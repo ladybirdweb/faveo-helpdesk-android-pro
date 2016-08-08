@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "661051343223",
+    "firebase_url": "https://faveo-helpdesk-pro-6dafa.firebaseio.com",
+    "project_id": "faveo-helpdesk-pro-6dafa",
+    "storage_bucket": "faveo-helpdesk-pro-6dafa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661051343223:android:c1a9827aea16c2aa",
+        "android_client_info": {
+          "package_name": "co.helpdesk.faveo.pro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661051343223-c8o6bm02gigm7gufi5dou7sv2ucpel43.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhGSzS9IFAmXaJmlgJvr9LNT-hkSddPNA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
