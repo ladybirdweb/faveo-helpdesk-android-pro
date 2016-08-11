@@ -69,9 +69,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
-        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody));
-//               notificationBuilder .setLargeIcon( BitmapFactory.decodeResource(getApplicationContext().getResources(),
-//                        R.mipmap.ic_stat_f));
+
         notificationBuilder.setContentTitle("Faveo Helpdesk Pro");
         notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
@@ -82,6 +80,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setDefaults(Notification.PRIORITY_HIGH);
         notificationBuilder.setWhen(System.currentTimeMillis());
         notificationBuilder.setAutoCancel(true);
+        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody));
         notificationBuilder.setTicker(messageBody);
         notificationBuilder.setContentIntent(pendingIntent);
 

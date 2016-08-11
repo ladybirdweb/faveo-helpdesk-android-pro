@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new Preference(getApplicationContext());
         isShowing = true;
         boolean enabledAnalytics = Preference.isCrashReport();
         Log.d("Crash Preference", Preference.isCrashReport() + "");
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         } else Log.d("Crash REport", "disabled");
 
         setContentView(R.layout.activity_main);
-        new Preference(getApplicationContext());
         String nextPageURL = getIntent().getStringExtra("nextPageURL");
         Bundle bundle = new Bundle();
         bundle.putString("nextPageURL", nextPageURL);
