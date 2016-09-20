@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
     int paddingTop, paddingBottom;
     ProgressDialog progressDialogVerifyURL;
     ProgressDialog progressDialogSignIn;
+    ProgressDialog progressDialogBilling;
 
 
     @Override
@@ -143,6 +144,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             if (result.contains("success")) {
                 Preference.setCompanyURL(companyURL + "api/v1/");
                 Constants.URL = Preference.getCompanyURL();
+                progressDialogBilling.show();
                 new VerifyBilling(LoginActivity.this, baseURL).execute();
                 // viewflipper.showNext();
 
@@ -169,12 +171,12 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
 
         @Override
         protected void onPostExecute(String result) {
+            progressDialogBilling.dismiss();
             Log.d("Response BillingVerfy", result);
             if (result == null) {
                 Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             if (result.contains("success")) {
                 viewflipper.showNext();
             } else if (result.contains("fails")) {
@@ -285,6 +287,8 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         progressDialogVerifyURL.setMessage("Verifying URL");
         progressDialogSignIn = new ProgressDialog(this);
         progressDialogSignIn.setMessage("Signing in");
+        progressDialogBilling=new ProgressDialog(this);
+        progressDialogBilling.setMessage("Access checking!");
         editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
         if (editTextCompanyURL != null) {
             editTextCompanyURL.setText("http://");

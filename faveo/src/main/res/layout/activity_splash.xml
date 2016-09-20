@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:background="@color/colorAccent"
     android:padding="24dp"
-    tools:context=".pro.frontend.activities.SplashActivity">
+    tools:context=".frontend.activities.SplashActivity">
 
     <TextView
         android:textColor="@color/black"
@@ -22,7 +22,7 @@
     <ImageView
         android:layout_weight="1"
         android:padding="40dp"
-        android:src="@drawable/new_logo"
+        android:src="@drawable/pro"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 
