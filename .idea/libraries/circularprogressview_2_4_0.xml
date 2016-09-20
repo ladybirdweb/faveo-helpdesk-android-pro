@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="circularprogressview-2.4.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.github.rahatarmanahmed/circularprogressview/2.4.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.github.rahatarmanahmed/circularprogressview/2.4.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.rahatarmanahmed/circularprogressview/2.4.0/8ec5972028cb7b58fd01082e808596e7e8f0bded/circularprogressview-2.4.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
