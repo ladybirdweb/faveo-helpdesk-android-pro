@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
 
+import android.net.Uri;
 import android.util.Log;
 
 import co.helpdesk.faveo.pro.Constants;
@@ -35,7 +36,7 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&user_id=" + userID +
-                "&subject=" + subject +
+                "&subject=" + Uri.encode(subject) +
                 "&body=" + body +
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
@@ -46,7 +47,7 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&user_id=" + userID +
-                "&subject=" + subject +
+                "&subject=" + Uri.encode(subject) +
                 "&body=" + body +
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
@@ -58,7 +59,7 @@ public class Helpdesk {
                     "api_key=" + apiKey +
                     "&ip=" + IP +
                     "&user_id=" + userID +
-                    "&subject=" + subject +
+                    "&subject=" + Uri.encode(subject) +
                     "&body=" + body +
                     "&helptopic=" + helpTopic +
                     "&sla=" + sla +
@@ -127,7 +128,7 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
-                "&subject=" + subject +
+                "&subject=" + Uri.encode(subject) +
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
@@ -138,7 +139,7 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
-                "&subject=" + subject +
+                "&subject=" + Uri.encode(subject) +
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
@@ -150,7 +151,7 @@ public class Helpdesk {
                     "&ip=" + IP +
                     "&token=" + token +
                     "&ticket_id=" + ticketID +
-                    "&subject=" + subject +
+                    "&subject=" + Uri.encode(subject) +
                     "&sla_plan=" + slaPlan +
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
@@ -169,7 +170,7 @@ public class Helpdesk {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new HTTPConnection().HTTPResponsePost(Constants.URL+"fcmtoken?", parameters);
+        return new HTTPConnection().HTTPResponsePost(Constants.URL + "fcmtoken?", parameters);
     }
 
     public String getCheckBillingURL(String baseURL) {
