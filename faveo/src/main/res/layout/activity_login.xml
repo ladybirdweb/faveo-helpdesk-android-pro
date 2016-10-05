@@ -57,10 +57,10 @@
                         android:layout_weight="1"
                         android:background="@drawable/edittext_modified_states"
                         android:imeOptions="actionDone"
-                        android:inputType="textWebEditText"
+                        android:inputType="textUri"
                         android:paddingBottom="16dp"
                         android:paddingTop="16dp"
-                        android:singleLine="true"
+                        android:maxLines="1"
                         android:textCursorDrawable="@drawable/color_cursor"
                         android:textSize="14sp" />
 
@@ -106,7 +106,7 @@
                     android:inputType="textWebEditText"
                     android:paddingBottom="16dp"
                     android:paddingTop="16dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="14sp" />
 
@@ -128,7 +128,7 @@
                     android:imeOptions="actionNext"
                     android:paddingBottom="16dp"
                     android:paddingTop="16dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="14sp" />
 
@@ -151,7 +151,7 @@
                     android:inputType="textPassword"
                     android:paddingBottom="16dp"
                     android:paddingTop="16dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="14sp" />
 
