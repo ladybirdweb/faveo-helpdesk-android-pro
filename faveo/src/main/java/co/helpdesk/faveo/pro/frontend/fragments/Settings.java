@@ -195,7 +195,7 @@ public class Settings extends Fragment implements CompoundButton.OnCheckedChange
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
 }

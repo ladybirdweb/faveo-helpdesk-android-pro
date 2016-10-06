@@ -212,7 +212,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     }
 
     public interface FragmentDrawerListener {
-        public void onDrawerItemSelected(View view, int position);
+        void onDrawerItemSelected(View view, int position);
     }
 
 }

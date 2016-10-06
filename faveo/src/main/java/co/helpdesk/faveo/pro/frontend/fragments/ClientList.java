@@ -265,7 +265,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
 }
