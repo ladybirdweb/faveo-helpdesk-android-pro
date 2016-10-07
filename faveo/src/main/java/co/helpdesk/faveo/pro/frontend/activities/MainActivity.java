@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (isConnected) {
 
             Snackbar snackbar = Snackbar
-
                     .make(findViewById(android.R.id.content), "Connected to Internet", Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();

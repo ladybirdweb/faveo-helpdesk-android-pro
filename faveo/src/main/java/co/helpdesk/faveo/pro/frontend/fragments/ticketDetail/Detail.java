@@ -32,7 +32,7 @@ public class Detail extends Fragment {
     TextView tv_helpTopic, tv_dept;
     TextView textViewOpenedBy;
 
-    EditText editTextSubject, editTextName, editTextEmail,
+    EditText editTextSubject, editTextFirstName, editTextLastName, editTextEmail,
             editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
 
     Spinner spinnerSLAPlans, spinnerDepartment, spinnerStatus, spinnerSource,
@@ -161,6 +161,21 @@ public class Detail extends Fragment {
                     e.printStackTrace();
                 }
 
+                if (jsonObject1.getString("first_name").equals("null")) {
+                    editTextFirstName.setText("Not available");
+                } else
+                    editTextFirstName.setText(jsonObject1.getString("first_name"));
+
+                if (jsonObject1.getString("last_name").equals("null")) {
+                    editTextLastName.setText("Not available");
+                } else
+                    editTextLastName.setText(jsonObject1.getString("last_name"));
+
+                if (jsonObject1.getString("email").equals("null")) {
+                    editTextEmail.setText("Not available");
+                } else
+                    editTextEmail.setText(jsonObject1.getString("email"));
+
                 if (jsonObject1.getString("duedate").equals("null")) {
                     editTextDueDate.setText("Not available");
                 } else {
@@ -184,15 +199,7 @@ public class Detail extends Fragment {
 //                } else
 //                    editTextLastMessage.setText(jsonObject1.getString("last_message"));
 
-                if (jsonObject1.getString("user_name").equals("null")) {
-                    editTextName.setText("Not available");
-                } else
-                    editTextName.setText(jsonObject1.getString("user_name"));
 
-                if (jsonObject1.getString("email").equals("null")) {
-                    editTextEmail.setText("Not available");
-                } else
-                    editTextEmail.setText(jsonObject1.getString("email"));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -236,7 +243,7 @@ public class Detail extends Fragment {
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
             }
-            if (result.contains("ticket_id"))
+            if (result.contains("dept_id"))
                 Toast.makeText(getActivity(), "Update successful", Toast.LENGTH_LONG).show();
             else
                 Toast.makeText(getActivity(), "Failed to update ticket", Toast.LENGTH_LONG).show();
@@ -275,7 +282,8 @@ public class Detail extends Fragment {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopics.setAdapter(spinnerArrayAdapter);
 
-        editTextName = (EditText) rootView.findViewById(R.id.editText_name);
+        editTextFirstName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_firstname);
+        editTextLastName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_lastname);
         editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
 
         spinnerSource = (Spinner) rootView.findViewById(R.id.spinner_source);

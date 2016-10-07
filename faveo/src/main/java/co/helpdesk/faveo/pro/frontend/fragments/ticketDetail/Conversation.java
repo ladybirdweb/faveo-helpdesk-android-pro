@@ -56,6 +56,7 @@ public class Conversation extends Fragment {
     }
 
     public Conversation() {
+
     }
 
     @Override
