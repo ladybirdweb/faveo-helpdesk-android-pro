@@ -1,8 +1,5 @@
 package co.helpdesk.faveo.pro;
 
-import co.helpdesk.faveo.pro.model.ClientOverview;
-import co.helpdesk.faveo.pro.model.TicketOverview;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -10,6 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import co.helpdesk.faveo.pro.model.ClientOverview;
+import co.helpdesk.faveo.pro.model.TicketOverview;
 
 /**
  * Created by sumit on 1/26/2016.

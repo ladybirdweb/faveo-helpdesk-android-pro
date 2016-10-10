@@ -54,7 +54,7 @@
             android:screenOrientation="portrait" />
 
         <receiver
-            android:name=".frontend.receivers.InternetReceiver"
+            android:name="co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -74,6 +74,14 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <!--<service-->
+            <!--android:name=".CustomService"-->
+            <!--android:exported="true"-->
+            <!--android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
     </application>
 
 </manifest>

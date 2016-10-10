@@ -281,29 +281,38 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 TicketThread ticketThread;
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject res = jsonObject.getJSONObject("result");
-                String clientPicture = "";
+//                String clientPicture = "";
+//                try {
+//                    clientPicture = res.getString("profile_pic");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                String messageTitle = "";
+//                try {
+//                    messageTitle = res.getString("title");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+                String clientName = "";
                 try {
-                    clientPicture = res.getString("profile_pic");
+                    clientName = res.getString("first_name");
+                    if (clientName.equals("") || clientName == null)
+                        clientName = res.getString("user_name");
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
-                String messageTitle = "";
-                try {
-                    messageTitle = res.getString("title");
-                } catch (Exception e) {
 
-                }
-                String clientName = res.getString("first_name");
-                if (clientName.equals("null") || clientName.equals(""))
-                    clientName = res.getString("user_name");
                 String messageTime = res.getString("created_at");
                 String message = res.getString("body");
                 String isReply = "true";
                 try {
                     isReply = res.getString("is_reply");
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
+                // ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
+                ticketThread = new TicketThread(clientName, messageTime, message, isReply);
+
                 if (fragmentConversation != null) {
                     exitReveal();
                     fragmentConversation.addThreadAndUpdate(ticketThread);

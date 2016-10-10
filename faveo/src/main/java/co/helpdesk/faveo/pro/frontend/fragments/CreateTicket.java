@@ -2,10 +2,12 @@ package co.helpdesk.faveo.pro.frontend.fragments;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +31,8 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 public class CreateTicket extends Fragment {
 
     EditText editTextEmail, editTextLastName, editTextFirstName, editTextPhone, editTextSubject, editTextMessage;
-    TextView textViewErrorEmail,textViewErrorLastName, textViewErrorFirstName, textViewErrorPhone, textViewErrorSubject, textViewErrorMessage;
-    Spinner spinnerHelpTopic, spinnerSLAPlans, spinnerAssignTo, spinnerPriority;
+    TextView textViewErrorEmail, textViewErrorLastName, textViewErrorFirstName, textViewErrorPhone, textViewErrorSubject, textViewErrorMessage;
+    Spinner spinnerHelpTopic, spinnerSLAPlans, spinnerAssignTo, spinnerPriority, spinnerCountryCode;
     Button buttonSubmit;
     ProgressDialog progressDialog;
 
@@ -66,6 +68,26 @@ public class CreateTicket extends Fragment {
         }
     }
 
+    public int GetCountryZipCode() {
+        String CountryID = "";
+        String CountryZipCode = "";
+        int code = 0;
+
+        TelephonyManager manager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+        CountryID = manager.getSimCountryIso().toUpperCase();
+        String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
+        for (int i = 0; i < rl.length; i++) {
+            String[] g = rl[i].split(",");
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
+                code = i;
+                break;
+            }
+        }
+        return code;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,6 +108,9 @@ public class CreateTicket extends Fragment {
                     int SLAPlans = spinnerSLAPlans.getSelectedItemPosition() + 1;
                     int assignTo = spinnerAssignTo.getSelectedItemPosition() + 1;
                     int priority = spinnerPriority.getSelectedItemPosition() + 1;
+                    String countrycode = spinnerCountryCode.getSelectedItem().toString();
+                    String[] cc = countrycode.split(",");
+                    countrycode = cc[0];
                     boolean allCorrect = true;
 
                     if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
@@ -140,7 +165,7 @@ public class CreateTicket extends Fragment {
                                 e.printStackTrace();
                             }
 
-                            new CreateNewTicket(Integer.parseInt(Preference.getUserID()), subject, message, helpTopic, SLAPlans, priority, assignTo, phone, fname, lname, email).execute();
+                            new CreateNewTicket(Integer.parseInt(Preference.getUserID()), subject, message, helpTopic, SLAPlans, priority, assignTo, phone, fname, lname, email, countrycode).execute();
                         } else
                             Toast.makeText(v.getContext(), "Oops! No internet", Toast.LENGTH_LONG).show();
                     }
@@ -162,9 +187,10 @@ public class CreateTicket extends Fragment {
         int SLA;
         int priority;
         int dept;
+        String code;
 
         CreateNewTicket(int userID, String subject, String body,
-                        int helpTopic, int SLA, int priority, int dept, String phone, String fname, String lname, String email) {
+                        int helpTopic, int SLA, int priority, int dept, String phone, String fname, String lname, String email, String code) {
             this.userID = userID;
             this.subject = subject;
             this.body = body;
@@ -176,10 +202,11 @@ public class CreateTicket extends Fragment {
             this.lname = lname;
             this.fname = fname;
             this.email = email;
+            this.code = code;
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, SLA, priority, dept, fname, lname, phone, email);
+            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, SLA, priority, dept, fname, lname, phone, email, code);
         }
 
         protected void onPostExecute(String result) {
@@ -188,13 +215,14 @@ public class CreateTicket extends Fragment {
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
             }
-            if (result.contains("ticket_id")) {
+            if (result.contains("Ticket created successfully!")) {
                 Toast.makeText(getActivity(), "Ticket created", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     private void resetViews() {
+
         editTextEmail.setBackgroundResource(R.drawable.edittext_theme_states);
         editTextEmail.setPadding(0, paddingTop, 0, paddingBottom);
         editTextFirstName.setBackgroundResource(co.helpdesk.faveo.pro.R.drawable.edittext_theme_states);
@@ -222,6 +250,7 @@ public class CreateTicket extends Fragment {
     }
 
     private void setUpViews(View rootView) {
+
         editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
         editTextFirstName = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_firstname);
         editTextLastName = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_lastname);
@@ -254,6 +283,9 @@ public class CreateTicket extends Fragment {
         spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Preference.getValuePriority().split(",")); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPriority.setAdapter(spinnerArrayAdapter);
+
+        spinnerCountryCode = (Spinner) rootView.findViewById(R.id.spinner_code);
+        spinnerCountryCode.setSelection(GetCountryZipCode());
 
         buttonSubmit = (Button) rootView.findViewById(R.id.button_submit);
         paddingTop = editTextEmail.getPaddingTop();

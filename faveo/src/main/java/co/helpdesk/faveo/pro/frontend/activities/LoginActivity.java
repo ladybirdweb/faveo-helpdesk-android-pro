@@ -247,6 +247,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                 authenticationEditor.apply();
 
                 Preference.setFCMtoken(FirebaseInstanceId.getInstance().getToken());
+
                 new SendingFCM(LoginActivity.this, Preference.getFCMtoken()).execute();
 
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
