@@ -119,7 +119,7 @@ public class InboxTickets extends Fragment {
             });
             tv = (TextView) rootView.findViewById(R.id.empty_view);
         }
-        ((MainActivity) getActivity()).setActionBarTitle("Inbox");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox_tickets));
         return rootView;
     }
 

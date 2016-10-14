@@ -284,12 +284,19 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
     }
 
     private void setUpViews() {
+
         progressDialogVerifyURL = new ProgressDialog(this);
         progressDialogVerifyURL.setMessage("Verifying URL");
+        progressDialogVerifyURL.setCancelable(false);
+
         progressDialogSignIn = new ProgressDialog(this);
         progressDialogSignIn.setMessage("Signing in");
-        progressDialogBilling=new ProgressDialog(this);
+        progressDialogSignIn.setCancelable(false);
+
+        progressDialogBilling = new ProgressDialog(this);
         progressDialogBilling.setMessage("Access checking!");
+        progressDialogBilling.setCancelable(false);
+
         editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
         if (editTextCompanyURL != null) {
             editTextCompanyURL.setText("http://");

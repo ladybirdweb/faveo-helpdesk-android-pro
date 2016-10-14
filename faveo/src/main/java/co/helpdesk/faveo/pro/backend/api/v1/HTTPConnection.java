@@ -1,8 +1,7 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
 import android.util.Log;
-
-import co.helpdesk.faveo.pro.Preference;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +16,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import co.helpdesk.faveo.pro.FaveoApplication;
+import co.helpdesk.faveo.pro.Preference;
 
 /**
  * Created by Sumit
@@ -171,6 +173,8 @@ public class HTTPConnection {
                 new Helpdesk();
                 new Authenticate();
                 return "tokenRefreshed";
+            } else if (e.getMessage().contains("404 Not Found error")) {
+                Toast.makeText(FaveoApplication.getInstance(), "Oops! File not found", Toast.LENGTH_LONG).show();
             }
 
             Log.e("error in faveo", e.getMessage());

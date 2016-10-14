@@ -67,6 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
 
@@ -74,16 +75,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
         notificationBuilder.setSound(defaultSoundUri);
+        notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         // notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
         notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
         notificationBuilder.setDefaults(Notification.FLAG_ONGOING_EVENT);
-        notificationBuilder.setDefaults(Notification.PRIORITY_HIGH);
+//        notificationBuilder.setDefaults(Notification.PRIORITY_HIGH);
         notificationBuilder.setWhen(System.currentTimeMillis());
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody));
         notificationBuilder.setTicker(messageBody);
         notificationBuilder.setContentIntent(pendingIntent);
 
+        if (defaultSoundUri == null) {
+            notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
+            Log.e("ringtone", "setDefault");
+        }
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
