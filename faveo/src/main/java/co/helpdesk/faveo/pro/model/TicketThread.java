@@ -12,6 +12,9 @@ public class TicketThread {
     public String message;
     public String isReply;
 
+    public TicketThread() {
+    }
+
     public TicketThread(String clientName, String messageTime, String message, String isReply) {
         this.messageTime = messageTime;
         this.message = message;

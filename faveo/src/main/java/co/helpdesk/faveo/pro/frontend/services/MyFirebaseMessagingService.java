@@ -37,13 +37,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
         //Calling method to generate notification
-        sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getData().get("ticket_id"), remoteMessage.getData().get("ticket_number"), remoteMessage.getData().get("ticket_opened_by"), remoteMessage.getData().get("ticket_subject"));
+        sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getData().get("ticket_id"), remoteMessage.getData().get("ticket_number"), remoteMessage.getData().get("ticket_opened_by"), remoteMessage.getData().get("ticket_subject"), remoteMessage.getData().get("notification_title"));
         //Log.d("Data",remoteMessage.getNotification().);
     }
 
     //This method is only generating push notification
     //It is same as we did in earlier posts
-    private void sendNotification(String messageBody, String ID, String number, String opened_by, String subject) {
+    private void sendNotification(String messageBody, String ID, String number, String opened_by, String subject, String noti_tittle) {
 
         Intent intent = new Intent(this, TicketDetailActivity.class);
 
@@ -52,6 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtra("ticket_number", number);
         intent.putExtra("ticket_opened_by", opened_by);
         intent.putExtra("ticket_subject", subject);
+
         Log.d("intents from FCM", "ID :" + ID + " Num : " + number + " openedBy : " + opened_by + " sub : " + subject);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -70,8 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
-
-        notificationBuilder.setContentTitle("Faveo Helpdesk Pro");
+        notificationBuilder.setContentTitle(noti_tittle);
         notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
         notificationBuilder.setSound(defaultSoundUri);
