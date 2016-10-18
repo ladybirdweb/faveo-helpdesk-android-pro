@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Helper;
-import co.helpdesk.faveo.pro.Preference;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.backend.database.DatabaseHandler;
@@ -31,7 +30,8 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
 
 
     ProgressDialog progressDialog;
-    public String
+
+    public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
             keyStatus = "", valueStatus = "",
@@ -41,6 +41,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
             keyTopic = "", valueTopic = "",
             keySource = "", valueSource = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +50,17 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         progressDialog.setMessage("Loading");
         if (InternetReceiver.isConnected()) {
             progressDialog.show();
-            if(Preference.isFetchDependency()){
-                new FetchData(this).execute();
-            }else {
-                new FetchDependency(this).execute();
-                Preference.setFetchDependency(true);
-            }
-
+            new FetchDependency(this).execute();
         } else Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+//        if (InternetReceiver.isConnected()) {
+//            progressDialog.show();
+//            if(Preference.isFetchDependency()){
+//                new FetchData(this).execute();
+//            }else {
+//                new FetchDependency(this).execute();
+//                Preference.setFetchDependency(true);
+//            }
+//        } else Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
     }
 
     public class FetchDependency extends AsyncTask<String, Void, String> {
@@ -78,6 +82,8 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                 Toast.makeText(SplashActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
             }
+            new FetchData(context).execute();
+
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
@@ -87,8 +93,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     keyDepartment += jsonArrayDepartments.getJSONObject(i).getString("id") + ",";
                     valueDepartment += jsonArrayDepartments.getJSONObject(i).getString("name") + ",";
                 }
-                Preference.setKeyDept(keyDepartment);
-                Preference.setValueDept(valueDepartment);
+
 
                 JSONArray jsonArraySla = jsonObject1.getJSONArray("sla");
                 for (int i = 0; i < jsonArraySla.length(); i++) {
@@ -96,16 +101,13 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     valueSLA += jsonArraySla.getJSONObject(i).getString("name") + ",";
                 }
 
-                Preference.setKeySLA(keySLA);
-                Preference.setValueSLA(valueSLA);
 
                 JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
                 for (int i = 0; i < jsonArrayStaffs.length(); i++) {
                     keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
                     valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
                 }
-                Preference.setKeyStaff(keyStaff);
-                Preference.setValueStaff(valueStaff);
+
 
                 JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
                 for (int i = 0; i < jsonArrayTeams.length(); i++) {
@@ -113,16 +115,13 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
                 }
 
-                Preference.setKeyTeam(keyTeam);
-                Preference.setValueTeam(valueTeam);
 
                 JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
                 for (int i = 0; i < jsonArrayPriorities.length(); i++) {
                     keyPriority += jsonArrayPriorities.getJSONObject(i).getString("priority_id") + ",";
                     valuePriority += jsonArrayPriorities.getJSONObject(i).getString("priority") + ",";
                 }
-                Preference.setKeyPriority(keyPriority);
-                Preference.setValuePriority(valuePriority);
+
 
                 JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("helptopics");
                 for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
@@ -130,24 +129,19 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     valueTopic += jsonArrayHelpTopics.getJSONObject(i).getString("topic") + ",";
                 }
 
-                Preference.setKeyTopic(keyTopic);
-                Preference.setValueTopic(valueTopic);
 
                 JSONArray jsonArrayStatus = jsonObject1.getJSONArray("status");
                 for (int i = 0; i < jsonArrayStatus.length(); i++) {
                     keyStatus += jsonArrayStatus.getJSONObject(i).getString("id") + ",";
                     valueStatus += jsonArrayStatus.getJSONObject(i).getString("name") + ",";
                 }
-                Preference.setKeyStatus(keyStatus);
-                Preference.setValueStatus(valueStatus);
+
 
                 JSONArray jsonArraySources = jsonObject1.getJSONArray("sources");
                 for (int i = 0; i < jsonArraySources.length(); i++) {
                     keySource += jsonArraySources.getJSONObject(i).getString("id") + ",";
                     valueSource += jsonArraySources.getJSONObject(i).getString("name") + ",";
                 }
-                Preference.setKeySource(keySource);
-                Preference.setValueSource(valueSource);
 
                 new FetchData(context).execute();
 
@@ -192,12 +186,12 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         }
 
         protected void onPostExecute(String result) {
-            Log.d("Data Response code : ", result+"");
+            Log.d("Data Response code : ", result + "");
             if (result == null) {
                 Toast.makeText(SplashActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
             }
-            Intent intent = new Intent(SplashActivity.this,  MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             intent.putExtra("nextPageURL", nextPageURL);
             startActivity(intent);
         }

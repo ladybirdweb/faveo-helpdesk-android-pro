@@ -21,9 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.helpdesk.faveo.pro.Helper;
-import co.helpdesk.faveo.pro.Preference;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.Utils;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.activities.SplashActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 
 public class Detail extends Fragment {
@@ -84,11 +85,11 @@ public class Detail extends Fragment {
                 new SaveTicket(getActivity(),
                         Integer.parseInt(TicketDetailActivity.ticketID),
                         editTextSubject.getText().toString(),
-                        Integer.parseInt(Preference.getKeySLA().split(",")[spinnerSLAPlans.getSelectedItemPosition()]),
-                        Integer.parseInt(Preference.getKeyTopic().split(",")[spinnerHelpTopics.getSelectedItemPosition()]),
-                        Integer.parseInt(Preference.getKeySource().split(",")[spinnerSource.getSelectedItemPosition()]),
-                        Integer.parseInt(Preference.getKeyPriority().split(",")[spinnerPriority.getSelectedItemPosition()]),
-                        Integer.parseInt(Preference.getKeyStatus().split(",")[spinnerStatus.getSelectedItemPosition()]))
+                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keySLA.split(","))[spinnerSLAPlans.getSelectedItemPosition()]),
+                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyTopic.split(","))[spinnerHelpTopics.getSelectedItemPosition()]),
+                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keySource.split(","))[spinnerSource.getSelectedItemPosition()]),
+                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyPriority.split(","))[spinnerPriority.getSelectedItemPosition()]),
+                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]))
                         .execute();
             }
         });
@@ -257,27 +258,27 @@ public class Detail extends Fragment {
         editTextSubject.setText(TicketDetailActivity.ticketSubject);
 
         spinnerSLAPlans = (Spinner) rootView.findViewById(R.id.spinner_sla_plans);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Preference.getValueSLA().split(",")); //selected item will look like a spinner set from XML
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueSLA.split(","))); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSLAPlans.setAdapter(spinnerArrayAdapter);
 
         spinnerStatus = (Spinner) rootView.findViewById(R.id.spinner_status);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Preference.getValueStatus().split(",")); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueStatus.split(","))); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerStatus.setAdapter(spinnerArrayAdapter);
 
         spinnerPriority = (Spinner) rootView.findViewById(R.id.spinner_priority);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Preference.getValuePriority().split(",")); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valuePriority.split(","))); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPriority.setAdapter(spinnerArrayAdapter);
 
         spinnerDepartment = (Spinner) rootView.findViewById(R.id.spinner_department);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Preference.getValueDept().split(",")); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueDepartment.split(","))); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDepartment.setAdapter(spinnerArrayAdapter);
 
         spinnerHelpTopics = (Spinner) rootView.findViewById(R.id.spinner_help_topics);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Preference.getValueTopic().split(",")); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueTopic.split(","))); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopics.setAdapter(spinnerArrayAdapter);
 
@@ -286,7 +287,7 @@ public class Detail extends Fragment {
         editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
 
         spinnerSource = (Spinner) rootView.findViewById(R.id.spinner_source);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Preference.getValueSource().split(",")); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueSource.split(","))); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSource.setAdapter(spinnerArrayAdapter);
 
