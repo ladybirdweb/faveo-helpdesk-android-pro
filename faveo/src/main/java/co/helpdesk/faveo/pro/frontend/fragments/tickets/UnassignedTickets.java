@@ -245,6 +245,7 @@ public class UnassignedTickets extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        nextPageURL = "";
     }
 
     public interface OnFragmentInteractionListener {

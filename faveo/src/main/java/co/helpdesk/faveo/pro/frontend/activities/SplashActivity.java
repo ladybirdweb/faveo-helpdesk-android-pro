@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +30,8 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
 public class SplashActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener {
 
 
-    ProgressDialog progressDialog;
-
+    ProgressBar progressDialog;
+    TextView loading;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -46,21 +47,16 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading");
+        progressDialog = (ProgressBar) findViewById(R.id.progressBar1);
+        loading = (TextView) findViewById(R.id.loading);
+        //progressDialog.setMessage("Loading");
         if (InternetReceiver.isConnected()) {
-            progressDialog.show();
+            progressDialog.setVisibility(View.VISIBLE);
             new FetchDependency(this).execute();
+            new FetchData(this).execute();
+
         } else Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
-//        if (InternetReceiver.isConnected()) {
-//            progressDialog.show();
-//            if(Preference.isFetchDependency()){
-//                new FetchData(this).execute();
-//            }else {
-//                new FetchDependency(this).execute();
-//                Preference.setFetchDependency(true);
-//            }
-//        } else Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+
     }
 
     public class FetchDependency extends AsyncTask<String, Void, String> {
@@ -71,18 +67,19 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         }
 
         protected String doInBackground(String... urls) {
-            progressDialog.dismiss();
+
             return new Helpdesk().getDependency();
+
         }
 
         protected void onPostExecute(String result) {
+
             Log.d("Depen Response code : ", result + "");
             if (result == null) {
 
                 Toast.makeText(SplashActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
             }
-            new FetchData(context).execute();
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -143,7 +140,6 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     valueSource += jsonArraySources.getJSONObject(i).getString("name") + ",";
                 }
 
-                new FetchData(context).execute();
 
             } catch (JSONException e) {
                 Toast.makeText(SplashActivity.this, "Error", Toast.LENGTH_LONG).show();
@@ -161,7 +157,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         }
 
         protected String doInBackground(String... urls) {
-            progressDialog.dismiss();
+
             String result = new Helpdesk().getInboxTicket();
             if (result == null)
                 return null;
@@ -186,6 +182,8 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.setVisibility(View.GONE);
+            loading.setText("Done Loading!");
             Log.d("Data Response code : ", result + "");
             if (result == null) {
                 Toast.makeText(SplashActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -194,6 +192,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             intent.putExtra("nextPageURL", nextPageURL);
             startActivity(intent);
+
         }
     }
 

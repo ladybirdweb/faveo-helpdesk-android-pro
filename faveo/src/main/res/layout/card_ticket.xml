@@ -56,7 +56,6 @@
         android:textSize="12sp"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
-        android:singleLine="true"
         android:fontFamily="sans-serif-medium"/>
 
     <TextView
@@ -105,7 +104,6 @@
         android:textSize="16sp"
         android:textColor="@color/black"
         android:layout_centerHorizontal="true"
-        android:singleLine="true"
         android:fontFamily="sans-serif-bold" />
 
     <View

@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         isShowing = true;
         boolean enabledAnalytics = Preference.isCrashReport();
         Log.d("Crash Preference", Preference.isCrashReport() + "");
-
         if (enabledAnalytics) {
             Fabric.with(this, new Crashlytics());
             Log.d("Crash REport", "enabled");
