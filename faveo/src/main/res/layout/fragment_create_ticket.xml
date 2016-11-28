@@ -5,7 +5,7 @@
     android:background="@color/colorAccent"
     tools:context="co.helpdesk.faveo.pro.frontend.fragments.CreateTicket">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -354,7 +354,7 @@
                     android:id="@+id/button_submit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="84dp"
+                    android:layout_marginBottom="44dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:background="@color/blue_300"
@@ -366,6 +366,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </FrameLayout>

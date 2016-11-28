@@ -15,7 +15,7 @@ import co.helpdesk.faveo.pro.model.TicketGlimpse;
 
 public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdapter.TicketViewHolder> {
     private List<TicketGlimpse> ticketGlimpseList;
-    final String clientName;
+    private final String clientName;
 
     public TicketGlimpseAdapter(List<TicketGlimpse> ticketGlimpseList, String clientName) {
         this.ticketGlimpseList = ticketGlimpseList;
@@ -38,31 +38,31 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
     @Override
     public TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
-        from(viewGroup.getContext()).
-        inflate(R.layout.card_ticket_status, viewGroup, false);
+                from(viewGroup.getContext()).
+                inflate(R.layout.card_ticket_status, viewGroup, false);
         return new TicketViewHolder(itemView, clientName);
     }
 
-    public static class TicketViewHolder extends RecyclerView.ViewHolder {
+    static class TicketViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView textViewTicketID;
-        protected TextView textViewTicketNumber;
-        protected TextView textViewSubject;
+        TextView textViewTicketID;
+        TextView textViewTicketNumber;
+        TextView textViewSubject;
 
-        public TicketViewHolder(View v, final String clientName) {
+        TicketViewHolder(View v, final String clientName) {
             super(v);
-            textViewTicketID = (TextView)  v.findViewById(R.id.textView_ticket_id);
-            textViewTicketNumber = (TextView)  v.findViewById(R.id.textView_ticket_number);
+            textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
+            textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
             textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
-                    intent.putExtra("TICKET_ID", textViewTicketID.getText().toString());
-                    intent.putExtra("TICKET_NUMBER", textViewTicketNumber.getText().toString());
-                    intent.putExtra("TICKET_OPENED_BY", clientName);
-                    intent.putExtra("TICKET_SUBJECT", textViewSubject.getText().toString());
+                    intent.putExtra("ticket_id", textViewTicketID.getText().toString());
+                    intent.putExtra("ticket_number", textViewTicketNumber.getText().toString());
+                    intent.putExtra("ticket_opened_by", clientName);
+                    intent.putExtra("ticket_subject", textViewSubject.getText().toString());
                     v.getContext().startActivity(intent);
                 }
             });

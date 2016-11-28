@@ -26,6 +26,7 @@ public class ClosedTickets extends Fragment {
     TextView tv;
     View rootView;
     RecyclerView recyclerView;
+
     TicketGlimpseAdapter ticketGlimpseAdapter;
 
     private OnFragmentInteractionListener mListener;

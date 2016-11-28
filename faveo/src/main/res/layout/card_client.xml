@@ -30,10 +30,10 @@
         android:layout_marginLeft="18dp"
         android:layout_toRightOf="@+id/imageView_default_profile"
         android:fontFamily="sans-serif-bold"
-        android:singleLine="true"
         android:text="Karthik Sen"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/textView_client_email"
@@ -48,10 +48,10 @@
         android:drawableLeft="@drawable/email"
         android:drawablePadding="8dp"
         android:fontFamily="sans-serif-medium"
-        android:singleLine="true"
         android:text="karthiksen@ladybirdweb.com"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/textView_client_phone"
@@ -67,9 +67,16 @@
         android:drawableLeft="@drawable/phone"
         android:drawablePadding="8dp"
         android:fontFamily="sans-serif-medium"
-        android:singleLine="true"
         android:text="9876543210"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:maxLines="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/textView_client_phone"
+        android:layout_marginTop="16dp"
+        android:background="@color/grey_200" />
 
 </RelativeLayout>
