@@ -41,6 +41,9 @@ public class CreateTicket extends Fragment {
     int paddingTop, paddingBottom;
     View rootView;
 
+    ArrayAdapter<String> spinnerSlaArrayAdapter,spinnerAssignToArrayAdapter,
+            spinnerHelpArrayAdapter,spinnerDeptArrayAdapter,spinnerPriArrayAdapter;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -252,44 +255,43 @@ public class CreateTicket extends Fragment {
     }
 
     private void setUpViews(View rootView) {
-
-        editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
+        editTextEmail = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_email);
         editTextFirstName = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_firstname);
         editTextLastName = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_lastname);
-        editTextPhone = (EditText) rootView.findViewById(R.id.editText_phone);
-        editTextSubject = (EditText) rootView.findViewById(R.id.editText_subject);
-        editTextMessage = (EditText) rootView.findViewById(R.id.editText_message);
-        textViewErrorEmail = (TextView) rootView.findViewById(R.id.textView_error_email);
+        editTextPhone = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_phone);
+        // editTextPhone.setText("91");
+        editTextSubject = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_subject);
+        editTextMessage = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_message);
+        textViewErrorEmail = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_email);
         textViewErrorFirstName = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_firstname);
         textViewErrorLastName = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_lastname);
-        textViewErrorPhone = (TextView) rootView.findViewById(R.id.textView_error_phone);
-        textViewErrorSubject = (TextView) rootView.findViewById(R.id.textView_error_subject);
-        textViewErrorMessage = (TextView) rootView.findViewById(R.id.textView_error_message);
+        textViewErrorPhone = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_phone);
+        textViewErrorSubject = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_subject);
+        textViewErrorMessage = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_message);
 
-        spinnerHelpTopic = (Spinner) rootView.findViewById(R.id.spinner_help_topics);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueTopic.split(","))); //selected item will look like a spinner set from XML
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerHelpTopic.setAdapter(spinnerArrayAdapter);
+        spinnerHelpTopic = (Spinner) rootView.findViewById(co.helpdesk.faveo.pro.R.id.spinner_help_topics);
+        spinnerHelpArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueTopic.split(","))); //selected item will look like a spinner set from XML
+        spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerHelpTopic.setAdapter(spinnerHelpArrayAdapter);
 
-        spinnerSLAPlans = (Spinner) rootView.findViewById(R.id.spinner_sla_plans);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueSLA.split(","))); //selected item will look like a spinner set from XML
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSLAPlans.setAdapter(spinnerArrayAdapter);
+        spinnerSLAPlans = (Spinner) rootView.findViewById(co.helpdesk.faveo.pro.R.id.spinner_sla_plans);
+        spinnerSlaArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueSLA.split(","))); //selected item will look like a spinner set from XML
+        spinnerSlaArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSLAPlans.setAdapter(spinnerSlaArrayAdapter);
 
-        spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_assign_to);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueDepartment.split(","))); //selected item will look like a spinner set from XML
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerAssignTo.setAdapter(spinnerArrayAdapter);
+        spinnerAssignTo = (Spinner) rootView.findViewById(co.helpdesk.faveo.pro.R.id.spinner_assign_to);
+        spinnerAssignToArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueDepartment.split(","))); //selected item will look like a spinner set from XML
+        spinnerAssignToArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAssignTo.setAdapter(spinnerAssignToArrayAdapter);
 
-        spinnerPriority = (Spinner) rootView.findViewById(R.id.spinner_priority);
-        spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valuePriority.split(","))); //selected item will look like a spinner set from XML
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPriority.setAdapter(spinnerArrayAdapter);
+        spinnerPriority = (Spinner) rootView.findViewById(co.helpdesk.faveo.pro.R.id.spinner_priority);
+        spinnerPriArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valuePriority.split(","))); //selected item will look like a spinner set from XML
+        spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPriority.setAdapter(spinnerPriArrayAdapter);
 
         spinnerCountryCode = (Spinner) rootView.findViewById(R.id.spinner_code);
         spinnerCountryCode.setSelection(GetCountryZipCode());
-
-        buttonSubmit = (Button) rootView.findViewById(R.id.button_submit);
+        buttonSubmit = (Button) rootView.findViewById(co.helpdesk.faveo.pro.R.id.button_submit);
         paddingTop = editTextEmail.getPaddingTop();
         paddingBottom = editTextEmail.getPaddingBottom();
     }

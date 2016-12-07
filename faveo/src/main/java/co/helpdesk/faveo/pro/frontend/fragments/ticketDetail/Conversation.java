@@ -102,41 +102,7 @@ public class Conversation extends Fragment {
 
         protected String doInBackground(String... urls) {
             return new Helpdesk().getTicketThread(TicketDetailActivity.ticketID);
-//            String result = new Helpdesk().getTicketThread(TicketDetailActivity.ticketID);
-//            if (result == null)
-//                return null;
-//            try {
-//                JSONArray jsonArray = new JSONArray(result);
-//                for(int i = 0; i < jsonArray.length(); i++) {
-//                    TicketThread ticketThread = null;
-//                    try {
-//                        String clientPicture = null;
-//                        try {
-//                            clientPicture = jsonArray.getJSONObject(i).getString("profile_pic");
-//                        } catch (Exception e) {
-//
-//                        }
-///*                        String clientName = jsonArray.getJSONObject(i).getString("poster");
-//                        if (clientName.equals("null") || clientName.equals(""))
-//                            clientName = "NOTE";*/
-//                        String clientName = jsonArray.getJSONObject(i).getString("first_name");
-//                        if (clientName.equals("null") || clientName.equals(""))
-//                            clientName = jsonArray.getJSONObject(i).getString("user_name");
-//                        String messageTime = jsonArray.getJSONObject(i).getString("created_at");
-//                        String messageTitle = jsonArray.getJSONObject(i).getString("title");
-//                        String message = jsonArray.getJSONObject(i).getString("body");
-//                        String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
-//                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if(ticketThread != null)
-//                        ticketThreadList.add(ticketThread);
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            return "success";
+
         }
 
         protected void onPostExecute(String result) {
