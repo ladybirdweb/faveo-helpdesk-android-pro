@@ -12,6 +12,7 @@
         <item name="colorAccent">@color/faveo_blue</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="actionBarTheme">@style/AppThemeOverlay.ActionBar</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
@@ -26,4 +27,13 @@
         <item name="colorSwitchThumbNormal">@color/blue</item>
     </style>
 
+    <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/actionbar</item>
+        <item name="android:textColorPrimary">@color/actionbar</item>
+        <item name="android:textColorSecondary">@color/actionbar</item>
+    </style>
 </resources>

@@ -16,6 +16,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
+import co.helpdesk.faveo.pro.model.Ticket;
+import io.realm.Realm;
 
 /**
  * Created by narendra on 11/07/16.
@@ -39,6 +41,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Calling method to generate notification
         sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getData().get("ticket_id"), remoteMessage.getData().get("ticket_number"), remoteMessage.getData().get("ticket_opened_by"), remoteMessage.getData().get("ticket_subject"), remoteMessage.getData().get("notification_title"));
         //Log.d("Data",remoteMessage.getNotification().);
+
+        Ticket ticket = new Ticket();
+        ticket.setTicket_id(Integer.parseInt(remoteMessage.getData().get("ticket_id")));
+        ticket.setTicket_number(remoteMessage.getData().get("ticket_number"));
+        ticket.setTicket_opened_by(remoteMessage.getData().get("ticket_opened_by"));
+        ticket.setTicket_subject(remoteMessage.getData().get("ticket_subject"));
+
+        Realm realm = null;
+        try {
+            Log.d(TAG, "Realm");
+            realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.copyToRealm(ticket);
+            realm.commitTransaction();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (realm != null) {
+                realm.close();
+            }
+        }
     }
 
     //This method is only generating push notification

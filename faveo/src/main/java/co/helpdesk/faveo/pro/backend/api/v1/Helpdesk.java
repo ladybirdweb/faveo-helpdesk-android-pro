@@ -37,7 +37,7 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&user_id=" + userID +
                 "&subject=" + Uri.encode(subject) +
-                "&body=" +Uri.encode(body) +
+                "&body=" + Uri.encode(body) +
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
                 "&priority=" + priority +
@@ -53,7 +53,7 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&user_id=" + userID +
-                "&subject=" +Uri.encode(subject)+
+                "&subject=" + Uri.encode(subject) +
                 "&body=" + Uri.encode(body) +
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
@@ -119,7 +119,7 @@ public class Helpdesk {
                 "&token=" + token +
                 "&ticket_ID=" + ticketID +
                 "&cc=" + cc +
-                "&reply_content=" +Uri.encode(replyContent));
+                "&reply_content=" + Uri.encode(replyContent));
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/reply?" +
                         "api_key=" + apiKey +
                         "&ip=" + IP +
@@ -179,10 +179,11 @@ public class Helpdesk {
     }
 
     public String postFCMToken(String token, String ID) {
+        Log.d("FCM token beforesending", token + "");
         String parameters = null;
         JSONObject obj = new JSONObject();
         try {
-            obj.put("fcm_token", Uri.encode(token));
+            obj.put("fcm_token", token);
             obj.put("user_id", ID);
             parameters = obj.toString();
         } catch (JSONException e) {

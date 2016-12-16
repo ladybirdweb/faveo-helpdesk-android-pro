@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -25,11 +27,19 @@ import co.helpdesk.faveo.pro.Preference;
  */
 public class HTTPConnection {
 
+    HTTPConnection() {
+
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
+    }
+
     private StringBuilder sb = null;
     private InputStream is = null;
     private URL url;
 
     public String HTTPResponsePost(String stringURL, String parameters) {
+
+
         try {
             url = new URL(stringURL);
             final HttpURLConnection connection = (HttpURLConnection) url.openConnection();

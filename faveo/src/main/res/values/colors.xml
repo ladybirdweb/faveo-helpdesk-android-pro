@@ -15,5 +15,5 @@
     <color name="black">#000000</color>
     <color name="grey_200">#eeeeee</color>
     <color name="transparent">#00FFFFFF</color>
-
+    <color name="actionbar">#00aeef</color>
 </resources>

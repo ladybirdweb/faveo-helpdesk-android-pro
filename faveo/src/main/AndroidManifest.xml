@@ -10,51 +10,52 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="co.helpdesk.faveo.pro.FaveoApplication"
+        android:name=".FaveoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme">
         <activity
-            android:name="co.helpdesk.faveo.pro.frontend.activities.LoginActivity"
+            android:name=".frontend.activities.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="co.helpdesk.faveo.pro.frontend.activities.ClientDetailActivity"
+            android:name=".frontend.activities.ClientDetailActivity"
             android:label="@string/title_activity_client_profile"
             android:screenOrientation="portrait" />
         <activity
-            android:name="co.helpdesk.faveo.pro.frontend.activities.ForgotPasswordActivity"
+            android:name=".frontend.activities.ForgotPasswordActivity"
             android:label="@string/title_activity_forgot_password"
             android:screenOrientation="portrait" />
         <activity
-            android:name="co.helpdesk.faveo.pro.frontend.activities.SplashActivity"
-            android:label="@string/title_activity_splash"
+            android:name=".frontend.activities.SplashActivity"
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name="co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity"
+            android:name=".frontend.activities.TicketDetailActivity"
             android:label="@string/title_activity_ticket_detail"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="OPEN_ACTIVITY_1" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name="co.helpdesk.faveo.pro.frontend.activities.MainActivity"
+            android:name=".frontend.activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" />
 
         <receiver
-            android:name="co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver"
+            android:name=".frontend.receivers.InternetReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -65,24 +66,27 @@
             android:name="io.fabric.ApiKey"
             android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />
 
-        <service android:name="co.helpdesk.faveo.pro.frontend.services.MyFirebaseInstanceIDService">
+        <service android:name=".frontend.services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name="co.helpdesk.faveo.pro.frontend.services.MyFirebaseMessagingService">
+        <service android:name=".frontend.services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!--<service-->
-            <!--android:name=".CustomService"-->
-            <!--android:exported="true"-->
-            <!--android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />-->
-            <!--</intent-filter>-->
-        <!--</service>-->
+        <!-- <service -->
+        <!-- android:name=".CustomService" -->
+        <!-- android:exported="true" -->
+        <!-- android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
+        <activity
+            android:name=".frontend.activities.NotificationActivity"
+            android:label="@string/title_activity_notification" />
     </application>
 
 </manifest>

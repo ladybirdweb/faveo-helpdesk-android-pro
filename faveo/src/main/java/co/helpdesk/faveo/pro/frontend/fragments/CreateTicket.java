@@ -41,8 +41,8 @@ public class CreateTicket extends Fragment {
     int paddingTop, paddingBottom;
     View rootView;
 
-    ArrayAdapter<String> spinnerSlaArrayAdapter,spinnerAssignToArrayAdapter,
-            spinnerHelpArrayAdapter,spinnerDeptArrayAdapter,spinnerPriArrayAdapter;
+    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
+            spinnerHelpArrayAdapter, spinnerDeptArrayAdapter, spinnerPriArrayAdapter;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -322,5 +322,6 @@ public class CreateTicket extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+
 
 }

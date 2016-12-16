@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
@@ -14,6 +15,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -50,18 +53,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     protected boolean doubleBackToExitPressedOnce = false;
     public static boolean isShowing = false;
+    private boolean isCreateTicket = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new Preference(getApplicationContext());
         isShowing = true;
-        boolean enabledAnalytics = Preference.isCrashReport();
-        Log.d("Crash Preference", Preference.isCrashReport() + "");
-        if (enabledAnalytics) {
-            Fabric.with(this, new Crashlytics());
-            Log.d("Crash REport", "enabled");
-        } else Log.d("Crash REport", "disabled");
 
         setContentView(R.layout.activity_main);
         String nextPageURL = getIntent().getStringExtra("nextPageURL");
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         TextView mTitle = (TextView) toolbarTop.findViewById(R.id.title);
         mTitle.setText(title.toUpperCase());
 
-        View mCreateTicket = toolbarTop.findViewById(R.id.button_create_ticket);
+        // View mCreateTicket = toolbarTop.findViewById(R.id.button_create_ticket);
 
         switch (title) {
             case "Inbox":
@@ -116,30 +114,74 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case "Unassigned tickets":
             case "Closed tickets":
             case "Trash":
-                mCreateTicket.setVisibility(View.VISIBLE);
+                isCreateTicket = false;
+                invalidateOptionsMenu();
+                // mCreateTicket.setVisibility(View.VISIBLE);
                 break;
             default:
-                mCreateTicket.setVisibility(View.GONE);
+                isCreateTicket = true;
+                invalidateOptionsMenu();
+                // mCreateTicket.setVisibility(View.GONE);
                 break;
         }
-        mCreateTicket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Fragment fragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.create_ticket));
-                // if (fragment == null)
-                Fragment fragment = new CreateTicket();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_body, fragment);
-                //fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
+//        mCreateTicket.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Fragment fragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.create_ticket));
+//                // if (fragment == null)
+//                Fragment fragment = new CreateTicket();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container_body, fragment);
+//                //fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            }
+//        });
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (isCreateTicket){
+            menu.findItem(R.id.action_create_ticket).setVisible(false);
+        }else menu.findItem(R.id.action_create_ticket).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_create_ticket) {
+            Fragment fragment = new CreateTicket();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            //fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+//            item.setVisible(false);
+            isCreateTicket = true;
+            invalidateOptionsMenu();
+            return true;
+        }
+
+        if (id == R.id.action_noti) {
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
