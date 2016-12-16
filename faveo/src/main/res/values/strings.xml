@@ -19,7 +19,9 @@
     <string name="client_list">Client list</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
-
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_notification">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 </resources>

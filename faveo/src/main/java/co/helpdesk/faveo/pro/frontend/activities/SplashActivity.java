@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -62,7 +61,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
     public class FetchDependency extends AsyncTask<String, Void, String> {
         Context context;
 
-        public FetchDependency(Context context) {
+        FetchDependency(Context context) {
             this.context = context;
         }
 
@@ -152,7 +151,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         Context context;
         String nextPageURL;
 
-        public FetchData(Context context) {
+        FetchData(Context context) {
             this.context = context;
         }
 

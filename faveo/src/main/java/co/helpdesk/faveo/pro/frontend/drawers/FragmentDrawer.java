@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.helpdesk.faveo.pro.Constants;
+import co.helpdesk.faveo.pro.Controller.RealmController;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
@@ -190,11 +191,14 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                if (RealmController.with(this).hasTickets()) {
+                    RealmController.with(this).clearAll();
+                }
                 NotificationManager notificationManager =
                         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancelAll();
                 FaveoApplication.getInstance().clearApplicationData();
-                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().commit();
+                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

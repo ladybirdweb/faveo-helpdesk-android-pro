@@ -136,7 +136,6 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         protected void onPostExecute(String result) {
             progressDialogVerifyURL.dismiss();
             if (result == null) {
-
                 Toast.makeText(context, "Invalid URL", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -148,8 +147,9 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                 new VerifyBilling(LoginActivity.this, baseURL).execute();
                 // viewflipper.showNext();
 
-            } else
+            } else {
                 Toast.makeText(context, "Error verifying URL", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
