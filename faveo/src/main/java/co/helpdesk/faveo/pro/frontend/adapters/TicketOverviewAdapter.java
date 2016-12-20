@@ -67,7 +67,7 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
         return new TicketViewHolder(itemView);
     }
 
-    public static class TicketViewHolder extends RecyclerView.ViewHolder {
+     static class TicketViewHolder extends RecyclerView.ViewHolder {
 
         protected View ticket;
         protected RoundedImageView roundedImageViewProfilePic;

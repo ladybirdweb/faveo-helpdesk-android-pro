@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                 Constants.URL = Preference.getCompanyURL();
                 progressDialogBilling.show();
                 new VerifyBilling(LoginActivity.this, baseURL).execute();
-                // viewflipper.showNext();
+                //viewflipper.showNext();
 
             } else {
                 Toast.makeText(context, "Error verifying URL", Toast.LENGTH_LONG).show();

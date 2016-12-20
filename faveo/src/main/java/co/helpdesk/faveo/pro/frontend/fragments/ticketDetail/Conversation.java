@@ -128,13 +128,13 @@ public class Conversation extends Fragment {
 /*                        String clientName = jsonArray.getJSONObject(i).getString("poster");
                         if (clientName.equals("null") || clientName.equals(""))
                             clientName = "NOTE";*/
-                        String clientName = jsonArray.getJSONObject(i).getString("first_name");
+                        String clientName = jsonArray.getJSONObject(i).getString("first_name") + " " + jsonArray.getJSONObject(i).getString("last_name");
                         if (clientName.equals("null") || clientName.equals(""))
                             clientName = jsonArray.getJSONObject(i).getString("user_name");
                         String messageTime = jsonArray.getJSONObject(i).getString("created_at");
                         String messageTitle = jsonArray.getJSONObject(i).getString("title");
                         String message = jsonArray.getJSONObject(i).getString("body");
-                                Log.d("body:", message);
+                        Log.d("body:", message);
                         String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
                         ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
                     } catch (JSONException e) {

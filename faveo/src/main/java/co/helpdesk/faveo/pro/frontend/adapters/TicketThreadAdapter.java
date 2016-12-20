@@ -1,7 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         return new TicketViewHolder(itemView);
     }
 
-    public static class TicketViewHolder extends RecyclerView.ViewHolder {
+    static class TicketViewHolder extends RecyclerView.ViewHolder {
 
         protected View thread;
         protected RoundedImageView roundedImageViewProfilePic;

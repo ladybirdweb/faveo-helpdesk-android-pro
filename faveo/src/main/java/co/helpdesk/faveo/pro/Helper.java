@@ -36,7 +36,7 @@ public class Helper {
             String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
 
             return new TicketOverview(Integer.parseInt(ID), profilePic,
-                    ticketNumber, username, title, updatedAt, i + "");
+                    ticketNumber, firstName + " " + lastName, title, updatedAt, i + "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -56,7 +56,7 @@ public class Helper {
             String clientActive = jsonArray.getJSONObject(i).getString("active");
 
             return new ClientOverview(Integer.parseInt(clientID), clientPicture,
-                    userName, clientEmail, clientPhone, clientCompany, clientActive);
+                    firstName + " " + lastName, clientEmail, clientPhone, clientCompany, clientActive);
 
         } catch (JSONException e) {
             e.printStackTrace();
