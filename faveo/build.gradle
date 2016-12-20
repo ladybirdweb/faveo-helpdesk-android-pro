@@ -23,6 +23,9 @@ android {
         versionCode 9
         versionName "1.6"
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -66,6 +69,7 @@ dependencies {
     }
     // Realm
     compile 'io.realm:realm-android:0.82.1'
+    compile 'com.android.support:multidex:1.0.1'
 
 }
 apply plugin: 'com.google.gms.google-services'

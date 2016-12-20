@@ -5,17 +5,19 @@ package co.helpdesk.faveo.pro;
  */
 
 
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
+
 import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+
 import java.io.File;
 
-import android.app.Application;
-
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-public class FaveoApplication extends Application {
+public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
 
     @Override
@@ -27,6 +29,7 @@ public class FaveoApplication extends Application {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
+        MultiDex.install(this);
         Fabric.with(this, new Crashlytics());
         instance = this;
     }

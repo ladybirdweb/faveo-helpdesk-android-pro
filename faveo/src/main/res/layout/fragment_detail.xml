@@ -26,7 +26,6 @@
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             android:text="Client name"
-            android:textAllCaps="true"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp"
             android:textStyle="bold" />
