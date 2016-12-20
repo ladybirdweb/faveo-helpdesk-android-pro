@@ -1,7 +1,6 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
 
-import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -36,8 +35,8 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&user_id=" + userID +
-                "&subject=" + Uri.encode(subject) +
-                "&body=" + Uri.encode(body) +
+                "&subject=" + subject+
+                "&body=" + body+
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
                 "&priority=" + priority +
@@ -53,8 +52,8 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&user_id=" + userID +
-                "&subject=" + Uri.encode(subject) +
-                "&body=" + Uri.encode(body) +
+                "&subject=" +subject +
+                "&body=" + body +
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
                 "&priority=" + priority +
@@ -71,8 +70,8 @@ public class Helpdesk {
                     "api_key=" + apiKey +
                     "&ip=" + IP +
                     "&user_id=" + userID +
-                    "&subject=" + Uri.encode(subject) +
-                    "&body=" + Uri.encode(body) +
+                    "&subject=" +subject +
+                    "&body=" +body +
                     "&helptopic=" + helpTopic +
                     "&sla=" + sla +
                     "&priority=" + priority +
@@ -93,14 +92,14 @@ public class Helpdesk {
                 "&token=" + token +
                 "&ticketid=" + ticketID +
                 "&userid=" + userID +
-                "&body=" + Uri.encode(note));
+                "&body=" + note);
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/internal-note?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticketid=" + ticketID +
                 "&userid=" + userID +
-                "&body=" + Uri.encode(note), null);
+                "&body=" +note, null);
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/internal-note?" +
                     "api_key=" + apiKey +
@@ -108,7 +107,7 @@ public class Helpdesk {
                     "&token=" + token +
                     "&ticketid=" + ticketID +
                     "&userid=" + userID +
-                    "&body=" + Uri.encode(note), null);
+                    "&body=" +note, null);
         return result;
     }
 
@@ -119,14 +118,14 @@ public class Helpdesk {
                 "&token=" + token +
                 "&ticket_ID=" + ticketID +
                 "&cc=" + cc +
-                "&reply_content=" + Uri.encode(replyContent));
+                "&reply_content=" +replyContent);
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/reply?" +
                         "api_key=" + apiKey +
                         "&ip=" + IP +
                         "&token=" + token +
                         "&ticket_ID=" + ticketID +
                         "&cc=" + cc +
-                        "&reply_content=" + Uri.encode(replyContent),
+                        "&reply_content=" + replyContent,
                 null);
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/reply?" +
@@ -135,7 +134,7 @@ public class Helpdesk {
                     "&token=" + token +
                     "&ticket_ID=" + ticketID +
                     "&cc=" + cc +
-                    "&reply_content=" + Uri.encode(replyContent), null);
+                    "&reply_content=" +replyContent, null);
         return result;
     }
 
@@ -146,7 +145,7 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
-                "&subject=" + Uri.encode(subject) +
+                "&subject=" + subject +
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
@@ -157,7 +156,7 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
-                "&subject=" + Uri.encode(subject) +
+                "&subject=" + subject +
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
@@ -169,7 +168,7 @@ public class Helpdesk {
                     "&ip=" + IP +
                     "&token=" + token +
                     "&ticket_id=" + ticketID +
-                    "&subject=" + Uri.encode(subject) +
+                    "&subject=" +subject +
                     "&sla_plan=" + slaPlan +
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
