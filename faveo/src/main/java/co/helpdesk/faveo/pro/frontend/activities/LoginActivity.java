@@ -38,7 +38,7 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 public class LoginActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener {
 
     TextView textViewFieldError, textViewForgotPassword;
-    EditText editTextCompanyURL, editTextUsername, editTextPassword;
+    EditText editTextCompanyURL, editTextUsername, editTextPassword, editTextAPIkey;
     ViewFlipper viewflipper;
     ImageButton buttonVerifyURL;
     Button buttonSignIn;
@@ -46,8 +46,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
     ProgressDialog progressDialogVerifyURL;
     ProgressDialog progressDialogSignIn;
     ProgressDialog progressDialogBilling;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             @Override
             public void onClick(View v) {
                 setNormalStates();
+
                 String username = editTextUsername.getText().toString();
                 String password = editTextPassword.getText().toString();
                 if (username.trim().length() == 0 || password.trim().length() == 0) {
@@ -265,6 +265,8 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         textViewFieldError.setVisibility(View.INVISIBLE);
         editTextUsername.setBackgroundResource(R.drawable.edittext_modified_states);
         editTextPassword.setBackgroundResource(R.drawable.edittext_modified_states);
+        editTextAPIkey.setBackgroundResource(R.drawable.edittext_modified_states);
+        editTextAPIkey.setPadding(0, paddingTop, 0, paddingBottom);
         editTextUsername.setPadding(0, paddingTop, 0, paddingBottom);
         editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
     }
@@ -307,6 +309,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         textViewForgotPassword = (TextView) findViewById(R.id.forgot_password);
         editTextUsername = (EditText) findViewById(R.id.editText_username);
         editTextPassword = (EditText) findViewById(R.id.editText_password);
+        editTextAPIkey = (EditText) findViewById(R.id.editText_company_api_key);
         buttonSignIn = (Button) findViewById(R.id.button_sign_in);
         paddingTop = editTextUsername.getPaddingTop();
         paddingBottom = editTextUsername.getPaddingBottom();

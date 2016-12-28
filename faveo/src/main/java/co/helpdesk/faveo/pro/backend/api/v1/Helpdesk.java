@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
-
 import android.net.Uri;
 import android.util.Log;
 
@@ -191,6 +190,7 @@ public class Helpdesk {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("fcm call",Constants.URL + "fcmtoken?");
         return new HTTPConnection().HTTPResponsePost(Constants.URL + "fcmtoken?", parameters);
     }
 
