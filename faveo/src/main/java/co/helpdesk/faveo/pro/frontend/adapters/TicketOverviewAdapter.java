@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
+
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 
@@ -37,7 +39,7 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
         ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
         ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
         ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
-        ticketViewHolder.textViewTime.setText(Helper.parseDate(ticketOverview.ticketTime));
+        ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
         if (ticketOverview.clientPicture != null && ticketOverview.clientPicture.trim().length() != 0)
             Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
                     .load(ticketOverview.clientPicture)
@@ -75,7 +77,7 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
         protected TextView textViewTicketNumber;
         protected TextView textViewClientName;
         protected TextView textViewSubject;
-        protected TextView textViewTime;
+        protected RelativeTimeTextView textViewTime;
         protected TextView textViewNewNotification;
 
         public TicketViewHolder(View v) {
@@ -86,7 +88,7 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             textViewTicketNumber = (TextView)  v.findViewById(R.id.textView_ticket_number);
             textViewClientName = (TextView)  v.findViewById(R.id.textView_client_name);
             textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
-            textViewTime = (TextView) v.findViewById(R.id.textView_ticket_time);
+            textViewTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
             textViewNewNotification = (TextView) v.findViewById(R.id.textView_ticket_bubble);
         }
 

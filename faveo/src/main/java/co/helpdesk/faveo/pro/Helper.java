@@ -84,19 +84,48 @@ public class Helper {
         return null;
     }
 
+    public static Long relativeTime(String dateToParse) {
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date d = null;
+        try {
+            d = sdf.parse(dateToParse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat output = new SimpleDateFormat("d MMM yyyy  HH:mm");
+        output.setTimeZone(TimeZone.getDefault());
+
+        String formattedTime = output.format(d);
+        Date gg = null;
+        try {
+            gg = output.parse(formattedTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // SimpleDateFormat day = new SimpleDateFormat("dd");
+//            String formattedDay = day.format(d) + Helper.getDayOfMonthSuffix(Integer.parseInt(day.format(d)));
+//            formattedTime = formattedTime.replaceFirst(formattedTime.substring(0, formattedTime.indexOf(" ")), formattedDay);
+//            sdf.parse(dateToParse);
+        return gg != null ? gg.getTime() : 0;
+    }
+
     public static String parseDate(String dateToParse) {
         try {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date d = sdf.parse(dateToParse);
+            Date dAte = sdf.parse(dateToParse);
 
             SimpleDateFormat output = new SimpleDateFormat("d MMM yyyy  HH:mm");
             output.setTimeZone(TimeZone.getDefault());
 
-            String formattedTime = output.format(d);
+            String formattedTime = output.format(dAte);
             SimpleDateFormat day = new SimpleDateFormat("dd");
-            String formattedDay = day.format(d) + Helper.getDayOfMonthSuffix(Integer.parseInt(day.format(d)));
+            String formattedDay = day.format(dAte) + Helper.getDayOfMonthSuffix(Integer.parseInt(day.format(dAte)));
             formattedTime = formattedTime.replaceFirst(formattedTime.substring(0, formattedTime.indexOf(" ")), formattedDay);
             sdf.parse(dateToParse);
             return formattedTime;
@@ -105,7 +134,6 @@ public class Helper {
             return dateToParse;
         }
     }
-
     public static String getDayOfMonthSuffix(final int n) {
         if (n >= 11 && n <= 13) {
             return "th";

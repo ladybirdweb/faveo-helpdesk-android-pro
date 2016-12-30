@@ -24,4 +24,7 @@
     <string name="title_activity_notification">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
 
+
+    <string name="just_now">Just now</string>
+
 </resources>
