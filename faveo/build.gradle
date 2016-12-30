@@ -71,5 +71,6 @@ dependencies {
     compile 'io.realm:realm-android:0.82.1'
     compile 'com.android.support:multidex:1.0.1'
 
+    compile 'com.github.curioustechizen.android-ago:library:+'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -262,6 +262,7 @@ public class Detail extends Fragment {
     }
 
     private void setUpViews(View rootView) {
+
         textViewOpenedBy = (TextView) rootView.findViewById(R.id.textView_opened_by);
         textViewOpenedBy.setText(TicketDetailActivity.ticketOpenedBy);
 
