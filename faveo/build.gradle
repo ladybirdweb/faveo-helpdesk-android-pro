@@ -20,8 +20,8 @@ android {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.6"
+        versionCode 17
+        versionName "1.7"
     }
     dexOptions {
         javaMaxHeapSize "4g"
@@ -70,7 +70,7 @@ dependencies {
     // Realm
     compile 'io.realm:realm-android:0.82.1'
     compile 'com.android.support:multidex:1.0.1'
-
+    compile 'com.gordonwong:material-sheet-fab:1.2.1'
     compile 'com.github.curioustechizen.android-ago:library:+'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:background="@color/colorAccent">
+    android:background="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/textView_ticket_id"

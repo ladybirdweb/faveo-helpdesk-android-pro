@@ -1,116 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ticket"
-    android:paddingLeft="8dp"
-    android:paddingTop="16dp"
-    android:paddingRight="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorAccent" >
+    android:background="?attr/selectableItemBackground"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="16dp">
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/textView_ticket_id"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imageView_default_profile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
         android:src="@drawable/default_pic"
         app:riv_corner_radius="30dip"
         app:riv_mutate_background="true"
-        app:riv_tile_mode="repeat"
         app:riv_oval="true"
-        android:layout_centerVertical="true"
-        android:layout_width="48dp"
-        android:layout_height="48dp" />
+        app:riv_tile_mode="repeat" />
 
     <com.github.curioustechizen.ago.RelativeTimeTextView
         android:id="@+id/textView_ticket_time"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:text="6th Dec 2016"
-        android:textSize="12sp"
-        android:textColor="@color/black"
+        android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        android:maxLines="1"
+        android:layout_marginLeft="18dp"
         android:alpha=".54"
-        android:fontFamily="sans-serif-medium"/>
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:text="6th Dec 2016"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
     <TextView
-        android:visibility="invisible"
         android:id="@+id/textView_ticket_bubble"
-        android:layout_below="@+id/textView_ticket_time"
-        android:layout_alignParentRight="true"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView_ticket_time"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
         android:text="12"
-        android:textSize="12sp"
         android:textColor="@color/white"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-medium"/>
+        android:textSize="12sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/textView_ticket_number"
-        android:layout_toRightOf="@+id/imageView_default_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="18dp"
         android:layout_marginRight="18dp"
-        android:text="#AAAA-0001-0000001"
-        android:textSize="12sp"
-        android:textColor="@color/black"
-        android:layout_centerHorizontal="true"
-        android:maxLines="1"
+        android:layout_toRightOf="@+id/imageView_default_profile"
         android:alpha=".54"
-        android:fontFamily="sans-serif-medium"/>
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:text="#AAAA-0001-0000001"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textView_ticket_subject"
-        android:layout_below="@+id/textView_ticket_number"
-        android:layout_toRightOf="@+id/imageView_default_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="18dp"
-        android:text="Subject of the ticket"
-        android:textSize="14sp"
-        android:textColor="@color/black"
+        android:layout_below="@+id/textView_ticket_number"
         android:layout_centerHorizontal="true"
-        android:maxLines="1"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/imageView_default_profile"
         android:alpha=".54"
         android:fontFamily="sans-serif-medium"
-        android:textStyle="bold"/>
+        android:maxLines="1"
+        android:text="Subject of the ticket"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView_client_name"
-        android:layout_below="@+id/textView_ticket_subject"
-        android:layout_toRightOf="@+id/imageView_default_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_ticket_subject"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="18dp"
         android:layout_marginRight="18dp"
         android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/imageView_default_profile"
+        android:fontFamily="sans-serif-bold"
         android:text="Karthik Sen"
-        android:textSize="16sp"
         android:textColor="@color/black"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-bold" />
+        android:textSize="16sp" />
 
     <View
-        android:layout_below="@+id/textView_client_name"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@+id/textView_client_name"
         android:layout_marginTop="16dp"
-        android:background="@color/grey_200"/>
+        android:background="@color/grey_200" />
 
 </RelativeLayout>

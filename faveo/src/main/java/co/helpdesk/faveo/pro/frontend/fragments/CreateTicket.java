@@ -143,8 +143,8 @@ public class CreateTicket extends Fragment {
                     if (message.trim().length() == 0) {
                         setErrorState(editTextMessage, textViewErrorMessage, "Please fill the field");
                         allCorrect = false;
-                    } else if (message.trim().length() < 5) {
-                        setErrorState(editTextMessage, textViewErrorMessage, "Message should be minimum 5 characters");
+                    } else if (message.trim().length() < 10) {
+                        setErrorState(editTextMessage, textViewErrorMessage, "Message should be minimum 10 characters");
                         allCorrect = false;
                     }
 
@@ -259,7 +259,7 @@ public class CreateTicket extends Fragment {
         editTextFirstName = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_firstname);
         editTextLastName = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_lastname);
         editTextPhone = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_phone);
-        // editTextPhone.setText("91");
+
         editTextSubject = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_subject);
         editTextMessage = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_message);
         textViewErrorEmail = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_email);

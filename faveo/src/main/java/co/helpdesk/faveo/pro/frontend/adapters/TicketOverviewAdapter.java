@@ -15,7 +15,6 @@ import java.util.List;
 
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
-
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 
@@ -64,29 +63,29 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
     @Override
     public TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
-        from(viewGroup.getContext()).
-        inflate(R.layout.card_ticket, viewGroup, false);
+                from(viewGroup.getContext()).
+                inflate(R.layout.card_ticket, viewGroup, false);
         return new TicketViewHolder(itemView);
     }
 
-     static class TicketViewHolder extends RecyclerView.ViewHolder {
+    static class TicketViewHolder extends RecyclerView.ViewHolder {
 
         protected View ticket;
-        protected RoundedImageView roundedImageViewProfilePic;
-        protected TextView textViewTicketID;
-        protected TextView textViewTicketNumber;
-        protected TextView textViewClientName;
-        protected TextView textViewSubject;
-        protected RelativeTimeTextView textViewTime;
-        protected TextView textViewNewNotification;
+        RoundedImageView roundedImageViewProfilePic;
+        TextView textViewTicketID;
+        TextView textViewTicketNumber;
+        TextView textViewClientName;
+        TextView textViewSubject;
+        RelativeTimeTextView textViewTime;
+        TextView textViewNewNotification;
 
-        public TicketViewHolder(View v) {
+        TicketViewHolder(View v) {
             super(v);
-            ticket =  v.findViewById(R.id.ticket);
-            roundedImageViewProfilePic =  (RoundedImageView) v.findViewById(R.id.imageView_default_profile);
-            textViewTicketID = (TextView)  v.findViewById(R.id.textView_ticket_id);
-            textViewTicketNumber = (TextView)  v.findViewById(R.id.textView_ticket_number);
-            textViewClientName = (TextView)  v.findViewById(R.id.textView_client_name);
+            ticket = v.findViewById(R.id.ticket);
+            roundedImageViewProfilePic = (RoundedImageView) v.findViewById(R.id.imageView_default_profile);
+            textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
+            textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
+            textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
             textViewTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
             textViewNewNotification = (TextView) v.findViewById(R.id.textView_ticket_bubble);

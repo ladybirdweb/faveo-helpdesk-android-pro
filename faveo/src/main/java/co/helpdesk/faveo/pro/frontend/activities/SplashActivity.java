@@ -41,7 +41,6 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
             keyTopic = "", valueTopic = "",
             keySource = "", valueSource = "";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +51,12 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         if (InternetReceiver.isConnected()) {
             progressDialog.setVisibility(View.VISIBLE);
             new FetchDependency(this).execute();
-            new FetchData(this).execute();
-
-        } else Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+            //new FetchData(this).execute();
+        } else {
+            progressDialog.setVisibility(View.GONE);
+            loading.setText("Oops! No internet");
+            //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -144,6 +146,12 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                 Toast.makeText(SplashActivity.this, "Error", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
+
+            progressDialog.setVisibility(View.GONE);
+            loading.setText("Done Loading!");
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            // intent.putExtra("nextPageURL", nextPageURL);
+            startActivity(intent);
         }
     }
 

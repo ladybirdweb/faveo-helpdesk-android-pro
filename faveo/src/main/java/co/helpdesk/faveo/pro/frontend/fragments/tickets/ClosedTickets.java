@@ -190,8 +190,8 @@ public class ClosedTickets extends Fragment {
             String result = new Helpdesk().nextPageURL(nextPageURL);
             if (result == null)
                 return null;
-            DatabaseHandler databaseHandler = new DatabaseHandler(context);
-            databaseHandler.recreateTable();
+           // DatabaseHandler databaseHandler = new DatabaseHandler(context);
+           // databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 nextPageURL = jsonObject.getString("next_page_url");
@@ -201,13 +201,13 @@ public class ClosedTickets extends Fragment {
                     TicketOverview ticketOverview = Helper.parseTicketOverview(jsonArray, i);
                     if (ticketOverview != null) {
                         ticketOverviewList.add(ticketOverview);
-                        databaseHandler.addTicketOverview(ticketOverview);
+                       // databaseHandler.addTicketOverview(ticketOverview);
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            databaseHandler.close();
+            //databaseHandler.close();
             return "success";
         }
 

@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
     ProgressDialog progressDialogVerifyURL;
     ProgressDialog progressDialogSignIn;
     ProgressDialog progressDialogBilling;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         Context context;
         String baseURL;
 
-        public VerifyBilling(Context context, String baseURL) {
+        VerifyBilling(Context context, String baseURL) {
             this.context = context;
             this.baseURL = baseURL;
         }
@@ -172,7 +172,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         @Override
         protected void onPostExecute(String result) {
             progressDialogBilling.dismiss();
-            Log.d("Response BillingVerfy", result);
+            Log.d("Response BillingVerfy", result + "");
             if (result == null) {
                 Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 return;
@@ -215,7 +215,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         }
 
         protected void onPostExecute(String result) {
-            Log.d("Response login", result);
+            Log.d("Response login", result + "");
             progressDialogSignIn.dismiss();
             if (result == null) {
                 Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -392,7 +392,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("Response FCM", result);
+            Log.d("Response FCM", result + "");
             if (result == null) {
                 Log.d("RESPONSE_FCM", "" + result);
                 return;

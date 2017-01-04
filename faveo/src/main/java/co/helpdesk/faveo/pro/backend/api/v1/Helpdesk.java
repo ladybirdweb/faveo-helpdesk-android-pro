@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
-import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -35,8 +34,8 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&user_id=" + userID +
-                "&subject=" + Uri.encode(subject) +
-                "&body=" + Uri.encode(body) +
+                "&subject=" + subject +
+                "&body=" + body +
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
                 "&priority=" + priority +
@@ -52,8 +51,8 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&user_id=" + userID +
-                "&subject=" + Uri.encode(subject) +
-                "&body=" + Uri.encode(body) +
+                "&subject=" + subject +
+                "&body=" + body +
                 "&helptopic=" + helpTopic +
                 "&sla=" + sla +
                 "&priority=" + priority +
@@ -70,8 +69,8 @@ public class Helpdesk {
                     "api_key=" + apiKey +
                     "&ip=" + IP +
                     "&user_id=" + userID +
-                    "&subject=" + Uri.encode(subject) +
-                    "&body=" + Uri.encode(body) +
+                    "&subject=" + subject +
+                    "&body=" + body +
                     "&helptopic=" + helpTopic +
                     "&sla=" + sla +
                     "&priority=" + priority +
@@ -146,7 +145,7 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
-                "&subject=" + Uri.encode(subject) +
+                "&subject=" + subject +
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
@@ -157,7 +156,7 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
-                "&subject=" + Uri.encode(subject) +
+                "&subject=" + subject +
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
@@ -170,7 +169,7 @@ public class Helpdesk {
                     "&ip=" + IP +
                     "&token=" + token +
                     "&ticket_id=" + ticketID +
-                    "&subject=" + Uri.encode(subject) +
+                    "&subject=" + subject +
                     "&sla_plan=" + slaPlan +
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
@@ -190,12 +189,12 @@ public class Helpdesk {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("fcm call",Constants.URL + "fcmtoken?");
+        Log.d("fcm call", Constants.URL + "fcmtoken?");
         return new HTTPConnection().HTTPResponsePost(Constants.URL + "fcmtoken?", parameters);
     }
 
     public String getCheckBillingURL(String baseURL) {
-
+        Log.d("getBillingURL", Constants.BILLING_URL + "?url=" + baseURL);
         return new HTTPConnection().HTTPResponseGet(Constants.BILLING_URL + "?url=" + baseURL);
     }
 

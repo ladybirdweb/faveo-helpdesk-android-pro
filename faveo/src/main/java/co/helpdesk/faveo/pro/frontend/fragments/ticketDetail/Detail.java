@@ -20,6 +20,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.Utils;
@@ -36,8 +39,8 @@ public class Detail extends Fragment {
     EditText editTextSubject, editTextFirstName, editTextLastName, editTextEmail,
             editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
 
-    ArrayAdapter<String> spinnerSlaArrayAdapter,spinnerAssignToArrayAdapter,spinnerStatusArrayAdapter,
-            spinnerSourceArrayAdapter,spinnerHelpArrayAdapter,spinnerDeptArrayAdapter,spinnerPriArrayAdapter;
+    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter, spinnerStatusArrayAdapter,
+            spinnerSourceArrayAdapter, spinnerHelpArrayAdapter, spinnerDeptArrayAdapter, spinnerPriArrayAdapter;
 
     Spinner spinnerSLAPlans, spinnerDepartment, spinnerStatus, spinnerSource,
             spinnerPriority, spinnerHelpTopics, spinnerAssignTo;
@@ -85,15 +88,19 @@ public class Detail extends Fragment {
             public void onClick(View v) {
                 progressDialog.setMessage("Updating ticket");
                 progressDialog.show();
-                new SaveTicket(getActivity(),
-                        Integer.parseInt(TicketDetailActivity.ticketID),
-                        editTextSubject.getText().toString(),
-                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keySLA.split(","))[spinnerSLAPlans.getSelectedItemPosition()]),
-                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyTopic.split(","))[spinnerHelpTopics.getSelectedItemPosition()]),
-                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keySource.split(","))[spinnerSource.getSelectedItemPosition()]),
-                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyPriority.split(","))[spinnerPriority.getSelectedItemPosition()]),
-                        Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]))
-                        .execute();
+                try {
+                    new SaveTicket(getActivity(),
+                            Integer.parseInt(TicketDetailActivity.ticketID),
+                            URLEncoder.encode(editTextSubject.getText().toString(), "utf-8"),
+                            Integer.parseInt(Utils.removeDuplicates(SplashActivity.keySLA.split(","))[spinnerSLAPlans.getSelectedItemPosition()]),
+                            Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyTopic.split(","))[spinnerHelpTopics.getSelectedItemPosition()]),
+                            Integer.parseInt(Utils.removeDuplicates(SplashActivity.keySource.split(","))[spinnerSource.getSelectedItemPosition()]),
+                            Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyPriority.split(","))[spinnerPriority.getSelectedItemPosition()]),
+                            Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]))
+                            .execute();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
         });
         return rootView;
