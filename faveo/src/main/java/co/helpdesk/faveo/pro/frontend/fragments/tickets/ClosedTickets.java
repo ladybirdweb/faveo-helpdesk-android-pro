@@ -26,7 +26,6 @@ import java.util.List;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.backend.database.DatabaseHandler;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.model.TicketOverview;
@@ -100,18 +99,19 @@ public class ClosedTickets extends Fragment {
     public class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
 
-        public FetchFirst(Context context) {
+        FetchFirst(Context context) {
             this.context = context;
         }
 
         protected String doInBackground(String... urls) {
-            if (nextPageURL.equals("null")) {
-                return "all done";
-            }
+//            if (nextPageURL.equals("null")) {
+//                return "all done";
+//            }
             String result = new Helpdesk().getClosedTicket();
             if (result == null)
                 return null;
             String data;
+            ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 try {
@@ -179,7 +179,7 @@ public class ClosedTickets extends Fragment {
     public class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
-        public FetchNextPage(Context context) {
+        FetchNextPage(Context context) {
             this.context = context;
         }
 
@@ -190,8 +190,8 @@ public class ClosedTickets extends Fragment {
             String result = new Helpdesk().nextPageURL(nextPageURL);
             if (result == null)
                 return null;
-           // DatabaseHandler databaseHandler = new DatabaseHandler(context);
-           // databaseHandler.recreateTable();
+            // DatabaseHandler databaseHandler = new DatabaseHandler(context);
+            // databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 nextPageURL = jsonObject.getString("next_page_url");
@@ -201,7 +201,7 @@ public class ClosedTickets extends Fragment {
                     TicketOverview ticketOverview = Helper.parseTicketOverview(jsonArray, i);
                     if (ticketOverview != null) {
                         ticketOverviewList.add(ticketOverview);
-                       // databaseHandler.addTicketOverview(ticketOverview);
+                        // databaseHandler.addTicketOverview(ticketOverview);
                     }
                 }
             } catch (JSONException e) {
