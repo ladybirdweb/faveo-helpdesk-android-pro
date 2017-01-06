@@ -22,6 +22,7 @@ android {
         targetSdkVersion 25
         versionCode 17
         versionName "1.7"
+        multiDexEnabled true
     }
     dexOptions {
         javaMaxHeapSize "4g"
