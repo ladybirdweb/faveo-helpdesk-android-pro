@@ -37,7 +37,6 @@ public class CreateTicket extends Fragment {
     Spinner spinnerHelpTopic, spinnerSLAPlans, spinnerAssignTo, spinnerPriority, spinnerCountryCode;
     Button buttonSubmit;
     ProgressDialog progressDialog;
-
     int paddingTop, paddingBottom;
     View rootView;
 
@@ -73,7 +72,7 @@ public class CreateTicket extends Fragment {
         }
     }
 
-    public int GetCountryZipCode() {
+    public int getCountryZipCode() {
         String CountryID = "";
         String CountryZipCode = "";
         int code = 0;
@@ -151,11 +150,11 @@ public class CreateTicket extends Fragment {
                         allCorrect = false;
                     }
 
-                    if (spinnerAssignTo.getSelectedItemPosition() == 1) {
-                        Toast.makeText(getActivity(), "Invalid assignment", Toast.LENGTH_LONG).show();
-                        setErrorState(editTextMessage, textViewErrorMessage, "Invalid assign");
-                        allCorrect = false;
-                    }
+//                    if (spinnerAssignTo.getSelectedItemPosition() == 1) {
+//                        Toast.makeText(getActivity(), "Invalid assignment", Toast.LENGTH_LONG).show();
+//                        setErrorState(editTextMessage, textViewErrorMessage, "Invalid assign");
+//                        allCorrect = false;
+//                    }
 
                     if (allCorrect) {
                         if (InternetReceiver.isConnected()) {
@@ -293,7 +292,7 @@ public class CreateTicket extends Fragment {
         spinnerPriority.setAdapter(spinnerPriArrayAdapter);
 
         spinnerCountryCode = (Spinner) rootView.findViewById(R.id.spinner_code);
-        spinnerCountryCode.setSelection(GetCountryZipCode());
+        spinnerCountryCode.setSelection(getCountryZipCode());
         buttonSubmit = (Button) rootView.findViewById(co.helpdesk.faveo.pro.R.id.button_submit);
         paddingTop = editTextEmail.getPaddingTop();
         paddingBottom = editTextEmail.getPaddingBottom();

@@ -7,8 +7,11 @@ package co.helpdesk.faveo.pro;
 
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
+import com.amitshekhar.DebugDB;
 import com.crashlytics.android.Crashlytics;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
 
@@ -23,13 +26,30 @@ public class FaveoApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
+
+        Log.d("Debug address :",DebugDB.getAddressLog());
+
+        //Fast Android Networking init..
+        //AndroidNetworking.initialize(getApplicationContext());
+        //AndroidNetworking.setParserFactory(new JacksonParserFactory());
+
+        //Realm.io
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
                 .name(Realm.DEFAULT_REALM_NAME)
                 .schemaVersion(0)
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
-        MultiDex.install(this);
+
+        //Fabric.io
         Fabric.with(this, new Crashlytics());
         instance = this;
     }
@@ -49,17 +69,27 @@ public class FaveoApplication extends MultiDexApplication {
             String[] children = appDir.list();
             for (String s : children) {
                 if (!s.equals("lib"))
-                    deleteDir(new File(appDir, s));
+                    deleteRecursive(new File(appDir, s));
             }
         }
     }
 
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String aChildren : children)
-                return deleteDir(new File(dir, aChildren));
+//    public static boolean deleteDir(File dir) {
+//        if (dir != null && dir.isDirectory()) {
+//            String[] children = dir.list();
+//            for (String aChildren : children)
+//                return deleteDir(new File(dir, aChildren));
+//        }
+//        return dir.delete();
+//    }
+
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory != null && fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                child.delete();
+                deleteRecursive(child);
+            }
         }
-        return dir.delete();
+        fileOrDirectory.delete();
     }
 }

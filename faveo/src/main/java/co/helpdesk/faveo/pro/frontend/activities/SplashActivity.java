@@ -141,6 +141,15 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     valueSource += jsonArraySources.getJSONObject(i).getString("name") + ",";
                 }
 
+//                JSONArray jsonArrayTicketsCount = jsonObject1.getJSONArray("tickets_count");
+//                jsonArrayTicketsCount.getJSONObject(0).getInt("Open");
+//                jsonArrayTicketsCount.getJSONObject(1).getInt("Resolved");
+//                jsonArrayTicketsCount.getJSONObject(2).getInt("Closed");
+//                jsonArrayTicketsCount.getJSONObject(3).getInt("Archived");
+//                jsonArrayTicketsCount.getJSONObject(4).getInt("Deleted");
+//                jsonArrayTicketsCount.getJSONObject(5).getInt("Open");
+
+
 
             } catch (JSONException e) {
                 Toast.makeText(SplashActivity.this, "Error", Toast.LENGTH_LONG).show();

@@ -25,7 +25,7 @@ import co.helpdesk.faveo.pro.Preference;
 /**
  * Created by Sumit
  */
-public class HTTPConnection {
+class HTTPConnection {
 
     HTTPConnection() {
 
@@ -37,7 +37,7 @@ public class HTTPConnection {
     private InputStream is = null;
     private URL url;
 
-    public String HTTPResponsePost(String stringURL, String parameters) {
+    String HTTPResponsePost(String stringURL, String parameters) {
 
 
         try {

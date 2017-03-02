@@ -8,24 +8,32 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Preference;
@@ -38,21 +46,35 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 public class LoginActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener {
 
     TextView textViewFieldError, textViewForgotPassword;
-    EditText editTextCompanyURL, editTextUsername, editTextPassword, editTextAPIkey;
-    ViewFlipper viewflipper;
-    ImageButton buttonVerifyURL;
-    Button buttonSignIn;
+    EditText editTextUsername, editTextPassword, editTextAPIkey;
     int paddingTop, paddingBottom;
     ProgressDialog progressDialogVerifyURL;
     ProgressDialog progressDialogSignIn;
     ProgressDialog progressDialogBilling;
 
+    @BindView(R.id.button_signin)
+    Button buttonSignIn;
+    @BindView(R.id.fab_verify_url)
+    FloatingActionButton buttonVerifyURL;
+    @BindView(R.id.input_password)
+    AppCompatEditText passwordEdittext;
+    @BindView(R.id.input_username)
+    AppCompatEditText usernameEdittext;
+    @BindView(R.id.editText_company_url)
+    EditText editTextCompanyURL;
+    @BindView(R.id.viewFlipper)
+    ViewFlipper viewflipper;
+    @BindView(R.id.input_layout_username)
+    TextInputLayout textInputLayoutUsername;
+    @BindView(R.id.input_layout_password)
+    TextInputLayout textInputLayoutPass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        new Preference(getApplicationContext());
+        ButterKnife.bind(this);
+        Preference.setInstance(getApplicationContext());
 
         SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, 0);
         Boolean loginComplete = prefs.getBoolean("LOGIN_COMPLETE", false);
@@ -63,6 +85,9 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             startActivity(intent);
             return;
         }
+        buttonSignIn.setEnabled(false);
+        usernameEdittext.addTextChangedListener(mTextWatcher);
+        passwordEdittext.addTextChangedListener(mTextWatcher);
 
         setUpViews();
 
@@ -82,27 +107,27 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             }
         });
 
-        buttonSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNormalStates();
-
-                String username = editTextUsername.getText().toString();
-                String password = editTextPassword.getText().toString();
-                if (username.trim().length() == 0 || password.trim().length() == 0) {
-                    if (username.trim().length() == 0)
-                        setUsernameErrorStates();
-                    else
-                        setPasswordErrorStates();
-                    return;
-                }
-                if (InternetReceiver.isConnected()) {
-                    progressDialogSignIn.show();
-                    new SignIn(LoginActivity.this, username, password).execute();
-                } else
-                    Toast.makeText(v.getContext(), "Oops! No internet", Toast.LENGTH_LONG).show();
-            }
-        });
+//        buttonSignIn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setNormalStates();
+//
+//                String username = editTextUsername.getText().toString();
+//                String password = editTextPassword.getText().toString();
+//                if (username.trim().length() == 0 || password.trim().length() == 0) {
+//                    if (username.trim().length() == 0)
+//                        setUsernameErrorStates();
+//                    else
+//                        setPasswordErrorStates();
+//                    return;
+//                }
+//                if (InternetReceiver.isConnected()) {
+//                    progressDialogSignIn.show();
+//                    new SignIn(LoginActivity.this, username, password).execute();
+//                } else
+//                    Toast.makeText(v.getContext(), "Oops! No internet", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,16 +137,14 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             }
         });
 
-
     }
-
 
     public class VerifyURL extends AsyncTask<String, Void, String> {
         Context context;
         String companyURL;
         String baseURL;
 
-        public VerifyURL(Context context, String companyURL) {
+        VerifyURL(Context context, String companyURL) {
             this.context = context;
             this.companyURL = companyURL;
             baseURL = companyURL;
@@ -143,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             if (result.contains("success")) {
                 Preference.setCompanyURL(companyURL + "api/v1/");
                 Constants.URL = Preference.getCompanyURL();
-                progressDialogBilling.show();
+                 progressDialogBilling.show();
                 new VerifyBilling(LoginActivity.this, baseURL).execute();
                 //viewflipper.showNext();
 
@@ -161,7 +184,6 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             this.context = context;
             this.baseURL = baseURL;
         }
-
 
         @Override
         protected String doInBackground(String... params) {
@@ -199,12 +221,26 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         }
     }
 
+    @OnClick(R.id.button_signin)
+    public void signIn() {
+        String username = usernameEdittext.getText().toString();
+        String password = passwordEdittext.getText().toString();
+        if (InternetReceiver.isConnected()) {
+            //progressDialogSignIn.show();
+            textInputLayoutUsername.setEnabled(false);
+            textInputLayoutPass.setEnabled(false);
+            buttonSignIn.setText("Signing in...");
+            new SignIn(LoginActivity.this, username, password).execute();
+        } else
+            Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+    }
+
     public class SignIn extends AsyncTask<String, Void, String> {
         Context context;
         String username;
         String password;
 
-        public SignIn(Context context, String username, String password) {
+        SignIn(Context context, String username, String password) {
             this.context = context;
             this.username = username;
             this.password = password;
@@ -215,9 +251,13 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         }
 
         protected void onPostExecute(String result) {
+
             Log.d("Response login", result + "");
-            progressDialogSignIn.dismiss();
+            //progressDialogSignIn.dismiss();
             if (result == null) {
+                textInputLayoutUsername.setEnabled(true);
+                textInputLayoutPass.setEnabled(true);
+                buttonSignIn.setText("Sign in");
                 Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 return;
             } else {
@@ -225,7 +265,16 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                     JSONObject jsonObject = new JSONObject(result);
                     String error = jsonObject.getString("status_code");
                     if (error.equals("401")) {
-                        Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
+                        textInputLayoutUsername.setEnabled(true);
+                        textInputLayoutPass.setEnabled(true);
+                        buttonSignIn.setText("Sign in");
+                        //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
+                        StyleableToast st = new StyleableToast(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_LONG);
+                        st.setBackgroundColor(Color.parseColor("#3da6d7"));
+                        st.setBoldText();
+                        st.setTextColor(Color.WHITE);
+                        st.setCornerRadius(7);
+                        st.show();
                         return;
                     }
                 } catch (JSONException e) {
@@ -301,16 +350,17 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
 
         editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
         if (editTextCompanyURL != null) {
-            editTextCompanyURL.setText("http://");
+            editTextCompanyURL.setText("");
+            editTextCompanyURL.append("http://");
         }
-        viewflipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-        buttonVerifyURL = (ImageButton) findViewById(R.id.imageButton_verify_url);
+        //viewflipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+        // buttonVerifyURL = (FloatingActionButton) findViewById(R.id.fab_verify_url);
         textViewFieldError = (TextView) findViewById(R.id.textView_field_error);
         textViewForgotPassword = (TextView) findViewById(R.id.forgot_password);
         editTextUsername = (EditText) findViewById(R.id.editText_username);
         editTextPassword = (EditText) findViewById(R.id.editText_password);
         editTextAPIkey = (EditText) findViewById(R.id.editText_company_api_key);
-        buttonSignIn = (Button) findViewById(R.id.button_sign_in);
+        //buttonSignIn = (Button) findViewById(R.id.button_1);
         paddingTop = editTextUsername.getPaddingTop();
         paddingBottom = editTextUsername.getPaddingBottom();
 
@@ -378,7 +428,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         Context context;
         String token;
 
-        public SendingFCM(Context context, String token) {
+        SendingFCM(Context context, String token) {
             this.context = context;
             this.token = token;
         }
@@ -405,5 +455,41 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             }
         }
     }
+
+    void checkFieldsForEmptyValues() {
+
+        String username = usernameEdittext.getText().toString();
+        String password = passwordEdittext.getText().toString();
+        if (username.trim().length() == 0 || password.trim().length() == 0) {
+            buttonSignIn.setEnabled(false);
+        } else {
+            buttonSignIn.setEnabled(true);
+        }
+
+//        if (username.trim().length() == 0 || password.trim().length() == 0) {
+//            buttonSignIn.setEnabled(false);
+//        } else if (username.trim().length() <= 2) {
+//            textInputLayoutUsername.setError("Username must be at least 3 characters");
+//        } else {
+//            textInputLayoutUsername.setError(null);
+//            buttonSignIn.setEnabled(true);
+//        }
+    }
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            // check Fields For Empty Values
+            checkFieldsForEmptyValues();
+        }
+    };
 
 }

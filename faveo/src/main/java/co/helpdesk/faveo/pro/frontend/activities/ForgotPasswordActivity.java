@@ -13,8 +13,7 @@ import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 
-
-public class ForgotPasswordActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener{
+public class ForgotPasswordActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener {
 
     TextView textViewErrorEmail;
     EditText editTextEmail;
@@ -28,7 +27,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Interne
         buttonResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
     }
@@ -38,6 +36,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Interne
         editTextEmail = (EditText) findViewById(R.id.editText_email);
         buttonResetPassword = (Button) findViewById(R.id.button_reset_password);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -84,7 +83,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Interne
         } else {
             showSnackIfNoInternet(false);
         }
-
     }
 
     /**

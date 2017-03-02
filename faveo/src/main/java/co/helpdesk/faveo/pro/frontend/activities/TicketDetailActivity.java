@@ -69,7 +69,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     Button buttonCreate, buttonSend;
     ProgressDialog progressDialog;
     private int statusBarColor;
-
+    Toolbar mToolbar;
     public static String ticketID;
     public static String ticketNumber;
     public static String ticketOpenedBy;
@@ -82,18 +82,17 @@ public class TicketDetailActivity extends AppCompatActivity implements
         setupFab();
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         ticketID = getIntent().getStringExtra("ticket_id");
         ticketNumber = getIntent().getStringExtra("ticket_number");
         ticketOpenedBy = getIntent().getStringExtra("ticket_opened_by");
         ticketSubject = getIntent().getStringExtra("ticket_subject");
-        TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
-        mTitle.setText(ticketNumber == null ? "Unknown" : ticketNumber);
-
+       // TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
+        //mTitle.setText(ticketNumber == null ? "Unknown" : ticketNumber);
+        getSupportActionBar().setTitle(ticketNumber == null ? "Unknown" : ticketNumber);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         setupViewPager();

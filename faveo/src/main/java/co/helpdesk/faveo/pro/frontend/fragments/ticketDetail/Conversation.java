@@ -1,7 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,12 +7,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,22 +23,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
+import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketThread;
 
 public class Conversation extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    RecyclerView recyclerView;
+    @BindView(R.id.cardList)
+    ShimmerRecyclerView recyclerView;
+
+    @BindView(R.id.empty_view)
+    TextView empty_view;
+
+    @BindView(R.id.noiternet_view)
+    TextView noInternet_view;
+
     View rootView;
 
     TicketThreadAdapter ticketThreadAdapter;
     List<TicketThread> ticketThreadList = new ArrayList<>();
-    ProgressDialog progressDialog;
+
+    @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
     private String mParam1;
@@ -73,19 +85,40 @@ public class Conversation extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Fetching conversation");
-            progressDialog.show();
-            new FetchTicketThreads(getActivity()).execute();
-            swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefresh);
+            ButterKnife.bind(this, rootView);
+            swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+
+            //            swipeRefresh.setRefreshing(true);
+//            new FetchFirst(getActivity()).execute();
+            if (InternetReceiver.isConnected()) {
+                noInternet_view.setVisibility(View.GONE);
+                // swipeRefresh.setRefreshing(true);
+                new FetchTicketThreads(getActivity()).execute();
+            } else {
+                noInternet_view.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+                empty_view.setVisibility(View.GONE);
+            }
+
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    if (ticketThreadList.size() != 0) {
-                        ticketThreadList.clear();
-                        ticketThreadAdapter.notifyDataSetChanged();
-                        new FetchTicketThreads(getActivity()).execute();
+                    if (InternetReceiver.isConnected()) {
+//                        loading = true;
+                        recyclerView.setVisibility(View.VISIBLE);
+                        noInternet_view.setVisibility(View.GONE);
+                        if (ticketThreadList.size() != 0) {
+                            ticketThreadList.clear();
+                            ticketThreadAdapter.notifyDataSetChanged();
+                            new FetchTicketThreads(getActivity()).execute();
+                        }
+                    } else {
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        swipeRefresh.setRefreshing(false);
+                        empty_view.setVisibility(View.GONE);
+                        noInternet_view.setVisibility(View.VISIBLE);
                     }
+
                 }
             });
         }
@@ -96,7 +129,7 @@ public class Conversation extends Fragment {
     public class FetchTicketThreads extends AsyncTask<String, Void, String> {
         Context context;
 
-        public FetchTicketThreads(Context context) {
+        FetchTicketThreads(Context context) {
             this.context = context;
         }
 
@@ -108,8 +141,6 @@ public class Conversation extends Fragment {
         protected void onPostExecute(String result) {
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
             if (result == null) {
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
@@ -128,7 +159,16 @@ public class Conversation extends Fragment {
 /*                        String clientName = jsonArray.getJSONObject(i).getString("poster");
                         if (clientName.equals("null") || clientName.equals(""))
                             clientName = "NOTE";*/
-                        String clientName = jsonArray.getJSONObject(i).getString("first_name") + " " + jsonArray.getJSONObject(i).getString("last_name");
+                        String firstName = jsonArray.getJSONObject(i).getString("first_name");
+                        String lastName = jsonArray.getJSONObject(i).getString("last_name");
+                        String clientName = firstName + " " + lastName;
+                        String f = "", l = "";
+                        if (firstName.trim().length() != 0) {
+                            f = firstName.substring(0, 1);
+                        }
+                        if (lastName.trim().length() != 0) {
+                            l = lastName.substring(0, 1);
+                        }
                         if (clientName.equals("null") || clientName.equals(""))
                             clientName = jsonArray.getJSONObject(i).getString("user_name");
                         String messageTime = jsonArray.getJSONObject(i).getString("created_at");
@@ -136,7 +176,7 @@ public class Conversation extends Fragment {
                         String message = jsonArray.getJSONObject(i).getString("body");
                         Log.d("body:", message);
                         String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
-                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
+                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -147,7 +187,6 @@ public class Conversation extends Fragment {
                 e.printStackTrace();
             }
 
-            recyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
             recyclerView.setHasFixedSize(false);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -165,12 +204,12 @@ public class Conversation extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

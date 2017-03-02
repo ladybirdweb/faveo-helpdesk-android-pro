@@ -20,7 +20,7 @@
     <View
         android:layout_width="6dp"
         android:layout_height="match_parent"
-        android:background="@color/blue"
+        android:background="@color/faveo"
         android:visibility="invisible" />
 
     <ImageView

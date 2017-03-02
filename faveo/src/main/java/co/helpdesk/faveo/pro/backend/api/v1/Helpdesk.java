@@ -8,9 +8,7 @@ import org.json.JSONObject;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.Preference;
 
-/**
- * Created by Sumit
- */
+
 public class Helpdesk {
 
     static String apiKey;
@@ -385,6 +383,7 @@ public class Helpdesk {
             return new HTTPConnection().HTTPResponseGet(URL + "&api_key=" + apiKey + "&token=" + token);
         return result;
     }
+
     public String nextPageURL(String URL, String userID) {
 
         Log.d("nextPageURLAPI", URL + "&api_key=" + apiKey + "&token=" + token + "&user_id=" + userID);
@@ -393,6 +392,7 @@ public class Helpdesk {
             return new HTTPConnection().HTTPResponseGet(URL + "&api_key=" + apiKey + "&token=" + token + "&user_id=" + userID);
         return result;
     }
+
     public String getMyTickets(String userID) {
         Log.d("MyTicketsAPI", Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
         String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);

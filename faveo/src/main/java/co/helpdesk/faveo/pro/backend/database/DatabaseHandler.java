@@ -164,28 +164,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<TicketOverview> getTicketOverview() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_TICKET_OVERVIEW, null, null, null, null, null, null, null);
-        List<TicketOverview> ticketOverviewList = new ArrayList<>();
-        if (cursor == null)
-            return null;
-        else if (cursor.moveToFirst()) {
-            do {
-                TicketOverview ticketOverview = new TicketOverview(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getString(6));
-                ticketOverviewList.add(ticketOverview);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return ticketOverviewList;
-    }
+//    public List<TicketOverview> getTicketOverview() {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.query(TABLE_TICKET_OVERVIEW, null, null, null, null, null, null, null);
+//        List<TicketOverview> ticketOverviewList = new ArrayList<>();
+//        if (cursor == null)
+//            return null;
+//        else if (cursor.moveToFirst()) {
+//            do {
+//                TicketOverview ticketOverview = new TicketOverview(
+//                        cursor.getInt(0),
+//                        cursor.getString(1),
+//                        cursor.getString(2),
+//                        cursor.getString(3),
+//                        cursor.getString(4),
+//                        cursor.getString(5),
+//                        cursor.getString(6));
+//                ticketOverviewList.add(ticketOverview);
+//            } while (cursor.moveToNext());
+//        }
+//        cursor.close();
+//        return ticketOverviewList;
+//    }
 
     public List<TicketDetail> getTicketDetail() {
         SQLiteDatabase db = this.getReadableDatabase();

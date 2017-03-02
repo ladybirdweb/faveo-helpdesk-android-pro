@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.curioustechizen.ago.RelativeTimeTextView;
+
 import co.helpdesk.faveo.pro.Controller.RealmController;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
@@ -49,12 +51,12 @@ public class NotificationAdapter extends RealmRecyclerViewAdapter<Ticket> {
 
         // set the title and the snippet
         holder.textSub.setText(ticket.getTicket_subject());
-        holder.textTicketNumber.setText(ticket.getTicket_number());
+       // holder.textNotificationtime.setText(ticket.getTicket_number());
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), TicketDetailActivity.class);
-                intent.putExtra("ticket_id", ticket.getTicket_id()+"");
+                intent.putExtra("ticket_id", ticket.getTicket_id() + "");
                 intent.putExtra("ticket_number", ticket.getTicket_number());
                 intent.putExtra("ticket_opened_by", ticket.getTicket_opened_by());
                 intent.putExtra("ticket_subject", ticket.getTicket_subject());
@@ -73,18 +75,18 @@ public class NotificationAdapter extends RealmRecyclerViewAdapter<Ticket> {
         return 0;
     }
 
-    public static class CardViewHolder extends RecyclerView.ViewHolder {
+    private static class CardViewHolder extends RecyclerView.ViewHolder {
 
-        public CardView card;
-        public TextView textSub;
-        public TextView textTicketNumber;
+        CardView card;
+        TextView textSub;
+        RelativeTimeTextView textNotificationtime;
 
-        public CardViewHolder(View itemView) {
+        CardViewHolder(View itemView) {
             // standard view holder pattern with Butterknife view injection
             super(itemView);
             card = (CardView) itemView.findViewById(R.id.notification_cardview);
             textSub = (TextView) itemView.findViewById(R.id.ticket_subject);
-            textTicketNumber = (TextView) itemView.findViewById(R.id.ticket_number);
+            textNotificationtime = (RelativeTimeTextView) itemView.findViewById(R.id.noti_time);
         }
     }
 }

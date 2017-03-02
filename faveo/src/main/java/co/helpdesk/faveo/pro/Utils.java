@@ -11,9 +11,9 @@ import java.util.LinkedHashSet;
 public class Utils {
 
     public static String[] removeDuplicates(String[] arr) {
-
+        //arr[0] = "--";
         LinkedHashSet<String> lhs = new LinkedHashSet<>();
-
+        lhs.add("--");
         Collections.addAll(lhs, arr);
 
         String[] strArr = new String[lhs.size()];

@@ -18,11 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +27,11 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.loader.PicassoLoader;
+import agency.tango.android.avatarview.views.AvatarView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -43,9 +45,27 @@ public class ClientDetailActivity extends AppCompatActivity implements
         OpenTickets.OnFragmentInteractionListener,
         ClosedTickets.OnFragmentInteractionListener, InternetReceiver.InternetReceiverListener {
 
-    ImageView imageViewClientPicture;
-    TextView textViewClientName, textViewClientEmail, textViewClientPhone, textViewClientStatus, textViewClientCompany;
+    @BindView(R.id.imageView_default_profile)
+    AvatarView imageViewClientPicture;
+
+    @BindView(R.id.textView_client_name)
+    TextView textViewClientName;
+
+    @BindView(R.id.textView_client_email)
+    TextView textViewClientEmail;
+
+    @BindView(R.id.textView_client_phone)
+    TextView textViewClientPhone;
+
+    @BindView(R.id.textView_client_status)
+    TextView textViewClientStatus;
+
+    @BindView(R.id.textView_client_company)
+    TextView textViewClientCompany;
+
+    @BindView(R.id.viewpager)
     ViewPager viewPager;
+
     ViewPagerAdapter adapter;
     OpenTickets fragmentOpenTickets;
     ClosedTickets fragmentClosedTickets;
@@ -58,7 +78,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_profile);
-
+        ButterKnife.bind(this);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
@@ -86,15 +106,17 @@ public class ClientDetailActivity extends AppCompatActivity implements
             textViewClientCompany.setText(intent.getStringExtra("CLIENT_COMPANY"));
         textViewClientStatus.setText(intent.getStringExtra("CLIENT_ACTIVE").equals("1") ? "ACTIVE" : "INACTIVE");
 
-        if (clientPictureUrl != null && clientPictureUrl.trim().length() != 0) {
-            Picasso.with(this)
-                    .load(clientPictureUrl)
-                    .placeholder(R.drawable.default_pic)
-                    .error(R.drawable.default_pic)
-                    .into(imageViewClientPicture);
-        }
+        IImageLoader imageLoader = new PicassoLoader();
+        imageLoader.loadImage(imageViewClientPicture, clientPictureUrl, clientName);
+//        if (clientPictureUrl != null && clientPictureUrl.trim().length() != 0) {
+//            Picasso.with(this)
+//                    .load(clientPictureUrl)
+//                    .placeholder(R.drawable.default_pic)
+//                    .error(R.drawable.default_pic)
+//                    .into(imageViewClientPicture);
+//        }
         if (InternetReceiver.isConnected()) {
-            progressDialog.show();
+            //progressDialog.show();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -127,7 +149,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         List<TicketGlimpse> listOpenTicketGlimpse = new ArrayList<>();
         List<TicketGlimpse> listClosedTicketGlimpse = new ArrayList<>();
 
-        public FetchClientTickets(Context context) {
+        FetchClientTickets(Context context) {
             this.context = context;
         }
 
@@ -250,13 +272,13 @@ public class ClientDetailActivity extends AppCompatActivity implements
     private void setUpViews() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Fetching tickets");
-        imageViewClientPicture = (ImageView) findViewById(R.id.imageView_default_profile);
-        textViewClientName = (TextView) findViewById(R.id.textView_client_name);
-        textViewClientEmail = (TextView) findViewById(R.id.textView_client_email);
-        textViewClientPhone = (TextView) findViewById(R.id.textView_client_phone);
-        textViewClientCompany = (TextView) findViewById(R.id.textView_client_company);
-        textViewClientStatus = (TextView) findViewById(R.id.textView_client_status);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        //imageViewClientPicture = (ImageView) findViewById(R.id.imageView_default_profile);
+        //textViewClientName = (TextView) findViewById(R.id.textView_client_name);
+        // textViewClientEmail = (TextView) findViewById(R.id.textView_client_email);
+        // textViewClientPhone = (TextView) findViewById(R.id.textView_client_phone);
+        //textViewClientCompany = (TextView) findViewById(R.id.textView_client_company);
+        //textViewClientStatus = (TextView) findViewById(R.id.textView_client_status);
+        // viewPager = (ViewPager) findViewById(R.id.viewpager);
 
     }
 

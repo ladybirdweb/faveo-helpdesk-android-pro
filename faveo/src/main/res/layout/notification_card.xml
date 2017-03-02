@@ -13,15 +13,15 @@
     card_view:contentPadding="5dp">
 
     <RelativeLayout
-        android:layout_margin="4dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
 
 
-        <ImageView
+        <agency.tango.android.avatarview.views.AvatarView
             android:id="@+id/dthumbnail"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
@@ -30,30 +30,32 @@
 
         <TextView
             android:id="@+id/ticket_subject"
-            android:layout_width="172dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/dthumbnail"
+            android:layout_toRightOf="@+id/dthumbnail"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Subject of the ticket ajsbja asjnbasnfa asfasfsafd asfasfsafasfaf "
             android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_below="@+id/ticket_number"
-            android:layout_toRightOf="@+id/dthumbnail"
-            android:layout_marginStart="9dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/ticket_number"
+        <com.github.curioustechizen.ago.RelativeTimeTextView
+            android:id="@+id/noti_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1AAA-5545454-DD"
+            android:layout_below="@+id/ticket_subject"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@+id/dthumbnail"
+            android:layout_toRightOf="@+id/dthumbnail"
+            android:text="6th Dec 2016"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="12sp"
-            android:layout_alignParentTop="true"
-            android:layout_alignLeft="@+id/ticket_subject"
-            android:layout_alignStart="@+id/ticket_subject" />
+            android:textSize="12sp" />
 
     </RelativeLayout>
 

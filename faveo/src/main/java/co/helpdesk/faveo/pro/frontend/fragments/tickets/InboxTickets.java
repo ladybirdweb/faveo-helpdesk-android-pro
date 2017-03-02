@@ -1,11 +1,11 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +16,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,23 +26,36 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
+import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 
 public class InboxTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    TextView tv;
-    RecyclerView recyclerView;
+
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
+
+    @BindView(R.id.cardList)
+    ShimmerRecyclerView recyclerView;
+
+    @BindView(R.id.empty_view)
+    TextView empty_view;
+
+    @BindView(R.id.noiternet_view)
+    TextView noInternet_view;
+
     int currentPage = 1;
     static String nextPageURL = "";
     View rootView;
-    ProgressDialog progressDialog;
-    SwipeRefreshLayout swipeRefresh;
+
 
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
@@ -67,6 +83,7 @@ public class InboxTickets extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -78,45 +95,38 @@ public class InboxTickets extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
-//            if (getArguments() != null)
-//                nextPageURL = getArguments().getString("nextPageURL");
-            recyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
-            recyclerView.setHasFixedSize(false);
-            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Fetching tickets");
-            progressDialog.show();
-            // new ReadFromDatabase(getActivity()).execute();
-            new FetchFirst(getActivity()).execute();
-            swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefresh);
+            ButterKnife.bind(this, rootView);
+
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+//            swipeRefresh.setRefreshing(true);
+//            new FetchFirst(getActivity()).execute();
+            if (InternetReceiver.isConnected()) {
+                noInternet_view.setVisibility(View.GONE);
+                // swipeRefresh.setRefreshing(true);
+                new FetchFirst(getActivity()).execute();
+            } else {
+                noInternet_view.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+                empty_view.setVisibility(View.GONE);
+            }
+
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    new FetchFirst(getActivity()).execute();
+                    if (InternetReceiver.isConnected()) {
+                        loading = true;
+                        recyclerView.setVisibility(View.VISIBLE);
+                        noInternet_view.setVisibility(View.GONE);
+                        new FetchFirst(getActivity()).execute();
+                    } else {
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        swipeRefresh.setRefreshing(false);
+                        empty_view.setVisibility(View.GONE);
+                        noInternet_view.setVisibility(View.VISIBLE);
+                    }
                 }
             });
 
-//            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                @Override
-//                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                    if (dy > 0) {
-//                        visibleItemCount = linearLayoutManager.getChildCount();
-//                        totalItemCount = linearLayoutManager.getItemCount();
-//                        pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-//                        if (loading) {
-//                            if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-//                                loading = false;
-//                                new FetchNextPage(getActivity()).execute();
-//                                Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-            tv = (TextView) rootView.findViewById(R.id.empty_view);
         }
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox_tickets));
         return rootView;
@@ -148,6 +158,102 @@ public class InboxTickets extends Fragment {
 //            } else tv.setVisibility(View.GONE);
 //        }
 //    }
+
+
+    public class FetchFirst extends AsyncTask<String, Void, String> {
+        Context context;
+
+        FetchFirst(Context context) {
+            this.context = context;
+        }
+
+        protected String doInBackground(String... urls) {
+//            if (nextPageURL.equals("null")) {
+//                return "all done";
+//            }
+            String result = new Helpdesk().getInboxTicket();
+            if (result == null)
+                return null;
+            String data;
+            ticketOverviewList.clear();
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                try {
+                    data = jsonObject.getString("data");
+                    nextPageURL = jsonObject.getString("next_page_url");
+                } catch (JSONException e) {
+                    data = jsonObject.getString("result");
+                }
+                JSONArray jsonArray = new JSONArray(data);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    TicketOverview ticketOverview = Helper.parseTicketOverview(jsonArray, i);
+                    if (ticketOverview != null)
+                        ticketOverviewList.add(ticketOverview);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return "success";
+        }
+
+        protected void onPostExecute(String result) {
+//            ticketOverviewAdapter.notifyDataSetChanged();
+            //progressBar.setVisibility(View.GONE);
+
+            if (swipeRefresh.isRefreshing())
+                swipeRefresh.setRefreshing(false);
+
+            if (result == null) {
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                return;
+            }
+//            if (result.equals("all done")) {
+//                Toast.makeText(context, "All tickets loaded", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+
+            if (result.equals("all done")) {
+
+                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
+                //return;
+            }
+          //  recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
+            recyclerView.setHasFixedSize(false);
+            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        visibleItemCount = linearLayoutManager.getChildCount();
+                        totalItemCount = linearLayoutManager.getItemCount();
+                        pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
+                        if (loading) {
+                            if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                                loading = false;
+                                new FetchNextPage(getActivity()).execute();
+                                StyleableToast st = new StyleableToast(getContext(), "Loading!", Toast.LENGTH_SHORT);
+                                st.setBackgroundColor(Color.parseColor("#3da6d7"));
+                                st.setTextColor(Color.WHITE);
+                                st.setIcon(R.drawable.ic_autorenew_black_24dp);
+                                st.spinIcon();
+                                st.setMaxAlpha();
+                                st.show();
+                                //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+            });
+
+            ticketOverviewAdapter = new TicketOverviewAdapter(ticketOverviewList);
+            recyclerView.setAdapter(ticketOverviewAdapter);
+            if (ticketOverviewAdapter.getItemCount() == 0) {
+                empty_view.setVisibility(View.VISIBLE);
+            } else empty_view.setVisibility(View.GONE);
+        }
+    }
 
     public class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
@@ -198,90 +304,6 @@ public class InboxTickets extends Fragment {
         }
     }
 
-    public class FetchFirst extends AsyncTask<String, Void, String> {
-        Context context;
-
-        FetchFirst(Context context) {
-            this.context = context;
-        }
-
-        protected String doInBackground(String... urls) {
-//            if (nextPageURL.equals("null")) {
-//                return "all done";
-//            }
-            String result = new Helpdesk().getInboxTicket();
-            if (result == null)
-                return null;
-            String data;
-            ticketOverviewList.clear();
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                try {
-                    data = jsonObject.getString("data");
-                    nextPageURL = jsonObject.getString("next_page_url");
-                } catch (JSONException e) {
-                    data = jsonObject.getString("result");
-                }
-                JSONArray jsonArray = new JSONArray(data);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    TicketOverview ticketOverview = Helper.parseTicketOverview(jsonArray, i);
-                    if (ticketOverview != null)
-                        ticketOverviewList.add(ticketOverview);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return "success";
-        }
-
-        protected void onPostExecute(String result) {
-//            ticketOverviewAdapter.notifyDataSetChanged();
-            if (swipeRefresh.isRefreshing())
-                swipeRefresh.setRefreshing(false);
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
-            if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
-                return;
-            }
-//            if (result.equals("all done")) {
-//                Toast.makeText(context, "All tickets loaded", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-
-            if (result.equals("all done")) {
-
-                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
-                //return;
-            }
-            recyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
-            recyclerView.setHasFixedSize(false);
-            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    if (dy > 0) {
-                        visibleItemCount = linearLayoutManager.getChildCount();
-                        totalItemCount = linearLayoutManager.getItemCount();
-                        pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-                        if (loading) {
-                            if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-                                loading = false;
-                                new FetchNextPage(getActivity()).execute();
-                                Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                }
-            });
-
-            ticketOverviewAdapter = new TicketOverviewAdapter(ticketOverviewList);
-            recyclerView.setAdapter(ticketOverviewAdapter);
-        }
-    }
-
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -289,12 +311,12 @@ public class InboxTickets extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

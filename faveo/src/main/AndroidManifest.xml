@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".FaveoApplication"
@@ -88,7 +89,29 @@
         <!-- </service> -->
         <activity
             android:name=".frontend.activities.NotificationActivity"
-            android:label="@string/title_activity_notification" />
+            android:label="@string/title_activity_notification"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".frontend.activities.CreateTicketActivity"
+            android:label="@string/title_activity_create_ticket"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".frontend.activities.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <provider
+            android:name=".frontend.MySuggestionProvider"
+            android:authorities="co.helpdesk.faveo.pro.frontend.MySuggestionProvider" />
     </application>
 
 </manifest>

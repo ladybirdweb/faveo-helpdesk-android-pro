@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -8,8 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -18,10 +17,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
+import com.amitshekhar.DebugDB;
+import com.cocosw.bottomsheet.BottomSheet;
 
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Preference;
 import co.helpdesk.faveo.pro.R;
@@ -36,7 +43,6 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.TrashTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
-import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,
@@ -53,15 +59,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     protected boolean doubleBackToExitPressedOnce = false;
     public static boolean isShowing = false;
-    private boolean isCreateTicket = false;
+    private ArrayList<String> mList = new ArrayList<>();
+    @BindView(R.id.sort_view)
+    RelativeLayout sortView;
+    @BindView(R.id.sorting_type_textview)
+    TextView sortTextview;
+    @BindView(R.id.arrow_imgView)
+    ImageView arrowDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new Preference(getApplicationContext());
+        Preference.setInstance(getApplicationContext());
         isShowing = true;
-
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        DebugDB.getAddressLog();
+
         String nextPageURL = getIntent().getStringExtra("nextPageURL");
         Bundle bundle = new Bundle();
         bundle.putString("nextPageURL", nextPageURL);
@@ -70,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setTitle("Inbox");
 
         FragmentDrawer drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -96,6 +111,61 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onDestroy();
     }
 
+    @OnClick(R.id.sort_view)
+    public void onClickSort() {
+        arrowDown.animate().rotation(180).start();
+
+        new BottomSheet.Builder(this).title("Sort by").sheet(R.menu.sort_menu).listener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case R.id.action_date:
+                        sortTextview.setText("Due by date");
+                        break;
+                    case R.id.action_time:
+                        sortTextview.setText("Due by time");
+                        break;
+                    case R.id.action_status:
+                        sortTextview.setText("Status");
+                        break;
+                    case R.id.action_priority:
+                        sortTextview.setText("Priority");
+                        break;
+                }
+            }
+        }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                arrowDown.animate().rotation(0).start();
+            }
+        }).show();
+
+//        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+//        dialog.setContentView(R.layout.sort_bottom_sheet);
+//        BottomSheetListView listView = (BottomSheetListView) dialog.findViewById(R.id.ViewBtmSheet);
+//        ArrayAdapter<String> itemsAdapter =
+//                new ArrayAdapter<>(this, R.layout.sort_item, mList);
+//        listView.setAdapter(itemsAdapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+////                Bean bean = (Bean) parent.getAdapter().getItem(position);
+////                bean.isChecked = !bean.isChecked;
+////                SmoothCheckBox checkBox = (SmoothCheckBox) view.findViewById(R.id.scb);
+////                checkBox.setChecked(bean.isChecked, true);
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                arrowDown.animate().rotation(0).start();
+//            }
+//        });
+//        dialog.show();
+
+    }
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
@@ -106,37 +176,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         TextView mTitle = (TextView) toolbarTop.findViewById(R.id.title);
         mTitle.setText(title.toUpperCase());
 
-        // View mCreateTicket = toolbarTop.findViewById(R.id.button_create_ticket);
-
-        switch (title) {
-            case "Inbox":
-            case "My tickets":
-            case "Unassigned tickets":
-            case "Closed tickets":
-            case "Trash":
-                isCreateTicket = false;
-                invalidateOptionsMenu();
-                // mCreateTicket.setVisibility(View.VISIBLE);
-                break;
-            default:
-                isCreateTicket = true;
-                invalidateOptionsMenu();
-                // mCreateTicket.setVisibility(View.GONE);
-                break;
-        }
-//        mCreateTicket.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Fragment fragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.create_ticket));
-//                // if (fragment == null)
-//                Fragment fragment = new CreateTicket();
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.container_body, fragment);
-//                //fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
-//        });
     }
 
     @Override
@@ -148,9 +187,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        if (isCreateTicket){
-            menu.findItem(R.id.action_create_ticket).setVisible(false);
-        }else menu.findItem(R.id.action_create_ticket).setVisible(true);
+
         return true;
     }
 
@@ -161,20 +198,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_create_ticket) {
-            Fragment fragment = new CreateTicket();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, fragment);
-            //fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-//            item.setVisible(false);
-            isCreateTicket = true;
-            invalidateOptionsMenu();
+        if (id == R.id.action_search) {
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));
             return true;
         }
-
         if (id == R.id.action_noti) {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);

@@ -8,11 +8,12 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.github.curioustechizen.ago.RelativeTimeTextView;
-import com.makeramen.roundedimageview.RoundedImageView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.loader.PicassoLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.model.TicketThread;
@@ -38,14 +39,16 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         //ticketViewHolder.textViewMessage.setText(Html.fromHtml(ticketThread.message));
         ticketViewHolder.webView.loadDataWithBaseURL(null, ticketThread.message, "text/html", "utf-8", null);
 
-        if (ticketThread.clientPicture != null && ticketThread.clientPicture.trim().length() != 0)
-            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
-                    .load(ticketThread.clientPicture)
-                    .resize(96, 96)
-                    .centerCrop()
-                    .placeholder(R.drawable.default_pic)
-                    .error(R.drawable.default_pic)
-                    .into(ticketViewHolder.roundedImageViewProfilePic);
+        IImageLoader imageLoader = new PicassoLoader();
+        imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketThread.clientPicture, ticketThread.placeholder);
+//        if (ticketThread.clientPicture != null && ticketThread.clientPicture.trim().length() != 0)
+//            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
+//                    .load(ticketThread.clientPicture)
+//                    .resize(96, 96)
+//                    .centerCrop()
+//                    .placeholder(R.drawable.default_pic)
+//                    .error(R.drawable.default_pic)
+//                    .into(ticketViewHolder.roundedImageViewProfilePic);
 
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,19 +78,19 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 
     static class TicketViewHolder extends RecyclerView.ViewHolder {
 
-        protected View thread;
-        protected RoundedImageView roundedImageViewProfilePic;
-        protected TextView textViewClientName;
-        protected RelativeTimeTextView textViewMessageTime;
-        protected TextView textViewMessageTitle;
+        View thread;
+        AvatarView roundedImageViewProfilePic;
+        TextView textViewClientName;
+        RelativeTimeTextView textViewMessageTime;
+        TextView textViewMessageTitle;
         //  protected TextView textViewMessage;
-        protected TextView textViewType;
-        protected WebView webView;
+        TextView textViewType;
+        WebView webView;
 
-        public TicketViewHolder(View v) {
+        TicketViewHolder(View v) {
             super(v);
             thread = v.findViewById(R.id.thread);
-            roundedImageViewProfilePic = (RoundedImageView) v.findViewById(R.id.imageView_default_profile);
+            roundedImageViewProfilePic = (AvatarView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewMessageTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
             textViewMessageTitle = (TextView) v.findViewById(R.id.textView_client_message_title);

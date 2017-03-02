@@ -12,9 +12,10 @@ public class ClientOverview {
     public String clientPhone;
     public String clientCompany;
     public String clientActive;
+    public String placeholder;
 
     public ClientOverview(int clientID, String clientPicture, String clientName,
-                          String clientEmail, String clientPhone, String clientCompany, String clientActive) {
+                          String clientEmail, String clientPhone, String clientCompany, String clientActive, String placeholder) {
         this.clientID = clientID;
         this.clientPicture = clientPicture;
         this.clientName = clientName;
@@ -22,6 +23,16 @@ public class ClientOverview {
         this.clientPhone = clientPhone;
         this.clientCompany = clientCompany;
         this.clientActive = clientActive;
+        this.placeholder = placeholder;
+    }
+
+
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
     }
 
     public int getClientID() {

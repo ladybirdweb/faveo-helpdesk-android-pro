@@ -1,11 +1,13 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
 
-import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.Preference;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import co.helpdesk.faveo.pro.Constants;
+import co.helpdesk.faveo.pro.Preference;
 
 /**
  * Created by Sumit
@@ -34,6 +36,7 @@ public class Authenticate {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("Authenticate-URL :", Constants.URL + "authenticate" + parameters);
         return new HTTPConnection().HTTPResponsePost(Constants.URL + "authenticate", parameters);
     }
 

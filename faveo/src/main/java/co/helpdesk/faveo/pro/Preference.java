@@ -3,15 +3,23 @@ package co.helpdesk.faveo.pro;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by sumit on 2/7/2016.
- */
 public class Preference {
 
+    //    private Context applicationContext;
+    private static SharedPreferences pref;
+    //private SharedPreferences.Editor editor;
 
     private static boolean crashReport;
 
-    public static Context applicationContext;
+//    private static Preference instance;
+
+    public Preference() {
+    }
+
+    public static void setInstance(Context context) {
+        if (pref == null)
+            pref = context.getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
+    }
 
 //    private static boolean fetchDependency;
 
@@ -28,62 +36,71 @@ public class Preference {
 
 
     public static String getFCMtoken() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("FCMtoken", null);
+        //SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+        return pref.getString("FCMtoken", null);
     }
 
     public static void setFCMtoken(String FCMtoken) {
-        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
+        SharedPreferences.Editor authenticationEditor = pref.edit();
         authenticationEditor.putString("FCMtoken", FCMtoken);
         authenticationEditor.apply();
-
     }
 
 
-    public Preference(Context applicationContext) {
-        Preference.applicationContext = applicationContext;
-    }
+//    public static Preference getInstance() {
+//        if (instance == null) {
+//            instance = new Preference();
+//            return instance;
+//        }
+//        return instance;
+//    }
+
+//    public Preference(Context applicationContext) {
+//        this.applicationContext = applicationContext;
+//        pref = applicationContext.getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
+//        editor = pref.edit();
+//    }
 
     public static String getToken() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("TOKEN", null);
+        //SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+        return pref.getString("TOKEN", null);
     }
 
     public static String getUsername() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("USERNAME", null);
+        //SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+        return pref.getString("USERNAME", null);
     }
 
     public static String getPassword() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("PASSWORD", null);
+        //SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+        return pref.getString("PASSWORD", null);
     }
 
     public static String getUserID() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("ID", null);
+        //SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+        return pref.getString("ID", null);
     }
 
     public static void setToken(String token) {
-        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
+        SharedPreferences.Editor authenticationEditor = pref.edit();
         authenticationEditor.putString("TOKEN", token);
         authenticationEditor.apply();
     }
 
     public static void setCompanyURL(String companyURL) {
-        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
+        SharedPreferences.Editor authenticationEditor = pref.edit();
         authenticationEditor.putString("COMPANY_URL", companyURL);
         authenticationEditor.apply();
     }
 
     public static String getCompanyURL() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("COMPANY_URL", null);
+        //SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+        return pref.getString("COMPANY_URL", null);
     }
 
     public static boolean isCrashReport() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getBoolean("CRASH_REPORT", true);
+        //SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+        return pref.getBoolean("CRASH_REPORT", true);
     }
 
     public static void setCrashReport(boolean crashReport) {

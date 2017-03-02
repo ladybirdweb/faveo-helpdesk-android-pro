@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground">
@@ -18,24 +19,28 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:animateLayoutChanges="true"
-                android:padding="18dp">
+                android:paddingBottom="2dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="2dp">
 
-                <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <agency.tango.android.avatarview.views.AvatarView
                     android:id="@+id/imageView_default_profile"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/default_pic"
-                    app:riv_corner_radius="30dip"
-                    app:riv_mutate_background="true"
-                    app:riv_oval="true"
-                    app:riv_tile_mode="repeat" />
+                    app:av_border_color="@color/faveo"
+                    app:av_border_width="2dp"
+                    app:av_text_size_percentage="35" />
 
                 <TextView
                     android:id="@+id/textView_client_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="18dp"
                     android:layout_toLeftOf="@+id/textView_ticket_time"
                     android:layout_toRightOf="@+id/imageView_default_profile"
@@ -52,7 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
                     android:alpha=".86"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="6th Dec 2016"
                     android:textColor="@color/black"
@@ -62,11 +69,12 @@
                     android:id="@+id/textView_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/textView_ticket_time"
                     android:text="INTERNAL NOTE"
                     android:textColor="@color/error_red"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:layout_below="@+id/textView_client_name"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
 
 
             </RelativeLayout>

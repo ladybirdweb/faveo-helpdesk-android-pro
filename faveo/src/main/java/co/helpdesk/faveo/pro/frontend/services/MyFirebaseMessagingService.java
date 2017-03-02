@@ -38,7 +38,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData().get("ticket_opened_by"));
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData().get("ticket_subject"));
 
-
         //Calling method to generate notification
         sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getData().get("ticket_id"), remoteMessage.getData().get("ticket_number"), remoteMessage.getData().get("ticket_opened_by"), remoteMessage.getData().get("ticket_subject"), remoteMessage.getData().get("notification_title"));
         //Log.d("Data",remoteMessage.getNotification().);

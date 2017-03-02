@@ -6,19 +6,17 @@ import org.json.JSONException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import co.helpdesk.faveo.pro.model.ClientOverview;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 
-/**
- * Created by sumit on 1/26/2016.
- */
 public class Helper {
 
     public static TicketOverview parseTicketOverview(JSONArray jsonArray, int i) {
         try {
-            Date updated_at = null;
+            //Date updated_at = null;
             String firstName = jsonArray.getJSONObject(i).getString("first_name");
             String lastName = jsonArray.getJSONObject(i).getString("last_name");
             String username = jsonArray.getJSONObject(i).getString("user_name");
@@ -34,9 +32,18 @@ public class Helper {
             String helpTopicName = jsonArray.getJSONObject(i).getString("help_topic_name");
             String ticketStatusName = jsonArray.getJSONObject(i).getString("ticket_status_name");
             String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
-
+            String dueDate = jsonArray.getJSONObject(i).getString("overdue_date");
+            String priorityColor = jsonArray.getJSONObject(i).getString("priority_color");
+            String attachment = jsonArray.getJSONObject(i).getString("attachment");
+            String f = "", l = "";
+            if (firstName.trim().length() != 0) {
+                f = firstName.substring(0, 1);
+            }
+            if (lastName.trim().length() != 0) {
+                l = lastName.substring(0, 1);
+            }
             return new TicketOverview(Integer.parseInt(ID), profilePic,
-                    ticketNumber, firstName + " " + lastName, title, updatedAt, i + "");
+                    ticketNumber, firstName + " " + lastName, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, f + l);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -54,9 +61,15 @@ public class Helper {
             String clientPhone = jsonArray.getJSONObject(i).getString("phone_number");
             String clientCompany = jsonArray.getJSONObject(i).getString("company");
             String clientActive = jsonArray.getJSONObject(i).getString("active");
-
+            String f = "", l = "";
+            if (firstName.trim().length() != 0) {
+                f = firstName.substring(0, 1);
+            }
+            if (lastName.trim().length() != 0) {
+                l = lastName.substring(0, 1);
+            }
             return new ClientOverview(Integer.parseInt(clientID), clientPicture,
-                    firstName + " " + lastName, clientEmail, clientPhone, clientCompany, clientActive);
+                    firstName + " " + lastName, clientEmail, clientPhone, clientCompany, clientActive, f + l);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -74,9 +87,15 @@ public class Helper {
             String clientPhone = jsonArray.getJSONObject(i).getString("phone_number");
             String clientCompany = jsonArray.getJSONObject(i).getString("company");
             String clientActive = jsonArray.getJSONObject(i).getString("active");
-
+            String f = "", l = "";
+            if (firstName.trim().length() != 0) {
+                f = firstName.substring(0, 1);
+            }
+            if (lastName.trim().length() != 0) {
+                l = lastName.substring(0, 1);
+            }
             return new ClientOverview(Integer.parseInt(clientID), clientPicture,
-                    firstName + " " + lastName, clientEmail, clientPhone, clientCompany, clientActive);
+                    firstName + " " + lastName, clientEmail, clientPhone, clientCompany, clientActive, f + l);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -85,7 +104,6 @@ public class Helper {
     }
 
     public static Long relativeTime(String dateToParse) {
-
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -134,7 +152,45 @@ public class Helper {
             return dateToParse;
         }
     }
-    public static String getDayOfMonthSuffix(final int n) {
+
+    public static int compareDates(String duedate1) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = null;
+        try {
+            date = sdf.parse(duedate1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat output = new SimpleDateFormat("d MMM yyyy  HH:mm");
+        output.setTimeZone(TimeZone.getDefault());
+        String formattedTime = output.format(date);
+
+        Date dueDate = null;
+        Date curntDate = null;
+
+        String currentStringDate = new SimpleDateFormat("d MMM yyyy  HH:mm", Locale.getDefault()).format(new Date());
+        try {
+            dueDate = output.parse(formattedTime);
+            curntDate = output.parse(currentStringDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int i = 0;
+
+        if (dueDate.after(curntDate)) {
+            i = 0;
+        } else if (dueDate.before(curntDate)) {
+            i = 1;
+        } else if (dueDate.equals(curntDate)) {
+            i = 0;
+        }
+        return i;
+
+    }
+
+    private static String getDayOfMonthSuffix(final int n) {
         if (n >= 11 && n <= 13) {
             return "th";
         }

@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -82,7 +81,7 @@ public class Detail extends Fragment {
         setUpViews(rootView);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Fetching detail");
-        progressDialog.show();
+        // progressDialog.show();
         new FetchTicketDetail(getActivity(), TicketDetailActivity.ticketID).execute();
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +140,8 @@ public class Detail extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
             if (result == null) {
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
@@ -277,7 +277,8 @@ public class Detail extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
             if (result == null) {
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
                 return;
@@ -358,12 +359,12 @@ public class Detail extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
