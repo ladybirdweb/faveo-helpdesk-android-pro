@@ -1,7 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,24 +13,32 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.Helper;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.backend.database.DatabaseHandler;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
-import co.helpdesk.faveo.pro.model.TicketOverview;
+import co.helpdesk.faveo.pro.model.MessageEvent;
+import es.dmoral.toasty.Toasty;
 
 
-public class SplashActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener {
+public class SplashActivity extends AppCompatActivity {
 
-
+    @BindView(R.id.progressBar1)
     ProgressBar progressDialog;
+
+    @BindView(R.id.loading)
     TextView loading;
+
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -45,27 +53,21 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        progressDialog = (ProgressBar) findViewById(R.id.progressBar1);
-        loading = (TextView) findViewById(R.id.loading);
-        //progressDialog.setMessage("Loading");
+        ButterKnife.bind(this);
+
         if (InternetReceiver.isConnected()) {
             progressDialog.setVisibility(View.VISIBLE);
-            new FetchDependency(this).execute();
+            new FetchDependency().execute();
             //new FetchData(this).execute();
         } else {
-            progressDialog.setVisibility(View.GONE);
-            loading.setText("Oops! No internet");
+            progressDialog.setVisibility(View.INVISIBLE);
+            loading.setText(getString(R.string.oops_no_internet));
             //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
         }
 
     }
 
-    public class FetchDependency extends AsyncTask<String, Void, String> {
-        Context context;
-
-        FetchDependency(Context context) {
-            this.context = context;
-        }
+    private class FetchDependency extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
 
@@ -78,19 +80,21 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
             Log.d("Depen Response code : ", result + "");
             if (result == null) {
 
-                Toast.makeText(SplashActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(SplashActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-
+                //Preference.setDependencyObject(jsonObject1, "dependency");
                 JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");
                 for (int i = 0; i < jsonArrayDepartments.length(); i++) {
                     keyDepartment += jsonArrayDepartments.getJSONObject(i).getString("id") + ",";
                     valueDepartment += jsonArrayDepartments.getJSONObject(i).getString("name") + ",";
                 }
+                Prefs.putString("keyDept", keyDepartment);
+                Prefs.putString("valueDept", valueDepartment);
 
 
                 JSONArray jsonArraySla = jsonObject1.getJSONArray("sla");
@@ -98,42 +102,52 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     keySLA += jsonArraySla.getJSONObject(i).getString("id") + ",";
                     valueSLA += jsonArraySla.getJSONObject(i).getString("name") + ",";
                 }
+                Prefs.putString("keySLA", keySLA);
+                Prefs.putString("valueSLA", valueSLA);
+
+//                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+//                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+//                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
+//                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
+//                }
 
 
-                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
-                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
-                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
-                }
+//                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
+//                for (int i = 0; i < jsonArrayTeams.length(); i++) {
+//                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
+//                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
+//                }
 
-
-                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
-                for (int i = 0; i < jsonArrayTeams.length(); i++) {
-                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
-                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
-                }
-
-
+                //Set<String> keyPri = new LinkedHashSet<>();
+                // Set<String> valuePri = new LinkedHashSet<>();
                 JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
                 for (int i = 0; i < jsonArrayPriorities.length(); i++) {
+                    // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));
+                    //valuePri.add(jsonArrayPriorities.getJSONObject(i).getString("priority"));
                     keyPriority += jsonArrayPriorities.getJSONObject(i).getString("priority_id") + ",";
                     valuePriority += jsonArrayPriorities.getJSONObject(i).getString("priority") + ",";
                 }
-
+                Prefs.putString("keyPri", keyPriority);
+                Prefs.putString("valuePri", valuePriority);
+                //Prefs.putOrderedStringSet("keyPri", keyPri);
+                // Prefs.putOrderedStringSet("valuePri", valuePri);
+                //Log.d("Testtttttt", Prefs.getOrderedStringSet("keyPri", keyPri) + "   " + Prefs.getOrderedStringSet("valuePri", valuePri));
 
                 JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("helptopics");
                 for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
                     keyTopic += jsonArrayHelpTopics.getJSONObject(i).getString("id") + ",";
                     valueTopic += jsonArrayHelpTopics.getJSONObject(i).getString("topic") + ",";
                 }
-
+                Prefs.putString("keyHelpTopic", keyTopic);
+                Prefs.putString("valueHelptopic", valueTopic);
 
                 JSONArray jsonArrayStatus = jsonObject1.getJSONArray("status");
                 for (int i = 0; i < jsonArrayStatus.length(); i++) {
                     keyStatus += jsonArrayStatus.getJSONObject(i).getString("id") + ",";
                     valueStatus += jsonArrayStatus.getJSONObject(i).getString("name") + ",";
                 }
-
+                Prefs.putString("keyStatus", keyStatus);
+                Prefs.putString("valueStatus", valueStatus);
 
                 JSONArray jsonArraySources = jsonObject1.getJSONArray("sources");
                 for (int i = 0; i < jsonArraySources.length(); i++) {
@@ -141,82 +155,79 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
                     valueSource += jsonArraySources.getJSONObject(i).getString("name") + ",";
                 }
 
-//                JSONArray jsonArrayTicketsCount = jsonObject1.getJSONArray("tickets_count");
-//                jsonArrayTicketsCount.getJSONObject(0).getInt("Open");
-//                jsonArrayTicketsCount.getJSONObject(1).getInt("Resolved");
-//                jsonArrayTicketsCount.getJSONObject(2).getInt("Closed");
-//                jsonArrayTicketsCount.getJSONObject(3).getInt("Archived");
-//                jsonArrayTicketsCount.getJSONObject(4).getInt("Deleted");
-//                jsonArrayTicketsCount.getJSONObject(5).getInt("Open");
+                Prefs.putString("keySource", keySource);
+                Prefs.putString("valueSource", valueSource);
 
+                int open = 0, closed = 0, trash = 0, unasigned = 0, my_tickets = 0;
+                JSONArray jsonArrayTicketsCount = jsonObject1.getJSONArray("tickets_count");
+                for (int i = 0; i < jsonArrayTicketsCount.length(); i++) {
+                    String name = jsonArrayTicketsCount.getJSONObject(i).getString("name");
+                    String count = jsonArrayTicketsCount.getJSONObject(i).getString("count");
 
+                    switch (name) {
+                        case "Open":
+                            open = Integer.parseInt(count);
+                            break;
+                        case "Closed":
+                            closed = Integer.parseInt(count);
+                            break;
+                        case "Deleted":
+                            trash = Integer.parseInt(count);
+                            break;
+                        case "unassigned":
+                            unasigned = Integer.parseInt(count);
+                            break;
+                        case "mytickets":
+                            my_tickets = Integer.parseInt(count);
+                            break;
+                        default:
+                            break;
 
-            } catch (JSONException e) {
-                Toast.makeText(SplashActivity.this, "Error", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
-            progressDialog.setVisibility(View.GONE);
-            loading.setText("Done Loading!");
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            // intent.putExtra("nextPageURL", nextPageURL);
-            startActivity(intent);
-        }
-    }
-
-    public class FetchData extends AsyncTask<String, Void, String> {
-        Context context;
-        String nextPageURL;
-
-        FetchData(Context context) {
-            this.context = context;
-        }
-
-        protected String doInBackground(String... urls) {
-
-            String result = new Helpdesk().getInboxTicket();
-            if (result == null)
-                return null;
-            DatabaseHandler databaseHandler = new DatabaseHandler(context);
-            databaseHandler.recreateTable();
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                nextPageURL = jsonObject.getString("next_page_url");
-                String data = jsonObject.getString("data");
-                JSONArray jsonArray = new JSONArray(data);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    TicketOverview ticketOverview = Helper.parseTicketOverview(jsonArray, i);
-                    if (ticketOverview != null)
-                        databaseHandler.addTicketOverview(ticketOverview);
+                    }
                 }
+
+
+                if (open > 999)
+                    Prefs.putString("inboxTickets", "999+");
+                else
+                    Prefs.putString("inboxTickets", open + "");
+
+                if (closed > 999)
+                    Prefs.putString("closedTickets", "999+");
+                else
+                    Prefs.putString("closedTickets", closed + "");
+
+                if (my_tickets > 999)
+                    Prefs.putString("myTickets", "999+");
+                else
+                    Prefs.putString("myTickets", my_tickets + "");
+
+                if (trash > 999)
+                    Prefs.putString("trashTickets", "999+");
+                else
+                    Prefs.putString("trashTickets", trash + "");
+
+                if (unasigned > 999)
+                    Prefs.putString("unassignedTickets", "999+");
+                else
+                    Prefs.putString("unassignedTickets", unasigned + "");
+
             } catch (JSONException e) {
+                Toasty.error(SplashActivity.this, "Error", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-            databaseHandler.close();
-            return "success";
 
-        }
-
-        protected void onPostExecute(String result) {
-            progressDialog.setVisibility(View.GONE);
-            loading.setText("Done Loading!");
-            Log.d("Data Response code : ", result + "");
-            if (result == null) {
-                Toast.makeText(SplashActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-                return;
-            }
+            progressDialog.setVisibility(View.INVISIBLE);
+            loading.setText(R.string.done_loading);
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            intent.putExtra("nextPageURL", nextPageURL);
             startActivity(intent);
-
         }
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        // register connection status listener
-        FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
     }
 
@@ -228,7 +239,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Sorry! Not connected to internet", Snackbar.LENGTH_INDEFINITE);
+                    .make(findViewById(android.R.id.content), R.string.sry_not_connected_to_internet, Snackbar.LENGTH_INDEFINITE);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -249,7 +260,7 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
         if (isConnected) {
 
             Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Connected to Internet", Snackbar.LENGTH_LONG);
+                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -261,13 +272,22 @@ public class SplashActivity extends AppCompatActivity implements InternetReceive
 
     }
 
-    /**
-     * Callback will be triggered when there is change in
-     * network connection
-     */
+    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        showSnack(event.message);
+    }
+
     @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
 }

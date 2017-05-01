@@ -1,0 +1,177 @@
+<resources>
+
+
+    <string name="search_result">Результат поиска!</string>
+    <string name="search_hint">Поиск…</string>
+    <string name="menu_search">Поиск</string>
+    <string name="just_now">Прямо сейчас</string>
+    <string name="reset_password">Сброс пароля</string>
+    <string name="empty_username">Пустое имя пользователя</string>
+    <string name="create">Создайте</string>
+    <string name="send">послать</string>
+    <string name="add">ДОБАВИТЬ</string>
+    <string name="overdue">Просроченные</string>
+    <string name="required">необходимые</string>
+    <string name="no_internet_connection">Нет соединения с интернетом!</string>
+    <string name="descending">По убыванию</string>
+    <string name="ascending">Восходящий</string>
+    <string name="sort_by">Сортировать по</string>
+    <string name="due_by_time">По времени</string>
+    <string name="due_by_date">Срок по дате</string>
+    <string name="gallery">Галерея</string>
+    <string name="search">Поиск</string>
+    <string name="unexpected_error">Неожиданная ошибка</string>
+    <string name="error_creating_ticket">ОШИБКА! Не удалось создать билет</string>
+    <string name="sub_must_not_be_empty">Тема не может быть пустой</string>
+    <string name="msg_must_not_be_empty">Сообщение не может быть пустым</string>
+    <string name="you_hvent_picked_anything">Вы ничего не выбрали!</string>
+    <string name="client_name">Имя клиента</string>
+    <string name="sorting_type">Тип сортировки</string>
+    <string name="sort">Сортировать</string>
+    <string name="enter_valid_email">Введите действительный идентификатор почты</string>
+    <string name="tickets">Билеты</string>
+    <string name="customers">Клиенты</string>
+    <string name="restart_app">Чтобы применить изменения в настройках, необходимо перезапустить приложение!</string>
+    <string name="restarting">Перезагрузка…</string>
+    <string name="no_clients">Нет клиентов!</string>
+    <string name="no_results_found">Результатов не найдено!</string>
+    <string name="access_denied">Доступ закрыт!</string>
+    <string name="please_purchase_faveo">Пожалуйста, приобретите Faveo PRO edition, чтобы использовать это приложение.</string>
+    <string name="ok">OK</string>
+    <string name="error_checking_pro">Ошибка при проверке доступа к Pro Edition!</string>
+    <string name="error">ошибка</string>
+    <string name="restart_app_tittle">Перезапустить приложение?</string>
+    <string name="creating_note">Создание заметки</string>
+    <string name="wrong_user_id">Неправильный идентификатор пользователя</string>
+    <string name="invalid_cc">Неверный Cc</string>
+    <string name="sending_msg">Отправка сообщения</string>
+    <string name="internal_notes_posted">Внутренние примечания отправлены</string>
+    <string name="posted_reply">Написал ответ</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="helpdesk_url">Helpdesk URL</string>
+    <string name="verifying_url">URL контролирующая</string>
+
+    <string name="access_checking">Доступ Проверка!</string>
+    <string name="api_key_optional">Ключ API(optional)</string>
+    <string name="user_name">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="signing_in">Подписание в…</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="fetching_tickets">Билеты Извлечение</string>
+    <string name="inbox">Входящие</string>
+    <string name="create_ticket">Создать билет</string>
+    <string name="ticket_list">Список билетов</string>
+
+    <string name="my_tickets">Мои билеты</string>
+    <string name="unassigned_tickets">Нераспределенные билеты</string>
+    <string name="closed_tickets">Закрытые билеты</string>
+    <string name="trash">Мусор</string>
+    <string name="client_list">Список клиентов</string>
+    <string name="settings">Настройки</string>
+    <string name="about">О</string>
+    <string name="logout">Выход</string>
+    <string name="email">Электронная почта</string>
+    <string name="first_name">Имя</string>
+    <string name="last_name">Фамилия</string>
+    <string name="phone">Телефон</string>
+    <string name="helptopic">разделы справки</string>
+    <string name="sla_plans">Планы SLA</string>
+    <string name="deparment">Отделы</string>
+    <string name="subject">Предмет</string>
+    <string name="message">Сообщение</string>
+    <string name="priority">Приоритет</string>
+    <string name="submit">Отправить</string>
+
+    <string name="conversation">диалог</string>
+    <string name="detail">Деталь</string>
+    <string name="reply">Ответить</string>
+    <string name="internal_note">Внутренняя записка</string>
+    <string name="source">Источник</string>
+    <string name="created_date">Дата создания</string>
+    <string name="last_response_date">Дата последнего ответа</string>
+    <string name="due_date">Срок оплаты</string>
+    <string name="status">Статус</string>
+    <string name="save">Сохранить</string>
+    <string name="loading">Загрузка…</string>
+    <string name="all_caught_up">Все билеты загружены</string>
+    <string name="fetching_detail">Fetching подробно</string>
+    <string name="crash_reports">Как сообщает Крушение</string>
+    <string name="send_crash_reports">Отчеты тправлять</string>
+    <string name="website">Веб-сайт</string>
+
+
+
+    <string name="no_records">нет записей!</string>
+    <string name="inactive">Неактивные</string>
+    <string name="active">Активный</string>
+    <string name="open_ticket">Открытые билеты</string>
+    <string name="closed_ticket">Закрытые билеты</string>
+    <string name="profile">Профиль</string>
+
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="sign_in">Вход</string>
+    <string name="done_loading">загрузится!</string>
+    <string name="press_again_exit">Нажмите еще раз, чтобы выйти!</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="invalid_url">URL Invalid</string>
+    <string name="oops_no_internet">К сожалению! Без интернета</string>
+    <string name="error_verifying_url">Ошибка проверки URL</string>
+    <string name="wrong_credentials">Неверные учетные данные</string>
+    <string name="connected_to_internet">Подключение к Интернету</string>
+    <string name="sry_not_connected_to_internet">К сожалению! Не подключен к Интернету</string>
+
+
+    <string name="please_enter_valid_url">Введите действительный URL</string>
+
+    <string name="update_success">Обновление успешно</string>
+    <string name="failed_to_update_ticket">Не удалось обновить билет</string>
+    <string name="sub_minimum_char">Предмет должен быть не менее 5 символов</string>
+    <string name="please_fill_field">Пожалуйста, заполните поле</string>
+    <string name="updating_ticket">Обновление билет на</string>
+    <string name="invalid_email">Неверное имя пользователя</string>
+    <string name="firstname_minimum_char">Firstname должна быть не менее 3-х символов</string>
+    <string name="fill_firstname">Заливка первое имя</string>
+    <string name="fill_lastname">Заливка Lastname</string>
+    <string name="msg_minimum_char">Сообщение должно быть не менее 10 символов</string>
+
+
+    <string name="creating_ticket">Создание билет на</string>
+    <string name="ticket_created_success">Билет создан!</string>
+    <string name="title_activity_notification">Уведомления</string>
+    <string name="action_search">Поиск</string>
+
+
+
+
+
+
+    <string name="not_available">Не доступно</string>
+
+
+
+
+
+    <string name="faveo_content">Faveo Helpdesk обеспечивает предприятия с автоматизированной системой Helpdesk для управления службой поддержки клиентов. Слово Faveo происходит от латинского слова, которое означает быть благоприятным. Который действительно выдвигает на первый план и видение сферы, а также функциональные возможности продукта, который является Faveo.
+
+Faveo расширяет возможности вашего бизнеса с государственным искусства, билет на основе системы поддержки. В конкурентной сегодняшнем запуске сценария удержания клиентов является одной из основных проблем. Обработка запроса клиента старательно вся разница между сохранением или потерять долгосрочные отношения. Компания управляется со страстью предоставления инструментов для управления потребительских запросов для стратегических идей и помогает компаниям принимать эти решительные решения.
+
+Это приложение будет работать с Faveo Helpdesk Pro Edition веб-приложений.
+</string>
+
+
+</resources>

@@ -116,7 +116,7 @@ public class SearchCustomerFragment extends Fragment implements View.OnClickList
                 }
             });
 
-            empty_view.setText("No Results found!");
+            empty_view.setText(R.string.no_results_found);
         }
         return rootView;
     }
@@ -154,12 +154,12 @@ public class SearchCustomerFragment extends Fragment implements View.OnClickList
                 swipeRefresh.setRefreshing(false);
 
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             if (result.equals("all done")) {
 
-                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 //return;
             }
             recyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);

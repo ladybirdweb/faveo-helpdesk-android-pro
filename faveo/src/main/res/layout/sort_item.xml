@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="100"
-        android:text="Ascending"
+        android:text="@string/ascending"
         android:textSize="16sp" />
 
     <co.helpdesk.faveo.pro.frontend.views.SmoothCheckBox

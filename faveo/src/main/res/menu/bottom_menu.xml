@@ -5,7 +5,7 @@
         android:id="@+id/action_gallery"
         android:icon="@drawable/ic_action_photo"
         android:orderInCategory="1"
-        android:title="Gallery"
+        android:title="@string/gallery"
         app:showAsAction="ifRoom" />
     <!--<item-->
         <!--android:id="@+id/action_docx"-->

@@ -1,13 +1,21 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Color;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -27,23 +35,30 @@ import android.widget.ViewFlipper;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.pixplicity.easyprefs.library.Prefs;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import co.helpdesk.faveo.pro.BuildConfig;
 import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.Preference;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.MessageEvent;
+import es.dmoral.toasty.Toasty;
 
 
-public class LoginActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener {
+public class LoginActivity extends AppCompatActivity {
 
     TextView textViewFieldError, textViewForgotPassword;
     EditText editTextUsername, editTextPassword, editTextAPIkey;
@@ -74,15 +89,18 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Preference.setInstance(getApplicationContext());
+        //new Preference(getApplicationContext());
 
-        SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, 0);
-        Boolean loginComplete = prefs.getBoolean("LOGIN_COMPLETE", false);
+        //Preference.setInstance(getApplicationContext());
+        //SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE);
+
+        Boolean loginComplete = Prefs.getBoolean("LOGIN_COMPLETE", false);
         if (loginComplete) {
-            Constants.URL = Preference.getCompanyURL();
+            Constants.URL = Prefs.getString("COMPANY_URL", "");
             Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            finish();
             return;
         }
         buttonSignIn.setEnabled(false);
@@ -90,20 +108,39 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         passwordEdittext.addTextChangedListener(mTextWatcher);
 
         setUpViews();
+        String manufacturer = "xiaomi";
+        if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("Enable Permission")
+                    .setMessage("To get notifications, we requesting you to enable the permission in auto start for FAVEO. ")
+                    .setIcon(R.drawable.ic_warning_black_36dp)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent intent = new Intent();
+                            intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+                            startActivity(intent);
+                        }
+                    });
+            builder.create();
+            builder.show();
+            //this will open auto start screen where user can enable permission for your app
 
+        }
         buttonVerifyURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String companyURL = editTextCompanyURL.getText().toString();
                 if (companyURL.trim().length() == 0 || !Patterns.WEB_URL.matcher(companyURL).matches()) {
-                    Toast.makeText(v.getContext(), "Please enter a valid url", Toast.LENGTH_LONG).show();
+                    Toasty.warning(v.getContext(), getString(R.string.please_enter_valid_url), Toast.LENGTH_LONG).show();
                     return;
                 }
                 if (InternetReceiver.isConnected()) {
                     progressDialogVerifyURL.show();
                     new VerifyURL(LoginActivity.this, companyURL).execute();
                 } else
-                    Toast.makeText(v.getContext(), "Oops! No internet", Toast.LENGTH_LONG).show();
+                    Toasty.warning(v.getContext(), getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -139,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
 
     }
 
-    public class VerifyURL extends AsyncTask<String, Void, String> {
+    private class VerifyURL extends AsyncTask<String, Void, String> {
         Context context;
         String companyURL;
         String baseURL;
@@ -159,24 +196,44 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         protected void onPostExecute(String result) {
             progressDialogVerifyURL.dismiss();
             if (result == null) {
-                Toast.makeText(context, "Invalid URL", Toast.LENGTH_LONG).show();
+                Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
                 return;
             }
 
             if (result.contains("success")) {
-                Preference.setCompanyURL(companyURL + "api/v1/");
-                Constants.URL = Preference.getCompanyURL();
-                 progressDialogBilling.show();
-                new VerifyBilling(LoginActivity.this, baseURL).execute();
-                //viewflipper.showNext();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    dynamicShortcut();
+                }
+                Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
+                Constants.URL = Prefs.getString("COMPANY_URL", "");
+                if (BuildConfig.DEBUG) {
+                    viewflipper.showNext();
+                } else {
+                    progressDialogBilling.show();
+                    new VerifyBilling(LoginActivity.this, baseURL).execute();
+                }
 
             } else {
-                Toast.makeText(context, "Error verifying URL", Toast.LENGTH_LONG).show();
+                Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    public class VerifyBilling extends AsyncTask<String, Void, String> {
+    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+    void dynamicShortcut() {
+        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
+        ShortcutInfo webShortcut = new ShortcutInfo.Builder(this, "Web app")
+                .setShortLabel("Web App")
+                .setLongLabel("Open the web app")
+                .setIcon(Icon.createWithResource(this, R.drawable.add))
+                .setIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(editTextCompanyURL.getText().toString())))
+                .build();
+
+        shortcutManager.setDynamicShortcuts(Collections.singletonList(webShortcut));
+    }
+
+    private class VerifyBilling extends AsyncTask<String, Void, String> {
         Context context;
         String baseURL;
 
@@ -196,17 +253,17 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             progressDialogBilling.dismiss();
             Log.d("Response BillingVerfy", result + "");
             if (result == null) {
-                Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (result.contains("success")) {
                 viewflipper.showNext();
             } else if (result.contains("fails")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this)
-                        .setTitle("Access denied!")
-                        .setMessage("Please purchase Faveo PRO edition to use this app.")
+                        .setTitle(R.string.access_denied)
+                        .setMessage(R.string.please_purchase_faveo)
                         .setIcon(R.drawable.ic_warning_black_36dp)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -217,7 +274,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                 builder.show();
 
             } else
-                Toast.makeText(context, "Error, while checking Access to Pro Edition!", Toast.LENGTH_LONG).show();
+                Toasty.error(context, getString(R.string.error_checking_pro), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -229,13 +286,13 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             //progressDialogSignIn.show();
             textInputLayoutUsername.setEnabled(false);
             textInputLayoutPass.setEnabled(false);
-            buttonSignIn.setText("Signing in...");
+            buttonSignIn.setText(R.string.signing_in);
             new SignIn(LoginActivity.this, username, password).execute();
         } else
-            Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+            Toasty.warning(this, getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
     }
 
-    public class SignIn extends AsyncTask<String, Void, String> {
+    private class SignIn extends AsyncTask<String, Void, String> {
         Context context;
         String username;
         String password;
@@ -257,8 +314,8 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             if (result == null) {
                 textInputLayoutUsername.setEnabled(true);
                 textInputLayoutPass.setEnabled(true);
-                buttonSignIn.setText("Sign in");
-                Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                buttonSignIn.setText(getString(R.string.sign_in));
+                Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 try {
@@ -267,9 +324,9 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                     if (error.equals("401")) {
                         textInputLayoutUsername.setEnabled(true);
                         textInputLayoutPass.setEnabled(true);
-                        buttonSignIn.setText("Sign in");
+                        buttonSignIn.setText(getString(R.string.sign_in));
                         //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
-                        StyleableToast st = new StyleableToast(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_LONG);
+                        StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
                         st.setBackgroundColor(Color.parseColor("#3da6d7"));
                         st.setBoldText();
                         st.setTextColor(Color.WHITE);
@@ -287,7 +344,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                 String token = jsonObject.getString("token");
                 String userID = jsonObject.getString("user_id");
 
-                SharedPreferences.Editor authenticationEditor = getApplicationContext().getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE).edit();
+                SharedPreferences.Editor authenticationEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
                 authenticationEditor.putString("ID", userID);
                 authenticationEditor.putString("TOKEN", token);
                 authenticationEditor.putString("USERNAME", username);
@@ -295,15 +352,15 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
                 authenticationEditor.putBoolean("LOGIN_COMPLETE", true);
                 authenticationEditor.apply();
 
-                Preference.setFCMtoken(FirebaseInstanceId.getInstance().getToken());
+                Prefs.putString("FCMtoken", FirebaseInstanceId.getInstance().getToken());
 
-                new SendingFCM(LoginActivity.this, Preference.getFCMtoken()).execute();
+                new SendingFCM(LoginActivity.this, FirebaseInstanceId.getInstance().getToken()).execute();
 
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                Toasty.error(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 
@@ -337,18 +394,34 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
     private void setUpViews() {
 
         progressDialogVerifyURL = new ProgressDialog(this);
-        progressDialogVerifyURL.setMessage("Verifying URL");
+        progressDialogVerifyURL.setMessage(getString(R.string.verifying_url));
         progressDialogVerifyURL.setCancelable(false);
 
         progressDialogSignIn = new ProgressDialog(this);
-        progressDialogSignIn.setMessage("Signing in");
+        progressDialogSignIn.setMessage(getString(R.string.signing_in));
         progressDialogSignIn.setCancelable(false);
 
         progressDialogBilling = new ProgressDialog(this);
-        progressDialogBilling.setMessage("Access checking!");
+        progressDialogBilling.setMessage(getString(R.string.access_checking));
         progressDialogBilling.setCancelable(false);
 
+//        InputFilter filter = new InputFilter() {
+//            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+//                String filtered = "";
+//                for (int i = start; i < end; i++) {
+//                    char character = source.charAt(i);
+//                    if (!Character.isWhitespace(character)) {
+//                        filtered += character;
+//                    }
+//                }
+//
+//                return filtered;
+//            }
+//
+//        };
+
         editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
+        // editTextCompanyURL.setFilters(new InputFilter[]{filter});
         if (editTextCompanyURL != null) {
             editTextCompanyURL.setText("");
             editTextCompanyURL.append("http://");
@@ -370,7 +443,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
     protected void onResume() {
         super.onResume();
         // register connection status listener
-        FaveoApplication.getInstance().setInternetListener(this);
+        //FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
     }
 
@@ -382,7 +455,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Sorry! Not connected to internet", Snackbar.LENGTH_INDEFINITE);
+                    .make(findViewById(android.R.id.content), R.string.sry_not_connected_to_internet, Snackbar.LENGTH_INDEFINITE);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -403,7 +476,7 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         if (isConnected) {
 
             Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Connected to Internet", Snackbar.LENGTH_LONG);
+                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -415,16 +488,16 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
 
     }
 
-    /**
-     * Callback will be triggered when there is change in
-     * network connection
-     */
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
-    }
+//    /**
+//     * Callback will be triggered when there is change in
+//     * network connection
+//     */
+//    @Override
+//    public void onNetworkConnectionChanged(boolean isConnected) {
+//        showSnack(isConnected);
+//    }
 
-    public class SendingFCM extends AsyncTask<String, Void, String> {
+    private class SendingFCM extends AsyncTask<String, Void, String> {
         Context context;
         String token;
 
@@ -437,14 +510,13 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
         @Override
         protected String doInBackground(String... params) {
 
-            return new Helpdesk().postFCMToken(token, Preference.getUserID());
+            return new Helpdesk().postFCMToken(token, Prefs.getString("ID", null));
         }
 
         @Override
         protected void onPostExecute(String result) {
             Log.d("Response FCM", result + "");
             if (result == null) {
-                Log.d("RESPONSE_FCM", "" + result);
                 return;
             }
 
@@ -491,5 +563,25 @@ public class LoginActivity extends AppCompatActivity implements InternetReceiver
             checkFieldsForEmptyValues();
         }
     };
+
+    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+
+        showSnack(event.message);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
 
 }

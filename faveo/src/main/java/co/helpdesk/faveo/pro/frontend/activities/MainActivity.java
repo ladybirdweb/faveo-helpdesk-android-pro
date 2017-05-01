@@ -1,9 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,24 +10,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amitshekhar.DebugDB;
-import com.cocosw.bottomsheet.BottomSheet;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.Preference;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
@@ -43,6 +34,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.TrashTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.MessageEvent;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,
@@ -54,31 +46,37 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         About.OnFragmentInteractionListener,
         ClientList.OnFragmentInteractionListener,
         CreateTicket.OnFragmentInteractionListener,
-        Settings.OnFragmentInteractionListener,
-        InternetReceiver.InternetReceiverListener {
+        Settings.OnFragmentInteractionListener {
+
+    // The BroadcastReceiver that tracks network connectivity changes.
+    private InternetReceiver receiver = new InternetReceiver();
 
     protected boolean doubleBackToExitPressedOnce = false;
     public static boolean isShowing = false;
     private ArrayList<String> mList = new ArrayList<>();
-    @BindView(R.id.sort_view)
-    RelativeLayout sortView;
-    @BindView(R.id.sorting_type_textview)
-    TextView sortTextview;
-    @BindView(R.id.arrow_imgView)
-    ImageView arrowDown;
+//    @BindView(R.id.sort_view)
+//    RelativeLayout sortView;
+//    @BindView(R.id.sorting_type_textview)
+//    TextView sortTextview;
+//    @BindView(R.id.arrow_imgView)
+//    ImageView arrowDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Preference.setInstance(getApplicationContext());
         isShowing = true;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        DebugDB.getAddressLog();
+        // TODO: Move this to where you establish a user session
+        //logUser();
+//        if (BuildConfig.DEBUG) {
+//            DebugDB.getAddressLog();
+//            Log.d("Refreshed token: ", "" + FirebaseInstanceId.getInstance().getToken());
+//        }
 
-        String nextPageURL = getIntent().getStringExtra("nextPageURL");
-        Bundle bundle = new Bundle();
-        bundle.putString("nextPageURL", nextPageURL);
+//        String nextPageURL = getIntent().getStringExtra("nextPageURL");
+//        Bundle bundle = new Bundle();
+//        bundle.putString("nextPageURL", nextPageURL);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -92,80 +90,60 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setDrawerListener(this);
 
         InboxTickets inboxTickets = new InboxTickets();
-        inboxTickets.setArguments(bundle);
+        //inboxTickets.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container_body, inboxTickets);
         fragmentTransaction.commit();
-        setActionBarTitle(getResources().getString(R.string.inbox_tickets));
-
-        SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("FAVEO", MODE_PRIVATE).edit();
-        editor.putBoolean("LOGIN_COMPLETE", true);
-        editor.apply();
+        setActionBarTitle(getResources().getString(R.string.inbox));
 
     }
+
+//    private void logUser() {
+//        // TODO: Use the current user's information
+//        // You can call any combination of these three methods
+//        Crashlytics.setUserIdentifier(Preference.getUserID());
+//        Crashlytics.setUserEmail(Constants.URL);
+//        Crashlytics.setUserName(Preference.getUsername());
+//    }
 
     @Override
     protected void onDestroy() {
         isShowing = false;
         super.onDestroy();
+
     }
 
-    @OnClick(R.id.sort_view)
-    public void onClickSort() {
-        arrowDown.animate().rotation(180).start();
-
-        new BottomSheet.Builder(this).title("Sort by").sheet(R.menu.sort_menu).listener(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case R.id.action_date:
-                        sortTextview.setText("Due by date");
-                        break;
-                    case R.id.action_time:
-                        sortTextview.setText("Due by time");
-                        break;
-                    case R.id.action_status:
-                        sortTextview.setText("Status");
-                        break;
-                    case R.id.action_priority:
-                        sortTextview.setText("Priority");
-                        break;
-                }
-            }
-        }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                arrowDown.animate().rotation(0).start();
-            }
-        }).show();
-
-//        final BottomSheetDialog dialog = new BottomSheetDialog(this);
-//        dialog.setContentView(R.layout.sort_bottom_sheet);
-//        BottomSheetListView listView = (BottomSheetListView) dialog.findViewById(R.id.ViewBtmSheet);
-//        ArrayAdapter<String> itemsAdapter =
-//                new ArrayAdapter<>(this, R.layout.sort_item, mList);
-//        listView.setAdapter(itemsAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                Bean bean = (Bean) parent.getAdapter().getItem(position);
-////                bean.isChecked = !bean.isChecked;
-////                SmoothCheckBox checkBox = (SmoothCheckBox) view.findViewById(R.id.scb);
-////                checkBox.setChecked(bean.isChecked, true);
-//                dialog.dismiss();
-//            }
-//        });
+//    @OnClick(R.id.sort_view)
+//    public void onClickSort() {
+//        arrowDown.animate().rotation(180).start();
 //
-//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//        new BottomSheet.Builder(this).title("Sort by").sheet(R.menu.sort_menu).listener(new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                switch (which) {
+//                    case R.id.action_date:
+//                        sortTextview.setText("Due by date");
+//                        break;
+//                    case R.id.action_time:
+//                        sortTextview.setText("Due by time");
+//                        break;
+//                    case R.id.action_status:
+//                        sortTextview.setText("Status");
+//                        break;
+//                    case R.id.action_priority:
+//                        sortTextview.setText("Priority");
+//                        break;
+//                }
+//            }
+//        }).setOnDismissListener(new DialogInterface.OnDismissListener() {
 //            @Override
 //            public void onDismiss(DialogInterface dialog) {
 //                arrowDown.animate().rotation(0).start();
 //            }
-//        });
-//        dialog.show();
-
-    }
+//        }).show();
+//
+//    }
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
@@ -198,10 +176,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_search) {
-            startActivity(new Intent(MainActivity.this, SearchActivity.class));
-            return true;
-        }
+//        if (id == R.id.action_search) {
+//            startActivity(new Intent(MainActivity.this, SearchActivity.class));
+//            return true;
+//        }
         if (id == R.id.action_noti) {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);
@@ -215,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onResume() {
         super.onResume();
         // register connection status listener
-        FaveoApplication.getInstance().setInternetListener(this);
+        //FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
     }
 
@@ -227,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Sorry! Not connected to internet", Snackbar.LENGTH_INDEFINITE);
+                    .make(findViewById(android.R.id.content), R.string.sry_not_connected_to_internet, Snackbar.LENGTH_INDEFINITE);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -246,9 +224,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {
-
             Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Connected to Internet", Snackbar.LENGTH_LONG);
+                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -260,14 +237,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
-    /**
-     * Callback will be triggered when there is change in
-     * network connection
-     */
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
-    }
+//    /**
+//     * Callback will be triggered when there is change in
+//     * network connection
+//     */
+//    @Override
+//    public void onNetworkConnectionChanged(boolean isConnected) {
+//        showSnack(isConnected);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -277,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Snackbar.make(findViewById(android.R.id.content), "Press again to EXIT!", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 
@@ -288,4 +265,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }, 2500);
     }
 
+    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        //Toast.makeText(this, event.message, Toast.LENGTH_SHORT).show();
+//        Snackbar.make(findViewById(android.R.id.content), event.message, Snackbar.LENGTH_LONG).show();
+        showSnack(event.message);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
 }

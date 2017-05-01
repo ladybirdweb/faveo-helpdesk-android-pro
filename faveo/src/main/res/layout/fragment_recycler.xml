@@ -20,7 +20,7 @@
         android:layout_gravity="center"
         android:drawableTint="@color/dark_translucent"
         android:drawableTop="@drawable/ic_signal_wifi_off_black_48dp"
-        android:text="No internet connection!"
+        android:text="@string/no_internet_connection"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
         android:visibility="gone" />
@@ -33,7 +33,7 @@
         android:layout_gravity="center"
         android:drawableTint="@color/dark_translucent"
         android:drawableTop="@drawable/ic_inbox_black_48dp"
-        android:text="No Records!"
+        android:text="@string/no_records"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
         android:visibility="gone" />

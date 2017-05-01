@@ -9,11 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.MessageEvent;
 
-public class ForgotPasswordActivity extends AppCompatActivity implements InternetReceiver.InternetReceiverListener {
+public class ForgotPasswordActivity extends AppCompatActivity  {
 
     TextView textViewErrorEmail;
     EditText editTextEmail;
@@ -41,7 +46,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Interne
     protected void onResume() {
         super.onResume();
         // register connection status listener
-        FaveoApplication.getInstance().setInternetListener(this);
+        //FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
     }
 
@@ -53,7 +58,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Interne
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Sorry! Not connected to internet", Snackbar.LENGTH_INDEFINITE);
+                    .make(findViewById(android.R.id.content), R.string.sry_not_connected_to_internet, Snackbar.LENGTH_INDEFINITE);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -74,7 +79,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Interne
         if (isConnected) {
 
             Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Connected to Internet", Snackbar.LENGTH_LONG);
+                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -83,14 +88,34 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Interne
         } else {
             showSnackIfNoInternet(false);
         }
+
     }
 
-    /**
-     * Callback will be triggered when there is change in
-     * network connection
-     */
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
+    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+
+        showSnack(event.message);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+//    /**
+//     * Callback will be triggered when there is change in
+//     * network connection
+//     */
+//    @Override
+//    public void onNetworkConnectionChanged(boolean isConnected) {
+//        showSnack(isConnected);
+//    }
 }

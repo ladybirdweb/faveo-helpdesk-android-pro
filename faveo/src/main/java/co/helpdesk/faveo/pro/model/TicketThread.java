@@ -13,9 +13,6 @@ public class TicketThread {
     public String isReply;
     public String placeholder;
 
-    public TicketThread() {
-    }
-
     public TicketThread(String clientName, String messageTime, String message, String isReply) {
         this.messageTime = messageTime;
         this.message = message;

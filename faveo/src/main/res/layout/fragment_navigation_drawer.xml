@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
                     android:gravity="center"
-                    android:text="Create ticket"
+                    android:text="@string/create_ticket"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -76,7 +76,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
                     android:gravity="center"
-                    android:text="Ticket list"
+                    android:text="@string/ticket_list"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -96,6 +96,7 @@
                     android:layout_marginLeft="38dp"
                     android:layout_marginRight="22dp"
                     android:layout_marginTop="22dp"
+                    android:maxLines="2"
                     android:src="@drawable/inbox_tickets" />
 
                 <TextView
@@ -111,9 +112,11 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/rounded_textview"
                     android:gravity="center"
+                    android:padding="4dp"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/inboxtv"
@@ -121,10 +124,12 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/imageView2"
+                    android:layout_toLeftOf="@+id/inbox_count"
                     android:layout_toRightOf="@+id/imageView2"
+                    android:layout_toStartOf="@+id/inbox_count"
                     android:fontFamily="sans-serif-bold"
-                    android:gravity="center"
-                    android:text="Inbox tickets"
+                    android:gravity="center|start"
+                    android:text="@string/inbox"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -159,9 +164,11 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/rounded_textview"
                     android:gravity="center"
+                    android:padding="4dp"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/my_ticketstv"
@@ -169,10 +176,12 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/imageView3"
+                    android:layout_toLeftOf="@+id/my_tickets_count"
                     android:layout_toRightOf="@+id/imageView3"
+                    android:layout_toStartOf="@+id/my_tickets_count"
                     android:fontFamily="sans-serif-bold"
-                    android:gravity="center"
-                    android:text="My tickets"
+                    android:gravity="center|start"
+                    android:text="@string/my_tickets"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -188,10 +197,27 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginBottom="22dp"
+                    android:layout_marginEnd="22dp"
                     android:layout_marginLeft="38dp"
                     android:layout_marginRight="22dp"
+                    android:layout_marginStart="38dp"
                     android:layout_marginTop="22dp"
                     android:src="@drawable/unassigned_ticket" />
+
+                <TextView
+                    android:id="@+id/unassigned_ticketstv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/imageView4"
+                    android:layout_toLeftOf="@+id/unassigned_tickets_count"
+                    android:layout_toRightOf="@+id/imageView4"
+                    android:layout_toStartOf="@+id/unassigned_tickets_count"
+                    android:fontFamily="sans-serif-bold"
+                    android:gravity="center|start"
+                    android:text="@string/unassigned_tickets"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/unassigned_tickets_count"
@@ -206,22 +232,11 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/rounded_textview"
                     android:gravity="center"
+                    android:padding="4dp"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/unassigned_ticketstv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/imageView4"
-                    android:layout_toRightOf="@+id/imageView4"
-                    android:fontFamily="sans-serif-bold"
-                    android:gravity="center"
-                    android:text="Unassigned tickets"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -253,19 +268,23 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/rounded_textview"
                     android:gravity="center"
+                    android:padding="4dp"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/closed_ticketstv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_toEndOf="@+id/imageView5"
+                    android:layout_toLeftOf="@+id/closed_tickets_count"
                     android:layout_toRightOf="@+id/imageView5"
+                    android:layout_toStartOf="@+id/closed_tickets_count"
                     android:fontFamily="sans-serif-bold"
-                    android:gravity="center"
-                    android:text="Closed tickets"
+                    android:gravity="center|start"
+                    android:text="@string/closed_tickets"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -290,9 +309,11 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/rounded_textview"
                     android:gravity="center"
+                    android:padding="4dp"
                     android:text="0"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
                 <ImageView
                     android:id="@+id/imageView6"
@@ -312,10 +333,12 @@
                     android:layout_toEndOf="@+id/imageView6"
                     android:layout_toRightOf="@+id/imageView6"
                     android:fontFamily="sans-serif-bold"
-                    android:gravity="center"
-                    android:text="Trash"
+                    android:gravity="center|start"
+                    android:layout_toStartOf="@+id/trash_tickets_count"
+                    android:text="@string/trash"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:layout_toLeftOf="@+id/trash_tickets_count" />
 
             </RelativeLayout>
 
@@ -341,7 +364,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
                     android:gravity="center"
-                    android:text="Client list"
+                    android:text="@string/client_list"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -369,7 +392,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
                     android:gravity="center"
-                    android:text="Settings"
+                    android:text="@string/settings"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -397,7 +420,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
                     android:gravity="center"
-                    android:text="About"
+                    android:text="@string/about"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -425,7 +448,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
                     android:gravity="center"
-                    android:text="Logout"
+                    android:text="@string/logout"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 

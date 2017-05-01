@@ -3,6 +3,8 @@ package co.helpdesk.faveo.pro.backend.api.v1;
 
 import android.util.Log;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,7 +22,8 @@ public class Authenticate {
 
     public Authenticate() {
         apiKey = Constants.API_KEY;
-        token = Preference.getToken();
+        token = Prefs.getString("TOKEN", "");
+        //token = Preference.getToken();
         IP = null;
     }
 

@@ -4,29 +4,29 @@
     <group>
         <item
             android:id="@+id/action_time"
-            android:title="Due by time"
+            android:title="@string/due_by_time"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_date"
-            android:title="Due byt date"
+            android:title="@string/due_by_date"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_status"
-            android:title="Status"
+            android:title="@string/status"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_priority"
-            android:title="Priority"
+            android:title="@string/priority"
             app:showAsAction="ifRoom" />
     </group>
     <!--<group>-->
-        <!--<item-->
-            <!--android:id="@+id/action_asc"-->
-            <!--android:title="Ascending"-->
-            <!--app:showAsAction="ifRoom" />-->
-        <!--<item-->
-            <!--android:id="@+id/action_dsc"-->
-            <!--android:title="Descending"-->
-            <!--app:showAsAction="ifRoom" />-->
+    <!--<item-->
+    <!--android:id="@+id/action_asc"-->
+    <!--android:title="Ascending"-->
+    <!--app:showAsAction="ifRoom" />-->
+    <!--<item-->
+    <!--android:id="@+id/action_dsc"-->
+    <!--android:title="Descending"-->
+    <!--app:showAsAction="ifRoom" />-->
     <!--</group>-->
 </menu>

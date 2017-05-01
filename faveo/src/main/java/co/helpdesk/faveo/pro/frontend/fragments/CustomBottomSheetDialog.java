@@ -2,9 +2,8 @@ package co.helpdesk.faveo.pro.frontend.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.AppCompatEditText;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -22,7 +21,7 @@ import butterknife.OnClick;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 
-public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
+public class CustomBottomSheetDialog extends DialogFragment {
 
     @BindView(R.id.add_button)
     Button addButton;
@@ -45,9 +44,17 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
         return new CustomBottomSheetDialog();
     }
 
-    @Nullable
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        setStyle(DialogFragment.STYLE_NORMAL, R.style.MyMaterialTheme);
+//
+//    }
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_requester, container, false);
         ButterKnife.bind(this, view);
         phCode.setSelection(getCountryZipCode());
@@ -76,7 +83,7 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
         if (s1.equals("") || s2.equals("") || s3.equals("")) {
             addButton.setEnabled(false);
         } else if (!Helper.isValidEmail(s3)) {
-            textInputLayoutEmail.setError("Enter a valid Mail ID");
+            textInputLayoutEmail.setError(getString(R.string.enter_valid_email));
         } else {
             textInputLayoutEmail.setError(null);
             addButton.setEnabled(true);

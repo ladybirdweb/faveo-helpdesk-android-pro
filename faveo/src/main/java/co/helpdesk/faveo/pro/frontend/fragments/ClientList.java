@@ -37,6 +37,7 @@ import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.ClientOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.ClientOverview;
+import es.dmoral.toasty.Toasty;
 
 public class ClientList extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
@@ -122,13 +123,13 @@ public class ClientList extends Fragment implements View.OnClickListener {
                 }
             });
 
-            empty_view.setText("No Clients!");
+            empty_view.setText(R.string.no_clients);
         }
-        ((MainActivity) getActivity()).setActionBarTitle("Client list");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.client_list));
         return rootView;
     }
 
-    public class FetchClients extends AsyncTask<String, Void, String> {
+    private class FetchClients extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchClients(Context context) {
@@ -162,12 +163,12 @@ public class ClientList extends Fragment implements View.OnClickListener {
                 swipeRefresh.setRefreshing(false);
 
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             if (result.equals("all done")) {
 
-                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 //return;
             }
             // recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
@@ -188,7 +189,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                                 new FetchNextPage(getActivity()).execute();
                                 //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
 
-                                StyleableToast st = new StyleableToast(getContext(), "Loading!", Toast.LENGTH_SHORT);
+                                StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
                                 st.setBackgroundColor(Color.parseColor("#3da6d7"));
                                 st.setTextColor(Color.WHITE);
                                 st.setIcon(R.drawable.ic_autorenew_black_24dp);
@@ -208,7 +209,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
         }
     }
 
-    public class FetchNextPage extends AsyncTask<String, Void, String> {
+    private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchNextPage(Context context) {
@@ -243,7 +244,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
             if (result == null)
                 return;
             if (result.equals("all done")) {
-                Toast.makeText(context, "All caught up!", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
             clientOverviewAdapter.notifyDataSetChanged();

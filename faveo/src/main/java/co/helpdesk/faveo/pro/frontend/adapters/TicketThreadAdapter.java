@@ -37,7 +37,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         ticketViewHolder.textViewMessageTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
         ticketViewHolder.textViewMessageTitle.setText(ticketThread.messageTitle);
         //ticketViewHolder.textViewMessage.setText(Html.fromHtml(ticketThread.message));
-        ticketViewHolder.webView.loadDataWithBaseURL(null, ticketThread.message, "text/html", "utf-8", null);
+        ticketViewHolder.webView.loadDataWithBaseURL(null, ticketThread.message.replaceAll("\\n", "<br/>"), "text/html", "UTF-8", null);
 
         IImageLoader imageLoader = new PicassoLoader();
         imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketThread.clientPicture, ticketThread.placeholder);

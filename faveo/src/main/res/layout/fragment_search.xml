@@ -34,7 +34,7 @@
         android:layout_gravity="center"
         android:drawableTint="@color/cardview_dark_background"
         android:drawableTop="@drawable/ic_inbox_black_48dp"
-        android:text="No Records!"
+        android:text="@string/no_records"
         android:textSize="24sp"
         android:textStyle="bold"
         android:visibility="gone" />

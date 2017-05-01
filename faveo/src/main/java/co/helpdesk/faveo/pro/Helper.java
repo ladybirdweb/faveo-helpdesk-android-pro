@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import co.helpdesk.faveo.pro.model.ClientOverview;
+import co.helpdesk.faveo.pro.model.NotificationThread;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 
 public class Helper {
@@ -20,30 +22,28 @@ public class Helper {
             String firstName = jsonArray.getJSONObject(i).getString("first_name");
             String lastName = jsonArray.getJSONObject(i).getString("last_name");
             String username = jsonArray.getJSONObject(i).getString("user_name");
-            String email = jsonArray.getJSONObject(i).getString("email");
+            // String email = jsonArray.getJSONObject(i).getString("email");
             String profilePic = jsonArray.getJSONObject(i).getString("profile_pic");
             String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
             String ID = jsonArray.getJSONObject(i).getString("id");
             String title = jsonArray.getJSONObject(i).getString("title");
-            String createdAt = jsonArray.getJSONObject(i).getString("created_at");
-            String departmentName = jsonArray.getJSONObject(i).getString("department_name");
-            String priorityName = jsonArray.getJSONObject(i).getString("priotity_name");
-            String slaPlanName = jsonArray.getJSONObject(i).getString("sla_plan_name");
-            String helpTopicName = jsonArray.getJSONObject(i).getString("help_topic_name");
+//            String createdAt = jsonArray.getJSONObject(i).getString("created_at");
+//            String departmentName = jsonArray.getJSONObject(i).getString("department_name");
+//            String priorityName = jsonArray.getJSONObject(i).getString("priotity_name");
+//            String slaPlanName = jsonArray.getJSONObject(i).getString("sla_plan_name");
+//            String helpTopicName = jsonArray.getJSONObject(i).getString("help_topic_name");
             String ticketStatusName = jsonArray.getJSONObject(i).getString("ticket_status_name");
             String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
             String dueDate = jsonArray.getJSONObject(i).getString("overdue_date");
             String priorityColor = jsonArray.getJSONObject(i).getString("priority_color");
             String attachment = jsonArray.getJSONObject(i).getString("attachment");
-            String f = "", l = "";
-            if (firstName.trim().length() != 0) {
-                f = firstName.substring(0, 1);
-            }
-            if (lastName.trim().length() != 0) {
-                l = lastName.substring(0, 1);
-            }
+            String clientname;
+            if (firstName == null || firstName.equals(""))
+                clientname = username;
+            else
+                clientname = firstName + " " + lastName;
             return new TicketOverview(Integer.parseInt(ID), profilePic,
-                    ticketNumber, firstName + " " + lastName, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, f + l);
+                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -61,15 +61,13 @@ public class Helper {
             String clientPhone = jsonArray.getJSONObject(i).getString("phone_number");
             String clientCompany = jsonArray.getJSONObject(i).getString("company");
             String clientActive = jsonArray.getJSONObject(i).getString("active");
-            String f = "", l = "";
-            if (firstName.trim().length() != 0) {
-                f = firstName.substring(0, 1);
-            }
-            if (lastName.trim().length() != 0) {
-                l = lastName.substring(0, 1);
-            }
-            return new ClientOverview(Integer.parseInt(clientID), clientPicture,
-                    firstName + " " + lastName, clientEmail, clientPhone, clientCompany, clientActive, f + l);
+            String clientname;
+            if (firstName == null || firstName.equals(""))
+                clientname = userName;
+            else
+                clientname = firstName + " " + lastName;
+            return new ClientOverview(Integer.parseInt(clientID), clientPicture, clientname
+                    , clientEmail, clientPhone, clientCompany, clientActive, clientname);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -102,6 +100,61 @@ public class Helper {
         }
         return null;
     }
+
+    public static NotificationThread parseNotifications(JSONArray jsonArray, int i) {
+        try {
+            String message = jsonArray.getJSONObject(i).getString("message");
+            int ticketID = jsonArray.getJSONObject(i).getInt("row_id");
+            int notiID = jsonArray.getJSONObject(i).getInt("id");
+            String created_at = jsonArray.getJSONObject(i).getString("created_utc");
+            String senario = jsonArray.getJSONObject(i).getString("senario");
+            String seen = jsonArray.getJSONObject(i).getString("seen");
+            JSONObject requester = jsonArray.getJSONObject(i).getJSONObject("requester");
+            int clientID = requester.getInt("id");
+            String firstName = requester.getString("changed_by_first_name");
+            String clientPicture = requester.getString("profile_pic");
+            String lastName = requester.getString("changed_by_last_name");
+            String userName = requester.getString("changed_by_user_name");
+            String clientname;
+            if (firstName == null || firstName.equals(""))
+                clientname = userName;
+            else
+                clientname = firstName + " " + lastName;
+            return new NotificationThread(clientPicture, created_at, ticketID, message, clientname, senario, clientID, notiID, seen, clientname);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+//    public static Long notiRelativeTime(String dateToParse) {
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy HH:mm:ss");
+//        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//        Date d = null;
+//        try {
+//            d = sdf.parse(dateToParse);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        SimpleDateFormat output = new SimpleDateFormat("d MMM yyyy  HH:mm");
+//        output.setTimeZone(TimeZone.getDefault());
+//
+//        String formattedTime = output.format(d);
+//        Date gg = null;
+//        try {
+//            gg = output.parse(formattedTime);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        // SimpleDateFormat day = new SimpleDateFormat("dd");
+////            String formattedDay = day.format(d) + Helper.getDayOfMonthSuffix(Integer.parseInt(day.format(d)));
+////            formattedTime = formattedTime.replaceFirst(formattedTime.substring(0, formattedTime.indexOf(" ")), formattedDay);
+////            sdf.parse(dateToParse);
+//        return gg != null ? gg.getTime() : 0;
+//    }
 
     public static Long relativeTime(String dateToParse) {
 

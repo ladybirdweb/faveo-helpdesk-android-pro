@@ -17,11 +17,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
@@ -47,6 +52,17 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     private FragmentDrawerListener drawerListener;
     View layout;
     Context context;
+
+    @BindView(R.id.inbox_count)
+    TextView inbox_count;
+    @BindView(R.id.my_tickets_count)
+    TextView my_tickets_count;
+    @BindView(R.id.trash_tickets_count)
+    TextView trash_tickets_count;
+    @BindView(R.id.unassigned_tickets_count)
+    TextView unassigned_tickets_count;
+    @BindView(R.id.closed_tickets_count)
+    TextView closed_tickets_count;
 
     public FragmentDrawer() {
 
@@ -88,6 +104,13 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         layout.findViewById(R.id.settings).setOnClickListener(this);
         layout.findViewById(R.id.about).setOnClickListener(this);
         layout.findViewById(R.id.logout).setOnClickListener(this);
+        ButterKnife.bind(this, layout);
+
+        inbox_count.setText(Prefs.getString("inboxTickets", "-"));
+        closed_tickets_count.setText(Prefs.getString("closedTickets", "-"));
+        unassigned_tickets_count.setText(Prefs.getString("unassignedTickets", "-"));
+        trash_tickets_count.setText(Prefs.getString("trashTickets", "-"));
+        my_tickets_count.setText(Prefs.getString("myTickets", "-"));
         return layout;
     }
 
@@ -142,7 +165,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 break;
             case R.id.inbox_tickets:
 
-                title = getString(R.string.inbox_tickets);
+                title = getString(R.string.inbox);
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                 if (fragment == null)
                     fragment = new InboxTickets();
@@ -166,7 +189,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                     fragment = new ClosedTickets();
                 break;
             case R.id.trash_tickets:
-                title = getString(R.string.trash_tickets);
+                title = getString(R.string.trash);
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                 if (fragment == null)
                     fragment = new TrashTickets();
@@ -202,6 +225,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancelAll();
                 FaveoApplication.getInstance().clearApplicationData();
+                Prefs.clear();
                 getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

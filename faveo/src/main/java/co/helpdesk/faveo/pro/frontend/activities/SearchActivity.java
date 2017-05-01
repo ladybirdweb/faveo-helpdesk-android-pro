@@ -236,9 +236,9 @@ public class SearchActivity extends AppCompatActivity implements
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Tickets";
+                    return getString(R.string.tickets);
                 case 1:
-                    return "Customers";
+                    return getString(R.string.customers);
             }
             return null;
         }

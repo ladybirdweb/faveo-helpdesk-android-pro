@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -35,6 +34,7 @@ import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
+import es.dmoral.toasty.Toasty;
 
 public class ClosedTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -126,7 +126,7 @@ public class ClosedTickets extends Fragment {
         return rootView;
     }
 
-    public class FetchFirst extends AsyncTask<String, Void, String> {
+    private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchFirst(Context context) {
@@ -166,12 +166,12 @@ public class ClosedTickets extends Fragment {
                 swipeRefresh.setRefreshing(false);
 
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             if (result.equals("all done")) {
 
-                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 //return;
             }
             //recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
@@ -190,8 +190,8 @@ public class ClosedTickets extends Fragment {
                             if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                                 loading = false;
                                 new FetchNextPage(getActivity()).execute();
-                               // Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
-                                StyleableToast st = new StyleableToast(getContext(), "Loading!", Toast.LENGTH_SHORT);
+                                // Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+                                StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
                                 st.setBackgroundColor(Color.parseColor("#3da6d7"));
                                 st.setTextColor(Color.WHITE);
                                 st.setIcon(R.drawable.ic_autorenew_black_24dp);
@@ -211,7 +211,7 @@ public class ClosedTickets extends Fragment {
         }
     }
 
-    public class FetchNextPage extends AsyncTask<String, Void, String> {
+    private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchNextPage(Context context) {
@@ -250,7 +250,7 @@ public class ClosedTickets extends Fragment {
             if (result == null)
                 return;
             if (result.equals("all done")) {
-                Toast.makeText(context, "All tickets loaded", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
             ticketOverviewAdapter.notifyDataSetChanged();
@@ -265,12 +265,12 @@ public class ClosedTickets extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

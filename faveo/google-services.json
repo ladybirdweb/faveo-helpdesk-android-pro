@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "661051343223-mmuq118etsu862vmimsenl82n3nqo9vs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.helpdesk.faveo.pro",
+            "certificate_hash": "69845de1ce75a864bd5a20d47129a9ee97a2aefc"
+          }
+        },
+        {
           "client_id": "661051343223-c8o6bm02gigm7gufi5dou7sv2ucpel43.apps.googleusercontent.com",
           "client_type": 3
         }

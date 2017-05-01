@@ -1,66 +1,93 @@
 package co.helpdesk.faveo.pro;
 
-/**
- * Created by sumit on 3/13/2016.
- */
-
-
+import android.content.ContextWrapper;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 
-import com.amitshekhar.DebugDB;
 import com.crashlytics.android.Crashlytics;
-import com.squareup.leakcanary.LeakCanary;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.File;
 
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
+    InternetReceiver internetReceiver;
 
     @Override
     public void onCreate() {
+        internetReceiver = new InternetReceiver();
+        registerReceiver(
+                internetReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
         super.onCreate();
         MultiDex.install(this);
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
-        // Normal app init code...
 
-        Log.d("Debug address :",DebugDB.getAddressLog());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("ccc");
+        StringBuffer stringBuffer=new StringBuffer();
+        stringBuffer.append("cvcv");
+        //JodaTimeAndroid.init(this);
 
+//        if (BuildConfig.DEBUG) {
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(this);
+//            DebugDB.getAddressLog();
+//
+////            Stetho.initialize(
+////                    Stetho.newInitializerBuilder(this)
+////                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+////                            .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+////                            .build());
+//
+//            Stetho.initializeWithDefaults(this);
+//
+//            OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+//                    .addNetworkInterceptor(new StethoInterceptor())
+//                    .build();
+//            AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
+//        } else
         //Fast Android Networking init..
         //AndroidNetworking.initialize(getApplicationContext());
         //AndroidNetworking.setParserFactory(new JacksonParserFactory());
 
-        //Realm.io
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
-                .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(0)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfiguration);
+//        //Realm.io
+//        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
+//                .name(Realm.DEFAULT_REALM_NAME)
+//                .schemaVersion(0)
+//                .deleteRealmIfMigrationNeeded()
+//                .build();
+//        Realm.setDefaultConfiguration(realmConfiguration);
 
         //Fabric.io
         Fabric.with(this, new Crashlytics());
         instance = this;
+
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
     }
 
     public static synchronized FaveoApplication getInstance() {
         return instance;
     }
 
-    public void setInternetListener(InternetReceiver.InternetReceiverListener listener) {
-        InternetReceiver.internetReceiverListener = listener;
-    }
+//    public void setInternetListener(InternetReceiver.InternetReceiverListener listener) {
+//
+//        InternetReceiver.internetReceiverListener = listener;
+//    }
 
     public void clearApplicationData() {
         File cache = getCacheDir();
@@ -92,4 +119,31 @@ public class FaveoApplication extends MultiDexApplication {
         }
         fileOrDirectory.delete();
     }
+
+//    @Override
+//    protected void onPause() {
+//        unregisterReceiver(mReceiver);
+//        super.onPause();
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        this.mReceiver = new ConnectivityChangeReceiver();
+//        registerReceiver(
+//                this.mReceiver,
+//                new IntentFilter(
+//                        ConnectivityManager.CONNECTIVITY_ACTION));
+//        super.onResume();
+//    }
+
+
+    @Override
+    public void onTerminate() {
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
+            internetReceiver = null;
+        }
+        super.onTerminate();
+    }
+
 }

@@ -31,6 +31,7 @@ import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketThread;
+import es.dmoral.toasty.Toasty;
 
 public class Conversation extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -126,7 +127,7 @@ public class Conversation extends Fragment {
         return rootView;
     }
 
-    public class FetchTicketThreads extends AsyncTask<String, Void, String> {
+    private class FetchTicketThreads extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchTicketThreads(Context context) {
@@ -135,14 +136,13 @@ public class Conversation extends Fragment {
 
         protected String doInBackground(String... urls) {
             return new Helpdesk().getTicketThread(TicketDetailActivity.ticketID);
-
         }
 
         protected void onPostExecute(String result) {
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -224,9 +224,20 @@ public class Conversation extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void addThreadAndUpdate(TicketThread thread) {
-        ticketThreadList.add(0, thread);
-        ticketThreadAdapter.notifyDataSetChanged();
-    }
+//    public void addThreadAndUpdate(TicketThread thread) {
+//        ticketThreadList.add(0, thread);
+//        ticketThreadAdapter.notifyDataSetChanged();
+//    }
 
+    public void refresh() {
+        if (InternetReceiver.isConnected()) {
+            noInternet_view.setVisibility(View.GONE);
+            swipeRefresh.setRefreshing(true);
+            new FetchTicketThreads(getActivity()).execute();
+        } else {
+            noInternet_view.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+            empty_view.setVisibility(View.GONE);
+        }
+    }
 }

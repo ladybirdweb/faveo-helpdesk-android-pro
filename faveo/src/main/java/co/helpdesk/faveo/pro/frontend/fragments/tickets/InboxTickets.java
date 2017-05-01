@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +34,7 @@ import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
+import es.dmoral.toasty.Toasty;
 
 public class InboxTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -128,7 +128,7 @@ public class InboxTickets extends Fragment {
             });
 
         }
-        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox_tickets));
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox));
         return rootView;
     }
 
@@ -160,7 +160,7 @@ public class InboxTickets extends Fragment {
 //    }
 
 
-    public class FetchFirst extends AsyncTask<String, Void, String> {
+    private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchFirst(Context context) {
@@ -204,7 +204,7 @@ public class InboxTickets extends Fragment {
                 swipeRefresh.setRefreshing(false);
 
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
 //            if (result.equals("all done")) {
@@ -212,12 +212,13 @@ public class InboxTickets extends Fragment {
 //                return;
 //            }
 
+
             if (result.equals("all done")) {
 
-                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 //return;
             }
-          //  recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
+            //  recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
             recyclerView.setHasFixedSize(false);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -233,7 +234,7 @@ public class InboxTickets extends Fragment {
                             if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                                 loading = false;
                                 new FetchNextPage(getActivity()).execute();
-                                StyleableToast st = new StyleableToast(getContext(), "Loading!", Toast.LENGTH_SHORT);
+                                StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
                                 st.setBackgroundColor(Color.parseColor("#3da6d7"));
                                 st.setTextColor(Color.WHITE);
                                 st.setIcon(R.drawable.ic_autorenew_black_24dp);
@@ -255,7 +256,7 @@ public class InboxTickets extends Fragment {
         }
     }
 
-    public class FetchNextPage extends AsyncTask<String, Void, String> {
+    private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchNextPage(Context context) {
@@ -292,11 +293,11 @@ public class InboxTickets extends Fragment {
 
         protected void onPostExecute(String result) {
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             if (result.equals("all done")) {
-                Toast.makeText(context, "All tickets loaded", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
             ticketOverviewAdapter.notifyDataSetChanged();

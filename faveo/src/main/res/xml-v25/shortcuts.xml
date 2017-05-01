@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="false"
+        android:icon="@drawable/create_ticket"
+        android:shortcutDisabledMessage="@string/create_ticket_disabled_message"
+        android:shortcutId="static"
+        android:shortcutLongLabel="@string/static_shortcut_long_label"
+        android:shortcutShortLabel="@string/static_shortcut_short_label">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetClass="co.helpdesk.faveo.pro.frontend.activities.MainActivity"
+            android:targetPackage="co.helpdesk.faveo.pro" />
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity"
+            android:targetPackage="co.helpdesk.faveo.pro" />
+    </shortcut>
+</shortcuts>

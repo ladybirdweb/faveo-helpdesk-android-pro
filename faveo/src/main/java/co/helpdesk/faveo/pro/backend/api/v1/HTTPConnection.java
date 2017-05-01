@@ -3,6 +3,8 @@ package co.helpdesk.faveo.pro.backend.api.v1;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,7 +22,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.Preference;
 
 /**
  * Created by Sumit
@@ -38,7 +39,6 @@ class HTTPConnection {
     private URL url;
 
     String HTTPResponsePost(String stringURL, String parameters) {
-
 
         try {
             url = new URL(stringURL);
@@ -162,7 +162,7 @@ class HTTPConnection {
         return sb.toString();
     }
 
-    public String HTTPResponseGet(String stringURL) {
+    String HTTPResponseGet(String stringURL) {
         try {
             url = new URL(stringURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -218,13 +218,14 @@ class HTTPConnection {
     }
 
     private String refreshToken() {
-        String result = new Authenticate().postAuthenticateUser(Preference.getUsername(), Preference.getPassword());
+        String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
         if (result == null)
             return null;
         try {
             JSONObject jsonObject = new JSONObject(result);
             String token = jsonObject.getString("token");
-            Preference.setToken(token);
+            Prefs.putString("TOKEN", token);
+            // Preference.setToken(token);
             Authenticate.token = token;
             Helpdesk.token = token;
         } catch (JSONException e) {

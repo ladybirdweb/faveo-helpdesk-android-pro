@@ -18,7 +18,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="18dp"
-        android:text="Sort"
+        android:text="@string/sort"
         android:textAllCaps="false"
         android:textColor="@color/shade_white"
         android:textStyle="bold" />
@@ -30,7 +30,7 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/arrow_imgView"
         android:layout_toStartOf="@+id/arrow_imgView"
-        android:text="Sorting type"
+        android:text="@string/sorting_type"
         android:textColor="@color/shade_white"
         android:textStyle="bold" />
 

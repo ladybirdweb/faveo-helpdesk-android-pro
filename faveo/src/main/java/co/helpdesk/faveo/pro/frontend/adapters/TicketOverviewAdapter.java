@@ -41,10 +41,10 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
         } else {
             ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
         }
-
-        if (Helper.compareDates(ticketOverview.dueDate) == 1) {
-            ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-        } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+        if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
+            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
 
         ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
         ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);

@@ -16,24 +16,24 @@
         android:orientation="vertical"
         tools:context="com.android.faveo.CreateNewTicketActivity">
 
-        <TextView
-            android:id="@+id/textView_opened_by"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:maxLines="1"
-            android:paddingTop="8dp"
-            android:text="Client name"
-            android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+            <!--android:id="@+id/textView_ticket_number"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--android:gravity="center"-->
+            <!--android:maxLines="1"-->
+            <!--android:paddingTop="8dp"-->
+            <!--android:text="Ticket Number"-->
+            <!--android:textCursorDrawable="@drawable/color_cursor"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textStyle="bold" />-->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="SUBJECT"
+            android:text="@string/subject"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -45,10 +45,10 @@
             android:background="@drawable/edittext_modified_states"
             android:cursorVisible="true"
             android:imeOptions="actionNext"
-            android:maxLines="3"
+            android:inputType="text"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:text="Not Available"
+            android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="SLA PLANS"
+            android:text="@string/sla_plans"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -84,33 +84,33 @@
             android:paddingTop="24dp"
             android:textSize="14sp" />
 
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:alpha="0.3"-->
+            <!--android:text="@string/status"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textStyle="bold" />-->
+
+        <!--<Spinner-->
+            <!--android:id="@+id/spinner_status"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--android:background="@drawable/edittext_modified_states"-->
+            <!--android:entries="@array/spinnerPriority"-->
+            <!--android:imeOptions="actionNext"-->
+            <!--android:maxLines="1"-->
+            <!--android:paddingBottom="24dp"-->
+            <!--android:paddingTop="24dp"-->
+            <!--android:textSize="14sp" />-->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="STATUS"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spinner_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/edittext_modified_states"
-            android:entries="@array/spinnerPriority"
-            android:imeOptions="actionNext"
-            android:maxLines="1"
-            android:paddingBottom="24dp"
-            android:paddingTop="24dp"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.3"
-            android:text="PRIORITY"
+            android:text="@string/priority"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -128,34 +128,34 @@
             android:paddingTop="24dp"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tv_dept"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.3"
-            android:text="DEPARTMENT"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+            <!--android:id="@+id/tv_dept"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:alpha="0.3"-->
+            <!--android:text="@string/deparment"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textStyle="bold" />-->
 
-        <Spinner
-            android:id="@+id/spinner_department"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/edittext_modified_states"
-            android:imeOptions="actionNext"
-            android:maxLines="1"
-            android:paddingBottom="24dp"
-            android:paddingTop="24dp"
-            android:textSize="14sp" />
+        <!--<Spinner-->
+            <!--android:id="@+id/spinner_department"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--android:background="@drawable/edittext_modified_states"-->
+            <!--android:imeOptions="actionNext"-->
+            <!--android:maxLines="1"-->
+            <!--android:paddingBottom="24dp"-->
+            <!--android:paddingTop="24dp"-->
+            <!--android:textSize="14sp" />-->
 
         <TextView
             android:id="@+id/tv_helpTopic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="HELP TOPIC"
+            android:text="@string/helptopic"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -177,7 +177,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="FIRST NAME"
+            android:text="@string/first_name"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -197,7 +197,7 @@
             android:maxLines="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:text="Not Available"
+            android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
@@ -205,7 +205,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="LAST NAME"
+            android:text="@string/last_name"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -225,7 +225,7 @@
             android:maxLines="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:text="Not Available"
+            android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
@@ -233,7 +233,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="EMAIL"
+            android:text="@string/email"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -253,7 +253,7 @@
             android:maxLines="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:text="Not Available"
+            android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
@@ -261,7 +261,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="SOURCE"
+            android:text="@string/source"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -312,7 +312,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="DUE DATE"
+            android:text="@string/due_date"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -333,7 +333,7 @@
             android:maxLines="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:text="Not Available"
+            android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
@@ -341,7 +341,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="CREATED DATE"
+            android:text="@string/created_date"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -362,7 +362,7 @@
             android:maxLines="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:text="Not Available"
+            android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
@@ -370,8 +370,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="LAST RESPONSE DATE"
-
+            android:text="@string/last_response_date"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -392,7 +391,7 @@
             android:maxLines="1"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:text="Not Available"
+            android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
@@ -400,7 +399,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0.3"
-            android:text="ASSIGN TO"
+            android:text="@string/assign_to"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -427,9 +426,9 @@
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="36dp"
+            android:layout_marginBottom="56dp"
             android:background="@drawable/button_background"
-            android:text="Save"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"

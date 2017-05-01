@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.fragments;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
@@ -18,11 +17,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import co.helpdesk.faveo.pro.Helper;
-import co.helpdesk.faveo.pro.Preference;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.Utils;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -118,35 +118,35 @@ public class CreateTicket extends Fragment {
                     boolean allCorrect = true;
 
                     if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
-                        setErrorState(editTextEmail, textViewErrorEmail, "Invalid email");
+                        setErrorState(editTextEmail, textViewErrorEmail, getString(R.string.invalid_email));
                         allCorrect = false;
                     }
 
                     if (fname.trim().length() == 0) {
-                        setErrorState(editTextFirstName, textViewErrorFirstName, "Fill FirstName");
+                        setErrorState(editTextFirstName, textViewErrorFirstName, getString(R.string.fill_firstname));
                         allCorrect = false;
                     } else if (fname.trim().length() < 3) {
-                        setErrorState(editTextFirstName, textViewErrorFirstName, "FirstName should be minimum 3 characters");
+                        setErrorState(editTextFirstName, textViewErrorFirstName, getString(R.string.firstname_minimum_char));
                         allCorrect = false;
                     }
                     if (lname.trim().length() == 0) {
-                        setErrorState(editTextLastName, textViewErrorLastName, "Fill LastName");
+                        setErrorState(editTextLastName, textViewErrorLastName, getString(R.string.fill_lastname));
                         allCorrect = false;
                     }
 
                     if (subject.trim().length() == 0) {
-                        setErrorState(editTextSubject, textViewErrorSubject, "Please fill the field");
+                        setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.please_fill_field));
                         allCorrect = false;
                     } else if (subject.trim().length() < 5) {
-                        setErrorState(editTextSubject, textViewErrorSubject, "Subject should be minimum 5 characters");
+                        setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.sub_minimum_char));
                         allCorrect = false;
                     }
 
                     if (message.trim().length() == 0) {
-                        setErrorState(editTextMessage, textViewErrorMessage, "Please fill the field");
+                        setErrorState(editTextMessage, textViewErrorMessage, getString(R.string.please_fill_field));
                         allCorrect = false;
                     } else if (message.trim().length() < 10) {
-                        setErrorState(editTextMessage, textViewErrorMessage, "Message should be minimum 10 characters");
+                        setErrorState(editTextMessage, textViewErrorMessage, getString(R.string.msg_minimum_char));
                         allCorrect = false;
                     }
 
@@ -159,7 +159,7 @@ public class CreateTicket extends Fragment {
                     if (allCorrect) {
                         if (InternetReceiver.isConnected()) {
                             progressDialog = new ProgressDialog(getActivity());
-                            progressDialog.setMessage("Creating ticket");
+                            progressDialog.setMessage(getString(R.string.creating_ticket));
                             progressDialog.show();
                             try {
                                 fname = URLEncoder.encode(fname, "utf-8");
@@ -172,19 +172,19 @@ public class CreateTicket extends Fragment {
                                 e.printStackTrace();
                             }
 
-                            new CreateNewTicket(Integer.parseInt(Preference.getUserID()), subject, message, helpTopic, SLAPlans, priority, assignTo, phone, fname, lname, email, countrycode).execute();
+                            new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic, SLAPlans, priority, assignTo, phone, fname, lname, email, countrycode).execute();
                         } else
-                            Toast.makeText(v.getContext(), "Oops! No internet", Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(), R.string.oops_no_internet, Toast.LENGTH_LONG).show();
                     }
 
                 }
             });
         }
-        ((MainActivity) getActivity()).setActionBarTitle("Create ticket");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.create_ticket));
         return rootView;
     }
 
-    public class CreateNewTicket extends AsyncTask<String, Void, String> {
+    private class CreateNewTicket extends AsyncTask<String, Void, String> {
         int userID;
         String phone;
         String subject;
@@ -213,17 +213,17 @@ public class CreateTicket extends Fragment {
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, SLA, priority, dept, fname, lname, phone, email, code);
+            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code);
         }
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            if (result.contains("Ticket created successfully!")) {
-                Toast.makeText(getActivity(), "Ticket created", Toast.LENGTH_LONG).show();
+            if (result.contains("NotificationThread created successfully!")) {
+                Toast.makeText(getActivity(), getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -305,12 +305,12 @@ public class CreateTicket extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Settings.OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

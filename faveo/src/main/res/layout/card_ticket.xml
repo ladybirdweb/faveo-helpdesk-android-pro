@@ -45,7 +45,7 @@
             android:alpha=".54"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:text="#AAAA-0001-0000001"
+            android:text="@string/aaaa_0001_0000001"
             android:textColor="@color/black"
             android:textSize="10sp" />
 
@@ -62,7 +62,7 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:text="Subject of the ticket fdfgffsafsafasfasfsafbjjhjkh"
+            android:text="@string/dummy_sub"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -76,7 +76,7 @@
             android:layout_marginTop="6dp"
             android:layout_toRightOf="@+id/imageView_default_profile"
             android:fontFamily="sans-serif-bold"
-            android:text="Karthik Sen"
+            android:text="@string/dummy_name"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -125,7 +125,7 @@
             android:alpha=".54"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:text="6th Dec 2016"
+            android:text="@string/dummy_date"
             android:textColor="@color/black"
             android:textSize="12sp" />
 
@@ -139,10 +139,11 @@
             android:background="@drawable/curve_corners"
             android:gravity="center"
             android:paddingBottom="2dp"
-            android:text="Overdue"
+            android:text="@string/overdue"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/attachment_icon"
