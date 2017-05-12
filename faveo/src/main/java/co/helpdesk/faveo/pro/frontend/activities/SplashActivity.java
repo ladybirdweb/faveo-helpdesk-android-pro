@@ -1,7 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,6 +21,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.IllegalFormatException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,11 +78,12 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            Log.d("Depen Response : ", result + "");
 
-            Log.d("Depen Response code : ", result + "");
-            if (result == null) {
+            if (result==null) {
 
-                Toasty.error(SplashActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                loading.setText("Oops! Something went wrong, \nplease try again later");
+                progressDialog.setVisibility(View.INVISIBLE);
                 return;
             }
 
@@ -213,11 +216,13 @@ public class SplashActivity extends AppCompatActivity {
                     Prefs.putString("unassignedTickets", unasigned + "");
 
             } catch (JSONException e) {
-                Toasty.error(SplashActivity.this, "Error", Toast.LENGTH_LONG).show();
+                Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
+            } finally {
+                progressDialog.setVisibility(View.INVISIBLE);
+
             }
 
-            progressDialog.setVisibility(View.INVISIBLE);
             loading.setText(R.string.done_loading);
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);

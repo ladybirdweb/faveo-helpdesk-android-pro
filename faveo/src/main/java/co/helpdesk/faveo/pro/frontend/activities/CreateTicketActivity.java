@@ -101,10 +101,10 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    Spinner spinnerSLA;
     //    @BindView(R.id.spinner_dept)
 //    Spinner spinnerDept;
-    @BindView(R.id.cc_searchview)
-    SearchView ccSearchview;
-    @BindView(R.id.requester_searchview)
-    SearchView requesterSearchview;
+//    @BindView(R.id.cc_searchview)
+//    SearchView ccSearchview;
+//    @BindView(R.id.requester_searchview)
+//    SearchView requesterSearchview;
     ProgressDialog progressDialog;
 
     @Override
@@ -145,34 +145,34 @@ public class CreateTicketActivity extends AppCompatActivity {
                 this.finish();
                 return true;
 
-            case R.id.action_attach: {
-                new BottomSheet.Builder(this).title("Attach files from").sheet(R.menu.bottom_menu).listener(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case R.id.action_gallery:
-
-                                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                                startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-                                break;
-//                            case R.id.action_docx:
+//            case R.id.action_attach: {
+//                new BottomSheet.Builder(this).title("Attach files from").sheet(R.menu.bottom_menu).listener(new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which) {
+//                            case R.id.action_gallery:
 //
-////                                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-////                                //intent.setType("text/*");
-////                                intent.setType("*/*");
-////                                intent.addCategory(Intent.CATEGORY_OPENABLE);
-////                                startActivityForResult(Intent.createChooser(intent, "Select a doc"), RESULT_LOAD_FILE);
+//                                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 //
+//                                startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
 //                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }).show();
-                return true;
-            }
+////                            case R.id.action_docx:
+////
+//////                                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//////                                //intent.setType("text/*");
+//////                                intent.setType("*/*");
+//////                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//////                                startActivityForResult(Intent.createChooser(intent, "Select a doc"), RESULT_LOAD_FILE);
+////
+////                                break;
+//                            default:
+//                                break;
+//                        }
+//                    }
+//                }).show();
+//                return true;
+//            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -279,103 +279,103 @@ public class CreateTicketActivity extends AppCompatActivity {
                 0);
         final List<String> suggestions = new ArrayList<>();
 
-        requesterSearchview.setSuggestionsAdapter(suggestionAdapter);
-        requesterSearchview.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-            @Override
-            public boolean onSuggestionSelect(int position) {
-                return false;
-            }
-
-            @Override
-            public boolean onSuggestionClick(int position) {
-                requesterSearchview.setQuery(suggestions.get(position), false);
-                requesterSearchview.clearFocus();
-                //doSearch(suggestions.get(position));
-                return true;
-            }
-        });
-
-        requesterSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.length() > 2) {
-                    //loadData(s);
-                    Toast.makeText(getBaseContext(), newText, Toast.LENGTH_SHORT).show();
-                }
-
-                //                MyApp.autocompleteService.search(newText, new Callback<Autocomplete>() {
-//                    @Override
-//                    public void success(Autocomplete autocomplete, Response response) {
-//                        suggestions.clear();
-//                        suggestions.addAll(autocomplete.suggestions);
+//        requesterSearchview.setSuggestionsAdapter(suggestionAdapter);
+//        requesterSearchview.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+//            @Override
+//            public boolean onSuggestionSelect(int position) {
+//                return false;
+//            }
 //
-//                        String[] columns = {
-//                                BaseColumns._ID,
-//                                SearchManager.SUGGEST_COLUMN_TEXT_1,
-//                                SearchManager.SUGGEST_COLUMN_INTENT_DATA
-//                        };
+//            @Override
+//            public boolean onSuggestionClick(int position) {
+//                requesterSearchview.setQuery(suggestions.get(position), false);
+//                requesterSearchview.clearFocus();
+//                //doSearch(suggestions.get(position));
+//                return true;
+//            }
+//        });
 //
-//                        MatrixCursor cursor = new MatrixCursor(columns);
+//        requesterSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
 //
-//                        for (int i = 0; i < autocomplete.suggestions.size(); i++) {
-//                            String[] tmp = {Integer.toString(i), autocomplete.suggestions.get(i), autocomplete.suggestions.get(i)};
-//                            cursor.addRow(tmp);
-//                        }
-//                        suggestionAdapter.swapCursor(cursor);
-//                    }
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                if (newText.length() > 2) {
+//                    //loadData(s);
+//                    Toast.makeText(getBaseContext(), newText, Toast.LENGTH_SHORT).show();
+//                }
 //
-//                    @Override
-//                    public void failure(RetrofitError error) {
-//                        Toast.makeText(SearchFoodActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-//                        Log.w("autocompleteService", error.getMessage());
-//                    }
-//                });
-                return true;
-            }
-        });
-        ccSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
-                return false;
-            }
+//                //                MyApp.autocompleteService.search(newText, new Callback<Autocomplete>() {
+////                    @Override
+////                    public void success(Autocomplete autocomplete, Response response) {
+////                        suggestions.clear();
+////                        suggestions.addAll(autocomplete.suggestions);
+////
+////                        String[] columns = {
+////                                BaseColumns._ID,
+////                                SearchManager.SUGGEST_COLUMN_TEXT_1,
+////                                SearchManager.SUGGEST_COLUMN_INTENT_DATA
+////                        };
+////
+////                        MatrixCursor cursor = new MatrixCursor(columns);
+////
+////                        for (int i = 0; i < autocomplete.suggestions.size(); i++) {
+////                            String[] tmp = {Integer.toString(i), autocomplete.suggestions.get(i), autocomplete.suggestions.get(i)};
+////                            cursor.addRow(tmp);
+////                        }
+////                        suggestionAdapter.swapCursor(cursor);
+////                    }
+////
+////                    @Override
+////                    public void failure(RetrofitError error) {
+////                        Toast.makeText(SearchFoodActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+////                        Log.w("autocompleteService", error.getMessage());
+////                    }
+////                });
+//                return true;
+//            }
+//        });
+//        ccSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                //Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                return true;
+//            }
+//        });
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                return true;
-            }
-        });
-
-        ImageButton attchmentClose = (ImageButton) findViewById(R.id.attachment_close);
-        ImageButton addButton = (ImageButton) findViewById(R.id.addrequester_button);
-        addButton.setOnClickListener(new View.OnClickListener()
-                                     {
-                                         @Override
-                                         public void onClick(View v) {
-
-                                             CustomBottomSheetDialog bottomSheetDialog = new CustomBottomSheetDialog();
-                                             bottomSheetDialog.show(getSupportFragmentManager(), "Custom Bottom Sheet");
-
-                                         }
-                                     }
-
-        );
-        attchmentClose.setOnClickListener(new View.OnClickListener()
-
-                                          {
-                                              @Override
-                                              public void onClick(View v) {
-                                                  attachment_layout.setVisibility(View.GONE);
-                                              }
-                                          }
-
-        );
+//        ImageButton attchmentClose = (ImageButton) findViewById(R.id.attachment_close);
+//        ImageButton addButton = (ImageButton) findViewById(R.id.addrequester_button);
+//        addButton.setOnClickListener(new View.OnClickListener()
+//                                     {
+//                                         @Override
+//                                         public void onClick(View v) {
+//
+//                                             CustomBottomSheetDialog bottomSheetDialog = new CustomBottomSheetDialog();
+//                                             bottomSheetDialog.show(getSupportFragmentManager(), "Custom Bottom Sheet");
+//
+//                                         }
+//                                     }
+//
+//        );
+//        attchmentClose.setOnClickListener(new View.OnClickListener()
+//
+//                                          {
+//                                              @Override
+//                                              public void onClick(View v) {
+//                                                  attachment_layout.setVisibility(View.GONE);
+//                                              }
+//                                          }
+//
+//        );
 
         spinnerHelpArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueTopic.split(","))); //selected item will look like a spinner set from XML
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

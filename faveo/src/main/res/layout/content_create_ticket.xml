@@ -232,111 +232,111 @@
             <!--android:textSize="16sp" />-->
             <!--</LinearLayout>-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="#EEEEEE">
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="36dp"-->
+            <!--android:background="#EEEEEE">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
-                    android:text="Requester"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginLeft="17dp"-->
+            <!--android:layout_marginStart="17dp"-->
+            <!--android:text="Requester"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textStyle="bold" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:text="Required"
-                    android:textSize="12sp" />
-            </RelativeLayout>
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="Required"-->
+            <!--android:textSize="12sp" />-->
+            <!--</RelativeLayout>-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal">
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:focusable="true"-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:orientation="horizontal">-->
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/requester_searchview"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_toLeftOf="@+id/addrequester_button"
-                    android:layout_toStartOf="@+id/addrequester_button"
-                    android:background="@android:color/transparent"
-                    android:imeOptions="actionNext"
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    app:iconifiedByDefault="false"
-                    app:queryHint="Search requester"
-                    app:searchIcon="@null"
-                    app:showDividers="none" />
+            <!--<android.support.v7.widget.SearchView-->
+            <!--android:id="@+id/requester_searchview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginLeft="2dp"-->
+            <!--android:layout_marginRight="2dp"-->
+            <!--android:layout_toLeftOf="@+id/addrequester_button"-->
+            <!--android:layout_toStartOf="@+id/addrequester_button"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:imeOptions="actionNext"-->
+            <!--android:textCursorDrawable="@drawable/color_cursor"-->
+            <!--app:iconifiedByDefault="false"-->
+            <!--app:queryHint="Search requester"-->
+            <!--app:searchIcon="@null"-->
+            <!--app:showDividers="none" />-->
 
-                <ImageButton
-                    android:id="@+id/addrequester_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/ic_action_add_circle_outline" />
-            </RelativeLayout>
+            <!--<ImageButton-->
+            <!--android:id="@+id/addrequester_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--android:background="@drawable/ic_action_add_circle_outline" />-->
+            <!--</RelativeLayout>-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="#EEEEEE">
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="36dp"-->
+            <!--android:background="#EEEEEE">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
-                    android:text="Cc"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginLeft="17dp"-->
+            <!--android:layout_marginStart="17dp"-->
+            <!--android:text="Cc"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textStyle="bold" />-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:focusable="true"-->
+            <!--android:focusableInTouchMode="true">-->
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/cc_searchview"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@android:color/transparent"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="16sp"
-                    app:iconifiedByDefault="false"
-                    app:searchIcon="@null" />
-            </LinearLayout>
+            <!--<android.support.v7.widget.SearchView-->
+            <!--android:id="@+id/cc_searchview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:imeOptions="actionNext"-->
+            <!--android:inputType="text"-->
+            <!--android:textCursorDrawable="@drawable/color_cursor"-->
+            <!--android:textSize="16sp"-->
+            <!--app:iconifiedByDefault="false"-->
+            <!--app:searchIcon="@null" />-->
+            <!--</LinearLayout>-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
