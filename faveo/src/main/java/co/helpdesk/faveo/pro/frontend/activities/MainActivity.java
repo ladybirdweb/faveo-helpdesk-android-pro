@@ -176,10 +176,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-//        if (id == R.id.action_search) {
-//            startActivity(new Intent(MainActivity.this, SearchActivity.class));
-//            return true;
-//        }
+        if (id == R.id.action_search) {
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            return true;
+        }
         if (id == R.id.action_noti) {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);

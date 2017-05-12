@@ -178,17 +178,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-
     public Bitmap getBitmapFromURL(String strURL) {
-
-//        return Glide.with(this)
-//                .load(strURL)
-//                .asBitmap()
-//                .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
-
         try {
-//            URL url = new URL(strURL);
-//            return BitmapFactory.decodeStream(url.openConnection().getInputStream());
             URL url = new URL(strURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);

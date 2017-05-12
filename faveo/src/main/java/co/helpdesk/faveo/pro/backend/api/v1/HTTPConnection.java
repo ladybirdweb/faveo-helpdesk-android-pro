@@ -165,15 +165,16 @@ class HTTPConnection {
     String HTTPResponseGet(String stringURL) {
         try {
             url = new URL(stringURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Offer-type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
-            is = connection.getInputStream();
             connection.getResponseCode();
             Log.e("Response Codee", connection.getResponseCode() + "");
+            is = connection.getInputStream();
+
         } catch (IOException e) {
 
             if (e.getMessage().contains("No authentication challenges found")) {

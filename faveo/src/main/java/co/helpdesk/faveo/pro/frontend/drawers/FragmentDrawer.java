@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.loader.PicassoLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Constants;
@@ -63,6 +66,15 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     TextView unassigned_tickets_count;
     @BindView(R.id.closed_tickets_count)
     TextView closed_tickets_count;
+    @BindView(R.id.usernametv)
+    TextView userName;
+    @BindView(R.id.domaintv)
+    TextView domainAddress;
+    @BindView(R.id.roleTv)
+    TextView userRole;
+    @BindView(R.id.imageView_default_profile)
+    AvatarView profilePic;
+
 
     public FragmentDrawer() {
 
@@ -93,6 +105,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
+
         layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         layout.findViewById(R.id.create_ticket).setOnClickListener(this);
         layout.findViewById(R.id.inbox_tickets).setOnClickListener(this);
@@ -111,6 +124,12 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         unassigned_tickets_count.setText(Prefs.getString("unassignedTickets", "-"));
         trash_tickets_count.setText(Prefs.getString("trashTickets", "-"));
         my_tickets_count.setText(Prefs.getString("myTickets", "-"));
+
+        IImageLoader imageLoader = new PicassoLoader();
+        imageLoader.loadImage(profilePic, Prefs.getString("PROFILE_PIC", null), Prefs.getString("USERNAME", " ").charAt(0) + "");
+        userRole.setText(Prefs.getString("ROLE", ""));
+        domainAddress.setText(Prefs.getString("BASE_URL", ""));
+        userName.setText(Prefs.getString("PROFILE_NAME", ""));
         return layout;
     }
 

@@ -37,7 +37,7 @@ public class Helpdesk {
                 "&subject=" + subject +
                 "&body=" + body +
                 "&helptopic=" + helpTopic +
-               // "&sla=" + sla +
+                // "&sla=" + sla +
                 "&priority=" + priority +
                 //"&dept=" + dept +
                 "&first_name=" + fname +
@@ -54,9 +54,9 @@ public class Helpdesk {
                 "&subject=" + subject +
                 "&body=" + body +
                 "&helptopic=" + helpTopic +
-               // "&sla=" + sla +
+                // "&sla=" + sla +
                 "&priority=" + priority +
-               // "&dept=" + dept +
+                // "&dept=" + dept +
                 "&first_name=" + fname +
                 "&last_name=" + lname +
                 "&phone=" + phone +
@@ -72,9 +72,9 @@ public class Helpdesk {
                     "&subject=" + subject +
                     "&body=" + body +
                     "&helptopic=" + helpTopic +
-                   // "&sla=" + sla +
+                    // "&sla=" + sla +
                     "&priority=" + priority +
-                  //  "&dept=" + dept +
+                    //  "&dept=" + dept +
                     "&first_name=" + fname +
                     "&last_name=" + lname +
                     "&phone=" + phone +
@@ -458,8 +458,9 @@ public class Helpdesk {
     public String getDependency() {
         Log.d("DependencyAPI", Constants.URL + "helpdesk/dependency?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
         String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/dependency?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        if (result != null && result.equals("tokenRefreshed"))
+        if (result != null && result.equals("tokenRefreshed")) {
             return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/dependency?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        }
         return result;
     }
 

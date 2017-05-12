@@ -19,6 +19,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
@@ -83,6 +84,10 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout textInputLayoutUsername;
     @BindView(R.id.input_layout_password)
     TextInputLayout textInputLayoutPass;
+    @BindView(R.id.url)
+    TextView url;
+    @BindView(R.id.flipcolor)
+    View flipColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             return;
         }
+        url.setVisibility(View.GONE);
+        flipColor.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_200));
         buttonSignIn.setEnabled(false);
         usernameEdittext.addTextChangedListener(mTextWatcher);
         passwordEdittext.addTextChangedListener(mTextWatcher);
@@ -204,14 +211,17 @@ public class LoginActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     dynamicShortcut();
                 }
+                Prefs.putString("BASE_URL", baseURL);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
-                if (BuildConfig.DEBUG) {
-                    viewflipper.showNext();
-                } else {
+//                if (BuildConfig.DEBUG) {
+//                    viewflipper.showNext();
+//                    url.setText(baseURL); url.setVisibility(View.VISIBLE);
+//                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
+//                } else {
                     progressDialogBilling.show();
                     new VerifyBilling(LoginActivity.this, baseURL).execute();
-                }
+               // }
 
             } else {
                 Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
@@ -258,6 +268,9 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (result.contains("success")) {
                 viewflipper.showNext();
+                url.setText(baseURL);
+                url.setVisibility(View.VISIBLE);
+                flipColor.setBackgroundColor(ContextCompat.getColor(context, R.color.faveo));
             } else if (result.contains("fails")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(R.string.access_denied)
@@ -342,14 +355,28 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 String token = jsonObject.getString("token");
-                String userID = jsonObject.getString("user_id");
-
+                JSONObject jsonObject1 = jsonObject.getJSONObject("user_id");
+                String userID = jsonObject1.getString("id");
+                String profile_pic = jsonObject1.getString("profile_pic");
+                String role = jsonObject1.getString("role");
+                String firstName = jsonObject1.getString("first_name");
+                String lastName = jsonObject1.getString("last_name");
+                String userName = jsonObject1.getString("user_name");
+                String clientname;
+                if (firstName == null || firstName.equals(""))
+                    clientname = userName;
+                else
+                    clientname = firstName + " " + lastName;
                 SharedPreferences.Editor authenticationEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
                 authenticationEditor.putString("ID", userID);
                 authenticationEditor.putString("TOKEN", token);
                 authenticationEditor.putString("USERNAME", username);
                 authenticationEditor.putString("PASSWORD", password);
                 authenticationEditor.putBoolean("LOGIN_COMPLETE", true);
+                authenticationEditor.putString("PROFILE_PIC", profile_pic);
+                authenticationEditor.putString("ROLE", role);
+                authenticationEditor.putString("PROFILE_NAME", clientname);
+                authenticationEditor.putString("AGENT_SIGN", jsonObject1.getString("agent_sign"));
                 authenticationEditor.apply();
 
                 Prefs.putString("FCMtoken", FirebaseInstanceId.getInstance().getToken());

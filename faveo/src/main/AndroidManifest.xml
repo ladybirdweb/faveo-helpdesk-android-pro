@@ -15,10 +15,11 @@
 
     <application
         android:name=".FaveoApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme">
+        android:theme="@style/MyMaterialTheme"
+        tools:replace="allowBackup, label">
         <activity
             android:name=".frontend.activities.LoginActivity"
             android:label="@string/app_name"
@@ -50,8 +51,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".frontend.activities.SplashActivity"
-            android:noHistory="true"
             android:launchMode="singleTask"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".frontend.activities.TicketDetailActivity"
