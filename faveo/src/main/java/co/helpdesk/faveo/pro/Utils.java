@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 
 public class Utils {
 
+    //Removing duplicates from Collection objects
     public static String[] removeDuplicates(String[] arr) {
         //arr[0] = "--";
         LinkedHashSet<String> lhs = new LinkedHashSet<>();

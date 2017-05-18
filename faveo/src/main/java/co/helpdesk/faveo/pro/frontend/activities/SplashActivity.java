@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,8 +20,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.IllegalFormatException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +46,8 @@ public class SplashActivity extends AppCompatActivity {
             keyTeam = "", valueTeam = "",
             keyPriority = "", valuePriority = "",
             keyTopic = "", valueTopic = "",
-            keySource = "", valueSource = "";
+            keySource = "", valueSource = "",
+            keyType = "", valueType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +67,7 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    //Dependency API
     private class FetchDependency extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
@@ -80,7 +79,7 @@ public class SplashActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.d("Depen Response : ", result + "");
 
-            if (result==null) {
+            if (result == null) {
 
                 loading.setText("Oops! Something went wrong, \nplease try again later");
                 progressDialog.setVisibility(View.INVISIBLE);
@@ -107,6 +106,14 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 Prefs.putString("keySLA", keySLA);
                 Prefs.putString("valueSLA", valueSLA);
+
+                JSONArray jsonArrayType = jsonObject1.getJSONArray("type");
+                for (int i = 0; i < jsonArrayType.length(); i++) {
+                    keyType += jsonArrayType.getJSONObject(i).getString("id") + ",";
+                    valueType += jsonArrayType.getJSONObject(i).getString("name") + ",";
+                }
+                Prefs.putString("keyType", keyType);
+                Prefs.putString("valueType", valueType);
 
 //                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
 //                for (int i = 0; i < jsonArrayStaffs.length(); i++) {

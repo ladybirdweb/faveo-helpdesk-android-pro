@@ -16,6 +16,7 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
 
 public class Helper {
 
+    //Tickets Page
     public static TicketOverview parseTicketOverview(JSONArray jsonArray, int i) {
         try {
             //Date updated_at = null;
@@ -50,6 +51,7 @@ public class Helper {
         return null;
     }
 
+    //Client Page
     public static ClientOverview parseClientOverview(JSONArray jsonArray, int i) {
         try {
             String clientID = jsonArray.getJSONObject(i).getString("id");
@@ -101,6 +103,7 @@ public class Helper {
         return null;
     }
 
+    //Notification Page
     public static NotificationThread parseNotifications(JSONArray jsonArray, int i) {
         try {
             String message = jsonArray.getJSONObject(i).getString("message");
@@ -156,6 +159,7 @@ public class Helper {
 //        return gg != null ? gg.getTime() : 0;
 //    }
 
+    //Converting UTC to local returns long timeinmillseconds
     public static Long relativeTime(String dateToParse) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -184,6 +188,7 @@ public class Helper {
         return gg != null ? gg.getTime() : 0;
     }
 
+    //UTC time conversion to local time returns String DAte
     public static String parseDate(String dateToParse) {
         try {
 
@@ -206,6 +211,7 @@ public class Helper {
         }
     }
 
+    //Comparing two dates
     public static int compareDates(String duedate1) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -259,6 +265,7 @@ public class Helper {
         }
     }
 
+    //Email validation
     public static boolean isValidEmail(CharSequence target) {
         return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }

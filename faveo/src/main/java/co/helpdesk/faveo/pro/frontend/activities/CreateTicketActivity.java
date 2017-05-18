@@ -3,7 +3,6 @@ package co.helpdesk.faveo.pro.frontend.activities;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -27,14 +25,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cocosw.bottomsheet.BottomSheet;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,10 +46,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.Utils;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.fragments.CustomBottomSheetDialog;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import es.dmoral.toasty.Toasty;
@@ -67,16 +63,16 @@ public class CreateTicketActivity extends AppCompatActivity {
     ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
             spinnerHelpArrayAdapter, spinnerDeptArrayAdapter, spinnerPriArrayAdapter;
 
-    //    @BindView(R.id.fname_edittext)
-//    EditText editTextFirstName;
-//    @BindView(R.id.email_edittext)
-//    EditText editTextEmail;
-//    @BindView(R.id.lname_edittext)
-//    EditText editTextLastName;
-//    @BindView(R.id.phone_edittext)
-//    EditText editTextPhone;
-//    @BindView(R.id.spinner_code)
-//    Spinner phCode;
+    @BindView(R.id.fname_edittext)
+    EditText editTextFirstName;
+    @BindView(R.id.email_edittext)
+    EditText editTextEmail;
+    @BindView(R.id.lname_edittext)
+    EditText editTextLastName;
+    @BindView(R.id.phone_edittext)
+    EditText editTextPhone;
+    @BindView(R.id.spinner_code)
+    Spinner phCode;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
@@ -406,13 +402,13 @@ public class CreateTicketActivity extends AppCompatActivity {
     public void createButtonClick() {
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
-//        String email = editTextEmail.getText().toString();
-//        String fname = editTextFirstName.getText().toString();
-//        String lname = editTextLastName.getText().toString();
-//        String phone = editTextPhone.getText().toString();
-//        String countrycode = phCode.getSelectedItem().toString();
-//        String[] cc = countrycode.split(",");
-//        countrycode = cc[0];
+        String email = editTextEmail.getText().toString();
+        String fname = editTextFirstName.getText().toString();
+        String lname = editTextLastName.getText().toString();
+        String phone = editTextPhone.getText().toString();
+        String countrycode = phCode.getSelectedItem().toString();
+        String[] cc = countrycode.split(",");
+        countrycode = cc[0];
         boolean allCorrect = true;
 
         int helpTopic = spinnerHelpTopic.getSelectedItemPosition();
@@ -420,20 +416,19 @@ public class CreateTicketActivity extends AppCompatActivity {
         //int dept = spinnerDept.getSelectedItemPosition();
         int priority = spinnerPriority.getSelectedItemPosition();
 
-//        if (fname.trim().length() == 0) {
-//            Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
-//            allCorrect = false;
-//        } else if (fname.trim().length() < 3) {
-//            Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
-//            allCorrect = false;
-//        } else if (lname.trim().length() == 0) {
-//            Toasty.warning(this, getString(R.string.fill_lastname), Toast.LENGTH_SHORT).show();
-//            allCorrect = false;
-//        } else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
-//            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
-//            allCorrect = false;
-//        } else
-        if (subject.trim().length() == 0) {
+        if (fname.trim().length() == 0) {
+            Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (fname.trim().length() < 3) {
+            Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (lname.trim().length() == 0) {
+            Toasty.warning(this, getString(R.string.fill_lastname), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
+            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (subject.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (message.trim().length() == 0) {
@@ -466,17 +461,17 @@ public class CreateTicketActivity extends AppCompatActivity {
                 progressDialog.setMessage(getString(R.string.creating_ticket));
 
                 try {
-                    // fname = URLEncoder.encode(fname, "utf-8");
-                    // lname = URLEncoder.encode(lname, "utf-8");
+                    fname = URLEncoder.encode(fname, "utf-8");
+                    lname = URLEncoder.encode(lname, "utf-8");
                     subject = URLEncoder.encode(subject, "utf-8");
                     message = URLEncoder.encode(message, "utf-8");
-                    // email = URLEncoder.encode(email, "utf-8");
-                    // phone = URLEncoder.encode(phone, "utf-8");
+                    email = URLEncoder.encode(email, "utf-8");
+                    phone = URLEncoder.encode(phone, "utf-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
                 progressDialog.show();
-                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic, priority).execute();
+                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic, priority, phone, fname, lname, email, countrycode).execute();
 //                JSONObject jsonObject = new JSONObject();
 //                try {
 //                    //jsonObject.put("api_key", Constants.API_KEY);
@@ -561,7 +556,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         int userID;
 
         CreateNewTicket(int userID, String subject, String body,
-                        int helpTopic, int priority) {
+                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code) {
 
             this.subject = subject;
             this.body = body;

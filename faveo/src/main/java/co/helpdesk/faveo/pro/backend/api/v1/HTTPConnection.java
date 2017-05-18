@@ -60,8 +60,32 @@ class HTTPConnection {
             outputStream.close();
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Log.d("HTTP Error", "http response code is " + connection.getResponseCode());
-                return null;
+                String ret = null;
+                switch (connection.getResponseCode()) {
+//                    case HttpURLConnection.HTTP_OK:
+//                        log.fine(entries + " **OK**");
+//                        connected = true;
+//                        break; // fine, go on
+                    case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+                        Log.e("Response code: ", "Timeout!");
+                        break;// retry
+                    case HttpURLConnection.HTTP_UNAVAILABLE:
+                        Log.e("Response code: ", "Unavailable!");
+                        break;// retry, server is unstable
+                    case HttpURLConnection.HTTP_BAD_REQUEST:
+                        Log.e("Response code: ", "BadRequest!");
+                        if (refreshToken() == null)
+                            return null;
+                        new Helpdesk();
+                        new Authenticate();
+                        ret = "tokenRefreshed";
+                        break;
+                    default:
+
+                        break; // abort
+                }
+
+                return ret;
             }
 
             is = connection.getInputStream();
@@ -94,7 +118,7 @@ class HTTPConnection {
             return null;
 
         String input = sb.toString();
-        if (input.contains("token_expired")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();
@@ -152,7 +176,7 @@ class HTTPConnection {
             return null;
 
         String input = sb.toString();
-        if (input.contains("token_expired")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();
@@ -171,8 +195,35 @@ class HTTPConnection {
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
-            connection.getResponseCode();
             Log.e("Response Codee", connection.getResponseCode() + "");
+
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                String ret = null;
+                switch (connection.getResponseCode()) {
+//                    case HttpURLConnection.HTTP_OK:
+//                        log.fine(entries + " **OK**");
+//                        connected = true;
+//                        break; // fine, go on
+                    case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+                        Log.e("Response code: ", "Timeout!");
+                        break;// retry
+                    case HttpURLConnection.HTTP_UNAVAILABLE:
+                        Log.e("Response code: ", "Unavailable!");
+                        break;// retry, server is unstable
+                    case HttpURLConnection.HTTP_BAD_REQUEST:
+                        Log.e("Response code: ", "BadRequest!");
+                        if (refreshToken() == null)
+                            return null;
+                        new Helpdesk();
+                        new Authenticate();
+                        ret = "tokenRefreshed";
+                        break;
+                    default:
+
+                        break; // abort
+                }
+                return ret;
+            }
             is = connection.getInputStream();
 
         } catch (IOException e) {
@@ -208,7 +259,7 @@ class HTTPConnection {
 
         String input = sb.toString();
         Log.e("input", "" + input);
-        if (input.contains("token_expired")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();

@@ -1,7 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.drawers;
-/**
- * Created by Sumit
- */
+
 
 import android.app.NotificationManager;
 import android.content.Context;

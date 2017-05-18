@@ -45,9 +45,9 @@ public class Detail extends Fragment {
             editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
 
     ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter, spinnerStatusArrayAdapter,
-            spinnerSourceArrayAdapter, spinnerHelpArrayAdapter, spinnerDeptArrayAdapter, spinnerPriArrayAdapter;
+            spinnerSourceArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerPriArrayAdapter;
 
-    Spinner spinnerSLAPlans, spinnerDepartment, spinnerStatus, spinnerSource,
+    Spinner spinnerSLAPlans, spinnerType, spinnerStatus, spinnerSource,
             spinnerPriority, spinnerHelpTopics, spinnerAssignTo;
     ProgressDialog progressDialog;
 
@@ -74,7 +74,7 @@ public class Detail extends Fragment {
     public void onPause() {
         if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
             task.cancel(true);
-            Log.d("Async Detail","Cancelled");
+            Log.d("Async Detail", "Cancelled");
         }
         super.onPause();
     }
@@ -111,6 +111,7 @@ public class Detail extends Fragment {
                 int helpTopic = spinnerHelpTopics.getSelectedItemPosition();
                 int source = spinnerSource.getSelectedItemPosition();
                 int priority = spinnerPriority.getSelectedItemPosition();
+                int type = spinnerType.getSelectedItemPosition();
                 //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
                 if (subject.trim().length() == 0) {
                     setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.please_fill_field));
@@ -131,6 +132,7 @@ public class Detail extends Fragment {
                     allCorrect = false;
                     Toasty.warning(getContext(), "Please select some Source", Toast.LENGTH_SHORT).show();
                 }
+
                 if (allCorrect) {
                     if (InternetReceiver.isConnected()) {
                         progressDialog.setMessage(getString(R.string.updating_ticket));
@@ -142,7 +144,7 @@ public class Detail extends Fragment {
                                     SLAPlans,
                                     helpTopic,
                                     source,
-                                    priority)
+                                    priority, type)
                                     .execute();
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -186,7 +188,7 @@ public class Detail extends Fragment {
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                 editTextSubject.setText(jsonObject1.getString("title"));
                 String ticketNumber = jsonObject1.getString("ticket_number");
-               // textViewTicketNumber.setText(ticketNumber);
+                // textViewTicketNumber.setText(ticketNumber);
                 ActionBar actionBar = ((TicketDetailActivity) getActivity()).getSupportActionBar();
                 if (actionBar != null) {
                     actionBar.setTitle(ticketNumber == null ? "TicketDetail" : ticketNumber);
@@ -216,15 +218,15 @@ public class Detail extends Fragment {
                     e.printStackTrace();
                 }
 
-//                try {
-//
-//                    // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
-//                    spinnerDepartment.setSelection(spinnerDeptArrayAdapter.getPosition(jsonObject1.getString("dept_name")));
-//                } catch (Exception e) {
-//                    tv_dept.setVisibility(View.GONE);
-//                    spinnerDepartment.setVisibility(View.GONE);
-//                    e.printStackTrace();
-//                }
+                try {
+                    if (jsonObject1.getString("type") != null && !jsonObject1.getString("type").equals("0")) {
+                        // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
+                        spinnerType.setSelection(spinnerTypeArrayAdapter.getPosition(jsonObject1.getString("type")));
+                    } else if (jsonObject1.getString("type").equals("0"))
+                        spinnerType.setSelection(0);
+                } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
+                }
                 try {
                     if (jsonObject1.getString("helptopic_name") != null)
                         spinnerHelpTopics.setSelection(spinnerHelpArrayAdapter.getPosition(jsonObject1.getString("helptopic_name")));
@@ -297,9 +299,10 @@ public class Detail extends Fragment {
         int ticketSource;
         int ticketPriority;
         int ticketStatus;
+        int ticketType;
 
         SaveTicket(Context context, int ticketNumber, String subject,
-                   int slaPlan, int helpTopic, int ticketSource, int ticketPriority) {
+                   int slaPlan, int helpTopic, int ticketSource, int ticketPriority, int ticketType) {
             this.context = context;
             this.ticketNumber = ticketNumber;
             this.subject = subject;
@@ -308,13 +311,14 @@ public class Detail extends Fragment {
             this.ticketSource = ticketSource;
             this.ticketPriority = ticketPriority;
             // this.ticketStatus = ticketStatus;
+            this.ticketType = ticketType;
         }
 
         protected String doInBackground(String... urls) {
             if (subject.equals("Not available"))
                 subject = "";
             return new Helpdesk().postEditTicket(ticketNumber, subject, slaPlan,
-                    helpTopic, ticketSource, ticketPriority);
+                    helpTopic, ticketSource, ticketPriority, ticketType);
         }
 
         protected void onPostExecute(String result) {
@@ -334,7 +338,7 @@ public class Detail extends Fragment {
     private void setUpViews(View rootView) {
 
 
-       // textViewTicketNumber = (TextView) rootView.findViewById(R.id.textView_ticket_number);
+        // textViewTicketNumber = (TextView) rootView.findViewById(R.id.textView_ticket_number);
         //textViewOpenedBy.setText(TicketDetailActivity.ticketOpenedBy);
 
         editTextSubject = (EditText) rootView.findViewById(R.id.editText_subject);
@@ -356,10 +360,10 @@ public class Detail extends Fragment {
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPriority.setAdapter(spinnerPriArrayAdapter);
 
-//        spinnerDepartment = (Spinner) rootView.findViewById(R.id.spinner_department);
-//        spinnerDeptArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueDepartment.split(","))); //selected item will look like a spinner set from XML
-//        spinnerDeptArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerDepartment.setAdapter(spinnerDeptArrayAdapter);
+        spinnerType = (Spinner) rootView.findViewById(R.id.spinner_type);
+        spinnerTypeArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueType", "").split(","))); //selected item will look like a spinner set from XML
+        spinnerTypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerType.setAdapter(spinnerTypeArrayAdapter);
 
         spinnerHelpTopics = (Spinner) rootView.findViewById(R.id.spinner_help_topics);
         spinnerHelpArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueHelptopic", "").split(","))); //selected item will look like a spinner set from XML

@@ -17,17 +17,17 @@
         tools:context="com.android.faveo.CreateNewTicketActivity">
 
         <!--<TextView-->
-            <!--android:id="@+id/textView_ticket_number"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="24dp"-->
-            <!--android:gravity="center"-->
-            <!--android:maxLines="1"-->
-            <!--android:paddingTop="8dp"-->
-            <!--android:text="Ticket Number"-->
-            <!--android:textCursorDrawable="@drawable/color_cursor"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textStyle="bold" />-->
+        <!--android:id="@+id/textView_ticket_number"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="24dp"-->
+        <!--android:gravity="center"-->
+        <!--android:maxLines="1"-->
+        <!--android:paddingTop="8dp"-->
+        <!--android:text="Ticket Number"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:textSize="14sp"-->
+        <!--android:textStyle="bold" />-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -85,26 +85,26 @@
             android:textSize="14sp" />
 
         <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:alpha="0.3"-->
-            <!--android:text="@string/status"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textStyle="bold" />-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:alpha="0.3"-->
+        <!--android:text="@string/status"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:textSize="14sp"-->
+        <!--android:textStyle="bold" />-->
 
         <!--<Spinner-->
-            <!--android:id="@+id/spinner_status"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="24dp"-->
-            <!--android:background="@drawable/edittext_modified_states"-->
-            <!--android:entries="@array/spinnerPriority"-->
-            <!--android:imeOptions="actionNext"-->
-            <!--android:maxLines="1"-->
-            <!--android:paddingBottom="24dp"-->
-            <!--android:paddingTop="24dp"-->
-            <!--android:textSize="14sp" />-->
+        <!--android:id="@+id/spinner_status"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="24dp"-->
+        <!--android:background="@drawable/edittext_modified_states"-->
+        <!--android:entries="@array/spinnerPriority"-->
+        <!--android:imeOptions="actionNext"-->
+        <!--android:maxLines="1"-->
+        <!--android:paddingBottom="24dp"-->
+        <!--android:paddingTop="24dp"-->
+        <!--android:textSize="14sp" />-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -128,27 +128,27 @@
             android:paddingTop="24dp"
             android:textSize="14sp" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_dept"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:alpha="0.3"-->
-            <!--android:text="@string/deparment"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textStyle="bold" />-->
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.3"
+            android:text="@string/ticket_type"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-        <!--<Spinner-->
-            <!--android:id="@+id/spinner_department"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="24dp"-->
-            <!--android:background="@drawable/edittext_modified_states"-->
-            <!--android:imeOptions="actionNext"-->
-            <!--android:maxLines="1"-->
-            <!--android:paddingBottom="24dp"-->
-            <!--android:paddingTop="24dp"-->
-            <!--android:textSize="14sp" />-->
+        <Spinner
+            android:id="@+id/spinner_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/edittext_modified_states"
+            android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:paddingBottom="24dp"
+            android:paddingTop="24dp"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_helpTopic"

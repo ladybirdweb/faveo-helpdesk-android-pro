@@ -28,6 +28,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,7 +46,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialogVerifyURL;
     ProgressDialog progressDialogSignIn;
     ProgressDialog progressDialogBilling;
+    List<String> urlSuggestions;
 
     @BindView(R.id.button_signin)
     Button buttonSignIn;
@@ -77,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.input_username)
     AppCompatEditText usernameEdittext;
     @BindView(R.id.editText_company_url)
-    EditText editTextCompanyURL;
+    AutoCompleteTextView editTextCompanyURL;
     @BindView(R.id.viewFlipper)
     ViewFlipper viewflipper;
     @BindView(R.id.input_layout_username)
@@ -114,7 +121,10 @@ public class LoginActivity extends AppCompatActivity {
         usernameEdittext.addTextChangedListener(mTextWatcher);
         passwordEdittext.addTextChangedListener(mTextWatcher);
 
+        //View init
         setUpViews();
+
+        //ONly for Xiaomi devices
         String manufacturer = "xiaomi";
         if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
@@ -135,6 +145,8 @@ public class LoginActivity extends AppCompatActivity {
             //this will open auto start screen where user can enable permission for your app
 
         }
+
+        //Verifying the URL adress
         buttonVerifyURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +185,7 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 //        });
 
+        //Forgot password
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,17 +224,21 @@ public class LoginActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     dynamicShortcut();
                 }
+                urlSuggestions.add(baseURL);
+                Set<String> set = new HashSet<>(urlSuggestions);
+                Prefs.putStringSet("URL_SUG", set);
                 Prefs.putString("BASE_URL", baseURL);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
-//                if (BuildConfig.DEBUG) {
-//                    viewflipper.showNext();
-//                    url.setText(baseURL); url.setVisibility(View.VISIBLE);
-//                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
-//                } else {
+                if (BuildConfig.DEBUG) {
+                    viewflipper.showNext();
+                    url.setText(baseURL);
+                    url.setVisibility(View.VISIBLE);
+                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
+                } else {
                     progressDialogBilling.show();
                     new VerifyBilling(LoginActivity.this, baseURL).execute();
-               // }
+                }
 
             } else {
                 Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
@@ -229,6 +246,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    //N 7.0-> shortcuts
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     void dynamicShortcut() {
         ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
@@ -394,29 +412,29 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void setNormalStates() {
-        textViewFieldError.setVisibility(View.INVISIBLE);
-        editTextUsername.setBackgroundResource(R.drawable.edittext_modified_states);
-        editTextPassword.setBackgroundResource(R.drawable.edittext_modified_states);
-        editTextAPIkey.setBackgroundResource(R.drawable.edittext_modified_states);
-        editTextAPIkey.setPadding(0, paddingTop, 0, paddingBottom);
-        editTextUsername.setPadding(0, paddingTop, 0, paddingBottom);
-        editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
-    }
-
-    private void setUsernameErrorStates() {
-        textViewFieldError.setText("Please insert username");
-        textViewFieldError.setVisibility(View.VISIBLE);
-        editTextUsername.setBackgroundResource(R.drawable.edittext_error_state);
-        editTextUsername.setPadding(0, paddingTop, 0, paddingBottom);
-    }
-
-    private void setPasswordErrorStates() {
-        textViewFieldError.setText("Please insert password");
-        textViewFieldError.setVisibility(View.VISIBLE);
-        editTextPassword.setBackgroundResource(R.drawable.edittext_error_state);
-        editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
-    }
+//    private void setNormalStates() {
+//        textViewFieldError.setVisibility(View.INVISIBLE);
+//        editTextUsername.setBackgroundResource(R.drawable.edittext_modified_states);
+//        editTextPassword.setBackgroundResource(R.drawable.edittext_modified_states);
+//        editTextAPIkey.setBackgroundResource(R.drawable.edittext_modified_states);
+//        editTextAPIkey.setPadding(0, paddingTop, 0, paddingBottom);
+//        editTextUsername.setPadding(0, paddingTop, 0, paddingBottom);
+//        editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
+//    }
+//
+//    private void setUsernameErrorStates() {
+//        textViewFieldError.setText("Please insert username");
+//        textViewFieldError.setVisibility(View.VISIBLE);
+//        editTextUsername.setBackgroundResource(R.drawable.edittext_error_state);
+//        editTextUsername.setPadding(0, paddingTop, 0, paddingBottom);
+//    }
+//
+//    private void setPasswordErrorStates() {
+//        textViewFieldError.setText("Please insert password");
+//        textViewFieldError.setVisibility(View.VISIBLE);
+//        editTextPassword.setBackgroundResource(R.drawable.edittext_error_state);
+//        editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
+//    }
 
     private void setUpViews() {
 
@@ -447,12 +465,22 @@ public class LoginActivity extends AppCompatActivity {
 //
 //        };
 
-        editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
+        // editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
         // editTextCompanyURL.setFilters(new InputFilter[]{filter});
+
         if (editTextCompanyURL != null) {
             editTextCompanyURL.setText("");
             editTextCompanyURL.append("http://");
         }
+        Set<String> set = Prefs.getStringSet("URL_SUG", new HashSet<String>());
+        urlSuggestions = new ArrayList<>(set);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>
+                (this, android.R.layout.simple_dropdown_item_1line, urlSuggestions);
+        editTextCompanyURL.setThreshold(1);
+        editTextCompanyURL.setAdapter(adapter);
+
+
         //viewflipper = (ViewFlipper) findViewById(R.id.viewFlipper);
         // buttonVerifyURL = (FloatingActionButton) findViewById(R.id.fab_verify_url);
         textViewFieldError = (TextView) findViewById(R.id.textView_field_error);

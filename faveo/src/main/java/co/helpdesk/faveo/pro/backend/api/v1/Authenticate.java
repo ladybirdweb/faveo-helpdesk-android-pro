@@ -20,6 +20,7 @@ public class Authenticate {
     static String token;
     static String IP;
 
+
     public Authenticate() {
         apiKey = Constants.API_KEY;
         token = Prefs.getString("TOKEN", "");
@@ -27,6 +28,7 @@ public class Authenticate {
         IP = null;
     }
 
+    //Authenticate API
     public String postAuthenticateUser(String username, String password) {
         String parameters = null;
         JSONObject obj = new JSONObject();

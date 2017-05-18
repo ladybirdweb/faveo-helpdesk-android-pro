@@ -32,7 +32,6 @@ public class FaveoApplication extends MultiDexApplication {
         stringBuilder.append("ccc");
         StringBuffer stringBuffer=new StringBuffer();
         stringBuffer.append("cvcv");
-        //JodaTimeAndroid.init(this);
 
 //        if (BuildConfig.DEBUG) {
 //        if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -84,11 +83,8 @@ public class FaveoApplication extends MultiDexApplication {
         return instance;
     }
 
-//    public void setInternetListener(InternetReceiver.InternetReceiverListener listener) {
-//
-//        InternetReceiver.internetReceiverListener = listener;
-//    }
 
+    //Deleting the user data while loggin out from app.
     public void clearApplicationData() {
         File cache = getCacheDir();
         File appDir = new File(cache.getParent());
@@ -110,6 +106,7 @@ public class FaveoApplication extends MultiDexApplication {
 //        return dir.delete();
 //    }
 
+
     private void deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory != null && fileOrDirectory.isDirectory()) {
             for (File child : fileOrDirectory.listFiles()) {
@@ -119,23 +116,6 @@ public class FaveoApplication extends MultiDexApplication {
         }
         fileOrDirectory.delete();
     }
-
-//    @Override
-//    protected void onPause() {
-//        unregisterReceiver(mReceiver);
-//        super.onPause();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        this.mReceiver = new ConnectivityChangeReceiver();
-//        registerReceiver(
-//                this.mReceiver,
-//                new IntentFilter(
-//                        ConnectivityManager.CONNECTIVITY_ACTION));
-//        super.onResume();
-//    }
-
 
     @Override
     public void onTerminate() {

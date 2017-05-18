@@ -19,11 +19,15 @@ android {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 26
-        versionName "2.3"
+        versionCode 27
+        versionName "2.4"
         multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    dataBinding {
+        enabled = true
     }
     dexOptions {
         javaMaxHeapSize "4g"

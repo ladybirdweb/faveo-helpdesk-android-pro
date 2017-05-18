@@ -177,7 +177,7 @@ public class Helpdesk {
 
 
     public String postEditTicket(int ticketID, String subject, int slaPlan, int helpTopic,
-                                 int ticketSource, int ticketPriority) {
+                                 int ticketSource, int ticketPriority, int ticketType) {
         Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
@@ -187,7 +187,8 @@ public class Helpdesk {
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
-                "&ticket_priority=" + ticketPriority
+                "&ticket_priority=" + ticketPriority +
+                "&ticket_type=" + ticketType
         );
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
@@ -198,7 +199,8 @@ public class Helpdesk {
                 "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
-                "&ticket_priority=" + ticketPriority, null);
+                "&ticket_priority=" + ticketPriority +
+                "&ticket_type=" + ticketType, null);
 
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
@@ -210,7 +212,8 @@ public class Helpdesk {
                     "&sla_plan=" + slaPlan +
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
-                    "&ticket_priority=" + ticketPriority, null);
+                    "&ticket_priority=" + ticketPriority +
+                    "&ticket_type=" + ticketType, null);
         return result;
     }
 
