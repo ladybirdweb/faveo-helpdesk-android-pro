@@ -162,6 +162,6 @@
     <string name="detail">Detail</string>
     <string name="open_ticket">OPEN TICKET</string>
     <string name="closed_ticket">CLOSED TICKET</string>
-    <string name="ticket_type">Ticket Type</string>
+    <string name="ticket_type" translatable="false">Ticket Type </string>
 
 </resources>

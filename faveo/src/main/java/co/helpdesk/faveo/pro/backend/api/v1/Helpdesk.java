@@ -176,7 +176,7 @@ public class Helpdesk {
     }
 
 
-    public String postEditTicket(int ticketID, String subject, int slaPlan, int helpTopic,
+    public String postEditTicket(int ticketID, String subject, int helpTopic,
                                  int ticketSource, int ticketPriority, int ticketType) {
         Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
@@ -184,7 +184,6 @@ public class Helpdesk {
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
                 "&subject=" + subject +
-                "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
                 "&ticket_priority=" + ticketPriority +
@@ -196,7 +195,6 @@ public class Helpdesk {
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
                 "&subject=" + subject +
-                "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
                 "&ticket_priority=" + ticketPriority +
@@ -209,7 +207,6 @@ public class Helpdesk {
                     "&token=" + token +
                     "&ticket_id=" + ticketID +
                     "&subject=" + subject +
-                    "&sla_plan=" + slaPlan +
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
                     "&ticket_priority=" + ticketPriority +

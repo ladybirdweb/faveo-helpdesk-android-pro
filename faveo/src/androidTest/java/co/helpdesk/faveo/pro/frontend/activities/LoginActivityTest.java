@@ -27,9 +27,9 @@ public class LoginActivityTest {
 
     @Test
     public void loginActivityTest() {
-        String email = "demoadmin";
+        String email = "baratam.narendra";
         String password = "demopass";
-        String url = "faveohelpdesk.co.in/demo/public";
+        String url = "www.ladybirdweb.com/support";
 
         onView(withId(R.id.editText_company_url)).perform(typeText(url), closeSoftKeyboard());
         onView(withId(R.id.fab_verify_url)).perform(click());

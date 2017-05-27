@@ -21,6 +21,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.R;
@@ -80,16 +83,36 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("Depen Response : ", result + "");
 
             if (result == null) {
-
-                loading.setText("Oops! Something went wrong, \nplease try again later");
+                loading.setText("Oops! Something went wrong, \nplease try again later.");
                 progressDialog.setVisibility(View.INVISIBLE);
                 return;
             }
 
+            switch (result) {
+
+                case "HTTP_UNAUTHORIZED":
+                    loading.setText("The credentials has been changed, \nplease LOGIN again.");
+                    return;
+                case "HTTP_NOT_FOUND":
+                    loading.setText("Oops! \n404-Page not found.");
+                    return;
+                case "HTTP_INTERNAL_ERROR":
+                    loading.setText("Oops! \n500-Please try again later.");
+                    return;
+                case "HTTP_GATEWAY_TIMEOUT":
+                    loading.setText("Oops! Seems like you have a slower net connection,\nplease try again later.");
+                    return;
+                case "HTTP_UNAVAILABLE":
+                    loading.setText("Oops! Server busy, please try again later.  ");
+                    return;
+            }
+
             try {
+
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                //Preference.setDependencyObject(jsonObject1, "dependency");
+                 Prefs.putString("DEPENDENCY",jsonObject1.toString());
+                // Preference.setDependencyObject(jsonObject1, "dependency");
                 JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");
                 for (int i = 0; i < jsonArrayDepartments.length(); i++) {
                     keyDepartment += jsonArrayDepartments.getJSONObject(i).getString("id") + ",";
@@ -143,11 +166,15 @@ public class SplashActivity extends AppCompatActivity {
                 // Prefs.putOrderedStringSet("valuePri", valuePri);
                 //Log.d("Testtttttt", Prefs.getOrderedStringSet("keyPri", keyPri) + "   " + Prefs.getOrderedStringSet("valuePri", valuePri));
 
+
+
                 JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("helptopics");
                 for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
+
                     keyTopic += jsonArrayHelpTopics.getJSONObject(i).getString("id") + ",";
                     valueTopic += jsonArrayHelpTopics.getJSONObject(i).getString("topic") + ",";
                 }
+
                 Prefs.putString("keyHelpTopic", keyTopic);
                 Prefs.putString("valueHelptopic", valueTopic);
 

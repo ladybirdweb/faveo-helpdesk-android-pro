@@ -211,7 +211,7 @@ public class Helper {
         }
     }
 
-    //Comparing two dates
+    //Comparing two dates for DUEDATE
     public static int compareDates(String duedate1) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));

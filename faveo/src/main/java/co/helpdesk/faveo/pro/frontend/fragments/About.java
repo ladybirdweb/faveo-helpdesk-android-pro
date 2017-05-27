@@ -53,7 +53,7 @@ public class About extends Fragment {
         PackageInfo pInfo;
         try {
             pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            String version = pInfo.versionName;
+            String version = "Version :"+pInfo.versionName;
             ((TextView) rootView.findViewById(R.id.textView_version)).setText(version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

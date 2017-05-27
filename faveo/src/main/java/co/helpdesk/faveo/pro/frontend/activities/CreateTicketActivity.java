@@ -36,6 +36,9 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -48,9 +51,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.Utils;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import es.dmoral.toasty.Toasty;
 
@@ -59,9 +62,9 @@ public class CreateTicketActivity extends AppCompatActivity {
     private static int RESULT_LOAD_FILE = 42;
     //String imgDecodableString;
     static final String TAG = "CreateTicketActivity";
-
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter;
     ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
-            spinnerHelpArrayAdapter, spinnerDeptArrayAdapter, spinnerPriArrayAdapter;
+            spinnerDeptArrayAdapter;
 
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
@@ -102,6 +105,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    @BindView(R.id.requester_searchview)
 //    SearchView requesterSearchview;
     ProgressDialog progressDialog;
+    ArrayList<Data> helptopicItems, priorityItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,32 @@ public class CreateTicketActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.create_ticket);
+
+
+        JSONObject jsonObject;
+        String json = Prefs.getString("DEPENDENCY", "");
+        try {
+            helptopicItems = new ArrayList<>();
+            helptopicItems.add(new Data(0, "--"));
+            jsonObject = new JSONObject(json);
+            JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
+            for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
+                Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
+
+                helptopicItems.add(data);
+            }
+
+            JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
+            priorityItems = new ArrayList<>();
+            priorityItems.add(new Data(0, "--"));
+            for (int i = 0; i < jsonArrayPriorities.length(); i++) {
+                Data data = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
+                priorityItems.add(data);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         setUpViews();
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // AndroidNetworking.enableLogging();
@@ -373,7 +403,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 //
 //        );
 
-        spinnerHelpArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueTopic.split(","))); //selected item will look like a spinner set from XML
+        spinnerHelpArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, helptopicItems); //selected item will look like a spinner set from XML
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopic.setAdapter(spinnerHelpArrayAdapter);
 
@@ -385,7 +415,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 //        spinnerAssignToArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        spinnerDept.setAdapter(spinnerAssignToArrayAdapter);
 
-        spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valuePriority.split(","))); //selected item will look like a spinner set from XML
+        spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, priorityItems); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPriority.setAdapter(spinnerPriArrayAdapter);
     }
@@ -411,10 +441,11 @@ public class CreateTicketActivity extends AppCompatActivity {
         countrycode = cc[0];
         boolean allCorrect = true;
 
-        int helpTopic = spinnerHelpTopic.getSelectedItemPosition();
+        Data helpTopic = (Data) spinnerHelpTopic.getSelectedItem();
+        Log.d("ID of objt", "" + helpTopic.ID);
         //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
         //int dept = spinnerDept.getSelectedItemPosition();
-        int priority = spinnerPriority.getSelectedItemPosition();
+        Data priority = (Data) spinnerPriority.getSelectedItem();
 
         if (fname.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
@@ -440,10 +471,10 @@ public class CreateTicketActivity extends AppCompatActivity {
         } else if (message.trim().length() < 10) {
             Toasty.warning(this, getString(R.string.msg_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (helpTopic == 0) {
+        } else if (helpTopic.ID == 0) {
             allCorrect = false;
             Toasty.warning(CreateTicketActivity.this, "Please select some helptopic", Toast.LENGTH_SHORT).show();
-        } else if (priority == 0) {
+        } else if (priority.ID == 0) {
             allCorrect = false;
             Toasty.warning(CreateTicketActivity.this, "Please select some Priority", Toast.LENGTH_SHORT).show();
         }
@@ -471,7 +502,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 progressDialog.show();
-                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic, priority, phone, fname, lname, email, countrycode).execute();
+                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email, countrycode).execute();
 //                JSONObject jsonObject = new JSONObject();
 //                try {
 //                    //jsonObject.put("api_key", Constants.API_KEY);
@@ -583,7 +614,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Toasty.error(CreateTicketActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            if (result.contains("NotificationThread created successfully!")) {
+            if (result.contains("Ticket created successfully!")) {
                 Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
             }
         }

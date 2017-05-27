@@ -147,7 +147,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     public void onBackPressed() {
         if (!MainActivity.isShowing) {
             Log.d("isShowing", "false");
-            Intent intent = new Intent(this, SplashActivity.class);
+            Intent intent = new Intent(ClientDetailActivity.this, SplashActivity.class);
             startActivity(intent);
         } else Log.d("isShowing", "true");
         super.onBackPressed();

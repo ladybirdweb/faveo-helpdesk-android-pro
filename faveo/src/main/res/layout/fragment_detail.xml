@@ -62,27 +62,27 @@
             android:textColor="@color/error_red"
             android:textSize="12sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.3"
-            android:text="@string/sla_plans"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:alpha="0.3"-->
+            <!--android:text="@string/sla_plans"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textStyle="bold" />-->
 
-        <Spinner
-            android:id="@+id/spinner_sla_plans"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/edittext_modified_states"
-            android:entries="@array/spinnerSlaPlans"
-            android:imeOptions="actionNext"
-            android:maxLines="1"
-            android:paddingBottom="24dp"
-            android:paddingTop="24dp"
-            android:textSize="14sp" />
+        <!--<Spinner-->
+            <!--android:id="@+id/spinner_sla_plans"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--android:background="@drawable/edittext_modified_states"-->
+            <!--android:entries="@array/spinnerSlaPlans"-->
+            <!--android:imeOptions="actionNext"-->
+            <!--android:maxLines="1"-->
+            <!--android:paddingBottom="24dp"-->
+            <!--android:paddingTop="24dp"-->
+            <!--android:textSize="14sp" />-->
 
         <!--<TextView-->
         <!--android:layout_width="wrap_content"-->

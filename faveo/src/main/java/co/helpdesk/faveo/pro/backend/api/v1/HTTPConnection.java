@@ -62,15 +62,17 @@ class HTTPConnection {
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 String ret = null;
                 switch (connection.getResponseCode()) {
-//                    case HttpURLConnection.HTTP_OK:
-//                        log.fine(entries + " **OK**");
-//                        connected = true;
-//                        break; // fine, go on
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        Log.e("Response code: ", "NotFound-404!");
+                        //ret = "notFound";
+                        break;
                     case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
                         Log.e("Response code: ", "Timeout!");
-                        break;// retry
+                       // ret = "timeout";
+                        break;
                     case HttpURLConnection.HTTP_UNAVAILABLE:
                         Log.e("Response code: ", "Unavailable!");
+                       // ret = "unavailable";
                         break;// retry, server is unstable
                     case HttpURLConnection.HTTP_BAD_REQUEST:
                         Log.e("Response code: ", "BadRequest!");
@@ -200,18 +202,28 @@ class HTTPConnection {
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 String ret = null;
                 switch (connection.getResponseCode()) {
-//                    case HttpURLConnection.HTTP_OK:
-//                        log.fine(entries + " **OK**");
-//                        connected = true;
-//                        break; // fine, go on
+                    case HttpURLConnection.HTTP_UNAUTHORIZED:
+                        Log.e("Response code: ", "401-UNAUTHORIZED!");
+                        ret="HTTP_UNAUTHORIZED";
+                        break;
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        Log.e("Response code: ", "404-NOT_FOUND!");
+                        ret="HTTP_NOT_FOUND";
+                        break;
+                    case HttpURLConnection.HTTP_INTERNAL_ERROR:
+                        Log.e("Response code: ", "500-INTERNAL_ERROR!");
+                        ret="HTTP_INTERNAL_ERROR";
+                        break;
                     case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
-                        Log.e("Response code: ", "Timeout!");
+                        Log.e("Response code: ", "504-Timeout!");
+                        ret="HTTP_GATEWAY_TIMEOUT";
                         break;// retry
                     case HttpURLConnection.HTTP_UNAVAILABLE:
-                        Log.e("Response code: ", "Unavailable!");
+                        Log.e("Response code: ", "503-Unavailable!");
+                        ret="HTTP_UNAVAILABLE";
                         break;// retry, server is unstable
                     case HttpURLConnection.HTTP_BAD_REQUEST:
-                        Log.e("Response code: ", "BadRequest!");
+                        Log.e("Response code: ", "400-BadRequest!");
                         if (refreshToken() == null)
                             return null;
                         new Helpdesk();

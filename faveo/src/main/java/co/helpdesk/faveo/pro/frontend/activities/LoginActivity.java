@@ -323,6 +323,9 @@ public class LoginActivity extends AppCompatActivity {
             Toasty.warning(this, getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Post the user credentials to server.
+     */
     private class SignIn extends AsyncTask<String, Void, String> {
         Context context;
         String username;
@@ -436,6 +439,9 @@ public class LoginActivity extends AppCompatActivity {
 //        editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
 //    }
 
+    /**
+     * To initialize the views.
+     */
     private void setUpViews() {
 
         progressDialogVerifyURL = new ProgressDialog(this);
@@ -507,6 +513,11 @@ public class LoginActivity extends AppCompatActivity {
         showSnackIfNoInternet(isConnected);
     }
 
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
@@ -526,6 +537,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {
@@ -552,6 +568,9 @@ public class LoginActivity extends AppCompatActivity {
 //        showSnack(isConnected);
 //    }
 
+    /**
+     * To send the FCM token to server.
+     */
     private class SendingFCM extends AsyncTask<String, Void, String> {
         Context context;
         String token;

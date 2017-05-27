@@ -76,6 +76,8 @@
             android:layout_marginTop="6dp"
             android:layout_toRightOf="@+id/imageView_default_profile"
             android:fontFamily="sans-serif-bold"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/dummy_name"
             android:textColor="@color/black"
             android:textSize="14sp" />

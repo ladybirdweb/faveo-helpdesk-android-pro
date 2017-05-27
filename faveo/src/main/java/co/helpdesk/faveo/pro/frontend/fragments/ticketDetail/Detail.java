@@ -20,18 +20,20 @@ import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.Utils;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.Data;
 import es.dmoral.toasty.Toasty;
 
 public class Detail extends Fragment {
@@ -44,13 +46,13 @@ public class Detail extends Fragment {
     EditText editTextSubject, editTextFirstName, editTextLastName, editTextEmail,
             editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
 
-    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter, spinnerStatusArrayAdapter,
-            spinnerSourceArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerPriArrayAdapter;
+    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter, spinnerStatusArrayAdapter;
 
     Spinner spinnerSLAPlans, spinnerType, spinnerStatus, spinnerSource,
             spinnerPriority, spinnerHelpTopics, spinnerAssignTo;
     ProgressDialog progressDialog;
-
+    ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems;
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter;
     Button buttonSave;
 
     private String mParam1;
@@ -107,28 +109,31 @@ public class Detail extends Fragment {
                 //int helpTopic=1;
                 boolean allCorrect = true;
                 String subject = editTextSubject.getText().toString();
-                int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
-                int helpTopic = spinnerHelpTopics.getSelectedItemPosition();
-                int source = spinnerSource.getSelectedItemPosition();
-                int priority = spinnerPriority.getSelectedItemPosition();
-                int type = spinnerType.getSelectedItemPosition();
+                // int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
+                Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
+                Data source = (Data) spinnerSource.getSelectedItem();
+                Data priority = (Data) spinnerPriority.getSelectedItem();
+                Data type = (Data) spinnerType.getSelectedItem();
                 //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
+
+//                if (SLAPlans == 0) {
+//                    allCorrect = false;
+//                    Toasty.warning(getContext(), "Please select some SLA plan", Toast.LENGTH_SHORT).show();
+//                } else
+
                 if (subject.trim().length() == 0) {
                     setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.please_fill_field));
                     allCorrect = false;
                 } else if (subject.trim().length() < 5) {
                     setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.sub_minimum_char));
                     allCorrect = false;
-                } else if (helpTopic == 0) {
+                } else if (helpTopic.ID == 0) {
                     allCorrect = false;
                     Toasty.warning(getContext(), "Please select some helptopic", Toast.LENGTH_SHORT).show();
-                } else if (SLAPlans == 0) {
-                    allCorrect = false;
-                    Toasty.warning(getContext(), "Please select some SLA plan", Toast.LENGTH_SHORT).show();
-                } else if (priority == 0) {
+                } else if (priority.ID == 0) {
                     allCorrect = false;
                     Toasty.warning(getContext(), "Please select some Priority", Toast.LENGTH_SHORT).show();
-                } else if (source == 0) {
+                } else if (source.ID == 0) {
                     allCorrect = false;
                     Toasty.warning(getContext(), "Please select some Source", Toast.LENGTH_SHORT).show();
                 }
@@ -141,10 +146,9 @@ public class Detail extends Fragment {
                             new SaveTicket(getActivity(),
                                     Integer.parseInt(TicketDetailActivity.ticketID),
                                     URLEncoder.encode(subject, "utf-8"),
-                                    SLAPlans,
-                                    helpTopic,
-                                    source,
-                                    priority, type)
+                                    helpTopic.ID,
+                                    source.ID,
+                                    priority.ID, type.ID)
                                     .execute();
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -193,14 +197,14 @@ public class Detail extends Fragment {
                 if (actionBar != null) {
                     actionBar.setTitle(ticketNumber == null ? "TicketDetail" : ticketNumber);
                 }
-                try {
-                    if (jsonObject1.getString("sla_name") != null) {
-                        //spinnerSLAPlans.setSelection(Integer.parseInt(jsonObject1.getString("sla")) - 1);
-                        spinnerSLAPlans.setSelection(spinnerSlaArrayAdapter.getPosition(jsonObject1.getString("sla_name")));
-                    }
-                } catch (JSONException | NumberFormatException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    if (jsonObject1.getString("sla_name") != null) {
+//                        //spinnerSLAPlans.setSelection(Integer.parseInt(jsonObject1.getString("sla")) - 1);
+//                        spinnerSLAPlans.setSelection(spinnerSlaArrayAdapter.getPosition(jsonObject1.getString("sla_name")));
+//                    }
+//                } catch (JSONException | NumberFormatException e) {
+//                    e.printStackTrace();
+//                }
 //                try {
 //                    if (jsonObject1.getString("status") != null) {
 //                        // spinnerStatus.setSelection(Integer.parseInt(jsonObject1.getString("status")) - 1);
@@ -212,7 +216,7 @@ public class Detail extends Fragment {
                 try {
                     if (jsonObject1.getString("priority_name") != null) {
                         // spinnerPriority.setSelection(Integer.parseInt(jsonObject1.getString("priority_id")) - 1);
-                        spinnerPriority.setSelection(spinnerPriArrayAdapter.getPosition(jsonObject1.getString("priority_name")));
+                        spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject1.getString("priority_name")));
                     }
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
@@ -221,7 +225,7 @@ public class Detail extends Fragment {
                 try {
                     if (jsonObject1.getString("type") != null && !jsonObject1.getString("type").equals("0")) {
                         // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
-                        spinnerType.setSelection(spinnerTypeArrayAdapter.getPosition(jsonObject1.getString("type")));
+                        spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type")));
                     } else if (jsonObject1.getString("type").equals("0"))
                         spinnerType.setSelection(0);
                 } catch (JSONException | NumberFormatException e) {
@@ -229,7 +233,7 @@ public class Detail extends Fragment {
                 }
                 try {
                     if (jsonObject1.getString("helptopic_name") != null)
-                        spinnerHelpTopics.setSelection(spinnerHelpArrayAdapter.getPosition(jsonObject1.getString("helptopic_name")));
+                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
                 } catch (Exception e) {
 //                    spinnerHelpTopics.setVisibility(View.GONE);
 //                    tv_helpTopic.setVisibility(View.GONE);
@@ -238,7 +242,8 @@ public class Detail extends Fragment {
                 try {
                     if (jsonObject1.getString("source_name") != null)
                         //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
-                        spinnerSource.setSelection(spinnerSourceArrayAdapter.getPosition(jsonObject1.getString("source_name")));
+
+                        spinnerSource.setSelection(getIndex(spinnerSource, jsonObject1.getString("source_name")));
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -290,23 +295,37 @@ public class Detail extends Fragment {
 
     }
 
+    private int getIndex(Spinner spinner, String myString) {
+
+        int index = 0;
+
+        for (int i = 0; i < spinner.getCount(); i++) {
+            Log.d("item ", spinner.getItemAtPosition(i).toString());
+            if (spinner.getItemAtPosition(i).toString().equals(myString.trim())) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+
     private class SaveTicket extends AsyncTask<String, Void, String> {
         Context context;
         int ticketNumber;
         String subject;
-        int slaPlan;
+        //int slaPlan;
         int helpTopic;
         int ticketSource;
         int ticketPriority;
         int ticketStatus;
         int ticketType;
 
-        SaveTicket(Context context, int ticketNumber, String subject,
-                   int slaPlan, int helpTopic, int ticketSource, int ticketPriority, int ticketType) {
+        SaveTicket(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType) {
             this.context = context;
             this.ticketNumber = ticketNumber;
             this.subject = subject;
-            this.slaPlan = slaPlan;
+            // this.slaPlan = slaPlan;
             this.helpTopic = helpTopic;
             this.ticketSource = ticketSource;
             this.ticketPriority = ticketPriority;
@@ -317,7 +336,7 @@ public class Detail extends Fragment {
         protected String doInBackground(String... urls) {
             if (subject.equals("Not available"))
                 subject = "";
-            return new Helpdesk().postEditTicket(ticketNumber, subject, slaPlan,
+            return new Helpdesk().postEditTicket(ticketNumber, subject,
                     helpTopic, ticketSource, ticketPriority, ticketType);
         }
 
@@ -328,7 +347,13 @@ public class Detail extends Fragment {
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            if (result.contains("ticket_id"))
+
+            switch (result) {
+                case "":
+
+            }
+
+            if (result.contains("Edited successfully"))
                 Toasty.success(getActivity(), getString(R.string.update_success), Toast.LENGTH_LONG).show();
             else
                 Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
@@ -336,6 +361,48 @@ public class Detail extends Fragment {
     }
 
     private void setUpViews(View rootView) {
+
+        JSONObject jsonObject;
+        String json = Prefs.getString("DEPENDENCY", "");
+        try {
+            helptopicItems = new ArrayList<>();
+            helptopicItems.add(new Data(0, "--"));
+            jsonObject = new JSONObject(json);
+            JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
+            for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
+                Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
+
+                helptopicItems.add(data);
+            }
+
+            JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
+            priorityItems = new ArrayList<>();
+            priorityItems.add(new Data(0, "--"));
+            for (int i = 0; i < jsonArrayPriorities.length(); i++) {
+                Data data = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
+                priorityItems.add(data);
+            }
+
+            JSONArray jsonArrayType = jsonObject.getJSONArray("type");
+            typeItems = new ArrayList<>();
+            typeItems.add(new Data(0, "--"));
+            for (int i = 0; i < jsonArrayType.length(); i++) {
+                Data data = new Data(Integer.parseInt(jsonArrayType.getJSONObject(i).getString("id")), jsonArrayType.getJSONObject(i).getString("name"));
+                typeItems.add(data);
+
+            }
+
+            JSONArray jsonArraySources = jsonObject.getJSONArray("sources");
+            sourceItems = new ArrayList<>();
+            sourceItems.add(new Data(0, "--"));
+            for (int i = 0; i < jsonArraySources.length(); i++) {
+                Data data = new Data(Integer.parseInt(jsonArraySources.getJSONObject(i).getString("id")), jsonArraySources.getJSONObject(i).getString("name"));
+                sourceItems.add(data);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         // textViewTicketNumber = (TextView) rootView.findViewById(R.id.textView_ticket_number);
@@ -345,10 +412,10 @@ public class Detail extends Fragment {
         //editTextSubject.setText(TicketDetailActivity.ticketSubject);
         textViewErrorSubject = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_subject);
 
-        spinnerSLAPlans = (Spinner) rootView.findViewById(R.id.spinner_sla_plans);
-        spinnerSlaArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueSLA", "").split(","))); //selected item will look like a spinner set from XML
-        spinnerSlaArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSLAPlans.setAdapter(spinnerSlaArrayAdapter);
+//        spinnerSLAPlans = (Spinner) rootView.findViewById(R.id.spinner_sla_plans);
+//        spinnerSlaArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueSLA", "").split(","))); //selected item will look like a spinner set from XML
+//        spinnerSlaArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerSLAPlans.setAdapter(spinnerSlaArrayAdapter);
 
 //        spinnerStatus = (Spinner) rootView.findViewById(R.id.spinner_status);
 //        spinnerStatusArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueStatus.split(","))); //selected item will look like a spinner set from XML
@@ -356,17 +423,17 @@ public class Detail extends Fragment {
 //        spinnerStatus.setAdapter(spinnerStatusArrayAdapter);
 
         spinnerPriority = (Spinner) rootView.findViewById(R.id.spinner_priority);
-        spinnerPriArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valuePri", "").split(","))); //selected item will look like a spinner set from XML
+        spinnerPriArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, priorityItems); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPriority.setAdapter(spinnerPriArrayAdapter);
 
         spinnerType = (Spinner) rootView.findViewById(R.id.spinner_type);
-        spinnerTypeArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueType", "").split(","))); //selected item will look like a spinner set from XML
+        spinnerTypeArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, typeItems); //selected item will look like a spinner set from XML
         spinnerTypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(spinnerTypeArrayAdapter);
 
         spinnerHelpTopics = (Spinner) rootView.findViewById(R.id.spinner_help_topics);
-        spinnerHelpArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueHelptopic", "").split(","))); //selected item will look like a spinner set from XML
+        spinnerHelpArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, helptopicItems); //selected item will look like a spinner set from XML
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopics.setAdapter(spinnerHelpArrayAdapter);
 
@@ -375,7 +442,7 @@ public class Detail extends Fragment {
         editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
 
         spinnerSource = (Spinner) rootView.findViewById(R.id.spinner_source);
-        spinnerSourceArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueSource", "").split(","))); //selected item will look like a spinner set from XML
+        spinnerSourceArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, sourceItems); //selected item will look like a spinner set from XML
         spinnerSourceArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSource.setAdapter(spinnerSourceArrayAdapter);
 
