@@ -20,8 +20,8 @@ android {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 28
-        versionName "2.5"
+        versionCode 29
+        versionName "2.6"
         multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -140,6 +140,7 @@ dependencies {
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.pixplicity.easyprefs:library:1.8.1@aar'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
 }
 apply plugin: 'com.google.gms.google-services'
 

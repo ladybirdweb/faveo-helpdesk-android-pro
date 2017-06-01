@@ -49,12 +49,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String pic = "";
         int client_id = 0;
+        String clientname = "";
         String requester = remoteMessage.getData().get("requester");
         Log.d("Requester", requester);
         try {
             JSONObject jsonObj = new JSONObject(requester);
             pic = jsonObj.getString("profile_pic");
             client_id = jsonObj.getInt("id");
+            String firstName = jsonObj.getString("first_name");
+            String lastName = jsonObj.getString("last_name");
+            String userName = jsonObj.getString("user_name");
+            if (firstName == null || firstName.equals(""))
+                clientname = userName;
+            else
+                clientname = firstName + " " + lastName;
             Log.d("Profile_Pic", pic);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -63,9 +71,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Calling method to generate notification
 
         if (remoteMessage.getData().get("scenario").equals("tickets"))
-            sendNotificationTicket(remoteMessage.getData().get("message"), remoteMessage.getData().get("id"), "Faveo", pic);
+            sendNotificationTicket(clientname.trim() + ", " + remoteMessage.getData().get("message"), remoteMessage.getData().get("id"), "Faveo", pic);
         else
-            sendNotificationClient(remoteMessage.getData().get("message"), client_id + "", "Faveo", pic);
+            sendNotificationClient(clientname.trim() + ", " + remoteMessage.getData().get("message"), client_id + "", "Faveo", pic);
 
         //Log.d("Data",remoteMessage.getNotification().);
 

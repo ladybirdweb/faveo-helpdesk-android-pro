@@ -50,7 +50,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(CardViewHolder viewHolder, final int position) {
         final NotificationThread notiThread = notiThreadList.get(position);
         viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
-        viewHolder.textSub.setText(notiThread.getRequesterName()+", "+notiThread.getTicket_subject());
+        viewHolder.textSub.setText(notiThread.getRequesterName().trim()+", "+notiThread.getTicket_subject());
         IImageLoader imageLoader = new PicassoLoader();
         imageLoader.loadImage(viewHolder.roundedImageViewProfilePic, notiThread.profiel_pic, notiThread.placeHolder);
         if (notiThread.getNoti_seen().equals("1")) {

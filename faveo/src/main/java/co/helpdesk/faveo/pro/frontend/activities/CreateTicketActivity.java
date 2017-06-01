@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -75,7 +76,7 @@ public class CreateTicketActivity extends AppCompatActivity {
     @BindView(R.id.phone_edittext)
     EditText editTextPhone;
     @BindView(R.id.spinner_code)
-    Spinner phCode;
+    SearchableSpinner phCode;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
@@ -117,7 +118,8 @@ public class CreateTicketActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.create_ticket);
 
-
+        phCode.setTitle("Select Country");
+        phCode.setPositiveButton("OK");
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
@@ -277,25 +279,39 @@ public class CreateTicketActivity extends AppCompatActivity {
 
     public int getCountryZipCode() {
         String CountryID = "";
-        //String CountryZipCode = "";
+        String CountryZipCode = "";
         int code = 0;
 
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         //getNetworkCountryIso
         CountryID = manager.getSimCountryIso().toUpperCase();
         String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
-        for (int i = 0; i < rl.length; i++) {
-            String[] g = rl[i].split(",");
+        for (String aRl : rl) {
+            String[] g = aRl.split(",");
             if (g[1].trim().equals(CountryID.trim())) {
-                //CountryZipCode = g[0];
-                code = i;
+                CountryZipCode = g[0];
+                //code = i;
                 break;
             }
         }
-        return code;
+        return Integer.parseInt(CountryZipCode);
+    }
+
+    private void selectValue(Spinner spinner, Object value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            spinner.getItemAtPosition(i);
+            String[] split = spinner.getItemAtPosition(i).toString().split(",");
+            String s = split[1];
+            if (s.equals(value)) {
+                Log.d("dsegffg", i + "");
+                spinner.setSelection(i);
+                break;
+            }
+        }
     }
 
     public void setUpViews() {
+        // selectValue(phCode, getCountryZipCode());
         // phCode.setSelection(getCountryZipCode());
         final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1,
@@ -436,9 +452,12 @@ public class CreateTicketActivity extends AppCompatActivity {
         String fname = editTextFirstName.getText().toString();
         String lname = editTextLastName.getText().toString();
         String phone = editTextPhone.getText().toString();
-        String countrycode = phCode.getSelectedItem().toString();
-        String[] cc = countrycode.split(",");
-        countrycode = cc[0];
+        String countrycode = "";
+        if (!phCode.getSelectedItem().toString().equals("Select Country")) {
+            countrycode = phCode.getSelectedItem().toString();
+            String[] cc = countrycode.split(",");
+            countrycode = cc[1];
+        }
         boolean allCorrect = true;
 
         Data helpTopic = (Data) spinnerHelpTopic.getSelectedItem();
@@ -616,6 +635,8 @@ public class CreateTicketActivity extends AppCompatActivity {
             }
             if (result.contains("Ticket created successfully!")) {
                 Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
+                finish();
+                startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
             }
         }
     }

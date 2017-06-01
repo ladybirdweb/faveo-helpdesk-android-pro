@@ -49,20 +49,6 @@
     <string name="posted_reply">Написал ответ</string>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <string name="helpdesk_url">Helpdesk URL</string>
     <string name="verifying_url">URL контролирующая</string>
 
@@ -115,7 +101,6 @@
     <string name="website">Веб-сайт</string>
 
 
-
     <string name="no_records">нет записей!</string>
     <string name="inactive">Неактивные</string>
     <string name="active">Активный</string>
@@ -156,14 +141,7 @@
     <string name="action_search">Поиск</string>
 
 
-
-
-
-
     <string name="not_available">Не доступно</string>
-
-
-
 
 
     <string name="faveo_content">Faveo Helpdesk обеспечивает предприятия с автоматизированной системой Helpdesk для управления службой поддержки клиентов. Слово Faveo происходит от латинского слова, которое означает быть благоприятным. Который действительно выдвигает на первый план и видение сферы, а также функциональные возможности продукта, который является Faveo.
