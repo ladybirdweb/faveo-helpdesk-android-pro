@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -144,6 +145,12 @@ public class ClosedTickets extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 try {
                     data = jsonObject.getString("data");
+                    int closed = jsonObject.getInt("total");
+                    if (closed > 999)
+                        Prefs.putString("closedTickets", "999+");
+                    else
+                        Prefs.putString("closedTickets", closed + "");
+
                     nextPageURL = jsonObject.getString("next_page_url");
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");

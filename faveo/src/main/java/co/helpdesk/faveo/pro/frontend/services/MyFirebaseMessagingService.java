@@ -71,9 +71,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Calling method to generate notification
 
         if (remoteMessage.getData().get("scenario").equals("tickets"))
-            sendNotificationTicket(clientname.trim() + ", " + remoteMessage.getData().get("message"), remoteMessage.getData().get("id"), "Faveo", pic);
+            sendNotificationTicket(clientname.trim() + ", " + remoteMessage.getData().get("message"), remoteMessage.getData().get("id"), clientname.trim(), pic);
         else
-            sendNotificationClient(clientname.trim() + ", " + remoteMessage.getData().get("message"), client_id + "", "Faveo", pic);
+            sendNotificationClient(clientname.trim() + ", " + remoteMessage.getData().get("message"), client_id + "", clientname.trim(), pic);
 
         //Log.d("Data",remoteMessage.getNotification().);
 

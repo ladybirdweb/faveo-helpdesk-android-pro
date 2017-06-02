@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -191,7 +190,7 @@ public class Conversation extends Fragment {
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(linearLayoutManager);
-            Collections.reverse(ticketThreadList);
+            // Collections.reverse(ticketThreadList);
             ticketThreadAdapter = new TicketThreadAdapter(ticketThreadList);
             recyclerView.setAdapter(ticketThreadAdapter);
         }

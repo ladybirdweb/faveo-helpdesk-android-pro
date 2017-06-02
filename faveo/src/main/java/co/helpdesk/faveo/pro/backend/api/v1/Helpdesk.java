@@ -403,6 +403,16 @@ public class Helpdesk {
         return result;
     }
 
+   // helpdesk/get-tickets?departments=All&show=inbox&api=1
+
+    public String getInboxTicket2() {
+        Log.d("InboxTicketAPI", Constants.URL + "helpdesk/get-tickets?token=" + token+"&api=1&departments=All&show=inbox");
+        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token+"&api=1&departments=All&show=inbox");
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token+"&api=1&departments=All&show=inbox");
+        return result;
+    }
+
     public String getTrashTickets() {
         Log.d("TrashTicketsAPI", Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
         String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);

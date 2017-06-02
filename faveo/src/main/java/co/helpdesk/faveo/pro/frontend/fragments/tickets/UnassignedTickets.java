@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -144,6 +144,12 @@ public class UnassignedTickets extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 try {
                     data = jsonObject.getString("data");
+                    int unasigned = jsonObject.getInt("total");
+                    if (unasigned > 999)
+                        Prefs.putString("unassignedTickets", "999+");
+                    else
+                        Prefs.putString("unassignedTickets", unasigned + "");
+
                     nextPageURL = jsonObject.getString("next_page_url");
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");
@@ -174,7 +180,7 @@ public class UnassignedTickets extends Fragment {
                 Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 //return;
             }
-           // recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
+            // recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
             recyclerView.setHasFixedSize(false);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

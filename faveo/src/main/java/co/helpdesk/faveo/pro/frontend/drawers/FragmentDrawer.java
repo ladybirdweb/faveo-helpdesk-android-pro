@@ -131,6 +131,11 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         return layout;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
         containerView = getActivity().findViewById(fragmentId);
@@ -263,6 +268,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     public interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);
     }
+
 
 }
 

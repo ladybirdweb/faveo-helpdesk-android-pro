@@ -237,7 +237,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
-                    android:text="@string/phone"
+                    android:text="@string/mobile"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </RelativeLayout>
