@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,7 +36,7 @@ import es.dmoral.toasty.Toasty;
 public class Conversation extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    AsyncTask<String, Void, String> task;
     @BindView(R.id.cardList)
     ShimmerRecyclerView recyclerView;
 
@@ -93,7 +94,8 @@ public class Conversation extends Fragment {
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
-                new FetchTicketThreads(getActivity()).execute();
+                task = new FetchTicketThreads(getActivity());
+                task.execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
@@ -110,7 +112,8 @@ public class Conversation extends Fragment {
                         if (ticketThreadList.size() != 0) {
                             ticketThreadList.clear();
                             ticketThreadAdapter.notifyDataSetChanged();
-                            new FetchTicketThreads(getActivity()).execute();
+                            task = new FetchTicketThreads(getActivity());
+                            task.execute();
                         }
                     } else {
                         recyclerView.setVisibility(View.INVISIBLE);
@@ -190,7 +193,7 @@ public class Conversation extends Fragment {
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(linearLayoutManager);
-            // Collections.reverse(ticketThreadList);
+            Collections.reverse(ticketThreadList);
             ticketThreadAdapter = new TicketThreadAdapter(ticketThreadList);
             recyclerView.setAdapter(ticketThreadAdapter);
         }
@@ -229,14 +232,31 @@ public class Conversation extends Fragment {
 //    }
 
     public void refresh() {
+
         if (InternetReceiver.isConnected()) {
+//                        loading = true;
+            recyclerView.setVisibility(View.VISIBLE);
             noInternet_view.setVisibility(View.GONE);
-            swipeRefresh.setRefreshing(true);
-            new FetchTicketThreads(getActivity()).execute();
+            if (ticketThreadList.size() != 0) {
+                ticketThreadList.clear();
+                ticketThreadAdapter.notifyDataSetChanged();
+                task = new FetchTicketThreads(getActivity());
+                task.execute();
+            }
         } else {
-            noInternet_view.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
+            swipeRefresh.setRefreshing(false);
             empty_view.setVisibility(View.GONE);
+            noInternet_view.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onPause() {
+        if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
+            task.cancel(true);
+            Log.d("Async Detail", "Cancelled");
+        }
+        super.onPause();
     }
 }

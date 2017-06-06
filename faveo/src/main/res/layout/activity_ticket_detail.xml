@@ -149,7 +149,8 @@
                     android:text="@string/cc"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <EditText
                     android:id="@+id/editText_cc"
@@ -161,7 +162,8 @@
                     android:paddingBottom="16dp"
                     android:paddingTop="16dp"
                     android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
 
                 <TextView
