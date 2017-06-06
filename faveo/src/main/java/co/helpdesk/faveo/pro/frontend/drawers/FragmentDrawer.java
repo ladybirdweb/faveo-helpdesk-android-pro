@@ -44,6 +44,11 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.TrashTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
 import co.helpdesk.faveo.pro.frontend.services.MyFirebaseInstanceIDService;
 
+/**
+ * This is the fragment where we are going to handle the
+ * drawer item events,for create ticket ,inbox,client list...
+ *
+ */
 public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
     private DrawerLayout mDrawerLayout;

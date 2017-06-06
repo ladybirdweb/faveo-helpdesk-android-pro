@@ -161,6 +161,9 @@ public class InboxTickets extends Fragment {
 //    }
 
 
+    /**
+     * Fetch the first page tickets
+     */
     private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
 
@@ -257,6 +260,9 @@ public class InboxTickets extends Fragment {
         }
     }
 
+    /**
+     * Fetch the nextpage tickets by next_pageUrl.
+     */
     private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 

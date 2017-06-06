@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.model;
 
 /**
  * Created by narendra on 26/05/17.
+ * Model class for displaying the data in spinner list.
  */
 
 public class Data {

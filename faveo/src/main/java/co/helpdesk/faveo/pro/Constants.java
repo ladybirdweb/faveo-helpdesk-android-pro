@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro;
 
 /**
  * Created by sumit on 1/25/2016.
+ * This class contains the API key,base URL and billing URL details.
  */
 public class Constants {
     public static final String PREFERENCE = "FAVEO";

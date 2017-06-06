@@ -16,6 +16,10 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.ClientDetailActivity;
 import co.helpdesk.faveo.pro.model.ClientOverview;
 
+/**
+ * This adapter is for the recycler view which we have used
+ * in client details page.
+ */
 public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAdapter.ClientViewHolder> {
     private List<ClientOverview> clientOverviewList;
 

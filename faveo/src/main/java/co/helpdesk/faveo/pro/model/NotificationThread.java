@@ -2,8 +2,8 @@ package co.helpdesk.faveo.pro.model;
 
 /**
  * Created by narendra on 09/12/16.
+ * Model class for notification.
  */
-
 public class NotificationThread {
 
     public String profiel_pic;

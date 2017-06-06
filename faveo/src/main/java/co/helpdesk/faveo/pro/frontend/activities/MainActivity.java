@@ -36,7 +36,11 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 
-
+/**
+ * This is the main activity where we are loading the inbox fragment
+ * once log in success we will start this activity. Here we are loading the
+ * navigation drawer item.
+ */
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,
         ClosedTickets.OnFragmentInteractionListener,
         InboxTickets.OnFragmentInteractionListener,
@@ -89,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
+        /*
+          Loading the inbox fragment here.
+         */
         InboxTickets inboxTickets = new InboxTickets();
         //inboxTickets.setArguments(bundle);
 
@@ -145,6 +152,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //
 //    }
 
+    /**
+     * This will handle the drawer item.
+     * @param view
+     * @param position
+     */
     @Override
     public void onDrawerItemSelected(View view, int position) {
     }
@@ -169,6 +181,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     * @param item items refer to the menu items.
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -189,6 +208,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * While resuming it will check if the internet
+     * is available or not.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -202,6 +225,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         showSnackIfNoInternet(isConnected);
     }
 
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
@@ -221,6 +249,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {
@@ -246,6 +279,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        showSnack(isConnected);
 //    }
 
+    /**
+     * Handling the back button here.
+     * As if we clicking twice then it will
+     * ask press one more time to exit,we are handling
+     * the double back button pressing here.
+     */
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {

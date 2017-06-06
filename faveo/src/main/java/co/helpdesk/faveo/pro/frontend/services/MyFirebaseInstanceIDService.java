@@ -19,6 +19,7 @@ import okhttp3.Response;
 
 /**
  * Created by narendra on 11/07/16.
+ * This is for getting push notification from the server.
  */
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
@@ -47,6 +48,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         }
     }
 
+    /**
+     * Send the refreshed fcm_token to the server along with user_id
+     * @param token
+     * @throws IOException
+     */
     public static void sendRegistrationToServer(String token) throws IOException {
 
         String userID = Prefs.getString("ID", "");

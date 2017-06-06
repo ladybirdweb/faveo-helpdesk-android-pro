@@ -29,6 +29,8 @@ import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 
 /**
  * Created by narendra on 11/07/16.
+ * When ever anything posted on the server this method will be executed to get the
+ * notification.
  */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
@@ -71,16 +73,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Calling method to generate notification
 
         if (remoteMessage.getData().get("scenario").equals("tickets"))
-            sendNotificationTicket(clientname.trim() + ", " + remoteMessage.getData().get("message"), remoteMessage.getData().get("id"), clientname.trim(), pic);
+            sendNotificationTicket(remoteMessage.getData().get("message"), remoteMessage.getData().get("id"), clientname.trim(), pic);
         else
-            sendNotificationClient(clientname.trim() + ", " + remoteMessage.getData().get("message"), client_id + "", clientname.trim(), pic);
+            sendNotificationClient(remoteMessage.getData().get("message"), client_id + "", clientname.trim(), pic);
 
         //Log.d("Data",remoteMessage.getNotification().);
 
     }
 
-    //This method is only generating push notification
-    //It is same as we did in earlier posts
+    /**
+     * This method is only generating push notification
+     * It is same as we did in earlier posts.
+     * @param messageBody
+     * @param ID
+     * @param noti_tittle
+     * @param profilePic
+     */
     private void sendNotificationClient(String messageBody, String ID, String noti_tittle, String profilePic) {
 
         Intent intent = new Intent(this, ClientDetailActivity.class);
@@ -133,8 +141,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-    //This method is only generating push notification
-    //It is same as we did in earlier posts
+    /**
+     * This method is only generating push notification
+     * it is same as we did in earlier posts.
+     * @param messageBody
+     * @param ID
+     * @param noti_tittle
+     * @param profilePic
+     */
     private void sendNotificationTicket(String messageBody, String ID, String noti_tittle, String profilePic) {
 
         Intent intent = new Intent(this, TicketDetailActivity.class);
@@ -186,6 +200,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
+    /**
+     * Get bitmap image from requested url
+     * @param strURL
+     * @return
+     */
     public Bitmap getBitmapFromURL(String strURL) {
         try {
             URL url = new URL(strURL);

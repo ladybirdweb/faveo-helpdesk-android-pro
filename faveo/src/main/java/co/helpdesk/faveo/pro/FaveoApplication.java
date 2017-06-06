@@ -14,6 +14,12 @@ import java.io.File;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import io.fabric.sdk.android.Fabric;
 
+/**
+ * In this class we are adding fabric to our application.
+ * This is for crash reporting ,whenever we will have any issue in
+ * the user system this will give the error message for the issue
+ * to us.
+ */
 public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
     InternetReceiver internetReceiver;
@@ -67,7 +73,10 @@ public class FaveoApplication extends MultiDexApplication {
 //                .build();
 //        Realm.setDefaultConfiguration(realmConfiguration);
 
-        //Fabric.io
+        /*
+          Fabric.io.
+          Crash reporting tool.
+         */
         Fabric.with(this, new Crashlytics());
         instance = this;
 
@@ -84,7 +93,9 @@ public class FaveoApplication extends MultiDexApplication {
     }
 
 
-    //Deleting the user data while loggin out from app.
+    /**
+     * Deleting the user data while logging out from app.
+     */
     public void clearApplicationData() {
         File cache = getCacheDir();
         File appDir = new File(cache.getParent());

@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.model;
 
 /**
  * Created by Sumit
+ * Model class for ticket thread.
  */
 public class TicketThread {
 

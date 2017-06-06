@@ -9,10 +9,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.Preference;
 
 /**
- * Created by Sumit
+ * Created by Sumit.
+ * This class is for responsible for getting the authenticate
+ * details ,whenever we need to call the authenticate API,we will
+ * create object of this class and we will call that API.
  */
 public class Authenticate {
 

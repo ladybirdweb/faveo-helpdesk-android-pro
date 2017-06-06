@@ -33,6 +33,9 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketThread;
 import es.dmoral.toasty.Toasty;
 
+/**
+ *This is the Fragment for showing the conversation details.
+ */
 public class Conversation extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";

@@ -9,7 +9,11 @@ import org.json.JSONObject;
 
 import co.helpdesk.faveo.pro.Constants;
 
-
+/**
+ * In this class we are basically setting the API
+ * which we need to call ,so when ever we need to call that API we wil create the object for this class.
+ * This class contains all of the API's which we have used in our application.
+ */
 public class Helpdesk {
 
     static String apiKey;

@@ -58,6 +58,11 @@ import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import es.dmoral.toasty.Toasty;
 
+/**
+ * This activity is for responsible for creating the ticket.
+ * Here we are using create ticket async task which is
+ * POST request.We are getting the JSON data here from the dependency API.
+ */
 public class CreateTicketActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMG = 1;
     private static int RESULT_LOAD_FILE = 42;
@@ -156,7 +161,11 @@ public class CreateTicketActivity extends AppCompatActivity {
 
         return true;
     }
-
+    /**
+     * Handlig the menu items here.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -216,7 +225,12 @@ public class CreateTicketActivity extends AppCompatActivity {
         return ss;
     }
 
-
+    /**
+     * Here we are handling the activity result.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -309,7 +323,9 @@ public class CreateTicketActivity extends AppCompatActivity {
             }
         }
     }
-
+    /**
+     * Setting up the views here.
+     */
     public void setUpViews() {
         // selectValue(phCode, getCountryZipCode());
         // phCode.setSelection(getCountryZipCode());
@@ -444,7 +460,9 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
         return true;
     }
-
+    /**
+     * Handling the create button here.
+     */
     public void createButtonClick() {
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
@@ -594,6 +612,9 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Async task for creating the ticket.
+     */
     private class CreateNewTicket extends AsyncTask<String, Void, String> {
         String fname, lname, email, code;
         String subject;
@@ -641,7 +662,10 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
     }
 
-    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    /**
+     * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
 
@@ -659,7 +683,11 @@ public class CreateTicketActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
-
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
@@ -679,6 +707,11 @@ public class CreateTicketActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {

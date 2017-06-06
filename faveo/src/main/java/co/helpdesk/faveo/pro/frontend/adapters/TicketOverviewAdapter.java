@@ -21,6 +21,9 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 
+/**
+ * This adapter is for the tickets(inbox,mytickets,trash...) page in the main page.
+ */
 public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
     private List<TicketOverview> ticketOverviewList;
 

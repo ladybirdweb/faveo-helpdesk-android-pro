@@ -27,9 +27,8 @@ import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.model.NotificationThread;
 
 /**
- * Created by narendra on 09/12/16.
+ * This adapter is for the notification page.
  */
-
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.CardViewHolder> {
 
     private List<NotificationThread> notiThreadList;

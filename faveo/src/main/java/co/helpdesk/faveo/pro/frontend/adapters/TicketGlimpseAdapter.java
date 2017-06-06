@@ -13,6 +13,9 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.model.TicketGlimpse;
 
+/**
+ * This adapter is for the Open/Close page in the client detail page.
+ */
 public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdapter.TicketViewHolder> {
     private List<TicketGlimpse> ticketGlimpseList;
     private final String clientName;

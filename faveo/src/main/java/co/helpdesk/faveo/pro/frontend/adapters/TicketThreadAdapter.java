@@ -18,6 +18,9 @@ import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.model.TicketThread;
 
+/**
+ * This adapter is for the conversation page in the ticket detail page.
+ */
 public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapter.TicketViewHolder> {
     private List<TicketThread> ticketThreadList;
 

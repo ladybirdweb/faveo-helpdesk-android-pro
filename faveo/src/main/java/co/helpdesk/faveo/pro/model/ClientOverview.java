@@ -1,7 +1,8 @@
 package co.helpdesk.faveo.pro.model;
 
 /**
- * Created by Sumit
+ * Created by Sumit.
+ * Model class for client overview.
  */
 public class ClientOverview {
 

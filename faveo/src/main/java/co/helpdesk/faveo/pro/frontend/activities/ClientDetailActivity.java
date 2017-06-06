@@ -48,7 +48,11 @@ import co.helpdesk.faveo.pro.model.MessageEvent;
 import co.helpdesk.faveo.pro.model.TicketGlimpse;
 import es.dmoral.toasty.Toasty;
 
-
+/**
+ * In this activity we are showing the client details to the user.
+ * We have used view pager for showing the open and closed tickets
+ * so we are loading the view pager here.
+ */
 public class ClientDetailActivity extends AppCompatActivity implements
         OpenTickets.OnFragmentInteractionListener,
         ClosedTickets.OnFragmentInteractionListener {
@@ -143,6 +147,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Handling the back button here.
+     */
     @Override
     public void onBackPressed() {
         if (!MainActivity.isShowing) {
@@ -153,6 +160,11 @@ public class ClientDetailActivity extends AppCompatActivity implements
         super.onBackPressed();
     }
 
+    /**
+     * Handling the menu items here.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -163,6 +175,10 @@ public class ClientDetailActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This async task is for getting the client details.We have
+     * used two list for open and close ticket.
+     */
     private class FetchClientTickets extends AsyncTask<String, Void, String> {
         Context context;
         List<TicketGlimpse> listOpenTicketGlimpse = new ArrayList<>();
@@ -265,7 +281,10 @@ public class ClientDetailActivity extends AppCompatActivity implements
             fragmentClosedTickets.populateData(listClosedTicketGlimpse, clientName);
         }
     }
-
+    /**
+     * Here we are initializing the view pager and the
+     * adapter for the view pager.
+     */
     private void setupViewPager() {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         fragmentOpenTickets = new OpenTickets();
@@ -356,7 +375,10 @@ public class ClientDetailActivity extends AppCompatActivity implements
         // viewPager = (ViewPager) findViewById(R.id.viewpager);
 
     }
-
+    /**
+     * While resuming it will check if the internet
+     * is available or not.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -365,11 +387,16 @@ public class ClientDetailActivity extends AppCompatActivity implements
         checkConnection();
     }
 
+
     private void checkConnection() {
         boolean isConnected = InternetReceiver.isConnected();
         showSnackIfNoInternet(isConnected);
     }
-
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
@@ -388,7 +415,11 @@ public class ClientDetailActivity extends AppCompatActivity implements
         }
 
     }
-
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {
@@ -406,7 +437,10 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
     }
 
-    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    /**
+     * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
 

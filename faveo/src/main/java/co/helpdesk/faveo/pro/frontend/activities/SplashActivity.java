@@ -21,9 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.R;
@@ -32,7 +29,10 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import es.dmoral.toasty.Toasty;
 
-
+/**
+ * This splash activity is responsible for
+ * getting the metadata of our faveo application from the dependency API.
+ */
 public class SplashActivity extends AppCompatActivity {
 
     @BindView(R.id.progressBar1)
@@ -70,7 +70,11 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    //Dependency API
+    /**
+     * This dependency is for getting the meta data about
+     * our faveo application.From here we will get sla,priority
+     * help topics.
+     */
     private class FetchDependency extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
@@ -111,7 +115,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                 Prefs.putString("DEPENDENCY",jsonObject1.toString());
+                Prefs.putString("DEPENDENCY", jsonObject1.toString());
                 // Preference.setDependencyObject(jsonObject1, "dependency");
                 JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");
                 for (int i = 0; i < jsonArrayDepartments.length(); i++) {
@@ -165,7 +169,6 @@ public class SplashActivity extends AppCompatActivity {
                 //Prefs.putOrderedStringSet("keyPri", keyPri);
                 // Prefs.putOrderedStringSet("valuePri", valuePri);
                 //Log.d("Testtttttt", Prefs.getOrderedStringSet("keyPri", keyPri) + "   " + Prefs.getOrderedStringSet("valuePri", valuePri));
-
 
 
                 JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("helptopics");
@@ -275,6 +278,11 @@ public class SplashActivity extends AppCompatActivity {
         showSnackIfNoInternet(isConnected);
     }
 
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
@@ -294,6 +302,12 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
+
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {
@@ -311,7 +325,9 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    /**
+     * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         showSnack(event.message);

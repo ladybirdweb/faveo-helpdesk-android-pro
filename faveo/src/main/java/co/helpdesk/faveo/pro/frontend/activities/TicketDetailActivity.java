@@ -53,7 +53,11 @@ import es.dmoral.toasty.Toasty;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
-
+/**
+ * This splash activity is responsible for
+ * getting the metadata of our faveo application from the dependency API.
+ *
+ */
 public class TicketDetailActivity extends AppCompatActivity implements
         Conversation.OnFragmentInteractionListener,
         Detail.OnFragmentInteractionListener {
@@ -110,6 +114,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
         buttonCreate = (Button) findViewById(R.id.button_create);
         buttonSend = (Button) findViewById(R.id.button_send);
 
+        /*
+          This button is for creating the internal note.
+         */
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,6 +143,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
 
+        /*
+          This button is for getting the cc from the reply option
+          here we are handling multiple cc items.
+         */
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,10 +216,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         int sheetColor = getResources().getColor(R.color.background_card);
         int fabColor = getResources().getColor(R.color.theme_accent);
 
-        // Create material sheet FAB
+        /**
+         * Create material sheet FAB.
+         */
         materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay1, sheetColor, fabColor);
 
-        // Set material sheet event listener
+        /**
+         * Set material sheet event listener.
+         */
         materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
             @Override
             public void onShowSheet() {
@@ -225,7 +240,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
 
-        // Set material sheet item click listeners
+        /**
+         * Set material sheet item click listeners.
+         */
         findViewById(R.id.fab_sheet_item_reply).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,6 +276,11 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Handling the back button.
+     * @param item refers to the menu item .
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -294,6 +316,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
         builder.show();
     }
 
+    /**
+     * This API is for creating the internal note.
+     */
     private class CreateInternalNote extends AsyncTask<String, Void, String> {
         int ticketID;
         int userID;
@@ -325,6 +350,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * This API is for replying to the particular ticket.
+     */
     private class ReplyTicket extends AsyncTask<String, Void, String> {
         int ticketID;
         String cc;
@@ -404,6 +432,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Here we are initializing the view pager
+     * for the conversation and detail fragment.
+     */
     private void setupViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -438,6 +470,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         }
 
+        /**
+         * This method is for controlling the FAB button.
+         * @param position of the FAB button.
+         */
         @Override
         public void onPageSelected(int position) {
             switch (position) {
@@ -491,6 +527,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Here we are controlling the FAB reply and internal note option.
+     * @param type
+     */
     void enterReveal(String type) {
         fab.setVisibility(View.GONE);
         final View myView = findViewById(R.id.reveal);
@@ -559,6 +599,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
+    /**
+     * Handling the back button here.
+     */
     @Override
     public void onBackPressed() {
         if (!MainActivity.isShowing) {
@@ -577,6 +620,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        else super.onBackPressed();
     }
 
+    /**
+     * While resuming it will check if the internet
+     * is available or not.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -590,6 +637,11 @@ public class TicketDetailActivity extends AppCompatActivity implements
         showSnackIfNoInternet(isConnected);
     }
 
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
@@ -609,6 +661,11 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {

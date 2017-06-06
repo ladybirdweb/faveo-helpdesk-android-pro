@@ -64,7 +64,14 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import es.dmoral.toasty.Toasty;
 
-
+/**
+ * This log in activity is for verifying the url and and
+ * checking the credentials provided by the user.Here we are using view flipper
+ * we will check first if the url provided by the user is registered or not
+ * if it is correct then we are going to load the view pager where user will give
+ * the user name and the password.If it is right then we are going to load the
+ * inbox page to the user.We have used verify url,verify billing url and sign in async task.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     TextView textViewFieldError, textViewForgotPassword;
@@ -124,7 +131,10 @@ public class LoginActivity extends AppCompatActivity {
         //View init
         setUpViews();
 
-        //ONly for Xiaomi devices
+        /*
+          This is only for xiaomi devices.For getting the notification
+          they have to enable the permission.
+         */
         String manufacturer = "xiaomi";
         if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
@@ -146,7 +156,10 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-        //Verifying the URL adress
+        /*
+         This button is for getting the url from the user
+          and it will check if it is a registered url or not.
+         */
         buttonVerifyURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +209,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *Async task is for verifying the url.
+     */
     private class VerifyURL extends AsyncTask<String, Void, String> {
         Context context;
         String companyURL;
@@ -247,6 +263,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //N 7.0-> shortcuts
+
+    /**
+     * This method is for getting the short cut if we are
+     * holding the icon for long time.
+     */
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     void dynamicShortcut() {
         ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
@@ -261,6 +282,9 @@ public class LoginActivity extends AppCompatActivity {
         shortcutManager.setDynamicShortcuts(Collections.singletonList(webShortcut));
     }
 
+    /**
+     * This async task is for verifying the url,for paid version only.
+     */
     private class VerifyBilling extends AsyncTask<String, Void, String> {
         Context context;
         String baseURL;
@@ -309,6 +333,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This button will work after the url is been verified
+     * it will take the user name and password and it will check
+     * it is valid or not.
+     */
     @OnClick(R.id.button_signin)
     public void signIn() {
         String username = usernameEdittext.getText().toString();
@@ -324,7 +353,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Post the user credentials to server.
+     * Post the user credentials to server. This will execute after the
+     * verify url is being verified.
      */
     private class SignIn extends AsyncTask<String, Void, String> {
         Context context;
@@ -440,7 +470,8 @@ public class LoginActivity extends AppCompatActivity {
 //    }
 
     /**
-     * To initialize the views.
+     * To initialize the views.Here we are initializing all
+     * the edit text,progress dialog and other views.
      */
     private void setUpViews() {
 
@@ -500,6 +531,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * While resuming it will check if the internet
+     * is available or not.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -569,7 +604,8 @@ public class LoginActivity extends AppCompatActivity {
 //    }
 
     /**
-     * To send the FCM token to server.
+     * To send the FCM token to server.This is required
+     * for getting push notification from the server.
      */
     private class SendingFCM extends AsyncTask<String, Void, String> {
         Context context;
@@ -602,6 +638,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * For checking if the user related fields
+     * are empty or not.
+     */
     void checkFieldsForEmptyValues() {
 
         String username = usernameEdittext.getText().toString();
@@ -638,7 +678,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    /**
+     * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
+     */
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
 

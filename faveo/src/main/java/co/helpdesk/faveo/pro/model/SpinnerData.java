@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.model;
 
 /**
  * Created by narendra on 10/03/17.
+ * Model class for spinner data.
  */
 
 public class SpinnerData {

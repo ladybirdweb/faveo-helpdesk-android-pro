@@ -38,6 +38,9 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import es.dmoral.toasty.Toasty;
 
+/**
+ * This is the Fragment for showing the ticket details.
+ */
 public class Detail extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";

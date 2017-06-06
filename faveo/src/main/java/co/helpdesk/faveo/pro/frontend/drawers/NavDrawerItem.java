@@ -2,13 +2,14 @@ package co.helpdesk.faveo.pro.frontend.drawers;
 
 /**
  * Created by Sumit
+ * This class is for creating the object for the NavDrawer item.
  */
-public class NavDrawerItem {
+class NavDrawerItem {
     private boolean showNotify;
     private String title;
 
 
-    public NavDrawerItem() {
+    NavDrawerItem() {
 
     }
 

@@ -39,6 +39,11 @@ import co.helpdesk.faveo.pro.model.MessageEvent;
 import co.helpdesk.faveo.pro.model.NotificationThread;
 import es.dmoral.toasty.Toasty;
 
+/**
+ * This activity is for getting the notification.We have used recycler view for showing the
+ * notification to the user.We have used swipe refresh layout here,so when ever we are going to scroll down
+ * we will make call to fetch first async task.
+ */
 public class NotificationActivity extends AppCompatActivity {
 
     @BindView(R.id.swipeRefresh)
@@ -82,6 +87,9 @@ public class NotificationActivity extends AppCompatActivity {
             empty_view.setVisibility(View.GONE);
         }
 
+        /*
+         * Handling the refresh layout listener here.
+         */
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -116,6 +124,9 @@ public class NotificationActivity extends AppCompatActivity {
 //        recycler.setAdapter(adapter);
 //    }
 
+    /**
+     * This async task is for getting the notification details .
+     */
     private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
 
@@ -204,6 +215,9 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This async task is for getting the next page url.
+     */
     private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
@@ -256,6 +270,11 @@ public class NotificationActivity extends AppCompatActivity {
 //        adapter.notifyDataSetChanged();
 //    }
 
+    /**
+     * Handling the menu items here.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -268,6 +287,10 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * While resuming it will check if the internet
+     * is available or not.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -281,6 +304,11 @@ public class NotificationActivity extends AppCompatActivity {
         showSnackIfNoInternet(isConnected);
     }
 
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
@@ -300,6 +328,11 @@ public class NotificationActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {
@@ -339,7 +372,7 @@ public class NotificationActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // mListener = null;
+        // mListener = null;
         nextPageURL = "";
     }
 
