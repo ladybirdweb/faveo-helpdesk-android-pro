@@ -33,7 +33,7 @@ public class Helpdesk {
     }
 
     public String postCreateTicket(int userID, String subject, String body, int helpTopic,
-                                   int priority, String fname, String lname, String phone, String email, String code) {
+                                   int priority, String fname, String lname, String phone, String email, String code, String mobile) {
         Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
@@ -48,6 +48,7 @@ public class Helpdesk {
                 "&last_name=" + lname +
                 "&phone=" + phone +
                 "&code=" + code +
+                "&mobile=" + mobile +
                 "&email=" + email +
                 "&token=" + token);
 
@@ -64,6 +65,7 @@ public class Helpdesk {
                 "&first_name=" + fname +
                 "&last_name=" + lname +
                 "&phone=" + phone +
+                "&mobile=" + mobile +
                 "&code=" + code +
                 "&email=" + email +
                 "&token=" + token, null);
@@ -82,6 +84,7 @@ public class Helpdesk {
                     "&first_name=" + fname +
                     "&last_name=" + lname +
                     "&phone=" + phone +
+                    "&mobile=" + mobile +
                     "&code=" + code +
                     "&email=" + email +
                     "&token=" + token, null);
@@ -152,20 +155,20 @@ public class Helpdesk {
         return result;
     }
 
-    public String postReplyTicket(int ticketID, String cc, String replyContent) {
+    public String postReplyTicket(int ticketID, String replyContent) {
         Log.d("ReplyTicketAPI", Constants.URL + "helpdesk/reply?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_ID=" + ticketID +
-                "&cc=" + cc +
+
                 "&reply_content=" + replyContent);
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/reply?" +
                         "api_key=" + apiKey +
                         "&ip=" + IP +
                         "&token=" + token +
                         "&ticket_ID=" + ticketID +
-                        "&cc=" + cc +
+
                         "&reply_content=" + replyContent,
                 null);
         if (result != null && result.equals("tokenRefreshed"))
@@ -174,7 +177,7 @@ public class Helpdesk {
                     "&ip=" + IP +
                     "&token=" + token +
                     "&ticket_ID=" + ticketID +
-                    "&cc=" + cc +
+
                     "&reply_content=" + replyContent, null);
         return result;
     }
@@ -407,13 +410,13 @@ public class Helpdesk {
         return result;
     }
 
-   // helpdesk/get-tickets?departments=All&show=inbox&api=1
+    // helpdesk/get-tickets?departments=All&show=inbox&api=1
 
     public String getInboxTicket2() {
-        Log.d("InboxTicketAPI", Constants.URL + "helpdesk/get-tickets?token=" + token+"&api=1&departments=All&show=inbox");
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token+"&api=1&departments=All&show=inbox");
+        Log.d("InboxTicketAPI", Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
+        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
         if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token+"&api=1&departments=All&show=inbox");
+            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
         return result;
     }
 

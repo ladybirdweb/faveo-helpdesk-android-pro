@@ -165,5 +165,6 @@
     <string name="ticket_type" translatable="false">Ticket Type </string>
     <string name="code" translatable="false">Code</string>
     <string name="mobile" translatable="false">Mobile</string>
+    <string name="name">Name</string>
 
 </resources>

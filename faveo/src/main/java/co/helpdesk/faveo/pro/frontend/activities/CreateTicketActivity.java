@@ -96,6 +96,8 @@ public class CreateTicketActivity extends AppCompatActivity {
     EditText subEdittext;
     @BindView(R.id.msg_edittext)
     EditText msgEdittext;
+    @BindView(R.id.phone_edittext10)
+    EditText editTextMobile;
     //    @BindView(R.id.spinner_dept)
 //    Spinner spinnerDept;
     @BindView(R.id.spinner_pri)
@@ -161,8 +163,10 @@ public class CreateTicketActivity extends AppCompatActivity {
 
         return true;
     }
+
     /**
      * Handlig the menu items here.
+     *
      * @param item
      * @return
      */
@@ -227,6 +231,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 
     /**
      * Here we are handling the activity result.
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -323,6 +328,7 @@ public class CreateTicketActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * Setting up the views here.
      */
@@ -460,6 +466,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
         return true;
     }
+
     /**
      * Handling the create button here.
      */
@@ -470,6 +477,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         String fname = editTextFirstName.getText().toString();
         String lname = editTextLastName.getText().toString();
         String phone = editTextPhone.getText().toString();
+        String mobile = editTextMobile.getText().toString();
         String countrycode = "";
         if (!phCode.getSelectedItem().toString().equals("Select Country")) {
             countrycode = phCode.getSelectedItem().toString();
@@ -489,9 +497,6 @@ public class CreateTicketActivity extends AppCompatActivity {
             allCorrect = false;
         } else if (fname.trim().length() < 3) {
             Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
-            allCorrect = false;
-        } else if (lname.trim().length() == 0) {
-            Toasty.warning(this, getString(R.string.fill_lastname), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
             Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
@@ -515,6 +520,11 @@ public class CreateTicketActivity extends AppCompatActivity {
             allCorrect = false;
             Toasty.warning(CreateTicketActivity.this, "Please select some Priority", Toast.LENGTH_SHORT).show();
         }
+
+//        if (lname.trim().length() == 0) {
+//            Toasty.warning(this, getString(R.string.fill_lastname), Toast.LENGTH_SHORT).show();
+//            allCorrect = false;
+//        } else
 //        if (dept == 0) {
 //            allCorrect = false;
 //            Toasty.warning(CreateTicketActivity.this, "Please select some Department", Toast.LENGTH_SHORT).show();
@@ -535,11 +545,13 @@ public class CreateTicketActivity extends AppCompatActivity {
                     message = URLEncoder.encode(message, "utf-8");
                     email = URLEncoder.encode(email, "utf-8");
                     phone = URLEncoder.encode(phone, "utf-8");
+                    mobile = URLEncoder.encode(mobile, "utf-8");
+
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
                 progressDialog.show();
-                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email, countrycode).execute();
+                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email, countrycode, mobile).execute();
 //                JSONObject jsonObject = new JSONObject();
 //                try {
 //                    //jsonObject.put("api_key", Constants.API_KEY);
@@ -620,6 +632,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         String subject;
         String body;
         String phone;
+        String mobile;
         int helpTopic;
         // int SLA;
         int priority;
@@ -627,7 +640,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         int userID;
 
         CreateNewTicket(int userID, String subject, String body,
-                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code) {
+                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code, String mobile) {
 
             this.subject = subject;
             this.body = body;
@@ -641,11 +654,12 @@ public class CreateTicketActivity extends AppCompatActivity {
             this.fname = fname;
             this.email = email;
             this.code = code;
+            this.mobile = mobile;
 
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code);
+            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, mobile);
         }
 
         protected void onPostExecute(String result) {
@@ -664,6 +678,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 
     /**
      * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
+     *
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -683,6 +698,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
     /**
      * Display the snackbar if network connection is not there.
      *

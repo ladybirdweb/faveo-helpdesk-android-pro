@@ -56,7 +56,6 @@ import io.codetail.animation.ViewAnimationUtils;
 /**
  * This splash activity is responsible for
  * getting the metadata of our faveo application from the dependency API.
- *
  */
 public class TicketDetailActivity extends AppCompatActivity implements
         Conversation.OnFragmentInteractionListener,
@@ -177,7 +176,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         e.printStackTrace();
                     }
 
-                    new ReplyTicket(Integer.parseInt(ticketID), cc, replyMessage).execute();
+                    new ReplyTicket(Integer.parseInt(ticketID), replyMessage).execute();
                     progressDialog.setMessage(getString(R.string.sending_msg));
                     progressDialog.show();
 
@@ -278,6 +277,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     /**
      * Handling the back button.
+     *
      * @param item refers to the menu item .
      * @return
      */
@@ -358,14 +358,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         String cc;
         String replyContent;
 
-        ReplyTicket(int ticketID, String cc, String replyContent) {
+        ReplyTicket(int ticketID, String replyContent) {
             this.ticketID = ticketID;
             this.cc = cc;
             this.replyContent = replyContent;
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postReplyTicket(ticketID, cc, replyContent);
+            return new Helpdesk().postReplyTicket(ticketID, replyContent);
         }
 
         protected void onPostExecute(String result) {
@@ -529,6 +529,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     /**
      * Here we are controlling the FAB reply and internal note option.
+     *
      * @param type
      */
     void enterReveal(String type) {

@@ -48,7 +48,7 @@ public class Detail extends Fragment {
     AsyncTask<String, Void, String> task;
     TextView textViewTicketNumber, textViewErrorSubject;
     int paddingTop, paddingBottom;
-    EditText editTextSubject, editTextFirstName, editTextLastName, editTextEmail,
+    EditText editTextSubject, editTextFirstName, editTextEmail,
             editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
 
     ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter, spinnerStatusArrayAdapter;
@@ -257,10 +257,10 @@ public class Detail extends Fragment {
                 } else
                     editTextFirstName.setText(jsonObject1.getString("first_name"));
 
-                if (jsonObject1.getString("last_name").equals("") || jsonObject1.getString("last_name") == null) {
-                    editTextLastName.setText(getString(R.string.not_available));
-                } else
-                    editTextLastName.setText(jsonObject1.getString("last_name"));
+//                if (jsonObject1.getString("last_name").equals("") || jsonObject1.getString("last_name") == null) {
+//                    editTextLastName.setText(getString(R.string.not_available));
+//                } else
+//                    editTextLastName.setText(jsonObject1.getString("last_name"));
 
                 if (jsonObject1.getString("email").equals("") || jsonObject1.getString("email") == null) {
                     editTextEmail.setText(getString(R.string.not_available));
@@ -442,7 +442,7 @@ public class Detail extends Fragment {
         spinnerHelpTopics.setAdapter(spinnerHelpArrayAdapter);
 
         editTextFirstName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_firstname);
-        editTextLastName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_lastname);
+        //editTextLastName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_lastname);
         editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
 
         spinnerSource = (Spinner) rootView.findViewById(R.id.spinner_source);
