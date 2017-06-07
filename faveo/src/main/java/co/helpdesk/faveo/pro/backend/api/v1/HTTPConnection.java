@@ -228,7 +228,7 @@ class HTTPConnection {
                             return null;
                         new Helpdesk();
                         new Authenticate();
-                        ret = "tokenRefreshed";
+                        ret = "token Refreshed";
                         break;
                     default:
 
@@ -271,7 +271,7 @@ class HTTPConnection {
 
         String input = sb.toString();
         Log.e("input", "" + input);
-        if (input.contains("token_expired") || input.contains("token_invalid")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")|| input.contains("token_not_provided")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();

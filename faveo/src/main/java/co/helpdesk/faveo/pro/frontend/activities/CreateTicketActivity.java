@@ -539,13 +539,13 @@ public class CreateTicketActivity extends AppCompatActivity {
                 progressDialog.setMessage(getString(R.string.creating_ticket));
 
                 try {
-                    fname = URLEncoder.encode(fname, "utf-8");
-                    lname = URLEncoder.encode(lname, "utf-8");
-                    subject = URLEncoder.encode(subject, "utf-8");
-                    message = URLEncoder.encode(message, "utf-8");
-                    email = URLEncoder.encode(email, "utf-8");
-                    phone = URLEncoder.encode(phone, "utf-8");
-                    mobile = URLEncoder.encode(mobile, "utf-8");
+                    fname = URLEncoder.encode(fname.trim(), "utf-8");
+                    lname = URLEncoder.encode(lname.trim(), "utf-8");
+                    subject = URLEncoder.encode(subject.trim(), "utf-8");
+                    message = URLEncoder.encode(message.trim(), "utf-8");
+                    email = URLEncoder.encode(email.trim(), "utf-8");
+                    phone = URLEncoder.encode(phone.trim(), "utf-8");
+                    mobile = URLEncoder.encode(mobile.trim(), "utf-8");
 
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();

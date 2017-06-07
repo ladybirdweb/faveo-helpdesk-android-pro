@@ -9,6 +9,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="4dp"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppThemeOverlay.ActionBar">
 
@@ -151,7 +152,6 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="4dp"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/faveo"
             app:tabMode="fixed" />

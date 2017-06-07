@@ -38,7 +38,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         TicketThread ticketThread = ticketThreadList.get(i);
         ticketViewHolder.textViewClientName.setText(ticketThread.clientName);
         ticketViewHolder.textViewMessageTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
-        ticketViewHolder.textViewMessageTitle.setText(ticketThread.messageTitle);
+        //ticketViewHolder.textViewMessageTitle.setText(ticketThread.messageTitle);
         //ticketViewHolder.textViewMessage.setText(Html.fromHtml(ticketThread.message));
         ticketViewHolder.webView.loadDataWithBaseURL(null, ticketThread.message.replaceAll("\\n", "<br/>"), "text/html", "UTF-8", null);
 
@@ -56,11 +56,11 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ticketViewHolder.textViewMessageTitle.getVisibility() == View.GONE) {
-                    ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
+                if (ticketViewHolder.webView.getVisibility() == View.GONE) {
+                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
                     ticketViewHolder.webView.setVisibility(View.VISIBLE);
                 } else {
-                    ticketViewHolder.textViewMessageTitle.setVisibility(View.GONE);
+                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.GONE);
                     ticketViewHolder.webView.setVisibility(View.GONE);
                 }
             }

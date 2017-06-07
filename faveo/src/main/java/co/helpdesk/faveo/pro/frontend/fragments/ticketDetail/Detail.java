@@ -150,7 +150,7 @@ public class Detail extends Fragment {
                         try {
                             new SaveTicket(getActivity(),
                                     Integer.parseInt(TicketDetailActivity.ticketID),
-                                    URLEncoder.encode(subject, "utf-8"),
+                                    URLEncoder.encode(subject.trim(), "utf-8"),
                                     helpTopic.ID,
                                     source.ID,
                                     priority.ID, type.ID)
