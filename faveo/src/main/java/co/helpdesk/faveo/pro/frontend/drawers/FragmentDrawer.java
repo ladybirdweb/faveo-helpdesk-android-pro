@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -43,11 +44,11 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.TrashTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
 import co.helpdesk.faveo.pro.frontend.services.MyFirebaseInstanceIDService;
+import es.dmoral.toasty.Toasty;
 
 /**
  * This is the fragment where we are going to handle the
  * drawer item events,for create ticket ,inbox,client list...
- *
  */
 public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
@@ -257,6 +258,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                Toasty.success(getActivity(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
 
                 break;
         }

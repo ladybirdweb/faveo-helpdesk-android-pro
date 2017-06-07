@@ -2,12 +2,13 @@ package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,6 @@ import java.util.ArrayList;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -42,6 +42,19 @@ import es.dmoral.toasty.Toasty;
  * This is the Fragment for showing the ticket details.
  */
 public class Detail extends Fragment {
+
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            String blockCharacterSet = "~!@#$%^&*()_-;:<>,.[]{}|/+";
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     TextView tv_helpTopic, tv_dept;
@@ -461,6 +474,20 @@ public class Detail extends Fragment {
 
         paddingTop = editTextEmail.getPaddingTop();
         paddingBottom = editTextEmail.getPaddingBottom();
+        editTextSubject.setFilters(new InputFilter[]{
+                new InputFilter() {
+                    public CharSequence filter(CharSequence src, int start,
+                                               int end, Spanned dst, int dstart, int dend) {
+                        if (src.equals("")) { // for backspace
+                            return src;
+                        }
+                        if (src.toString().matches("[\\x00-\\x7F]+")) {
+                            return src;
+                        }
+                        return "";
+                    }
+                }
+        });
     }
 
     private void resetViews() {

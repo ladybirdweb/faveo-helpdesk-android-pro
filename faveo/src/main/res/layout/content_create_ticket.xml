@@ -462,7 +462,7 @@
                     android:layout_marginRight="16dp"
                     android:background="@android:color/transparent"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="16sp" />
             </LinearLayout>

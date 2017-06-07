@@ -18,6 +18,8 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -114,6 +116,19 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    SearchView requesterSearchview;
     ProgressDialog progressDialog;
     ArrayList<Data> helptopicItems, priorityItems;
+
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            String blockCharacterSet = "~!@#$%^&*()_-;:<>,.[]{}|/+";
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -456,6 +471,26 @@ public class CreateTicketActivity extends AppCompatActivity {
         spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, priorityItems); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPriority.setAdapter(spinnerPriArrayAdapter);
+
+//
+        // editTextFirstName.addTextChangedListener(mTextWatcher);
+        editTextLastName.setFilters(new InputFilter[]{filter});
+        editTextFirstName.setFilters(new InputFilter[]{filter});
+        subEdittext.setFilters(new InputFilter[]{
+                new InputFilter() {
+                    public CharSequence filter(CharSequence src, int start,
+                                               int end, Spanned dst, int dstart, int dend) {
+                        if (src.equals("")) { // for backspace
+                            return src;
+                        }
+                        if (src.toString().matches("[\\x00-\\x7F]+")) {
+                            return src;
+                        }
+                        return "";
+                    }
+                }
+        });
+
     }
 
     @Override
@@ -674,6 +709,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                 startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
             }
         }
+
     }
 
     /**
@@ -743,4 +779,25 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
 
     }
+
+//    private TextWatcher mTextWatcher = new TextWatcher() {
+//        @Override
+//        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//
+//            if ((subEdittext.getText().toString()).matches("\\[a-zA-Z]+")) {
+//
+//
+//            }
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable editable) {
+//            // check Fields For Empty Values
+//            //checkFieldsForEmptyValues();
+//        }
+//    };
 }

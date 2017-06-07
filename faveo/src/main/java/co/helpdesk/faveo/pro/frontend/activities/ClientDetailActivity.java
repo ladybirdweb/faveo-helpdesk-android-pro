@@ -162,6 +162,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
     /**
      * Handling the menu items here.
+     *
      * @param item
      * @return
      */
@@ -241,10 +242,15 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
                 textViewClientName.setText(clientname);
                 textViewClientEmail.setText(requester.getString("email"));
-                if (requester.getString("phone_number") == null || requester.getString("phone_number").equals(""))
+
+                String phone = "";
+                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
                     textViewClientPhone.setVisibility(View.INVISIBLE);
                 else
-                    textViewClientPhone.setText(requester.getString("phone_number"));
+                    phone = requester.getString("mobile");
+
+                textViewClientPhone.setText(phone);
+
 
                 if (requester.getString("company").equals("null") || requester.getString("company").equals(""))
                     textViewClientCompany.setText("");
@@ -281,6 +287,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
             fragmentClosedTickets.populateData(listClosedTicketGlimpse, clientName);
         }
     }
+
     /**
      * Here we are initializing the view pager and the
      * adapter for the view pager.
@@ -375,6 +382,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         // viewPager = (ViewPager) findViewById(R.id.viewpager);
 
     }
+
     /**
      * While resuming it will check if the internet
      * is available or not.
@@ -392,6 +400,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         boolean isConnected = InternetReceiver.isConnected();
         showSnackIfNoInternet(isConnected);
     }
+
     /**
      * Display the snackbar if network connection is not there.
      *
@@ -415,6 +424,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         }
 
     }
+
     /**
      * Display the snackbar if network connection is there.
      *
@@ -439,6 +449,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
     /**
      * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
+     *
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
