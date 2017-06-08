@@ -1,8 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +15,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.pixplicity.easyprefs.library.Prefs;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,23 +26,33 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
+import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
+import es.dmoral.toasty.Toasty;
 
 public class ClosedTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    TextView tv;
-    RecyclerView recyclerView;
+
+    @BindView(R.id.cardList)
+    ShimmerRecyclerView recyclerView;
+
     int currentPage = 1;
     static String nextPageURL = "";
     View rootView;
-    ProgressDialog progressDialog;
+    @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.empty_view)
+    TextView empty_view;
+    @BindView(R.id.noiternet_view)
+    TextView noInternet_view;
 
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
@@ -78,25 +91,43 @@ public class ClosedTickets extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Fetching tickets");
-            progressDialog.show();
-            new FetchFirst(getActivity()).execute();
-            swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefresh);
+            ButterKnife.bind(this, rootView);
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+
+//            swipeRefresh.setRefreshing(true);
+//            new FetchFirst(getActivity()).execute();
+            if (InternetReceiver.isConnected()) {
+                noInternet_view.setVisibility(View.GONE);
+                // swipeRefresh.setRefreshing(true);
+                new FetchFirst(getActivity()).execute();
+            } else {
+                noInternet_view.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+                empty_view.setVisibility(View.GONE);
+            }
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    new FetchFirst(getActivity()).execute();
+                    if (InternetReceiver.isConnected()) {
+                        loading = true;
+                        recyclerView.setVisibility(View.VISIBLE);
+                        noInternet_view.setVisibility(View.GONE);
+                        new FetchFirst(getActivity()).execute();
+                    } else {
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        swipeRefresh.setRefreshing(false);
+                        empty_view.setVisibility(View.GONE);
+                        noInternet_view.setVisibility(View.VISIBLE);
+                    }
                 }
             });
-            tv = (TextView) rootView.findViewById(R.id.empty_view);
+
         }
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.closed_tickets));
         return rootView;
     }
 
-    public class FetchFirst extends AsyncTask<String, Void, String> {
+    private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchFirst(Context context) {
@@ -104,9 +135,7 @@ public class ClosedTickets extends Fragment {
         }
 
         protected String doInBackground(String... urls) {
-//            if (nextPageURL.equals("null")) {
-//                return "all done";
-//            }
+
             String result = new Helpdesk().getClosedTicket();
             if (result == null)
                 return null;
@@ -116,6 +145,12 @@ public class ClosedTickets extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 try {
                     data = jsonObject.getString("data");
+                    int closed = jsonObject.getInt("total");
+                    if (closed > 999)
+                        Prefs.putString("closedTickets", "999+");
+                    else
+                        Prefs.putString("closedTickets", closed + "");
+
                     nextPageURL = jsonObject.getString("next_page_url");
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");
@@ -133,20 +168,20 @@ public class ClosedTickets extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
+
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             if (result.equals("all done")) {
 
-                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 //return;
             }
-            recyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
+            //recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
             recyclerView.setHasFixedSize(false);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -162,7 +197,14 @@ public class ClosedTickets extends Fragment {
                             if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                                 loading = false;
                                 new FetchNextPage(getActivity()).execute();
-                                Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+                                StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
+                                st.setBackgroundColor(Color.parseColor("#3da6d7"));
+                                st.setTextColor(Color.WHITE);
+                                st.setIcon(R.drawable.ic_autorenew_black_24dp);
+                                st.spinIcon();
+                                st.setMaxAlpha();
+                                st.show();
                             }
                         }
                     }
@@ -171,12 +213,12 @@ public class ClosedTickets extends Fragment {
             ticketOverviewAdapter = new TicketOverviewAdapter(ticketOverviewList);
             recyclerView.setAdapter(ticketOverviewAdapter);
             if (ticketOverviewAdapter.getItemCount() == 0) {
-                tv.setVisibility(View.VISIBLE);
-            } else tv.setVisibility(View.GONE);
+                empty_view.setVisibility(View.VISIBLE);
+            } else empty_view.setVisibility(View.GONE);
         }
     }
 
-    public class FetchNextPage extends AsyncTask<String, Void, String> {
+    private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchNextPage(Context context) {
@@ -215,7 +257,7 @@ public class ClosedTickets extends Fragment {
             if (result == null)
                 return;
             if (result.equals("all done")) {
-                Toast.makeText(context, "All tickets loaded", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
             ticketOverviewAdapter.notifyDataSetChanged();
@@ -230,12 +272,12 @@ public class ClosedTickets extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

@@ -2,14 +2,17 @@ package co.helpdesk.faveo.pro.backend.api.v1;
 
 import android.util.Log;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.Preference;
 
 /**
- * Created by Sumit
+ * In this class we are basically setting the API
+ * which we need to call ,so when ever we need to call that API we wil create the object for this class.
+ * This class contains all of the API's which we have used in our application.
  */
 public class Helpdesk {
 
@@ -19,7 +22,8 @@ public class Helpdesk {
 
     public Helpdesk() {
         apiKey = Constants.API_KEY;
-        token = Preference.getToken();
+        token = Prefs.getString("TOKEN", "");
+        //token = Preference.getToken();
         IP = null;
     }
 
@@ -29,7 +33,7 @@ public class Helpdesk {
     }
 
     public String postCreateTicket(int userID, String subject, String body, int helpTopic,
-                                   int sla, int priority, int dept, String fname, String lname, String phone, String email, String code) {
+                                   int priority, String fname, String lname, String phone, String email, String code, String mobile) {
         Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
@@ -37,13 +41,14 @@ public class Helpdesk {
                 "&subject=" + subject +
                 "&body=" + body +
                 "&helptopic=" + helpTopic +
-                "&sla=" + sla +
+                // "&sla=" + sla +
                 "&priority=" + priority +
-                "&dept=" + dept +
+                //"&dept=" + dept +
                 "&first_name=" + fname +
                 "&last_name=" + lname +
                 "&phone=" + phone +
                 "&code=" + code +
+                "&mobile=" + mobile +
                 "&email=" + email +
                 "&token=" + token);
 
@@ -54,12 +59,13 @@ public class Helpdesk {
                 "&subject=" + subject +
                 "&body=" + body +
                 "&helptopic=" + helpTopic +
-                "&sla=" + sla +
+                // "&sla=" + sla +
                 "&priority=" + priority +
-                "&dept=" + dept +
+                // "&dept=" + dept +
                 "&first_name=" + fname +
                 "&last_name=" + lname +
                 "&phone=" + phone +
+                "&mobile=" + mobile +
                 "&code=" + code +
                 "&email=" + email +
                 "&token=" + token, null);
@@ -72,17 +78,56 @@ public class Helpdesk {
                     "&subject=" + subject +
                     "&body=" + body +
                     "&helptopic=" + helpTopic +
-                    "&sla=" + sla +
+                    // "&sla=" + sla +
                     "&priority=" + priority +
-                    "&dept=" + dept +
+                    //  "&dept=" + dept +
                     "&first_name=" + fname +
                     "&last_name=" + lname +
                     "&phone=" + phone +
+                    "&mobile=" + mobile +
                     "&code=" + code +
                     "&email=" + email +
                     "&token=" + token, null);
         return result;
     }
+
+//    public String postCreateTicket(int userID, String subject, String body, int helpTopic,
+//                                   int priority,) {
+//        Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
+//                "&ip=" + IP +
+//                "&subject=" + subject +
+//                "&body=" + body +
+//                "&user_id=" + userID +
+//                "&helptopic=" + helpTopic +
+//                "&sla=" + sla +
+//                "&priority=" + priority +
+//                "&dept=" + dept +
+//                "&token=" + token);
+//
+//        String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/create?" +
+//                "&ip=" + IP +
+//                "&subject=" + subject +
+//                "&user_id=" + userID +
+//                "&body=" + body +
+//                "&helptopic=" + helpTopic +
+//                "&sla=" + sla +
+//                "&priority=" + priority +
+//                "&dept=" + dept +
+//                "&token=" + token, null);
+//
+//        if (result != null && result.equals("tokenRefreshed"))
+//            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/create?" +
+//                    "&ip=" + IP +
+//                    "&subject=" + subject +
+//                    "&user_id=" + userID +
+//                    "&body=" + body +
+//                    "&helptopic=" + helpTopic +
+//                    "&sla=" + sla +
+//                    "&priority=" + priority +
+//                    "&dept=" + dept +
+//                    "&token=" + token, null);
+//        return result;
+//    }
 
     public String postCreateInternalNote(int ticketID, int userID, String note) {
         Log.d("CreateInternalNoteAPI", Constants.URL + "helpdesk/internal-note?" +
@@ -110,20 +155,20 @@ public class Helpdesk {
         return result;
     }
 
-    public String postReplyTicket(int ticketID, String cc, String replyContent) {
+    public String postReplyTicket(int ticketID, String replyContent) {
         Log.d("ReplyTicketAPI", Constants.URL + "helpdesk/reply?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_ID=" + ticketID +
-                "&cc=" + cc +
+
                 "&reply_content=" + replyContent);
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/reply?" +
                         "api_key=" + apiKey +
                         "&ip=" + IP +
                         "&token=" + token +
                         "&ticket_ID=" + ticketID +
-                        "&cc=" + cc +
+
                         "&reply_content=" + replyContent,
                 null);
         if (result != null && result.equals("tokenRefreshed"))
@@ -132,36 +177,35 @@ public class Helpdesk {
                     "&ip=" + IP +
                     "&token=" + token +
                     "&ticket_ID=" + ticketID +
-                    "&cc=" + cc +
+
                     "&reply_content=" + replyContent, null);
         return result;
     }
 
 
-    public String postEditTicket(int ticketID, String subject, int slaPlan, int helpTopic,
-                                 int ticketSource, int ticketPriority, int ticketStatus) {
+    public String postEditTicket(int ticketID, String subject, int helpTopic,
+                                 int ticketSource, int ticketPriority, int ticketType) {
         Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
                 "&subject=" + subject +
-                "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
                 "&ticket_priority=" + ticketPriority +
-                "&status=" + ticketStatus);
+                "&ticket_type=" + ticketType
+        );
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
                 "&subject=" + subject +
-                "&sla_plan=" + slaPlan +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
                 "&ticket_priority=" + ticketPriority +
-                "&status=" + ticketStatus, null);
+                "&ticket_type=" + ticketType, null);
 
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
@@ -170,11 +214,10 @@ public class Helpdesk {
                     "&token=" + token +
                     "&ticket_id=" + ticketID +
                     "&subject=" + subject +
-                    "&sla_plan=" + slaPlan +
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
                     "&ticket_priority=" + ticketPriority +
-                    "&status=" + ticketStatus, null);
+                    "&ticket_type=" + ticketType, null);
         return result;
     }
 
@@ -367,6 +410,16 @@ public class Helpdesk {
         return result;
     }
 
+    // helpdesk/get-tickets?departments=All&show=inbox&api=1
+
+    public String getInboxTicket2() {
+        Log.d("InboxTicketAPI", Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
+        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
+        return result;
+    }
+
     public String getTrashTickets() {
         Log.d("TrashTicketsAPI", Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
         String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
@@ -385,6 +438,7 @@ public class Helpdesk {
             return new HTTPConnection().HTTPResponseGet(URL + "&api_key=" + apiKey + "&token=" + token);
         return result;
     }
+
     public String nextPageURL(String URL, String userID) {
 
         Log.d("nextPageURLAPI", URL + "&api_key=" + apiKey + "&token=" + token + "&user_id=" + userID);
@@ -393,6 +447,7 @@ public class Helpdesk {
             return new HTTPConnection().HTTPResponseGet(URL + "&api_key=" + apiKey + "&token=" + token + "&user_id=" + userID);
         return result;
     }
+
     public String getMyTickets(String userID) {
         Log.d("MyTicketsAPI", Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
         String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
@@ -420,8 +475,25 @@ public class Helpdesk {
     public String getDependency() {
         Log.d("DependencyAPI", Constants.URL + "helpdesk/dependency?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
         String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/dependency?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        if (result != null && result.equals("tokenRefreshed"))
+        if (result != null && result.equals("tokenRefreshed")) {
             return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/dependency?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        }
+        return result;
+    }
+
+    public String getNotifications() {
+        Log.d("NotificationsAPI", Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        return result;
+    }
+
+    public String postSeenNotifications(int ticketID) {
+        Log.d("Noti-seenAPI", Constants.URL + "helpdesk/notifications-seen?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&=notification_id" + ticketID);
+        String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/notifications-seen?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&notification_id=" + ticketID, null);
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/notifications-seen?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&notification_id=" + ticketID, null);
         return result;
     }
 

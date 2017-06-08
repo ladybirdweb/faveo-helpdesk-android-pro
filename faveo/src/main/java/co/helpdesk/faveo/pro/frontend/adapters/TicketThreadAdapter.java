@@ -8,15 +8,19 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.github.curioustechizen.ago.RelativeTimeTextView;
-import com.makeramen.roundedimageview.RoundedImageView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.loader.PicassoLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.model.TicketThread;
 
+/**
+ * This adapter is for the conversation page in the ticket detail page.
+ */
 public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapter.TicketViewHolder> {
     private List<TicketThread> ticketThreadList;
 
@@ -34,27 +38,29 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         TicketThread ticketThread = ticketThreadList.get(i);
         ticketViewHolder.textViewClientName.setText(ticketThread.clientName);
         ticketViewHolder.textViewMessageTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
-        ticketViewHolder.textViewMessageTitle.setText(ticketThread.messageTitle);
+        //ticketViewHolder.textViewMessageTitle.setText(ticketThread.messageTitle);
         //ticketViewHolder.textViewMessage.setText(Html.fromHtml(ticketThread.message));
-        ticketViewHolder.webView.loadDataWithBaseURL(null, ticketThread.message, "text/html", "utf-8", null);
+        ticketViewHolder.webView.loadDataWithBaseURL(null, ticketThread.message.replaceAll("\\n", "<br/>"), "text/html", "UTF-8", null);
 
-        if (ticketThread.clientPicture != null && ticketThread.clientPicture.trim().length() != 0)
-            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
-                    .load(ticketThread.clientPicture)
-                    .resize(96, 96)
-                    .centerCrop()
-                    .placeholder(R.drawable.default_pic)
-                    .error(R.drawable.default_pic)
-                    .into(ticketViewHolder.roundedImageViewProfilePic);
+        IImageLoader imageLoader = new PicassoLoader();
+        imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketThread.clientPicture, ticketThread.placeholder);
+//        if (ticketThread.clientPicture != null && ticketThread.clientPicture.trim().length() != 0)
+//            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
+//                    .load(ticketThread.clientPicture)
+//                    .resize(96, 96)
+//                    .centerCrop()
+//                    .placeholder(R.drawable.default_pic)
+//                    .error(R.drawable.default_pic)
+//                    .into(ticketViewHolder.roundedImageViewProfilePic);
 
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ticketViewHolder.textViewMessageTitle.getVisibility() == View.GONE) {
-                    ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
+                if (ticketViewHolder.webView.getVisibility() == View.GONE) {
+                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
                     ticketViewHolder.webView.setVisibility(View.VISIBLE);
                 } else {
-                    ticketViewHolder.textViewMessageTitle.setVisibility(View.GONE);
+                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.GONE);
                     ticketViewHolder.webView.setVisibility(View.GONE);
                 }
             }
@@ -75,19 +81,19 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 
     static class TicketViewHolder extends RecyclerView.ViewHolder {
 
-        protected View thread;
-        protected RoundedImageView roundedImageViewProfilePic;
-        protected TextView textViewClientName;
-        protected RelativeTimeTextView textViewMessageTime;
-        protected TextView textViewMessageTitle;
+        View thread;
+        AvatarView roundedImageViewProfilePic;
+        TextView textViewClientName;
+        RelativeTimeTextView textViewMessageTime;
+        TextView textViewMessageTitle;
         //  protected TextView textViewMessage;
-        protected TextView textViewType;
-        protected WebView webView;
+        TextView textViewType;
+        WebView webView;
 
-        public TicketViewHolder(View v) {
+        TicketViewHolder(View v) {
             super(v);
             thread = v.findViewById(R.id.thread);
-            roundedImageViewProfilePic = (RoundedImageView) v.findViewById(R.id.imageView_default_profile);
+            roundedImageViewProfilePic = (AvatarView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewMessageTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
             textViewMessageTitle = (TextView) v.findViewById(R.id.textView_client_message_title);

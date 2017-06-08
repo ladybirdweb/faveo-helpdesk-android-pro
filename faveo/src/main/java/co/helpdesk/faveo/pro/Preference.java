@@ -3,283 +3,176 @@ package co.helpdesk.faveo.pro;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by sumit on 2/7/2016.
- */
+import org.jetbrains.annotations.Contract;
+
 public class Preference {
 
-
-    private static boolean crashReport;
-
-    public static Context applicationContext;
-
-//    private static boolean fetchDependency;
-
-//    public static boolean isFetchDependency() {
+//    private static Context applicationContext;
+//    // private static SharedPreferences pref;
+//    //private SharedPreferences.Editor editor;
+//
+//    private static boolean crashReport;
+//
+////    private static Preference instance;
+//
+////    private Preference() {
+////    }
+//
+////    public static void setDependencyObject(JSONObject modal, String key) {
+////
+////        SharedPreferences.Editor prefsEditor = pref.edit();
+//////        Gson gson = new Gson();
+//////        String jsonObject = gson.toJson(modal);
+////        prefsEditor.putString(key, modal.toString());
+////        prefsEditor.apply();
+////
+////    }
+////
+////    public static JSONObject getDependencyObject(String key) throws JSONException {
+////
+////        String json = pref.getString(key, null);
+////        //        Gson gson = new Gson();
+//////        Dependency selectedUser = gson.fromJson(json, Dependency.class);
+////        return new JSONObject(json);
+////    }
+//
+////    public static synchronized void setInstance(Context context) {
+////        if (pref == null)
+////            pref = context.getSharedPreferences("faveo", Context.MODE_PRIVATE);
+////    }
+//
+//    public static String getFCMtoken() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getBoolean("FETCHDEPENDENCY", false);
+//        return prefs.getString("FCMtoken", null);
 //    }
 //
-//    public static void setFetchDependency(boolean fetchDependency) {
+//    public static void setFCMtoken(String FCMtoken) {
 //        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putBoolean("FETCHDEPENDENCY", fetchDependency);
+//        authenticationEditor.putString("FCMtoken", FCMtoken);
 //        authenticationEditor.apply();
 //    }
-
-
-    public static String getFCMtoken() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("FCMtoken", null);
-    }
-
-    public static void setFCMtoken(String FCMtoken) {
-        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-        authenticationEditor.putString("FCMtoken", FCMtoken);
-        authenticationEditor.apply();
-
-    }
-
-
-    public Preference(Context applicationContext) {
-        Preference.applicationContext = applicationContext;
-    }
-
-    public static String getToken() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("TOKEN", null);
-    }
-
-    public static String getUsername() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("USERNAME", null);
-    }
-
-    public static String getPassword() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("PASSWORD", null);
-    }
-
-    public static String getUserID() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("ID", null);
-    }
-
-    public static void setToken(String token) {
-        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-        authenticationEditor.putString("TOKEN", token);
-        authenticationEditor.apply();
-    }
-
-    public static void setCompanyURL(String companyURL) {
-        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-        authenticationEditor.putString("COMPANY_URL", companyURL);
-        authenticationEditor.apply();
-    }
-
-    public static String getCompanyURL() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getString("COMPANY_URL", null);
-    }
-
-    public static boolean isCrashReport() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-        return prefs.getBoolean("CRASH_REPORT", true);
-    }
-
-    public static void setCrashReport(boolean crashReport) {
-        Preference.crashReport = crashReport;
-    }
-
-//    public static String getKeyDept() {
+//
+////    public static Preference getInstance() {
+////        if (instance == null) {
+////            instance = new Preference();
+////            return instance;
+////        }
+////        return instance;
+////    }
+//
+//    public Preference(Context applicationContext) {
+//        Preference.applicationContext = applicationContext;
+////        pref = applicationContext.getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
+////        editor = pref.edit();
+//    }
+//
+////    public static String getToken() {
+////        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
+////        return prefs.getString("TOKEN", null);
+////    }
+//
+//    public static String getUsername() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYDEPT", null);
+//        return prefs.getString("USERNAME", null);
 //    }
 //
-//    public static void setKeyDept(String keyDept) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYDEPT", keyDept);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getValueDept() {
+//    public static String getPassword() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUEDEPT", null);
+//        return prefs.getString("PASSWORD", null);
 //    }
 //
-//    public static void setValueDept(String valueDept) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUEDEPT", valueDept);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getKeySLA() {
+//    public static String getUserID() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYSLA", null);
+//        return prefs.getString("ID", null);
 //    }
 //
-//    public static void setKeySLA(String keySLA) {
+////    public static void setToken(String token) {
+////        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
+////        authenticationEditor.putString("TOKEN", token);
+////        authenticationEditor.apply();
+////    }
+//
+//    public static void setCompanyURL(String companyURL) {
 //        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYSLA", keySLA);
+//        authenticationEditor.putString("COMPANY_URL", companyURL);
 //        authenticationEditor.apply();
-//
 //    }
 //
-//    public static String getKeyStaff() {
+//    public static String getCompanyURL() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYSTAFF", null);
+//        return prefs.getString("COMPANY_URL", null);
 //    }
 //
-//    public static void setKeyStaff(String keyStaff) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYSTAFF", keyStaff);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getValueSLA() {
+//    public static boolean isCrashReport() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUESLA", null);
+//        return prefs.getBoolean("CRASH_REPORT", true);
 //    }
 //
-//    public static void setValueSLA(String valueSLA) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUESLA", valueSLA);
-//        authenticationEditor.apply();
-//
+//    public static void setCrashReport(boolean crashReport) {
+//        Preference.crashReport = crashReport;
 //    }
 //
-//    public static String getValueStaff() {
+//    @Contract(" -> !null")
+//    public static String getInboxTickets() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUESTAFF", null);
+//        return prefs.getString("inboxTickets", "-");
 //    }
 //
-//    public static void setValueStaff(String valueStaff) {
+//    public static void setInboxTickets(String inboxTickets) {
 //        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUESTAFF", valueStaff);
+//        authenticationEditor.putString("inboxTickets", inboxTickets);
 //        authenticationEditor.apply();
-//
 //    }
 //
-//    public static String getKeyTeam() {
+//    @Contract(" -> !null")
+//    public static String getMyTickets() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYTEAM", null);
+//        return prefs.getString("myTickets", "-");
 //    }
 //
-//    public static void setKeyTeam(String keyTeam) {
+//    public static void setMyTickets(String myTickets) {
 //        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYTEAM", keyTeam);
+//        authenticationEditor.putString("myTickets", myTickets);
 //        authenticationEditor.apply();
-//
 //    }
 //
-//    public static String getValueTeam() {
+//    @Contract(" -> !null")
+//    public static String getClosedTickets() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUETEAM", null);
+//        return prefs.getString("closedTickets", "-");
 //    }
 //
-//    public static void setValueTeam(String valueTeam) {
+//    public static void setClosedTickets(String closedTickets) {
 //        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUETEAM", valueTeam);
+//        authenticationEditor.putString("closedTickets", closedTickets);
 //        authenticationEditor.apply();
-//
 //    }
 //
-//    public static String getKeyPriority() {
+//    @Contract(" -> !null")
+//    public static String getUnassignedTickets() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYPRIORITY", null);
+//        return prefs.getString("unassignedTickets", "-");
 //    }
 //
-//    public static void setKeyPriority(String keyPriority) {
+//    public static void setUnassignedTickets(String unassignedTickets) {
 //        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYPRIORITY", keyPriority);
+//        authenticationEditor.putString("unassignedTickets", unassignedTickets);
 //        authenticationEditor.apply();
-//
 //    }
 //
-//    public static String getValuePriority() {
+//    @Contract(" -> !null")
+//    public static String getTrashTickets() {
 //        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUEPRIORITY", null);
+//        return prefs.getString("trashTickets", "-");
 //    }
 //
-//    public static void setValuePriority(String valuePriority) {
+//    public static void setTrashTickets(String trashTickets) {
 //        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUEPRIORITY", valuePriority);
+//        authenticationEditor.putString("trashTickets", trashTickets);
 //        authenticationEditor.apply();
-//
-//    }
-
-
-//    public static String getValueSource() {
-//        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUESOURCE", null);
 //    }
 //
-//    public static void setValueSource(String valueSource) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUESOURCE", valueSource);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getKeySource() {
-//        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYSOURCE", null);
-//    }
-//
-//    public static void setKeySource(String keySource) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYSOURCE", keySource);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getValueStatus() {
-//        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUESTATUS", null);
-//    }
-//
-//    public static void setValueStatus(String valueStatus) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUESTATUS", valueStatus);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getKeyStatus() {
-//        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYSTATUS", null);
-//    }
-//
-//    public static void setKeyStatus(String keyStatus) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYSTATUS", keyStatus);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getValueTopic() {
-//        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("VALUETOPIC", null);
-//    }
-//
-//    public static void setValueTopic(String valueTopic) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("VALUETOPIC", valueTopic);
-//        authenticationEditor.apply();
-//
-//    }
-//
-//    public static String getKeyTopic() {
-//        SharedPreferences prefs = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0);
-//        return prefs.getString("KEYTOPIC", null);
-//    }
-//
-//    public static void setKeyTopic(String keyTopic) {
-//        SharedPreferences.Editor authenticationEditor = applicationContext.getSharedPreferences(Constants.PREFERENCE, 0).edit();
-//        authenticationEditor.putString("KEYTOPIC", keyTopic);
-//        authenticationEditor.apply();
-//
-//    }
+////    public static void clearAll() {
+////
+////    }
 }

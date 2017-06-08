@@ -6,14 +6,17 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.greenrobot.eventbus.EventBus;
+
 import co.helpdesk.faveo.pro.FaveoApplication;
+import co.helpdesk.faveo.pro.model.MessageEvent;
 
 /**
  * Created by narendra on 13/06/16.
  */
 public class InternetReceiver extends BroadcastReceiver {
 
-    public static InternetReceiverListener internetReceiverListener;
+    //public static InternetReceiverListener internetReceiverListener;
 
     public InternetReceiver() {
         super();
@@ -27,9 +30,11 @@ public class InternetReceiver extends BroadcastReceiver {
         boolean isConnected = activeNetwork != null
                 && activeNetwork.isConnectedOrConnecting();
 
-        if (internetReceiverListener != null) {
-            internetReceiverListener.onNetworkConnectionChanged(isConnected);
-        }
+        EventBus.getDefault().post(new MessageEvent(isConnected));
+
+//        if (internetReceiverListener != null) {
+//            internetReceiverListener.onNetworkConnectionChanged(isConnected);
+//        }
     }
 
     public static boolean isConnected() {
@@ -41,8 +46,8 @@ public class InternetReceiver extends BroadcastReceiver {
                 && activeNetwork.isConnectedOrConnecting();
     }
 
-    public interface InternetReceiverListener {
-        void onNetworkConnectionChanged(boolean isConnected);
-    }
+//    public interface InternetReceiverListener {
+//        void onNetworkConnectionChanged(boolean isConnected);
+//    }
 
 }

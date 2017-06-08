@@ -1,9 +1,9 @@
 package co.helpdesk.faveo.pro.frontend.fragments;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -32,6 +37,7 @@ import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.ClientOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.ClientOverview;
+import es.dmoral.toasty.Toasty;
 
 public class ClientList extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
@@ -39,14 +45,19 @@ public class ClientList extends Fragment implements View.OnClickListener {
 
     static String nextPageURL = "";
 
-    TextView tv;
-    RecyclerView recyclerView;
+    @BindView(R.id.cardList)
+    ShimmerRecyclerView recyclerView;
 
+    @BindView(R.id.empty_view)
+    TextView empty_view;
+    @BindView(R.id.noiternet_view)
+    TextView noInternet_view;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
     ClientOverviewAdapter clientOverviewAdapter;
     List<ClientOverview> clientOverviewList = new ArrayList<>();
     View rootView;
-    ProgressDialog progressDialog;
-    SwipeRefreshLayout swipeRefresh;
+
 
     private boolean loading = true;
     int pastVisibleItems, visibleItemCount, totalItemCount;
@@ -82,38 +93,43 @@ public class ClientList extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
-            recyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
-            recyclerView.setHasFixedSize(false);
-            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            progressDialog = new ProgressDialog(getContext());
-            progressDialog.setMessage("Fetching clients");
-            if (InternetReceiver.isConnected()) {
-                progressDialog.show();
-                new FetchClients(getActivity()).execute();
-            } else
-                Toast.makeText(getActivity(), "Oops! No internet", Toast.LENGTH_LONG).show();
+            ButterKnife.bind(this, rootView);
 
-            swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefresh);
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+            if (InternetReceiver.isConnected()) {
+                noInternet_view.setVisibility(View.GONE);
+                //swipeRefresh.setRefreshing(true);
+                new FetchClients(getActivity()).execute();
+            } else {
+                noInternet_view.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+                empty_view.setVisibility(View.GONE);
+            }
+
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     if (InternetReceiver.isConnected()) {
+                        loading = true;
+                        recyclerView.setVisibility(View.VISIBLE);
+                        noInternet_view.setVisibility(View.GONE);
                         new FetchClients(getActivity()).execute();
-                    } else
-                        Toast.makeText(getActivity(), "Oops! No internet", Toast.LENGTH_LONG).show();
+                    } else {
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        swipeRefresh.setRefreshing(false);
+                        empty_view.setVisibility(View.GONE);
+                        noInternet_view.setVisibility(View.VISIBLE);
+                    }
                 }
             });
-            tv = (TextView) rootView.findViewById(R.id.empty_view);
-            tv.setText("No Clients!");
+
+            empty_view.setText(R.string.no_clients);
         }
-        ((MainActivity) getActivity()).setActionBarTitle("Client list");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.client_list));
         return rootView;
     }
 
-    public class FetchClients extends AsyncTask<String, Void, String> {
+    private class FetchClients extends AsyncTask<String, Void, String> {
         Context context;
 
         FetchClients(Context context) {
@@ -145,18 +161,17 @@ public class ClientList extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String result) {
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
+
             if (result == null) {
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             if (result.equals("all done")) {
 
-                Toast.makeText(context, "All Done!", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 //return;
             }
-            recyclerView = (RecyclerView) rootView.findViewById(R.id.cardList);
+            // recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
             recyclerView.setHasFixedSize(false);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -172,7 +187,15 @@ public class ClientList extends Fragment implements View.OnClickListener {
                             if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                                 loading = false;
                                 new FetchNextPage(getActivity()).execute();
-                                Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+
+                                StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
+                                st.setBackgroundColor(Color.parseColor("#3da6d7"));
+                                st.setTextColor(Color.WHITE);
+                                st.setIcon(R.drawable.ic_autorenew_black_24dp);
+                                st.spinIcon();
+                                st.setMaxAlpha();
+                                st.show();
                             }
                         }
                     }
@@ -181,15 +204,15 @@ public class ClientList extends Fragment implements View.OnClickListener {
             clientOverviewAdapter = new ClientOverviewAdapter(clientOverviewList);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
-                tv.setVisibility(View.VISIBLE);
-            } else tv.setVisibility(View.GONE);
+                empty_view.setVisibility(View.VISIBLE);
+            } else empty_view.setVisibility(View.GONE);
         }
     }
 
-    public class FetchNextPage extends AsyncTask<String, Void, String> {
+    private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
-       FetchNextPage(Context context) {
+        FetchNextPage(Context context) {
             this.context = context;
         }
 
@@ -221,7 +244,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
             if (result == null)
                 return;
             if (result.equals("all done")) {
-                Toast.makeText(context, "All tickets loaded", Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
             clientOverviewAdapter.notifyDataSetChanged();
@@ -236,12 +259,12 @@ public class ClientList extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
@@ -250,7 +273,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        nextPageURL="";
+        nextPageURL = "";
     }
 
     @Override
@@ -258,7 +281,15 @@ public class ClientList extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.client4:
                 Intent intent = new Intent(getActivity(), ClientDetailActivity.class);
-                startActivity(intent);
+                View sharedView = v.findViewById(R.id.imageView_default_profile);
+                String transitionName = getString(R.string.blue_name);
+
+                ActivityOptions transitionActivityOptions = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(getActivity(), sharedView, transitionName);
+                    startActivity(intent, transitionActivityOptions.toBundle());
+                } else startActivity(intent);
+
                 break;
         }
     }

@@ -3,6 +3,8 @@ package co.helpdesk.faveo.pro.backend.api.v1;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,12 +22,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.Preference;
 
 /**
  * Created by Sumit
  */
-public class HTTPConnection {
+class HTTPConnection {
 
     HTTPConnection() {
 
@@ -37,8 +38,7 @@ public class HTTPConnection {
     private InputStream is = null;
     private URL url;
 
-    public String HTTPResponsePost(String stringURL, String parameters) {
-
+    String HTTPResponsePost(String stringURL, String parameters) {
 
         try {
             url = new URL(stringURL);
@@ -60,8 +60,34 @@ public class HTTPConnection {
             outputStream.close();
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Log.d("HTTP Error", "http response code is " + connection.getResponseCode());
-                return null;
+                String ret = null;
+                switch (connection.getResponseCode()) {
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        Log.e("Response code: ", "NotFound-404!");
+                        //ret = "notFound";
+                        break;
+                    case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+                        Log.e("Response code: ", "Timeout!");
+                       // ret = "timeout";
+                        break;
+                    case HttpURLConnection.HTTP_UNAVAILABLE:
+                        Log.e("Response code: ", "Unavailable!");
+                       // ret = "unavailable";
+                        break;// retry, server is unstable
+                    case HttpURLConnection.HTTP_BAD_REQUEST:
+                        Log.e("Response code: ", "BadRequest!");
+                        if (refreshToken() == null)
+                            return null;
+                        new Helpdesk();
+                        new Authenticate();
+                        ret = "tokenRefreshed";
+                        break;
+                    default:
+
+                        break; // abort
+                }
+
+                return ret;
             }
 
             is = connection.getInputStream();
@@ -94,7 +120,7 @@ public class HTTPConnection {
             return null;
 
         String input = sb.toString();
-        if (input.contains("token_expired")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();
@@ -152,7 +178,7 @@ public class HTTPConnection {
             return null;
 
         String input = sb.toString();
-        if (input.contains("token_expired")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();
@@ -162,18 +188,56 @@ public class HTTPConnection {
         return sb.toString();
     }
 
-    public String HTTPResponseGet(String stringURL) {
+    String HTTPResponseGet(String stringURL) {
         try {
             url = new URL(stringURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Offer-type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
-            is = connection.getInputStream();
-            connection.getResponseCode();
             Log.e("Response Codee", connection.getResponseCode() + "");
+
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                String ret = null;
+                switch (connection.getResponseCode()) {
+                    case HttpURLConnection.HTTP_UNAUTHORIZED:
+                        Log.e("Response code: ", "401-UNAUTHORIZED!");
+                        ret="HTTP_UNAUTHORIZED";
+                        break;
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        Log.e("Response code: ", "404-NOT_FOUND!");
+                        ret="HTTP_NOT_FOUND";
+                        break;
+                    case HttpURLConnection.HTTP_INTERNAL_ERROR:
+                        Log.e("Response code: ", "500-INTERNAL_ERROR!");
+                        ret="HTTP_INTERNAL_ERROR";
+                        break;
+                    case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+                        Log.e("Response code: ", "504-Timeout!");
+                        ret="HTTP_GATEWAY_TIMEOUT";
+                        break;// retry
+                    case HttpURLConnection.HTTP_UNAVAILABLE:
+                        Log.e("Response code: ", "503-Unavailable!");
+                        ret="HTTP_UNAVAILABLE";
+                        break;// retry, server is unstable
+                    case HttpURLConnection.HTTP_BAD_REQUEST:
+                        Log.e("Response code: ", "400-BadRequest!");
+                        if (refreshToken() == null)
+                            return null;
+                        new Helpdesk();
+                        new Authenticate();
+                        ret = "token Refreshed";
+                        break;
+                    default:
+
+                        break; // abort
+                }
+                return ret;
+            }
+            is = connection.getInputStream();
+
         } catch (IOException e) {
 
             if (e.getMessage().contains("No authentication challenges found")) {
@@ -207,7 +271,7 @@ public class HTTPConnection {
 
         String input = sb.toString();
         Log.e("input", "" + input);
-        if (input.contains("token_expired")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")|| input.contains("token_not_provided")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();
@@ -218,13 +282,14 @@ public class HTTPConnection {
     }
 
     private String refreshToken() {
-        String result = new Authenticate().postAuthenticateUser(Preference.getUsername(), Preference.getPassword());
+        String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
         if (result == null)
             return null;
         try {
             JSONObject jsonObject = new JSONObject(result);
             String token = jsonObject.getString("token");
-            Preference.setToken(token);
+            Prefs.putString("TOKEN", token);
+            // Preference.setToken(token);
             Authenticate.token = token;
             Helpdesk.token = token;
         } catch (JSONException e) {

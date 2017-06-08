@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.adapters;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,9 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.model.TicketGlimpse;
 
+/**
+ * This adapter is for the Open/Close page in the client detail page.
+ */
 public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdapter.TicketViewHolder> {
     private List<TicketGlimpse> ticketGlimpseList;
     private final String clientName;
@@ -33,6 +37,10 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         ticketViewHolder.textViewTicketID.setText(ticketGlimpse.ticketID + "");
         ticketViewHolder.textViewTicketNumber.setText(ticketGlimpse.ticketNumber);
         ticketViewHolder.textViewSubject.setText(ticketGlimpse.ticketSubject);
+        if (ticketGlimpse.isTicketOpen)
+            ticketViewHolder.color.setBackgroundColor(Color.parseColor("#4CD964"));
+        else
+            ticketViewHolder.color.setBackgroundColor(Color.parseColor("#d50000"));
     }
 
     @Override
@@ -48,13 +56,14 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         TextView textViewTicketID;
         TextView textViewTicketNumber;
         TextView textViewSubject;
+        View color;
 
         TicketViewHolder(View v, final String clientName) {
             super(v);
             textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
             textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
             textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
-
+            color = v.findViewById(R.id.color);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

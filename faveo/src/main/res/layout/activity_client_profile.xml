@@ -1,154 +1,166 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".frontend.activities.ClientDetailActivity">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorAccent"
-        android:orientation="vertical"
-        tools:context=".pro.frontend.activities.ClientDetailActivity">
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppThemeOverlay.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" >
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <TextView
-                android:id="@+id/title"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_gravity="center"
-                android:textColor="@color/black"
-                android:text="PROFILE"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-
-        </android.support.v7.widget.Toolbar>
-
-        <RelativeLayout
-            android:id="@+id/client4"
-            android:padding="8dp"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent" >
-
-            <com.makeramen.roundedimageview.RoundedImageView
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/imageView_default_profile"
-                android:src="@drawable/default_pic"
-                app:riv_corner_radius="30dip"
-                app:riv_mutate_background="true"
-                app:riv_tile_mode="repeat"
-                app:riv_oval="true"
-                android:layout_width="64dp"
-                android:layout_centerVertical="true"
-                android:layout_height="64dp" />
-
-            <TextView
-                android:id="@+id/textView_client_name"
-                android:layout_toRightOf="@+id/imageView_default_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
-                android:text="Karthik Sen"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:layout_centerHorizontal="true"
-                android:singleLine="true"
-                android:fontFamily="sans-serif-bold" />
-
-            <TextView
-                android:drawableLeft="@drawable/email"
-                android:drawablePadding="8dp"
-                android:id="@+id/textView_client_email"
-                android:layout_below="@+id/textView_client_name"
-                android:layout_toRightOf="@+id/imageView_default_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="8dp"
-                android:text="karthiksen@ladybirdweb.com"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:layout_centerHorizontal="true"
-                android:singleLine="true"
-                android:alpha=".54"
-                android:fontFamily="sans-serif-medium"/>
-
-            <TextView
-                android:drawableLeft="@drawable/phone"
-                android:drawablePadding="8dp"
-                android:id="@+id/textView_client_phone"
-                android:layout_below="@+id/textView_client_email"
-                android:layout_toRightOf="@+id/imageView_default_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="18dp"
-                android:text="9876543210"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:layout_centerHorizontal="true"
-                android:singleLine="true"
-                android:alpha=".54"
-                android:fontFamily="sans-serif-medium"/>
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/textView_client_company"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="LADY WEB SOLUTION"
-                android:textStyle="bold"
-                android:alpha="0.3"/>
-
-            <TextView
-                android:id="@+id/textView_client_status"
-                android:gravity="right"
-                android:textColor="@color/black"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="STATUS"
-                android:textStyle="bold"
-                android:alpha="0.3"/>
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/AppThemeOverlay.ActionBar">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:text="@string/profile"
+                        android:textColor="@color/faveo"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </android.support.v7.widget.Toolbar>
+
+                <RelativeLayout
+                    android:id="@+id/client4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <agency.tango.android.avatarview.views.AvatarView
+                        android:id="@+id/imageView_default_profile"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/default_pic"
+                        android:transitionName="@string/blue_name"
+                        app:av_border_color="@color/faveo"
+                        app:av_border_width="2dp"
+                        app:av_text_size_percentage="35" />
+
+                    <TextView
+                        android:id="@+id/textView_client_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imageView_default_profile"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="sans-serif-bold"
+                        android:maxLines="1"
+                        android:text="@string/dummy_name"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/textView_client_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView_client_name"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:alpha=".54"
+                        android:drawableLeft="@drawable/email"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:text="@string/dummy_mail_id"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textView_client_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView_client_email"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:alpha=".54"
+                        android:drawableLeft="@drawable/phone"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:text="@string/dummy_num"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="4dp">
+
+                    <TextView
+                        android:id="@+id/textView_client_company"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.3"
+                        android:text="@string/company"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView_client_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.3"
+                        android:gravity="end"
+                        android:text="@string/status"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/blue"
-            app:tabMode="fixed"
-            app:tabGravity="fill"/>
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/faveo"
+            app:tabMode="fixed" />
+    </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
-
-    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

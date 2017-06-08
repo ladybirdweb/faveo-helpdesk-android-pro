@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="4dp"
-            android:theme="@style/MyMaterialTheme.AppBarOverlay">
+            android:theme="@style/AppThemeOverlay.ActionBar">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -28,46 +28,22 @@
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/MyMaterialTheme.PopupOverlay">
+                app:popupTheme="@style/AppThemeOverlay.ActionBar">
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="INBOX"
+                    android:text="@string/inbox"
                     android:textColor="@color/theme"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <!--<LinearLayout-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:id="@+id/button_create_ticket"-->
-                    <!--android:layout_width="?attr/actionBarSize"-->
-                    <!--android:layout_height="?attr/actionBarSize"-->
-                    <!--android:layout_gravity="right"-->
-                    <!--android:visibility="gone">-->
-
-                    <!--<ImageView-->
-                        <!--android:id="@+id/add_icon11"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_centerInParent="true"-->
-                        <!--android:background="@color/transparent"-->
-                        <!--android:src="@drawable/l" />-->
-
-                    <!--<ImageView-->
-                        <!--android:id="@+id/notify_icon11"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_centerInParent="true"-->
-                        <!--android:background="@color/transparent"-->
-                        <!--android:src="@drawable/ic_notifications_black_24dp" />-->
-
-                <!--</LinearLayout>-->
-
             </android.support.v7.widget.Toolbar>
 
+            <!--<include layout="@layout/sort" />-->
         </android.support.design.widget.AppBarLayout>
+
 
         <include layout="@layout/content_main" />
 

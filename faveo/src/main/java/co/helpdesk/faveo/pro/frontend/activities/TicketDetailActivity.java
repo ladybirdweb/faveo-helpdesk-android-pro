@@ -2,7 +2,7 @@ package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,9 +29,11 @@ import android.widget.Toast;
 
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
+import com.pixplicity.easyprefs.library.Prefs;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -38,22 +41,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.Fab;
-import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
-import co.helpdesk.faveo.pro.model.TicketThread;
+import co.helpdesk.faveo.pro.frontend.views.Fab;
+import co.helpdesk.faveo.pro.model.MessageEvent;
+import es.dmoral.toasty.Toasty;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
-
+/**
+ * This splash activity is responsible for
+ * getting the metadata of our faveo application from the dependency API.
+ */
 public class TicketDetailActivity extends AppCompatActivity implements
         Conversation.OnFragmentInteractionListener,
-        Detail.OnFragmentInteractionListener, InternetReceiver.InternetReceiverListener {
+        Detail.OnFragmentInteractionListener {
 
     ViewPager viewPager;
     ViewPagerAdapter adapter;
@@ -69,11 +75,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
     Button buttonCreate, buttonSend;
     ProgressDialog progressDialog;
     private int statusBarColor;
-
     public static String ticketID;
-    public static String ticketNumber;
-    public static String ticketOpenedBy;
-    public static String ticketSubject;
+//    public static String ticketNumber;
+//    public static String ticketOpenedBy;
+//    public static String ticketSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,18 +87,19 @@ public class TicketDetailActivity extends AppCompatActivity implements
         setupFab();
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-        ticketID = getIntent().getStringExtra("ticket_id");
-        ticketNumber = getIntent().getStringExtra("ticket_number");
-        ticketOpenedBy = getIntent().getStringExtra("ticket_opened_by");
-        ticketSubject = getIntent().getStringExtra("ticket_subject");
-        TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
-        mTitle.setText(ticketNumber == null ? "Unknown" : ticketNumber);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        Constants.URL = Prefs.getString("COMPANY_URL", "");
+        ticketID = getIntent().getStringExtra("ticket_id");
+        //ticketNumber = getIntent().getStringExtra("ticket_number");
+        // ticketOpenedBy = getIntent().getStringExtra("ticket_opened_by");
+        //ticketSubject = getIntent().getStringExtra("ticket_subject");
+//         TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
+//        mTitle.setText(ticketNumber == null ? "Unknown" : ticketNumber);
+        //getSupportActionBar().setTitle(ticketNumber == null ? "NotificationThread" : ticketNumber);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         setupViewPager();
@@ -107,16 +113,18 @@ public class TicketDetailActivity extends AppCompatActivity implements
         buttonCreate = (Button) findViewById(R.id.button_create);
         buttonSend = (Button) findViewById(R.id.button_send);
 
+        /*
+          This button is for creating the internal note.
+         */
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String note = editTextInternalNote.getText().toString();
                 if (note.trim().length() == 0) {
-                    Toast.makeText(TicketDetailActivity.this, "Empty message", Toast.LENGTH_LONG).show();
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
                     return;
                 }
-                SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, 0);
-                String userID = prefs.getString("ID", "");
+                String userID = Prefs.getString("ID", null);
                 if (userID != null && userID.length() != 0) {
                     try {
                         note = URLEncoder.encode(note, "utf-8");
@@ -125,21 +133,26 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     }
 
                     new CreateInternalNote(Integer.parseInt(ticketID), Integer.parseInt(userID), note).execute();
-                    progressDialog.setMessage("Creating note");
+                    progressDialog.setMessage(getString(R.string.creating_note));
                     progressDialog.show();
 
+
                 } else
-                    Toast.makeText(TicketDetailActivity.this, "Wrong userID", Toast.LENGTH_LONG).show();
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
             }
         });
 
+        /*
+          This button is for getting the cc from the reply option
+          here we are handling multiple cc items.
+         */
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String cc = editTextCC.getText().toString();
                 String replyMessage = editTextReplyMessage.getText().toString();
                 if (replyMessage.trim().length() == 0) {
-                    Toast.makeText(TicketDetailActivity.this, "Empty message", Toast.LENGTH_LONG).show();
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -148,27 +161,27 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     String[] multipleEmails = cc.split(",");
                     for (String email : multipleEmails) {
                         if (email.length() > 0 && !Helper.isValidEmail(email)) {
-                            Toast.makeText(TicketDetailActivity.this, "Invalid CC", Toast.LENGTH_LONG).show();
+                            Toasty.warning(TicketDetailActivity.this, getString(R.string.invalid_cc), Toast.LENGTH_LONG).show();
                             return;
                         }
                     }
                 }
 
-                SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, 0);
-                String userID = prefs.getString("ID", "");
+                String userID = Prefs.getString("ID", null);
                 if (userID != null && userID.length() != 0) {
                     try {
                         replyMessage = URLEncoder.encode(replyMessage, "utf-8");
+                        Log.d("Msg", replyMessage);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
 
-                    new ReplyTicket(Integer.parseInt(ticketID), cc, replyMessage).execute();
-                    progressDialog.setMessage("Sending message");
+                    new ReplyTicket(Integer.parseInt(ticketID), replyMessage).execute();
+                    progressDialog.setMessage(getString(R.string.sending_msg));
                     progressDialog.show();
 
                 } else
-                    Toast.makeText(TicketDetailActivity.this, "Wrong userID", Toast.LENGTH_LONG).show();
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -202,10 +215,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         int sheetColor = getResources().getColor(R.color.background_card);
         int fabColor = getResources().getColor(R.color.theme_accent);
 
-        // Create material sheet FAB
+        /**
+         * Create material sheet FAB.
+         */
         materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay1, sheetColor, fabColor);
 
-        // Set material sheet event listener
+        /**
+         * Set material sheet event listener.
+         */
         materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
             @Override
             public void onShowSheet() {
@@ -222,7 +239,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
 
-        // Set material sheet item click listeners
+        /**
+         * Set material sheet item click listeners.
+         */
         findViewById(R.id.fab_sheet_item_reply).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,11 +275,17 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Handling the back button.
+     *
+     * @param item refers to the menu item .
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+            onBackPressed(); // close this activity and return to preview activity (if there is any)
         }
 
         return super.onOptionsItemSelected(item);
@@ -291,7 +316,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         builder.show();
     }
 
-    public class CreateInternalNote extends AsyncTask<String, Void, String> {
+    /**
+     * This API is for creating the internal note.
+     */
+    private class CreateInternalNote extends AsyncTask<String, Void, String> {
         int ticketID;
         int userID;
         String note;
@@ -309,40 +337,55 @@ public class TicketDetailActivity extends AppCompatActivity implements
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
             if (result == null) {
-                Toast.makeText(TicketDetailActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            Toast.makeText(TicketDetailActivity.this, "Internal notes posted", Toast.LENGTH_LONG).show();
+            Toasty.success(TicketDetailActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
+            editTextInternalNote.getText().clear();
             exitReveal();
+
+            Conversation conversation = (Conversation) adapter.getItem(0);
+            if (conversation != null)
+                conversation.refresh();
         }
     }
 
-    public class ReplyTicket extends AsyncTask<String, Void, String> {
+    /**
+     * This API is for replying to the particular ticket.
+     */
+    private class ReplyTicket extends AsyncTask<String, Void, String> {
         int ticketID;
         String cc;
         String replyContent;
 
-        ReplyTicket(int ticketID, String cc, String replyContent) {
+        ReplyTicket(int ticketID, String replyContent) {
             this.ticketID = ticketID;
             this.cc = cc;
             this.replyContent = replyContent;
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postReplyTicket(ticketID, cc, replyContent);
+            return new Helpdesk().postReplyTicket(ticketID, replyContent);
         }
 
         protected void onPostExecute(String result) {
+            Log.d("reply", result + "");
             progressDialog.dismiss();
             if (result == null) {
-                Toast.makeText(TicketDetailActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            Toast.makeText(TicketDetailActivity.this, "Reply posted", Toast.LENGTH_LONG).show();
-            try {
-                TicketThread ticketThread;
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject res = jsonObject.getJSONObject("result");
+            editTextCC.getText().clear();
+            editTextReplyMessage.getText().clear();
+            exitReveal();
+            Toasty.success(TicketDetailActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
+            Conversation conversation = (Conversation) adapter.getItem(0);
+            if (conversation != null)
+                conversation.refresh();
+            // try {
+//                TicketThread ticketThread;
+//                JSONObject jsonObject = new JSONObject(result);
+//                JSONObject res = jsonObject.getJSONObject("result");
 //                String clientPicture = "";
 //                try {
 //                    clientPicture = res.getString("profile_pic");
@@ -355,47 +398,51 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //                } catch (Exception e) {
 //                    e.printStackTrace();
 //                }
-                String clientName = "";
-                try {
-                    clientName = res.getString("first_name") + " " + res.getString("last_name");
-                    if (clientName.equals("") || clientName == null)
-                        clientName = res.getString("user_name");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                String clientName = "";
+//                try {
+//                    clientName = res.getString("first_name") + " " + res.getString("last_name");
+//                    if (clientName.equals("") || clientName == null)
+//                        clientName = res.getString("user_name");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                String messageTime = res.getString("created_at");
+//                String message = res.getString("body");
+//                String isReply = "true";
+//                try {
+//                    isReply = res.getString("is_reply");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+            // ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
+            //ticketThread = new TicketThread(clientName, messageTime, message, isReply);
 
-                String messageTime = res.getString("created_at");
-                String message = res.getString("body");
-                String isReply = "true";
-                try {
-                    isReply = res.getString("is_reply");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                // ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
-                ticketThread = new TicketThread(clientName, messageTime, message, isReply);
-
-                if (fragmentConversation != null) {
-                    exitReveal();
-                    fragmentConversation.addThreadAndUpdate(ticketThread);
-                }
-            } catch (JSONException e) {
-                if (fragmentConversation != null) {
-                    exitReveal();
-                }
-                e.printStackTrace();
-                // Toast.makeText(TicketDetailActivity.this, "Unexpected Error ", Toast.LENGTH_LONG).show();
-            }
+//            if (fragmentConversation != null) {
+//                exitReveal();
+//                //fragmentConversation.addThreadAndUpdate(ticketThread);
+//            }
+//            } catch (JSONException e) {
+//                if (fragmentConversation != null) {
+//                    exitReveal();
+//                }
+//                e.printStackTrace();
+//                // Toast.makeText(TicketDetailActivity.this, "Unexpected Error ", Toast.LENGTH_LONG).show();
+//            }
         }
     }
 
+    /**
+     * Here we are initializing the view pager
+     * for the conversation and detail fragment.
+     */
     private void setupViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         fragmentConversation = new Conversation();
         fragmentDetail = new Detail();
-        adapter.addFragment(fragmentConversation, "CONVERSATION");
-        adapter.addFragment(fragmentDetail, "DETAIL");
+        adapter.addFragment(fragmentConversation, getString(R.string.conversation));
+        adapter.addFragment(fragmentDetail, getString(R.string.detail));
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(onPageChangeListener);
     }
@@ -423,6 +470,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         }
 
+        /**
+         * This method is for controlling the FAB button.
+         * @param position of the FAB button.
+         */
         @Override
         public void onPageSelected(int position) {
             switch (position) {
@@ -447,11 +498,11 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -465,7 +516,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
@@ -476,6 +527,11 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Here we are controlling the FAB reply and internal note option.
+     *
+     * @param type
+     */
     void enterReveal(String type) {
         fab.setVisibility(View.GONE);
         final View myView = findViewById(R.id.reveal);
@@ -544,8 +600,17 @@ public class TicketDetailActivity extends AppCompatActivity implements
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
+    /**
+     * Handling the back button here.
+     */
     @Override
     public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, SplashActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
         if (materialSheetFab.isSheetVisible()) {
             materialSheetFab.hideSheet();
         } else {
@@ -556,11 +621,15 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        else super.onBackPressed();
     }
 
+    /**
+     * While resuming it will check if the internet
+     * is available or not.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         // register connection status listener
-        FaveoApplication.getInstance().setInternetListener(this);
+        // FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
     }
 
@@ -569,10 +638,15 @@ public class TicketDetailActivity extends AppCompatActivity implements
         showSnackIfNoInternet(isConnected);
     }
 
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
             final Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Sorry! Not connected to internet", Snackbar.LENGTH_INDEFINITE);
+                    .make(findViewById(android.R.id.content), R.string.sry_not_connected_to_internet, Snackbar.LENGTH_INDEFINITE);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -588,12 +662,17 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
     private void showSnack(boolean isConnected) {
 
         if (isConnected) {
 
             Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), "Connected to Internet", Snackbar.LENGTH_LONG);
+                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
 
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -605,12 +684,31 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     }
 
-    /**
-     * Callback will be triggered when there is change in
-     * network connection
-     */
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
+    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+
+        showSnack(event.message);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+//    /**
+//     * Callback will be triggered when there is change in
+//     * network connection
+//     */
+//    @Override
+//    public void onNetworkConnectionChanged(boolean isConnected) {
+//        showSnack(isConnected);
+//    }
 }

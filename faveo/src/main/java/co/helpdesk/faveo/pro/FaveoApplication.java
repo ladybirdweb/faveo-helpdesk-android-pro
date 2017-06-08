@@ -1,47 +1,101 @@
 package co.helpdesk.faveo.pro;
 
-/**
- * Created by sumit on 3/13/2016.
- */
-
-
+import android.content.ContextWrapper;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.File;
 
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
+/**
+ * In this class we are adding fabric to our application.
+ * This is for crash reporting ,whenever we will have any issue in
+ * the user system this will give the error message for the issue
+ * to us.
+ */
 public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
+    InternetReceiver internetReceiver;
 
     @Override
     public void onCreate() {
+        internetReceiver = new InternetReceiver();
+        registerReceiver(
+                internetReceiver,
+                new IntentFilter(
+                        ConnectivityManager.CONNECTIVITY_ACTION));
         super.onCreate();
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
-                .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(0)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfiguration);
         MultiDex.install(this);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("ccc");
+        StringBuffer stringBuffer=new StringBuffer();
+        stringBuffer.append("cvcv");
+
+//        if (BuildConfig.DEBUG) {
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(this);
+//            DebugDB.getAddressLog();
+//
+////            Stetho.initialize(
+////                    Stetho.newInitializerBuilder(this)
+////                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+////                            .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+////                            .build());
+//
+//            Stetho.initializeWithDefaults(this);
+//
+//            OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+//                    .addNetworkInterceptor(new StethoInterceptor())
+//                    .build();
+//            AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
+//        } else
+        //Fast Android Networking init..
+        //AndroidNetworking.initialize(getApplicationContext());
+        //AndroidNetworking.setParserFactory(new JacksonParserFactory());
+
+//        //Realm.io
+//        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
+//                .name(Realm.DEFAULT_REALM_NAME)
+//                .schemaVersion(0)
+//                .deleteRealmIfMigrationNeeded()
+//                .build();
+//        Realm.setDefaultConfiguration(realmConfiguration);
+
+        /*
+          Fabric.io.
+          Crash reporting tool.
+         */
         Fabric.with(this, new Crashlytics());
         instance = this;
+
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
     }
 
     public static synchronized FaveoApplication getInstance() {
         return instance;
     }
 
-    public void setInternetListener(InternetReceiver.InternetReceiverListener listener) {
-        InternetReceiver.internetReceiverListener = listener;
-    }
 
+    /**
+     * Deleting the user data while logging out from app.
+     */
     public void clearApplicationData() {
         File cache = getCacheDir();
         File appDir = new File(cache.getParent());
@@ -49,17 +103,38 @@ public class FaveoApplication extends MultiDexApplication {
             String[] children = appDir.list();
             for (String s : children) {
                 if (!s.equals("lib"))
-                    deleteDir(new File(appDir, s));
+                    deleteRecursive(new File(appDir, s));
             }
         }
     }
 
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String aChildren : children)
-                return deleteDir(new File(dir, aChildren));
+//    public static boolean deleteDir(File dir) {
+//        if (dir != null && dir.isDirectory()) {
+//            String[] children = dir.list();
+//            for (String aChildren : children)
+//                return deleteDir(new File(dir, aChildren));
+//        }
+//        return dir.delete();
+//    }
+
+
+    private void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory != null && fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                child.delete();
+                deleteRecursive(child);
+            }
         }
-        return dir.delete();
+        fileOrDirectory.delete();
     }
+
+    @Override
+    public void onTerminate() {
+        if (internetReceiver != null) {
+            unregisterReceiver(internetReceiver);
+            internetReceiver = null;
+        }
+        super.onTerminate();
+    }
+
 }

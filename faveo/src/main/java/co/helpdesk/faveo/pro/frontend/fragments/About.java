@@ -1,6 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -53,7 +53,7 @@ public class About extends Fragment {
         PackageInfo pInfo;
         try {
             pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            String version = pInfo.versionName;
+            String version = "Version :"+pInfo.versionName;
             ((TextView) rootView.findViewById(R.id.textView_version)).setText(version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class About extends Fragment {
                 startActivity(browserIntent);
             }
         });
-        ((MainActivity) getActivity()).setActionBarTitle("About");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.about));
         return rootView;
     }
 
@@ -78,12 +78,12 @@ public class About extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }

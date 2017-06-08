@@ -7,41 +7,57 @@
 
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".FaveoApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme">
+        android:theme="@style/MyMaterialTheme"
+        tools:replace="allowBackup, label">
         <activity
             android:name=".frontend.activities.LoginActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".frontend.activities.ClientDetailActivity"
             android:label="@string/title_activity_client_profile"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="OPEN_ACTIVITY_2" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".frontend.activities.ForgotPasswordActivity"
             android:label="@string/title_activity_forgot_password"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".frontend.activities.SplashActivity"
+            android:launchMode="singleTask"
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".frontend.activities.TicketDetailActivity"
             android:label="@string/title_activity_ticket_detail"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -49,6 +65,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".frontend.activities.MainActivity"
@@ -61,6 +78,7 @@
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
 
@@ -88,7 +106,29 @@
         <!-- </service> -->
         <activity
             android:name=".frontend.activities.NotificationActivity"
-            android:label="@string/title_activity_notification" />
+            android:label="@string/title_activity_notification"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".frontend.activities.CreateTicketActivity"
+            android:label="@string/title_activity_create_ticket"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".frontend.activities.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <provider
+            android:name=".frontend.MySuggestionProvider"
+            android:authorities="co.helpdesk.faveo.pro.frontend.MySuggestionProvider" />
     </application>
 
 </manifest>

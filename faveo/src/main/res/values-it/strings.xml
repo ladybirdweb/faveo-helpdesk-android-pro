@@ -1,0 +1,177 @@
+<resources>
+
+
+    <string name="search_result">Risultato della ricerca!</string>
+    <string name="search_hint">Ricerca…</string>
+    <string name="menu_search">Ricerca</string>
+    <string name="just_now">Proprio adesso</string>
+    <string name="reset_password">Resetta la password</string>
+    <string name="empty_username">nome utente vuoto</string>
+    <string name="create">Creare</string>
+    <string name="send">Inviare</string>
+    <string name="add">INSERISCI</string>
+    <string name="overdue">in ritardo</string>
+    <string name="required">necessario</string>
+    <string name="no_internet_connection">Nessuna connessione Internet!</string>
+    <string name="descending">Discendente</string>
+    <string name="ascending">Ascendente</string>
+    <string name="sort_by">Ordina per</string>
+    <string name="due_by_time">Due di tempo</string>
+    <string name="due_by_date">Grazie per data</string>
+    <string name="gallery">Galleria</string>
+    <string name="search">Ricerca</string>
+    <string name="unexpected_error">Errore inaspettato</string>
+    <string name="error_creating_ticket">ERRORE! Impossibile creare biglietto</string>
+    <string name="sub_must_not_be_empty">Il soggetto non deve essere vuoto</string>
+    <string name="msg_must_not_be_empty">Messaggio non deve essere vuoto</string>
+    <string name="you_hvent_picked_anything">Non hai preso niente!</string>
+    <string name="client_name">Nome del cliente</string>
+    <string name="sorting_type">tipo di ordinamento</string>
+    <string name="sort">Ordinare</string>
+    <string name="enter_valid_email">Di inserire una valida mail ID</string>
+    <string name="tickets">Biglietti</string>
+    <string name="customers">Clienti</string>
+    <string name="restart_app">Per applicare le modifiche nelle impostazioni, è necessario riavviare l\'applicazione!</string>
+    <string name="restarting">Riavvio…</string>
+    <string name="no_clients">Nessun Clienti!</string>
+    <string name="no_results_found">Nessun risultato trovato!</string>
+    <string name="access_denied">Accesso negato!</string>
+    <string name="please_purchase_faveo">Si prega di acquistare Faveo PRO edizione di utilizzare questa applicazione.</string>
+    <string name="ok">OK</string>
+    <string name="error_checking_pro">Errore, durante il controllo di accesso a Pro Edition!</string>
+    <string name="error">Errore</string>
+    <string name="restart_app_tittle">Riavviare App?</string>
+    <string name="creating_note">Creazione di nota</string>
+    <string name="wrong_user_id">userID sbagliato</string>
+    <string name="invalid_cc">Cc non valido</string>
+    <string name="sending_msg">Invio messaggio</string>
+    <string name="internal_notes_posted">note interne pubblicate</string>
+    <string name="posted_reply">Pubblicato tua risposta</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="helpdesk_url">Helpdesk URL</string>
+    <string name="verifying_url">Verifica URL</string>
+
+    <string name="access_checking">Accesso Controllo!</string>
+    <string name="api_key_optional">API Key (optional)</string>
+    <string name="user_name">Nome utente</string>
+    <string name="password">password</string>
+    <string name="signing_in">Firma in…</string>
+    <string name="welcome">Benvenuto!</string>
+    <string name="fetching_tickets">Biglietti Recuperare</string>
+    <string name="inbox">Posta in arrivo</string>
+    <string name="create_ticket">Creare biglietteria</string>
+    <string name="ticket_list">Lista Biglietto</string>
+
+    <string name="my_tickets">I miei Biglietti</string>
+    <string name="unassigned_tickets">Biglietti non assegnati</string>
+    <string name="closed_tickets">Biglietti chiuse</string>
+    <string name="trash">Trash</string>
+    <string name="client_list">Lista clienti</string>
+    <string name="settings">Impostazioni</string>
+    <string name="about">A proposito di</string>
+    <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="first_name">Nome</string>
+    <string name="last_name">Cognome</string>
+    <string name="phone">Telefono</string>
+    <string name="helptopic">argomenti della Guida</string>
+    <string name="sla_plans">piani di SLA</string>
+    <string name="deparment">Dipartimenti</string>
+    <string name="subject">Soggetto</string>
+    <string name="message">Messaggio</string>
+    <string name="priority">La priorità</string>
+    <string name="submit">Invia</string>
+
+    <string name="conversation">Conversazione</string>
+    <string name="detail">Dettaglio</string>
+    <string name="reply">Rispondi</string>
+    <string name="internal_note">Nota interna</string>
+    <string name="source">Fonte</string>
+    <string name="created_date">Data Creato</string>
+    <string name="last_response_date">Data ultima risposta</string>
+    <string name="due_date">Data di scadenza</string>
+    <string name="status">Stato</string>
+    <string name="save">Salva</string>
+    <string name="loading">Caricamento…</string>
+    <string name="all_caught_up">Tutti i biglietti caricati</string>
+    <string name="fetching_detail">Recupero dettagli</string>
+    <string name="crash_reports">Crash report</string>
+    <string name="send_crash_reports">Inviare segnalazioni di crash</string>
+    <string name="website">Sito web</string>
+
+
+
+    <string name="no_records">No records!</string>
+    <string name="inactive">Inattivo</string>
+    <string name="active">attivo</string>
+    <string name="open_ticket">Biglietti Aperti</string>
+    <string name="closed_ticket">Biglietti chiuse</string>
+    <string name="profile">Profilo</string>
+
+    <string name="forgot_password">Hai dimenticato la password?</string>
+    <string name="sign_in">Login</string>
+    <string name="done_loading">carico Done!</string>
+    <string name="press_again_exit">Premere di nuovo per uscire!</string>
+    <string name="something_went_wrong">Qualcosa è andato storto</string>
+    <string name="invalid_url">URL non valido</string>
+    <string name="oops_no_internet">Ops! Senza internet</string>
+    <string name="error_verifying_url">Errore di verifica URL</string>
+    <string name="wrong_credentials">credenziali errate</string>
+    <string name="connected_to_internet">connesso a Internet</string>
+    <string name="sry_not_connected_to_internet">Siamo spiacenti! Non collegato ad internet</string>
+
+
+    <string name="please_enter_valid_url">Si prega di inserire un URL valido</string>
+
+    <string name="update_success">Aggiornamento con successo</string>
+    <string name="failed_to_update_ticket">Impossibile aggiornare biglietto</string>
+    <string name="sub_minimum_char">Soggetto dovrebbe essere minimo 5 caratteri</string>
+    <string name="please_fill_field">Si prega di compilare il campo</string>
+    <string name="updating_ticket">Biglietto di aggiornamento</string>
+    <string name="invalid_email">Mail non valido</string>
+    <string name="firstname_minimum_char">Nome dovrebbe essere minimo 3 caratteri</string>
+    <string name="fill_firstname">Fill nome</string>
+    <string name="fill_lastname">Fill cognome</string>
+    <string name="msg_minimum_char">messaggio deve essere minimo di 10 caratteri</string>
+
+
+    <string name="creating_ticket">Creazione di biglietto</string>
+    <string name="ticket_created_success">Biglietto creato!</string>
+    <string name="title_activity_notification">Notifiche</string>
+    <string name="action_search">Ricerca</string>
+
+
+
+
+
+
+    <string name="not_available">Non disponibile</string>
+
+
+
+
+
+    <string name="faveo_content">Faveo Helpdesk fornisce alle aziende un sistema di helpdesk automatizzato per gestire l\'assistenza clienti. La parola Faveo deriva dal latino che significa essere favorevoli. Che evidenzia realmente visione e la portata e la funzionalità del prodotto che è Faveo.
+
+Faveo consente la vostra attività con stato dell\'arte, sistema di supporto ticket in base. In avvio di fidelizzazione dei clienti scenario competitivo di oggi è una delle maggiori sfide. Gestione di query cliente diligentemente è la differenza tra il mantenimento o la perdita di un rapporto duraturo. L\'azienda è guidata con passione di fornire strumenti per la gestione delle richieste di consumo per analisi strategiche e aiutare le aziende a prendere quelle decisioni decisive.
+
+Questa applicazione funziona con Faveo Helpdesk applicazione basata su Web Pro Edition.
+</string>
+
+
+</resources>
