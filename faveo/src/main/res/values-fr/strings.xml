@@ -10,11 +10,13 @@
     <string name="create">Créer</string>
     <string name="send">Envoyer</string>
     <string name="add">AJOUTER</string>
+    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 10 caractères</string>
     <string name="overdue">En retard</string>
     <string name="required">Champs obligatoires</string>
     <string name="no_internet_connection">Pas de connexion Internet!</string>
     <string name="descending">Descendant</string>
     <string name="ascending">Ascendant</string>
+    <string name="fill_all_the_details">Veuillez remplir tous les champs requis</string>
     <string name="sort_by">Trier par</string>
     <string name="due_by_time">Dû par le temps</string>
     <string name="due_by_date">Date d\'échéance</string>

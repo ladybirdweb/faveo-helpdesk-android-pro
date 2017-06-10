@@ -116,7 +116,10 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    SearchView requesterSearchview;
     ProgressDialog progressDialog;
     ArrayList<Data> helptopicItems, priorityItems;
-
+    String code="";
+    String mobile="";
+    String splChrs = "-/@#$%^&_+=()" ;
+    String countrycode = "";
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -127,6 +130,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                 return "";
             }
             return null;
+
         }
     };
 
@@ -139,9 +143,8 @@ public class CreateTicketActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.create_ticket);
+        //Toast.makeText(this, "For mobile no code is mandatory", Toast.LENGTH_LONG).show();
 
-        phCode.setTitle("Select Country");
-        phCode.setPositiveButton("OK");
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
@@ -476,20 +479,21 @@ public class CreateTicketActivity extends AppCompatActivity {
         // editTextFirstName.addTextChangedListener(mTextWatcher);
         editTextLastName.setFilters(new InputFilter[]{filter});
         editTextFirstName.setFilters(new InputFilter[]{filter});
-        subEdittext.setFilters(new InputFilter[]{
-                new InputFilter() {
-                    public CharSequence filter(CharSequence src, int start,
-                                               int end, Spanned dst, int dstart, int dend) {
-                        if (src.equals("")) { // for backspace
-                            return src;
-                        }
-                        if (src.toString().matches("[\\x00-\\x7F]+")) {
-                            return src;
-                        }
-                        return "";
-                    }
-                }
-        });
+        subEdittext.setFilters(new InputFilter[]{filter});
+//        subEdittext.setFilters(new InputFilter[]{
+//                new InputFilter() {
+//                    public CharSequence filter(CharSequence src, int start,
+//                                               int end, Spanned dst, int dstart, int dend) {
+//                        if (src.equals("")) { // for backspace
+//                            return src;
+//                        }
+//                        if (src.toString().matches("[\\x00-\\x7F]+")) {
+//                            return src;
+//                        }
+//                        return "";
+//                    }
+//                }
+//        });
 
     }
 
@@ -512,8 +516,8 @@ public class CreateTicketActivity extends AppCompatActivity {
         String fname = editTextFirstName.getText().toString();
         String lname = editTextLastName.getText().toString();
         String phone = editTextPhone.getText().toString();
-        String mobile = editTextMobile.getText().toString();
-        String countrycode = "";
+        mobile = editTextMobile.getText().toString();
+
         if (!phCode.getSelectedItem().toString().equals("Select Country")) {
             countrycode = phCode.getSelectedItem().toString();
             String[] cc = countrycode.split(",");
@@ -521,24 +525,42 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
         boolean allCorrect = true;
 
+
         Data helpTopic = (Data) spinnerHelpTopic.getSelectedItem();
         Log.d("ID of objt", "" + helpTopic.ID);
         //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
         //int dept = spinnerDept.getSelectedItemPosition();
         Data priority = (Data) spinnerPriority.getSelectedItem();
 
-        if (fname.trim().length() == 0) {
+//    if (phCode.equals("")){
+//        Toast.makeText(this, "Select the code", Toast.LENGTH_SHORT).show();
+//    }
+    if (fname.length()==0&&email.length()==0&&subject.length()==0&&message.length()==0&&helpTopic.ID == 0&&priority.ID == 0){
+        Toasty.warning(this,getString(R.string.fill_all_the_details),Toast.LENGTH_SHORT).show();
+        allCorrect=false;
+    }
+
+    else if (fname.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (fname.trim().length() < 3) {
             Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
+        }
+        else if (fname.length()>=10){
+        Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
+        allCorrect=false;
+    }   else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
             Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (subject.trim().length() == 0) {
+        }
+        else if (subject.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
             allCorrect = false;
+        }
+        else if (subject.matches("[" + splChrs + "]+")){
+        Toasty.warning(this, "Only special characters not allowed here", Toast.LENGTH_SHORT).show();
+        allCorrect=false;
         } else if (message.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_SHORT).show();
             allCorrect = false;
@@ -555,7 +577,6 @@ public class CreateTicketActivity extends AppCompatActivity {
             allCorrect = false;
             Toasty.warning(CreateTicketActivity.this, "Please select some Priority", Toast.LENGTH_SHORT).show();
         }
-
 //        if (lname.trim().length() == 0) {
 //            Toasty.warning(this, getString(R.string.fill_lastname), Toast.LENGTH_SHORT).show();
 //            allCorrect = false;

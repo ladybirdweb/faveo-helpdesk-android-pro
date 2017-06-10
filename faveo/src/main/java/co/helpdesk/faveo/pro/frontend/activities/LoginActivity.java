@@ -164,9 +164,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String companyURL = editTextCompanyURL.getText().toString();
+
                 if (companyURL.trim().length() == 0 || !Patterns.WEB_URL.matcher(companyURL).matches()) {
                     Toasty.warning(v.getContext(), getString(R.string.please_enter_valid_url), Toast.LENGTH_LONG).show();
                     return;
+
                 }
                 if (InternetReceiver.isConnected()) {
                     progressDialogVerifyURL.show();

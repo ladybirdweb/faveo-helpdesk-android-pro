@@ -13,12 +13,14 @@
     <string name="overdue">Achterstallig</string>
     <string name="required">nodig</string>
     <string name="no_internet_connection">Geen internet verbinding!</string>
+    <string name="firstname_maximum_char">FirstName mag niet langer zijn dan 10 karakters</string>
     <string name="descending">Aflopend</string>
     <string name="ascending">oplopend</string>
     <string name="sort_by">Sorteer op</string>
     <string name="due_by_time">Verschuldigd door de tijd</string>
     <string name="due_by_date">Due op datum</string>
     <string name="gallery">Galerij</string>
+    <string name="fill_all_the_details">Vul al de vereiste velden in</string>
     <string name="search">Zoeken</string>
     <string name="unexpected_error">Onverwachte fout</string>
     <string name="error_creating_ticket">FOUT! Mislukt ticket creëren</string>

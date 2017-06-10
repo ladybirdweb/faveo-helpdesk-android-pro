@@ -31,7 +31,7 @@
     <string name="title_activity_search" translatable="false">SearchActivity</string>
     <string name="section_format" translatable="false">Hello World from section: %1$d</string>
     <string name="blue_name" translatable="false">blue</string>
-    <string name="internal_note">Internal Note</string>
+    <string name="internal_note">Internal Notes</string>
     <string name="dummy_title" translatable="false">Dummy title</string>
     <string name="dummy_name" translatable="false">Client Name</string>
     <string name="profile">Profile</string>
@@ -106,10 +106,12 @@
     <string name="creating_ticket">Creating ticket</string>
     <string name="ticket_created_success">Ticket created successfully!</string>
     <string name="error_creating_ticket">ERROR! Failed to create ticket</string>
+    <string name="fill_all_the_details">Please fill all the required fields</string>
     <string name="fill_firstname">Fill FirstName</string>
     <string name="firstname_minimum_char">FirstName should be minimum 3 characters</string>
+    <string name="firstname_maximum_char">FirstName should not exceed 10 characters</string>
     <string name="fill_lastname">Fill LastName</string>
-    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_email">Please enter valid email id</string>
     <string name="sub_must_not_be_empty">Subject must not be empty</string>
     <string name="msg_must_not_be_empty">Message must not be empty</string>
     <string name="sub_minimum_char">Subject must have atleast 5 characters</string>
@@ -159,7 +161,7 @@
     <string name="internal_notes_posted">Internal notes posted</string>
     <string name="posted_reply">Posted your reply</string>
     <string name="conversation">Conversation</string>
-    <string name="detail">Detail</string>
+    <string name="detail">Details</string>
     <string name="open_ticket">OPEN TICKET</string>
     <string name="closed_ticket">CLOSED TICKET</string>
     <string name="ticket_type" translatable="false">Ticket Type </string>

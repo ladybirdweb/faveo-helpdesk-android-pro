@@ -1,11 +1,8 @@
 <component name="libraryTable">
   <library name="bottomsheet-0.9">
-    <ANNOTATIONS>
-      <root url="jar://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.cocosw/bottomsheet/0.9/annotations.zip!/" />
-    </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/00086e0e8e73b76d2e4a6e60e8dbf2af23f56929/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/00086e0e8e73b76d2e4a6e60e8dbf2af23f56929/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/fd4d0d3d19d28673181a122ea392da75b5489d6b/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/fd4d0d3d19d28673181a122ea392da75b5489d6b/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

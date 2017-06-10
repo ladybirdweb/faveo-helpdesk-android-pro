@@ -14,12 +14,15 @@
     <string name="required">necessario</string>
     <string name="no_internet_connection">Nessuna connessione Internet!</string>
     <string name="descending">Discendente</string>
+    <string name="firstname_maximum_char">Nome non deve superare i 10 caratteri</string>
     <string name="ascending">Ascendente</string>
     <string name="sort_by">Ordina per</string>
     <string name="due_by_time">Due di tempo</string>
     <string name="due_by_date">Grazie per data</string>
     <string name="gallery">Galleria</string>
     <string name="search">Ricerca</string>
+    <string name="fill_all_the_details">
+Si prega di compilare tutti i campi richiesti</string>
     <string name="unexpected_error">Errore inaspettato</string>
     <string name="error_creating_ticket">ERRORE! Impossibile creare biglietto</string>
     <string name="sub_must_not_be_empty">Il soggetto non deve essere vuoto</string>

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="avatar-view-0.0.2">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/11fe8c275128224df5fa041a60ea59dd49d84cb7/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/11fe8c275128224df5fa041a60ea59dd49d84cb7/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/d57f9f1fb7723d52d1417829d1e43f8a36419799/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/d57f9f1fb7723d52d1417829d1e43f8a36419799/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

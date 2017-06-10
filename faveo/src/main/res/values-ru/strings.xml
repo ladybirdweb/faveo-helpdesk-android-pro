@@ -7,6 +7,7 @@
     <string name="just_now">Прямо сейчас</string>
     <string name="reset_password">Сброс пароля</string>
     <string name="empty_username">Пустое имя пользователя</string>
+    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 10 caractères</string>
     <string name="create">Создайте</string>
     <string name="send">послать</string>
     <string name="add">ДОБАВИТЬ</string>
@@ -14,6 +15,8 @@
     <string name="required">необходимые</string>
     <string name="no_internet_connection">Нет соединения с интернетом!</string>
     <string name="descending">По убыванию</string>
+    <string name="fill_all_the_details">
+Пожалуйста, заполните все обязательные поля</string>
     <string name="ascending">Восходящий</string>
     <string name="sort_by">Сортировать по</string>
     <string name="due_by_time">По времени</string>

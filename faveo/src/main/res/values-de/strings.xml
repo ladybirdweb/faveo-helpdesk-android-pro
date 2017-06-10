@@ -9,6 +9,8 @@
     <string name="create">Erstellen</string>
     <string name="send">Senden</string>
     <string name="add">HINZUFÜGEN</string>
+    <string name="firstname_maximum_char">
+FirstName darf 10 Zeichen nicht überschreiten</string>
     <string name="overdue">Überfällig</string>
     <string name="required">Erforderlich</string>
     <string name="no_internet_connection">Keine Internetverbindung!</string>
@@ -16,6 +18,7 @@
     <string name="ascending">Aufsteigend</string>
     <string name="sort_by">Sortiere nach</string>
     <string name="due_by_time">Nach zeit</string>
+    <string name="fill_all_the_details">Bitte füllen Sie alle Pflichtfelder aus</string>
     <string name="due_by_date">Fälligkeit nach Datum</string>
     <string name="gallery">Galerie</string>
     <string name="search">Suche</string>
