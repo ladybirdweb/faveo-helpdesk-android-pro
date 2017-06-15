@@ -49,9 +49,14 @@
     <string name="sending_msg">Envoi du message</string>
     <string name="internal_notes_posted">Notes internes publiées</string>
     <string name="posted_reply">Publié votre réponse</string>
+    <string name="only_special_characters_not_allowed_here">Seuls les caractères spéciaux ne sont pas autorisés ici</string>
 
-
-
+    <string name="please_select_some_priority">
+Sélectionnez une Priorité</string>
+    <string name="select_some_helptopic">
+Selecciona algunos helptopic</string>
+    <string name="select_code">
+Sélectionnez le code</string>
 
 
 

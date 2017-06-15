@@ -13,6 +13,9 @@ import co.helpdesk.faveo.pro.model.MessageEvent;
 
 /**
  * Created by narendra on 13/06/16.
+ * This class is for checking whether internet
+ * is available or not,it will also check if there is
+ * any network changes or not.
  */
 public class InternetReceiver extends BroadcastReceiver {
 
@@ -37,6 +40,10 @@ public class InternetReceiver extends BroadcastReceiver {
 //        }
     }
 
+    /**
+     * Function for checking Internet is available or not.
+     * @return
+     */
     public static boolean isConnected() {
         ConnectivityManager
                 cm = (ConnectivityManager) FaveoApplication.getInstance().getApplicationContext()

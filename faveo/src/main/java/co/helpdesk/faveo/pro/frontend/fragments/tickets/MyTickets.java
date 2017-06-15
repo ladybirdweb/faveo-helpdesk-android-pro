@@ -75,7 +75,11 @@ public class MyTickets extends Fragment {
 
     public MyTickets() {
     }
-
+    /**
+     *
+     * @param savedInstanceState under special circumstances, to restore themselves to a previous
+     * state using the data stored in this bundle.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +88,14 @@ public class MyTickets extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    /**
+     *
+     * @param inflater for loading the fragment.
+     * @param container where the fragment is going to be load.
+     * @param savedInstanceState
+     * @return after initializing returning the rootview
+     * which is having the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -124,6 +135,9 @@ public class MyTickets extends Fragment {
         return rootView;
     }
 
+    /**
+     * Async task for getting the my tickets.
+     */
     private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
 
@@ -213,6 +227,9 @@ public class MyTickets extends Fragment {
         }
     }
 
+    /**
+     * Async task for next page details.
+     */
     private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
 
@@ -270,7 +287,11 @@ public class MyTickets extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
+    /**
+     * When the fragment is going to be attached
+     * this life cycle method is going to be called.
+     * @param context refers to the current fragment.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -281,7 +302,10 @@ public class MyTickets extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+    /**
+     * Once the fragment is going to be detached then
+     * this method is going to be called.
+     */
     @Override
     public void onDetach() {
         super.onDetach();

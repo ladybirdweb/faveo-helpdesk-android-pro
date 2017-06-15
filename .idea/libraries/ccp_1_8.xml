@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="ccp-1.8">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/8bbd731e52ee4e074dbbacd06f3ecc3ed0269c93/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/8bbd731e52ee4e074dbbacd06f3ecc3ed0269c93/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.hbb20/ccp/1.8/325ab0a18c122c7bb0fa9d2ac85673ecba00d68c/ccp-1.8-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

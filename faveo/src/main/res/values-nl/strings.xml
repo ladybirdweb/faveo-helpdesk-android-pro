@@ -49,6 +49,13 @@
     <string name="sending_msg">bericht wordt verzonden</string>
     <string name="internal_notes_posted">Interne nota\'s geplaatst</string>
     <string name="posted_reply">Geplaatst uw antwoord</string>
+    <string name="only_special_characters_not_allowed_here">
+Alleen speciale tekens zijn hier niet toegestaan</string>
+    <string name="please_select_some_priority">
+Selecteer een aantal prioriteiten</string>
+    <string name="select_some_helptopic">Selecteer alstublieft een helptopic</string>
+    <string name="select_code">
+Selecteer de code alstublieft</string>
 
 
 

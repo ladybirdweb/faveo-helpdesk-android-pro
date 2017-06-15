@@ -40,6 +40,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @BindView(R.id.loading)
     TextView loading;
+    //WelcomeDialog welcomeDialog;
 
     public static String
             keyDepartment = "", valueDepartment = "",
@@ -57,6 +58,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        //welcomeDialog=new WelcomeDialog();
 
         if (InternetReceiver.isConnected()) {
             progressDialog.setVisibility(View.VISIBLE);
@@ -261,8 +263,25 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             loading.setText(R.string.done_loading);
+
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
+//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+//            builder.setTitle("Welcome to FAVEO");
+//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
+//            builder.setCancelable(true);
+//
+//            final AlertDialog dlg = builder.create();
+//
+//            dlg.show();
+//
+//            final Timer t = new Timer();
+//            t.schedule(new TimerTask() {
+//                public void run() {
+//                    dlg.dismiss(); // when the task active then close the dialog
+//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+//                }
+//            }, 3000);
         }
     }
 

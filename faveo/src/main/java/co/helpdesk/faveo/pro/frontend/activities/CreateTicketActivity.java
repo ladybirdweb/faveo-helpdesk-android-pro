@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -68,8 +69,10 @@ import es.dmoral.toasty.Toasty;
 public class CreateTicketActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMG = 1;
     private static int RESULT_LOAD_FILE = 42;
+    //CountryCodePicker ccp;
     //String imgDecodableString;
     static final String TAG = "CreateTicketActivity";
+    boolean allCorrect;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter;
     ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
             spinnerDeptArrayAdapter;
@@ -106,6 +109,8 @@ public class CreateTicketActivity extends AppCompatActivity {
     Spinner spinnerPriority;
     @BindView(R.id.spinner_help)
     Spinner spinnerHelpTopic;
+    @BindView(R.id.buttonSubmit)
+    Button buttonSubmit;
     //    @BindView(R.id.spinner_assign_to)
 //    Spinner spinnerSLA;
     //    @BindView(R.id.spinner_dept)
@@ -143,13 +148,20 @@ public class CreateTicketActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.create_ticket);
+        //ccp = (CountryCodePicker) findViewById(R.id.ccp);
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createButtonClick();
+            }
+        });
         //Toast.makeText(this, "For mobile no code is mandatory", Toast.LENGTH_LONG).show();
 
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
             helptopicItems = new ArrayList<>();
-            helptopicItems.add(new Data(0, "--"));
+            helptopicItems.add(new Data(0, "Please select help topic"));
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
             for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
@@ -160,7 +172,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 
             JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
             priorityItems = new ArrayList<>();
-            priorityItems.add(new Data(0, "--"));
+            priorityItems.add(new Data(0, "Please select the priority"));
             for (int i = 0; i < jsonArrayPriorities.length(); i++) {
                 Data data = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
                 priorityItems.add(data);
@@ -195,9 +207,9 @@ public class CreateTicketActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
 
-            case R.id.action_create:
-                createButtonClick();
-                return true;
+//            case R.id.action_create:
+//                createButtonClick();
+//                return true;
 
             case android.R.id.home:
                 //Write your logic here
@@ -518,12 +530,14 @@ public class CreateTicketActivity extends AppCompatActivity {
         String phone = editTextPhone.getText().toString();
         mobile = editTextMobile.getText().toString();
 
-        if (!phCode.getSelectedItem().toString().equals("Select Country")) {
+        if (!phCode.getSelectedItem().toString().equals("Code")) {
             countrycode = phCode.getSelectedItem().toString();
             String[] cc = countrycode.split(",");
             countrycode = cc[1];
         }
-        boolean allCorrect = true;
+
+
+        allCorrect = true;
 
 
         Data helpTopic = (Data) spinnerHelpTopic.getSelectedItem();
@@ -535,12 +549,12 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    if (phCode.equals("")){
 //        Toast.makeText(this, "Select the code", Toast.LENGTH_SHORT).show();
 //    }
-    if (fname.length()==0&&email.length()==0&&subject.length()==0&&message.length()==0&&helpTopic.ID == 0&&priority.ID == 0){
-        Toasty.warning(this,getString(R.string.fill_all_the_details),Toast.LENGTH_SHORT).show();
-        allCorrect=false;
-    }
+        if (fname.length()==0&&email.length()==0&&subject.length()==0&&message.length()==0&&helpTopic.ID == 0&&priority.ID == 0){
+            Toasty.warning(this,getString(R.string.fill_all_the_details),Toast.LENGTH_SHORT).show();
+            allCorrect=false;
+        }
 
-    else if (fname.trim().length() == 0) {
+        else if (fname.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (fname.trim().length() < 3) {
@@ -548,34 +562,52 @@ public class CreateTicketActivity extends AppCompatActivity {
             allCorrect = false;
         }
         else if (fname.length()>=10){
-        Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
-        allCorrect=false;
-    }   else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
+            Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
+            allCorrect=false;
+        }   else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
             Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         }
+
+//        else if (phCode.getSelectedItemPosition()==0){
+//            if (mobile!=null){
+//
+//            }
+//        }
+//        else if (phCode.getSelectedItemPosition()==0&&mobile!=null){
+//
+//                allCorrect=false;
+
+//            }
+
+
+
         else if (subject.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         }
-        else if (subject.matches("[" + splChrs + "]+")){
-        Toasty.warning(this, "Only special characters not allowed here", Toast.LENGTH_SHORT).show();
-        allCorrect=false;
-        } else if (message.trim().length() == 0) {
-            Toasty.warning(this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_SHORT).show();
-            allCorrect = false;
-        } else if (subject.trim().length() < 5) {
+        else if (subject.trim().length() < 5) {
             Toasty.warning(this, getString(R.string.sub_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (message.trim().length() < 10) {
+        }
+        else if (subject.matches("[" + splChrs + "]+")){
+            Toasty.warning(this, getString(R.string.only_special_characters_not_allowed_here), Toast.LENGTH_SHORT).show();
+            allCorrect=false;
+        }
+        else if (priority.ID == 0) {
+            allCorrect = false;
+            Toasty.warning(CreateTicketActivity.this, getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
+        }
+        else if (helpTopic.ID == 0) {
+            allCorrect = false;
+            Toasty.warning(CreateTicketActivity.this, getString(R.string.select_some_helptopic), Toast.LENGTH_SHORT).show();
+        }
+        else if (message.trim().length() == 0) {
+            Toasty.warning(this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        }  else if (message.trim().length() < 10) {
             Toasty.warning(this, getString(R.string.msg_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (helpTopic.ID == 0) {
-            allCorrect = false;
-            Toasty.warning(CreateTicketActivity.this, "Please select some helptopic", Toast.LENGTH_SHORT).show();
-        } else if (priority.ID == 0) {
-            allCorrect = false;
-            Toasty.warning(CreateTicketActivity.this, "Please select some Priority", Toast.LENGTH_SHORT).show();
         }
 //        if (lname.trim().length() == 0) {
 //            Toasty.warning(this, getString(R.string.fill_lastname), Toast.LENGTH_SHORT).show();
@@ -588,6 +620,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 //            allCorrect = false;
 //            Toasty.warning(CreateTicketActivity.this, "Please select some SLA plan", Toast.LENGTH_SHORT).show();
 //        } else
+
         if (allCorrect) {
 
             if (InternetReceiver.isConnected()) {
@@ -724,11 +757,25 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Toasty.error(CreateTicketActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            if (result.contains("Ticket created successfully!")) {
+            try {
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("response");
+                String message=jsonObject1.getString("fails");
+                if (message.contains("Code is required with phone/mobile number.")){
+                    Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+  if (result.contains("Ticket created successfully!")) {
                 Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
             }
+
+
         }
 
     }

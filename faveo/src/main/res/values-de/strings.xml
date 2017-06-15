@@ -49,6 +49,11 @@ FirstName darf 10 Zeichen nicht überschreiten</string>
     <string name="sending_msg">Schicke Nachricht</string>
     <string name="internal_notes_posted">Interne Notizen veröffentlicht</string>
     <string name="posted_reply">Veröffentlicht Ihre Antwort</string>
+    <string name="only_special_characters_not_allowed_here">Nur Sonderzeichen sind hier nicht erlaubt</string>
+    <string name="please_select_some_priority">
+Bitte wählen Sie eine Priorität aus</string>
+    <string name="select_some_helptopic">Bitte wählen Sie etwas Helptopic</string>
+    <string name="select_code">Bitte wählen Sie den Code aus</string>
 
 
 

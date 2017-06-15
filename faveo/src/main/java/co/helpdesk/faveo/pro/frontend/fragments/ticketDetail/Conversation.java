@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -165,6 +164,7 @@ public class Conversation extends Fragment {
                         if (clientName.equals("null") || clientName.equals(""))
                             clientName = "NOTE";*/
                         String firstName = jsonArray.getJSONObject(i).getString("first_name");
+                        String userName=jsonArray.getJSONObject(i).getString("user_name");
                         String lastName = jsonArray.getJSONObject(i).getString("last_name");
                         String clientName = firstName + " " + lastName;
                         String f = "", l = "";
@@ -174,8 +174,28 @@ public class Conversation extends Fragment {
                         if (lastName.trim().length() != 0) {
                             l = lastName.substring(0, 1);
                         }
-                        if (clientName.equals("null") || clientName.equals(""))
-                            clientName = jsonArray.getJSONObject(i).getString("user_name");
+//                        if ((clientName.equals("null null") || clientName.equals(""))&&userName.equals("")){
+//                            clientName="system";
+//                        }else
+                        if (firstName.equals("null")&&lastName.equals("null")&&userName.equals("null")){
+                            clientName="System";
+                        }
+                        else if (clientName.equals("")&&userName.equals("null")&&userName.equals("null")){
+                            clientName="System";
+                        }
+                        else if ((firstName.equals("null"))&&(lastName.equals("null"))&&(userName!=null)){
+                            clientName=userName;
+                        }
+                        else if (firstName.equals("")&&(lastName.equals(""))&&(userName!=null)){
+                            clientName=userName;
+                        }
+                      else if (firstName!=null||lastName!=null) {
+                            clientName = firstName+" "+lastName;
+                        }
+
+
+
+
                         String messageTime = jsonArray.getJSONObject(i).getString("created_at");
                         String messageTitle = jsonArray.getJSONObject(i).getString("title");
                         String message = jsonArray.getJSONObject(i).getString("body");

@@ -44,7 +44,7 @@
     1- Add This Array to Strings.xml File
 
     <string-array name="codes" translatable="false">
-        <item>Select Country</item>
+        <item>Code</item>
         <item>Afghanistan,93</item>
         <item>Albania,355</item>
         <item>Algeria,213</item>

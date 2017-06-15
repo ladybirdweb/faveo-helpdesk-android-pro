@@ -51,6 +51,11 @@ Preencha todos os campos obrigatórios</string>
     <string name="sending_msg">Enviando mensagem</string>
     <string name="internal_notes_posted">Notas internas lançadas</string>
     <string name="posted_reply">Postado sua resposta</string>
+    <string name="only_special_characters_not_allowed_here">Somente caracteres especiais não são permitidos aqui</string>
+    <string name="please_select_some_priority">Selecione alguns Prioridade</string>
+    <string name="select_some_helptopic">
+Selecione alguns helptopic</string>
+    <string name="select_code">Selecione o código</string>
 
 
 

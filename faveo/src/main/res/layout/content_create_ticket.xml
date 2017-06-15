@@ -168,48 +168,6 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="#EEEEEE">
-
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginEnd="8dp"-->
-                <!--android:layout_marginRight="8dp"-->
-                <!--android:text="Required"-->
-                <!--android:textSize="12sp" />-->
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:text="@string/code"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                android:id="@+id/spinner_code"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@android:color/transparent"
-                android:drawSelectorOnTop="true"
-                android:entries="@array/codes"
-                android:imeOptions="actionNext"
-                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -246,8 +204,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
 
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/spinner_code"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@android:color/transparent"
+                    android:drawSelectorOnTop="true"
+                    android:entries="@array/codes"
+                    android:imeOptions="actionNext"
+                    android:textSize="14sp" />
                 <EditText
                     android:id="@+id/phone_edittext"
                     android:layout_width="match_parent"

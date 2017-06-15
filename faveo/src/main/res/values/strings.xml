@@ -123,7 +123,7 @@
     <string name="sorting_type">Sorting type</string>
     <string name="sort">Sort</string>
     <string name="ex_number" translatable="false">EX:+91 9999999999</string>
-    <string name="dummy_num" translatable="false">9999999999</string>
+    <string name="dummy_num" translatable="false">Unavailable</string>
     <string name="all_caught_up">All caught up!</string>
     <string name="enter_valid_email">Enter a valid Mail ID</string>
     <string name="updating_ticket">Updating ticket</string>
@@ -136,7 +136,7 @@
     <string name="inactive">INACTIVE</string>
     <string name="no_clients">No Clients!</string>
     <string name="no_results_found">No Results found!</string>
-    <string name="update_success">Update successful</string>
+    <string name="update_success">Successfully Updated</string>
     <string name="failed_to_update_ticket">Failed to update ticket</string>
     <string name="please_fill_field">Please fill the field</string>
     <string name="fetching_detail">Fetching detail</string>
@@ -168,5 +168,13 @@
     <string name="code" translatable="false">Code</string>
     <string name="mobile" translatable="false">Mobile</string>
     <string name="name" translatable="false">Name</string>
+    <string name="only_special_characters_not_allowed_here">Only special characters not allowed here</string>
+    <string name="please_select_some_priority">Please select some Priority</string>
+    <string name="select_some_helptopic">Please select some helptopic</string>
+    <string name="select_code">Please select the code</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

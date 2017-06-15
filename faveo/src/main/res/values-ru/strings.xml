@@ -50,6 +50,15 @@
     <string name="sending_msg">Отправка сообщения</string>
     <string name="internal_notes_posted">Внутренние примечания отправлены</string>
     <string name="posted_reply">Написал ответ</string>
+    <string name="only_special_characters_not_allowed_here">
+Здесь запрещены только специальные символы</string>
+    <string name="please_select_some_priority">
+Выберите приоритет</string>
+    <string name="select_some_helptopic">
+Пожалуйста, выберите</string>
+    <string name="select_code">Выберите код</string>
+
+
 
 
     <string name="helpdesk_url">Helpdesk URL</string>

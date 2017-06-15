@@ -21,9 +21,9 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
 public class Helper {
     /**
      * Tickets Page.
-     * @param jsonArray
+     * @param jsonArray refers to the array of JSON elements.
      * @param i
-     * @return
+     * @return object for ticket overview.
      */
     public static TicketOverview parseTicketOverview(JSONArray jsonArray, int i) {
         try {
@@ -61,9 +61,9 @@ public class Helper {
 
     /**
      * Client Page.
-     * @param jsonArray
+     * @param jsonArray jsonArray refers to the array of JSON elements.
      * @param i
-     * @return
+     * @return object for client overview.
      */
     public static ClientOverview parseClientOverview(JSONArray jsonArray, int i) {
         try {
@@ -118,9 +118,9 @@ public class Helper {
 
     /**
      * Notification Page.
-     * @param jsonArray
+     * @param jsonArray jsonArray jsonArray refers to the array of JSON elements.
      * @param i
-     * @return
+     * @return object for notification thread.
      */
     public static NotificationThread parseNotifications(JSONArray jsonArray, int i) {
         try {
