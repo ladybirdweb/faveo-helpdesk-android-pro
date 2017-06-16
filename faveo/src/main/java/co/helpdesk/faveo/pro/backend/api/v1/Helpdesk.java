@@ -28,6 +28,7 @@ public class Helpdesk {
     }
 
     public String getBaseURL(String companyURL) {
+
         Log.d("checkingURL", companyURL + "api/v1/helpdesk/check-url?url=" + companyURL.substring(0, companyURL.length() - 1) + "&api_key=" + apiKey);
         return new HTTPConnection().HTTPResponseGet(companyURL + "api/v1/helpdesk/check-url?url=" + companyURL.substring(0, companyURL.length() - 1) + "&api_key=" + apiKey);
     }

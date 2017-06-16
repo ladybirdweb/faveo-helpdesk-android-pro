@@ -62,7 +62,11 @@ public class CreateTicket extends Fragment {
 
     public CreateTicket() {
     }
-
+    /**
+     *
+     * @param savedInstanceState under special circumstances, to restore themselves to a previous
+     * state using the data stored in this bundle.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +95,14 @@ public class CreateTicket extends Fragment {
         }
         return code;
     }
-
+    /**
+     *
+     * @param inflater for loading the fragment.
+     * @param container where the fragment is going to be load.
+     * @param savedInstanceState
+     * @return after initializing returning the rootview
+     * which is having the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -256,6 +267,11 @@ public class CreateTicket extends Fragment {
         textViewError.setText(error);
     }
 
+    /**
+     * For initializing all the views used
+     * in create ticket fragment.
+     * @param rootView
+     */
     private void setUpViews(View rootView) {
         editTextEmail = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_email);
         editTextFirstName = (EditText) rootView.findViewById(co.helpdesk.faveo.pro.R.id.editText_firstname);
@@ -303,7 +319,11 @@ public class CreateTicket extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
+    /**
+     * When the fragment is going to be attached
+     * this life cycle method is going to be called.
+     * @param context refers to the current fragment.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -314,7 +334,10 @@ public class CreateTicket extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+    /**
+     * Once the fragment is going to be detached then
+     * this method is going to be called.
+     */
     @Override
     public void onDetach() {
         super.onDetach();

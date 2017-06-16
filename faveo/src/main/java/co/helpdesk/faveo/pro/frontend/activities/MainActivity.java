@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         isShowing = true;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         // TODO: Move this to where you establish a user session
         //logUser();
 //        if (BuildConfig.DEBUG) {
@@ -86,12 +87,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 //        getSupportActionBar().setTitle("Inbox");
 
         FragmentDrawer drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
+
 
         /*
           Loading the inbox fragment here.
@@ -104,7 +107,29 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.commit();
         setActionBarTitle(getResources().getString(R.string.inbox));
 
+
+
+//        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+//        builder1.setTitle("Faveo Pro");
+//        builder1.setMessage("Welcome to FAVEO!");
+//        builder1.setIcon(R.mipmap.ic_launcher);
+//        builder1.setCancelable(true);
+//
+//        final AlertDialog dlg = builder1.create();
+//
+//        dlg.show();
+//
+//        final Timer t = new Timer();
+//        t.schedule(new TimerTask() {
+//            public void run() {
+//                dlg.dismiss(); // when the task active then close the dialog
+//                t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+//            }
+//        }, 2000);
+
     }
+
+
 
 //    private void logUser() {
 //        // TODO: Use the current user's information

@@ -51,6 +51,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             return;
         }
+
         url.setVisibility(View.GONE);
         flipColor.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_200));
         buttonSignIn.setEnabled(false);
@@ -131,10 +134,13 @@ public class LoginActivity extends AppCompatActivity {
         //View init
         setUpViews();
 
-        /*
-          This is only for xiaomi devices.For getting the notification
-          they have to enable the permission.
+
+        /**
+         * This is only for xiaomi devices.For getting the notification
+         * they have to enable the permission.
          */
+
+
         String manufacturer = "xiaomi";
         if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
@@ -164,9 +170,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String companyURL = editTextCompanyURL.getText().toString();
+
                 if (companyURL.trim().length() == 0 || !Patterns.WEB_URL.matcher(companyURL).matches()) {
                     Toasty.warning(v.getContext(), getString(R.string.please_enter_valid_url), Toast.LENGTH_LONG).show();
                     return;
+
                 }
                 if (InternetReceiver.isConnected()) {
                     progressDialogVerifyURL.show();
@@ -543,6 +551,9 @@ public class LoginActivity extends AppCompatActivity {
         checkConnection();
     }
 
+    /**
+     * For checking if the internet is available or not.
+     */
     private void checkConnection() {
         boolean isConnected = InternetReceiver.isConnected();
         showSnackIfNoInternet(isConnected);

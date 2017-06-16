@@ -14,12 +14,12 @@ public class TicketThread {
     public String isReply;
     public String placeholder;
 
-    public TicketThread(String clientName, String messageTime, String message, String isReply) {
-        this.messageTime = messageTime;
-        this.message = message;
-        this.isReply = isReply;
-        this.clientName = clientName;
-    }
+//    public TicketThread(String clientName, String messageTime, String message, String isReply) {
+//        this.messageTime = messageTime;
+//        this.message = message;
+//        this.isReply = isReply;
+//        this.clientName = clientName;
+//    }
 
     public TicketThread(String clientPicture, String clientName, String messageTime, String messageTitle, String message, String isReply, String placeholder) {
         this.clientPicture = clientPicture;

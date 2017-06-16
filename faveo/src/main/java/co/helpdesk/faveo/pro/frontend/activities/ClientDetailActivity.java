@@ -244,13 +244,17 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 textViewClientEmail.setText(requester.getString("email"));
 
                 String phone = "";
-                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
-                    textViewClientPhone.setVisibility(View.INVISIBLE);
-                else
-                    phone = requester.getString("mobile");
-
-                textViewClientPhone.setText(phone);
-
+//                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
+//                    textViewClientPhone.setVisibility(View.INVISIBLE);
+//
+//                else
+                    phone = requester.getString("phone_number");
+                if (phone.equals("null")||phone.equals("")){
+                    textViewClientPhone.setVisibility(View.GONE);
+                }else {
+                    textViewClientPhone.setVisibility(View.VISIBLE);
+                    textViewClientPhone.setText(phone);
+                }
 
                 if (requester.getString("company").equals("null") || requester.getString("company").equals(""))
                     textViewClientCompany.setText("");

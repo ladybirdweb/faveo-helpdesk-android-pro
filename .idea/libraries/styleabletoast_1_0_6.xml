@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="styleabletoast-1.0.6">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/e671d2387eaaf2f9dd7f4c4e1810582ecc423ca4/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/e671d2387eaaf2f9dd7f4c4e1810582ecc423ca4/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/796296054022d1371b3bf8d1763a1f2686b8baf6/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/796296054022d1371b3bf8d1763a1f2686b8baf6/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

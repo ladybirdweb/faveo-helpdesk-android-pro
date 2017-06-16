@@ -1,7 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.drawers;
 
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -29,11 +27,9 @@ import agency.tango.android.avatarview.loader.PicassoLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.FaveoApplication;
+import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
-import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
@@ -44,7 +40,6 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.TrashTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
 import co.helpdesk.faveo.pro.frontend.services.MyFirebaseInstanceIDService;
-import es.dmoral.toasty.Toasty;
 
 /**
  * This is the fragment where we are going to handle the
@@ -59,6 +54,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     private FragmentDrawerListener drawerListener;
     View layout;
     Context context;
+    ConfirmationDialog confirmationDialog;
 
     @BindView(R.id.inbox_count)
     TextView inbox_count;
@@ -122,7 +118,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         layout.findViewById(R.id.about).setOnClickListener(this);
         layout.findViewById(R.id.logout).setOnClickListener(this);
         ButterKnife.bind(this, layout);
-
+        confirmationDialog=new ConfirmationDialog();
         inbox_count.setText(Prefs.getString("inboxTickets", "-"));
         closed_tickets_count.setText(Prefs.getString("closedTickets", "-"));
         unassigned_tickets_count.setText(Prefs.getString("unassignedTickets", "-"));
@@ -246,19 +242,20 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                confirmationDialog.show(getFragmentManager(),null);
 //                if (RealmController.with(this).hasTickets()) {
 //                    RealmController.with(this).clearAll();
 //                }
-                NotificationManager notificationManager =
-                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                FaveoApplication.getInstance().clearApplicationData();
-                Prefs.clear();
-                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                Toasty.success(getActivity(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
+//                NotificationManager notificationManager =
+//                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//                notificationManager.cancelAll();
+//                FaveoApplication.getInstance().clearApplicationData();
+//                Prefs.clear();
+//                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
+//                Toasty.success(getActivity(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
 
                 break;
         }

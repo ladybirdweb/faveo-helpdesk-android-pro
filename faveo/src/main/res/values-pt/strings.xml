@@ -7,6 +7,8 @@
     <string name="just_now">Agora mesmo</string>
     <string name="reset_password">Trocar a senha</string>
     <string name="empty_username">Nome de usuário vazio</string>
+    <string name="firstname_maximum_char">
+O primeiro nome não deve exceder 10 caracteres</string>
     <string name="create">Crio</string>
     <string name="send">Enviar</string>
     <string name="add">ADICIONAR</string>
@@ -15,6 +17,8 @@
     <string name="no_internet_connection">Sem ligação à Internet!</string>
     <string name="descending">descendente</string>
     <string name="ascending">Ascendente</string>
+    <string name="fill_all_the_details">
+Preencha todos os campos obrigatórios</string>
     <string name="sort_by">Ordenar por</string>
     <string name="due_by_time">Devido por tempo</string>
     <string name="due_by_date">Data de vencimento</string>
@@ -47,6 +51,11 @@
     <string name="sending_msg">Enviando mensagem</string>
     <string name="internal_notes_posted">Notas internas lançadas</string>
     <string name="posted_reply">Postado sua resposta</string>
+    <string name="only_special_characters_not_allowed_here">Somente caracteres especiais não são permitidos aqui</string>
+    <string name="please_select_some_priority">Selecione alguns Prioridade</string>
+    <string name="select_some_helptopic">
+Selecione alguns helptopic</string>
+    <string name="select_code">Selecione o código</string>
 
 
 
