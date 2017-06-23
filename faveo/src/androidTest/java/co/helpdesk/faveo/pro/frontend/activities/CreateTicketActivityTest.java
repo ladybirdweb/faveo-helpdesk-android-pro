@@ -17,7 +17,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -65,59 +64,32 @@ public class CreateTicketActivityTest {
         ViewInteraction appCompatCheckedTextView = onView(
                 Matchers.allOf(withId(android.R.id.text1), withText("Low"), isDisplayed()));
         appCompatCheckedTextView.perform(click());
-        ViewInteraction appCompatSpinner2 = onView(
-                allOf(withId(R.id.spinner_help), isDisplayed()));
-        appCompatSpinner2.perform(click());
+        onView(
+                allOf(withId(R.id.spinner_help), isDisplayed())).perform(click());
+//        ViewInteraction appCompatSpinner2 = onView(
+//                allOf(withId(R.id.spinner_help), isDisplayed()));
+//        appCompatSpinner2.perform(click());
+        onView(
+                allOf(withId(android.R.id.text1), withText("Support query"), isDisplayed())).perform(click());
+//        ViewInteraction appCompatCheckedTextView2 = onView(
+//                allOf(withId(android.R.id.text1), withText("Support query"), isDisplayed()));
+//        appCompatCheckedTextView2.perform(click());
 
-        ViewInteraction appCompatCheckedTextView2 = onView(
-                allOf(withId(android.R.id.text1), withText("Support query"), isDisplayed()));
-        appCompatCheckedTextView2.perform(click());
         //onView(withId(R.id.msg_edittext)).perform(closeSoftKeyboard());
-        onView(withId(R.id.msg_edittext)).perform(typeText(message));
-        ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.button_submit), withContentDescription("Create Ticket"), isDisplayed()));
-        actionMenuItemView.perform(click());
+        //onView(withId(R.id.button_submit)).perform(scrollTo(), click());
+        //onView(withId(R.id.msg_edittext)).perform(ViewActions.scrollTo()).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.msg_edittext)).perform(typeText(message),closeSoftKeyboard());
+        //onData(withId(R.id.msg_edittext)).perform(typeText(message),closeSoftKeyboard());
+//        onView(allOf(withId(R.id.msg_edittext), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE), withText(message))).perform(scrollTo(), click());
+        onView(withId(R.id.button_submit)).perform(click());
+//        ViewInteraction actionMenuItemView = onView(
+//                allOf(withId(R.id.button_submit), withContentDescription("Create Ticket"), isDisplayed()));
+//        actionMenuItemView.perform(click());
 //        onView(withId(R.id.spinner_pri)).perform(click());
 //        onData(allOf(is(instanceOf(Data.class)))).atPosition(2).perform(click());
 //        onView(withId(R.id.spinner_help_topics)).perform(click());
 //        onData(allOf(is(instanceOf(Data.class)))).atPosition(2).perform(click());
 
-
-
-
-
-
-
-
-
-//        onView(withText(R.string.verifying_url))
-//                .check(matches(isDisplayed()));
-//        onView(withText(R.string.access_checking))
-//                .check(matches(isDisplayed()));
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        //type in email
-//        onView(withId(R.id.input_username)).perform(typeText(email), closeSoftKeyboard());
-//
-        //type in password
-//        onView(withId(R.id.input_password)).perform(typeText(password), closeSoftKeyboard());
-
-        //click on login button
-//        onView(withId(R.id.button_signin)).perform(click());
-//        // Added a sleep statement to match the app's execution delay.
-//        // The recommended way to handle such scenarios is to use Espresso idling resources:
-//        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        ViewInteraction appCompatEditText = onView(
-//                allOf(withId(R.id.editText_company_url), isDisplayed()));
-//        appCompatEditText.perform(replaceText("http://"), closeSoftKeyboard());
     }
+
 }

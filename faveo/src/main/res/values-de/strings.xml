@@ -10,7 +10,7 @@
     <string name="send">Senden</string>
     <string name="add">HINZUFÜGEN</string>
     <string name="firstname_maximum_char">
-FirstName darf 10 Zeichen nicht überschreiten</string>
+FirstName darf 20 Zeichen nicht überschreiten</string>
     <string name="overdue">Überfällig</string>
     <string name="required">Erforderlich</string>
     <string name="no_internet_connection">Keine Internetverbindung!</string>

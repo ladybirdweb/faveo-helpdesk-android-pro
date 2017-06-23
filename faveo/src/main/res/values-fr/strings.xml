@@ -10,7 +10,7 @@
     <string name="create">Créer</string>
     <string name="send">Envoyer</string>
     <string name="add">AJOUTER</string>
-    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 10 caractères</string>
+    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 20 caractères</string>
     <string name="overdue">En retard</string>
     <string name="required">Champs obligatoires</string>
     <string name="no_internet_connection">Pas de connexion Internet!</string>

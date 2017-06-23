@@ -8,7 +8,7 @@
     <string name="reset_password">Trocar a senha</string>
     <string name="empty_username">Nome de usuário vazio</string>
     <string name="firstname_maximum_char">
-O primeiro nome não deve exceder 10 caracteres</string>
+O primeiro nome não deve exceder 20 caracteres</string>
     <string name="create">Crio</string>
     <string name="send">Enviar</string>
     <string name="add">ADICIONAR</string>

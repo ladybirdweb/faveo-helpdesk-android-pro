@@ -7,7 +7,7 @@
     <string name="just_now">Прямо сейчас</string>
     <string name="reset_password">Сброс пароля</string>
     <string name="empty_username">Пустое имя пользователя</string>
-    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 10 caractères</string>
+    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 20 caractères</string>
     <string name="create">Создайте</string>
     <string name="send">послать</string>
     <string name="add">ДОБАВИТЬ</string>

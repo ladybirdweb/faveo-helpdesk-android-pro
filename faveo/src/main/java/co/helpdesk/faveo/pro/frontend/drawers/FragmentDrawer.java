@@ -27,12 +27,12 @@ import agency.tango.android.avatarview.loader.PicassoLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
+import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
@@ -119,6 +119,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         layout.findViewById(R.id.logout).setOnClickListener(this);
         ButterKnife.bind(this, layout);
         confirmationDialog=new ConfirmationDialog();
+
         inbox_count.setText(Prefs.getString("inboxTickets", "-"));
         closed_tickets_count.setText(Prefs.getString("closedTickets", "-"));
         unassigned_tickets_count.setText(Prefs.getString("unassignedTickets", "-"));
@@ -147,6 +148,8 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getActivity().invalidateOptionsMenu();
+
+
             }
 
             @Override

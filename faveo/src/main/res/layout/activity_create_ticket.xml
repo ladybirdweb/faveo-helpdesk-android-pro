@@ -19,12 +19,12 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppThemeOverlay.ActionBar">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="200dp"
-            android:text="submit"
-            android:id="@+id/buttonSubmit"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="200dp"
+                android:text="submit"
+                android:id="@+id/buttonSubmit"/>
         </android.support.v7.widget.Toolbar>
 
 

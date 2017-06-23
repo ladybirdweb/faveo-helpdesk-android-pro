@@ -561,7 +561,7 @@ public class CreateTicketActivity extends AppCompatActivity {
             Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         }
-        else if (fname.length()>=10){
+        else if (fname.length()>20){
             Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
             allCorrect=false;
         }   else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
@@ -758,6 +758,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                 return;
             }
             try {
+
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("response");
                 String message=jsonObject1.getString("fails");
@@ -773,14 +774,21 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+
             }
+            else{
+      Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
+      finish();
+      startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+
+  }
 
 
         }
 
     }
 
-    /**
+     /**
      * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
      *
      * @param event
@@ -789,6 +797,16 @@ public class CreateTicketActivity extends AppCompatActivity {
     public void onMessageEvent(MessageEvent event) {
 
         showSnack(event.message);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+checkConnection();
+    }
+    private void checkConnection() {
+        boolean isConnected = InternetReceiver.isConnected();
+        showSnackIfNoInternet(isConnected);
     }
 
     @Override

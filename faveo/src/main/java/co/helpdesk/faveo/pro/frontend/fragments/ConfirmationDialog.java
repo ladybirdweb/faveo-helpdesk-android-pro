@@ -38,7 +38,7 @@ private Context context;
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
         builder.setTitle("Confirm log out....");
         builder.setIcon(R.mipmap.ic_launcher);
-        builder.setMessage("Are you sure");
+        builder.setMessage("Are you sure?");
         builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

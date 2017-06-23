@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         isShowing = true;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        
         // TODO: Move this to where you establish a user session
         //logUser();
 //        if (BuildConfig.DEBUG) {

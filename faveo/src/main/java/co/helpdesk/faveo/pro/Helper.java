@@ -16,13 +16,14 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
 
 /**
  * This helper class is responsible for parsing ticket,client and for the notifications.
- * Here we are doing the JSON parsing for the particular model class.
+ * Here we are doing the JSON parsing for the particular model class.After
+ * getting the json data we are creating object for that model class.
  */
 public class Helper {
     /**
      * Tickets Page.
      * @param jsonArray refers to the array of JSON elements.
-     * @param i
+     * @param i position of the element in array.
      * @return object for ticket overview.
      */
     public static TicketOverview parseTicketOverview(JSONArray jsonArray, int i) {
@@ -62,7 +63,7 @@ public class Helper {
     /**
      * Client Page.
      * @param jsonArray jsonArray refers to the array of JSON elements.
-     * @param i
+     * @param i position of the element in the array.
      * @return object for client overview.
      */
     public static ClientOverview parseClientOverview(JSONArray jsonArray, int i) {
@@ -119,7 +120,7 @@ public class Helper {
     /**
      * Notification Page.
      * @param jsonArray jsonArray jsonArray refers to the array of JSON elements.
-     * @param i
+     * @param i position of the element in the array.
      * @return object for notification thread.
      */
     public static NotificationThread parseNotifications(JSONArray jsonArray, int i) {

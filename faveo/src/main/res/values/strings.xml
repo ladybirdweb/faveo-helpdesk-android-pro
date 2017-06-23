@@ -109,7 +109,7 @@
     <string name="fill_all_the_details">Please fill all the required fields</string>
     <string name="fill_firstname">Fill FirstName</string>
     <string name="firstname_minimum_char">FirstName should be minimum 3 characters</string>
-    <string name="firstname_maximum_char">FirstName should not exceed 10 characters</string>
+    <string name="firstname_maximum_char">FirstName should not exceed 20 characters</string>
     <string name="fill_lastname">Fill LastName</string>
     <string name="invalid_email">Please enter valid email id</string>
     <string name="sub_must_not_be_empty">Subject must not be empty</string>
@@ -174,7 +174,7 @@
     <string name="select_code">Please select the code</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 </resources>

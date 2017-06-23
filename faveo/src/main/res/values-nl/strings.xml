@@ -13,7 +13,7 @@
     <string name="overdue">Achterstallig</string>
     <string name="required">nodig</string>
     <string name="no_internet_connection">Geen internet verbinding!</string>
-    <string name="firstname_maximum_char">FirstName mag niet langer zijn dan 10 karakters</string>
+    <string name="firstname_maximum_char">FirstName mag niet langer zijn dan 20 karakters</string>
     <string name="descending">Aflopend</string>
     <string name="ascending">oplopend</string>
     <string name="sort_by">Sorteer op</string>

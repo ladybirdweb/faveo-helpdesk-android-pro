@@ -51,8 +51,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -216,7 +214,23 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+    private class NewTask extends AsyncTask<String,Void,String>{
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
     /**
      *Async task is for verifying the url.
      */
@@ -657,15 +671,25 @@ public class LoginActivity extends AppCompatActivity {
 
         String username = usernameEdittext.getText().toString();
         String password = passwordEdittext.getText().toString();
-        if (username.trim().length() == 0 || password.trim().length() == 0) {
-            buttonSignIn.setEnabled(false);
-        } else {
-            buttonSignIn.setEnabled(true);
-        }
-
+//        if (username.trim().length()==0){
+//            textInputLayoutUsername.setError("Enter your full name");
+//        }
+//        else if (password.trim().length()==0){
+//            tex
+//        }
 //        if (username.trim().length() == 0 || password.trim().length() == 0) {
 //            buttonSignIn.setEnabled(false);
-//        } else if (username.trim().length() <= 2) {
+//        } else {
+//            buttonSignIn.setEnabled(true);
+//        }
+
+        if (username.trim().length() == 0 || password.trim().length() == 0) {
+            buttonSignIn.setEnabled(false);
+        }
+        else{
+            buttonSignIn.setEnabled(true);
+        }
+// else if (username.trim().length() <= 2) {
 //            textInputLayoutUsername.setError("Username must be at least 3 characters");
 //        } else {
 //            textInputLayoutUsername.setError(null);

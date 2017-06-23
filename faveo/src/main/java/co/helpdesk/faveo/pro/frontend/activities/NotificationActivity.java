@@ -376,4 +376,5 @@ public class NotificationActivity extends AppCompatActivity {
         nextPageURL = "";
     }
 
+
 }

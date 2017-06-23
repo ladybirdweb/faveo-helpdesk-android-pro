@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -372,8 +374,8 @@ public class Detail extends Fragment {
 
             if (result.contains("Edited successfully")) {
                 Toasty.success(getActivity(), getString(R.string.update_success), Toast.LENGTH_LONG).show();
-//                Intent intent=new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
+                Intent intent=new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
             } else
                 Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
         }
