@@ -14,10 +14,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
@@ -27,10 +24,12 @@ public class LoginActivityTest {
 
     @Test
     public void loginActivityTest() {
-        String email = "baratam.narendra";
-        String password = "demopass";
-        String url = "www.ladybirdweb.com/support";
-
+        String email = "sayar_samanta";
+        String password = "home@1234";
+        String url = "jamboreebliss.com/sayarnew/public";
+        /**
+         * Here we are passing the url and pressing the button for checking the URL is valid or not.
+         */
         onView(withId(R.id.editText_company_url)).perform(typeText(url), closeSoftKeyboard());
         onView(withId(R.id.fab_verify_url)).perform(click());
 //        onView(withText(R.string.verifying_url))
@@ -43,6 +42,10 @@ public class LoginActivityTest {
 //            e.printStackTrace();
 //        }
         //type in email
+        /**
+         * Here we are passing the log in credential and pressing the
+         * sign in button.
+         */
         onView(withId(R.id.input_username)).perform(typeText(email), closeSoftKeyboard());
 
         //type in password

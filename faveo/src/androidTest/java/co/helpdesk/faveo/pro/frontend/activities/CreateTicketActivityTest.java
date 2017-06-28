@@ -15,6 +15,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -32,6 +33,11 @@ public class CreateTicketActivityTest {
     @Rule
     public ActivityTestRule<CreateTicketActivity> mActivityTestRule = new ActivityTestRule<>(CreateTicketActivity.class);
 
+    /**
+     * method will check for creating the ticket.
+     * we are providing all the details and then we are
+     * pressing the submit button for creating the ticket.
+     */
     @Test
     public void createTicketActivityTest() {
         String fname="Sayar";
@@ -77,8 +83,13 @@ public class CreateTicketActivityTest {
 
         //onView(withId(R.id.msg_edittext)).perform(closeSoftKeyboard());
         //onView(withId(R.id.button_submit)).perform(scrollTo(), click());
-        //onView(withId(R.id.msg_edittext)).perform(ViewActions.scrollTo()).check(ViewAssertions.matches(isDisplayed()));
-        onView(withId(R.id.msg_edittext)).perform(typeText(message),closeSoftKeyboard());
+        onView(withId(R.id.msg_edittext)).perform(scrollTo()).perform(click());
+
+
+//        onView(withId(R.id.msg_edittext)).perform(scrollTo()).check(ViewAssertions.matches(isDisplayed()));
+//        onView(withId(R.id.msg_edittext)).perform(click()).check(matches(isDisplayed())).perform(click());
+
+        //onView(withId(R.id.msg_edittext)).perform(typeText(message));
         //onData(withId(R.id.msg_edittext)).perform(typeText(message),closeSoftKeyboard());
 //        onView(allOf(withId(R.id.msg_edittext), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE), withText(message))).perform(scrollTo(), click());
         onView(withId(R.id.button_submit)).perform(click());

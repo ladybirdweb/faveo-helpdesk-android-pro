@@ -121,7 +121,6 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    SearchView requesterSearchview;
     ProgressDialog progressDialog;
     ArrayList<Data> helptopicItems, priorityItems;
-    String code="";
     String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
@@ -594,6 +593,11 @@ public class CreateTicketActivity extends AppCompatActivity {
             Toasty.warning(this, getString(R.string.only_special_characters_not_allowed_here), Toast.LENGTH_SHORT).show();
             allCorrect=false;
         }
+        else if (subject.trim().length()>50){
+            Toasty.warning(this,"Subject must not exceed 50 characters"
+                    , Toast.LENGTH_SHORT).show();
+            allCorrect=false;
+        }
         else if (priority.ID == 0) {
             allCorrect = false;
             Toasty.warning(CreateTicketActivity.this, getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
@@ -776,17 +780,14 @@ public class CreateTicketActivity extends AppCompatActivity {
                 startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
 
             }
-            else{
-      Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
-      finish();
-      startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+
 
   }
 
 
         }
 
-    }
+
 
      /**
      * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
@@ -802,11 +803,7 @@ public class CreateTicketActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-checkConnection();
-    }
-    private void checkConnection() {
-        boolean isConnected = InternetReceiver.isConnected();
-        showSnackIfNoInternet(isConnected);
+
     }
 
     @Override

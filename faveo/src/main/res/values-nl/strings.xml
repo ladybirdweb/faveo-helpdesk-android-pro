@@ -139,7 +139,8 @@ Selecteer de code alstublieft</string>
     <string name="something_went_wrong">Er is iets misgegaan</string>
     <string name="invalid_url">Ongeldige URL</string>
     <string name="oops_no_internet">Oeps! Geen internet</string>
-    <string name="error_verifying_url">Fout bij het verifiëren van URL</string>
+    <string name="error_verifying_url">
+Controleer alstublieft uw Helpdesk-URL</string>
     <string name="wrong_credentials">Verkeerde referenties</string>
     <string name="connected_to_internet">Aangesloten op internet</string>
     <string name="sry_not_connected_to_internet">Sorry! Niet aangesloten op internet</string>

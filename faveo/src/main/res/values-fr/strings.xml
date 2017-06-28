@@ -135,7 +135,7 @@ Sélectionnez le code</string>
     <string name="something_went_wrong">Quelque chose s\'est mal passé</string>
     <string name="invalid_url">URL non valide</string>
     <string name="oops_no_internet">Oups! Pas d\'Internet</string>
-    <string name="error_verifying_url">Erreur lors de la vérification de l\'URL</string>
+    <string name="error_verifying_url">Vérifiez votre URL de Helpdesk</string>
     <string name="wrong_credentials">Pouvoirs erronés</string>
     <string name="connected_to_internet">Connexion à Internet</string>
     <string name="sry_not_connected_to_internet">Désolé! Pas connecté à Internet</string>

@@ -120,11 +120,11 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, layout);
         confirmationDialog=new ConfirmationDialog();
 
-        inbox_count.setText(Prefs.getString("inboxTickets", "-"));
-        closed_tickets_count.setText(Prefs.getString("closedTickets", "-"));
-        unassigned_tickets_count.setText(Prefs.getString("unassignedTickets", "-"));
-        trash_tickets_count.setText(Prefs.getString("trashTickets", "-"));
-        my_tickets_count.setText(Prefs.getString("myTickets", "-"));
+        inbox_count.setText(Prefs.getString("inboxTickets",null));
+        closed_tickets_count.setText(Prefs.getString("closedTickets", null));
+        unassigned_tickets_count.setText(Prefs.getString("unassignedTickets",null));
+        trash_tickets_count.setText(Prefs.getString("trashTickets", null));
+        my_tickets_count.setText(Prefs.getString("myTickets", null));
 
         IImageLoader imageLoader = new PicassoLoader();
         imageLoader.loadImage(profilePic, Prefs.getString("PROFILE_PIC", null), Prefs.getString("USERNAME", " ").charAt(0) + "");

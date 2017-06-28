@@ -41,7 +41,7 @@ public class Helpdesk {
                 "&user_id=" + userID +
                 "&subject=" + subject +
                 "&body=" + body +
-                "&helptopic=" + helpTopic +
+                "&help_topic=" + helpTopic +
                 // "&sla=" + sla +
                 "&priority=" + priority +
                 //"&dept=" + dept +
@@ -59,7 +59,7 @@ public class Helpdesk {
                 "&user_id=" + userID +
                 "&subject=" + subject +
                 "&body=" + body +
-                "&helptopic=" + helpTopic +
+                "&help_topic=" + helpTopic +
                 // "&sla=" + sla +
                 "&priority=" + priority +
                 // "&dept=" + dept +
@@ -78,7 +78,7 @@ public class Helpdesk {
                     "&user_id=" + userID +
                     "&subject=" + subject +
                     "&body=" + body +
-                    "&helptopic=" + helpTopic +
+                    "&help_topic=" + helpTopic +
                     // "&sla=" + sla +
                     "&priority=" + priority +
                     //  "&dept=" + dept +
@@ -135,23 +135,23 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
-                "&ticketid=" + ticketID +
-                "&userid=" + userID +
+                "&ticket_id=" + ticketID +
+                "&user_id=" + userID +
                 "&body=" + note);
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/internal-note?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
-                "&ticketid=" + ticketID +
-                "&userid=" + userID +
+                "&ticket_id=" + ticketID +
+                "&user_id=" + userID +
                 "&body=" + note, null);
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/internal-note?" +
                     "api_key=" + apiKey +
                     "&ip=" + IP +
                     "&token=" + token +
-                    "&ticketid=" + ticketID +
-                    "&userid=" + userID +
+                    "&ticket_id=" + ticketID +
+                    "&user_id=" + userID +
                     "&body=" + note, null);
         return result;
     }
@@ -161,14 +161,14 @@ public class Helpdesk {
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
-                "&ticket_ID=" + ticketID +
+                "&ticket_id=" + ticketID +
 
                 "&reply_content=" + replyContent);
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/reply?" +
                         "api_key=" + apiKey +
                         "&ip=" + IP +
                         "&token=" + token +
-                        "&ticket_ID=" + ticketID +
+                        "&ticket_id=" + ticketID +
 
                         "&reply_content=" + replyContent,
                 null);
@@ -177,7 +177,7 @@ public class Helpdesk {
                     "api_key=" + apiKey +
                     "&ip=" + IP +
                     "&token=" + token +
-                    "&ticket_ID=" + ticketID +
+                    "&ticket_id=" + ticketID +
 
                     "&reply_content=" + replyContent, null);
         return result;

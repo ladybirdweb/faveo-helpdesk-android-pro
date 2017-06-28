@@ -13,6 +13,16 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:orientation="vertical">
+      <ImageButton
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="10dp"
+          android:src="@drawable/ic_arrow_back_black_24dp"
+          android:background="#ffffff"
+          android:tint="#3da6d7"
+          android:visibility="invisible"
+          android:id="@+id/backButton"
+          />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -88,7 +98,8 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
-                tools:context=".LoginActivity">
+                tools:context=".LoginActivity"
+                android:id="@+id/animationLayout">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -137,7 +148,16 @@
                         android:src="@mipmap/ic_arrow_forward_white_24dp"
                         app:fabSize="mini" />
 
+
+
                 </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/urlError"
+                    android:visibility="gone"
+                    android:text="Please enter a valid url"
+                    android:textColor="#ff0000"/>
 
             </LinearLayout>
             <ScrollView
@@ -163,6 +183,13 @@
                         android:hint="@string/user_name"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:id="@+id/usernameError"
+                        android:visibility="gone"
+                        android:text="Username is required"
+                        android:textColor="#ff0000"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -181,6 +208,13 @@
                         android:hint="@string/password"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:id="@+id/passwordError"
+                        android:visibility="gone"
+                        android:text="Password is required"
+                        android:textColor="#ff0000"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
@@ -190,6 +224,7 @@
                     android:layout_margin="32dp"
                     android:background="@drawable/button_background"
                     android:text="@string/sign_in"
+                    android:visibility="visible"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -197,7 +232,6 @@
 
 
         </ViewFlipper>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

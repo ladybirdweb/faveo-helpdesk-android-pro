@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,6 +76,8 @@ public class Detail extends Fragment {
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter;
     Button buttonSave;
+    Animation animation;
+
 
     private String mParam1;
     private String mParam2;
@@ -115,6 +119,7 @@ public class Detail extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         setUpViews(rootView);
+        animation= AnimationUtils.loadAnimation(getActivity(),R.anim.shake_error);
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.fetching_detail));
         // progressDialog.show();
@@ -142,20 +147,20 @@ public class Detail extends Fragment {
 //                } else
 
                 if (subject.trim().length() == 0) {
-                    setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.please_fill_field));
+                    Toasty.warning(getActivity(), getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
                     allCorrect = false;
                 } else if (subject.trim().length() < 5) {
-                    setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.sub_minimum_char));
+                    Toasty.warning(getActivity(), getString(R.string.sub_minimum_char), Toast.LENGTH_SHORT).show();
                     allCorrect = false;
                 } else if (helpTopic.ID == 0) {
                     allCorrect = false;
-                    Toasty.warning(getContext(), "Please select some helptopic", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(getActivity(), getString(R.string.select_some_helptopic), Toast.LENGTH_SHORT).show();
                 } else if (priority.ID == 0) {
                     allCorrect = false;
-                    Toasty.warning(getContext(), "Please select some Priority", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(getActivity(), getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
                 } else if (source.ID == 0) {
                     allCorrect = false;
-                    Toasty.warning(getContext(), "Please select some Source", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
                 }
 
                 if (allCorrect) {
@@ -367,10 +372,10 @@ public class Detail extends Fragment {
                 return;
             }
 
-            switch (result) {
-                case "":
-
-            }
+//            switch (result) {
+//                case "":
+//
+//            }
 
             if (result.contains("Edited successfully")) {
                 Toasty.success(getActivity(), getString(R.string.update_success), Toast.LENGTH_LONG).show();
