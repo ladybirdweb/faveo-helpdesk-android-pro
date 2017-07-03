@@ -1,5 +1,4 @@
 package co.helpdesk.faveo.pro.frontend.activities;
-
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
