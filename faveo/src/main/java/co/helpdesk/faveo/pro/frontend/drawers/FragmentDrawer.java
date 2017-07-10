@@ -293,7 +293,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 //listView.setAdapter(null);
                 //progressDialog=new ProgressDialog(getActivity());
 
-                new FetchDependency().execute();
+//                new FetchDependency().execute();
                 //Toasty.normal(getActivity(), "Getting Information", Toast.LENGTH_LONG).show();
                 getActivity().invalidateOptionsMenu();
             }
@@ -304,7 +304,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 //listView.setAdapter(null);
                 //progressDialog=new ProgressDialog(getActivity());
 
-                new FetchDependency().execute();
+//                new FetchDependency().execute();
                 toolbar.setAlpha(1 - slideOffset / 2);
             }
         };
@@ -433,6 +433,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
         }
     }
+
 
 //    @Override
 //    public void onResume() {

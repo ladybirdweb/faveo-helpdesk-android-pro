@@ -1,6 +1,8 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,13 +59,17 @@ public class NotificationActivity extends AppCompatActivity {
 
     @BindView(R.id.noiternet_view)
     TextView noInternet_view;
+    @BindView(R.id.totalcount)
+    TextView textView;
 
     static String nextPageURL = "";
+    ProgressDialog progressDialog;
 
     NotificationAdapter notificationAdapter;
     List<NotificationThread> notiThreadList = new ArrayList<>();
 
     private boolean loading = true;
+    int total;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
     @Override
@@ -76,10 +82,12 @@ public class NotificationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        progressDialog=new ProgressDialog(NotificationActivity.this);
+        progressDialog.setMessage("Please wait");
         if (InternetReceiver.isConnected()) {
             noInternet_view.setVisibility(View.GONE);
             // swipeRefresh.setRefreshing(true);
+            progressDialog.show();
             new FetchFirst(this).execute();
         } else {
             noInternet_view.setVisibility(View.VISIBLE);
@@ -145,6 +153,8 @@ public class NotificationActivity extends AppCompatActivity {
             notiThreadList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                total=jsonObject.getInt("total");
+
                 try {
                     data = jsonObject.getString("data");
                     nextPageURL = jsonObject.getString("next_page_url");
@@ -164,7 +174,8 @@ public class NotificationActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-
+            progressDialog.dismiss();
+            textView.setText(""+total+" notifications");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
 
@@ -374,6 +385,15 @@ public class NotificationActivity extends AppCompatActivity {
         super.onDestroy();
         // mListener = null;
         nextPageURL = "";
+    }
+    @Override
+    public void onBackPressed() {
+        // your code.
+        progressDialog.setMessage("Please wait");
+        progressDialog.show();
+        Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
+//        progressDialog.dismiss();
+        startActivity(intent);
     }
 
 

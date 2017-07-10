@@ -178,10 +178,10 @@ public class Conversation extends Fragment {
 //                            clientName="system";
 //                        }else
                         if (firstName.equals("null")&&lastName.equals("null")&&userName.equals("null")){
-                            clientName="System";
+                            clientName="System Generated";
                         }
                         else if (clientName.equals("")&&userName.equals("null")&&userName.equals("null")){
-                            clientName="System";
+                            clientName="System Generated";
                         }
                         else if ((firstName.equals("null"))&&(lastName.equals("null"))&&(userName!=null)){
                             clientName=userName;

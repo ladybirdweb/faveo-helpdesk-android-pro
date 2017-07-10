@@ -764,9 +764,9 @@ public class CreateTicketActivity extends AppCompatActivity {
             try {
 
                 JSONObject jsonObject=new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("response");
-                String message=jsonObject1.getString("fails");
-                if (message.contains("Code is required with phone/mobile number.")){
+                JSONObject jsonObject1=jsonObject.getJSONObject("error");
+                String message=jsonObject1.getString("code");
+                if (message.contains("The code feild is required.")){
                     Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
                 }
 

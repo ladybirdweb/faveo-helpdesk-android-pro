@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -53,8 +54,12 @@ public class UnassignedTickets extends Fragment {
     View rootView;
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.totalcount)
+            TextView textView;
 
+    ProgressDialog progressDialog;
     TicketOverviewAdapter ticketOverviewAdapter;
+    int total;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
 
     private boolean loading = true;
@@ -104,9 +109,12 @@ public class UnassignedTickets extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+            progressDialog=new ProgressDialog(getActivity());
+            progressDialog.setMessage("Please wait");
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
+                progressDialog.show();
                 new FetchFirst(getActivity()).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -153,6 +161,7 @@ public class UnassignedTickets extends Fragment {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                total=jsonObject.getInt("total");
                 try {
                     data = jsonObject.getString("data");
                     int unasigned = jsonObject.getInt("total");
@@ -178,7 +187,8 @@ public class UnassignedTickets extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-
+            progressDialog.dismiss();
+            textView.setText(""+total+" tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
 
