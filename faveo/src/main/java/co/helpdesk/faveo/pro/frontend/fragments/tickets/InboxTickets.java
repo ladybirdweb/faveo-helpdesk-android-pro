@@ -344,6 +344,17 @@ public class InboxTickets extends Fragment {
         }
     }
     /**
+     * Whenever the this method is going to be called then the
+     * async task will be cancelled .
+     */
+    @Override
+    public void onStop() {
+        // notice here that I keep a reference to the task being executed as a class member:
+        if (this.new FetchFirst(getActivity()) != null && this.new FetchFirst(getActivity()).getStatus() == AsyncTask.Status.RUNNING)
+            this.new FetchFirst(getActivity()).cancel(true);
+        super.onStop();
+    }
+    /**
      * When the fragment is going to be attached
      * this life cycle method is going to be called.
      * @param context refers to the current fragment.
@@ -358,6 +369,7 @@ public class InboxTickets extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
     /**
      * Once the fragment is going to be detached then
      * this method is going to be called.

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="bottomsheet-0.9">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/fd4d0d3d19d28673181a122ea392da75b5489d6b/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/fd4d0d3d19d28673181a122ea392da75b5489d6b/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/08d48f76f1b391a511ff7b74d45b699e3a42fb21/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/08d48f76f1b391a511ff7b74d45b699e3a42fb21/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

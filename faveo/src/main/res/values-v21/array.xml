@@ -45,10 +45,10 @@
 
     <string-array name="codes" translatable="false">
         <item>Code</item>
-        <item>Afghanistan,93</item>
+        <item>Afghanistan,+93</item>
         <item>Albania,355</item>
         <item>Algeria,213</item>
-        <item>AmericanSamoa,1-684</item>
+        <item>American Samoa,1-684</item>
         <item>Andorra,376</item>
         <item>Angola,244</item>
         <item>Anguilla,1-264</item>
@@ -57,7 +57,7 @@
         <item>Armenia,374</item>
         <item>Aruba,297</item>
         <item>Australia,61</item>
-        <item>Austria 43</item>
+        <item>Austria,43</item>
         <item>Azerbaijan,994</item>
         <item>Bahamas,1-242</item>
         <item>Bahrain,973</item>
@@ -212,7 +212,7 @@
         <item>Peru,51</item>
         <item>Philippines,63</item>
         <item>Pitcairn,64</item>
-        <item>Poland, 48</item>
+        <item>Poland,48</item>
         <item>Portugal,351</item>
         <item>Puerto Rico,1-787</item>
         <item>Qatar,974</item>

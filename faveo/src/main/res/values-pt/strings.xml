@@ -54,6 +54,8 @@ Preencha todos os campos obrigatórios</string>
     <string name="only_special_characters_not_allowed_here">Somente caracteres especiais não são permitidos aqui</string>
     <string name="please_select_some_priority">Selecione alguns Prioridade</string>
     <string name="select_some_helptopic">
+        <string name="select_source">
+Selecione alguma Origem</string>
 Selecione alguns helptopic</string>
     <string name="select_code">Selecione o código</string>
 

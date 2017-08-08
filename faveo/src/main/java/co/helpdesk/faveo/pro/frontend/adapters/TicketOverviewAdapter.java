@@ -45,9 +45,26 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
         }
         if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
-            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+//            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+//                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+//            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+
+             if (Helper.compareDates(ticketOverview.dueDate) == 2) {
                 ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+                ticketViewHolder.textViewOverdue.setText(R.string.due_today);
+                 ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#FFD700"));
+                //ticketViewHolder.textViewOverdue.setBackgroundColor();
+
+            }
+            else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+            ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+                 ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+                 ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ef9a9a"));
+
+        }
+        else {
+                ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+            }
 
         ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
         ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);

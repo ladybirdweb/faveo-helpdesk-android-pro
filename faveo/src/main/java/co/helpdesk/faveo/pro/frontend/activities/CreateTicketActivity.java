@@ -34,6 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
@@ -85,8 +86,8 @@ public class CreateTicketActivity extends AppCompatActivity {
     EditText editTextLastName;
     @BindView(R.id.phone_edittext)
     EditText editTextPhone;
-    @BindView(R.id.spinner_code)
-    SearchableSpinner phCode;
+//    @BindView(R.id.spinner_code)
+//    SearchableSpinner phCode;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
@@ -124,6 +125,7 @@ public class CreateTicketActivity extends AppCompatActivity {
     String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
+    CountryCodePicker countryCodePicker;
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -146,8 +148,18 @@ public class CreateTicketActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.create_ticket);
+        //getSupportActionBar().setTitle(R.string.create_ticket);
         //ccp = (CountryCodePicker) findViewById(R.id.ccp);
+        countryCodePicker= (CountryCodePicker) findViewById(R.id.countrycoode);
+        countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
+            @Override
+            public void onCountrySelected() {
+                //Toast.makeText(MainActivity.this, "code :"+countryCodePicker.getSelectedCountryCode(), Toast.LENGTH_SHORT).show();
+
+                countrycode=countryCodePicker.getSelectedCountryCode();
+            }
+        });
+        editTextFirstName.requestFocus();
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +189,9 @@ public class CreateTicketActivity extends AppCompatActivity {
                 priorityItems.add(data);
             }
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch (ArrayIndexOutOfBoundsException e){
             e.printStackTrace();
         }
 
@@ -529,11 +544,13 @@ public class CreateTicketActivity extends AppCompatActivity {
         String phone = editTextPhone.getText().toString();
         mobile = editTextMobile.getText().toString();
 
-        if (!phCode.getSelectedItem().toString().equals("Code")) {
-            countrycode = phCode.getSelectedItem().toString();
-            String[] cc = countrycode.split(",");
-            countrycode = cc[1];
-        }
+//        if (!phCode.getSelectedItem().toString().equals("Code")) {
+//            countrycode = phCode.getSelectedItem().toString();
+//            String[] cc = countrycode.split(",");
+//            countrycode = cc[1];
+//        }
+
+        countrycode=countryCodePicker.getSelectedCountryCode();
 
 
         allCorrect = true;
@@ -593,8 +610,8 @@ public class CreateTicketActivity extends AppCompatActivity {
             Toasty.warning(this, getString(R.string.only_special_characters_not_allowed_here), Toast.LENGTH_SHORT).show();
             allCorrect=false;
         }
-        else if (subject.trim().length()>50){
-            Toasty.warning(this,"Subject must not exceed 50 characters"
+        else if (subject.trim().length()>100){
+            Toasty.warning(this,"Subject must not exceed 100 characters"
                     , Toast.LENGTH_SHORT).show();
             allCorrect=false;
         }
@@ -716,6 +733,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
         }
     }
+
 
     /**
      * Async task for creating the ticket.

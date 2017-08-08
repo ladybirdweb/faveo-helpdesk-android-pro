@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/textView_client_name"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView_ticket_subject"
             android:layout_centerHorizontal="true"
@@ -133,19 +133,17 @@
 
         <TextView
             android:id="@+id/overdue_view"
-            android:layout_width="60dp"
+            android:layout_width="70dp"
             android:layout_height="20dp"
             android:layout_alignEnd="@+id/textView_ticket_time"
             android:layout_alignRight="@+id/textView_ticket_time"
             android:layout_alignTop="@+id/textView_client_name"
-            android:background="@drawable/curve_corners"
             android:gravity="center"
             android:paddingBottom="2dp"
-            android:text="@string/overdue"
-            android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="visible"
+           />
 
         <ImageView
             android:id="@+id/attachment_icon"

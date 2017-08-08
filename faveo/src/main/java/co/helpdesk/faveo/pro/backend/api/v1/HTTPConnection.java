@@ -62,6 +62,14 @@ class HTTPConnection {
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 String ret = null;
                 switch (connection.getResponseCode()) {
+                    case HttpURLConnection.HTTP_UNAUTHORIZED:
+                        Log.e("Response code: ", "401-UNAUTHORIZED!");
+                        //ret="HTTP_UNAUTHORIZED";
+                        if (refreshToken() == null)
+                            return null;
+                        new Helpdesk();
+                        new Authenticate();
+                        return "tokenRefreshed";
                     case HttpURLConnection.HTTP_NOT_FOUND:
                         Log.e("Response code: ", "NotFound-404!");
                         //ret = "notFound";
@@ -204,8 +212,12 @@ class HTTPConnection {
                 switch (connection.getResponseCode()) {
                     case HttpURLConnection.HTTP_UNAUTHORIZED:
                         Log.e("Response code: ", "401-UNAUTHORIZED!");
-                        ret="HTTP_UNAUTHORIZED";
-                        break;
+                        //ret="HTTP_UNAUTHORIZED";
+                        if (refreshToken() == null)
+                            return null;
+                        new Helpdesk();
+                        new Authenticate();
+                        return "tokenRefreshed";
                     case HttpURLConnection.HTTP_NOT_FOUND:
                         Log.e("Response code: ", "404-NOT_FOUND!");
                         ret="HTTP_NOT_FOUND";
@@ -228,7 +240,7 @@ class HTTPConnection {
                             return null;
                         new Helpdesk();
                         new Authenticate();
-                        ret = "token Refreshed";
+                        ret = "tokenRefreshed";
                         break;
                     default:
 

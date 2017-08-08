@@ -246,18 +246,28 @@ public class Detail extends Fragment {
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
                 }
+                catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
 
                 try {
                     if (jsonObject1.getString("type_name") != null) {
                         // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
-                        spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
+                            spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
+                        //spinnerType.setSelection(Integer.parseInt(jsonObject1.getString("type")));
                     }
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
                 }
+                catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
                 try {
                     if (jsonObject1.getString("helptopic_name") != null)
-                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                } catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
                 } catch (Exception e) {
 //                    spinnerHelpTopics.setVisibility(View.GONE);
 //                    tv_helpTopic.setVisibility(View.GONE);
@@ -269,6 +279,9 @@ public class Detail extends Fragment {
 
                         spinnerSource.setSelection(getIndex(spinnerSource, jsonObject1.getString("source_name")));
                 } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
+                }
+                catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 }
 

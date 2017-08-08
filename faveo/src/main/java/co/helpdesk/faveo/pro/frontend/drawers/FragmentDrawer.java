@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.drawers;
 
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -38,10 +39,13 @@ import agency.tango.android.avatarview.loader.PicassoLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.Constants;
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UIUtils;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
+import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
@@ -63,6 +67,7 @@ import es.dmoral.toasty.Toasty;
  */
 public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private View containerView;
@@ -73,7 +78,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     DataModel[] drawerItem;
     DrawerItemCustomAdapter drawerItemCustomAdapter;
     ConfirmationDialog confirmationDialog;
-    int count=0;
+    //int count=0;
     ProgressDialog progressDialog;
     String title;
 
@@ -256,7 +261,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         ticketList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count++;
+                //count++;
                 listView.setVisibility(View.VISIBLE);
             }
         });
@@ -266,6 +271,18 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    /**
+     * Whenever the this method is going to be called then the
+     * async task will be cancelled .
+     */
+    @Override
+    public void onStop() {
+        // notice here that I keep a reference to the task being executed as a class member:
+        if (this.new FetchDependency() != null && this.new FetchDependency().getStatus() == AsyncTask.Status.RUNNING)
+            this.new FetchDependency().cancel(true);
+        super.onStop();
     }
 
 
@@ -398,19 +415,26 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                     Prefs.putString("unassignedTickets", "999+");
                 else
                     Prefs.putString("unassignedTickets", unasigned + "");
-                drawerItem[0] = new DataModel(R.drawable.inbox_tickets,getString(R.string.inbox),Prefs.getString("inboxTickets",null));
-                drawerItem[1] = new DataModel(R.drawable.my_ticket,getString(R.string.my_tickets),Prefs.getString("myTickets", null));
-                drawerItem[2] = new DataModel(R.drawable.unassigned_ticket,getString(R.string.unassigned_tickets),Prefs.getString("unassignedTickets",null));
-                drawerItem[3] = new DataModel(R.drawable.closed_ticket,getString(R.string.closed_tickets),Prefs.getString("closedTickets", null));
-                drawerItem[4] = new DataModel(R.drawable.trash_ticket ,getString(R.string.trash),Prefs.getString("trashTickets", null));
-                drawerItemCustomAdapter=new DrawerItemCustomAdapter(getActivity(),R.layout.list_view_item_row,drawerItem);
-                listView.setAdapter(drawerItemCustomAdapter);
-                drawerItemCustomAdapter.notifyDataSetChanged();
-                UIUtils.setListViewHeightBasedOnItems(listView);
+                if (isAdded()) {
+                    drawerItem[0] = new DataModel(R.drawable.inbox_tickets, getString(R.string.inbox), Prefs.getString("inboxTickets", null));
+                    drawerItem[1] = new DataModel(R.drawable.my_ticket, getString(R.string.my_tickets), Prefs.getString("myTickets", null));
+                    drawerItem[2] = new DataModel(R.drawable.unassigned_ticket, getString(R.string.unassigned_tickets), Prefs.getString("unassignedTickets", null));
+                    drawerItem[3] = new DataModel(R.drawable.closed_ticket, getString(R.string.closed_tickets), Prefs.getString("closedTickets", null));
+                    drawerItem[4] = new DataModel(R.drawable.trash_ticket, getString(R.string.trash), Prefs.getString("trashTickets", null));
+                    drawerItemCustomAdapter = new DrawerItemCustomAdapter(getActivity(), R.layout.list_view_item_row, drawerItem);
+                    listView.setAdapter(drawerItemCustomAdapter);
+                    drawerItemCustomAdapter.notifyDataSetChanged();
+                    UIUtils.setListViewHeightBasedOnItems(listView);
 //                drawerItemCustomAdapter.notifyDataSetChanged();
 //
 
-            } catch (JSONException e) {
+                }
+//                else{
+//                    Toasty.warning(getActivity(),"Something went wrong",Toast.LENGTH_LONG).show();
+//                }
+            }
+
+            catch (JSONException e) {
                 Toasty.error(getActivity(), "Parsing Error!", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
@@ -517,16 +541,16 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 //                if (RealmController.with(this).hasTickets()) {
 //                    RealmController.with(this).clearAll();
 //                }
-//                NotificationManager notificationManager =
-//                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//                notificationManager.cancelAll();
-//                FaveoApplication.getInstance().clearApplicationData();
-//                Prefs.clear();
-//                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
-//                Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                startActivity(intent);
-//                Toasty.success(getActivity(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
+                NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancelAll();
+                FaveoApplication.getInstance().clearApplicationData();
+                Prefs.clear();
+                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                Toasty.success(getActivity(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
 
                 break;
         }

@@ -51,6 +51,8 @@ Si prega di compilare tutti i campi richiesti</string>
     <string name="internal_notes_posted">note interne pubblicate</string>
     <string name="posted_reply">Pubblicato tua risposta</string>
     <string name="only_special_characters_not_allowed_here">Solo i caratteri speciali non sono ammessi qui</string>
+    <string name="select_source">
+Seleziona una sorgente</string>
 
     <string name="please_select_some_priority">Seleziona una priorità</string>
     <string name="select_some_helptopic">

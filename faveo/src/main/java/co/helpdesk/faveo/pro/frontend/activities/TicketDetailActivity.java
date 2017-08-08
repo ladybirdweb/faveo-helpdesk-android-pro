@@ -607,7 +607,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public void onBackPressed() {
         if (!MainActivity.isShowing) {
             Log.d("isShowing", "false");
-            Intent intent = new Intent(this, SplashActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else Log.d("isShowing", "true");
 

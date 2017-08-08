@@ -256,10 +256,13 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     textViewClientPhone.setText(phone);
                 }
 
-                if (requester.getString("company").equals("null") || requester.getString("company").equals(""))
-                    textViewClientCompany.setText("");
-                else
+                if (requester.getString("company").equals("null") || requester.getString("company").equals("")) {
+                    textViewClientCompany.setVisibility(View.GONE);
+                }
+                else {
+                    textViewClientCompany.setVisibility(View.VISIBLE);
                     textViewClientCompany.setText(requester.getString("company"));
+                }
                 textViewClientStatus.setText(requester.getString("active" +
                         "").equals("1") ? getString(R.string.active) : getString(R.string.inactive));
                 String clientPictureUrl = requester.getString("profile_pic");

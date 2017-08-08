@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +65,8 @@ public class NotificationActivity extends AppCompatActivity {
 
     static String nextPageURL = "";
     ProgressDialog progressDialog;
+
+    protected boolean doubleBackToExitPressedOnce = false;
 
     NotificationAdapter notificationAdapter;
     List<NotificationThread> notiThreadList = new ArrayList<>();
@@ -386,14 +389,39 @@ public class NotificationActivity extends AppCompatActivity {
         // mListener = null;
         nextPageURL = "";
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        if (doubleBackToExitPressedOnce) {
+//            super.onBackPressed();
+//            return;
+//        }
+//
+//        this.doubleBackToExitPressedOnce = true;
+//        //Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
+//        MainActivity mainActivity=new MainActivity();
+//        mainActivity.finish();
+//
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                doubleBackToExitPressedOnce = false;
+//            }
+//        }, 2500);
+//    }
+
+
     @Override
     public void onBackPressed() {
         // your code.
-        progressDialog.setMessage("Please wait");
-        progressDialog.show();
-        Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
-//        progressDialog.dismiss();
-        startActivity(intent);
+//        progressDialog.setMessage("Please wait");
+//        progressDialog.show();
+        finish();
+//        Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
+////        progressDialog.dismiss();
+//        startActivity(intent);
+
     }
 
 

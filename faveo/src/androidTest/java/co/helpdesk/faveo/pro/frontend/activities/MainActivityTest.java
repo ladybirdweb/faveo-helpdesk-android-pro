@@ -80,56 +80,56 @@ public class MainActivityTest {
  * This is for opening the drawer and clicking on the
  * inbox ticket option.
  */
-        onView(
-                allOf(withContentDescription("Open"),
-                        withParent(allOf(withId(R.id.toolbar),
-                                withParent(withId(R.id.appBarLayout)))),
-                        isDisplayed())).perform(click());
-        onView(withId(R.id.inbox_tickets)).perform(click());
+//        onView(
+//                allOf(withContentDescription("Open"),
+//                        withParent(allOf(withId(R.id.toolbar),
+//                                withParent(withId(R.id.appBarLayout)))),
+//                        isDisplayed())).perform(click());
+//        onView(withId(R.id.inbox_tickets)).perform(click());
 /**
  * This is for opening the drawer and clicking on the
  * my ticket option.
  */
 
-        onView(
-                allOf(withContentDescription("Open"),
-                        withParent(allOf(withId(R.id.toolbar),
-                                withParent(withId(R.id.appBarLayout)))),
-                        isDisplayed())).perform(click());
-        onView(withId(R.id.my_tickets)).perform(click());
+//        onView(
+//                allOf(withContentDescription("Open"),
+//                        withParent(allOf(withId(R.id.toolbar),
+//                                withParent(withId(R.id.appBarLayout)))),
+//                        isDisplayed())).perform(click());
+//        onView(withId(R.id.my_tickets)).perform(click());
 
 /**
  * This is for opening the drawer and clicking on the
  * unassigned ticket option.
  */
-        onView(
-                allOf(withContentDescription("Open"),
-                        withParent(allOf(withId(R.id.toolbar),
-                                withParent(withId(R.id.appBarLayout)))),
-                        isDisplayed())).perform(click());
-        onView(withId(R.id.unassigned_tickets)).perform(click());
-
-/**
- * This is for opening the drawer and clicking on the
- * closed ticket option.
- */
-        onView(
-                allOf(withContentDescription("Open"),
-                        withParent(allOf(withId(R.id.toolbar),
-                                withParent(withId(R.id.appBarLayout)))),
-                        isDisplayed())).perform(click());
-        onView(withId(R.id.closed_tickets)).perform(click());
-
-/**
- * This is for opening the drawer and clicking on the
- * trash ticket option.
- */
-        onView(
-                allOf(withContentDescription("Open"),
-                        withParent(allOf(withId(R.id.toolbar),
-                                withParent(withId(R.id.appBarLayout)))),
-                        isDisplayed())).perform(click());
-        onView(withId(R.id.trash_tickets)).perform(click());
+//        onView(
+//                allOf(withContentDescription("Open"),
+//                        withParent(allOf(withId(R.id.toolbar),
+//                                withParent(withId(R.id.appBarLayout)))),
+//                        isDisplayed())).perform(click());
+//        onView(withId(R.id.unassigned_tickets)).perform(click());
+//
+///**
+// * This is for opening the drawer and clicking on the
+// * closed ticket option.
+// */
+//        onView(
+//                allOf(withContentDescription("Open"),
+//                        withParent(allOf(withId(R.id.toolbar),
+//                                withParent(withId(R.id.appBarLayout)))),
+//                        isDisplayed())).perform(click());
+//        onView(withId(R.id.closed_tickets)).perform(click());
+//
+///**
+// * This is for opening the drawer and clicking on the
+// * trash ticket option.
+// */
+//        onView(
+//                allOf(withContentDescription("Open"),
+//                        withParent(allOf(withId(R.id.toolbar),
+//                                withParent(withId(R.id.appBarLayout)))),
+//                        isDisplayed())).perform(click());
+//        onView(withId(R.id.trash_tickets)).perform(click());
 /**
  * This is for opening the drawer and clicking on the
  * client ticket option.

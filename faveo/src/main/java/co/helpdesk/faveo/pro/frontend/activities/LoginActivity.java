@@ -1,4 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.activities;
+
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -85,9 +86,11 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialogBilling;
     List<String> urlSuggestions;
     Animation animation;
-
-
-
+    StringBuilder companyURLUser;
+    StringBuilder companyURLUser1;
+    String companyURL;
+    String companyURL1;
+    int count=0;
     @BindView(R.id.button_signin)
     Button buttonSignIn;
     @BindView(R.id.fab_verify_url)
@@ -115,15 +118,20 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.urlError)
     TextView urlError;
     @BindView(R.id.backButton)
-    ImageButton imageButton;
+    ImageButton imageBackButton;
     @BindView(R.id.animationLayout)
     LinearLayout linearLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+
+
+
 
         //new Preference(getApplicationContext());
 
@@ -143,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         url.setVisibility(View.GONE);
         flipColor.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_200));
         buttonSignIn.setEnabled(true);
+        urlSuggestions=new ArrayList<>();
         usernameEdittext.addTextChangedListener(mTextWatcher);
         passwordEdittext.addTextChangedListener(mTextWatcher);
 
@@ -182,11 +191,11 @@ public class LoginActivity extends AppCompatActivity {
          * where user can go from sign in page to URL
          * page.
          */
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        imageBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewflipper.setDisplayedChild(0);
-                imageButton.setVisibility(View.GONE);
+                imageBackButton.setVisibility(View.GONE);
 //                editTextCompanyURL.setText("http://");
                 editTextCompanyURL.setSelection(editTextCompanyURL.getText().toString().length());
                 editTextCompanyURL.requestFocus();
@@ -203,7 +212,23 @@ public class LoginActivity extends AppCompatActivity {
         buttonVerifyURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String companyURL = editTextCompanyURL.getText().toString();
+                //String companyURLUser = editTextCompanyURL.getText().toString();
+                //Prefs.putString("URL",companyURL);
+                companyURLUser=new StringBuilder(editTextCompanyURL.getText().toString().trim());
+                companyURLUser.insert(0,"https://").toString();
+                companyURLUser1=new StringBuilder(editTextCompanyURL.getText().toString().trim());
+                companyURLUser1.insert(0,"http://");
+                companyURL1=companyURLUser1.toString();
+                companyURL=companyURLUser.toString();
+
+
+//                if (!companyURL.contains("/public")){
+//                    companyURL=companyURLUser.insert(companyURL.length(),"/public").toString();
+//                }
+//                count++;
+//                Prefs.putInt("count",count);
+
+                //Toast.makeText(LoginActivity.this, "url :"+companyURL, Toast.LENGTH_SHORT).show();
 
                 InputMethodManager inputManager = (InputMethodManager)
                         getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -211,14 +236,25 @@ public class LoginActivity extends AppCompatActivity {
                 inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
 
+
                 if (companyURL.trim().length() == 0 || !Patterns.WEB_URL.matcher(companyURL).matches()) {
                     linearLayout.startAnimation(animation);
                     urlError.setVisibility(View.VISIBLE);
+                    urlError.setText(getString(R.string.format_error));
+                    urlError.setTextColor(Color.parseColor("#ff0000"));
                     urlError.postDelayed(new Runnable() {
                         public void run() {
                             urlError.setVisibility(View.INVISIBLE);
                         }
-                    }, 5000);
+                    }, 9000);
+//                    linearLayout.startAnimation(animation);
+//                    urlError.setVisibility(View.VISIBLE);
+//
+//                    urlError.postDelayed(new Runnable() {
+//                        public void run() {
+//                            urlError.setVisibility(View.INVISIBLE);
+//                        }
+//                    }, 5000);
 //                    urlError.setText(getString(R.string.please_enter_valid_url));
 //                    urlError.setTextColor(Color.parseColor("#ff0000"));
                     //Toasty.warning(v.getContext(), getString(R.string.please_enter_valid_url), Toast.LENGTH_LONG).show();
@@ -226,8 +262,17 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
                 if (InternetReceiver.isConnected()) {
+                    urlSuggestions.add(companyURL);
+                    Set<String> set=new HashSet<>(urlSuggestions);
+                    ArrayAdapter<String> adapter= new ArrayAdapter<String>(LoginActivity.this,
+                            android.R.layout.simple_dropdown_item_1line,urlSuggestions);
+                    editTextCompanyURL.setThreshold(2);
+                    editTextCompanyURL.setAdapter(adapter);
+                    Prefs.putStringSet("URL_SUG", set);
                     progressDialogVerifyURL.show();
                     new VerifyURL(LoginActivity.this, companyURL).execute();
+
+
                 } else
                     Toasty.warning(v.getContext(), getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
             }
@@ -238,8 +283,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                    String username=usernameEdittext.getText().toString();
-                    String password=passwordEdittext.getText().toString();
+                String username=usernameEdittext.getText().toString();
+                String password=passwordEdittext.getText().toString();
+
 
 //                if (username.equals("")&&password.equals("")){
 //                    userNameError.setVisibility(View.VISIBLE);
@@ -252,16 +298,16 @@ public class LoginActivity extends AppCompatActivity {
 //                }
 //
 //             else
-                 if (username.equals("")&&password!=null){
-                     passwordError.setVisibility(View.GONE);
-                     usernameEdittext.requestFocus();
+                if (username.equals("")&&password!=null){
+                    passwordError.setVisibility(View.GONE);
+                    usernameEdittext.requestFocus();
                     textInputLayoutUsername.startAnimation(animation);
-                     userNameError.setVisibility(View.VISIBLE);
-                     userNameError.postDelayed(new Runnable() {
-                         public void run() {
-                             userNameError.setVisibility(View.INVISIBLE);
-                         }
-                     }, 5000);
+                    userNameError.setVisibility(View.VISIBLE);
+                    userNameError.postDelayed(new Runnable() {
+                        public void run() {
+                            userNameError.setVisibility(View.INVISIBLE);
+                        }
+                    }, 5000);
 //
 
                     return;
@@ -272,13 +318,13 @@ public class LoginActivity extends AppCompatActivity {
                 else if (username!=null&&password.equals("")){
                     userNameError.setVisibility(View.GONE);
                     textInputLayoutPass.startAnimation(animation);
-                     passwordEdittext.requestFocus();
+                    passwordEdittext.requestFocus();
                     passwordError.setVisibility(View.VISIBLE);
-                     passwordError.postDelayed(new Runnable() {
-                         public void run() {
-                             passwordError.setVisibility(View.INVISIBLE);
-                         }
-                     }, 5000);
+                    passwordError.postDelayed(new Runnable() {
+                        public void run() {
+                            passwordError.setVisibility(View.INVISIBLE);
+                        }
+                    }, 5000);
                     return;
 
                     //Toasty.warning(LoginActivity.this, "Please provide password", Toast.LENGTH_LONG).show();
@@ -298,6 +344,7 @@ public class LoginActivity extends AppCompatActivity {
                         textInputLayoutUsername.setEnabled(false);
                         textInputLayoutPass.setEnabled(false);
                         buttonSignIn.setText(R.string.signing_in);
+
                         new SignIn(LoginActivity.this, username, password).execute();
                     }
                     else{
@@ -394,32 +441,46 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             progressDialogVerifyURL.dismiss();
             if (result == null) {
-                Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
-                return;
+                count++;
+//                if (count==0){
+//                    Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
+//                    count--;
+//                    return;
+//                }
+
+                new VerifyURLSecure(LoginActivity.this,companyURL1).execute();
+
+
+
+
             }
 
-            if (result.contains("success")) {
+            else if (result.contains("success")) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     dynamicShortcut();
                 }
-                urlSuggestions.add(baseURL);
-                Set<String> set = new HashSet<>(urlSuggestions);
-                Prefs.putStringSet("URL_SUG", set);
+//                urlSuggestions.add(baseURL);
+//                Set<String> set = new HashSet<>(urlSuggestions);
+//                Prefs.putStringSet("URL_SUG", set);
+
                 Prefs.putString("BASE_URL", baseURL);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
                 if (BuildConfig.DEBUG) {
                     viewflipper.showNext();
-                    imageButton.setVisibility(View.VISIBLE);
+                    imageBackButton.setVisibility(View.VISIBLE);
                     url.setText(baseURL);
                     url.setVisibility(View.VISIBLE);
                     flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
                 } else {
+
                     progressDialogBilling.show();
+
                     new VerifyBilling(LoginActivity.this, baseURL).execute();
                 }
 
             } else {
+                linearLayout.startAnimation(animation);
                 urlError.setVisibility(View.VISIBLE);
                 urlError.setText(getString(R.string.error_verifying_url));
                 urlError.setTextColor(Color.parseColor("#ff0000"));
@@ -428,6 +489,95 @@ public class LoginActivity extends AppCompatActivity {
                         urlError.setVisibility(View.INVISIBLE);
                     }
                 }, 5000);
+//                urlError.setVisibility(View.VISIBLE);
+//                urlError.setText(getString(R.string.error_verifying_url));
+//                urlError.setTextColor(Color.parseColor("#ff0000"));
+//                urlError.postDelayed(new Runnable() {
+//                    public void run() {
+//                        urlError.setVisibility(View.INVISIBLE);
+//                    }
+//                }, 5000);
+
+                //Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    private class VerifyURLSecure extends AsyncTask<String, Void, String> {
+        Context context;
+        String companyURL;
+        String baseURL;
+
+        VerifyURLSecure(Context context, String companyURL) {
+            this.context = context;
+            this.companyURL = companyURL;
+            baseURL = companyURL;
+        }
+
+        protected String doInBackground(String... urls) {
+            if (!companyURL.endsWith("/"))
+                companyURL = companyURL.concat("/");
+            return new Helpdesk().getBaseURL(companyURL);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialogVerifyURL.dismiss();
+            if (result == null) {
+                linearLayout.startAnimation(animation);
+                urlError.setVisibility(View.VISIBLE);
+                urlError.setText(getString(R.string.error_verifying_url));
+                urlError.setTextColor(Color.parseColor("#ff0000"));
+                urlError.postDelayed(new Runnable() {
+                    public void run() {
+                        urlError.setVisibility(View.INVISIBLE);
+                    }
+                }, 9000);
+                //Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
+                return;
+
+            }
+
+            else if (result.contains("success")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    dynamicShortcut();
+                }
+//                urlSuggestions.add(baseURL);
+//                Set<String> set = new HashSet<>(urlSuggestions);
+//                Prefs.putStringSet("URL_SUG", set);
+
+                Prefs.putString("BASE_URL", baseURL);
+                Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
+                Constants.URL = Prefs.getString("COMPANY_URL", "");
+                if (BuildConfig.DEBUG) {
+                    viewflipper.showNext();
+                    imageBackButton.setVisibility(View.VISIBLE);
+                    url.setText(baseURL);
+                    url.setVisibility(View.VISIBLE);
+                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
+                } else {
+
+                    progressDialogBilling.show();
+
+                    new VerifyBilling(LoginActivity.this, baseURL).execute();
+                }
+
+            } else {
+                linearLayout.startAnimation(animation);
+                urlError.setVisibility(View.VISIBLE);
+                urlError.setText(getString(R.string.error_verifying_url));
+                urlError.setTextColor(Color.parseColor("#ff0000"));
+                urlError.postDelayed(new Runnable() {
+                    public void run() {
+                        urlError.setVisibility(View.INVISIBLE);
+                    }
+                }, 5000);
+//                urlError.setVisibility(View.VISIBLE);
+//                urlError.setText(getString(R.string.error_verifying_url));
+//                urlError.setTextColor(Color.parseColor("#ff0000"));
+//                urlError.postDelayed(new Runnable() {
+//                    public void run() {
+//                        urlError.setVisibility(View.INVISIBLE);
+//                    }
+//                }, 5000);
 
                 //Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
             }
@@ -483,7 +633,7 @@ public class LoginActivity extends AppCompatActivity {
             if (result.contains("success")) {
 
                 viewflipper.showNext();
-                imageButton.setVisibility(View.VISIBLE);
+                imageBackButton.setVisibility(View.VISIBLE);
                 url.setText(baseURL);
                 url.setVisibility(View.VISIBLE);
                 flipColor.setBackgroundColor(ContextCompat.getColor(context, R.color.faveo));
@@ -497,6 +647,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 finish();
+
                             }
                         });
                 builder.create();
@@ -569,6 +720,11 @@ public class LoginActivity extends AppCompatActivity {
                         userNameError.setVisibility(View.VISIBLE);
                         userNameError.setText("Please check your password and email");
                         userNameError.setTextColor(Color.parseColor("#ff0000"));
+                        userNameError.postDelayed(new Runnable() {
+                            public void run() {
+                                userNameError.setVisibility(View.INVISIBLE);
+                            }
+                        }, 5000);
                         //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
                         passwordEdittext.startAnimation(animation);
                         usernameEdittext.startAnimation(animation);
@@ -668,6 +824,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialogBilling.setMessage(getString(R.string.access_checking));
         progressDialogBilling.setCancelable(false);
 
+
 //        InputFilter filter = new InputFilter() {
 //            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 //                String filtered = "";
@@ -686,13 +843,19 @@ public class LoginActivity extends AppCompatActivity {
         // editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
         // editTextCompanyURL.setFilters(new InputFilter[]{filter});
 
-        if (editTextCompanyURL != null) {
-            editTextCompanyURL.setText("");
-            editTextCompanyURL.append("http://");
-        }
-        Set<String> set = Prefs.getStringSet("URL_SUG", new HashSet<String>());
-        urlSuggestions = new ArrayList<>(set);
+//
+//            if (editTextCompanyURL != null) {
+//                editTextCompanyURL.setText("");
+//                editTextCompanyURL.append("http://");
+//            }
 
+//        String url=Prefs.getString("URL","");
+//        editTextCompanyURL.setText(url);
+//        editTextCompanyURL.requestFocus(url.length());
+
+//        Set<String> set = Prefs.getStringSet("URL_SUG", new HashSet<String>());
+//        urlSuggestions = new ArrayList<>(set);
+//
         ArrayAdapter<String> adapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_dropdown_item_1line, urlSuggestions);
         editTextCompanyURL.setThreshold(1);

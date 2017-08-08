@@ -160,6 +160,7 @@ Bitte überprüfen Sie Ihre Helpdesk-URL</string>
     <string name="ticket_created_success">Ticket erfolgreich erstellt!</string>
     <string name="title_activity_notification">Benachrichtigungen</string>
     <string name="action_search">Suche</string>
+    <string name="select_source">Please select some Source</string>
 
 
 

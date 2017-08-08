@@ -47,6 +47,8 @@ public class Conversation extends Fragment {
 
     @BindView(R.id.noiternet_view)
     TextView noInternet_view;
+    @BindView(R.id.totalcount)
+    TextView textView;
 
     View rootView;
 
@@ -143,6 +145,7 @@ public class Conversation extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+            textView.setVisibility(View.GONE);
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
             if (result == null) {

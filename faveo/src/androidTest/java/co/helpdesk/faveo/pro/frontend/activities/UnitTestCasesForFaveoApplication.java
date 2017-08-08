@@ -411,9 +411,9 @@ public class UnitTestCasesForFaveoApplication {
                         isDisplayed()));
         appCompatImageButton2.perform(click());
 
-        ViewInteraction relativeLayout = onView(
-                withId(R.id.inbox_tickets));
-        relativeLayout.perform(scrollTo(), click());
+//        ViewInteraction relativeLayout = onView(
+//                withId(R.id.inbox_tickets));
+//        relativeLayout.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -431,9 +431,9 @@ public class UnitTestCasesForFaveoApplication {
                         isDisplayed()));
         appCompatImageButton3.perform(click());
 
-        ViewInteraction relativeLayout2 = onView(
-                withId(R.id.my_tickets));
-        relativeLayout2.perform(scrollTo(), click());
+//        ViewInteraction relativeLayout2 = onView(
+//                withId(R.id.my_tickets));
+//        relativeLayout2.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -480,9 +480,9 @@ public class UnitTestCasesForFaveoApplication {
                         isDisplayed()));
         appCompatImageButton4.perform(click());
 
-        ViewInteraction relativeLayout3 = onView(
-                withId(R.id.my_tickets));
-        relativeLayout3.perform(scrollTo(), click());
+//        ViewInteraction relativeLayout3 = onView(
+//                withId(R.id.my_tickets));
+//        relativeLayout3.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -516,9 +516,9 @@ public class UnitTestCasesForFaveoApplication {
                         isDisplayed()));
         appCompatImageButton5.perform(click());
 
-        ViewInteraction relativeLayout4 = onView(
-                withId(R.id.unassigned_tickets));
-        relativeLayout4.perform(scrollTo(), click());
+//        ViewInteraction relativeLayout4 = onView(
+//                withId(R.id.unassigned_tickets));
+//        relativeLayout4.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -572,9 +572,9 @@ public class UnitTestCasesForFaveoApplication {
                         isDisplayed()));
         appCompatImageButton7.perform(click());
 
-        ViewInteraction relativeLayout5 = onView(
-                withId(R.id.closed_tickets));
-        relativeLayout5.perform(scrollTo(), click());
+//        ViewInteraction relativeLayout5 = onView(
+//                withId(R.id.closed_tickets));
+//        relativeLayout5.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -640,9 +640,9 @@ public class UnitTestCasesForFaveoApplication {
                         isDisplayed()));
         appCompatImageButton9.perform(click());
 
-        ViewInteraction relativeLayout6 = onView(
-                withId(R.id.trash_tickets));
-        relativeLayout6.perform(scrollTo(), click());
+//        ViewInteraction relativeLayout6 = onView(
+//                withId(R.id.trash_tickets));
+//        relativeLayout6.perform(scrollTo(), click());
 
         ViewInteraction appCompatImageButton10 = onView(
                 allOf(withContentDescription("Open"),
@@ -740,9 +740,9 @@ public class UnitTestCasesForFaveoApplication {
                         isDisplayed()));
         appCompatImageButton14.perform(click());
 
-        ViewInteraction relativeLayout8 = onView(
-                withId(R.id.my_tickets));
-        relativeLayout8.perform(scrollTo(), click());
+//        ViewInteraction relativeLayout8 = onView(
+//                withId(R.id.my_tickets));
+//        relativeLayout8.perform(scrollTo(), click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:

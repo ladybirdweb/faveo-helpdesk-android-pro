@@ -136,6 +136,7 @@
                         android:inputType="textUri"
                         android:paddingBottom="12dp"
                         android:paddingTop="12dp"
+                        android:hint="eg: faveohelpdesk.com/public"
                         android:textCursorDrawable="@drawable/color_cursor"
                         android:textSize="14sp" />
 

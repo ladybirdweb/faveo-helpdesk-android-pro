@@ -51,6 +51,8 @@
     <string name="posted_reply">Ha publicado tu respuesta</string>
     <string name="only_special_characters_not_allowed_here">
 Solo se permiten caracteres especiales.</string>
+    <string name="select_source">
+Por favor seleccione algunos Fuente</string>
     <string name="please_select_some_priority">
 Seleccione una prioridad</string>
     <string name="select_some_helptopic">
