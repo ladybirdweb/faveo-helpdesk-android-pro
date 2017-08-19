@@ -120,7 +120,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
         Constants.URL = Prefs.getString("COMPANY_URL", "");
         ticketID = getIntent().getStringExtra("ticket_id");
-        status=Prefs.getString("ticketstatus",null);
+        //status=Prefs.getString("ticketstatus",null);
 
         // ticketOpenedBy = getIntent().getStringExtra("ticket_opened_by");
         //ticketSubject = getIntent().getStringExtra("ticket_subject");
@@ -262,12 +262,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //            return true;
 //        }
         if (id==R.id.action_statusOpen){
+            status=Prefs.getString("ticketstatus",null);
             if (status.equals("Open")){
                 Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_open), Toast.LENGTH_SHORT).show();
                 return false;
             }
             else {
                 new StatusChange(Integer.parseInt(ticketID), 1).execute();
+                Prefs.putString("ticketstatus","Open");
                 Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_SHORT).show();
                 finish();
                 startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
@@ -275,23 +277,27 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         }
         else if (id==R.id.action_statusResolved){
+            status=Prefs.getString("ticketstatus",null);
             if (status.equals("Resolved")){
                 Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_alreday_resolved), Toast.LENGTH_SHORT).show();
                 return false;
             }
             new StatusChange(Integer.parseInt(ticketID),2).execute();
+            Prefs.putString("ticketstatus","Resolved");
             Toasty.success(TicketDetailActivity.this,getString(R.string.status_resolved),Toast.LENGTH_SHORT).show();
             finish();
             startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
 
         }
         else if (id==R.id.action_statusClosed){
+            status=Prefs.getString("ticketstatus",null);
             if (status.equals("Closed")){
                 Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_closed), Toast.LENGTH_SHORT).show();
                 return false;
             }
             else {
                 new StatusChange(Integer.parseInt(ticketID), 3).execute();
+                Prefs.putString("ticketstatus","Closed");
                 Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_SHORT).show();
                 finish();
                 startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
@@ -299,18 +305,23 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         }
         else if (id==R.id.action_statusDeleted){
+            status=Prefs.getString("ticketstatus",null);
             if (status.equals("Deleted")){
                 Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_deleted), Toast.LENGTH_SHORT).show();
                 return false;
             }
             else {
                 new StatusChange(Integer.parseInt(ticketID), 4).execute();
+                Prefs.putString("ticketstatus","Deleted");
                 Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_SHORT).show();
                 finish();
                 startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
             }
 
         }
+//        else{
+//            Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+//        }
 //        else if (id==R.id.action_statusRequestForClose){
 //            new StatusChange(Integer.parseInt(ticketID),5).execute();
 //            Toasty.success(TicketDetailActivity.this,getString(R.string.status_request_for_close),Toast.LENGTH_SHORT).show();
@@ -498,7 +509,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             try {
 
                 JSONObject jsonObject=new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("response");
+                //JSONObject jsonObject1=jsonObject.getJSONObject("response");
                 JSONObject jsonObject2=jsonObject.getJSONObject("error");
                 String message1=jsonObject2.getString("ticket_id");
 
@@ -514,8 +525,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
 
 
-            } catch (JSONException e) {
+            } catch (JSONException  | NullPointerException e) {
                 e.printStackTrace();
+
             }
 
 

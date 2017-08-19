@@ -157,7 +157,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     public void onBackPressed() {
         if (!MainActivity.isShowing) {
             Log.d("isShowing", "false");
-            Intent intent = new Intent(ClientDetailActivity.this, SplashActivity.class);
+            Intent intent = new Intent(ClientDetailActivity.this, MainActivity.class);
             startActivity(intent);
         } else Log.d("isShowing", "true");
         super.onBackPressed();
@@ -286,16 +286,17 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     boolean isOpen = true;
                     String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
                     String ticketSubject = jsonArray.getJSONObject(i).getString("title");
+                    String status=jsonArray.getJSONObject(i).getString("ticket_status_name");
                     try {
                         isOpen = jsonArray.getJSONObject(i).getString("ticket_status_name").equals("Open");
                         if (isOpen)
-                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
+                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status));
                         else
-                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false));
+                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status));
                     } catch (Exception e) {
-                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
+                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status));
                     }
-                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen));
+                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status));
                 }
             } catch (JSONException e) {
                 Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();

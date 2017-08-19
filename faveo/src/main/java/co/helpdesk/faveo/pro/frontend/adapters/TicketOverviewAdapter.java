@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.curioustechizen.ago.RelativeTimeTextView;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.List;
 
@@ -96,6 +97,7 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                 intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+                Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
                 intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                 intent.putExtra("ticket_opened_by", ticketOverview.clientName);
                 intent.putExtra("ticket_subject", ticketOverview.ticketSubject);

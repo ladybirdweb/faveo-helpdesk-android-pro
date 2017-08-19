@@ -10,12 +10,22 @@ public class TicketGlimpse {
     public String ticketNumber;
     public String ticketSubject;
     public boolean isTicketOpen;
+    public String status;
 
-    public TicketGlimpse(int ticketID, String ticketNumber, String ticketSubject, boolean isTicketOpen) {
+    public TicketGlimpse(int ticketID, String ticketNumber, String ticketSubject, boolean isTicketOpen,String status) {
         this.ticketID = ticketID;
         this.ticketNumber = ticketNumber;
         this.ticketSubject = ticketSubject;
         this.isTicketOpen = isTicketOpen;
+        this.status=status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public int getTicketID() {
