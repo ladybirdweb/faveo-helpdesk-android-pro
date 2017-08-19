@@ -71,6 +71,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @BindView(R.id.textView_client_phone)
     TextView textViewClientPhone;
 
+    @BindView(R.id.textView_client_mobile)
+    TextView textViewClientMobile;
+
     @BindView(R.id.textView_client_status)
     TextView textViewClientStatus;
 
@@ -244,16 +247,25 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 textViewClientEmail.setText(requester.getString("email"));
 
                 String phone = "";
+                String mobile="";
 //                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
 //                    textViewClientPhone.setVisibility(View.INVISIBLE);
 //
 //                else
                     phone = requester.getString("phone_number");
-                if (phone.equals("null")||phone.equals("")){
+                mobile=requester.getString("mobile");
+                if (phone.equals("null")||phone.equals("")||phone.equals("Not available")){
                     textViewClientPhone.setVisibility(View.GONE);
                 }else {
                     textViewClientPhone.setVisibility(View.VISIBLE);
                     textViewClientPhone.setText(phone);
+                }
+                if (mobile.equals("null")||mobile.equals("")||mobile.equals("Not available")){
+                    textViewClientMobile.setVisibility(View.GONE);
+                }
+            else {
+                    textViewClientMobile.setVisibility(View.VISIBLE);
+                    textViewClientMobile.setText(mobile);
                 }
 
                 if (requester.getString("company").equals("null") || requester.getString("company").equals("")) {

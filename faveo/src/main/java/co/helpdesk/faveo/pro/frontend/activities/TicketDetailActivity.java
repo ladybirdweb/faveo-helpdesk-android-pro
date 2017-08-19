@@ -18,8 +18,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +37,8 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -49,6 +54,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.frontend.views.Fab;
 import co.helpdesk.faveo.pro.model.MessageEvent;
+import co.helpdesk.faveo.pro.model.TicketDetail;
 import es.dmoral.toasty.Toasty;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
@@ -75,7 +81,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
     Button buttonCreate, buttonSend;
     ProgressDialog progressDialog;
     private int statusBarColor;
-    public static String ticketID;
+    public static String ticketID,ticketNumber;
+    TextView textView,textViewStatus,textViewStatus1,textViewStatus2;
+    String status;
 //    public static String ticketNumber;
 //    public static String ticketOpenedBy;
 //    public static String ticketSubject;
@@ -85,7 +93,25 @@ public class TicketDetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_detail);
         setupFab();
+
+        ticketNumber = getIntent().getStringExtra("ticket_number");
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        textView= (TextView) mToolbar.findViewById(R.id.title);
+//        textView.setText(Prefs.getString("ticketno",null));
+//        textViewStatus= (TextView) mToolbar.findViewById(R.id.status);
+//        textViewStatus1= (TextView) mToolbar.findViewById(R.id.status1);
+//        textViewStatus2= (TextView) mToolbar.findViewById(R.id.status2);
+        //textView.setText(ticketNumber);
+//        status=Prefs.getString("status_name",null);
+//        if (status.equals("Open")) {
+//            textViewStatus.setVisibility(View.VISIBLE);
+//        }
+//        else if (status.equals("Closed")){
+//            textViewStatus1.setVisibility(View.VISIBLE);
+//        }
+//        else if (status.equals("Deleted")){
+//            textViewStatus2.setVisibility(View.VISIBLE);
+//        }
         setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
@@ -94,7 +120,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
         Constants.URL = Prefs.getString("COMPANY_URL", "");
         ticketID = getIntent().getStringExtra("ticket_id");
-        //ticketNumber = getIntent().getStringExtra("ticket_number");
+        status=Prefs.getString("ticketstatus",null);
+
         // ticketOpenedBy = getIntent().getStringExtra("ticket_opened_by");
         //ticketSubject = getIntent().getStringExtra("ticket_subject");
 //         TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
@@ -202,7 +229,102 @@ public class TicketDetailActivity extends AppCompatActivity implements
         });
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main_new, menu);
 
+        return true;
+    }
+
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     * @param item items refer to the menu items.
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        int pos=0;
+
+//        String ticketid1= Prefs.getString("ticketid",null);
+//        StringBuilder stringBuilder=new StringBuilder(ticketid1);
+//        stringBuilder.deleteCharAt(ticketid1.length()-1);
+//        String ticketid=stringBuilder.toString();
+//
+//        if (id == R.id.action_search) {
+//            startActivity(new Intent(MainActivity.this, SearchActivity.class));
+//            return true;
+//        }
+        if (id==R.id.action_statusOpen){
+            if (status.equals("Open")){
+                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_open), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else {
+                new StatusChange(Integer.parseInt(ticketID), 1).execute();
+                Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+            }
+
+        }
+        else if (id==R.id.action_statusResolved){
+            if (status.equals("Resolved")){
+                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_alreday_resolved), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            new StatusChange(Integer.parseInt(ticketID),2).execute();
+            Toasty.success(TicketDetailActivity.this,getString(R.string.status_resolved),Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+
+        }
+        else if (id==R.id.action_statusClosed){
+            if (status.equals("Closed")){
+                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_closed), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else {
+                new StatusChange(Integer.parseInt(ticketID), 3).execute();
+                Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+            }
+
+        }
+        else if (id==R.id.action_statusDeleted){
+            if (status.equals("Deleted")){
+                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_deleted), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else {
+                new StatusChange(Integer.parseInt(ticketID), 4).execute();
+                Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+            }
+
+        }
+//        else if (id==R.id.action_statusRequestForClose){
+//            new StatusChange(Integer.parseInt(ticketID),5).execute();
+//            Toasty.success(TicketDetailActivity.this,getString(R.string.status_request_for_close),Toast.LENGTH_SHORT).show();
+//            finish();
+//            startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+//
+//        }
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed(); // close this activity and return to preview activity (if there is any)
+        }
+//
+
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * Sets up the Floating action button.
@@ -275,21 +397,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * Handling the back button.
-     *
-     * @param item refers to the menu item .
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed(); // close this activity and return to preview activity (if there is any)
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    /**
+//     * Handling the back button.
+//     *
+//     * @param item refers to the menu item .
+//     * @return
+//     */
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // handle arrow click here
+//        if (item.getItemId() == android.R.id.home) {
+//            onBackPressed(); // close this activity and return to preview activity (if there is any)
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void getCreateRequest() {
         final CharSequence[] items = {"Reply", "Internal notes"};
@@ -348,6 +470,59 @@ public class TicketDetailActivity extends AppCompatActivity implements
             if (conversation != null)
                 conversation.refresh();
         }
+    }
+    /**
+     * Async task for creating the ticket.
+     */
+    private class StatusChange extends AsyncTask<String, Void, String> {
+        int ticketId,statusId;
+
+        StatusChange(int ticketId, int statusId) {
+
+            this.ticketId=ticketId;
+            this.statusId=statusId;
+
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().postStatusChanged(ticketId,statusId);
+            //return new Helpdesk().postStatusChanged(ticketId,statusId);
+        }
+
+        protected void onPostExecute(String result) {
+            //progressDialog.dismiss();
+//            if (result == null) {
+//                Toasty.error(MainActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                return;
+//            }
+            try {
+
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("response");
+                JSONObject jsonObject2=jsonObject.getJSONObject("error");
+                String message1=jsonObject2.getString("ticket_id");
+
+                if (message1.contains("The ticket id field is required.")){
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
+                }
+                else if (message1.contains("The status id field is required.")){
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.select_both), Toast.LENGTH_LONG).show();
+                }
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+
+
     }
 
     /**

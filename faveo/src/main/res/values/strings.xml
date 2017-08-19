@@ -177,6 +177,18 @@
     <string name="select_code">Please select the code</string>
     <string name="select_source">Please select some Source</string>
     <string name="due_today">DueToday</string>
+    <string name="status_closed">Status changed to closed.</string>
+    <string name="status_deleted">Moved to trash</string>
+    <string name="status_opened">Status changed to open</string>
+    <string name="status_resolved">Status changed to resolved</string>
+    <string name="status_request_for_close">Status changed to request for close</string>
+    <string name="please_select_ticket">Please select a ticket to change status</string>
+    <string name="please_select_status">Please select one status</string>
+    <string name="select_both">Please select ticket and status</string>
+    <string name="ticket_already_open">Ticket is already opened</string>
+    <string name="ticket_already_closed">Ticket is already closed</string>
+    <string name="ticket_already_deleted">Ticket is already moved to trash</string>
+    <string name="ticket_alreday_resolved">Ticket is already resolved</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

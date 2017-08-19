@@ -30,6 +30,7 @@ public class Helpdesk {
     public String getBaseURL(String companyURL) {
 
         Log.d("checkingURL", companyURL + "api/v1/helpdesk/check-url?url=" + companyURL.substring(0, companyURL.length() - 1) + "&api_key=" + apiKey);
+        Prefs.putString("companyurl",companyURL+"api/v2/helpdesk/");
         return new HTTPConnection().HTTPResponseGet(companyURL + "api/v1/helpdesk/check-url?url=" + companyURL.substring(0, companyURL.length() - 1) + "&api_key=" + apiKey);
     }
 
@@ -497,6 +498,11 @@ public class Helpdesk {
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/notifications-seen?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&notification_id=" + ticketID, null);
         return result;
     }
-
-
+    public String postStatusChanged(int ticketID,int statusID){
+        Log.d("StatusChangedApi", Constants.URL1 + "status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID);
+        String result = new HTTPConnection().HTTPResponsePost(Constants.URL1 + "status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL1 + "status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
+        return result;
+    }
 }

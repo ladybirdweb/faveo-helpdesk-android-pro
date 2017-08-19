@@ -68,6 +68,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
 
                 if (notiThread.getNoti_scenario().equals("tickets")) {
+
                     Intent intent = new Intent(view.getContext(), TicketDetailActivity.class);
                     Log.d("ticket_id", notiThread.getTicket_id() + "");
                     intent.putExtra("ticket_id", notiThread.getTicket_id() + "");

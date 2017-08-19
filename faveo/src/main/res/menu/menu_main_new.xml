@@ -1,0 +1,49 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.narendra.myapplic ation12.MainActivity">
+
+    <!--<item-->
+    <!--android:id="@+id/action_search"-->
+    <!--android:icon="@drawable/ic_action_search"-->
+    <!--android:orderInCategory="99"-->
+    <!--android:title="Search"-->
+    <!--app:showAsAction="ifRoom" />-->
+    <item
+        android:id="@+id/status_id"
+        android:orderInCategory="100"
+        android:title="Change Ticket Status"
+        app:showAsAction="never" />
+    <group
+        android:id="@+id/text_color_group"
+        android:checkableBehavior="none"
+        >
+        <item
+            android:id="@+id/action_statusOpen"
+            android:orderInCategory="100"
+            android:title="Open"
+            app:showAsAction="never"
+
+            />
+        <item
+            android:id="@+id/action_statusResolved"
+            android:orderInCategory="100"
+            android:title="Resolved"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_statusClosed"
+            android:orderInCategory="100"
+            android:title="Closed"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_statusDeleted"
+            android:orderInCategory="100"
+            android:title="Move to trash"
+            app:showAsAction="never" />
+        <!--<item-->
+            <!--android:id="@+id/action_statusRequestForClose"-->
+            <!--android:orderInCategory="100"-->
+            <!--android:title="Request for close"-->
+            <!--app:showAsAction="never" />-->
+    </group>
+</menu>

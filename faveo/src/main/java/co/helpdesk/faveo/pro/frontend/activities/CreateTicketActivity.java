@@ -188,12 +188,10 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Data data = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
                 priorityItems.add(data);
             }
-        } catch (JSONException e) {
+        } catch (JSONException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-        catch (ArrayIndexOutOfBoundsException e){
-            e.printStackTrace();
-        }
+
 
         setUpViews();
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);

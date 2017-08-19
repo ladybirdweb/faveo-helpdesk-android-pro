@@ -132,6 +132,7 @@ public class Detail extends Fragment {
             public void onClick(View v) {
                 resetViews();
                 //int helpTopic=1;
+
                 boolean allCorrect = true;
                 String subject = editTextSubject.getText().toString();
                 // int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
@@ -439,7 +440,7 @@ public class Detail extends Fragment {
                 sourceItems.add(data);
             }
 
-        } catch (JSONException e) {
+        } catch (JSONException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
 

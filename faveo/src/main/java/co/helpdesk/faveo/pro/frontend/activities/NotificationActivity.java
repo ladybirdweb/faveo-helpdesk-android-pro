@@ -199,6 +199,7 @@ public class NotificationActivity extends AppCompatActivity {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
                     if (dy > 0) {
                         visibleItemCount = linearLayoutManager.getChildCount();
                         totalItemCount = linearLayoutManager.getItemCount();

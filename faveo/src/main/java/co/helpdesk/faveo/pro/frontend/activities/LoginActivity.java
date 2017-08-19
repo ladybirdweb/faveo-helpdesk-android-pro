@@ -141,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         Boolean loginComplete = Prefs.getBoolean("LOGIN_COMPLETE", false);
         if (loginComplete) {
             Constants.URL = Prefs.getString("COMPANY_URL", "");
+            Constants.URL1=Prefs.getString("companyurl","");
             Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -156,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEdittext.addTextChangedListener(mTextWatcher);
 
         //View init
+
         setUpViews();
         animation= AnimationUtils.loadAnimation(LoginActivity.this,R.anim.shake_error);
 
@@ -466,6 +468,8 @@ public class LoginActivity extends AppCompatActivity {
                 Prefs.putString("BASE_URL", baseURL);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
+                Constants.URL1=Prefs.getString("companyurl",null);
+                Log.d("companyurl",Constants.URL1);
                 if (BuildConfig.DEBUG) {
                     viewflipper.showNext();
                     imageBackButton.setVisibility(View.VISIBLE);
@@ -547,6 +551,8 @@ public class LoginActivity extends AppCompatActivity {
                 Prefs.putString("BASE_URL", baseURL);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
+                Constants.URL1=Prefs.getString("companyurl",null);
+                Log.d("companyurl",Constants.URL1);
                 if (BuildConfig.DEBUG) {
                     viewflipper.showNext();
                     imageBackButton.setVisibility(View.VISIBLE);
