@@ -1,5 +1,6 @@
 <h3>About Faveo Android App</h3>
 <a href="https://gitter.im/ladybirdweb/faveo-helpdesk" target="_blank"><img src="https://badges.gitter.im/ladybirdweb/faveo-helpdesk.svg"></a>
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c172951e007a4dceb30c47aa600b28c1)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ladybirdweb/faveo-helpdesk-android-pro&amp;utm_campaign=Badge_Grade)
 <p>
 Faveo Android app works along with Faveo Helpdesk web application. This app is available on Google Play store and can be installed directly from there. To use this app on your phone/tablet you must have Faveo Helpdesk web application installed on your server.
 </p>
