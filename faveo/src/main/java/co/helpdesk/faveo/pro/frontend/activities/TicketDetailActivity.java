@@ -68,7 +68,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         Detail.OnFragmentInteractionListener {
 
     ViewPager viewPager;
-    ViewPagerAdapter adapter;
+    public ViewPagerAdapter adapter;
     Conversation fragmentConversation;
     Detail fragmentDetail;
     Boolean fabExpanded = false;
@@ -176,23 +176,23 @@ public class TicketDetailActivity extends AppCompatActivity implements
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String cc = editTextCC.getText().toString();
+//                String cc = editTextCC.getText().toString();
                 String replyMessage = editTextReplyMessage.getText().toString();
                 if (replyMessage.trim().length() == 0) {
                     Toasty.warning(TicketDetailActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                cc = cc.replace(", ", ",");
-                if (cc.length() > 0) {
-                    String[] multipleEmails = cc.split(",");
-                    for (String email : multipleEmails) {
-                        if (email.length() > 0 && !Helper.isValidEmail(email)) {
-                            Toasty.warning(TicketDetailActivity.this, getString(R.string.invalid_cc), Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-                }
+//                cc = cc.replace(", ", ",");
+//                if (cc.length() > 0) {
+//                    String[] multipleEmails = cc.split(",");
+//                    for (String email : multipleEmails) {
+//                        if (email.length() > 0 && !Helper.isValidEmail(email)) {
+//                            Toasty.warning(TicketDetailActivity.this, getString(R.string.invalid_cc), Toast.LENGTH_LONG).show();
+//                            return;
+//                        }
+//                    }
+//                }
 
                 String userID = Prefs.getString("ID", null);
                 if (userID != null && userID.length() != 0) {
@@ -250,7 +250,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        int pos=0;
+
 
 //        String ticketid1= Prefs.getString("ticketid",null);
 //        StringBuilder stringBuilder=new StringBuilder(ticketid1);
@@ -424,30 +424,30 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        return super.onOptionsItemSelected(item);
 //    }
 
-    private void getCreateRequest() {
-        final CharSequence[] items = {"Reply", "Internal notes"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(TicketDetailActivity.this);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                dialog.dismiss();
-                if (items[item].equals("Reply")) {
-                    cx = (int) fabAdd.getX() + dpToPx(40);
-                    cy = (int) fabAdd.getY();
-                    fabExpanded = true;
-                    fabAdd.hide();
-                    enterReveal("Reply");
-                } else {
-                    cx = (int) fabAdd.getX() + dpToPx(40);
-                    cy = (int) fabAdd.getY();
-                    fabExpanded = true;
-                    fabAdd.hide();
-                    enterReveal("Internal notes");
-                }
-            }
-        });
-        builder.show();
-    }
+//    private void getCreateRequest() {
+//        final CharSequence[] items = {"Reply", "Internal notes"};
+//        AlertDialog.Builder builder = new AlertDialog.Builder(TicketDetailActivity.this);
+//        builder.setItems(items, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int item) {
+//                dialog.dismiss();
+//                if (items[item].equals("Reply")) {
+//                    cx = (int) fabAdd.getX() + dpToPx(40);
+//                    cy = (int) fabAdd.getY();
+//                    fabExpanded = true;
+//                    fabAdd.hide();
+//                    enterReveal("Reply");
+//                } else {
+//                    cx = (int) fabAdd.getX() + dpToPx(40);
+//                    cy = (int) fabAdd.getY();
+//                    fabExpanded = true;
+//                    fabAdd.hide();
+//                    enterReveal("Internal notes");
+//                }
+//            }
+//        });
+//        builder.show();
+//    }
 
     /**
      * This API is for creating the internal note.
@@ -483,7 +483,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
     /**
-     * Async task for creating the ticket.
+     * Async task for changing the status of the ticket.
      */
     private class StatusChange extends AsyncTask<String, Void, String> {
         int ticketId,statusId;
@@ -782,10 +782,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     }
 
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
+//    public int dpToPx(int dp) {
+//        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+//        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+//    }
 
     /**
      * Handling the back button here.

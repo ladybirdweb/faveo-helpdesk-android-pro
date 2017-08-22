@@ -86,7 +86,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     ViewPagerAdapter adapter;
     OpenTickets fragmentOpenTickets;
     ClosedTickets fragmentClosedTickets;
-    String clientID, clientName;
+    public String clientID, clientName;
     List<TicketGlimpse> listTicketGlimpse;
     ProgressDialog progressDialog;
 

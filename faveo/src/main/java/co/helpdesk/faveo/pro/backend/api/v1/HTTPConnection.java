@@ -27,16 +27,16 @@ import co.helpdesk.faveo.pro.FaveoApplication;
  * Created by Sumit
  */
 class HTTPConnection {
-
+    private StringBuilder sb = null;
+    private InputStream is = null;
+    private URL url;
     HTTPConnection() {
 
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
     }
 
-    private StringBuilder sb = null;
-    private InputStream is = null;
-    private URL url;
+
 
     String HTTPResponsePost(String stringURL, String parameters) {
 

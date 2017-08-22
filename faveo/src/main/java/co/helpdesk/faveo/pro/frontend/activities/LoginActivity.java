@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextUsername, editTextPassword, editTextAPIkey;
     int paddingTop, paddingBottom;
     ProgressDialog progressDialogVerifyURL;
-    ProgressDialog progressDialogSignIn;
+    public ProgressDialog progressDialogSignIn;
     ProgressDialog progressDialogBilling;
     List<String> urlSuggestions;
     Animation animation;

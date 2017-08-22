@@ -271,105 +271,105 @@ public class CreateTicketActivity extends AppCompatActivity {
         return ss;
     }
 
-    /**
-     * Here we are handling the activity result.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        try {
-            if (requestCode == RESULT_LOAD_FILE && resultCode == RESULT_OK
-                    && null != data) {
-                Uri selectedFile = data.getData();
-                String uriString = getPath(selectedFile);
-                File myFile = new File(uriString);
-                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_txt));
-                attachmentFileSize.setText(getFileSize(myFile.length()));
-                attachmentFileName.setText(myFile.getName());
-            } else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
-                    && null != data) {
-                // Get the Image from data
-                Uri selectedImage = data.getData();
-                Log.d("selectedIMG  ", selectedImage + "");
-                Log.d("getPath()  ", getPath(selectedImage) + "");
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                String uriString = getPath(selectedImage);
-                File myFile = new File(uriString);
-//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//    /**
+//     * Here we are handling the activity result.
+//     *
+//     * @param requestCode
+//     * @param resultCode
+//     * @param data
+//     */
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
 //
-//                // Get the cursor
-//                Cursor cursor = getContentResolver().query(selectedImage,
-//                        filePathColumn, null, null, null);
-//                // Move to first row
-//                cursor.moveToFirst();
+//        try {
+//            if (requestCode == RESULT_LOAD_FILE && resultCode == RESULT_OK
+//                    && null != data) {
+//                Uri selectedFile = data.getData();
+//                String uriString = getPath(selectedFile);
+//                File myFile = new File(uriString);
+//                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_txt));
+//                attachmentFileSize.setText(getFileSize(myFile.length()));
+//                attachmentFileName.setText(myFile.getName());
+//            } else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
+//                    && null != data) {
+//                // Get the Image from data
+//                Uri selectedImage = data.getData();
+//                Log.d("selectedIMG  ", selectedImage + "");
+//                Log.d("getPath()  ", getPath(selectedImage) + "");
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+//                String uriString = getPath(selectedImage);
+//                File myFile = new File(uriString);
+////                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+////
+////                // Get the cursor
+////                Cursor cursor = getContentResolver().query(selectedImage,
+////                        filePathColumn, null, null, null);
+////                // Move to first row
+////                cursor.moveToFirst();
+////
+////                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+////                imgDecodableString = cursor.getString(columnIndex);
+////                cursor.close();
+//                attachment_layout.setVisibility(View.VISIBLE);
+//                // Set the Image in ImageView after decoding the String
+//                imageView.setImageBitmap(bitmap);
+//                Log.d("size", myFile.length() + "");
+//                //attachmentFileSize.setText("(" + myFile.length() / 1024 + "kb)");
+//                attachmentFileSize.setText(getFileSize(myFile.length()));
+//                attachmentFileName.setText(myFile.getName());
 //
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                imgDecodableString = cursor.getString(columnIndex);
-//                cursor.close();
-                attachment_layout.setVisibility(View.VISIBLE);
-                // Set the Image in ImageView after decoding the String
-                imageView.setImageBitmap(bitmap);
-                Log.d("size", myFile.length() + "");
-                //attachmentFileSize.setText("(" + myFile.length() / 1024 + "kb)");
-                attachmentFileSize.setText(getFileSize(myFile.length()));
-                attachmentFileName.setText(myFile.getName());
+//            } else {
+//                Toasty.info(this, getString(R.string.you_hvent_picked_anything),
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Toasty.error(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
+//                    .show();
+//        }
+//    }
 
-            } else {
-                Toasty.info(this, getString(R.string.you_hvent_picked_anything),
-                        Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toasty.error(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
-                    .show();
-        }
-    }
-
-    public static String getFileSize(long size) {
-        if (size <= 0)
-            return "0";
-        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-    }
-
-    public int getCountryZipCode() {
-        String CountryID = "";
-        String CountryZipCode = "";
-        int code = 0;
-
-        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        //getNetworkCountryIso
-        CountryID = manager.getSimCountryIso().toUpperCase();
-        String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
-        for (String aRl : rl) {
-            String[] g = aRl.split(",");
-            if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
-                //code = i;
-                break;
-            }
-        }
-        return Integer.parseInt(CountryZipCode);
-    }
-
-    private void selectValue(Spinner spinner, Object value) {
-        for (int i = 0; i < spinner.getCount(); i++) {
-            spinner.getItemAtPosition(i);
-            String[] split = spinner.getItemAtPosition(i).toString().split(",");
-            String s = split[1];
-            if (s.equals(value)) {
-                Log.d("dsegffg", i + "");
-                spinner.setSelection(i);
-                break;
-            }
-        }
-    }
+//    public static String getFileSize(long size) {
+//        if (size <= 0)
+//            return "0";
+//        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+//        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+//        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+//    }
+//
+//    public int getCountryZipCode() {
+//        String CountryID = "";
+//        String CountryZipCode = "";
+//        int code = 0;
+//
+//        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+//        //getNetworkCountryIso
+//        CountryID = manager.getSimCountryIso().toUpperCase();
+//        String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
+//        for (String aRl : rl) {
+//            String[] g = aRl.split(",");
+//            if (g[1].trim().equals(CountryID.trim())) {
+//                CountryZipCode = g[0];
+//                //code = i;
+//                break;
+//            }
+//        }
+//        return Integer.parseInt(CountryZipCode);
+//    }
+//
+//    private void selectValue(Spinner spinner, Object value) {
+//        for (int i = 0; i < spinner.getCount(); i++) {
+//            spinner.getItemAtPosition(i);
+//            String[] split = spinner.getItemAtPosition(i).toString().split(",");
+//            String s = split[1];
+//            if (s.equals(value)) {
+//                Log.d("dsegffg", i + "");
+//                spinner.setSelection(i);
+//                break;
+//            }
+//        }
+//    }
 
     /**
      * Setting up the views here.
@@ -739,7 +739,7 @@ public class CreateTicketActivity extends AppCompatActivity {
     private class CreateNewTicket extends AsyncTask<String, Void, String> {
         String fname, lname, email, code;
         String subject;
-        String body;
+       public String body;
         String phone;
         String mobile;
         int helpTopic;
