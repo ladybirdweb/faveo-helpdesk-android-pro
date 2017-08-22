@@ -138,63 +138,63 @@ class HTTPConnection {
         return sb.toString();
     }
 
-    public String HTTPResponsePut(String stringURL, String parameters) {
-        try {
-            url = new URL(stringURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("Offer-type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            connection.setRequestMethod("PUT");
-            connection.setDoInput(true);
-
-            OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(outputStream, "UTF-8"));
-            writer.write(parameters);
-
-            writer.flush();
-            writer.close();
-            outputStream.close();
-
-            is = connection.getInputStream();
-            Log.e("Response Code", connection.getResponseCode() + "");
-        } catch (IOException e) {
-            if (e.getMessage().contains("No authentication challenges found")) {
-                if (refreshToken() == null)
-                    return null;
-                new Helpdesk();
-                new Authenticate();
-                return "tokenRefreshed";
-            }
-            Log.e("error in faveo", e.getMessage());
-            e.printStackTrace();
-        }
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
-            sb = new StringBuilder();
-            sb.append(reader.readLine()).append("\n");
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            is.close();
-        } catch (Exception e) {
-            Log.e("log_tag", "Error converting result " + e.toString());
-        }
-        if (sb == null)
-            return null;
-
-        String input = sb.toString();
-        if (input.contains("token_expired") || input.contains("token_invalid")) {
-            if (refreshToken() == null)
-                return null;
-            new Helpdesk();
-            new Authenticate();
-            return "tokenRefreshed";
-        }
-        return sb.toString();
-    }
+//    public String HTTPResponsePut(String stringURL, String parameters) {
+//        try {
+//            url = new URL(stringURL);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestProperty("Offer-type", "application/json");
+//            connection.setRequestProperty("Accept", "application/json");
+//            connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+//            connection.setRequestMethod("PUT");
+//            connection.setDoInput(true);
+//
+//            OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
+//            BufferedWriter writer = new BufferedWriter(
+//                    new OutputStreamWriter(outputStream, "UTF-8"));
+//            writer.write(parameters);
+//
+//            writer.flush();
+//            writer.close();
+//            outputStream.close();
+//
+//            is = connection.getInputStream();
+//            Log.e("Response Code", connection.getResponseCode() + "");
+//        } catch (IOException e) {
+//            if (e.getMessage().contains("No authentication challenges found")) {
+//                if (refreshToken() == null)
+//                    return null;
+//                new Helpdesk();
+//                new Authenticate();
+//                return "tokenRefreshed";
+//            }
+//            Log.e("error in faveo", e.getMessage());
+//            e.printStackTrace();
+//        }
+//        try {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+//            sb = new StringBuilder();
+//            sb.append(reader.readLine()).append("\n");
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                sb.append(line).append("\n");
+//            }
+//            is.close();
+//        } catch (Exception e) {
+//            Log.e("log_tag", "Error converting result " + e.toString());
+//        }
+//        if (sb == null)
+//            return null;
+//
+//        String input = sb.toString();
+//        if (input.contains("token_expired") || input.contains("token_invalid")) {
+//            if (refreshToken() == null)
+//                return null;
+//            new Helpdesk();
+//            new Authenticate();
+//            return "tokenRefreshed";
+//        }
+//        return sb.toString();
+//    }
 
     String HTTPResponseGet(String stringURL) {
         try {

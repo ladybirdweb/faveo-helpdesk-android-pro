@@ -243,34 +243,34 @@ public class Helpdesk {
         return new HTTPConnection().HTTPResponseGet(Constants.BILLING_URL + "?url=" + baseURL);
     }
 
-    public String postDeleteTicket(int ticketID) {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("ticket_ID", ticketID);
-            obj.put("token", token);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/delete?", parameters);
-    }
+//    public String postDeleteTicket(int ticketID) {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("ticket_ID", ticketID);
+//            obj.put("token", token);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/delete?", parameters);
+//    }
 
-    public String getOpenTicket() {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("token", token);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/open?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-    }
+//    public String getOpenTicket() {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("token", token);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/open?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+//    }
 
     public String getUnassignedTicket() {
         Log.d("UnassignedTicketAPI", Constants.URL + "helpdesk/unassigned?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
@@ -289,51 +289,51 @@ public class Helpdesk {
     }
 
 
-    public String getAgents() {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("token", token);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/agents?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-    }
+//    public String getAgents() {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("token", token);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/agents?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+//    }
 
-    public String getTeams() {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("token", token);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/teams?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-    }
+//    public String getTeams() {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("token", token);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/teams?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+//    }
 
-    public String getCustomers(String search) {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("token", token);
-            obj.put("search", search);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/customers?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&search=" + search);
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/customers?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&search=" + search);
-        return result;
-    }
+//    public String getCustomers(String search) {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("token", token);
+//            obj.put("search", search);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/customers?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&search=" + search);
+//        if (result != null && result.equals("tokenRefreshed"))
+//            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/customers?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&search=" + search);
+//        return result;
+//    }
 
     public String getCustomersOverview() {
         Log.d("CustomersOverviewAPI", Constants.URL + "helpdesk/customers-custom?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
@@ -343,35 +343,35 @@ public class Helpdesk {
         return result;
     }
 
-    public String getCustomer(int userID) {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("token", token);
-            obj.put("user_id", userID);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/customer?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
-    }
+//    public String getCustomer(int userID) {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("token", token);
+//            obj.put("user_id", userID);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/customer?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
+//    }
 
-    public String getTicket(String search) {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("token", token);
-            obj.put("search", search);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/ticket-search?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&search=" + search);
-    }
+//    public String getTicket(String search) {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("token", token);
+//            obj.put("search", search);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/ticket-search?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&search=" + search);
+//    }
 
     public String getTicketDetail(String ticketID) {
         Log.d("TicketDetailAPI", Constants.URL + "helpdesk/ticket?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&id=" + ticketID);
@@ -389,20 +389,20 @@ public class Helpdesk {
         return result;
     }
 
-    public String postAssignTicket(int id) {
-        String parameters = null;
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("api_key", apiKey);
-            obj.put("ip", IP);
-            obj.put("token", token);
-            obj.put("id", id);
-            parameters = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/assign", parameters);
-    }
+//    public String postAssignTicket(int id) {
+//        String parameters = null;
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("api_key", apiKey);
+//            obj.put("ip", IP);
+//            obj.put("token", token);
+//            obj.put("id", id);
+//            parameters = obj.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/assign", parameters);
+//    }
 
     public String getInboxTicket() {
         Log.d("InboxTicketAPI", Constants.URL + "helpdesk/inbox?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
@@ -414,13 +414,13 @@ public class Helpdesk {
 
     // helpdesk/get-tickets?departments=All&show=inbox&api=1
 
-    public String getInboxTicket2() {
-        Log.d("InboxTicketAPI", Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
-        return result;
-    }
+//    public String getInboxTicket2() {
+//        Log.d("InboxTicketAPI", Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
+//        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
+//        if (result != null && result.equals("tokenRefreshed"))
+//            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/get-tickets?token=" + token + "&api=1&departments=All&show=inbox");
+//        return result;
+//    }
 
     public String getTrashTickets() {
         Log.d("TrashTicketsAPI", Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
@@ -450,13 +450,13 @@ public class Helpdesk {
         return result;
     }
 
-    public String getMyTickets(String userID) {
-        Log.d("MyTicketsAPI", Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
-        return result;
-    }
+//    public String getMyTickets(String userID) {
+//        Log.d("MyTicketsAPI", Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
+//        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
+//        if (result != null && result.equals("tokenRefreshed"))
+//            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
+//        return result;
+//    }
 
     public String getTicketsByAgent(String userID) {
         Log.d("TicketsByAgentAPI", Constants.URL + "helpdesk/my-tickets-agent?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
