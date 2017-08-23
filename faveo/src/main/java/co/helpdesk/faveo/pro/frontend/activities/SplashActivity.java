@@ -136,6 +136,14 @@ public class SplashActivity extends AppCompatActivity {
                 Prefs.putString("keySLA", keySLA);
                 Prefs.putString("valueSLA", valueSLA);
 
+                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
+                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
+                }
+                Prefs.putString("keyStaff", keyStaff);
+                Prefs.putString("valueStaff", valueStaff);
+
                 JSONArray jsonArrayType = jsonObject1.getJSONArray("type");
                 for (int i = 0; i < jsonArrayType.length(); i++) {
                     keyType += jsonArrayType.getJSONObject(i).getString("id") + ",";

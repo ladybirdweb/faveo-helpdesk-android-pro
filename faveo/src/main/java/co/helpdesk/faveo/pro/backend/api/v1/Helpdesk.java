@@ -35,7 +35,7 @@ public class Helpdesk {
     }
 
     public String postCreateTicket(int userID, String subject, String body, int helpTopic,
-                                   int priority, String fname, String lname, String phone, String email, String code, String mobile) {
+                                   int priority, String fname, String lname, String phone, String email, String code, String mobile,int staff) {
         Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
@@ -52,6 +52,7 @@ public class Helpdesk {
                 "&code=" + code +
                 "&mobile=" + mobile +
                 "&email=" + email +
+                "&assigned=" + staff +
                 "&token=" + token);
 
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/create?" +
@@ -70,6 +71,7 @@ public class Helpdesk {
                 "&mobile=" + mobile +
                 "&code=" + code +
                 "&email=" + email +
+                "&assigned=" + staff +
                 "&token=" + token, null);
 
         if (result != null && result.equals("tokenRefreshed"))
@@ -89,6 +91,7 @@ public class Helpdesk {
                     "&mobile=" + mobile +
                     "&code=" + code +
                     "&email=" + email +
+                    "&assigned=" + staff +
                     "&token=" + token, null);
         return result;
     }
@@ -186,7 +189,7 @@ public class Helpdesk {
 
 
     public String postEditTicket(int ticketID, String subject, int helpTopic,
-                                 int ticketSource, int ticketPriority, int ticketType) {
+                                 int ticketSource, int ticketPriority, int ticketType,int staff) {
         Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
@@ -196,7 +199,8 @@ public class Helpdesk {
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
                 "&ticket_priority=" + ticketPriority +
-                "&ticket_type=" + ticketType
+                "&ticket_type=" + ticketType + "&assigned="
+                + staff
         );
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
@@ -207,7 +211,8 @@ public class Helpdesk {
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
                 "&ticket_priority=" + ticketPriority +
-                "&ticket_type=" + ticketType, null);
+                "&ticket_type=" + ticketType + "&assigned="
+                + staff, null);
 
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
@@ -219,7 +224,8 @@ public class Helpdesk {
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
                     "&ticket_priority=" + ticketPriority +
-                    "&ticket_type=" + ticketType, null);
+                    "&ticket_type=" + ticketType + "&assigned="
+                    + staff, null);
         return result;
     }
 

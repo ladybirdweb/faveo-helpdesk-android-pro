@@ -70,7 +70,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private View containerView;
+    View containerView;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
     View layout;

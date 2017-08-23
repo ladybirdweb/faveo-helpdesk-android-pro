@@ -74,7 +74,8 @@ public class CreateTicketActivity extends AppCompatActivity {
     //String imgDecodableString;
     static final String TAG = "CreateTicketActivity";
     boolean allCorrect;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter;
+
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter;
     ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
             spinnerDeptArrayAdapter;
 
@@ -110,6 +111,8 @@ public class CreateTicketActivity extends AppCompatActivity {
     Spinner spinnerPriority;
     @BindView(R.id.spinner_help)
     Spinner spinnerHelpTopic;
+    @BindView(R.id.assignedto)
+    Spinner spinnerAssignto;
     @BindView(R.id.buttonSubmit)
     Button buttonSubmit;
     //    @BindView(R.id.spinner_assign_to)
@@ -121,7 +124,7 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    @BindView(R.id.requester_searchview)
 //    SearchView requesterSearchview;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems;
+    ArrayList<Data> helptopicItems, priorityItems,staffItems;
     String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
@@ -171,6 +174,16 @@ public class CreateTicketActivity extends AppCompatActivity {
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
+            staffItems=new ArrayList<>();
+            staffItems.add(new Data(0,"select assignee"));
+            jsonObject=new JSONObject(json);
+            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
+            for (int i=0;i<jsonArrayStaffs.length();i++){
+                Data data=new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")),jsonArrayStaffs.getJSONObject(i).getString("email"));
+                staffItems.add(data);
+            }
+
+
             helptopicItems = new ArrayList<>();
             helptopicItems.add(new Data(0, "Please select help topic"));
             jsonObject = new JSONObject(json);
@@ -377,13 +390,13 @@ public class CreateTicketActivity extends AppCompatActivity {
     public void setUpViews() {
         // selectValue(phCode, getCountryZipCode());
         // phCode.setSelection(getCountryZipCode());
-        final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_1,
-                null,
-                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1},
-                new int[]{android.R.id.text1},
-                0);
-        final List<String> suggestions = new ArrayList<>();
+//        final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
+//                android.R.layout.simple_list_item_1,
+//                null,
+//                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1},
+//                new int[]{android.R.id.text1},
+//                0);
+//        final List<String> suggestions = new ArrayList<>();
 
 //        requesterSearchview.setSuggestionsAdapter(suggestionAdapter);
 //        requesterSearchview.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
@@ -487,6 +500,11 @@ public class CreateTicketActivity extends AppCompatActivity {
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopic.setAdapter(spinnerHelpArrayAdapter);
 
+        spinnerStaffArrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,staffItems);
+        spinnerStaffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAssignto.setAdapter(spinnerStaffArrayAdapter);
+
+
 //        spinnerSlaArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueSLA.split(","))); //selected item will look like a spinner set from XML
 //        spinnerSlaArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        spinnerSLA.setAdapter(spinnerSlaArrayAdapter);
@@ -559,6 +577,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
         //int dept = spinnerDept.getSelectedItemPosition();
         Data priority = (Data) spinnerPriority.getSelectedItem();
+        Data staff= (Data) spinnerAssignto.getSelectedItem();
 
 //    if (phCode.equals("")){
 //        Toast.makeText(this, "Select the code", Toast.LENGTH_SHORT).show();
@@ -659,7 +678,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 progressDialog.show();
-                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email, countrycode, mobile).execute();
+                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email, countrycode, mobile,staff.ID).execute();
 //                JSONObject jsonObject = new JSONObject();
 //                try {
 //                    //jsonObject.put("api_key", Constants.API_KEY);
@@ -747,9 +766,10 @@ public class CreateTicketActivity extends AppCompatActivity {
         int priority;
         //int dept;
         int userID;
+        int staff;
 
         CreateNewTicket(int userID, String subject, String body,
-                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code, String mobile) {
+                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code, String mobile,int staff) {
 
             this.subject = subject;
             this.body = body;
@@ -764,11 +784,12 @@ public class CreateTicketActivity extends AppCompatActivity {
             this.email = email;
             this.code = code;
             this.mobile = mobile;
+            this.staff=staff;
 
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, mobile);
+            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, mobile,staff);
         }
 
         protected void onPostExecute(String result) {

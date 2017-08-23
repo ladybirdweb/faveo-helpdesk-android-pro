@@ -31,8 +31,8 @@ public class Settings extends Fragment implements CompoundButton.OnClickListener
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+     public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 

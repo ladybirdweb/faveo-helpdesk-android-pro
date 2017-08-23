@@ -33,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -47,18 +48,18 @@ import es.dmoral.toasty.Toasty;
  */
 public class Detail extends Fragment {
 
-    private InputFilter filter = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-
-            String blockCharacterSet = "~!@#$%^&*()_-;:<>,.[]{}|/+";
-            if (source != null && blockCharacterSet.contains(("" + source))) {
-                return "";
-            }
-            return null;
-        }
-    };
+//    private InputFilter filter = new InputFilter() {
+//
+//        @Override
+//        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+//
+//            String blockCharacterSet = "~!@#$%^&*()_-;:<>,.[]{}|/+";
+//            if (source != null && blockCharacterSet.contains(("" + source))) {
+//                return "";
+//            }
+//            return null;
+//        }
+//    };
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     TextView tv_helpTopic, tv_dept;
@@ -68,19 +69,18 @@ public class Detail extends Fragment {
     EditText editTextSubject, editTextFirstName, editTextEmail,
             editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
 
-    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter, spinnerStatusArrayAdapter;
-
     Spinner spinnerSLAPlans, spinnerType, spinnerStatus, spinnerSource,
-            spinnerPriority, spinnerHelpTopics, spinnerAssignTo;
+            spinnerPriority, spinnerHelpTopics;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter;
+    ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems,staffItems;
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter,staffArrayAdapter;
     Button buttonSave;
     Animation animation;
+    @BindView(R.id.spinner_staffs)
+    Spinner spinnerStaffs;
 
-
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -127,12 +127,12 @@ public class Detail extends Fragment {
             task = new FetchTicketDetail(TicketDetailActivity.ticketID);
             task.execute();
         }
+
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resetViews();
                 //int helpTopic=1;
-
                 boolean allCorrect = true;
                 String subject = editTextSubject.getText().toString();
                 // int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
@@ -140,6 +140,8 @@ public class Detail extends Fragment {
                 Data source = (Data) spinnerSource.getSelectedItem();
                 Data priority = (Data) spinnerPriority.getSelectedItem();
                 Data type = (Data) spinnerType.getSelectedItem();
+                Data  staff= (Data) spinnerStaffs.getSelectedItem();
+
                 //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
 
 //                if (SLAPlans == 0) {
@@ -164,6 +166,9 @@ public class Detail extends Fragment {
                     Toasty.warning(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
                 }
 
+
+
+
                 if (allCorrect) {
                     if (InternetReceiver.isConnected()) {
                         progressDialog.setMessage(getString(R.string.updating_ticket));
@@ -174,7 +179,7 @@ public class Detail extends Fragment {
                                     URLEncoder.encode(subject.trim(), "utf-8"),
                                     helpTopic.ID,
                                     source.ID,
-                                    priority.ID, type.ID)
+                                    priority.ID, type.ID,staff.ID)
                                     .execute();
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -186,11 +191,11 @@ public class Detail extends Fragment {
         return rootView;
     }
 
-    private void setErrorState(EditText editText, TextView textViewError, String error) {
-        editText.setBackgroundResource(R.drawable.edittext_error_state);
-        editText.setPadding(0, paddingTop, 0, paddingBottom);
-        textViewError.setText(error);
-    }
+//    private void setErrorState(EditText editText, TextView textViewError, String error) {
+//        editText.setBackgroundResource(R.drawable.edittext_error_state);
+//        editText.setPadding(0, paddingTop, 0, paddingBottom);
+//        textViewError.setText(error);
+//    }
 
     private class FetchTicketDetail extends AsyncTask<String, Void, String> {
         String ticketID;
@@ -218,10 +223,21 @@ public class Detail extends Fragment {
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                 editTextSubject.setText(jsonObject1.getString("title"));
                 String ticketNumber = jsonObject1.getString("ticket_number");
+                String ticketStatus=jsonObject1.getString("status_name");
+                if (ticketStatus.equals("Open")){
+                    Prefs.putString("status_name","Open");
+                }
+                else if (ticketStatus.equals("Closed")){
+                    Prefs.putString("status_name","Closed");
+                }
+                else  if (ticketStatus.equals("Deleted")){
+                    Prefs.putString("status_name","Deleted");
+                }
                 // textViewTicketNumber.setText(ticketNumber);
                 ActionBar actionBar = ((TicketDetailActivity) getActivity()).getSupportActionBar();
                 if (actionBar != null) {
                     actionBar.setTitle(ticketNumber == null ? "TicketDetail" : ticketNumber);
+
                 }
 //                try {
 //                    if (jsonObject1.getString("sla_name") != null) {
@@ -254,7 +270,7 @@ public class Detail extends Fragment {
                 try {
                     if (jsonObject1.getString("type_name") != null) {
                         // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
-                            spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
+                        spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
                         //spinnerType.setSelection(Integer.parseInt(jsonObject1.getString("type")));
                     }
                 } catch (JSONException | NumberFormatException e) {
@@ -274,6 +290,7 @@ public class Detail extends Fragment {
 //                    tv_helpTopic.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
+
                 try {
                     if (jsonObject1.getString("source_name") != null)
                         //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
@@ -358,8 +375,9 @@ public class Detail extends Fragment {
         int ticketPriority;
         int ticketStatus;
         int ticketType;
+        int staff;
 
-        SaveTicket(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType) {
+        SaveTicket(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType,int staff) {
             this.context = context;
             this.ticketNumber = ticketNumber;
             this.subject = subject;
@@ -369,13 +387,14 @@ public class Detail extends Fragment {
             this.ticketPriority = ticketPriority;
             // this.ticketStatus = ticketStatus;
             this.ticketType = ticketType;
+            this.staff=staff;
         }
 
         protected String doInBackground(String... urls) {
             if (subject.equals("Not available"))
                 subject = "";
             return new Helpdesk().postEditTicket(ticketNumber, subject,
-                    helpTopic, ticketSource, ticketPriority, ticketType);
+                    helpTopic, ticketSource, ticketPriority, ticketType,staff);
         }
 
         protected void onPostExecute(String result) {
@@ -401,17 +420,25 @@ public class Detail extends Fragment {
     }
 
     private void setUpViews(View rootView) {
+        Prefs.getString("keyStaff", null);
 
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
+            staffItems=new ArrayList<>();
+            jsonObject=new JSONObject(json);
+            staffItems.add(new Data(0, "--"));
+            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
+            for (int i=0;i<jsonArrayStaffs.length();i++){
+                Data data=new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")),jsonArrayStaffs.getJSONObject(i).getString("email"));
+                staffItems.add(data);
+            }
             helptopicItems = new ArrayList<>();
             helptopicItems.add(new Data(0, "--"));
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
             for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
                 Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
-
                 helptopicItems.add(data);
             }
 
@@ -440,7 +467,7 @@ public class Detail extends Fragment {
                 sourceItems.add(data);
             }
 
-        } catch (JSONException | ArrayIndexOutOfBoundsException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -477,6 +504,11 @@ public class Detail extends Fragment {
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopics.setAdapter(spinnerHelpArrayAdapter);
 
+        spinnerStaffs= (Spinner) rootView.findViewById(R.id.spinner_staffs);
+        staffArrayAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_item,staffItems);
+        staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStaffs.setAdapter(staffArrayAdapter);
+
         editTextFirstName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_firstname);
         //editTextLastName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_lastname);
         editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
@@ -490,7 +522,8 @@ public class Detail extends Fragment {
         editTextDueDate = (EditText) rootView.findViewById(R.id.editText_due_date);
         editTextCreatedDate = (EditText) rootView.findViewById(R.id.editText_created_date);
         editTextLastResponseDate = (EditText) rootView.findViewById(R.id.editText_last_response_date);
-        spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_assign_to);
+        //spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_staffs);
+
         buttonSave = (Button) rootView.findViewById(R.id.button_save);
         //tv_dept = (TextView) rootView.findViewById(R.id.tv_dept);
         tv_helpTopic = (TextView) rootView.findViewById(R.id.tv_helpTopic);
