@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Settings.OnFragmentInteractionListener {
 
     // The BroadcastReceiver that tracks network connectivity changes.
+//    public InternetReceiver receiver = new InternetReceiver();
 
     protected boolean doubleBackToExitPressedOnce = false;
     public static boolean isShowing = false;

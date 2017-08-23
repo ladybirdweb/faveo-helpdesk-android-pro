@@ -2,11 +2,11 @@ package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+//import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
+//import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;

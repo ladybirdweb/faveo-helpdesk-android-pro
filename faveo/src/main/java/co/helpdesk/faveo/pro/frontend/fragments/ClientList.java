@@ -67,8 +67,8 @@ public class ClientList extends Fragment implements View.OnClickListener {
     private boolean loading = true;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 

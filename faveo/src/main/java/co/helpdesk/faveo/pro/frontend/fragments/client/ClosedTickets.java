@@ -21,8 +21,8 @@ public class ClosedTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
     TextView tv;
     View rootView;
     RecyclerView recyclerView;

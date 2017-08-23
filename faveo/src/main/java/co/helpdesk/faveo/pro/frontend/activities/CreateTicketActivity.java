@@ -1,23 +1,23 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
+//import android.app.SearchManager;
+//import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+//import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v4.widget.CursorAdapter;
+//import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
+//import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
@@ -36,7 +36,7 @@ import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+//import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,12 +45,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
+//import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
+//import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,16 +68,16 @@ import es.dmoral.toasty.Toasty;
  * POST request.We are getting the JSON data here from the dependency API.
  */
 public class CreateTicketActivity extends AppCompatActivity {
-    private static int RESULT_LOAD_IMG = 1;
-    private static int RESULT_LOAD_FILE = 42;
+//    private static int RESULT_LOAD_IMG = 1;
+//    private static int RESULT_LOAD_FILE = 42;
     //CountryCodePicker ccp;
     //String imgDecodableString;
-    static final String TAG = "CreateTicketActivity";
+//    static final String TAG = "CreateTicketActivity";
     boolean allCorrect;
 
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter;
-    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
-            spinnerDeptArrayAdapter;
+//    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
+//            spinnerDeptArrayAdapter;
 
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
