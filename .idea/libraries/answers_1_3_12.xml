@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="answers-1.3.12">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/af2e800df6b35f51356c5ecb173cd8fdceaef256/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/af2e800df6b35f51356c5ecb173cd8fdceaef256/output/res" />
+      <root url="file://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.crashlytics.sdk.android/answers/1.3.12/res" />
+      <root url="jar://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.crashlytics.sdk.android/answers/1.3.12/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

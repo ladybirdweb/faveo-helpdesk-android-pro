@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="runner-0.5">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/69d31fbe9e2b14ca59d7e191350f2fd4240dccf3/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/69d31fbe9e2b14ca59d7e191350f2fd4240dccf3/output/jars/classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.android.support.test/runner/0.5/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.android.support.test/runner/0.5/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

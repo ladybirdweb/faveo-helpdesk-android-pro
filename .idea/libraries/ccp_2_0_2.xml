@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="ccp-2.0.2">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/b88c03560d84ea9e5fb2dc0e820e8537627c548e/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/b88c03560d84ea9e5fb2dc0e820e8537627c548e/output/res" />
+      <root url="file://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.hbb20/ccp/2.0.2/res" />
+      <root url="jar://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.hbb20/ccp/2.0.2/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
