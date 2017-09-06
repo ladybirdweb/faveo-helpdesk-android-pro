@@ -9,21 +9,36 @@
     <!--android:orderInCategory="99"-->
     <!--android:title="Search"-->
     <!--app:showAsAction="ifRoom" />-->
+    <!--<item-->
+        <!--android:title="Change Status"-->
+        <!--android:id="@+id/menu_search_option"-->
+        <!--app:showAsAction="collapseActionView|never|ifRoom"-->
+
+        <!--&gt;-->
+        <!--<menu>-->
+            <!--<group>-->
+
+            <!--</group>-->
+        <!--</menu>-->
+    <!--</item>-->
     <item
         android:id="@+id/status_id"
         android:orderInCategory="100"
         android:title="Change Ticket Status"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        app:itemTextColor="@color/actionbar"
+        />
+
     <group
         android:id="@+id/text_color_group"
         android:checkableBehavior="none"
+        app:itemTextColor="#000000"
         >
         <item
             android:id="@+id/action_statusOpen"
             android:orderInCategory="100"
             android:title="Open"
             app:showAsAction="never"
-
             />
         <item
             android:id="@+id/action_statusResolved"
@@ -40,6 +55,7 @@
             android:orderInCategory="100"
             android:title="Move to trash"
             app:showAsAction="never" />
+
         <!--<item-->
             <!--android:id="@+id/action_statusRequestForClose"-->
             <!--android:orderInCategory="100"-->

@@ -34,6 +34,7 @@
         <item name="colorControlNormal">@color/actionbar</item>
         <item name="android:textColorPrimary">@color/actionbar</item>
         <item name="android:textColorSecondary">@color/actionbar</item>
+
     </style>
 
     <style name="Theme.MyCompatTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">

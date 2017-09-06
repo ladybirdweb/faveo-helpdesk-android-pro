@@ -290,6 +290,26 @@ public class Detail extends Fragment {
 //                    tv_helpTopic.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
+                try {
+                    if (jsonObject1.getString("assignee_email") != null) {
+                        //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        for (int j=0;j<spinnerStaffs.getCount();j++){
+                            if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("assignee_email"))) {
+                                spinnerStaffs.setSelection(j);
+                            }
+                        }
+                        //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+                    }
+                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                } catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                } catch (Exception e) {
+//                    spinnerHelpTopics.setVisibility(View.GONE);
+//                    tv_helpTopic.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
 
                 try {
                     if (jsonObject1.getString("source_name") != null)

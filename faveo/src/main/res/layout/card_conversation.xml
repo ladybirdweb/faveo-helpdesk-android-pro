@@ -48,7 +48,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-bold"
                     android:text="@string/dummy_name"
-                    android:textAllCaps="true"
+                    android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 

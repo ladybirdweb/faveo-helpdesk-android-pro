@@ -27,6 +27,7 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
  */
 public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
     private List<TicketOverview> ticketOverviewList;
+    String subject;
 
     public TicketOverviewAdapter(List<TicketOverview> ticketOverviewList) {
         this.ticketOverviewList = ticketOverviewList;
@@ -68,14 +69,23 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             }
 
         ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
+
         ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
         ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
-        ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
 
-//        GradientDrawable shape = new GradientDrawable(new );
-//        shape.mutate();
-//        shape.setCornerRadii(new float[]{10f,10f});
-//        ticketViewHolder.ticketPriority.setBackground(shape);
+        subject=ticketOverview.ticketSubject;
+        if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
+            String first=subject.replace("=?UTF-8?Q?","");
+            String second=first.replace("_"," ");
+            String third=second.replace("=C2=A0","");
+            String fourth=third.replace("?=","");
+            String fifth=fourth.replace("=E2=80=99","'");
+            ticketViewHolder.textViewSubject.setText(fifth);
+        }
+        else{
+            ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
+        }
+
         if (ticketOverview.ticketPriorityColor != null) {
             ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
         }

@@ -190,6 +190,8 @@
     <string name="ticket_already_deleted">Ticket is already moved to trash</string>
     <string name="ticket_alreday_resolved">Ticket is already resolved</string>
     <string name="assignedto">Assign to</string>
+    <string name="selectstatus">Please select a status to change</string>
+    <string name="retry">Please try again</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

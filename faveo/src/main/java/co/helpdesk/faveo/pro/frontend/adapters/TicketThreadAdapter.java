@@ -52,10 +52,14 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 //                    .placeholder(R.drawable.default_pic)
 //                    .error(R.drawable.default_pic)
 //                    .into(ticketViewHolder.roundedImageViewProfilePic);
-        if (i==0){
+//        if (i==0){
+//            ticketViewHolder.webView.setVisibility(View.VISIBLE);
+//        }else{
+//            ticketViewHolder.webView.setVisibility(View.GONE);
+//        }
+
+        for (int j=0;j<ticketThreadList.size()-1;j++){
             ticketViewHolder.webView.setVisibility(View.VISIBLE);
-        }else{
-            ticketViewHolder.webView.setVisibility(View.GONE);
         }
 
 

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="library-1.8.1">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.pixplicity.easyprefs/library/1.8.1/res" />
-      <root url="jar://$PROJECT_DIR$/faveo/build/intermediates/exploded-aar/com.pixplicity.easyprefs/library/1.8.1/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/5f4ca5814a640e80d31b8242c6e20b3a6dcf3c3f/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/5f4ca5814a640e80d31b8242c6e20b3a6dcf3c3f/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

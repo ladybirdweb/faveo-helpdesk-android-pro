@@ -21,6 +21,9 @@ import android.support.v7.widget.Toolbar;
 //import android.text.SpannableString;
 //import android.text.style.ForegroundColorSpan;
 //import android.util.DisplayMetrics;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -262,6 +265,16 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //            startActivity(new Intent(MainActivity.this, SearchActivity.class));
 //            return true;
 //        }
+
+        if (id==R.id.status_id){
+            SpannableString spannableString=new SpannableString(item.getTitle());
+            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+            item.setTitle(spannableString);
+            Toasty.info(TicketDetailActivity.this,getString(R.string.selectstatus),Toast.LENGTH_SHORT).show();
+            return super.onPrepareOptionsMenu((Menu) item);
+
+            //return false;
+        }
         if (id==R.id.action_statusOpen){
             status=Prefs.getString("ticketstatus",null);
             if (status.equals("Open")){
