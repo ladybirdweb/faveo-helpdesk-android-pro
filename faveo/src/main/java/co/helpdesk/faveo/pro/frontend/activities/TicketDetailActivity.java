@@ -267,13 +267,13 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        }
 
         if (id==R.id.status_id){
-            SpannableString spannableString=new SpannableString(item.getTitle());
-            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
-            item.setTitle(spannableString);
+//            SpannableString spannableString=new SpannableString(item.getTitle());
+//            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+//            item.setTitle(spannableString);
             Toasty.info(TicketDetailActivity.this,getString(R.string.selectstatus),Toast.LENGTH_SHORT).show();
-            return super.onPrepareOptionsMenu((Menu) item);
+//            return super.onPrepareOptionsMenu((Menu) item);
 
-            //return false;
+            return false;
         }
         if (id==R.id.action_statusOpen){
             status=Prefs.getString("ticketstatus",null);
