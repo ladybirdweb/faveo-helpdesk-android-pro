@@ -26,7 +26,6 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
-import co.helpdesk.faveo.pro.frontend.fragments.CreateTicket;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
@@ -49,15 +48,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         UnassignedTickets.OnFragmentInteractionListener,
         About.OnFragmentInteractionListener,
         ClientList.OnFragmentInteractionListener,
-        CreateTicket.OnFragmentInteractionListener,
         Settings.OnFragmentInteractionListener {
 
     // The BroadcastReceiver that tracks network connectivity changes.
-    private InternetReceiver receiver = new InternetReceiver();
+//    public InternetReceiver receiver = new InternetReceiver();
 
     protected boolean doubleBackToExitPressedOnce = false;
     public static boolean isShowing = false;
-    private ArrayList<String> mList = new ArrayList<>();
+//    private ArrayList<String> mList = new ArrayList<>();
 //    @BindView(R.id.sort_view)
 //    RelativeLayout sortView;
 //    @BindView(R.id.sorting_type_textview)
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         isShowing = true;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        
         // TODO: Move this to where you establish a user session
         //logUser();
 //        if (BuildConfig.DEBUG) {

@@ -1,23 +1,23 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
+//import android.app.SearchManager;
+//import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+//import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v4.widget.CursorAdapter;
+//import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
+//import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
@@ -34,8 +34,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+//import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,12 +45,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
+//import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
+//import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,15 +68,16 @@ import es.dmoral.toasty.Toasty;
  * POST request.We are getting the JSON data here from the dependency API.
  */
 public class CreateTicketActivity extends AppCompatActivity {
-    private static int RESULT_LOAD_IMG = 1;
-    private static int RESULT_LOAD_FILE = 42;
+//    private static int RESULT_LOAD_IMG = 1;
+//    private static int RESULT_LOAD_FILE = 42;
     //CountryCodePicker ccp;
     //String imgDecodableString;
-    static final String TAG = "CreateTicketActivity";
+//    static final String TAG = "CreateTicketActivity";
     boolean allCorrect;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter;
-    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
-            spinnerDeptArrayAdapter;
+
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter;
+//    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
+//            spinnerDeptArrayAdapter;
 
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
@@ -85,8 +87,8 @@ public class CreateTicketActivity extends AppCompatActivity {
     EditText editTextLastName;
     @BindView(R.id.phone_edittext)
     EditText editTextPhone;
-    @BindView(R.id.spinner_code)
-    SearchableSpinner phCode;
+//    @BindView(R.id.spinner_code)
+//    SearchableSpinner phCode;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
@@ -109,6 +111,8 @@ public class CreateTicketActivity extends AppCompatActivity {
     Spinner spinnerPriority;
     @BindView(R.id.spinner_help)
     Spinner spinnerHelpTopic;
+    @BindView(R.id.assignedto)
+    Spinner spinnerAssignto;
     @BindView(R.id.buttonSubmit)
     Button buttonSubmit;
     //    @BindView(R.id.spinner_assign_to)
@@ -120,11 +124,11 @@ public class CreateTicketActivity extends AppCompatActivity {
 //    @BindView(R.id.requester_searchview)
 //    SearchView requesterSearchview;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems;
-    String code="";
+    ArrayList<Data> helptopicItems, priorityItems,staffItems;
     String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
+    CountryCodePicker countryCodePicker;
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -147,8 +151,18 @@ public class CreateTicketActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.create_ticket);
+        //getSupportActionBar().setTitle(R.string.create_ticket);
         //ccp = (CountryCodePicker) findViewById(R.id.ccp);
+        countryCodePicker= (CountryCodePicker) findViewById(R.id.countrycoode);
+        countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
+            @Override
+            public void onCountrySelected() {
+                //Toast.makeText(MainActivity.this, "code :"+countryCodePicker.getSelectedCountryCode(), Toast.LENGTH_SHORT).show();
+
+                countrycode=countryCodePicker.getSelectedCountryCode();
+            }
+        });
+        editTextFirstName.requestFocus();
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +174,16 @@ public class CreateTicketActivity extends AppCompatActivity {
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
+            staffItems=new ArrayList<>();
+            staffItems.add(new Data(0,"select assignee"));
+            jsonObject=new JSONObject(json);
+            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
+            for (int i=0;i<jsonArrayStaffs.length();i++){
+                Data data=new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")),jsonArrayStaffs.getJSONObject(i).getString("email"));
+                staffItems.add(data);
+            }
+
+
             helptopicItems = new ArrayList<>();
             helptopicItems.add(new Data(0, "Please select help topic"));
             jsonObject = new JSONObject(json);
@@ -177,9 +201,10 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Data data = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
                 priorityItems.add(data);
             }
-        } catch (JSONException e) {
+        } catch (JSONException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
+
 
         setUpViews();
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -259,105 +284,105 @@ public class CreateTicketActivity extends AppCompatActivity {
         return ss;
     }
 
-    /**
-     * Here we are handling the activity result.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        try {
-            if (requestCode == RESULT_LOAD_FILE && resultCode == RESULT_OK
-                    && null != data) {
-                Uri selectedFile = data.getData();
-                String uriString = getPath(selectedFile);
-                File myFile = new File(uriString);
-                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_txt));
-                attachmentFileSize.setText(getFileSize(myFile.length()));
-                attachmentFileName.setText(myFile.getName());
-            } else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
-                    && null != data) {
-                // Get the Image from data
-                Uri selectedImage = data.getData();
-                Log.d("selectedIMG  ", selectedImage + "");
-                Log.d("getPath()  ", getPath(selectedImage) + "");
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                String uriString = getPath(selectedImage);
-                File myFile = new File(uriString);
-//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//    /**
+//     * Here we are handling the activity result.
+//     *
+//     * @param requestCode
+//     * @param resultCode
+//     * @param data
+//     */
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
 //
-//                // Get the cursor
-//                Cursor cursor = getContentResolver().query(selectedImage,
-//                        filePathColumn, null, null, null);
-//                // Move to first row
-//                cursor.moveToFirst();
+//        try {
+//            if (requestCode == RESULT_LOAD_FILE && resultCode == RESULT_OK
+//                    && null != data) {
+//                Uri selectedFile = data.getData();
+//                String uriString = getPath(selectedFile);
+//                File myFile = new File(uriString);
+//                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_txt));
+//                attachmentFileSize.setText(getFileSize(myFile.length()));
+//                attachmentFileName.setText(myFile.getName());
+//            } else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
+//                    && null != data) {
+//                // Get the Image from data
+//                Uri selectedImage = data.getData();
+//                Log.d("selectedIMG  ", selectedImage + "");
+//                Log.d("getPath()  ", getPath(selectedImage) + "");
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+//                String uriString = getPath(selectedImage);
+//                File myFile = new File(uriString);
+////                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+////
+////                // Get the cursor
+////                Cursor cursor = getContentResolver().query(selectedImage,
+////                        filePathColumn, null, null, null);
+////                // Move to first row
+////                cursor.moveToFirst();
+////
+////                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+////                imgDecodableString = cursor.getString(columnIndex);
+////                cursor.close();
+//                attachment_layout.setVisibility(View.VISIBLE);
+//                // Set the Image in ImageView after decoding the String
+//                imageView.setImageBitmap(bitmap);
+//                Log.d("size", myFile.length() + "");
+//                //attachmentFileSize.setText("(" + myFile.length() / 1024 + "kb)");
+//                attachmentFileSize.setText(getFileSize(myFile.length()));
+//                attachmentFileName.setText(myFile.getName());
 //
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                imgDecodableString = cursor.getString(columnIndex);
-//                cursor.close();
-                attachment_layout.setVisibility(View.VISIBLE);
-                // Set the Image in ImageView after decoding the String
-                imageView.setImageBitmap(bitmap);
-                Log.d("size", myFile.length() + "");
-                //attachmentFileSize.setText("(" + myFile.length() / 1024 + "kb)");
-                attachmentFileSize.setText(getFileSize(myFile.length()));
-                attachmentFileName.setText(myFile.getName());
+//            } else {
+//                Toasty.info(this, getString(R.string.you_hvent_picked_anything),
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Toasty.error(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
+//                    .show();
+//        }
+//    }
 
-            } else {
-                Toasty.info(this, getString(R.string.you_hvent_picked_anything),
-                        Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toasty.error(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
-                    .show();
-        }
-    }
-
-    public static String getFileSize(long size) {
-        if (size <= 0)
-            return "0";
-        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-    }
-
-    public int getCountryZipCode() {
-        String CountryID = "";
-        String CountryZipCode = "";
-        int code = 0;
-
-        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        //getNetworkCountryIso
-        CountryID = manager.getSimCountryIso().toUpperCase();
-        String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
-        for (String aRl : rl) {
-            String[] g = aRl.split(",");
-            if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
-                //code = i;
-                break;
-            }
-        }
-        return Integer.parseInt(CountryZipCode);
-    }
-
-    private void selectValue(Spinner spinner, Object value) {
-        for (int i = 0; i < spinner.getCount(); i++) {
-            spinner.getItemAtPosition(i);
-            String[] split = spinner.getItemAtPosition(i).toString().split(",");
-            String s = split[1];
-            if (s.equals(value)) {
-                Log.d("dsegffg", i + "");
-                spinner.setSelection(i);
-                break;
-            }
-        }
-    }
+//    public static String getFileSize(long size) {
+//        if (size <= 0)
+//            return "0";
+//        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+//        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+//        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+//    }
+//
+//    public int getCountryZipCode() {
+//        String CountryID = "";
+//        String CountryZipCode = "";
+//        int code = 0;
+//
+//        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+//        //getNetworkCountryIso
+//        CountryID = manager.getSimCountryIso().toUpperCase();
+//        String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
+//        for (String aRl : rl) {
+//            String[] g = aRl.split(",");
+//            if (g[1].trim().equals(CountryID.trim())) {
+//                CountryZipCode = g[0];
+//                //code = i;
+//                break;
+//            }
+//        }
+//        return Integer.parseInt(CountryZipCode);
+//    }
+//
+//    private void selectValue(Spinner spinner, Object value) {
+//        for (int i = 0; i < spinner.getCount(); i++) {
+//            spinner.getItemAtPosition(i);
+//            String[] split = spinner.getItemAtPosition(i).toString().split(",");
+//            String s = split[1];
+//            if (s.equals(value)) {
+//                Log.d("dsegffg", i + "");
+//                spinner.setSelection(i);
+//                break;
+//            }
+//        }
+//    }
 
     /**
      * Setting up the views here.
@@ -365,13 +390,13 @@ public class CreateTicketActivity extends AppCompatActivity {
     public void setUpViews() {
         // selectValue(phCode, getCountryZipCode());
         // phCode.setSelection(getCountryZipCode());
-        final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_1,
-                null,
-                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1},
-                new int[]{android.R.id.text1},
-                0);
-        final List<String> suggestions = new ArrayList<>();
+//        final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
+//                android.R.layout.simple_list_item_1,
+//                null,
+//                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1},
+//                new int[]{android.R.id.text1},
+//                0);
+//        final List<String> suggestions = new ArrayList<>();
 
 //        requesterSearchview.setSuggestionsAdapter(suggestionAdapter);
 //        requesterSearchview.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
@@ -475,6 +500,11 @@ public class CreateTicketActivity extends AppCompatActivity {
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopic.setAdapter(spinnerHelpArrayAdapter);
 
+        spinnerStaffArrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,staffItems);
+        spinnerStaffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAssignto.setAdapter(spinnerStaffArrayAdapter);
+
+
 //        spinnerSlaArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueSLA.split(","))); //selected item will look like a spinner set from XML
 //        spinnerSlaArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        spinnerSLA.setAdapter(spinnerSlaArrayAdapter);
@@ -530,11 +560,13 @@ public class CreateTicketActivity extends AppCompatActivity {
         String phone = editTextPhone.getText().toString();
         mobile = editTextMobile.getText().toString();
 
-        if (!phCode.getSelectedItem().toString().equals("Code")) {
-            countrycode = phCode.getSelectedItem().toString();
-            String[] cc = countrycode.split(",");
-            countrycode = cc[1];
-        }
+//        if (!phCode.getSelectedItem().toString().equals("Code")) {
+//            countrycode = phCode.getSelectedItem().toString();
+//            String[] cc = countrycode.split(",");
+//            countrycode = cc[1];
+//        }
+
+        countrycode=countryCodePicker.getSelectedCountryCode();
 
 
         allCorrect = true;
@@ -545,6 +577,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
         //int dept = spinnerDept.getSelectedItemPosition();
         Data priority = (Data) spinnerPriority.getSelectedItem();
+        Data staff= (Data) spinnerAssignto.getSelectedItem();
 
 //    if (phCode.equals("")){
 //        Toast.makeText(this, "Select the code", Toast.LENGTH_SHORT).show();
@@ -561,7 +594,7 @@ public class CreateTicketActivity extends AppCompatActivity {
             Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         }
-        else if (fname.length()>=10){
+        else if (fname.length()>20){
             Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
             allCorrect=false;
         }   else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
@@ -592,6 +625,11 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
         else if (subject.matches("[" + splChrs + "]+")){
             Toasty.warning(this, getString(R.string.only_special_characters_not_allowed_here), Toast.LENGTH_SHORT).show();
+            allCorrect=false;
+        }
+        else if (subject.trim().length()>100){
+            Toasty.warning(this,"Subject must not exceed 100 characters"
+                    , Toast.LENGTH_SHORT).show();
             allCorrect=false;
         }
         else if (priority.ID == 0) {
@@ -640,7 +678,7 @@ public class CreateTicketActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 progressDialog.show();
-                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email, countrycode, mobile).execute();
+                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email, countrycode, mobile,staff.ID).execute();
 //                JSONObject jsonObject = new JSONObject();
 //                try {
 //                    //jsonObject.put("api_key", Constants.API_KEY);
@@ -713,13 +751,14 @@ public class CreateTicketActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Async task for creating the ticket.
      */
     private class CreateNewTicket extends AsyncTask<String, Void, String> {
         String fname, lname, email, code;
         String subject;
-        String body;
+       public String body;
         String phone;
         String mobile;
         int helpTopic;
@@ -727,9 +766,10 @@ public class CreateTicketActivity extends AppCompatActivity {
         int priority;
         //int dept;
         int userID;
+        int staff;
 
         CreateNewTicket(int userID, String subject, String body,
-                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code, String mobile) {
+                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code, String mobile,int staff) {
 
             this.subject = subject;
             this.body = body;
@@ -744,11 +784,12 @@ public class CreateTicketActivity extends AppCompatActivity {
             this.email = email;
             this.code = code;
             this.mobile = mobile;
+            this.staff=staff;
 
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, mobile);
+            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, mobile,staff);
         }
 
         protected void onPostExecute(String result) {
@@ -758,10 +799,11 @@ public class CreateTicketActivity extends AppCompatActivity {
                 return;
             }
             try {
+
                 JSONObject jsonObject=new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("response");
-                String message=jsonObject1.getString("fails");
-                if (message.contains("Code is required with phone/mobile number.")){
+                JSONObject jsonObject1=jsonObject.getJSONObject("error");
+                String message=jsonObject1.getString("code");
+                if (message.contains("The code feild is required.")){
                     Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
                 }
 
@@ -773,14 +815,18 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+
             }
+
+
+  }
 
 
         }
 
-    }
 
-    /**
+
+     /**
      * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
      *
      * @param event
@@ -789,6 +835,12 @@ public class CreateTicketActivity extends AppCompatActivity {
     public void onMessageEvent(MessageEvent event) {
 
         showSnack(event.message);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override

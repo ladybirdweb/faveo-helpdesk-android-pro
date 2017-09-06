@@ -71,6 +71,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @BindView(R.id.textView_client_phone)
     TextView textViewClientPhone;
 
+    @BindView(R.id.textView_client_mobile)
+    TextView textViewClientMobile;
+
     @BindView(R.id.textView_client_status)
     TextView textViewClientStatus;
 
@@ -83,7 +86,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     ViewPagerAdapter adapter;
     OpenTickets fragmentOpenTickets;
     ClosedTickets fragmentClosedTickets;
-    String clientID, clientName;
+    public String clientID, clientName;
     List<TicketGlimpse> listTicketGlimpse;
     ProgressDialog progressDialog;
 
@@ -154,7 +157,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     public void onBackPressed() {
         if (!MainActivity.isShowing) {
             Log.d("isShowing", "false");
-            Intent intent = new Intent(ClientDetailActivity.this, SplashActivity.class);
+            Intent intent = new Intent(ClientDetailActivity.this, MainActivity.class);
             startActivity(intent);
         } else Log.d("isShowing", "true");
         super.onBackPressed();
@@ -244,22 +247,34 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 textViewClientEmail.setText(requester.getString("email"));
 
                 String phone = "";
+                String mobile="";
 //                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
 //                    textViewClientPhone.setVisibility(View.INVISIBLE);
 //
 //                else
                     phone = requester.getString("phone_number");
-                if (phone.equals("null")||phone.equals("")){
+                mobile=requester.getString("mobile");
+                if (phone.equals("null")||phone.equals("")||phone.equals("Not available")){
                     textViewClientPhone.setVisibility(View.GONE);
                 }else {
                     textViewClientPhone.setVisibility(View.VISIBLE);
                     textViewClientPhone.setText(phone);
                 }
+                if (mobile.equals("null")||mobile.equals("")||mobile.equals("Not available")){
+                    textViewClientMobile.setVisibility(View.GONE);
+                }
+            else {
+                    textViewClientMobile.setVisibility(View.VISIBLE);
+                    textViewClientMobile.setText(mobile);
+                }
 
-                if (requester.getString("company").equals("null") || requester.getString("company").equals(""))
-                    textViewClientCompany.setText("");
-                else
+                if (requester.getString("company").equals("null") || requester.getString("company").equals("")) {
+                    textViewClientCompany.setVisibility(View.GONE);
+                }
+                else {
+                    textViewClientCompany.setVisibility(View.VISIBLE);
                     textViewClientCompany.setText(requester.getString("company"));
+                }
                 textViewClientStatus.setText(requester.getString("active" +
                         "").equals("1") ? getString(R.string.active) : getString(R.string.inactive));
                 String clientPictureUrl = requester.getString("profile_pic");
@@ -271,16 +286,17 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     boolean isOpen = true;
                     String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
                     String ticketSubject = jsonArray.getJSONObject(i).getString("title");
+                    String status=jsonArray.getJSONObject(i).getString("ticket_status_name");
                     try {
                         isOpen = jsonArray.getJSONObject(i).getString("ticket_status_name").equals("Open");
                         if (isOpen)
-                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
+                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status));
                         else
-                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false));
+                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status));
                     } catch (Exception e) {
-                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
+                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status));
                     }
-                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen));
+                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status));
                 }
             } catch (JSONException e) {
                 Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();

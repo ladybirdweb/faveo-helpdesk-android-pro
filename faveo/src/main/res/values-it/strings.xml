@@ -14,7 +14,7 @@
     <string name="required">necessario</string>
     <string name="no_internet_connection">Nessuna connessione Internet!</string>
     <string name="descending">Discendente</string>
-    <string name="firstname_maximum_char">Nome non deve superare i 10 caratteri</string>
+    <string name="firstname_maximum_char">Nome non deve superare i 20 caratteri</string>
     <string name="ascending">Ascendente</string>
     <string name="sort_by">Ordina per</string>
     <string name="due_by_time">Due di tempo</string>
@@ -51,6 +51,8 @@ Si prega di compilare tutti i campi richiesti</string>
     <string name="internal_notes_posted">note interne pubblicate</string>
     <string name="posted_reply">Pubblicato tua risposta</string>
     <string name="only_special_characters_not_allowed_here">Solo i caratteri speciali non sono ammessi qui</string>
+    <string name="select_source">
+Seleziona una sorgente</string>
 
     <string name="please_select_some_priority">Seleziona una priorità</string>
     <string name="select_some_helptopic">
@@ -137,7 +139,7 @@ Seleziona il codice</string>
     <string name="something_went_wrong">Qualcosa è andato storto</string>
     <string name="invalid_url">URL non valido</string>
     <string name="oops_no_internet">Ops! Senza internet</string>
-    <string name="error_verifying_url">Errore di verifica URL</string>
+    <string name="error_verifying_url">Controlli l URL del tuo Helpdesk</string>
     <string name="wrong_credentials">credenziali errate</string>
     <string name="connected_to_internet">connesso a Internet</string>
     <string name="sry_not_connected_to_internet">Siamo spiacenti! Non collegato ad internet</string>

@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,9 +33,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -43,18 +48,18 @@ import es.dmoral.toasty.Toasty;
  */
 public class Detail extends Fragment {
 
-    private InputFilter filter = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-
-            String blockCharacterSet = "~!@#$%^&*()_-;:<>,.[]{}|/+";
-            if (source != null && blockCharacterSet.contains(("" + source))) {
-                return "";
-            }
-            return null;
-        }
-    };
+//    private InputFilter filter = new InputFilter() {
+//
+//        @Override
+//        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+//
+//            String blockCharacterSet = "~!@#$%^&*()_-;:<>,.[]{}|/+";
+//            if (source != null && blockCharacterSet.contains(("" + source))) {
+//                return "";
+//            }
+//            return null;
+//        }
+//    };
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     TextView tv_helpTopic, tv_dept;
@@ -64,17 +69,18 @@ public class Detail extends Fragment {
     EditText editTextSubject, editTextFirstName, editTextEmail,
             editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
 
-    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter, spinnerStatusArrayAdapter;
-
     Spinner spinnerSLAPlans, spinnerType, spinnerStatus, spinnerSource,
-            spinnerPriority, spinnerHelpTopics, spinnerAssignTo;
+            spinnerPriority, spinnerHelpTopics;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter;
+    ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems,staffItems;
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter,staffArrayAdapter;
     Button buttonSave;
+    Animation animation;
+    @BindView(R.id.spinner_staffs)
+    Spinner spinnerStaffs;
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -113,6 +119,7 @@ public class Detail extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         setUpViews(rootView);
+        animation= AnimationUtils.loadAnimation(getActivity(),R.anim.shake_error);
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.fetching_detail));
         // progressDialog.show();
@@ -120,6 +127,7 @@ public class Detail extends Fragment {
             task = new FetchTicketDetail(TicketDetailActivity.ticketID);
             task.execute();
         }
+
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +140,8 @@ public class Detail extends Fragment {
                 Data source = (Data) spinnerSource.getSelectedItem();
                 Data priority = (Data) spinnerPriority.getSelectedItem();
                 Data type = (Data) spinnerType.getSelectedItem();
+                Data  staff= (Data) spinnerStaffs.getSelectedItem();
+
                 //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
 
 //                if (SLAPlans == 0) {
@@ -140,21 +150,24 @@ public class Detail extends Fragment {
 //                } else
 
                 if (subject.trim().length() == 0) {
-                    setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.please_fill_field));
+                    Toasty.warning(getActivity(), getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
                     allCorrect = false;
                 } else if (subject.trim().length() < 5) {
-                    setErrorState(editTextSubject, textViewErrorSubject, getString(R.string.sub_minimum_char));
+                    Toasty.warning(getActivity(), getString(R.string.sub_minimum_char), Toast.LENGTH_SHORT).show();
                     allCorrect = false;
                 } else if (helpTopic.ID == 0) {
                     allCorrect = false;
-                    Toasty.warning(getContext(), "Please select some helptopic", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(getActivity(), getString(R.string.select_some_helptopic), Toast.LENGTH_SHORT).show();
                 } else if (priority.ID == 0) {
                     allCorrect = false;
-                    Toasty.warning(getContext(), "Please select some Priority", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(getActivity(), getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
                 } else if (source.ID == 0) {
                     allCorrect = false;
-                    Toasty.warning(getContext(), "Please select some Source", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
                 }
+
+
+
 
                 if (allCorrect) {
                     if (InternetReceiver.isConnected()) {
@@ -166,7 +179,7 @@ public class Detail extends Fragment {
                                     URLEncoder.encode(subject.trim(), "utf-8"),
                                     helpTopic.ID,
                                     source.ID,
-                                    priority.ID, type.ID)
+                                    priority.ID, type.ID,staff.ID)
                                     .execute();
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -178,11 +191,11 @@ public class Detail extends Fragment {
         return rootView;
     }
 
-    private void setErrorState(EditText editText, TextView textViewError, String error) {
-        editText.setBackgroundResource(R.drawable.edittext_error_state);
-        editText.setPadding(0, paddingTop, 0, paddingBottom);
-        textViewError.setText(error);
-    }
+//    private void setErrorState(EditText editText, TextView textViewError, String error) {
+//        editText.setBackgroundResource(R.drawable.edittext_error_state);
+//        editText.setPadding(0, paddingTop, 0, paddingBottom);
+//        textViewError.setText(error);
+//    }
 
     private class FetchTicketDetail extends AsyncTask<String, Void, String> {
         String ticketID;
@@ -210,10 +223,21 @@ public class Detail extends Fragment {
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                 editTextSubject.setText(jsonObject1.getString("title"));
                 String ticketNumber = jsonObject1.getString("ticket_number");
+                String ticketStatus=jsonObject1.getString("status_name");
+                if (ticketStatus.equals("Open")){
+                    Prefs.putString("status_name","Open");
+                }
+                else if (ticketStatus.equals("Closed")){
+                    Prefs.putString("status_name","Closed");
+                }
+                else  if (ticketStatus.equals("Deleted")){
+                    Prefs.putString("status_name","Deleted");
+                }
                 // textViewTicketNumber.setText(ticketNumber);
                 ActionBar actionBar = ((TicketDetailActivity) getActivity()).getSupportActionBar();
                 if (actionBar != null) {
                     actionBar.setTitle(ticketNumber == null ? "TicketDetail" : ticketNumber);
+
                 }
 //                try {
 //                    if (jsonObject1.getString("sla_name") != null) {
@@ -239,29 +263,63 @@ public class Detail extends Fragment {
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
                 }
+                catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
 
                 try {
                     if (jsonObject1.getString("type_name") != null) {
                         // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
                         spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
+                        //spinnerType.setSelection(Integer.parseInt(jsonObject1.getString("type")));
                     }
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
                 }
+                catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
                 try {
                     if (jsonObject1.getString("helptopic_name") != null)
-                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                } catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
                 } catch (Exception e) {
 //                    spinnerHelpTopics.setVisibility(View.GONE);
 //                    tv_helpTopic.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
                 try {
+                    if (jsonObject1.getString("assignee_email") != null) {
+                        //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        for (int j=0;j<spinnerStaffs.getCount();j++){
+                            if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("assignee_email"))) {
+                                spinnerStaffs.setSelection(j);
+                            }
+                        }
+                        //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+                    }
+                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                } catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                } catch (Exception e) {
+//                    spinnerHelpTopics.setVisibility(View.GONE);
+//                    tv_helpTopic.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
+
+                try {
                     if (jsonObject1.getString("source_name") != null)
                         //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
 
                         spinnerSource.setSelection(getIndex(spinnerSource, jsonObject1.getString("source_name")));
                 } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
+                }
+                catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 }
 
@@ -337,8 +395,9 @@ public class Detail extends Fragment {
         int ticketPriority;
         int ticketStatus;
         int ticketType;
+        int staff;
 
-        SaveTicket(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType) {
+        SaveTicket(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType,int staff) {
             this.context = context;
             this.ticketNumber = ticketNumber;
             this.subject = subject;
@@ -348,13 +407,14 @@ public class Detail extends Fragment {
             this.ticketPriority = ticketPriority;
             // this.ticketStatus = ticketStatus;
             this.ticketType = ticketType;
+            this.staff=staff;
         }
 
         protected String doInBackground(String... urls) {
             if (subject.equals("Not available"))
                 subject = "";
             return new Helpdesk().postEditTicket(ticketNumber, subject,
-                    helpTopic, ticketSource, ticketPriority, ticketType);
+                    helpTopic, ticketSource, ticketPriority, ticketType,staff);
         }
 
         protected void onPostExecute(String result) {
@@ -365,32 +425,40 @@ public class Detail extends Fragment {
                 return;
             }
 
-            switch (result) {
-                case "":
-
-            }
+//            switch (result) {
+//                case "":
+//
+//            }
 
             if (result.contains("Edited successfully")) {
                 Toasty.success(getActivity(), getString(R.string.update_success), Toast.LENGTH_LONG).show();
-//                Intent intent=new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
+                Intent intent=new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
             } else
                 Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
         }
     }
 
     private void setUpViews(View rootView) {
+        Prefs.getString("keyStaff", null);
 
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
+            staffItems=new ArrayList<>();
+            jsonObject=new JSONObject(json);
+            staffItems.add(new Data(0, "--"));
+            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
+            for (int i=0;i<jsonArrayStaffs.length();i++){
+                Data data=new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")),jsonArrayStaffs.getJSONObject(i).getString("email"));
+                staffItems.add(data);
+            }
             helptopicItems = new ArrayList<>();
             helptopicItems.add(new Data(0, "--"));
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
             for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
                 Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
-
                 helptopicItems.add(data);
             }
 
@@ -456,6 +524,11 @@ public class Detail extends Fragment {
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopics.setAdapter(spinnerHelpArrayAdapter);
 
+        spinnerStaffs= (Spinner) rootView.findViewById(R.id.spinner_staffs);
+        staffArrayAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_item,staffItems);
+        staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStaffs.setAdapter(staffArrayAdapter);
+
         editTextFirstName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_firstname);
         //editTextLastName = (EditText) rootView.findViewById(R.id.editText_ticketDetail_lastname);
         editTextEmail = (EditText) rootView.findViewById(R.id.editText_email);
@@ -469,7 +542,8 @@ public class Detail extends Fragment {
         editTextDueDate = (EditText) rootView.findViewById(R.id.editText_due_date);
         editTextCreatedDate = (EditText) rootView.findViewById(R.id.editText_created_date);
         editTextLastResponseDate = (EditText) rootView.findViewById(R.id.editText_last_response_date);
-        spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_assign_to);
+        //spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_staffs);
+
         buttonSave = (Button) rootView.findViewById(R.id.button_save);
         //tv_dept = (TextView) rootView.findViewById(R.id.tv_dept);
         tv_helpTopic = (TextView) rootView.findViewById(R.id.tv_helpTopic);

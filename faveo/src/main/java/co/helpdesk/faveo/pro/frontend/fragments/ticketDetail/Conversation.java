@@ -47,6 +47,8 @@ public class Conversation extends Fragment {
 
     @BindView(R.id.noiternet_view)
     TextView noInternet_view;
+    @BindView(R.id.totalcount)
+    TextView textView;
 
     View rootView;
 
@@ -143,6 +145,7 @@ public class Conversation extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+            textView.setVisibility(View.GONE);
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
             if (result == null) {
@@ -178,10 +181,10 @@ public class Conversation extends Fragment {
 //                            clientName="system";
 //                        }else
                         if (firstName.equals("null")&&lastName.equals("null")&&userName.equals("null")){
-                            clientName="System";
+                            clientName="System Generated";
                         }
                         else if (clientName.equals("")&&userName.equals("null")&&userName.equals("null")){
-                            clientName="System";
+                            clientName="System Generated";
                         }
                         else if ((firstName.equals("null"))&&(lastName.equals("null"))&&(userName!=null)){
                             clientName=userName;

@@ -109,7 +109,7 @@
     <string name="fill_all_the_details">Please fill all the required fields</string>
     <string name="fill_firstname">Fill FirstName</string>
     <string name="firstname_minimum_char">FirstName should be minimum 3 characters</string>
-    <string name="firstname_maximum_char">FirstName should not exceed 10 characters</string>
+    <string name="firstname_maximum_char">FirstName should not exceed 20 characters</string>
     <string name="fill_lastname">Fill LastName</string>
     <string name="invalid_email">Please enter valid email id</string>
     <string name="sub_must_not_be_empty">Subject must not be empty</string>
@@ -142,7 +142,9 @@
     <string name="fetching_detail">Fetching detail</string>
     <string name="please_enter_valid_url">Please enter a valid url</string>
     <string name="invalid_url">Invalid URL</string>
-    <string name="error_verifying_url">Error verifying URL</string>
+    <string name="error_verifying_url">Please check your Helpdesk URL</string>
+    <string name="format_error">URL should be in this format \n domainname/foldername \n eg: faveohelpdesk.in/test</string>
+
     <string name="access_denied">Access denied!</string>
     <string name="please_purchase_faveo">Please purchase Faveo PRO edition to use this app.</string>
     <string name="ok">OK</string>
@@ -169,12 +171,31 @@
     <string name="mobile" translatable="false">Mobile</string>
     <string name="name" translatable="false">Name</string>
     <string name="only_special_characters_not_allowed_here">Only special characters not allowed here</string>
+    <!--<string name="sub_must_not_exceed">Subject must not exceed 100 characters</string>-->
     <string name="please_select_some_priority">Please select some Priority</string>
     <string name="select_some_helptopic">Please select some helptopic</string>
     <string name="select_code">Please select the code</string>
+    <string name="select_source">Please select some Source</string>
+    <string name="due_today">DueToday</string>
+    <string name="status_closed">Status changed to closed.</string>
+    <string name="status_deleted">Moved to trash</string>
+    <string name="status_opened">Status changed to open</string>
+    <string name="status_resolved">Status changed to resolved</string>
+    <string name="status_request_for_close">Status changed to request for close</string>
+    <string name="please_select_ticket">Please select a ticket to change status</string>
+    <string name="please_select_status">Please select one status</string>
+    <string name="select_both">Please select ticket and status</string>
+    <string name="ticket_already_open">Ticket is already opened</string>
+    <string name="ticket_already_closed">Ticket is already closed</string>
+    <string name="ticket_already_deleted">Ticket is already moved to trash</string>
+    <string name="ticket_alreday_resolved">Ticket is already resolved</string>
+    <string name="assignedto">Assign to</string>
+    <string name="selectstatus">Please select a status to change</string>
+    <string name="retry">Please try again</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 </resources>

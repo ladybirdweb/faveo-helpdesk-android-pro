@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -52,11 +53,14 @@ public class InboxTickets extends Fragment {
 
     @BindView(R.id.noiternet_view)
     TextView noInternet_view;
+    @BindView(R.id.totalcount)
+            TextView textView;
 
     int currentPage = 1;
     static String nextPageURL = "";
     View rootView;
-
+    int total;
+    ProgressDialog progressDialog;
 
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
@@ -64,8 +68,8 @@ public class InboxTickets extends Fragment {
     private boolean loading = true;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -108,6 +112,8 @@ public class InboxTickets extends Fragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
+            progressDialog=new ProgressDialog(getActivity());
+            progressDialog.setMessage("Please wait");
 
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
 //            swipeRefresh.setRefreshing(true);
@@ -115,6 +121,7 @@ public class InboxTickets extends Fragment {
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
+                progressDialog.show();
                 new FetchFirst(getActivity()).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -193,6 +200,7 @@ public class InboxTickets extends Fragment {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                total=jsonObject.getInt("total");
                 try {
                     data = jsonObject.getString("data");
                     nextPageURL = jsonObject.getString("next_page_url");
@@ -214,7 +222,8 @@ public class InboxTickets extends Fragment {
         protected void onPostExecute(String result) {
 //            ticketOverviewAdapter.notifyDataSetChanged();
             //progressBar.setVisibility(View.GONE);
-
+            progressDialog.dismiss();
+            textView.setText(""+total+" tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
 
@@ -335,6 +344,17 @@ public class InboxTickets extends Fragment {
         }
     }
     /**
+     * Whenever the this method is going to be called then the
+     * async task will be cancelled .
+     */
+    @Override
+    public void onStop() {
+        // notice here that I keep a reference to the task being executed as a class member:
+        if (this.new FetchFirst(getActivity()) != null && this.new FetchFirst(getActivity()).getStatus() == AsyncTask.Status.RUNNING)
+            this.new FetchFirst(getActivity()).cancel(true);
+        super.onStop();
+    }
+    /**
      * When the fragment is going to be attached
      * this life cycle method is going to be called.
      * @param context refers to the current fragment.
@@ -349,6 +369,7 @@ public class InboxTickets extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
     /**
      * Once the fragment is going to be detached then
      * this method is going to be called.

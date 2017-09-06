@@ -19,7 +19,18 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
-        tools:replace="allowBackup, label">
+        tools:replace="allowBackup, label"
+
+        >
+        <!--<activity-->
+            <!--android:name=".SplashScreen"-->
+            <!--android:label="@string/app_name" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
         <activity
             android:name=".frontend.activities.LoginActivity"
             android:label="@string/app_name"
@@ -96,14 +107,14 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- <service -->
-        <!-- android:name=".CustomService" -->
-        <!-- android:exported="true" -->
-        <!-- android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
+         <!--<service -->
+         <!--android:name=".CustomService" -->
+         <!--android:exported="true" -->
+         <!--android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE"> -->
+         <!--<intent-filter> -->
+         <!--<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" /> -->
+         <!--</intent-filter> -->
+         <!--</service> -->
         <activity
             android:name=".frontend.activities.NotificationActivity"
             android:label="@string/title_activity_notification"

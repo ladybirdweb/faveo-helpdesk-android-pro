@@ -7,7 +7,15 @@ package co.helpdesk.faveo.pro.frontend.drawers;
 class NavDrawerItem {
     private boolean showNotify;
     private String title;
+    private String count="";
 
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
 
     NavDrawerItem() {
 

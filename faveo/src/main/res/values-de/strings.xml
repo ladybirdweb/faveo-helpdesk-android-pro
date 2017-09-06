@@ -10,7 +10,7 @@
     <string name="send">Senden</string>
     <string name="add">HINZUFÜGEN</string>
     <string name="firstname_maximum_char">
-FirstName darf 10 Zeichen nicht überschreiten</string>
+FirstName darf 20 Zeichen nicht überschreiten</string>
     <string name="overdue">Überfällig</string>
     <string name="required">Erforderlich</string>
     <string name="no_internet_connection">Keine Internetverbindung!</string>
@@ -136,7 +136,8 @@ Bitte wählen Sie eine Priorität aus</string>
     <string name="something_went_wrong">Etwas ist schief gelaufen</string>
     <string name="invalid_url">Ungültige URL</string>
     <string name="oops_no_internet">Hoppla! Kein Internet</string>
-    <string name="error_verifying_url">Fehler beim Überprüfen der URL</string>
+    <string name="error_verifying_url">
+Bitte überprüfen Sie Ihre Helpdesk-URL</string>
     <string name="wrong_credentials">Falsche Anmeldeinformationen</string>
     <string name="connected_to_internet">Verbindung zum Internet</string>
     <string name="sry_not_connected_to_internet">Entschuldigung! Nicht mit Internet verbunden</string>
@@ -159,6 +160,7 @@ Bitte wählen Sie eine Priorität aus</string>
     <string name="ticket_created_success">Ticket erfolgreich erstellt!</string>
     <string name="title_activity_notification">Benachrichtigungen</string>
     <string name="action_search">Suche</string>
+    <string name="select_source">Please select some Source</string>
 
 
 

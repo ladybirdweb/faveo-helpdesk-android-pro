@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.fragments;
 
 import android.app.ActivityOptions;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -55,15 +56,19 @@ public class ClientList extends Fragment implements View.OnClickListener {
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
     ClientOverviewAdapter clientOverviewAdapter;
+    int total;
+    @BindView(R.id.totalcount)
+            TextView textView;
     List<ClientOverview> clientOverviewList = new ArrayList<>();
     View rootView;
+    ProgressDialog progressDialog;
 
 
     private boolean loading = true;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -105,11 +110,14 @@ public class ClientList extends Fragment implements View.OnClickListener {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
+            progressDialog=new ProgressDialog(getActivity());
+            progressDialog.setMessage("Please wait");
 
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 //swipeRefresh.setRefreshing(true);
+                progressDialog.show();
                 new FetchClients(getActivity()).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -155,6 +163,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
             clientOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                total=jsonObject.getInt("total");
                 data = jsonObject.getString("data");
                 nextPageURL = jsonObject.getString("next_page_url");
                 JSONArray jsonArray = new JSONArray(data);
@@ -170,6 +179,8 @@ public class ClientList extends Fragment implements View.OnClickListener {
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            textView.setText(""+total+" clients");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
 

@@ -8,7 +8,7 @@
     <string name="reset_password">Trocar a senha</string>
     <string name="empty_username">Nome de usuário vazio</string>
     <string name="firstname_maximum_char">
-O primeiro nome não deve exceder 10 caracteres</string>
+O primeiro nome não deve exceder 20 caracteres</string>
     <string name="create">Crio</string>
     <string name="send">Enviar</string>
     <string name="add">ADICIONAR</string>
@@ -54,6 +54,8 @@ Preencha todos os campos obrigatórios</string>
     <string name="only_special_characters_not_allowed_here">Somente caracteres especiais não são permitidos aqui</string>
     <string name="please_select_some_priority">Selecione alguns Prioridade</string>
     <string name="select_some_helptopic">
+        <string name="select_source">
+Selecione alguma Origem</string>
 Selecione alguns helptopic</string>
     <string name="select_code">Selecione o código</string>
 
@@ -138,7 +140,8 @@ Selecione alguns helptopic</string>
     <string name="something_went_wrong">Algo deu errado</string>
     <string name="invalid_url">URL inválido</string>
     <string name="oops_no_internet">Opa! Sem internet</string>
-    <string name="error_verifying_url">Erro ao verificar URL</string>
+    <string name="error_verifying_url">
+Verifique o URL do Helpdesk</string>
     <string name="wrong_credentials">Credenciais erradas</string>
     <string name="connected_to_internet">Ligado à Internet</string>
     <string name="sry_not_connected_to_internet">Desculpe! Não conectado à Internet</string>

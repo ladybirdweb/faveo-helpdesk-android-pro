@@ -7,7 +7,7 @@
     <string name="just_now">Прямо сейчас</string>
     <string name="reset_password">Сброс пароля</string>
     <string name="empty_username">Пустое имя пользователя</string>
-    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 10 caractères</string>
+    <string name="firstname_maximum_char">FirstName ne doit pas dépasser 20 caractères</string>
     <string name="create">Создайте</string>
     <string name="send">послать</string>
     <string name="add">ДОБАВИТЬ</string>
@@ -57,6 +57,8 @@
     <string name="select_some_helptopic">
 Пожалуйста, выберите</string>
     <string name="select_code">Выберите код</string>
+    <string name="select_source">
+Выберите источник</string>
 
 
 
@@ -127,7 +129,7 @@
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="invalid_url">URL Invalid</string>
     <string name="oops_no_internet">К сожалению! Без интернета</string>
-    <string name="error_verifying_url">Ошибка проверки URL</string>
+    <string name="error_verifying_url">Проверьте свой адрес службы поддержки.</string>
     <string name="wrong_credentials">Неверные учетные данные</string>
     <string name="connected_to_internet">Подключение к Интернету</string>
     <string name="sry_not_connected_to_internet">К сожалению! Не подключен к Интернету</string>

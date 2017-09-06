@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -53,15 +54,19 @@ public class TrashTickets extends Fragment {
     View rootView;
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+    int total;
+    @BindView(R.id.totalcount)
+            TextView textView;
 
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
 
     private boolean loading = true;
+    ProgressDialog progressDialog;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -104,10 +109,13 @@ public class TrashTickets extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+            progressDialog=new ProgressDialog(getActivity());
+            progressDialog.setMessage("Please wait");
 
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
+                progressDialog.show();
                 new FetchFirst(getActivity()).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -156,6 +164,7 @@ public class TrashTickets extends Fragment {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                total=jsonObject.getInt("total");
                 try {
                     data = jsonObject.getString("data");
                     int trash = jsonObject.getInt("total");
@@ -181,7 +190,8 @@ public class TrashTickets extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-
+        progressDialog.dismiss();
+            textView.setText(""+total+" tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
 

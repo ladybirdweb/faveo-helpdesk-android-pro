@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -40,11 +41,13 @@ import es.dmoral.toasty.Toasty;
 public class ClosedTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    ProgressDialog progressDialog;
 
     @BindView(R.id.cardList)
     ShimmerRecyclerView recyclerView;
 
     int currentPage = 1;
+    int total;
     static String nextPageURL = "";
     View rootView;
     @BindView(R.id.swipeRefresh)
@@ -53,6 +56,8 @@ public class ClosedTickets extends Fragment {
     TextView empty_view;
     @BindView(R.id.noiternet_view)
     TextView noInternet_view;
+    @BindView(R.id.totalcount)
+            TextView textView;
 
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
@@ -60,8 +65,8 @@ public class ClosedTickets extends Fragment {
     private boolean loading = true;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+   public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -93,12 +98,15 @@ public class ClosedTickets extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+            progressDialog=new ProgressDialog(getActivity());
+            progressDialog.setMessage("Please wait");
 
 //            swipeRefresh.setRefreshing(true);
 //            new FetchFirst(getActivity()).execute();
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
+                progressDialog.show();
                 new FetchFirst(getActivity()).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -143,6 +151,7 @@ public class ClosedTickets extends Fragment {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                    total=jsonObject.getInt("total");
                 try {
                     data = jsonObject.getString("data");
                     int closed = jsonObject.getInt("total");
@@ -168,6 +177,8 @@ public class ClosedTickets extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            textView.setText(""+total+" tickets");
 
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);

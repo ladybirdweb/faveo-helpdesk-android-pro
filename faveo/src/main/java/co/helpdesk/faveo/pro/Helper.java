@@ -16,13 +16,14 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
 
 /**
  * This helper class is responsible for parsing ticket,client and for the notifications.
- * Here we are doing the JSON parsing for the particular model class.
+ * Here we are doing the JSON parsing for the particular model class.After
+ * getting the json data we are creating object for that model class.
  */
 public class Helper {
     /**
      * Tickets Page.
      * @param jsonArray refers to the array of JSON elements.
-     * @param i
+     * @param i position of the element in array.
      * @return object for ticket overview.
      */
     public static TicketOverview parseTicketOverview(JSONArray jsonArray, int i) {
@@ -62,7 +63,7 @@ public class Helper {
     /**
      * Client Page.
      * @param jsonArray jsonArray refers to the array of JSON elements.
-     * @param i
+     * @param i position of the element in the array.
      * @return object for client overview.
      */
     public static ClientOverview parseClientOverview(JSONArray jsonArray, int i) {
@@ -119,7 +120,7 @@ public class Helper {
     /**
      * Notification Page.
      * @param jsonArray jsonArray jsonArray refers to the array of JSON elements.
-     * @param i
+     * @param i position of the element in the array.
      * @return object for notification thread.
      */
     public static NotificationThread parseNotifications(JSONArray jsonArray, int i) {
@@ -187,6 +188,7 @@ public class Helper {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date d = null;
+
         try {
             d = sdf.parse(dateToParse);
         } catch (ParseException e) {
@@ -194,10 +196,14 @@ public class Helper {
         }
 
         SimpleDateFormat output = new SimpleDateFormat("d MMM yyyy  HH:mm");
+
         output.setTimeZone(TimeZone.getDefault());
 
         String formattedTime = output.format(d);
-        Date gg = null;
+        //Date gg = null;
+        Date gg = new Date();
+        //long diff = gg.getTime();
+
         try {
             gg = output.parse(formattedTime);
         } catch (ParseException e) {
@@ -244,37 +250,52 @@ public class Helper {
      */
     public static int compareDates(String duedate1) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        sdf1.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
+        Date date2=null;
         try {
             date = sdf.parse(duedate1);
+            date2=sdf1.parse(duedate1);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         SimpleDateFormat output = new SimpleDateFormat("d MMM yyyy  HH:mm");
+        SimpleDateFormat output1 = new SimpleDateFormat("d MMM yyyy");
         output.setTimeZone(TimeZone.getDefault());
+        output1.setTimeZone(TimeZone.getDefault());
         String formattedTime = output.format(date);
-
+        String formattedTime1=output1.format(date2);
         Date dueDate = null;
         Date curntDate = null;
+        Date dueDate1=null;
+        Date currDate1=null;
 
         String currentStringDate = new SimpleDateFormat("d MMM yyyy  HH:mm", Locale.getDefault()).format(new Date());
+        String currentStringDate1 = new SimpleDateFormat("d MMM yyyy", Locale.getDefault()).format(new Date());
         try {
             dueDate = output.parse(formattedTime);
             curntDate = output.parse(currentStringDate);
+            dueDate1=output1.parse(formattedTime1);
+            currDate1=output1.parse(currentStringDate1);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         int i = 0;
 
-        if (dueDate.after(curntDate)) {
+        if (dueDate1.equals(currDate1)) {
+            i = 2;
+        }
+
+        else if (dueDate.after(curntDate)) {
             i = 0;
         } else if (dueDate.before(curntDate)) {
             i = 1;
-        } else if (dueDate.equals(curntDate)) {
-            i = 0;
         }
+
+
         return i;
 
     }

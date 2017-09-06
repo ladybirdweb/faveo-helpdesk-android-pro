@@ -1,9 +1,12 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+//import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+//import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -57,13 +60,19 @@ public class NotificationActivity extends AppCompatActivity {
 
     @BindView(R.id.noiternet_view)
     TextView noInternet_view;
+    @BindView(R.id.totalcount)
+    TextView textView;
 
     static String nextPageURL = "";
+    ProgressDialog progressDialog;
+
+    protected boolean doubleBackToExitPressedOnce = false;
 
     NotificationAdapter notificationAdapter;
     List<NotificationThread> notiThreadList = new ArrayList<>();
 
     private boolean loading = true;
+    int total;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
     @Override
@@ -76,10 +85,12 @@ public class NotificationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        progressDialog=new ProgressDialog(NotificationActivity.this);
+        progressDialog.setMessage("Please wait");
         if (InternetReceiver.isConnected()) {
             noInternet_view.setVisibility(View.GONE);
             // swipeRefresh.setRefreshing(true);
+            progressDialog.show();
             new FetchFirst(this).execute();
         } else {
             noInternet_view.setVisibility(View.VISIBLE);
@@ -145,6 +156,8 @@ public class NotificationActivity extends AppCompatActivity {
             notiThreadList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                total=jsonObject.getInt("total");
+
                 try {
                     data = jsonObject.getString("data");
                     nextPageURL = jsonObject.getString("next_page_url");
@@ -164,7 +177,8 @@ public class NotificationActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-
+            progressDialog.dismiss();
+            textView.setText(""+total+" notifications");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
 
@@ -185,6 +199,7 @@ public class NotificationActivity extends AppCompatActivity {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
                     if (dy > 0) {
                         visibleItemCount = linearLayoutManager.getChildCount();
                         totalItemCount = linearLayoutManager.getItemCount();
@@ -375,5 +390,40 @@ public class NotificationActivity extends AppCompatActivity {
         // mListener = null;
         nextPageURL = "";
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        if (doubleBackToExitPressedOnce) {
+//            super.onBackPressed();
+//            return;
+//        }
+//
+//        this.doubleBackToExitPressedOnce = true;
+//        //Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
+//        MainActivity mainActivity=new MainActivity();
+//        mainActivity.finish();
+//
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                doubleBackToExitPressedOnce = false;
+//            }
+//        }, 2500);
+//    }
+
+
+    @Override
+    public void onBackPressed() {
+        // your code.
+//        progressDialog.setMessage("Please wait");
+//        progressDialog.show();
+        finish();
+//        Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
+////        progressDialog.dismiss();
+//        startActivity(intent);
+
+    }
+
 
 }

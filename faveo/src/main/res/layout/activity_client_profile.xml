@@ -111,8 +111,26 @@
                         android:text="@string/dummy_num"
                         android:textColor="@color/black"
                         android:textSize="16sp"
-
+                        android:visibility="gone"
                        />
+                    <TextView
+                        android:id="@+id/textView_client_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textView_client_phone"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:alpha=".54"
+                        android:drawableLeft="@drawable/phone"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:text="@string/dummy_num"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        />
+
 
                 </RelativeLayout>
 

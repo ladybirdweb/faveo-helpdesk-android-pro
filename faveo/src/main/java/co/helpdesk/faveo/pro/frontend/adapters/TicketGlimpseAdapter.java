@@ -3,10 +3,13 @@ package co.helpdesk.faveo.pro.frontend.adapters;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ import co.helpdesk.faveo.pro.model.TicketGlimpse;
 public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdapter.TicketViewHolder> {
     private List<TicketGlimpse> ticketGlimpseList;
     private final String clientName;
+    TicketGlimpse ticketGlimpse;
 
     public TicketGlimpseAdapter(List<TicketGlimpse> ticketGlimpseList, String clientName) {
         this.ticketGlimpseList = ticketGlimpseList;
@@ -32,8 +36,8 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
     }
 
     @Override
-    public void onBindViewHolder(TicketViewHolder ticketViewHolder, int i) {
-        TicketGlimpse ticketGlimpse = ticketGlimpseList.get(i);
+    public void onBindViewHolder(final TicketViewHolder ticketViewHolder, int i) {
+        ticketGlimpse = ticketGlimpseList.get(i);
         ticketViewHolder.textViewTicketID.setText(ticketGlimpse.ticketID + "");
         ticketViewHolder.textViewTicketNumber.setText(ticketGlimpse.ticketNumber);
         ticketViewHolder.textViewSubject.setText(ticketGlimpse.ticketSubject);
@@ -41,6 +45,20 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
             ticketViewHolder.color.setBackgroundColor(Color.parseColor("#4CD964"));
         else
             ticketViewHolder.color.setBackgroundColor(Color.parseColor("#d50000"));
+
+        ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("CLICKED","clicked");
+                Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+                intent.putExtra("ticket_id", ticketViewHolder.textViewTicketID.getText().toString());
+                intent.putExtra("ticket_number", ticketViewHolder.textViewTicketNumber.getText().toString());
+                intent.putExtra("ticket_opened_by", clientName);
+                Prefs.putString("ticketstatus",ticketGlimpse.getStatus());
+                intent.putExtra("ticket_subject", ticketViewHolder.textViewSubject.getText().toString());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -57,6 +75,7 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         TextView textViewTicketNumber;
         TextView textViewSubject;
         View color;
+        protected View ticket;
 
         TicketViewHolder(View v, final String clientName) {
             super(v);
@@ -64,17 +83,19 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
             textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
             textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
             color = v.findViewById(R.id.color);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
-                    intent.putExtra("ticket_id", textViewTicketID.getText().toString());
-                    intent.putExtra("ticket_number", textViewTicketNumber.getText().toString());
-                    intent.putExtra("ticket_opened_by", clientName);
-                    intent.putExtra("ticket_subject", textViewSubject.getText().toString());
-                    v.getContext().startActivity(intent);
-                }
-            });
+            ticket=v.findViewById(R.id.ticket);
+//            v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+//                    intent.putExtra("ticket_id", textViewTicketID.getText().toString());
+//                    intent.putExtra("ticket_number", textViewTicketNumber.getText().toString());
+//                    intent.putExtra("ticket_opened_by", clientName);
+//                    Prefs.putString("ticketstatus",ticke);
+//                    intent.putExtra("ticket_subject", textViewSubject.getText().toString());
+//                    v.getContext().startActivity(intent);
+//                }
+//            });
 
         }
 

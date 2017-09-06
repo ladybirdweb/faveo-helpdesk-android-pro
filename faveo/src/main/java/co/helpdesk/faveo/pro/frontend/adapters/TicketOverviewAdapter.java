@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.curioustechizen.ago.RelativeTimeTextView;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
  */
 public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
     private List<TicketOverview> ticketOverviewList;
+    String subject;
 
     public TicketOverviewAdapter(List<TicketOverview> ticketOverviewList) {
         this.ticketOverviewList = ticketOverviewList;
@@ -45,19 +47,45 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
         }
         if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
-            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+//            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+//                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+//            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+
+             if (Helper.compareDates(ticketOverview.dueDate) == 2) {
                 ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+                ticketViewHolder.textViewOverdue.setText(R.string.due_today);
+                 ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#FFD700"));
+                //ticketViewHolder.textViewOverdue.setBackgroundColor();
+
+            }
+            else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+            ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+                 ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+                 ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ef9a9a"));
+
+        }
+        else {
+                ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+            }
 
         ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
+
         ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
         ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
-        ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
 
-//        GradientDrawable shape = new GradientDrawable(new );
-//        shape.mutate();
-//        shape.setCornerRadii(new float[]{10f,10f});
-//        ticketViewHolder.ticketPriority.setBackground(shape);
+        subject=ticketOverview.ticketSubject;
+        if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
+            String first=subject.replace("=?UTF-8?Q?","");
+            String second=first.replace("_"," ");
+            String third=second.replace("=C2=A0","");
+            String fourth=third.replace("?=","");
+            String fifth=fourth.replace("=E2=80=99","'");
+            ticketViewHolder.textViewSubject.setText(fifth);
+        }
+        else{
+            ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
+        }
+
         if (ticketOverview.ticketPriorityColor != null) {
             ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
         }
@@ -79,6 +107,7 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                 intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+                Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
                 intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                 intent.putExtra("ticket_opened_by", ticketOverview.clientName);
                 intent.putExtra("ticket_subject", ticketOverview.ticketSubject);

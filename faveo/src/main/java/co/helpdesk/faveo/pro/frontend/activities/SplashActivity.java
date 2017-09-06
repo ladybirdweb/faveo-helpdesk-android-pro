@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +42,12 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.loading)
     TextView loading;
     //WelcomeDialog welcomeDialog;
+
+    @BindView(R.id.refresh)
+    TextView textViewrefresh;
+
+    @BindView(R.id.tryagain)
+    TextView textViewtryAgain;
 
     public static String
             keyDepartment = "", valueDepartment = "",
@@ -67,6 +74,16 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             progressDialog.setVisibility(View.INVISIBLE);
             loading.setText(getString(R.string.oops_no_internet));
+            textViewtryAgain.setVisibility(View.VISIBLE);
+            textViewrefresh.setVisibility(View.VISIBLE);
+            textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                    Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                    startActivity(intent);
+                }
+            });
             //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
         }
 
@@ -89,8 +106,18 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("Depen Response : ", result + "");
 
             if (result == null) {
-                loading.setText("Oops! Something went wrong, \nplease try again later.");
+                loading.setText("Oops! Something went wrong.");
                 progressDialog.setVisibility(View.INVISIBLE);
+                textViewtryAgain.setVisibility(View.VISIBLE);
+                textViewrefresh.setVisibility(View.VISIBLE);
+                textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                        Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                        startActivity(intent);
+                    }
+                });
                 return;
             }
 
@@ -98,18 +125,69 @@ public class SplashActivity extends AppCompatActivity {
 
                 case "HTTP_UNAUTHORIZED":
                     loading.setText("The credentials has been changed, \nplease LOGIN again.");
+                    textViewtryAgain.setVisibility(View.VISIBLE);
+                    textViewrefresh.setVisibility(View.VISIBLE);
+                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
                     return;
                 case "HTTP_NOT_FOUND":
-                    loading.setText("Oops! \n404-Page not found.");
+                    loading.setText("Oops! Page not found.");
+                    textViewtryAgain.setVisibility(View.VISIBLE);
+                    textViewrefresh.setVisibility(View.VISIBLE);
+                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     return;
                 case "HTTP_INTERNAL_ERROR":
-                    loading.setText("Oops! \n500-Please try again later.");
+                    loading.setText("Oops!Internal error.");
+                    textViewtryAgain.setVisibility(View.VISIBLE);
+                    textViewrefresh.setVisibility(View.VISIBLE);
+                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     return;
                 case "HTTP_GATEWAY_TIMEOUT":
-                    loading.setText("Oops! Seems like you have a slower net connection,\nplease try again later.");
+                    loading.setText("Oops! Seems like you have a slower net connection.");
+                    textViewtryAgain.setVisibility(View.VISIBLE);
+                    textViewrefresh.setVisibility(View.VISIBLE);
+                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     return;
                 case "HTTP_UNAVAILABLE":
-                    loading.setText("Oops! Server busy, please try again later.  ");
+                    loading.setText("Oops! Server busy.  ");
+                    textViewtryAgain.setVisibility(View.VISIBLE);
+                    textViewrefresh.setVisibility(View.VISIBLE);
+                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     return;
             }
 
@@ -135,6 +213,14 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 Prefs.putString("keySLA", keySLA);
                 Prefs.putString("valueSLA", valueSLA);
+
+                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
+                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
+                }
+                Prefs.putString("keyStaff", keyStaff);
+                Prefs.putString("valueStaff", valueStaff);
 
                 JSONArray jsonArrayType = jsonObject1.getJSONArray("type");
                 for (int i = 0; i < jsonArrayType.length(); i++) {

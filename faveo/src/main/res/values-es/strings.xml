@@ -10,7 +10,7 @@
     <string name="create">Crear</string>
     <string name="send">Enviar</string>
     <string name="add">AÑADIR</string>
-    <string name="firstname_maximum_char">FirstName no debe exceder los 10 caracteres</string>
+    <string name="firstname_maximum_char">FirstName no debe exceder los 20 caracteres</string>
     <string name="overdue">Atrasado</string>
     <string name="required">Necesario</string>
     <string name="no_internet_connection">¡Sin conexión a Internet!</string>
@@ -51,6 +51,8 @@
     <string name="posted_reply">Ha publicado tu respuesta</string>
     <string name="only_special_characters_not_allowed_here">
 Solo se permiten caracteres especiales.</string>
+    <string name="select_source">
+Por favor seleccione algunos Fuente</string>
     <string name="please_select_some_priority">
 Seleccione una prioridad</string>
     <string name="select_some_helptopic">
@@ -133,7 +135,7 @@ Selecciona algunos helptopic</string>
     <string name="something_went_wrong">Algo salió mal</string>
     <string name="invalid_url">URL no válida</string>
     <string name="oops_no_internet">¡Vaya! Sin internet</string>
-    <string name="error_verifying_url">Error al verificar URL</string>
+    <string name="error_verifying_url">Comprueba tu URL de Helpdesk</string>
     <string name="wrong_credentials">Credenciales incorrectas</string>
     <string name="connected_to_internet">Conectado a Internet</string>
     <string name="sry_not_connected_to_internet">Lo siento! No está conectado a Internet</string>
