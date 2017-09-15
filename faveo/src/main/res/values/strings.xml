@@ -186,12 +186,16 @@
     <string name="select_both">Please select ticket and status</string>
     <string name="ticket_already_open">Ticket is already opened</string>
     <string name="ticket_already_closed">Ticket is already closed</string>
-    <string name="ticket_already_deleted">Ticket is already moved to trash</string>
+    <string name="ticket_already_deleted">Ticket is already in trash</string>
     <string name="ticket_alreday_resolved">Ticket is already resolved</string>
     <string name="assignedto">Assign to</string>
     <string name="selectstatus">Please select a status to change</string>
     <string name="retry">Please try again</string>
-
+    <string name="permission">Access denied - You do not have permission to perform this action. Please contact your system administrator.</string>
+    <string name="pleasewait">Please wait</string>
+    <string name="notclient">You can not view this page,as a admin</string>
+    <string name="successfullylogin">You have been successfully logged in</string>
+    <string name="lastnamelength">last name should not exceed 20 characters</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

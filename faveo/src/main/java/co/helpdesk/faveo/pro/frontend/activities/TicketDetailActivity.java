@@ -40,6 +40,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,6 +57,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.frontend.views.Fab;
+import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 //import co.helpdesk.faveo.pro.model.TicketDetail;
 import es.dmoral.toasty.Toasty;
@@ -132,6 +134,39 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        mTitle.setText(ticketNumber == null ? "Unknown" : ticketNumber);
         //getSupportActionBar().setTitle(ticketNumber == null ? "NotificationThread" : ticketNumber);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        JSONObject jsonObject;
+        String json = Prefs.getString("DEPENDENCY", "");
+
+        try {
+            jsonObject=new JSONObject(json);
+            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("status");
+
+            for (int i=0;i<jsonArrayStaffs.length();i++){
+                if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Open")){
+                    Prefs.putString("openid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+                }
+                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Resolved")){
+                    Prefs.putString("resolvedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+                }
+                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Closed")){
+                    Prefs.putString("closedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+                }
+                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Deleted")){
+                    Prefs.putString("deletedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+                }
+                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Archived")){
+                    Prefs.putString("archivedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+                }
+                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Verified")){
+                    Prefs.putString("verifiedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+                }
+
+            }
+
+            }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         setupViewPager();
         tabLayout.setupWithViewPager(viewPager);
@@ -233,7 +268,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         });
 
     }
-    @Override
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_new, menu);
@@ -282,11 +317,13 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 return false;
             }
             else {
-                new StatusChange(Integer.parseInt(ticketID), 1).execute();
-                Prefs.putString("ticketstatus","Open");
-                Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_SHORT).show();
-                finish();
-                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+                new StatusChange(Integer.parseInt(ticketID),Integer.parseInt(Prefs.getString("openid",null))).execute();
+                progressDialog.show();
+                progressDialog.setMessage(getString(R.string.pleasewait));
+
+                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_SHORT).show();
+//                finish();
+//                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
             }
 
         }
@@ -296,11 +333,13 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_alreday_resolved), Toast.LENGTH_SHORT).show();
                 return false;
             }
-            new StatusChange(Integer.parseInt(ticketID),2).execute();
-            Prefs.putString("ticketstatus","Resolved");
-            Toasty.success(TicketDetailActivity.this,getString(R.string.status_resolved),Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+            new StatusChange(Integer.parseInt(ticketID),Integer.parseInt(Prefs.getString("resolvedid",null))).execute();
+            progressDialog.show();
+            progressDialog.setMessage(getString(R.string.pleasewait));
+
+            //Toasty.success(TicketDetailActivity.this,getString(R.string.status_resolved),Toast.LENGTH_SHORT).show();
+//            finish();
+//            startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
 
         }
         else if (id==R.id.action_statusClosed){
@@ -310,11 +349,13 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 return false;
             }
             else {
-                new StatusChange(Integer.parseInt(ticketID), 3).execute();
-                Prefs.putString("ticketstatus","Closed");
-                Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_SHORT).show();
-                finish();
-                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+                new StatusChange(Integer.parseInt(ticketID),Integer.parseInt(Prefs.getString("closedid",null))).execute();
+                progressDialog.show();
+                progressDialog.setMessage(getString(R.string.pleasewait));
+                //Prefs.putString("ticketstatus","Closed");
+                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_SHORT).show();
+//                finish();
+//                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
             }
 
         }
@@ -325,11 +366,12 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 return false;
             }
             else {
-                new StatusChange(Integer.parseInt(ticketID), 4).execute();
-                Prefs.putString("ticketstatus","Deleted");
-                Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_SHORT).show();
-                finish();
-                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+                new StatusChange(Integer.parseInt(ticketID),Integer.parseInt(Prefs.getString("deletedid",null))).execute();
+                progressDialog.show();
+                progressDialog.setMessage(getString(R.string.pleasewait));
+
+                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_SHORT).show();
+
             }
 
         }
@@ -515,34 +557,68 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.dismiss();
             //progressDialog.dismiss();
 //            if (result == null) {
-//                Toasty.error(MainActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
 //                return;
-//            }
+            String state=Prefs.getString("403",null);
+//                if (message1.contains("The ticket id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
+//                }
+//                else if (message1.contains("The status id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
+//                }
+//               else
             try {
-
-                JSONObject jsonObject=new JSONObject(result);
-                //JSONObject jsonObject1=jsonObject.getJSONObject("response");
-                JSONObject jsonObject2=jsonObject.getJSONObject("error");
-                String message1=jsonObject2.getString("ticket_id");
-
-                if (message1.contains("The ticket id field is required.")){
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
+                if (state.equals("403") && !state.equals(null)) {
+                    Toasty.warning(TicketDetailActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
                 }
-                else if (message1.contains("The status id field is required.")){
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.select_both), Toast.LENGTH_LONG).show();
-                }
-
-
-
-            } catch (JSONException  | NullPointerException e) {
+            }catch (NullPointerException e){
                 e.printStackTrace();
-
             }
+
+//            }
+                 try {
+
+                     JSONObject jsonObject = new JSONObject(result);
+                     JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                     //JSONObject jsonObject2=jsonObject.getJSONObject("error");
+                     //String message1=jsonObject2.getString("ticket_id");
+                     String message2 = jsonObject1.getString("message");
+
+
+//                if (message2.contains("permission denied")&&Prefs.getString("403",null).equals("403")){
+//
+//                }
+                     if (message2.contains("Status changed to Deleted")) {
+                         Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_LONG).show();
+                         Prefs.putString("ticketstatus", "Deleted");
+                         finish();
+                         startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+                     } else if (message2.contains("Status changed to Open")) {
+                         Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_LONG).show();
+                         Prefs.putString("ticketstatus", "Open");
+                         finish();
+                         startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+                     } else if (message2.contains("Status changed to Closed")) {
+                         Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_LONG).show();
+                         Prefs.putString("ticketstatus", "Closed");
+                         finish();
+                         startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+                     } else if (message2.contains("Status changed to Resolved")) {
+                         Toasty.success(TicketDetailActivity.this, getString(R.string.status_resolved), Toast.LENGTH_LONG).show();
+                         Prefs.putString("ticketstatus", "Resolved");
+                         finish();
+                         startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+                     }
+                 } catch (JSONException | NullPointerException e) {
+                     e.printStackTrace();
+
+                 }
+
 
 
 

@@ -169,22 +169,32 @@ public class Detail extends Fragment {
 
 
 
+
                 if (allCorrect) {
                     if (InternetReceiver.isConnected()) {
                         progressDialog.setMessage(getString(R.string.updating_ticket));
                         progressDialog.show();
                         try {
-                            new SaveTicket(getActivity(),
-                                    Integer.parseInt(TicketDetailActivity.ticketID),
-                                    URLEncoder.encode(subject.trim(), "utf-8"),
-                                    helpTopic.ID,
-                                    source.ID,
-                                    priority.ID, type.ID,staff.ID)
-                                    .execute();
-                        } catch (UnsupportedEncodingException e) {
+                            if (staff.ID == 0) {
+new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivity.ticketID),
+        URLEncoder.encode(subject.trim(), "utf-8"),
+        helpTopic.ID,
+        source.ID,
+        priority.ID, type.ID).execute();
+                            } else {
+                                new SaveTicket(getActivity(),
+                                        Integer.parseInt(TicketDetailActivity.ticketID),
+                                        URLEncoder.encode(subject.trim(), "utf-8"),
+                                        helpTopic.ID,
+                                        source.ID,
+                                        priority.ID, type.ID, staff.ID)
+                                        .execute();
+                            }
+                        }catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
                     }
+
                 }
             }
         });
@@ -266,23 +276,30 @@ public class Detail extends Fragment {
                 catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 }
-
+//
                 try {
                     if (jsonObject1.getString("type_name") != null) {
                         // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
                         spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
                         //spinnerType.setSelection(Integer.parseInt(jsonObject1.getString("type")));
                     }
-                } catch (JSONException | NumberFormatException e) {
-                    e.printStackTrace();
+
                 }
                 catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
+                }catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
                 }
+//
                 try {
                     if (jsonObject1.getString("helptopic_name") != null)
                         //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                        spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                        for (int j=0;j<spinnerHelpTopics.getCount();j++){
+                            if (spinnerHelpTopics.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("helptopic_name"))) {
+                                spinnerHelpTopics.setSelection(j);
+                            }
+                        }
+//                        spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
                 } catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 } catch (Exception e) {
@@ -301,16 +318,17 @@ public class Detail extends Fragment {
                         //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
                     }
                         //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
-                } catch (ArrayIndexOutOfBoundsException e){
-                    e.printStackTrace();
-                } catch (Exception e) {
-//                    spinnerHelpTopics.setVisibility(View.GONE);
-//                    tv_helpTopic.setVisibility(View.GONE);
+                } catch (ArrayIndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
-
-
-
+//                } catch (Exception e) {
+//////                    spinnerHelpTopics.setVisibility(View.GONE);
+//////                    tv_helpTopic.setVisibility(View.GONE);
+////                    e.printStackTrace();
+////                }
+//
+//
+//
                 try {
                     if (jsonObject1.getString("source_name") != null)
                         //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
@@ -424,6 +442,23 @@ public class Detail extends Fragment {
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
+            String state=Prefs.getString("403",null);
+//                if (message1.contains("The ticket id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
+//                }
+//                else if (message1.contains("The status id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
+//                }
+//               else
+            try {
+                if (state.equals("403") && !state.equals(null)) {
+                    Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
 
 //            switch (result) {
 //                case "":
@@ -436,6 +471,54 @@ public class Detail extends Fragment {
                 startActivity(intent);
             } else
                 Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
+        }
+    }
+    private class SaveTicketWithoutAssignee extends AsyncTask<String, Void, String> {
+        Context context;
+        int ticketNumber;
+        String subject;
+        //int slaPlan;
+        int helpTopic;
+        int ticketSource;
+        int ticketPriority;
+        int ticketStatus;
+        int ticketType;
+
+
+        SaveTicketWithoutAssignee(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType) {
+            this.context = context;
+            this.ticketNumber = ticketNumber;
+            this.subject = subject;
+            // this.slaPlan = slaPlan;
+            this.helpTopic = helpTopic;
+            this.ticketSource = ticketSource;
+            this.ticketPriority = ticketPriority;
+            // this.ticketStatus = ticketStatus;
+            this.ticketType = ticketType;
+
+        }
+
+        protected String doInBackground(String... urls) {
+            if (subject.equals("Not available"))
+                subject = "";
+            return new Helpdesk().postEditTicketWithoutAssignee(ticketNumber, subject,
+                    helpTopic, ticketSource, ticketPriority, ticketType);
+        }
+
+        protected void onPostExecute(String result) {
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
+            if (result == null) {
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (result.contains("Edited successfully")) {
+                Toasty.success(getActivity(), getString(R.string.update_success), Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            } else
+                Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
+
         }
     }
 

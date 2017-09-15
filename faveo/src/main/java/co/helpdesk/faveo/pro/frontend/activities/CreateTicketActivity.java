@@ -128,6 +128,7 @@ public class CreateTicketActivity extends AppCompatActivity {
     String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
+    String message2;
     CountryCodePicker countryCodePicker;
     private InputFilter filter = new InputFilter() {
 
@@ -557,8 +558,8 @@ public class CreateTicketActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString();
         String fname = editTextFirstName.getText().toString();
         String lname = editTextLastName.getText().toString();
-        String phone = editTextPhone.getText().toString();
-        mobile = editTextMobile.getText().toString();
+        String mobile = editTextPhone.getText().toString();
+        String phone = editTextMobile.getText().toString();
 
 //        if (!phCode.getSelectedItem().toString().equals("Code")) {
 //            countrycode = phCode.getSelectedItem().toString();
@@ -600,6 +601,10 @@ public class CreateTicketActivity extends AppCompatActivity {
         }   else if (email.trim().length() == 0 || !Helper.isValidEmail(email)) {
             Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             allCorrect = false;
+        }
+        else if (lname.length()>20){
+            Toasty.warning(this, getString(R.string.lastnamelength), Toast.LENGTH_SHORT).show();
+            allCorrect=false;
         }
 
 //        else if (phCode.getSelectedItemPosition()==0){
@@ -798,25 +803,46 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Toasty.error(CreateTicketActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
+            String state=Prefs.getString("403",null);
+//                if (message1.contains("The ticket id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
+//                }
+//                else if (message1.contains("The status id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
+//                }
+//               else
+            try {
+                if (state.equals("403") && !state.equals(null)) {
+                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
             try {
 
                 JSONObject jsonObject=new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("error");
-                String message=jsonObject1.getString("code");
-                if (message.contains("The code feild is required.")){
-                    Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
+                JSONObject jsonObject1=jsonObject.getJSONObject("response");
+                String message=jsonObject1.getString("message");
+//                JSONObject jsonObject2=jsonObject.getJSONObject("response");
+//                message2=jsonObject2.getString("message");
+                if (message.contains("Ticket created successfully!")){
+                    Toasty.success( CreateTicketActivity.this,getString(R.string.ticket_created_success),Toast.LENGTH_SHORT).show();
+                    finish();
+               startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-  if (result.contains("Ticket created successfully!")) {
-                Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
-                finish();
-                startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
-
-            }
+//  if (message2.equals("Ticket created successfully!")) {
+//                Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
+//                finish();
+//                startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+//
+//            }
 
 
   }
