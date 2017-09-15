@@ -747,6 +747,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             try {
+                Toasty.success(LoginActivity.this, getString(R.string.successfullylogin), Toast.LENGTH_SHORT).show();
                 JSONObject jsonObject = new JSONObject(result);
                 String token = jsonObject.getString("token");
                 JSONObject jsonObject1 = jsonObject.getJSONObject("user_id");
@@ -778,6 +779,7 @@ public class LoginActivity extends AppCompatActivity {
                 new SendingFCM(LoginActivity.this, FirebaseInstanceId.getInstance().getToken()).execute();
 
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } catch (JSONException e) {

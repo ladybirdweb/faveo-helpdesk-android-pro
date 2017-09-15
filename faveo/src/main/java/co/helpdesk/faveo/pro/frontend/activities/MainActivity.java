@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,6 +35,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.TrashTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
+import es.dmoral.toasty.Toasty;
 
 /**
  * This is the main activity where we are loading the inbox fragment
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         isShowing = true;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         
         // TODO: Move this to where you establish a user session
         //logUser();
@@ -85,6 +88,25 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar2);
+//        toolbar.setVisibility(View.VISIBLE);
+//        getSupportActionBar().setTitle("change status");
+//        toolbar.inflateMenu(R.menu.menu_main_new);
+//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                if (item.getItemId()==R.id.status_id){
+//                    Toast.makeText(MainActivity.this, "Please select a status", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+
+
+
+
+
 
 //        getSupportActionBar().setTitle("Inbox");
 
@@ -104,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.replace(R.id.container_body, inboxTickets);
         fragmentTransaction.commit();
         setActionBarTitle(getResources().getString(R.string.inbox));
+
+
 
 
 

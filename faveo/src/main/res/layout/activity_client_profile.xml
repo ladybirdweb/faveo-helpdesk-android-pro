@@ -97,7 +97,7 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/textView_client_phone"
+                        android:id="@+id/textView_client_mobile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/textView_client_email"
@@ -114,10 +114,10 @@
                         android:visibility="gone"
                        />
                     <TextView
-                        android:id="@+id/textView_client_mobile"
+                        android:id="@+id/textView_client_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textView_client_phone"
+                        android:layout_below="@+id/textView_client_mobile"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="6dp"
                         android:alpha=".54"

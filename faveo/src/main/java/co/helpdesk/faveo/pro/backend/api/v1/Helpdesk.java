@@ -228,6 +228,43 @@ public class Helpdesk {
                     + staff, null);
         return result;
     }
+    public String postEditTicketWithoutAssignee(int ticketID, String subject, int helpTopic,
+                                                int ticketSource, int ticketPriority, int ticketType) {
+        Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
+                "api_key=" + apiKey +
+                "&ip=" + IP +
+                "&token=" + token +
+                "&ticket_id=" + ticketID +
+                "&subject=" + subject +
+                "&help_topic=" + helpTopic +
+                "&ticket_source=" + ticketSource +
+                "&ticket_priority=" + ticketPriority +
+                "&ticket_type=" + ticketType
+        );
+        String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
+                "api_key=" + apiKey +
+                "&ip=" + IP +
+                "&token=" + token +
+                "&ticket_id=" + ticketID +
+                "&subject=" + subject +
+                "&help_topic=" + helpTopic +
+                "&ticket_source=" + ticketSource +
+                "&ticket_priority=" + ticketPriority +
+                "&ticket_type=" + ticketType, null);
+
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
+                    "api_key=" + apiKey +
+                    "&ip=" + IP +
+                    "&token=" + token +
+                    "&ticket_id=" + ticketID +
+                    "&subject=" + subject +
+                    "&help_topic=" + helpTopic +
+                    "&ticket_source=" + ticketSource +
+                    "&ticket_priority=" + ticketPriority +
+                    "&ticket_type=" + ticketType, null);
+        return result;
+    }
 
     public String postFCMToken(String token, String ID) {
         Log.d("FCM token beforesending", token + "");

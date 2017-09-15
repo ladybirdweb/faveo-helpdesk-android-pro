@@ -271,8 +271,10 @@ public class SplashActivity extends AppCompatActivity {
 
                 JSONArray jsonArrayStatus = jsonObject1.getJSONArray("status");
                 for (int i = 0; i < jsonArrayStatus.length(); i++) {
+
                     keyStatus += jsonArrayStatus.getJSONObject(i).getString("id") + ",";
                     valueStatus += jsonArrayStatus.getJSONObject(i).getString("name") + ",";
+
                 }
                 Prefs.putString("keyStatus", keyStatus);
                 Prefs.putString("valueStatus", valueStatus);
@@ -352,6 +354,7 @@ public class SplashActivity extends AppCompatActivity {
 
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
+
 //            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
 //            builder.setTitle("Welcome to FAVEO");
 //            //builder.setMessage("After 2 second, this dialog will be closed automatically!");

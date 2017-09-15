@@ -232,6 +232,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
             listTicketGlimpse = new ArrayList<>();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+
                 JSONObject requester = jsonObject.getJSONObject("requester");
                 String firstname = requester.getString("first_name");
                 String lastName = requester.getString("last_name");
@@ -248,20 +249,27 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
                 String phone = "";
                 String mobile="";
+                String code="";
 //                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
 //                    textViewClientPhone.setVisibility(View.INVISIBLE);
 //
 //                else
                     phone = requester.getString("phone_number");
                 mobile=requester.getString("mobile");
+                code=requester.getString("country_code");
                 if (phone.equals("null")||phone.equals("")||phone.equals("Not available")){
                     textViewClientPhone.setVisibility(View.GONE);
-                }else {
+                }
+                else{
                     textViewClientPhone.setVisibility(View.VISIBLE);
                     textViewClientPhone.setText(phone);
                 }
                 if (mobile.equals("null")||mobile.equals("")||mobile.equals("Not available")){
                     textViewClientMobile.setVisibility(View.GONE);
+                }
+                else if (!phone.equals("0")){
+                    textViewClientMobile.setVisibility(View.VISIBLE);
+                    textViewClientMobile.setText(code+" "+mobile);
                 }
             else {
                     textViewClientMobile.setVisibility(View.VISIBLE);
@@ -299,7 +307,8 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status));
                 }
             } catch (JSONException e) {
-                Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();
+                //Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();
+                Toasty.warning(ClientDetailActivity.this, getString(R.string.notclient), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -346,7 +355,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onPageSelected(int position) {
+        public void onPageSelected(int  position) {
 
         }
 

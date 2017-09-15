@@ -124,7 +124,7 @@
     <string name="sort">Sort</string>
     <string name="ex_number" translatable="false">EX:+91 9999999999</string>
     <string name="dummy_num" translatable="false">Unavailable</string>
-    <string name="all_caught_up">All caught up!</string>
+    <string name="all_caught_up">All tickets are loaded!</string>
     <string name="enter_valid_email">Enter a valid Mail ID</string>
     <string name="updating_ticket">Updating ticket</string>
     <string name="tickets">Tickets</string>
@@ -144,7 +144,6 @@
     <string name="invalid_url">Invalid URL</string>
     <string name="error_verifying_url">Please check your Helpdesk URL</string>
     <string name="format_error">URL should be in this format \n domainname/foldername \n eg: faveohelpdesk.in/test</string>
-
     <string name="access_denied">Access denied!</string>
     <string name="please_purchase_faveo">Please purchase Faveo PRO edition to use this app.</string>
     <string name="ok">OK</string>
@@ -187,12 +186,16 @@
     <string name="select_both">Please select ticket and status</string>
     <string name="ticket_already_open">Ticket is already opened</string>
     <string name="ticket_already_closed">Ticket is already closed</string>
-    <string name="ticket_already_deleted">Ticket is already moved to trash</string>
+    <string name="ticket_already_deleted">Ticket is already in trash</string>
     <string name="ticket_alreday_resolved">Ticket is already resolved</string>
     <string name="assignedto">Assign to</string>
     <string name="selectstatus">Please select a status to change</string>
     <string name="retry">Please try again</string>
-
+    <string name="permission">Access denied - You do not have permission to perform this action. Please contact your system administrator.</string>
+    <string name="pleasewait">Please wait</string>
+    <string name="notclient">You can not view this page,as a admin</string>
+    <string name="successfullylogin">You have been successfully logged in</string>
+    <string name="lastnamelength">last name should not exceed 20 characters</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import co.helpdesk.faveo.pro.FaveoApplication;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Sumit
@@ -89,6 +90,12 @@ class HTTPConnection {
                         new Helpdesk();
                         new Authenticate();
                         ret = "tokenRefreshed";
+                        break;
+                    case HttpURLConnection.HTTP_FORBIDDEN:
+                        Log.e("Response code","Forbidden");
+                        ret="Forbidden";
+                        Prefs.putString("403","403");
+
                         break;
                     default:
 
@@ -241,6 +248,12 @@ class HTTPConnection {
                         new Helpdesk();
                         new Authenticate();
                         ret = "tokenRefreshed";
+                        break;
+                    case HttpURLConnection.HTTP_FORBIDDEN:
+                        Log.e("Response code","Forbidden");
+                        ret="Forbidden";
+                        Prefs.putString("403","403");
+
                         break;
                     default:
 
