@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.pixplicity.easyprefs:library-1.8.1">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.8.1.aar/7ad3b1e4fc9598c1e3a05610334a026a/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.8.1.aar/7ad3b1e4fc9598c1e3a05610334a026a/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.pixplicity.easyprefs/library/1.8.1/e8db2dd73853a862d7119902418dc82721c6bb65/library-1.8.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

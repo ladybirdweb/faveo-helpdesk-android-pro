@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +52,8 @@ public class Conversation extends Fragment {
     @BindView(R.id.totalcount)
     TextView textView;
 
-    View rootView;
+    View rootView,view;
+    LinearLayout linearLayout;
 
     TicketThreadAdapter ticketThreadAdapter;
     List<TicketThread> ticketThreadList = new ArrayList<>();
@@ -91,8 +94,14 @@ public class Conversation extends Fragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
-            swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+            linearLayout= (LinearLayout) rootView.findViewById(R.id.toolbarview);
+            linearLayout.setVisibility(View.GONE);
 
+            view=rootView.findViewById(R.id.separationview);
+            swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+            Toolbar toolbar= (Toolbar)rootView.findViewById(R.id.toolbar2);
+//        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            toolbar.setVisibility(View.GONE);
             //            swipeRefresh.setRefreshing(true);
 //            new FetchFirst(getActivity()).execute();
             if (InternetReceiver.isConnected()) {

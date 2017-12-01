@@ -476,6 +476,10 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 //                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
 //                if (fragment == null)
 //                    fragment = new CreateTicket();
+                Prefs.putString("firstusername","null");
+                Prefs.putString("lastusername","null");
+                Prefs.putString("firstuseremail","null");
+                Prefs.putString("firstusermobile","null");
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 Intent inte = new Intent(getContext(), CreateTicketActivity.class);
                 startActivity(inte);
@@ -514,6 +518,8 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 //                    fragment = new TrashTickets();
 //                break;
             case R.id.client_list:
+                Prefs.putString("normalclientlist","true");
+                Prefs.putString("filtercustomer","true");
                 title = getString(R.string.client_list);
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                 if (fragment == null)
@@ -541,16 +547,16 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 //                if (RealmController.with(this).hasTickets()) {
 //                    RealmController.with(this).clearAll();
 //                }
-                NotificationManager notificationManager =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancelAll();
-                FaveoApplication.getInstance().clearApplicationData();
-                Prefs.clear();
-                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                Toasty.success(getActivity(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
+//                NotificationManager notificationManager =
+//                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//                notificationManager.cancelAll();
+//                FaveoApplication.getInstance().clearApplicationData();
+//                Prefs.clear();
+//                getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
+//                Toasty.success(getActivity(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
 
                 break;
         }

@@ -2,18 +2,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/client"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:background="?attr/selectableItemBackground"
     android:paddingBottom="4dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="4dp">
 
-    <TextView
-        android:id="@+id/textView_client_id"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+    <!--<TextView-->
+        <!--android:id="@+id/textView_client_id"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true" />-->
 
     <agency.tango.android.avatarview.views.AvatarView
         android:id="@+id/imageView_default_profile"
@@ -25,6 +25,11 @@
         app:av_border_color="@color/faveo"
         app:av_border_width="2dp"
         app:av_text_size_percentage="35" />
+
+
+
+
+
 
     <TextView
         android:id="@+id/textView_client_name"
@@ -80,10 +85,11 @@
         android:textSize="16sp" />
 
     <View
+        android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/textView_client_phone"
-        android:layout_marginTop="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:background="@color/grey_200" />
 
 </RelativeLayout>

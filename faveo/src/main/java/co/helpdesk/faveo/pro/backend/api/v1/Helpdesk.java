@@ -31,13 +31,15 @@ public class Helpdesk {
 
         Log.d("checkingURL", companyURL + "api/v1/helpdesk/check-url?url=" + companyURL.substring(0, companyURL.length() - 1) + "&api_key=" + apiKey);
         Prefs.putString("companyurl",companyURL+"api/v2/helpdesk/");
+        Log.d("companyUrl",Prefs.getString("companyurl",null));
         return new HTTPConnection().HTTPResponseGet(companyURL + "api/v1/helpdesk/check-url?url=" + companyURL.substring(0, companyURL.length() - 1) + "&api_key=" + apiKey);
     }
 
     public String postCreateTicket(int userID, String subject, String body, int helpTopic,
-                                   int priority, String fname, String lname, String phone, String email, String code, String mobile,int staff) {
+                                   int priority, String fname, String lname, String phone, String email, String code,int staff,String mobile) {
         Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
+                "&token=" + token+
                 "&ip=" + IP +
                 "&user_id=" + userID +
                 "&subject=" + subject +
@@ -48,15 +50,14 @@ public class Helpdesk {
                 //"&dept=" + dept +
                 "&first_name=" + fname +
                 "&last_name=" + lname +
-                "&phone=" + phone +
-                "&code=" + code +
-                "&mobile=" + mobile +
                 "&email=" + email +
-                "&assigned=" + staff +
-                "&token=" + token);
+                "&assigned=" + staff+ "&phone=" + mobile +
+                        "&code=" + code +
+                        "&mobile=" + phone);
 
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
+                "&token=" + token+
                 "&ip=" + IP +
                 "&user_id=" + userID +
                 "&subject=" + subject +
@@ -67,16 +68,15 @@ public class Helpdesk {
                 // "&dept=" + dept +
                 "&first_name=" + fname +
                 "&last_name=" + lname +
-                "&phone=" + phone +
-                "&mobile=" + mobile +
-                "&code=" + code +
                 "&email=" + email +
-                "&assigned=" + staff +
-                "&token=" + token, null);
+                "&assigned=" + staff + "&phone=" + mobile +
+                "&code=" + code +
+                "&mobile=" + phone, null);
 
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/create?" +
                     "api_key=" + apiKey +
+                    "&token=" + token+
                     "&ip=" + IP +
                     "&user_id=" + userID +
                     "&subject=" + subject +
@@ -86,13 +86,11 @@ public class Helpdesk {
                     "&priority=" + priority +
                     //  "&dept=" + dept +
                     "&first_name=" + fname +
-                    "&last_name=" + lname +
-                    "&phone=" + phone +
-                    "&mobile=" + mobile +
-                    "&code=" + code +
+                    "&last_name=" + lname+
                     "&email=" + email +
-                    "&assigned=" + staff +
-                    "&token=" + token, null);
+                    "&assigned=" + staff+ "&phone=" + mobile +
+                    "&code=" + code +
+                    "&mobile=" + phone, null);
         return result;
     }
 
@@ -228,43 +226,6 @@ public class Helpdesk {
                     + staff, null);
         return result;
     }
-    public String postEditTicketWithoutAssignee(int ticketID, String subject, int helpTopic,
-                                                int ticketSource, int ticketPriority, int ticketType) {
-        Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
-                "api_key=" + apiKey +
-                "&ip=" + IP +
-                "&token=" + token +
-                "&ticket_id=" + ticketID +
-                "&subject=" + subject +
-                "&help_topic=" + helpTopic +
-                "&ticket_source=" + ticketSource +
-                "&ticket_priority=" + ticketPriority +
-                "&ticket_type=" + ticketType
-        );
-        String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
-                "api_key=" + apiKey +
-                "&ip=" + IP +
-                "&token=" + token +
-                "&ticket_id=" + ticketID +
-                "&subject=" + subject +
-                "&help_topic=" + helpTopic +
-                "&ticket_source=" + ticketSource +
-                "&ticket_priority=" + ticketPriority +
-                "&ticket_type=" + ticketType, null);
-
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
-                    "api_key=" + apiKey +
-                    "&ip=" + IP +
-                    "&token=" + token +
-                    "&ticket_id=" + ticketID +
-                    "&subject=" + subject +
-                    "&help_topic=" + helpTopic +
-                    "&ticket_source=" + ticketSource +
-                    "&ticket_priority=" + ticketPriority +
-                    "&ticket_type=" + ticketType, null);
-        return result;
-    }
 
     public String postFCMToken(String token, String ID) {
         Log.d("FCM token beforesending", token + "");
@@ -315,19 +276,20 @@ public class Helpdesk {
 //        return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/open?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
 //    }
 
-    public String getUnassignedTicket() {
-        Log.d("UnassignedTicketAPI", Constants.URL + "helpdesk/unassigned?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/unassigned?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/unassigned?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+    public String getUnassignedTicket(int page) {
+        Log.d("UnassignedTicketAPI","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=inbox&departments=all&page="+page+"&assigned=0");
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=inbox&departments=all&page="+page+"&assigned=0");
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=inbox&departments=all&page="+page+"&assigned=0");
+        Log.d("URL",result);
         return result;
     }
 
-    public String getClosedTicket() {
-        Log.d("ClosedTicketAPI", Constants.URL + "helpdesk/closed?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/closed?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+    public String getClosedTicket(int page) {
+        Log.d("ClosedTicketAPI", "http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=closed&departments=all&page="+page);
+        String result = new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=closed&departments=all&page="+page);
         if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/closed?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=closed&departments=all&page="+page);
         return result;
     }
 
@@ -447,11 +409,12 @@ public class Helpdesk {
 //        return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/assign", parameters);
 //    }
 
-    public String getInboxTicket() {
-        Log.d("InboxTicketAPI", Constants.URL + "helpdesk/inbox?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/inbox?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/inbox?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+    public String getInboxTicket(int page) {
+        Log.d("Inboxapi","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=inbox&departments=all&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=inbox&departments=all&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=inbox&departments=all&page="+page);
+        Log.d("URL",result);
         return result;
     }
 
@@ -465,11 +428,12 @@ public class Helpdesk {
 //        return result;
 //    }
 
-    public String getTrashTickets() {
-        Log.d("TrashTicketsAPI", Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/trash?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+    public String getTrashTickets(int page) {
+        Log.d("TrashTicket","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=trash&departments=all&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=trash&departments=all&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=trash&departments=all&page="+page);
+        Log.d("URL",result);
         return result;
     }
 
@@ -484,6 +448,19 @@ public class Helpdesk {
         return result;
     }
 
+    public String nextpageurl(String show,int page)
+    {
+        Log.d("Inboxapi","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show="+show+"&departments=all&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show="+show+"&departments=all&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show="+show+"&departments=all&page="+page);
+        Log.d("URL",result);
+        return result;
+
+    }
+
+
+
     public String nextPageURL(String URL, String userID) {
 
         Log.d("nextPageURLAPI", URL + "&api_key=" + apiKey + "&token=" + token + "&user_id=" + userID);
@@ -492,6 +469,16 @@ public class Helpdesk {
             return new HTTPConnection().HTTPResponseGet(URL + "&api_key=" + apiKey + "&token=" + token + "&user_id=" + userID);
         return result;
     }
+    public String nextPageSorting(String show,String term,String order,int page){
+        Log.d("TicketTitleSOrtingAPI", "http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show="+ show+"&departments=All&api=1&sort-by="+term+"&order="+order+"&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show="+ show+"&departments=All&api=1&sort-by="+term+"&order="+order+"&page="+page);
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show="+ show+"&departments=All&api=1&sort-by="+term+"&order="+order+"&page="+page);
+        return result;
+    }
+
+
+
 
 //    public String getMyTickets(String userID) {
 //        Log.d("MyTicketsAPI", Constants.URL + "helpdesk/my-tickets?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
@@ -501,13 +488,16 @@ public class Helpdesk {
 //        return result;
 //    }
 
-    public String getTicketsByAgent(String userID) {
-        Log.d("TicketsByAgentAPI", Constants.URL + "helpdesk/my-tickets-agent?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets-agent?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/my-tickets-agent?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
+    public String getTicketsByAgent(int page) {
+        Log.d("MYticketAPI","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=mytickets&departments=all&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=mytickets&departments=all&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=mytickets&departments=all&page="+page);
+        Log.d("URL",result);
         return result;
     }
+
+
 
     public String getTicketsByUser(String userID) {
         Log.d("TicketsByUserAPI", Constants.URL + "helpdesk/my-tickets-user?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&user_id=" + userID);
@@ -526,13 +516,8 @@ public class Helpdesk {
         return result;
     }
 
-    public String getNotifications() {
-        Log.d("NotificationsAPI", Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
-        return result;
-    }
+
+
 
     public String postSeenNotifications(int ticketID) {
         Log.d("Noti-seenAPI", Constants.URL + "helpdesk/notifications-seen?api_key=" + apiKey + "&ip=" + IP + "&token=" + token + "&=notification_id" + ticketID);
@@ -542,10 +527,132 @@ public class Helpdesk {
         return result;
     }
     public String postStatusChanged(int ticketID,int statusID){
-        Log.d("StatusChangedApi", Constants.URL1 + "status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID);
-        String result = new HTTPConnection().HTTPResponsePost(Constants.URL1 + "status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
+        Log.d("StatusChangedApi", "http://"+Constants.URL1 + "/api/v2/helpdesk/status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID);
+        String result = new HTTPConnection().HTTPResponsePost("http://"+Constants.URL1 + "/api/v2/helpdesk/status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
         if (result != null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponsePost(Constants.URL1 + "status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
+            return new HTTPConnection().HTTPResponsePost("http://"+Constants.URL1 + "/api/v2/helpdesk/status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
         return result;
     }
+    public String postStatusChangedMultiple(String ticketID,int statusID){
+        Log.d("StatusChangedApi", "http://"+Constants.URL1 + "/api/v2/helpdesk/status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID);
+        String result = new HTTPConnection().HTTPResponsePost("http://"+Constants.URL1 + "/api/v2/helpdesk/status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost("http://"+Constants.URL1 + "/api/v2/helpdesk/status/change?api_key=" + apiKey + "&token=" + token + "&ticket_id=" + ticketID + "&status_id=" + statusID, null);
+        return result;
+    }
+    public String getNotifications() {
+        Log.d("NotificationsAPI", Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        String result = new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet(Constants.URL + "helpdesk/notifications?api_key=" + apiKey + "&ip=" + IP + "&token=" + token);
+        return result;
+    }
+//http://192.168.0.192/api/v2/helpdesk/get-tickets?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHA6Ly8xOTIuMTY4LjAuMTkyL2FwaS92MS9hdXRoZW50aWNhdGUiLCJpYXQiOjE1MDU5OTIxMjAsImV4cCI6MTUwNTk5MjM2MCwibmJmIjoxNTA1OTkyMTIwLCJqdGkiOiJFaWNWS3dvaTlRREVRMmQ5In0.uegtoFmzzZyZI-SlGWHeEqfv1nMqO7uxo4VYJ3CFCRk&show=inbox&departments=All&api=1&sort-by=ticket_title&order=ASC
+    public String getSortByTicketWithTitle(String show,String title,String order){
+        Log.d("TicketTitleSOrtingAPI", "http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show=" +show +"&departments=All&api=1&sort-by=" + title +"&order=" + order);
+        String result=new HTTPConnection().HTTPResponseGet("http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show=" +show +"&departments=All&api=1&sort-by=" + title +"&order=" + order);
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show=" +show +"&departments=All&api=1&sort-by=" + title +"&order=" + order);
+        return result;
+    }
+//    public String getSortByTicketWithTicketNumber(String show,String ticketnumber,String order){
+//        Log.d("TicketTitleSOrtingAPI", "http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show=" +show +"&departments=All&api=1&sort-by=" + ticketnumber +"&order=" + order);
+//        String result=new HTTPConnection().HTTPResponseGet("http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show=" +show +"&departments=All&api=1&sort-by=" + ticketnumber +"&order=" + order);
+//        if (result != null && result.equals("tokenRefreshed"))
+//            return new HTTPConnection().HTTPResponseGet("http://" + Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" +token +"&show=" +show +"&departments=All&api=1&sort-by=" + ticketnumber +"&order=" + order);
+//        return result;
+//    }
+
+    public String postRegisterUser(String email,String firstname,String lastname,String mobile,String company){
+    Log.d("RegisterUser", Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname +"&last_name="+ lastname+ "&mobile="+ mobile +"&company=" +company);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile + "&company=" +company,null);
+        if (result!=null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile + "&company=" +company,null);
+        return result;
+    }
+    public String postCollaboratorAssociatedWithTicket(String ticketid){
+        Log.d("CollaboratorFetch",Constants.URL + "helpdesk/collaborator/get-ticket?token=" +token +"&ticket_id="+ticketid);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/collaborator/get-ticket?token=" +token +"&ticket_id="+ticketid,null);
+        if (result!=null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/collaborator/get-ticket?token=" +token +"&ticket_id="+ticketid,null);
+        return result;
+    }
+    public String getUser(String term){
+        Log.d("getUserApi",Constants.URL +"helpdesk/collaborator/search?token=" +token + "&term="+ term);
+        String result=new HTTPConnection().HTTPResponseGet(Constants.URL +"helpdesk/collaborator/search?token=" +token + "&term="+ term);
+        if (result!=null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet(Constants.URL +"helpdesk/collaborator/search?token=" +token + "&term="+ term);
+        return result;
+    }
+    public String createCollaborator(String ticketid,String userid){
+        Log.d("CollaboratorCreate",Constants.URL + "helpdesk/collaborator/create?token="+ token +"&ticket_id=" +ticketid +"&user_id=" +userid);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL+ "helpdesk/collaborator/create?token="+ token +"&ticket_id=" +ticketid +"&user_id=" +userid,null );
+        if (result!=null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL+ "helpdesk/collaborator/create?token="+ token +"&ticket_id=" +ticketid +"&user_id=" +userid,null );
+        return result;
+    }
+    public String removeCollaborator(String ticketid,String email){
+        Log.d("CollaboratorRemove",Constants.URL + "helpdesk/collaborator/remove?token="+ token +"&ticket_id=" +ticketid +"&email=" +email);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL+ "helpdesk/collaborator/remove?token="+ token +"&ticket_id=" +ticketid +"&email=" +email,null);
+        if (result!=null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL+ "helpdesk/collaborator/create?token="+ token +"&ticket_id=" +ticketid +"&email=" +email,null);
+        return result;
+    }
+//    public String ticketFiltration(String show,String department,String priority,String type,String source,String assignedto,int assign){
+//        Log.d("ticketFiltrationApi","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=" +show + "&departments=" + department +"&priority=" + priority +"&type=" +type +"&source=" +source +"&assigned-to=a-" +assignedto +"&assigned="+assign);
+//        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=" +show + "&departments=" + department +"&priority=" + priority +"&type=" +type +"&source=" +source +"&assigned-to=a-" +assignedto +"&assigned="+assign);
+//        if (result!=null&&result.equals("tokenRefreshed"))
+//            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&show=" +show + "&departments=" + department +"&priority=" + priority +"&type=" +type +"&source=" +source +"&assigned-to=a-" +assignedto +"&assigned="+assign);
+//        return result;
+//    }
+    public String ticketFiltration(String url,int page){
+        Log.d("ticketFiltrationApi","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&"+url+"&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&"+url+"&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&"+url+"&page="+page);
+        Log.d("URL",result);
+        return result;
+    }
+
+    public String nextPageUrlFilter(String url,int page){
+        Log.d("ticketFiltrationApi","http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&"+url+"&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&"+url+"&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/get-tickets?token=" + token + "&api=1&"+url+"&page="+page);
+        return result;
+    }
+
+    public String customerFiltration(int page,String url){
+        Log.d("customerFiltration","http://"+Constants.URL1 + "/api/v2/helpdesk/user/filter?token=" + token + "&api=1&"+url+"&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/user/filter?token=" + token + "&api=1&"+url+"&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return  new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/user/filter?token=" + token + "&api=1&"+url+"&page="+page);
+        return result;
+    }
+    public String nextPagecustomerFiltration(int page,String url){
+        Log.d("customerFiltration","http://"+Constants.URL1 + "/api/v2/helpdesk/user/filter?token=" + token + "&api=1&"+url+"&page="+page);
+        String result=new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/user/filter?token=" + token + "&api=1&"+url+"&page="+page);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return  new HTTPConnection().HTTPResponseGet("http://"+Constants.URL1 + "/api/v2/helpdesk/user/filter?token=" + token + "&api=1&"+url+"&page="+page);
+        return result;
+    }
+
+    public String saveCustomerDetails(String userid,String username,String firstname,String lastname,
+                                                 String email,String mobile,String phone){
+        Log.d("editCustomerApi","http://"+Constants.URL1 + "/api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&user_name="+username +"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile);
+        String result=new HTTPConnection().HTTPResponsePatch("http://"+Constants.URL1 + "/api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&user_name="+username +"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile,null);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePatch("http://"+Constants.URL1 + "/api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&user_name="+username +"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile,null);
+        return result;
+
+    }
+    public String changeStatusUser(String userid,int status){
+        Log.d("changeStatusOfUserAPI","http://"+Constants.URL1 + "/api/v2/helpdesk/user/status/"+userid+"?api_key=" + apiKey+"&token="+token+"&status="+status);
+        String result=new HTTPConnection().HTTPResponsePatch("http://"+Constants.URL1 + "/api/v2/helpdesk/user/status/"+userid+"?api_key=" + apiKey+"&token="+token+"&status="+status,null);
+        if (result!=null&&result.equals("tokenRefreshed"))
+          return new HTTPConnection().HTTPResponsePatch("http://"+Constants.URL1 + "/api/v2/helpdesk/user/status/"+userid+"?api_key=" + apiKey+"&token="+token+"&status="+status,null);
+        return result;
+    }
+
+
 }

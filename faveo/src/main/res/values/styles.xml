@@ -3,6 +3,7 @@
     <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
 
     </style>
+
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -34,6 +35,7 @@
         <item name="colorControlNormal">@color/actionbar</item>
         <item name="android:textColorPrimary">@color/actionbar</item>
         <item name="android:textColorSecondary">@color/actionbar</item>
+        <item name="windowActionModeOverlay">true</item>
 
     </style>
 

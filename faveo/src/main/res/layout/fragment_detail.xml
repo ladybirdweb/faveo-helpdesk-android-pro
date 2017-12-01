@@ -32,7 +32,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/subject"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -43,15 +42,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_modified_states"
-            android:cursorVisible="true"
             android:imeOptions="actionNext"
-            android:inputType="textEmailAddress"
+            android:inputType="none"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:alpha="0.5"
+            />
 
         <TextView
             android:id="@+id/textView_error_subject"
@@ -109,7 +112,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/priority"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -126,13 +128,14 @@
             android:maxLines="1"
             android:paddingBottom="24dp"
             android:paddingTop="24dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:clickable="false"
+            android:alpha="0.5"/>
 
         <TextView
             android:id="@+id/tv_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/ticket_type"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -148,13 +151,14 @@
             android:maxLines="1"
             android:paddingBottom="24dp"
             android:paddingTop="24dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:clickable="false"
+            android:alpha="0.5"/>
 
         <TextView
             android:id="@+id/tv_helpTopic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/helptopic"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -171,11 +175,12 @@
             android:maxLines="1"
             android:paddingBottom="24dp"
             android:paddingTop="24dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:clickable="false"
+            android:alpha="0.5"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/assignedto"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -192,12 +197,13 @@
             android:maxLines="1"
             android:paddingBottom="24dp"
             android:paddingTop="24dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:clickable="false"
+            android:alpha="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/name"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -220,7 +226,8 @@
             android:paddingTop="16dp"
             android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:alpha="0.5"/>
 
         <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
@@ -253,7 +260,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/email"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -276,12 +282,12 @@
             android:paddingTop="16dp"
             android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:alpha="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/source"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -298,7 +304,9 @@
             android:maxLines="1"
             android:paddingBottom="24dp"
             android:paddingTop="24dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:clickable="false"
+            android:alpha="0.5"/>
 
         <!--<TextView-->
         <!--android:textColor="@color/black"-->
@@ -332,7 +340,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/due_date"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -356,12 +363,12 @@
             android:paddingTop="16dp"
             android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:alpha="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/created_date"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -385,12 +392,12 @@
             android:paddingTop="16dp"
             android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:alpha="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/last_response_date"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -399,8 +406,8 @@
         <EditText
             android:id="@+id/editText_last_response_date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="34dp"
             android:background="@drawable/edittext_modified_states"
             android:clickable="false"
             android:cursorVisible="false"
@@ -414,12 +421,12 @@
             android:paddingTop="16dp"
             android:text="@string/not_available"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:alpha="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.3"
             android:text="@string/assign_to"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -440,20 +447,21 @@
             android:paddingBottom="24dp"
             android:paddingTop="24dp"
             android:textSize="14sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:alpha="0.5"/>
 
-        <Button
-            android:id="@+id/button_save"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="56dp"
-            android:background="@drawable/button_background"
-            android:text="@string/save"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        <!--<Button-->
+            <!--android:id="@+id/button_save"-->
+            <!--android:layout_width="180dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginBottom="56dp"-->
+            <!--android:background="@drawable/button_background"-->
+            <!--android:text="@string/save"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textStyle="bold" />-->
 
     </LinearLayout>
 

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.narendra.myapplication12.MainActivity">
+    <!--<item-->
+    <!--android:id="@+id/spinner"-->
+    <!--app:actionViewClass="android.widget.Spinner"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always"-->
+    <!--/>-->
+    <!--<item-->
+        <!--android:id="@+id/buttonsave"-->
+        <!--android:icon="@drawable/ic_sort_black_24dp"-->
+        <!--android:tint="@color/faveo"-->
+        <!--app:showAsAction="always"-->
+        <!--android:enabled="false"-->
+        <!--android:checkable="false"-->
+        <!--/>-->
+    <item
+        android:id="@+id/action_due"
+        android:orderInCategory="100"
+        android:title="Due date"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/due_ascending"
+                android:title="Ascending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/due_descending"
+                android:title="Descending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_createdat"
+        android:orderInCategory="100"
+        android:title="Created at"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/created_ascending"
+                android:title="Ascending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/created_descending"
+                android:title="Descending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_ticketnumber"
+        android:orderInCategory="100"
+        android:title="Ticket number"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/ticketnumber_ascending"
+                android:title="Ascending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/ticketnumber_descending"
+                android:title="Descending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+
+    <!--<item-->
+        <!--android:id="@+id/action_tickettitle"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="Ticket title"-->
+        <!--app:showAsAction="never">-->
+        <!--<menu xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >-->
+            <!--<item android:id="@+id/tickettitle_ascending"-->
+                <!--android:title="Ascending"-->
+                <!--HTMLCode:showAsAction="ifRoom|withText" />-->
+
+            <!--<item android:id="@+id/tickettitle_descending"-->
+                <!--android:title="Descending"-->
+                <!--HTMLCode:showAsAction="ifRoom|withText" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+    <item
+        android:id="@+id/action_priority"
+        android:orderInCategory="100"
+        android:title="Priority"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/priorityasc"
+                android:title="Ascending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/prioritydesc"
+                android:title="Descending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_updatedat"
+        android:orderInCategory="100"
+        android:title="Updated at"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/updatedatasc"
+                android:title="Ascending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/updatedatdesc"
+                android:title="Descending"
+                HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+
+
+
+
+
+</menu>

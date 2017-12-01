@@ -19,18 +19,18 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
-        tools:replace="allowBackup, label"
+        tools:replace="allowBackup, label">
 
-        >
-        <!--<activity-->
-            <!--android:name=".SplashScreen"-->
-            <!--android:label="@string/app_name" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <!-- <activity -->
+        <!-- android:name=".SplashScreen" -->
+        <!-- android:label="@string/app_name" > -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
             android:name=".frontend.activities.LoginActivity"
             android:label="@string/app_name"
@@ -38,8 +38,10 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -55,11 +57,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!-- <activity -->
+        <!-- android:name=".frontend.activities.ForgotPasswordActivity" -->
+        <!-- android:label="@string/title_activity_forgot_password" -->
+        <!-- android:launchMode="singleTask" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
-            android:name=".frontend.activities.ForgotPasswordActivity"
-            android:label="@string/title_activity_forgot_password"
+            android:name=".frontend.activities.TicketSaveActivity"
+            android:label="@string/title_activity_save"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".frontend.activities.SplashActivity"
             android:launchMode="singleTask"
@@ -76,7 +83,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".frontend.activities.MainActivity"
@@ -107,14 +113,14 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-         <!--<service -->
-         <!--android:name=".CustomService" -->
-         <!--android:exported="true" -->
-         <!--android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE"> -->
-         <!--<intent-filter> -->
-         <!--<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" /> -->
-         <!--</intent-filter> -->
-         <!--</service> -->
+        <!-- <service -->
+        <!-- android:name=".CustomService" -->
+        <!-- android:exported="true" -->
+        <!-- android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
         <activity
             android:name=".frontend.activities.NotificationActivity"
             android:label="@string/title_activity_notification"
@@ -132,6 +138,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -140,6 +147,18 @@
         <provider
             android:name=".frontend.MySuggestionProvider"
             android:authorities="co.helpdesk.faveo.pro.frontend.MySuggestionProvider" />
+
+        <!-- <activity -->
+        <!-- android:name=".frontend.activities.TicketSaveActivity" -->
+        <!-- android:label="@string/title_activity_ticket_save" -->
+        <!-- android:theme="@style/MyMaterialTheme"></activity> -->
+        <activity
+            android:name=".frontend.activities.RegisterUser"
+            android:label="@string/title_activity_register_user"
+            android:theme="@style/MyMaterialTheme" />
+        <activity android:name=".frontend.activities.collaboratorAdd" />
+        <activity android:name=".frontend.activities.TicketFilter" />
+        <activity android:name=".frontend.activities.EditCustomer"></activity>
     </application>
 
 </manifest>

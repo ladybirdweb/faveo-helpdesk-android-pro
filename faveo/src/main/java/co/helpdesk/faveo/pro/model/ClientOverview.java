@@ -14,19 +14,27 @@ public class ClientOverview {
     public String clientCompany;
     public String clientActive;
     public String placeholder;
+    public String username;
 
     public ClientOverview(int clientID, String clientPicture, String clientName,
-                          String clientEmail, String clientPhone, String clientCompany, String clientActive, String placeholder) {
+                          String clientEmail, String clientPhone, String clientActive, String placeholder) {
         this.clientID = clientID;
         this.clientPicture = clientPicture;
         this.clientName = clientName;
         this.clientEmail = clientEmail;
         this.clientPhone = clientPhone;
-        this.clientCompany = clientCompany;
         this.clientActive = clientActive;
         this.placeholder = placeholder;
+        this.username=username;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getPlaceholder() {
         return placeholder;
@@ -74,14 +82,6 @@ public class ClientOverview {
 
     public void setClientPhone(String clientPhone) {
         this.clientPhone = clientPhone;
-    }
-
-    public String getClientCompany() {
-        return clientCompany;
-    }
-
-    public void setClientCompany(String clientCompany) {
-        this.clientCompany = clientCompany;
     }
 
     public String getClientActive() {

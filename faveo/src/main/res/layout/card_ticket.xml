@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ticket"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="100dp"
     android:background="?attr/selectableItemBackground"
     android:paddingLeft="8dp"
     android:paddingRight="8dp">
@@ -49,6 +49,7 @@
             android:textColor="@color/black"
             android:textSize="10sp" />
 
+
         <TextView
             android:id="@+id/textView_ticket_subject"
             android:layout_width="match_parent"
@@ -81,6 +82,16 @@
             android:text="@string/dummy_name"
             android:textColor="@color/black"
             android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/agentassigned"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView_client_name"
+            android:layout_below="@+id/imageView_default_profile"
+            android:text="Agent"
+            android:textStyle="bold"
+            android:textColor="#3da6d7"/>
 
         <!--<com.makeramen.roundedimageview.RoundedImageView-->
 
@@ -144,16 +155,53 @@
             android:textStyle="bold"
             android:visibility="visible"
            />
-
-        <ImageView
-            android:id="@+id/attachment_icon"
+        <TextView
+            android:id="@+id/countthread"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView_ticket_time"
             android:layout_toEndOf="@+id/textView_ticket_number"
             android:layout_toRightOf="@+id/textView_ticket_number"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            />
+        <ImageView
+            android:id="@+id/attachment_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_toEndOf="@+id/countthread"
+            android:layout_toRightOf="@+id/textView_ticket_number"
+            android:visibility="visible"
             app:srcCompat="@drawable/ic_attach_file_black_18dp" />
+        <ImageView
+            android:id="@+id/source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_toEndOf="@+id/attachment_icon"
+            android:layout_toRightOf="@+id/textView_ticket_number"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_attach_file_black_18dp" />
+        <ImageView
+            android:id="@+id/collaborator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_toEndOf="@+id/source"
+            android:layout_toRightOf="@+id/source"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_attach_file_black_18dp" />
+
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/agentassigned"
+            android:layout_toEndOf="@+id/textView_client_name"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
