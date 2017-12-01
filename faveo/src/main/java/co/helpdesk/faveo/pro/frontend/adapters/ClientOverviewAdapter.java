@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import java.util.List;
 
 import agency.tango.android.avatarview.IImageLoader;
@@ -35,7 +37,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
     @Override
     public void onBindViewHolder(ClientViewHolder clientViewHolder, int i) {
         final ClientOverview clientOverview = clientOverviewList.get(i);
-        clientViewHolder.textViewClientID.setText(clientOverview.clientID + "");
+        //clientViewHolder.textViewClientID.setText(clientOverview.clientID + "");
         clientViewHolder.textViewClientName.setText(clientOverview.clientName);
         clientViewHolder.textViewClientEmail.setText(clientOverview.clientEmail);
         if (clientOverview.clientPhone.equals("") || clientOverview.clientPhone.equals("null"))
@@ -59,6 +61,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ClientDetailActivity.class);
                 intent.putExtra("CLIENT_ID", clientOverview.clientID + "");
+                Prefs.putString("clientId",clientOverview.clientID+"");
                 intent.putExtra("CLIENT_NAME", clientOverview.clientName);
                 intent.putExtra("CLIENT_EMAIL", clientOverview.clientEmail);
                 intent.putExtra("CLIENT_PHONE", clientOverview.clientPhone);
@@ -90,7 +93,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
         ClientViewHolder(View v) {
             super(v);
             client = v.findViewById(R.id.client);
-            textViewClientID = (TextView) v.findViewById(R.id.textView_client_id);
+            //textViewClientID = (TextView) v.findViewById(R.id .textView_client_id);
             roundedImageViewProfilePic = (AvatarView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewClientEmail = (TextView) v.findViewById(R.id.textView_client_email);

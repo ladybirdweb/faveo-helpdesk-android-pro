@@ -57,20 +57,10 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 //        }else{
 //            ticketViewHolder.webView.setVisibility(View.GONE);
 //        }
-        if (i==0){
+
+        for (int j=0;j<ticketThreadList.size()-1;j++){
             ticketViewHolder.webView.setVisibility(View.VISIBLE);
         }
-        else{
-            for (int j=0;j<ticketThreadList.size()-1;j++){
-                ticketViewHolder.webView.setVisibility(View.VISIBLE);
-            }
-        }
-
-
-
-//        for (int j=0;j<ticketThreadList.size()-1;j++){
-//            ticketViewHolder.webView.setVisibility(View.VISIBLE);
-//        }
 
 
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {

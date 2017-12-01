@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,9 +20,6 @@ import android.support.v7.widget.Toolbar;
 //import android.text.SpannableString;
 //import android.text.style.ForegroundColorSpan;
 //import android.util.DisplayMetrics;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +53,6 @@ import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.frontend.views.Fab;
-import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 //import co.helpdesk.faveo.pro.model.TicketDetail;
 import es.dmoral.toasty.Toasty;
@@ -90,6 +85,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //    TextView textView,textViewStatus,textViewStatus1,textViewStatus2;
     TextView textView;
     String status;
+    String title;
+    Toolbar mToolbar;
+    TextView addCc;
+
 //    public static String ticketNumber;
 //    public static String ticketOpenedBy;
 //    public static String ticketSubject;
@@ -101,8 +100,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
         setupFab();
 
         ticketNumber = getIntent().getStringExtra("ticket_number");
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbarTicketDetail);
         textView= (TextView) mToolbar.findViewById(R.id.title);
+        mToolbar.inflateMenu(R.menu.menu_main_new);
+        mToolbar.getMenu().getItem(0).setEnabled(false);
+        addCc= (TextView) findViewById(R.id.addcc);
+        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+        addCc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(TicketDetailActivity.this,collaboratorAdd.class);
+                startActivity(intent);
+            }
+        });
+
+
 //        textView.setText(Prefs.getString("ticketno",null));
 //        textViewStatus= (TextView) mToolbar.findViewById(R.id.status);
 //        textViewStatus1= (TextView) mToolbar.findViewById(R.id.status1);
@@ -125,7 +137,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         Constants.URL = Prefs.getString("COMPANY_URL", "");
-        ticketID = getIntent().getStringExtra("ticket_id");
+        ticketID = Prefs.getString("TICKETid",null);
+        //Prefs.putString("ticketID",ticketID);
         //status=Prefs.getString("ticketstatus",null);
 
         // ticketOpenedBy = getIntent().getStringExtra("ticket_opened_by");
@@ -174,7 +187,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         progressDialog = new ProgressDialog(this);
         editTextInternalNote = (EditText) findViewById(R.id.editText_internal_note);
-        editTextCC = (EditText) findViewById(R.id.editText_cc);
+        //editTextCC = (EditText) findViewById(R.id.editText_cc);
         editTextReplyMessage = (EditText) findViewById(R.id.editText_reply_message);
         buttonCreate = (Button) findViewById(R.id.button_create);
         buttonSend = (Button) findViewById(R.id.button_send);
@@ -272,6 +285,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_new, menu);
+            //mToolbar.getMenu();
+
 
         return true;
     }
@@ -285,10 +300,38 @@ public class TicketDetailActivity extends AppCompatActivity implements
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        try {
+            if (item != null) {
+                item.getSubMenu().clearHeader();
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        Fragment fragment = null;
+        title = getString(R.string.app_name);
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+
+        if (id==R.id.buttonsave){
+            Intent intent=new Intent(TicketDetailActivity.this,TicketSaveActivity.class);
+            startActivity(intent);
+//            title = getString(R.string.title_activity_ticketsave);
+//            fragment = getSupportFragmentManager().findFragmentByTag(title);
+//            if (fragment == null)
+//                fragment = new TicketSaveFragment();
+//            if (fragment != null) {
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container_body, fragment);
+//                // fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            }
+
+        }
 
 
 //        String ticketid1= Prefs.getString("ticketid",null);
@@ -301,15 +344,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //            return true;
 //        }
 
-        if (id==R.id.status_id){
-//            SpannableString spannableString=new SpannableString(item.getTitle());
-//            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
-//            item.setTitle(spannableString);
-            Toasty.info(TicketDetailActivity.this,getString(R.string.selectstatus),Toast.LENGTH_SHORT).show();
-//            return super.onPrepareOptionsMenu((Menu) item);
 
-            return false;
-        }
         if (id==R.id.action_statusOpen){
             status=Prefs.getString("ticketstatus",null);
             if (status.equals("Open")){
@@ -562,7 +597,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //            if (result == null) {
 //                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
 //                return;
-            String state=Prefs.getString("403",null);
+            //String state=Prefs.getString("403",null);
 //                if (message1.contains("The ticket id field is required.")){
 //                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
 //                }
@@ -571,12 +606,19 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //                }
 //               else
             try {
-                if (state.equals("403") && !state.equals(null)) {
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-                    Prefs.putString("403", "null");
-                    return;
+                JSONObject jsonObject = new JSONObject(result);
+                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                JSONArray jsonArray=jsonObject1.getJSONArray("message");
+                for (int i=0;i<jsonArray.length();i++){
+                    String message=jsonArray.getString(i);
+                    if (message.equals("Permission denied, you do not have permission to access the requested page.")){
+                        Toasty.warning(TicketDetailActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                        Prefs.putString("403", "null");
+                        return;
+                    }
                 }
-            }catch (NullPointerException e){
+
+            }catch (JSONException e){
                 e.printStackTrace();
             }
 
@@ -652,7 +694,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            editTextCC.getText().clear();
+//            editTextCC.getText().clear();
             editTextReplyMessage.getText().clear();
             exitReveal();
             Toasty.success(TicketDetailActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
@@ -706,6 +748,53 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //                e.printStackTrace();
 //                // Toast.makeText(TicketDetailActivity.this, "Unexpected Error ", Toast.LENGTH_LONG).show();
 //            }
+        }
+    }
+
+    private class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
+        String ticketid;
+
+        FetchCollaboratorAssociatedWithTicket(String ticketid) {
+
+            this.ticketid = ticketid;
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
+        }
+
+        protected void onPostExecute(String result) {
+            int noOfCollaborator = 0;
+            if (isCancelled()) return;
+//            if (progressDialog.isShowing())
+//                progressDialog.dismiss();
+
+            if (result == null) {
+                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                Data data=new Data(0,"No recipients");
+//                stringArrayList.add(data);
+                return;
+            }
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
+                if (jsonArray.length() == 0) {
+                    addCc.setText("Add cc");
+                    return;
+                } else {
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        noOfCollaborator++;
+
+                    }
+                    addCc.setText("Add cc"+"("+noOfCollaborator+" Recipients)");
+                    //Toast.makeText(TicketDetailActivity.this, "noofcollaborators:" + noOfCollaborator, Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -905,6 +994,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
         // register connection status listener
         // FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
@@ -974,11 +1064,16 @@ public class TicketDetailActivity extends AppCompatActivity implements
         EventBus.getDefault().register(this);
     }
 
+
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
+
+
+
 
 //    /**
 //     * Callback will be triggered when there is change in

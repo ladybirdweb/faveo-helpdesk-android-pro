@@ -18,8 +18,38 @@ public class TicketOverview {
     public String ticketAttachments;
     public String dueDate;
     public String placeholder;
+    public String countcollaborator;
+    public String countthread;
+    public String sourceTicket;
+    public String lastReply;
+    public String agentName;
+    private boolean isChecked;
 
-    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder) {
+    public boolean getChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+//    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketBubble, String ticketStatus, String ticketPriorityColor, String ticketAttachments, String dueDate, String placeholder, boolean isChecked) {
+//        this.ticketID = ticketID;
+//        this.clientPicture = clientPicture;
+//        this.ticketNumber = ticketNumber;
+//        this.clientName = clientName;
+//        this.ticketSubject = ticketSubject;
+//        this.ticketTime = ticketTime;
+//        this.ticketBubble = ticketBubble;
+//        this.ticketStatus = ticketStatus;
+//        this.ticketPriorityColor = ticketPriorityColor;
+//        this.ticketAttachments = ticketAttachments;
+//        this.dueDate = dueDate;
+//        this.placeholder = placeholder;
+//        this.isChecked = isChecked;
+//    }
+
+    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName) {
         this.ticketID = ticketID;
         this.clientPicture = clientPicture;
         this.ticketNumber = ticketNumber;
@@ -32,9 +62,52 @@ public class TicketOverview {
         this.ticketAttachments = ticketAttachments;
         this.dueDate = dueDate;
         this.placeholder = placeholder;
-
+        this.countcollaborator=countcollaborator;
+        this.countthread=countthread;
+        this.sourceTicket=sourceTicket;
+        this.lastReply=lastReply;
+        this.agentName=agentName;
     }
 
+    public String getLastReply() {
+        return lastReply;
+    }
+
+    public void setLastReply(String lastReply) {
+        this.lastReply = lastReply;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
+    }
+
+    public String getCountcollaborator() {
+        return countcollaborator;
+    }
+
+    public void setCountcollaborator(String countcollaborator) {
+        this.countcollaborator = countcollaborator;
+    }
+
+    public String getCountthread() {
+        return countthread;
+    }
+
+    public void setCountthread(String countthread) {
+        this.countthread = countthread;
+    }
+
+    public String getSourceTicket() {
+        return sourceTicket;
+    }
+
+    public void setSourceTicket(String sourceTicket) {
+        this.sourceTicket = sourceTicket;
+    }
 
     public String getPlaceholder() {
         return placeholder;

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="#EEEEEE">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginStart="17dp"
+                    android:text="@string/show"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/required"
+                    android:textSize="12sp" />
+                />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/autocompleteshow"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:nextFocusForward="@+id/spinner_help"
+                    android:entries="@array/spinnerAssignTo"
+                    android:hint="@string/SelectPriority"/>
+            </LinearLayout>
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="36dp"
+    android:background="#EEEEEE">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
+        android:text="@string/department"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+    />
+
+</RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/autocompletedepartment"
+            android:hint="@string/showsuggestions"
+            android:inputType="text"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="#EEEEEE">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:text="@string/source"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/autocompletetesource"
+            android:hint="@string/showsuggestions"
+            android:inputType="text"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="#EEEEEE">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:text="@string/priority"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/autocompletetepriority"
+            android:hint="@string/showsuggestions"
+            android:inputType="text"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="#EEEEEE">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:text="@string/assign_to"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/autocompleteassign"
+            android:hint="@string/showsuggestions"
+            android:inputType="text"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="#EEEEEE">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:text="@string/ticket_type"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/autocompletetype"
+            android:hint="@string/showsuggestions"
+            android:inputType="text"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="#EEEEEE">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginStart="17dp"
+                    android:text="@string/assigned"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/autocompleteassigned"
+                    android:inputType="text"
+                    android:hint="@string/showsuggestions"
+                    android:layout_marginLeft="10dp"
+                    />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+</ScrollView>
+

@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     AppCompatEditText passwordEdittext;
     @BindView(R.id.input_username)
     AppCompatEditText usernameEdittext;
-    @BindView(R.id.editText_company_url)
+
     AutoCompleteTextView editTextCompanyURL;
     @BindView(R.id.viewFlipper)
     ViewFlipper viewflipper;
@@ -122,13 +122,22 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.animationLayout)
     LinearLayout linearLayout;
 
-
+String urlGivenByUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+//        try {
+//            if (!Prefs.getString("companyurl", null).equals("") || !Prefs.getString("companyurl", null).equals(null)) {
+//                editTextCompanyURL.setText(Prefs.getString("companyurl", null));
+//            } else {
+//                editTextCompanyURL.setText("");
+//                editTextCompanyURL.setHint("eg: faveohelpdesk.com/public");
+//            }
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
 
 
 
@@ -152,7 +161,12 @@ public class LoginActivity extends AppCompatActivity {
         url.setVisibility(View.GONE);
         flipColor.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_200));
         buttonSignIn.setEnabled(true);
+        editTextCompanyURL= (AutoCompleteTextView) findViewById(R.id.editText_company_url);
         urlSuggestions=new ArrayList<>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>
+                (this, android.R.layout.simple_dropdown_item_1line, urlSuggestions);
+        editTextCompanyURL.setThreshold(1);
+        editTextCompanyURL.setAdapter(adapter);
         usernameEdittext.addTextChangedListener(mTextWatcher);
         passwordEdittext.addTextChangedListener(mTextWatcher);
 
@@ -216,6 +230,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //String companyURLUser = editTextCompanyURL.getText().toString();
                 //Prefs.putString("URL",companyURL);
+                urlGivenByUser=editTextCompanyURL.getText().toString().trim();
                 companyURLUser=new StringBuilder(editTextCompanyURL.getText().toString().trim());
                 companyURLUser.insert(0,"https://").toString();
                 companyURLUser1=new StringBuilder(editTextCompanyURL.getText().toString().trim());
@@ -265,14 +280,15 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (InternetReceiver.isConnected()) {
                     urlSuggestions.add(companyURL);
-                    Set<String> set=new HashSet<>(urlSuggestions);
-                    ArrayAdapter<String> adapter= new ArrayAdapter<String>(LoginActivity.this,
-                            android.R.layout.simple_dropdown_item_1line,urlSuggestions);
-                    editTextCompanyURL.setThreshold(2);
-                    editTextCompanyURL.setAdapter(adapter);
-                    Prefs.putStringSet("URL_SUG", set);
+//                    Set<String> set=new HashSet<>(urlSuggestions);
+//                    ArrayAdapter<String> adapter= new ArrayAdapter<String>(LoginActivity.this,
+//                            android.R.layout.simple_dropdown_item_1line,urlSuggestions);
+//                    editTextCompanyURL.setThreshold(2);
+//                    editTextCompanyURL.setAdapter(adapter);
+//                    Prefs.putStringSet("URL_SUG", set);
                     progressDialogVerifyURL.show();
                     new VerifyURL(LoginActivity.this, companyURL).execute();
+
 
 
                 } else
@@ -466,6 +482,7 @@ public class LoginActivity extends AppCompatActivity {
 //                Prefs.putStringSet("URL_SUG", set);
 
                 Prefs.putString("BASE_URL", baseURL);
+                Prefs.putString("companyurl",urlGivenByUser);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
                 Constants.URL1=Prefs.getString("companyurl",null);
@@ -549,6 +566,7 @@ public class LoginActivity extends AppCompatActivity {
 //                Prefs.putStringSet("URL_SUG", set);
 
                 Prefs.putString("BASE_URL", baseURL);
+                Prefs.putString("companyurl",urlGivenByUser);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
                 Constants.URL1=Prefs.getString("companyurl",null);
@@ -637,7 +655,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             if (result.contains("success")) {
-
+                urlSuggestions.add(baseURL);
                 viewflipper.showNext();
                 imageBackButton.setVisibility(View.VISIBLE);
                 url.setText(baseURL);
@@ -747,7 +765,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             try {
-                Toasty.success(LoginActivity.this, getString(R.string.successfullylogin), Toast.LENGTH_SHORT).show();
                 JSONObject jsonObject = new JSONObject(result);
                 String token = jsonObject.getString("token");
                 JSONObject jsonObject1 = jsonObject.getJSONObject("user_id");
@@ -779,7 +796,6 @@ public class LoginActivity extends AppCompatActivity {
                 new SendingFCM(LoginActivity.this, FirebaseInstanceId.getInstance().getToken()).execute();
 
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } catch (JSONException e) {
@@ -864,10 +880,7 @@ public class LoginActivity extends AppCompatActivity {
 //        Set<String> set = Prefs.getStringSet("URL_SUG", new HashSet<String>());
 //        urlSuggestions = new ArrayList<>(set);
 //
-        ArrayAdapter<String> adapter = new ArrayAdapter<>
-                (this, android.R.layout.simple_dropdown_item_1line, urlSuggestions);
-        editTextCompanyURL.setThreshold(1);
-        editTextCompanyURL.setAdapter(adapter);
+
 
 
         //viewflipper = (ViewFlipper) findViewById(R.id.viewFlipper);

@@ -12,6 +12,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -74,7 +75,6 @@ public class Detail extends Fragment {
     ProgressDialog progressDialog;
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems,staffItems;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter,staffArrayAdapter;
-    Button buttonSave;
     Animation animation;
     @BindView(R.id.spinner_staffs)
     Spinner spinnerStaffs;
@@ -128,76 +128,67 @@ public class Detail extends Fragment {
             task.execute();
         }
 
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetViews();
-                //int helpTopic=1;
-                boolean allCorrect = true;
-                String subject = editTextSubject.getText().toString();
-                // int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
-                Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
-                Data source = (Data) spinnerSource.getSelectedItem();
-                Data priority = (Data) spinnerPriority.getSelectedItem();
-                Data type = (Data) spinnerType.getSelectedItem();
-                Data  staff= (Data) spinnerStaffs.getSelectedItem();
 
-                //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
-
-//                if (SLAPlans == 0) {
+//        buttonSave.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resetViews();
+//                //int helpTopic=1;
+//                boolean allCorrect = true;
+//                String subject = editTextSubject.getText().toString();
+//                // int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
+//                Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
+//                Data source = (Data) spinnerSource.getSelectedItem();
+//                Data priority = (Data) spinnerPriority.getSelectedItem();
+//                Data type = (Data) spinnerType.getSelectedItem();
+//                Data  staff= (Data) spinnerStaffs.getSelectedItem();
+//
+//                //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
+//
+////                if (SLAPlans == 0) {
+////                    allCorrect = false;
+////                    Toasty.warning(getContext(), "Please select some SLA plan", Toast.LENGTH_SHORT).show();
+////                } else
+//
+//                if (subject.trim().length() == 0) {
+//                    Toasty.warning(getActivity(), getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
 //                    allCorrect = false;
-//                    Toasty.warning(getContext(), "Please select some SLA plan", Toast.LENGTH_SHORT).show();
-//                } else
-
-                if (subject.trim().length() == 0) {
-                    Toasty.warning(getActivity(), getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
-                    allCorrect = false;
-                } else if (subject.trim().length() < 5) {
-                    Toasty.warning(getActivity(), getString(R.string.sub_minimum_char), Toast.LENGTH_SHORT).show();
-                    allCorrect = false;
-                } else if (helpTopic.ID == 0) {
-                    allCorrect = false;
-                    Toasty.warning(getActivity(), getString(R.string.select_some_helptopic), Toast.LENGTH_SHORT).show();
-                } else if (priority.ID == 0) {
-                    allCorrect = false;
-                    Toasty.warning(getActivity(), getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
-                } else if (source.ID == 0) {
-                    allCorrect = false;
-                    Toasty.warning(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
-                }
-
-
-
-
-
-                if (allCorrect) {
-                    if (InternetReceiver.isConnected()) {
-                        progressDialog.setMessage(getString(R.string.updating_ticket));
-                        progressDialog.show();
-                        try {
-                            if (staff.ID == 0) {
-new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivity.ticketID),
-        URLEncoder.encode(subject.trim(), "utf-8"),
-        helpTopic.ID,
-        source.ID,
-        priority.ID, type.ID).execute();
-                            } else {
-                                new SaveTicket(getActivity(),
-                                        Integer.parseInt(TicketDetailActivity.ticketID),
-                                        URLEncoder.encode(subject.trim(), "utf-8"),
-                                        helpTopic.ID,
-                                        source.ID,
-                                        priority.ID, type.ID, staff.ID)
-                                        .execute();
-                            }
-                        }catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-            }
-        });
+//                } else if (subject.trim().length() < 5) {
+//                    Toasty.warning(getActivity(), getString(R.string.sub_minimum_char), Toast.LENGTH_SHORT).show();
+//                    allCorrect = false;
+//                } else if (helpTopic.ID == 0) {
+//                    allCorrect = false;
+//                    Toasty.warning(getActivity(), getString(R.string.select_some_helptopic), Toast.LENGTH_SHORT).show();
+//                } else if (priority.ID == 0) {
+//                    allCorrect = false;
+//                    Toasty.warning(getActivity(), getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
+//                } else if (source.ID == 0) {
+//                    allCorrect = false;
+//                    Toasty.warning(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//
+//
+//                if (allCorrect) {
+//                    if (InternetReceiver.isConnected()) {
+//                        progressDialog.setMessage(getString(R.string.updating_ticket));
+//                        progressDialog.show();
+//                        try {
+//                            new SaveTicket(getActivity(),
+//                                    Integer.parseInt(TicketDetailActivity.ticketID),
+//                                    URLEncoder.encode(subject.trim(), "utf-8"),
+//                                    helpTopic.ID,
+//                                    source.ID,
+//                                    priority.ID, type.ID,staff.ID)
+//                                    .execute();
+//                        } catch (UnsupportedEncodingException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//        });
         return rootView;
     }
 
@@ -231,8 +222,11 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                editTextSubject.setText(jsonObject1.getString("title"));
+
+//                Prefs.putString("ticketsubject",jsonObject1.getString("title"));
+                String title=jsonObject1.getString("title");
                 String ticketNumber = jsonObject1.getString("ticket_number");
+                editTextSubject.setText(title);
                 String ticketStatus=jsonObject1.getString("status_name");
                 if (ticketStatus.equals("Open")){
                     Prefs.putString("status_name","Open");
@@ -268,7 +262,16 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
                 try {
                     if (jsonObject1.getString("priority_name") != null) {
                         // spinnerPriority.setSelection(Integer.parseInt(jsonObject1.getString("priority_id")) - 1);
+
                         spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject1.getString("priority_name")));
+                        spinnerPriority.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent motionEvent) {
+                                return true;
+                            }
+                        });
+
+
                     }
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
@@ -276,30 +279,65 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
                 catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 }
-//
+
                 try {
                     if (jsonObject1.getString("type_name") != null) {
                         // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
                         spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
+                        spinnerType.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent motionEvent) {
+                                return true;
+                            }
+                        });
                         //spinnerType.setSelection(Integer.parseInt(jsonObject1.getString("type")));
                     }
-
+                } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
                 }
                 catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
-                }catch (JSONException | NumberFormatException e) {
-                    e.printStackTrace();
                 }
-//
                 try {
                     if (jsonObject1.getString("helptopic_name") != null)
                         //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                        for (int j=0;j<spinnerHelpTopics.getCount();j++){
-                            if (spinnerHelpTopics.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("helptopic_name"))) {
-                                spinnerHelpTopics.setSelection(j);
-                            }
+//                    for (int j=0;j<spinnerHelpTopics.getCount();j++){
+//                        if (spinnerHelpTopics.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("helptopic_id"))){
+//                            spinnerHelpTopics.setSelection(j);
+//                        }
+//                    }
+                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+
+
+                    spinnerHelpTopics.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            return true;
                         }
-//                        spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                    });
+                } catch (ArrayIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                }
+                try {
+                    if (jsonObject1.getString("assignee_first_name") != null&&jsonObject1.getString("assignee_last_name") != null) {
+                        //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        for (int j=0;j<spinnerStaffs.getCount();j++){
+                            if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("assignee_first_name")+" "+jsonObject1.getString("assignee_last_name"))) {
+                                spinnerStaffs.setSelection(j);
+                            }
+                            spinnerStaffs.setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View view, MotionEvent motionEvent) {
+                                    return true;
+                                }
+                            });
+                        }
+                        //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+                    }
+                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
                 } catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 } catch (Exception e) {
@@ -307,33 +345,20 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
 //                    tv_helpTopic.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
-                try {
-                    if (jsonObject1.getString("assignee_email") != null) {
-                        //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                        for (int j=0;j<spinnerStaffs.getCount();j++){
-                            if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("assignee_email"))) {
-                                spinnerStaffs.setSelection(j);
-                            }
-                        }
-                        //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
-                    }
-                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-//                } catch (Exception e) {
-//////                    spinnerHelpTopics.setVisibility(View.GONE);
-//////                    tv_helpTopic.setVisibility(View.GONE);
-////                    e.printStackTrace();
-////                }
-//
-//
-//
+
+
+
                 try {
                     if (jsonObject1.getString("source_name") != null)
                         //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
 
                         spinnerSource.setSelection(getIndex(spinnerSource, jsonObject1.getString("source_name")));
+                    spinnerSource.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            return true;
+                        }
+                    });
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -473,54 +498,6 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
                 Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
         }
     }
-    private class SaveTicketWithoutAssignee extends AsyncTask<String, Void, String> {
-        Context context;
-        int ticketNumber;
-        String subject;
-        //int slaPlan;
-        int helpTopic;
-        int ticketSource;
-        int ticketPriority;
-        int ticketStatus;
-        int ticketType;
-
-
-        SaveTicketWithoutAssignee(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType) {
-            this.context = context;
-            this.ticketNumber = ticketNumber;
-            this.subject = subject;
-            // this.slaPlan = slaPlan;
-            this.helpTopic = helpTopic;
-            this.ticketSource = ticketSource;
-            this.ticketPriority = ticketPriority;
-            // this.ticketStatus = ticketStatus;
-            this.ticketType = ticketType;
-
-        }
-
-        protected String doInBackground(String... urls) {
-            if (subject.equals("Not available"))
-                subject = "";
-            return new Helpdesk().postEditTicketWithoutAssignee(ticketNumber, subject,
-                    helpTopic, ticketSource, ticketPriority, ticketType);
-        }
-
-        protected void onPostExecute(String result) {
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
-            if (result == null) {
-                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-            if (result.contains("Edited successfully")) {
-                Toasty.success(getActivity(), getString(R.string.update_success), Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-            } else
-                Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
-
-        }
-    }
 
     private void setUpViews(View rootView) {
         Prefs.getString("keyStaff", null);
@@ -533,7 +510,7 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
             staffItems.add(new Data(0, "--"));
             JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
             for (int i=0;i<jsonArrayStaffs.length();i++){
-                Data data=new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")),jsonArrayStaffs.getJSONObject(i).getString("email"));
+                Data data=new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")),jsonArrayStaffs.getJSONObject(i).getString("first_name")+" "+jsonArrayStaffs.getJSONObject(i).getString("last_name"));
                 staffItems.add(data);
             }
             helptopicItems = new ArrayList<>();
@@ -573,6 +550,8 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
 
 
         // textViewTicketNumber = (TextView) rootView.findViewById(R.id.textView_ticket_number);
@@ -627,7 +606,7 @@ new SaveTicketWithoutAssignee(getActivity(),Integer.parseInt(TicketDetailActivit
         editTextLastResponseDate = (EditText) rootView.findViewById(R.id.editText_last_response_date);
         //spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_staffs);
 
-        buttonSave = (Button) rootView.findViewById(R.id.button_save);
+//        buttonSave = (Button) rootView.findViewById(R.id.button_save);
         //tv_dept = (TextView) rootView.findViewById(R.id.tv_dept);
         tv_helpTopic = (TextView) rootView.findViewById(R.id.tv_helpTopic);
 

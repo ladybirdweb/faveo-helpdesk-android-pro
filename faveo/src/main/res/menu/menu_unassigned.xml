@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_noti"
+        android:icon="@drawable/ic_notifications_black_24dp_colored"
+        android:orderInCategory="100"
+        android:title="Notifications"
+        app:showAsAction="always" />
+    <!--<item-->
+    <!--android:id="@+id/spinner"-->
+    <!--app:actionViewClass="android.widget.Spinner"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always"-->
+    <!--/>-->
+    <item
+        android:id="@+id/action_statusResolved"
+        android:orderInCategory="100"
+        android:title="Resolved"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_statusClosed"
+        android:orderInCategory="100"
+        android:title="Closed"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_statusDeleted"
+        android:orderInCategory="100"
+        android:title="Move to trash"
+        app:showAsAction="never"/>
+
+
+</menu>

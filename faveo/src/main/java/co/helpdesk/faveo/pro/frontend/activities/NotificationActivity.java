@@ -187,7 +187,6 @@ public class NotificationActivity extends AppCompatActivity {
                 return;
             }
 
-
             if (result.equals("all done")) {
 
                 Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
@@ -274,7 +273,6 @@ public class NotificationActivity extends AppCompatActivity {
                 Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
-
             notificationAdapter.notifyDataSetChanged();
             loading = true;
         }

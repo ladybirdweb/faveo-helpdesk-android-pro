@@ -54,11 +54,12 @@ public class SplashActivity extends AppCompatActivity {
             keySLA = "", valueSLA = "",
             keyStatus = "", valueStatus = "",
             keyStaff = "", valueStaff = "",
-            keyTeam = "", valueTeam = "",
+            keyName="",
             keyPriority = "", valuePriority = "",
             keyTopic = "", valueTopic = "",
             keySource = "", valueSource = "",
             keyType = "", valueType = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class SplashActivity extends AppCompatActivity {
         if (InternetReceiver.isConnected()) {
             progressDialog.setVisibility(View.VISIBLE);
             new FetchDependency().execute();
+            Prefs.putString("came from filter","false");
             //new FetchData(this).execute();
         } else {
             progressDialog.setVisibility(View.INVISIBLE);
@@ -216,9 +218,11 @@ public class SplashActivity extends AppCompatActivity {
 
                 JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
                 for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                    keyName +=jsonArrayStaffs.getJSONObject(i).getString("first_name") + jsonArrayStaffs.getJSONObject(i).getString("last_name") +",";
                     keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
                     valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
                 }
+                Prefs.putString("keyName",keyName);
                 Prefs.putString("keyStaff", keyStaff);
                 Prefs.putString("valueStaff", valueStaff);
 
@@ -354,7 +358,6 @@ public class SplashActivity extends AppCompatActivity {
 
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
-
 //            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
 //            builder.setTitle("Welcome to FAVEO");
 //            //builder.setMessage("After 2 second, this dialog will be closed automatically!");

@@ -5,16 +5,17 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,13 +30,23 @@ import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
+
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.CreatedAtAsc;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.CreatedAtDesc;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.DueByAsc;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.DueByDesc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.SortByTicketNumberAscending;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.SortByTicketNumberDescending;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.SortByTicketPriorityAsc;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.SortByTicketPriorityDesc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.TrashTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UnassignedTickets;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtAsc;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
-import es.dmoral.toasty.Toasty;
 
 /**
  * This is the main activity where we are loading the inbox fragment
@@ -50,13 +61,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         UnassignedTickets.OnFragmentInteractionListener,
         About.OnFragmentInteractionListener,
         ClientList.OnFragmentInteractionListener,
-        Settings.OnFragmentInteractionListener {
+        Settings.OnFragmentInteractionListener,UpdatedAtDesc.OnFragmentInteractionListener,
+        UpdatedAtAsc.OnFragmentInteractionListener,DueByAsc.OnFragmentInteractionListener,DueByDesc.OnFragmentInteractionListener,
+        SortByTicketNumberAscending.OnFragmentInteractionListener,SortByTicketNumberDescending.OnFragmentInteractionListener,
+        SortByTicketPriorityAsc.OnFragmentInteractionListener,SortByTicketPriorityDesc.OnFragmentInteractionListener,CreatedAtAsc.OnFragmentInteractionListener,CreatedAtDesc.OnFragmentInteractionListener{
 
     // The BroadcastReceiver that tracks network connectivity changes.
 //    public InternetReceiver receiver = new InternetReceiver();
 
     protected boolean doubleBackToExitPressedOnce = false;
     public static boolean isShowing = false;
+    ArrayList<String> strings;
+    ArrayList<String> strings1;
+    Toolbar toolbar;
 //    private ArrayList<String> mList = new ArrayList<>();
 //    @BindView(R.id.sort_view)
 //    RelativeLayout sortView;
@@ -64,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //    TextView sortTextview;
 //    @BindView(R.id.arrow_imgView)
 //    ImageView arrowDown;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         isShowing = true;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         
         // TODO: Move this to where you establish a user session
         //logUser();
@@ -83,29 +100,44 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        String nextPageURL = getIntent().getStringExtra("nextPageURL");
 //        Bundle bundle = new Bundle();
 //        bundle.putString("nextPageURL", nextPageURL);
+        strings=new ArrayList<>();
+        strings.add(0,"Sort by");
+        strings.add(1,"Due by time");
+        strings.add(2,"Priority");
+        strings.add(3,"Created at");
+        strings.add(4,"Updated at");
+        strings.add(5,"Ticket title");
+        strings.add(6,"Status");
+//        Prefs.putString("came from filter","false");
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar2);
-//        toolbar.setVisibility(View.VISIBLE);
-//        getSupportActionBar().setTitle("change status");
-//        toolbar.inflateMenu(R.menu.menu_main_new);
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                if (item.getItemId()==R.id.status_id){
-//                    Toast.makeText(MainActivity.this, "Please select a status", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
 
 
 
-
+//Initializing the bottomNavigationView
+//        bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
+//        bottomNavigationView.setBackgroundColor(Color.parseColor("#cee0ef"));
+//        bottomNavigationView.setOnNavigationItemSelectedListener(
+//                new BottomNavigationView.OnNavigationItemSelectedListener() {
+//                    @Override
+//                    public boolean onNavigationItemSelected(MenuItem item) {
+//                        switch (item.getItemId()) {
+//                            case R.id.action_call:
+//                                Toast.makeText(MainActivity.this, "call clicked", Toast.LENGTH_SHORT).show();
+//                                break;
+//                            case R.id.action_chat:
+//                                Toast.makeText(MainActivity.this, "chat clicked", Toast.LENGTH_SHORT).show();
+//                                break;
+//                            case R.id.action_contact:
+//                                Toast.makeText(MainActivity.this, "contact clicked", Toast.LENGTH_SHORT).show();
+//                                break;
+//                        }
+//                        return false;
+//                    }
+//                });
 
 
 //        getSupportActionBar().setTitle("Inbox");
@@ -114,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
-
+        //mToolbar.setVisibility(View.GONE);
 
         /*
           Loading the inbox fragment here.
@@ -126,8 +158,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.replace(R.id.container_body, inboxTickets);
         fragmentTransaction.commit();
         setActionBarTitle(getResources().getString(R.string.inbox));
-
-
 
 
 
@@ -220,13 +250,41 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        MenuItem item = menu.findItem(R.id.spinner);
+//        final Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+//
+//        ArrayAdapter<String> spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,strings); //selected item will look like a spinner set from XML
+//        spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner.setAdapter(spinnerPriArrayAdapter);
+//
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                int pos = spinner.getSelectedItemPosition();
+//
+//                if (pos == 0) {
+//                    ((TextView) adapterView.getChildAt(0)).setTextColor(Color.parseColor("#3da6d7"));
+//                    return;
+//                } else {
+//                    ((TextView) adapterView.getChildAt(0)).setTextColor(Color.parseColor("#3da6d7"));
+////                    ((TextView) adapterView.getChildAt(0)).setTextSize(5);
+//                    Toast.makeText(MainActivity.this, "Position" + pos, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//
+//
+//        return true;
+//    }
 
     /**
      * Handle action bar item clicks here. The action bar will

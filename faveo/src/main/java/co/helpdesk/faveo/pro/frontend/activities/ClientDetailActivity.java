@@ -18,6 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,8 +60,8 @@ public class ClientDetailActivity extends AppCompatActivity implements
         OpenTickets.OnFragmentInteractionListener,
         ClosedTickets.OnFragmentInteractionListener {
 
-    AsyncTask<String, Void, String> task;
 
+    AsyncTask<String, Void, String> task;
     @BindView(R.id.imageView_default_profile)
     AvatarView imageViewClientPicture;
 
@@ -77,8 +80,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @BindView(R.id.textView_client_status)
     TextView textViewClientStatus;
 
-    @BindView(R.id.textView_client_company)
-    TextView textViewClientCompany;
+
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -89,6 +91,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     public String clientID, clientName;
     List<TicketGlimpse> listTicketGlimpse;
     ProgressDialog progressDialog;
+    ImageView imageViewClientEdit;
 
     @Override
     public void onPause() {
@@ -104,6 +107,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_profile);
         ButterKnife.bind(this);
+
+
+        imageViewClientEdit= (ImageView) findViewById(R.id.clientedit);
         Constants.URL = Prefs.getString("COMPANY_URL", "");
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -116,8 +122,12 @@ public class ClientDetailActivity extends AppCompatActivity implements
         mTitle.setText(R.string.profile);
 
         setUpViews();
-        Intent intent = getIntent();
+
+
+        textViewClientStatus= (TextView) findViewById(R.id.textView_client_status);
+        final Intent intent = getIntent();
         clientID = intent.getStringExtra("CLIENT_ID");
+        //Toast.makeText(this, "client id"+clientID, Toast.LENGTH_SHORT).show();
         // clientName = intent.getStringExtra("CLIENT_NAME");
 //        textViewClientName.setText(clientName);
 //        textViewClientEmail.setText(intent.getStringExtra("CLIENT_EMAIL"));
@@ -135,13 +145,27 @@ public class ClientDetailActivity extends AppCompatActivity implements
         //IImageLoader imageLoader = new PicassoLoader();
         //imageLoader.loadImage(imageViewClientPicture, clientPictureUrl, clientName);
 
+        imageViewClientEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            Intent intent1=new Intent(ClientDetailActivity.this,EditCustomer.class);
+            startActivity(intent1);
+            }
+        });
+
         if (InternetReceiver.isConnected()) {
+
             progressDialog.show();
             task = new FetchClientTickets(ClientDetailActivity.this);
             task.execute();
 
 
         } else Toasty.warning(this, getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
+
+
+
+        //aSwitch.setEnabled(false);
+
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         setupViewPager();
@@ -232,7 +256,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
             listTicketGlimpse = new ArrayList<>();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-
                 JSONObject requester = jsonObject.getJSONObject("requester");
                 String firstname = requester.getString("first_name");
                 String lastName = requester.getString("last_name");
@@ -249,40 +272,27 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
                 String phone = "";
                 String mobile="";
-                String code="";
 //                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
 //                    textViewClientPhone.setVisibility(View.INVISIBLE);
 //
 //                else
                     phone = requester.getString("phone_number");
                 mobile=requester.getString("mobile");
-                code=requester.getString("country_code");
                 if (phone.equals("null")||phone.equals("")||phone.equals("Not available")){
                     textViewClientPhone.setVisibility(View.GONE);
-                }
-                else{
+                }else {
                     textViewClientPhone.setVisibility(View.VISIBLE);
                     textViewClientPhone.setText(phone);
                 }
                 if (mobile.equals("null")||mobile.equals("")||mobile.equals("Not available")){
                     textViewClientMobile.setVisibility(View.GONE);
                 }
-                else if (!phone.equals("0")){
-                    textViewClientMobile.setVisibility(View.VISIBLE);
-                    textViewClientMobile.setText(code+" "+mobile);
-                }
             else {
                     textViewClientMobile.setVisibility(View.VISIBLE);
                     textViewClientMobile.setText(mobile);
                 }
 
-                if (requester.getString("company").equals("null") || requester.getString("company").equals("")) {
-                    textViewClientCompany.setVisibility(View.GONE);
-                }
-                else {
-                    textViewClientCompany.setVisibility(View.VISIBLE);
-                    textViewClientCompany.setText(requester.getString("company"));
-                }
+
                 textViewClientStatus.setText(requester.getString("active" +
                         "").equals("1") ? getString(R.string.active) : getString(R.string.inactive));
                 String clientPictureUrl = requester.getString("profile_pic");
@@ -307,8 +317,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status));
                 }
             } catch (JSONException e) {
-                //Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();
-                Toasty.warning(ClientDetailActivity.this, getString(R.string.notclient), Toast.LENGTH_LONG).show();
+                Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -316,6 +325,8 @@ public class ClientDetailActivity extends AppCompatActivity implements
             fragmentClosedTickets.populateData(listClosedTicketGlimpse, clientName);
         }
     }
+
+
 
     /**
      * Here we are initializing the view pager and the
@@ -355,7 +366,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onPageSelected(int  position) {
+        public void onPageSelected(int position) {
 
         }
 
@@ -490,6 +501,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @Override
     public void onStart() {
         super.onStart();
+        if (InternetReceiver.isConnected()){
+            new FetchClientTickets(ClientDetailActivity.this).execute();
+        }
         EventBus.getDefault().register(this);
     }
 
@@ -498,6 +512,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
+
+
 
 //    /**
 //     * Callback will be triggered when there is change in

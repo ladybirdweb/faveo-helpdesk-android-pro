@@ -15,7 +15,7 @@
         android:theme="@style/AppThemeOverlay.ActionBar">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarTicketDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
@@ -142,28 +142,28 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.3"
-                    android:text="@string/cc"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:alpha="0.3"-->
+                    <!--android:text="@string/cc"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:visibility="visible" />-->
 
-                <EditText
-                    android:id="@+id/editText_cc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_modified_states"
-                    android:imeOptions="actionNext"
-                    android:maxLines="3"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp"
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                <!--<EditText-->
+                    <!--android:id="@+id/editText_cc"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/edittext_modified_states"-->
+                    <!--android:imeOptions="actionNext"-->
+                    <!--android:maxLines="3"-->
+                    <!--android:paddingBottom="16dp"-->
+                    <!--android:paddingTop="16dp"-->
+                    <!--android:textCursorDrawable="@drawable/color_cursor"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:visibility="visible" />-->
 
 
                 <TextView
@@ -190,6 +190,23 @@
                     android:paddingTop="16dp"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="14sp" />
+
+
+                    <TextView
+                        android:id="@+id/addcc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:textColor="@color/faveo"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginRight="50dp"/>
+
+
+
+
 
                 <Button
                     android:id="@+id/button_send"

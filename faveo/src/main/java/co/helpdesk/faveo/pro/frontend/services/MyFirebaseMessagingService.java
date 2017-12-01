@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -114,8 +113,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
         notificationBuilder.setLargeIcon(getBitmapFromURL(profilePic));
-        notificationBuilder.setContentTitle("Faveo Helpdesk Pro").setColor(Color.parseColor("#3da6d7"));
-        notificationBuilder.setContentText(noti_tittle+"\n"+messageBody);
+        notificationBuilder.setContentTitle(noti_tittle);
+        notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
         notificationBuilder.setSound(defaultSoundUri);
         notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
@@ -130,11 +129,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setContentIntent(pendingIntent);
 
         if (defaultSoundUri == null) {
-                    notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
-        Log.e("ringtone", "setDefault");
-    }
-    NotificationManager notificationManager =
-            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
+            Log.e("ringtone", "setDefault");
+        }
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(id, notificationBuilder.build());
         Log.d("stackadded", "notification arrived");
@@ -173,8 +172,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
         notificationBuilder.setLargeIcon(getBitmapFromURL(profilePic));
-        notificationBuilder.setContentTitle("Faveo Helpdesk Pro").setColor(Color.parseColor("#3da6d7"));
-        notificationBuilder.setContentText(noti_tittle+" "+messageBody);
+        notificationBuilder.setContentTitle(noti_tittle);
+        notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
         notificationBuilder.setSound(defaultSoundUri);
         notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);

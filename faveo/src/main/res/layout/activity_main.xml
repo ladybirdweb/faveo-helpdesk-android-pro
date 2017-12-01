@@ -26,7 +26,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:popupTheme="@style/AppThemeOverlay.ActionBar"
                 >
@@ -35,26 +34,30 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/inbox"
+                    android:textAllCaps="false"
                     android:textColor="@color/theme"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
             </android.support.v7.widget.Toolbar>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar2"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_margin="8dp"
-                android:layout_gravity="end"
-                android:background="#DCDCDC"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-                app:layout_scrollFlags="scroll|enterAlways"
-                android:visibility="gone">
+                android:layout_height="2dp"
+                android:background="@color/faveo"
+                />
 
-            </android.support.v7.widget.Toolbar>
+
+            <!--<android.support.design.widget.BottomNavigationView-->
+                <!--android:id="@+id/bottom_navigation"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--app:itemBackground="@color/colorPrimary"-->
+                <!--app:menu="@menu/menu_bottom_navigation"-->
+                <!--app:itemIconTint="@color/actionbar"-->
+                <!--app:itemTextColor="@color/actionbar"-->
+                <!--android:visibility="gone"/>-->
 
 
 
@@ -64,7 +67,9 @@
 
         <include layout="@layout/content_main" />
 
+
     </android.support.design.widget.CoordinatorLayout>
+
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
@@ -74,5 +79,8 @@
         android:layout_gravity="start"
         app:layout="@layout/fragment_navigation_drawer"
         tools:layout="@layout/fragment_navigation_drawer" />
+
+
+
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.narendra.myapplication12.MainActivity">
+    <!--<item-->
+    <!--android:id="@+id/spinner"-->
+    <!--app:actionViewClass="android.widget.Spinner"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always"-->
+    <!--/>-->
+    <!--<item-->
+    <!--android:id="@+id/buttonsave"-->
+    <!--android:icon="@drawable/ic_sort_black_24dp"-->
+    <!--android:tint="@color/faveo"-->
+    <!--app:showAsAction="always"-->
+    <!--android:enabled="false"-->
+    <!--android:checkable="false"-->
+    <!--/>-->
+    <item
+        android:id="@+id/action_department"
+        android:orderInCategory="100"
+        android:title="Department"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/all"
+                android:title="All"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/operation"
+                android:title="Operation"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/sales"
+                android:title="Sales"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/support"
+                android:title="Support"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_helptopics"
+        android:orderInCategory="100"
+        android:title="Helptopics"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/helptopicsales"
+                android:title="Sales querry"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/helptopicsupport"
+                android:title="Support querry"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/helptopicoperational"
+                android:title="Operational querry"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_filterpriority"
+        android:orderInCategory="100"
+        android:title="Priority"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/helptopicemergency"
+                android:title="Emergency"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/helptopichigh"
+                android:title="High"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/helptopicnormal"
+                android:title="Normal"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/helptopiclow"
+                android:title="Low"
+                HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_filtersource"
+        android:orderInCategory="100"
+        android:title="Source"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/agent"
+                android:title="Agent"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/call"
+                android:title="Call"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/chat"
+                android:title="Chat"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/email"
+                android:title="Email"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/fb"
+                android:title="Facebook"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/twitter"
+                android:title="Twitter"
+                HTMLCode:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/filtertickettype"
+        android:orderInCategory="100"
+        android:title="Ticket type"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/featurerequest"
+                android:title="Feature request"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/incident"
+            android:title="Incident"
+            HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/problem"
+                android:title="Problem"
+                HTMLCode:showAsAction="ifRoom|withText" />
+            <item android:id="@+id/question"
+                android:title="Question"
+                HTMLCode:showAsAction="ifRoom|withText" />
+
+        </menu>
+    </item>
+
+
+
+
+
+</menu>
