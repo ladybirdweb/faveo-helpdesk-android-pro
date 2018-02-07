@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ticket"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="110dp"
     android:background="?attr/selectableItemBackground"
     android:paddingLeft="8dp"
     android:paddingRight="8dp">
@@ -52,46 +52,55 @@
 
         <TextView
             android:id="@+id/textView_ticket_subject"
-            android:layout_width="match_parent"
+            android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textView_ticket_number"
             android:layout_alignStart="@+id/textView_ticket_number"
             android:layout_below="@+id/textView_ticket_number"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_toLeftOf="@+id/overdue_view"
-            android:alpha=".54"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:text="@string/dummy_sub"
-            android:textColor="@color/black"
+            android:text="Test Tciket"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/textView_client_name"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView_ticket_subject"
+            android:layout_centerVertical="true"
             android:layout_below="@+id/textView_ticket_subject"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="6dp"
-            android:layout_toRightOf="@+id/imageView_default_profile"
+            android:ellipsize="end"
+            android:layout_marginTop="5dp"
+            android:alpha=".68"
             android:fontFamily="sans-serif-bold"
             android:maxLines="1"
-            android:ellipsize="end"
             android:text="@string/dummy_name"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
+        <ImageView
+            android:id="@+id/user"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_alignBottom="@+id/textView_client_name"
+            android:layout_toEndOf="@+id/textView_client_name"
+            android:visibility="gone"
+            app:srcCompat="@drawable/userpic" />
+
         <TextView
             android:id="@+id/agentassigned"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/textView_client_name"
             android:layout_below="@+id/imageView_default_profile"
+            android:fontFamily="sans-serif-bold"
             android:text="Agent"
-            android:textStyle="bold"
-            android:textColor="#3da6d7"/>
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
 
         <!--<com.makeramen.roundedimageview.RoundedImageView-->
 
@@ -101,19 +110,18 @@
         <!--app:riv_oval="true"-->
         <!--app:riv_tile_mode="repeat" />-->
 
-        <agency.tango.android.avatarview.views.AvatarView
+        <ImageView
             android:id="@+id/imageView_default_profile"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:visibility="visible"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:layout_toRightOf="@+id/textView_ticket_id"
             android:src="@drawable/default_pic"
-            app:av_border_color="@color/faveo"
-            app:av_border_width="2dp"
-            app:av_text_size_percentage="35" />
+            android:background="@drawable/rounded_textview"/>
 
         <View
             android:id="@+id/priority_view"
@@ -135,7 +143,7 @@
             android:layout_marginTop="8dp"
             android:layout_toLeftOf="@+id/priority_view"
             android:layout_toStartOf="@+id/priority_view"
-            android:alpha=".54"
+            android:alpha=".50"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
             android:text="@string/dummy_date"
@@ -145,50 +153,72 @@
         <TextView
             android:id="@+id/overdue_view"
             android:layout_width="70dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/textView_ticket_time"
-            android:layout_alignRight="@+id/textView_ticket_time"
-            android:layout_alignTop="@+id/textView_client_name"
+            android:layout_alignTop="@+id/agentassigned"
+            android:background="@drawable/rectangle"
             android:gravity="center"
             android:paddingBottom="2dp"
+            android:text="@string/due_today"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:visibility="visible"
-           />
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/duetoday"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/textView_ticket_time"
+            android:layout_alignTop="@+id/agentassigned"
+            android:background="@drawable/rectangle2"
+            android:gravity="center"
+            android:paddingBottom="2dp"
+            android:text="@string/due_today"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/countthread"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_marginLeft="3dp"
+            android:layout_above="@+id/textView_ticket_subject"
             android:layout_toEndOf="@+id/textView_ticket_number"
-            android:layout_toRightOf="@+id/textView_ticket_number"
-            android:visibility="visible"
-            android:textColor="#000000"
+            android:text="(2)"
+            android:textColor="#606060"
+            android:textSize="10sp"
             android:textStyle="bold"
-            />
+            android:visibility="visible" />
+
         <ImageView
             android:id="@+id/attachment_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_alignTop="@+id/countthread"
             android:layout_toEndOf="@+id/countthread"
             android:layout_toRightOf="@+id/textView_ticket_number"
             android:visibility="visible"
-            app:srcCompat="@drawable/ic_attach_file_black_18dp" />
+            app:srcCompat="@drawable/attachment" />
+
         <ImageView
             android:id="@+id/source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_alignTop="@+id/collaborator"
             android:layout_toEndOf="@+id/attachment_icon"
             android:layout_toRightOf="@+id/textView_ticket_number"
             android:visibility="visible"
             app:srcCompat="@drawable/ic_attach_file_black_18dp" />
+
         <ImageView
             android:id="@+id/collaborator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_alignTop="@+id/textView_ticket_time"
             android:layout_toEndOf="@+id/source"
             android:layout_toRightOf="@+id/source"
             android:visibility="visible"
@@ -199,8 +229,8 @@
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/agentassigned"
-            android:layout_toEndOf="@+id/textView_client_name"
+            android:layout_below="@+id/textView_ticket_id"
+            android:layout_toEndOf="@+id/textView_ticket_id"
             android:visibility="gone" />
 
         <View
@@ -209,7 +239,18 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:layout_toRightOf="@+id/textView_ticket_id"
-            android:background="@color/grey_200" />
+            android:background="@color/grey_200"
+            android:id="@+id/view4" />
+
+        <ImageView
+            android:id="@+id/agentAssigned"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignTop="@+id/agentassigned"
+            android:layout_toEndOf="@+id/agentassigned"
+            app:srcCompat="@drawable/headphones"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

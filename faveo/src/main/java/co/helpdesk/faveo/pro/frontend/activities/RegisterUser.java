@@ -9,6 +9,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,6 +47,9 @@ public class RegisterUser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_register_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,13 +87,15 @@ public class RegisterUser extends AppCompatActivity {
                 String lastname=editTextLastName.getText().toString();
                 String phone=editTextPhone.getText().toString();
                 String company=editTextCompany.getText().toString();
+
+
                 //countrycode=countryCodePicker.getSelectedCountryCode();
 
-                if (email.length()==0&&firstname.length()==0){
+                if (email.length()==0&&firstname.length()==0&&lastname.length()==0){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
                 }
-                else if (email.length()==0||!Helper.isValidEmail(email)){
+                else if (email.length()==0){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.invalid_email),Toast.LENGTH_SHORT).show();
                 }
@@ -104,7 +111,7 @@ public class RegisterUser extends AppCompatActivity {
                 if (allCorect) {
                     Prefs.putString("firstusername",firstname);
                     Prefs.putString("lastusername",lastname);
-                    Prefs.putString("firstuseremail",email);
+                    Prefs.putString("firstuseremail",firstname + " " + lastname + " <" + email + ">");
                     Prefs.putString("firstusermobile",phone);
 
                     if (InternetReceiver.isConnected()) {
@@ -178,6 +185,21 @@ public class RegisterUser extends AppCompatActivity {
 //            }catch (NullPointerException e){
 //                e.printStackTrace();
 //            }
+            try{
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("result");
+                String error=jsonObject1.getString("error");
+                if (error.equals("lang.methon_not_allowed")){
+                    Toasty.success(RegisterUser.this,getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
+                    Prefs.putString("newuseremail",email);
+                    startActivity(intent);
+
+                }
+
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
             try {
 
                 //JSONObject jsonObject=new JSONObject(result);

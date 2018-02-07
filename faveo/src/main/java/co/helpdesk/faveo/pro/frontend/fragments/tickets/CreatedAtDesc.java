@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,9 +43,12 @@ import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.MultiAssigningActivity;
 import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
+import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
@@ -77,17 +81,17 @@ public class  CreatedAtDesc extends Fragment {
     String title;
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
-    String show,dept;
+    String show, dept;
     private boolean loading = true;
     int total;
-    int pageNo=1;
+    int pageNo = 1;
     int pastVisibleItems, visibleItemCount, totalItemCount;
     String url;
     public String mParam1;
     public String mParam2;
     String ticket;
-    int pageno=1;
-    int assigned=1;
+    int pageno = 1;
+    int assigned = 1;
 
     private CreatedAtDesc.OnFragmentInteractionListener mListener;
 
@@ -117,26 +121,21 @@ public class  CreatedAtDesc extends Fragment {
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
-            jsonObject=new JSONObject(json);
-            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("status");
-            for (int i=0;i<jsonArrayStaffs.length();i++){
-                if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Open")){
-                    Prefs.putString("openid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                }
-                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Resolved")){
-                    Prefs.putString("resolvedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                }
-                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Closed")){
-                    Prefs.putString("closedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                }
-                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Deleted")){
-                    Prefs.putString("deletedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                }
-                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Archived")){
-                    Prefs.putString("archivedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                }
-                else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Verified")){
-                    Prefs.putString("verifiedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+            jsonObject = new JSONObject(json);
+            JSONArray jsonArrayStaffs = jsonObject.getJSONArray("status");
+            for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Open")) {
+                    Prefs.putString("openid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Resolved")) {
+                    Prefs.putString("resolvedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Closed")) {
+                    Prefs.putString("closedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Deleted")) {
+                    Prefs.putString("deletedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Archived")) {
+                    Prefs.putString("archivedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Verified")) {
+                    Prefs.putString("verifiedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
                 }
 
             }
@@ -146,9 +145,8 @@ public class  CreatedAtDesc extends Fragment {
     }
 
     /**
-     *
-     * @param inflater for loading the fragment.
-     * @param container where the fragment is going to be load.
+     * @param inflater           for loading the fragment.
+     * @param container          where the fragment is going to be load.
      * @param savedInstanceState
      * @return after initializing returning the rootview
      * which is having the fragment.
@@ -161,7 +159,7 @@ public class  CreatedAtDesc extends Fragment {
             ButterKnife.bind(this, rootView);
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Please wait");
-            url=Prefs.getString("URLFiltration",null);
+            url = Prefs.getString("URLFiltration", null);
 //            Toolbar toolbar1= (Toolbar) rootView.findViewById(R.id.toolbar3);
 //            toolbar1.setVisibility(View.VISIBLE);
 //            toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_filter_list_black_24dp));
@@ -176,8 +174,8 @@ public class  CreatedAtDesc extends Fragment {
 //                    return false;
 //                }
 //            });
-            Toolbar toolbar= (Toolbar) rootView.findViewById(R.id.toolbar2);
-            Toolbar toolbar1= (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
+            Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar2);
+            Toolbar toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
             toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
             //toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
@@ -195,14 +193,14 @@ public class  CreatedAtDesc extends Fragment {
                 @Override
                 public void onClick(View view) {
                     //Toast.makeText(getActivity(), "clicked on toolbar", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(getActivity(), TicketFilter.class);
+                    Intent intent = new Intent(getActivity(), TicketFilter.class);
                     startActivity(intent);
 
                 }
             });
 
 //        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-            TextView textView= (TextView) toolbar.findViewById(R.id.toolbartextview);
+            TextView textView = (TextView) toolbar.findViewById(R.id.toolbartextview);
 //        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
             textView.setText(getString(R.string.createdat));
             toolbar.setVisibility(View.VISIBLE);
@@ -217,12 +215,12 @@ public class  CreatedAtDesc extends Fragment {
                         if (item != null) {
                             item.getSubMenu().clearHeader();
                         }
-                    }catch (NullPointerException e){
+                    } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
                     Fragment fragment = null;
                     title = getString(R.string.app_name);
-                    if (item.getItemId()==R.id.due_ascending){
+                    if (item.getItemId() == R.id.due_ascending) {
                         title = getString(R.string.duebyasc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -236,11 +234,11 @@ public class  CreatedAtDesc extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.due_descending){
-                        Toasty.info(getActivity(),getString(R.string.alreadysorted), Toast.LENGTH_SHORT).show();
+                    if (item.getItemId() == R.id.due_descending) {
+                        Toasty.info(getActivity(), getString(R.string.alreadysorted), Toast.LENGTH_SHORT).show();
                         return true;
                     }
-                    if (item.getItemId()==R.id.created_ascending){
+                    if (item.getItemId() == R.id.created_ascending) {
                         title = getString(R.string.createdat);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -254,11 +252,11 @@ public class  CreatedAtDesc extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.created_descending){
-                        Toasty.info(getActivity(),getString(R.string.alreadysorted),Toast.LENGTH_SHORT).show();
+                    if (item.getItemId() == R.id.created_descending) {
+                        Toasty.info(getActivity(), getString(R.string.alreadysorted), Toast.LENGTH_SHORT).show();
                         return true;
                     }
-                    if (item.getItemId()==R.id.ticketnumber_ascending){
+                    if (item.getItemId() == R.id.ticketnumber_ascending) {
                         //Toast.makeText(getActivity(), "due in ascending", Toast.LENGTH_SHORT).show();
                         title = getString(R.string.sortbyticketnoasc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
@@ -273,7 +271,7 @@ public class  CreatedAtDesc extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.ticketnumber_descending){
+                    if (item.getItemId() == R.id.ticketnumber_descending) {
                         title = getString(R.string.sortbyticketnodesc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -287,7 +285,7 @@ public class  CreatedAtDesc extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.priorityasc){
+                    if (item.getItemId() == R.id.priorityasc) {
                         title = getString(R.string.sortbypriorityasc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -301,7 +299,7 @@ public class  CreatedAtDesc extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.prioritydesc){
+                    if (item.getItemId() == R.id.prioritydesc) {
                         title = getString(R.string.sortbyprioritydesc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -315,7 +313,7 @@ public class  CreatedAtDesc extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.updatedatasc){
+                    if (item.getItemId() == R.id.updatedatasc) {
                         title = getString(R.string.updatedat);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -329,7 +327,7 @@ public class  CreatedAtDesc extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.updatedatdesc){
+                    if (item.getItemId() == R.id.updatedatdesc) {
                         title = getString(R.string.updatedat);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -354,37 +352,32 @@ public class  CreatedAtDesc extends Fragment {
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
-                show =Prefs.getString("source",null);
-                if (show.equals("1")){
-                    dept="mytickets";
+                show = Prefs.getString("source", null);
+                if (show.equals("1")) {
+                    dept = "mytickets";
                     progressDialog.show();
-                    new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                }
-                else if (show.equals("2")){
-                    dept="inbox";
-                    assigned=0;
+                    new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                } else if (show.equals("2")) {
+                    dept = "inbox";
+                    assigned = 0;
                     progressDialog.show();
-                    new FetchFirstAscending(getActivity(),dept+"&assigned=0","created_at","DESC",1).execute();
-                }
-                else if (show.equals("3")){
-                    dept="closed";
+                    new FetchFirstAscending(getActivity(), dept + "&assigned=0", "created_at", "DESC", 1).execute();
+                } else if (show.equals("3")) {
+                    dept = "closed";
                     progressDialog.show();
-                    new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                }
-                else if (show.equals("4")){
-                    dept="trash";
+                    new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                } else if (show.equals("4")) {
+                    dept = "trash";
                     progressDialog.show();
-                    new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                }
-                else if (show.equals("5")){
-                    dept="inbox";
+                    new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                } else if (show.equals("5")) {
+                    dept = "inbox";
                     progressDialog.show();
-                    new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                }
-                else if (show.equals("6")&&!url.equals(null)){
+                    new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                } else if (show.equals("6") && !url.equals(null)) {
 
                     progressDialog.show();
-                    new FetchFirstFilter(getActivity(),url+"&sort-by=created_at&order=DESC",pageNo).execute();
+                    new FetchFirstFilter(getActivity(), url + "&sort-by=created_at&order=DESC", pageNo).execute();
                     //Toast.makeText(getActivity(), "came here", Toast.LENGTH_SHORT).show();
                 }
 
@@ -403,37 +396,32 @@ public class  CreatedAtDesc extends Fragment {
                         loading = true;
                         recyclerView.setVisibility(View.VISIBLE);
                         noInternet_view.setVisibility(View.GONE);
-                        show =Prefs.getString("source",null);
-                        if (show.equals("1")){
-                            dept="mytickets";
+                        show = Prefs.getString("source", null);
+                        if (show.equals("1")) {
+                            dept = "mytickets";
+                            //progressDialog.show();
+                            new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                        } else if (show.equals("2")) {
+                            dept = "inbox";
+                            assigned = 0;
+                            //progressDialog.show();
+                            new FetchFirstAscending(getActivity(), dept + "&assigned=0", "created_at", "DESC", 1).execute();
+                        } else if (show.equals("3")) {
+                            dept = "closed";
+                            //progressDialog.show();
+                            new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                        } else if (show.equals("4")) {
+                            dept = "trash";
                             progressDialog.show();
-                            new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                        }
-                        else if (show.equals("2")){
-                            dept="inbox";
-                            assigned=0;
-                            progressDialog.show();
-                            new FetchFirstAscending(getActivity(),dept+"&assigned=0","created_at","DESC",1).execute();
-                        }
-                        else if (show.equals("3")){
-                            dept="closed";
-                            progressDialog.show();
-                            new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                        }
-                        else if (show.equals("4")){
-                            dept="trash";
-                            progressDialog.show();
-                            new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                        }
-                        else if (show.equals("5")){
-                            dept="inbox";
-                            progressDialog.show();
-                            new FetchFirstAscending(getActivity(),dept,"created_at","DESC",1).execute();
-                        }
-                        else if (show.equals("6")&&!url.equals(null)){
+                            new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                        } else if (show.equals("5")) {
+                            dept = "inbox";
+                            //progressDialog.show();
+                            new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
+                        } else if (show.equals("6") && !url.equals(null)) {
 
-                            progressDialog.show();
-                            new FetchFirstFilter(getActivity(),url+"&sort-by=created_at&order=DESC",pageNo).execute();
+                            //progressDialog.show();
+                            new FetchFirstFilter(getActivity(), url + "&sort-by=created_at&order=DESC", pageNo).execute();
                             //Toast.makeText(getActivity(), "came here", Toast.LENGTH_SHORT).show();
                         }
 
@@ -465,12 +453,12 @@ public class  CreatedAtDesc extends Fragment {
             if (item != null) {
                 item.getSubMenu().clearHeader();
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        int id=item.getItemId();
-        StringBuffer stringBuffer=new StringBuffer();
-        if (id==R.id.action_statusClosed) {
+        int id = item.getItemId();
+        StringBuffer stringBuffer = new StringBuffer();
+        if (id == R.id.action_statusClosed) {
 
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
@@ -499,7 +487,7 @@ public class  CreatedAtDesc extends Fragment {
                     Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                     return false;
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
@@ -517,8 +505,7 @@ public class  CreatedAtDesc extends Fragment {
 //                }
 //
 //            }
-        }
-        else if (id==R.id.action_statusResolved) {
+        } else if (id == R.id.action_statusResolved) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -550,9 +537,7 @@ public class  CreatedAtDesc extends Fragment {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        }
-
-        else if (id==R.id.action_statusDeleted) {
+        } else if (id == R.id.action_statusDeleted) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -584,14 +569,70 @@ public class  CreatedAtDesc extends Fragment {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        }
-        else if (id==R.id.action_noti){
+        } else if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
             return true;
         }
+        if (id == R.id.actionsearch) {
+
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
+            return true;
+        }
+//        if (id==R.id.mergeticket) {
+//            try {
+//                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                String ticketId = Prefs.getString("tickets", null);
+//                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+//                int itemCount = items.size();
+//                if (itemCount == 1) {
+//                    Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                } else {
+//                    Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//                    startActivity(intent);
+//                }
+//
+////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+////            startActivity(intent);
+//
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//    }
+        else if (id==R.id.assignticket){
+            try {
+                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                String ticketId = Prefs.getString("tickets", null);
+                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                int itemCount = items.size();
+                if (itemCount == 1) {
+                    Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
+                    return false;
+                } else {
+                    Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+                    startActivity(intent);
+                }
+
+//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//            startActivity(intent);
+
+            } catch (NullPointerException e) {
+                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
         return super.onOptionsItemSelected(item);
-    }
+}
 
 
 
@@ -647,23 +688,27 @@ public class  CreatedAtDesc extends Fragment {
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
-                JSONArray jsonArray=jsonObject1.getJSONArray("message");
-                for (int i=0;i<jsonArray.length();i++){
-                    String message=jsonArray.getString(i);
-                    if (message.equals("Permission denied, you do not have permission to access the requested page.")){
-                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
-                        Prefs.putString("403", "null");
-                        return;
-                    }
-                }
-
-            }catch (JSONException e){
-                e.printStackTrace();
+            if (state.equals("403")&& !state.equals("null")){
+                Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                Prefs.putString("403", "null");
+                return;
             }
+//            try {
+//                JSONObject jsonObject = new JSONObject(result);
+//                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+//                JSONArray jsonArray=jsonObject1.getJSONArray("message");
+//                for (int i=0;i<jsonArray.length();i++){
+//                    String message=jsonArray.getString(i);
+//                    if (message.equals("Permission denied, you do not have permission to access the requested page.")){
+//                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+//                        Prefs.putString("403", "null");
+//                        return;
+//                    }
+//                }
+//
+//            }catch (JSONException e){
+//                e.printStackTrace();
+//            }
             try {
 
                 JSONObject jsonObject = new JSONObject(result);

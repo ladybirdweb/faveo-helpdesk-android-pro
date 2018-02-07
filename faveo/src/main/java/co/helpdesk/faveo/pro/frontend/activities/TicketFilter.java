@@ -1,6 +1,8 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,6 +20,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -26,8 +31,6 @@ import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.google.zxing.common.StringUtils;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
@@ -48,30 +51,30 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
     MultiAutoCompleteTextView autoDepartment,autoSource,autoPriority,autoType;
     Toolbar toolbar;
     AutoCompleteTextView autoCompleteAssigned;
-    Spinner autoCompleteShow;
+//    Spinner autoCompleteShow;
     MultiAutoCompleteTextView autoAssigned;
     ImageView imageViewback,buttonFilter,clearAll;
-    String show,departmment,type,priority,assignedto,source;
+    String show,departmment,type,priority,assignedto,source,status;
     int assigned,index;
-    String term;
-    String unassigned,title,department1,show1,source1,priority1,tickettype1,assignto1,assigned1;
-    String assignedtofinal,showfinal,departmentfinal,typefinal,priorityfinal,sourcefinal;
-    ArrayList<String> staffItems,departmentItems,priorityItems,typeItems,sourceItems,showItems,unassignedItems;
-    ArrayAdapter<String> staffArrayAdapter,departmentArrayAdapter,priorityAdapter,typeArrayAdapter,sourceArrayAdapter,showArrayAdapter,unassignedArrayAdapter;
+    String unassigned,department1,show1,source1,priority1,tickettype1,assignto1,assigned1;
+    String assignedtofinal,typefinal,priorityfinal,sourcefinal,statusFinal;
+    ArrayList<String> staffItems,departmentItems,priorityItems,typeItems,sourceItems,showItems,unassignedItems,statusItems;
+    ArrayAdapter<String> staffArrayAdapter,departmentArrayAdapter,priorityAdapter,typeArrayAdapter,sourceArrayAdapter,showArrayAdapter,unassignedArrayAdapter,statusArrayAdapter;
     ProgressDialog progressDialog;
-    String result,assignees;
+    String result;
     ArrayList<String> getStaffItems;
-    String staffs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_filter);
+        show=Prefs.getString("Show",null);
+        Log.d("Show",show);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         buttonFilter = (ImageView) findViewById(R.id.buttonfilter);
         setSupportActionBar(toolbar);
+        //autoStatus= (MultiAutoCompleteTextView) findViewById(R.id.autocompletestatus);
         autoCompleteAssigned = (AutoCompleteTextView) findViewById(R.id.autocompleteassigned);
-
-        autoCompleteShow = (Spinner) findViewById(R.id.autocompleteshow);
+        //autoCompleteShow = (Spinner) findViewById(R.id.autocompleteshow);
         autoDepartment = (MultiAutoCompleteTextView) findViewById(R.id.autocompletedepartment);
         autoPriority = (MultiAutoCompleteTextView) findViewById(R.id.autocompletetepriority);
         autoSource = (MultiAutoCompleteTextView) findViewById(R.id.autocompletetesource);
@@ -81,6 +84,15 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         imageViewback = (ImageView) findViewById(R.id.imageViewBack);
         progressDialog = new ProgressDialog(TicketFilter.this);
         getStaffItems = new ArrayList<>();
+        //autoDepartment.clearFocus();
+        InputMethodManager imm = (InputMethodManager) TicketFilter.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = TicketFilter.this.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(TicketFilter.this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
 
         try {
@@ -240,10 +252,10 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
 //                    return;
 //                }
 
-                    if (autoCompleteShow.getSelectedItemPosition() == 0) {
-                        Toasty.info(TicketFilter.this, getString(R.string.rquiredfields), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+//                    if (autoCompleteShow.getSelectedItemPosition() == 0) {
+//                        Toasty.info(TicketFilter.this, getString(R.string.rquiredfields), Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
                     try {
                         if (!autoDepartment.getText().toString().equals("")) {
                             departmment = autoDepartment.getText().toString();
@@ -280,15 +292,30 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                     } catch (StringIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
-                    try {
-                        if (autoCompleteShow.getSelectedItemPosition() > 0) {
-                            show = autoCompleteShow.getSelectedItem().toString();
-                            index=autoCompleteShow.getSelectedItemPosition();
-                            Prefs.putString("show", show);
 
-                        } else if (autoCompleteShow.getSelectedItemPosition() == 0) {
-                            Prefs.putString("show", "null");
-                        }
+
+//                    try{
+//                        if (!autoStatus.getText().toString().equals("")){
+//                            status = autoStatus.getText().toString();
+//                            statusFinal = status.replaceAll("\\s+,$", "");
+//                            statusFinal = status.replaceAll(" ", "");
+//                            Prefs.putString("statusfinal", statusFinal);
+//                        }
+//                    }catch (StringIndexOutOfBoundsException e){
+//                        e.printStackTrace();
+//                    }
+
+                    try {
+                        Prefs.putString("show", show);
+//                        if (autoCompleteShow.getSelectedItemPosition() > 0) {
+//                            show = autoCompleteShow.getSelectedItem().toString();
+//                            index=autoCompleteShow.getSelectedItemPosition();
+//                            String show1=show.replace(show.charAt(0),show.toLowerCase().charAt(0));
+//
+//
+//                        } else if (autoCompleteShow.getSelectedItemPosition() == 0) {
+//                            Prefs.putString("show", "null");
+//                        }
                     } catch (StringIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
@@ -371,7 +398,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
-
+                    //Toast.makeText(TicketFilter.this, "status:"+statusFinal, Toast.LENGTH_SHORT).show();
 //                Toast.makeText(TicketFilter.this, "department:"+result, Toast.LENGTH_SHORT).show();
 //                Toast.makeText(TicketFilter.this, "show:"+show, Toast.LENGTH_SHORT).show();
                     //Toast.makeText(TicketFilter.this, "assignedto:"+getStaffItems.toString(), Toast.LENGTH_SHORT).show();
@@ -390,14 +417,15 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             clearAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    autoCompleteShow.requestFocus();
+                    //autoCompleteShow.requestFocus();
                     autoType.setText("");
-                    autoCompleteShow.setSelection(0);
+                    //autoCompleteShow.setSelection(0);
                     autoDepartment.setText("");
                     autoPriority.setText("");
                     autoSource.setText("");
                     autoAssigned.setText("");
                     autoCompleteAssigned.setText("");
+                    //autoStatus.setText("");
                     //Prefs.putString("departmentfinal", "null");
                     Prefs.putString("departmentfinal", "all");
                     Prefs.putString("show", "null");
@@ -406,8 +434,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                     Prefs.putString("sourcefinal", "null");
                     Prefs.putString("typefinal", "null");
                     Prefs.putString("priorityfinal", "null");
-
-
                 }
             });
 
@@ -434,12 +460,21 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
 
                 }
 
+                statusItems=new ArrayList<>();
+                jsonObject = new JSONObject(json);
+                JSONArray jsonArrayStatus = jsonObject.getJSONArray("status");
+                for (int i = 0; i < jsonArrayStatus.length(); i++) {
+                    //Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
+                    statusItems.add(jsonArrayStatus.getJSONObject(i).getString("name"));
+
+                }
+
                 showItems = new ArrayList<>();
-                showItems.add("Please select a show");
-                showItems.add("inbox");
-                showItems.add("trash");
-                showItems.add("mytickets");
-                showItems.add("closed");
+                showItems.add("Please select a show to filter tickets");
+                showItems.add("Inbox");
+                showItems.add("Trash");
+                showItems.add("Mytickets");
+                showItems.add("Closed");
 
                 unassignedItems = new ArrayList<>();
                 unassignedItems.add("yes");
@@ -487,11 +522,12 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
 
 
 
-//        autoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.autocompletecc);
-//        stringArrayList=new ArrayList<Data>();
-//        autoCompleteTextViewCC.setThreshold(1);
-//        autoCompleteTextViewCC.setDropDownWidth(3000);
-//        autoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+//           statusArrayAdapter=new ArrayAdapter<>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,statusItems);
+//           //staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//           autoStatus.setAdapter(statusArrayAdapter);
+//           autoStatus.setThreshold(1);
+//           autoStatus.setDropDownWidth(1000);
+//           autoStatus.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
 //
         //autoAssigned= (MultiAutoCompleteTextView) findViewById(R.id.spinner_staffs);
@@ -505,9 +541,9 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
 //           autoCompleteShow.setAdapter(showArrayAdapter);
 //           autoCompleteShow.setThreshold(1);
 //           autoCompleteShow.setDropDownWidth(1000);
-           showArrayAdapter = new ArrayAdapter<>(TicketFilter.this, android.R.layout.simple_spinner_dropdown_item, showItems); //selected item will look like a spinner set from XML
-           showArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-           autoCompleteShow.setAdapter(showArrayAdapter);
+//           showArrayAdapter = new ArrayAdapter<>(TicketFilter.this, android.R.layout.simple_spinner_dropdown_item, showItems); //selected item will look like a spinner set from XML
+//           showArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//           autoCompleteShow.setAdapter(showArrayAdapter);
 
            staffArrayAdapter=new ArrayAdapter<>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,staffItems);
         //staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

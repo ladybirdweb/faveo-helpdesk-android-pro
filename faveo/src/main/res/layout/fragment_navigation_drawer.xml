@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <agency.tango.android.avatarview.views.AvatarView
+        <ImageView
             android:id="@+id/imageView_default_profile"
             android:layout_width="72dp"
             android:layout_height="72dp"
@@ -30,9 +30,7 @@
             android:layout_marginTop="54dp"
             android:src="@drawable/default_pic"
             android:transitionName="@string/blue_name"
-            app:av_border_color="@color/faveo"
-            app:av_border_width="2dp"
-            app:av_text_size_percentage="35" />
+            android:background="@drawable/rounded_textview"/>
 
         <TextView
             android:id="@+id/usernametv"

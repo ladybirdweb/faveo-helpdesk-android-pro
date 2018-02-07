@@ -1,19 +1,25 @@
 package co.helpdesk.faveo.pro.frontend.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.loader.PicassoLoader;
 import agency.tango.android.avatarview.views.AvatarView;
+import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.ClientDetailActivity;
 import co.helpdesk.faveo.pro.model.ClientOverview;
@@ -24,9 +30,10 @@ import co.helpdesk.faveo.pro.model.ClientOverview;
  */
 public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAdapter.ClientViewHolder> {
     private List<ClientOverview> clientOverviewList;
-
-    public ClientOverviewAdapter(List<ClientOverview> clientOverviewList) {
+    Context context;
+    public ClientOverviewAdapter(Context context,List<ClientOverview> clientOverviewList) {
         this.clientOverviewList = clientOverviewList;
+        this.context=context;
     }
 
     @Override
@@ -37,18 +44,43 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
     @Override
     public void onBindViewHolder(ClientViewHolder clientViewHolder, int i) {
         final ClientOverview clientOverview = clientOverviewList.get(i);
+        String letter = String.valueOf(clientOverview.clientName.charAt(0)).toUpperCase();
         //clientViewHolder.textViewClientID.setText(clientOverview.clientID + "");
         clientViewHolder.textViewClientName.setText(clientOverview.clientName);
         clientViewHolder.textViewClientEmail.setText(clientOverview.clientEmail);
-        if (clientOverview.clientPhone.equals("") || clientOverview.clientPhone.equals("null"))
+        if (clientOverview.clientPhone.equals("") || clientOverview.clientPhone.equals("null")||clientOverview.clientPhone.equals("Not available")||clientOverview.clientPhone.equals(" "))
             clientViewHolder.textViewClientPhone.setVisibility(View.GONE);
         else {
             clientViewHolder.textViewClientPhone.setVisibility(View.VISIBLE);
             clientViewHolder.textViewClientPhone.setText(clientOverview.clientPhone);
         }
+        if (clientOverview.clientPicture.equals("")){
+            clientViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
-        IImageLoader imageLoader = new PicassoLoader();
-        imageLoader.loadImage(clientViewHolder.roundedImageViewProfilePic, clientOverview.clientPicture, clientOverview.placeholder);
+        }
+        else if (clientOverview.clientPicture.contains(".jpg")){
+            //mDrawableBuilder = TextDrawable.builder()
+                    //.round();
+//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+            Picasso.with(context).load(clientOverview.getClientPicture()).transform(new CircleTransform()).into(clientViewHolder.roundedImageViewProfilePic);
+//        Glide.with(context)
+//            .load(ticketOverview.getClientPicture())
+//            .into(ticketViewHolder.roundedImageViewProfilePic);
+
+            //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+
+        }
+        else{
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(letter, generator.getRandomColor());
+            clientViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+        }
+
+
+
+//        IImageLoader imageLoader = new PicassoLoader();
+//        imageLoader.loadImage(clientViewHolder.roundedImageViewProfilePic, clientOverview.clientPicture, clientOverview.placeholder);
 //        if (clientOverview.clientPicture != null && clientOverview.clientPicture.trim().length() != 0)
 //            Picasso.with(clientViewHolder.roundedImageViewProfilePic.getContext())
 //                    .load(clientOverview.clientPicture)
@@ -85,7 +117,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
     static class ClientViewHolder extends RecyclerView.ViewHolder {
         protected View client;
         TextView textViewClientID;
-        AvatarView roundedImageViewProfilePic;
+        ImageView roundedImageViewProfilePic;
         TextView textViewClientName;
         TextView textViewClientEmail;
         TextView textViewClientPhone;
@@ -94,7 +126,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
             super(v);
             client = v.findViewById(R.id.client);
             //textViewClientID = (TextView) v.findViewById(R.id .textView_client_id);
-            roundedImageViewProfilePic = (AvatarView) v.findViewById(R.id.imageView_default_profile);
+            roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewClientEmail = (TextView) v.findViewById(R.id.textView_client_email);
             textViewClientPhone = (TextView) v.findViewById(R.id.textView_client_phone);

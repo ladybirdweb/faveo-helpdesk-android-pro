@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Faveo Beta Code.iml" filepath="$PROJECT_DIR$/Faveo Beta Code.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Faveo Development Code.iml" filepath="$PROJECT_DIR$/Faveo Development Code.iml" />
       <module fileurl="file://$PROJECT_DIR$/faveo/faveo.iml" filepath="$PROJECT_DIR$/faveo/faveo.iml" />
     </modules>
   </component>

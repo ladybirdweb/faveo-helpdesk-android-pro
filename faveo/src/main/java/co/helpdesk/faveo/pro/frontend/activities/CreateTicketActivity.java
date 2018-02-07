@@ -1,21 +1,50 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 //import android.app.SearchManager;
 //import android.content.Context;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 //import android.graphics.Bitmap;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 //import android.support.v4.content.ContextCompat;
 //import android.support.v4.widget.CursorAdapter;
 //import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.BitmapCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 //import android.telephony.TelephonyManager;
@@ -23,20 +52,26 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -44,7 +79,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
+import com.kishan.askpermission.AskPermission;
+import com.kishan.askpermission.ErrorCallback;
+import com.kishan.askpermission.PermissionCallback;
+import com.kishan.askpermission.PermissionInterface;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 //import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,7 +96,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 //import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 //import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -73,27 +123,22 @@ import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
+import droidninja.filepicker.models.Document;
 import es.dmoral.toasty.Toasty;
+import io.codetail.animation.SupportAnimator;
+import io.codetail.animation.ViewAnimationUtils;
 
 /**
  * This activity is for responsible for creating the ticket.
  * Here we are using create ticket async task which is
  * POST request.We are getting the JSON data here from the dependency API.
  */
-public class CreateTicketActivity extends AppCompatActivity {
-//    private static int RESULT_LOAD_IMG = 1;
-//    private static int RESULT_LOAD_FILE = 42;
-    //CountryCodePicker ccp;
-    //String imgDecodableString;
-//    static final String TAG = "CreateTicketActivity";
+public class CreateTicketActivity extends AppCompatActivity implements PermissionCallback, ErrorCallback {
     boolean allCorrect;
     String term;
     String collaborators=null;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter,autocompletetextview,stringArrayAdapterHint,arrayAdapterCC;
     ArrayAdapter<Data> arrayAdapterCollaborator;
-//    ArrayAdapter<String> spinnerSlaArrayAdapter, spinnerAssignToArrayAdapter,
-//            spinnerDeptArrayAdapter;
-
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
     AutoCompleteTextView editTextEmail;
@@ -101,8 +146,6 @@ public class CreateTicketActivity extends AppCompatActivity {
     EditText editTextLastName;
     @BindView(R.id.phone_edittext)
     EditText editTextPhone;
-//    @BindView(R.id.spinner_code)
-//    SearchableSpinner phCode;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
@@ -119,33 +162,23 @@ public class CreateTicketActivity extends AppCompatActivity {
     EditText msgEdittext;
     @BindView(R.id.phone_edittext10)
     EditText editTextMobile;
-    //    @BindView(R.id.spinner_dept)
-//    Spinner spinnerDept;
     Spinner autoCompletePriority;
     Spinner autoCompleteHelpTopic;
-//    @BindView(R.id.assignedto)
-//    Spinner spinnerAssignto;
     @BindView(R.id.buttonSubmit)
     Button buttonSubmit;
     Button buttonUserCreate;
     ImageView imageViewBack;
-    AutoCompleteTextView autoCompleteTextView;
-    String collaboratorFinal;
+    Spinner autoCompleteTextView;
     ArrayList<String> collaboratorArray;
-    //String email;
     String[] cc,cc1;
     StringBuilder sb,sb1;
     String emailfromsuggestion;
     String email2;
-
-    //    @BindView(R.id.spinner_assign_to)
-//    Spinner spinnerSLA;
-    //    @BindView(R.id.spinner_dept)
-//    Spinner spinnerDept;
-//    @BindView(R.id.cc_searchview)
-//    SearchView ccSearchview;
-//    @BindView(R.id.requester_searchview)
-//    SearchView requesterSearchview;
+//    @BindView(R.id.attachment)
+//    Button button;
+    String mimeType = null;
+    @BindView(R.id.attachment_close)
+    ImageButton imageButtonAttachmentClose;
     ProgressDialog progressDialog;
     ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,staffItemsHint,emailHint;
     int id=0;
@@ -155,10 +188,18 @@ public class CreateTicketActivity extends AppCompatActivity {
     String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
-    int pos;
+    int i=0;
     MultiAutoCompleteTextView multiAutoCompleteTextViewCC;
     CountryCodePicker countryCodePicker;
     String firstname,lastname,email,phone;
+    ImageButton imageViewGallery,imageViewCamera,imageViewDocument,imageViewAudio;
+    Toolbar toolbarAttachment;
+    File file3;
+    int gallery,document,camera,audio=0;
+
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int PICKFILE_REQUEST_CODE = 1234;
+
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -176,12 +217,85 @@ public class CreateTicketActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_create_ticket);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         collaboratorArray=new ArrayList<>();
+        toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
 //        getSupportActionBar().setHomeButtonEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+//        toolbarBottom= (Toolbar) findViewById(R.id.bottom_navigation);
+//        toolbarBottom.setVisibility(View.GONE);
+//        imageViewAudio= (ImageButton) toolbarAttachment.findViewById(R.id.audio_img_btn);
+//        imageViewGallery= (ImageButton) toolbarAttachment.findViewById(R.id.gallery_img_btn);
+//        imageViewCamera= (ImageButton) toolbarAttachment.findViewById(R.id.photo_img_btn);
+//        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
+
+//        imageViewGallery.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //int currentAPIVersion = Build.VERSION.SDK_INT;
+//                    gallery=2;
+//                    reqPermissionCamera();
+//
+//
+////                else{
+////                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+////                    intent.setType("image/*");
+////                    startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+////                }
+//
+//
+//
+//            }
+//        });
+//        imageViewDocument.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent intent = new Intent();
+////                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+////                Uri uri = Uri.fromParts("package", getPackageName(), null);
+////                intent.setData(uri);
+////                startActivity(intent);
+//                    document=1;
+//                    reqPermissionCamera();
+//
+//
+//
+//
+//            }
+//        });
+
+//        imageViewCamera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                if (ContextCompat.checkSelfPermission(CreateTicketActivity.this, Manifest.permission.CAMERA)
+////                        == PackageManager.PERMISSION_DENIED){
+////                    Toasty.warning(CreateTicketActivity.this,"Permission Denied By The User",Toast.LENGTH_SHORT).show();
+////                    return;
+////                }
+////                ActivityCompat.requestPermissions(CreateTicketActivity.this, new String[] {Manifest.permission.CAMERA}, CAMERA_REQUEST);
+//
+//                    camera=3;
+//                    reqPermissionCamera();
+//
+//
+//                //requestCameraPermission();
+//
+//            }
+//        });
+//    imageViewAudio.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            audio=4;
+//            reqPermissionCamera();
+//        }
+//    });
+
 
         buttonUserCreate= (Button) findViewById(R.id.usercreate);
 //        String emailregister=Prefs.getString("newuseremail",null);
@@ -202,7 +316,15 @@ cc1=new String[0];
         multiAutoCompleteTextViewCC.setThreshold(3);
         multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
-
+        imageButtonAttachmentClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attachment_layout.setVisibility(View.GONE);
+                attachmentFileName.setText("");
+                attachmentFileSize.setText("");
+                toolbarAttachment.setVisibility(View.GONE);
+            }
+        });
 
         buttonUserCreate.setVisibility(View.VISIBLE);
         buttonUserCreate.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +345,22 @@ cc1=new String[0];
                 startActivity(intent);
             }
         });
+
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                if (toolbarAttachment.getVisibility()==View.GONE){
+//                    toolbarAttachment.setVisibility(View.VISIBLE);
+//                }
+//                else if (toolbarAttachment.getVisibility()==View.VISIBLE){
+//                    toolbarAttachment.setVisibility(View.GONE);
+//                }
+//
+//
+//            }
+//        });
+
         //getSupportActionBar().setTitle(R.string.create_ticket);
         //ccp = (CountryCodePicker) findViewById(R.id.ccp);
         countryCodePicker= (CountryCodePicker) findViewById(R.id.countrycoode);
@@ -291,15 +429,22 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         //Toast.makeText(this, "For mobile no code is mandatory", Toast.LENGTH_LONG).show();
 
         JSONObject jsonObject;
+        Data data;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
             staffItems=new ArrayList<>();
             staffitemsauto=new ArrayList<>();
-            //staffItems.add(new Data(0,"select assignee"));
+            staffitemsauto.add(new Data(0,"select assignee"));
             jsonObject=new JSONObject(json);
             JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
             for (int i=0;i<jsonArrayStaffs.length();i++){
-                Data data=new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")),jsonArrayStaffs.getJSONObject(i).getString("first_name")+" "+jsonArrayStaffs.getJSONObject(i).getString("last_name"));
+                if (jsonArrayStaffs.getJSONObject(i).getString("first_name").equals("")&&jsonArrayStaffs.getJSONObject(i).getString("last_name").equals("")){
+                    Log.d("cameHere","TRUE");
+                    data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("email"));
+                }
+                else {
+                    data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("first_name")+" "+jsonArrayStaffs.getJSONObject(i).getString("last_name"));
+                }
                 staffItems.add(data);
                 staffitemsauto.add(data);
             }
@@ -309,21 +454,21 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
             for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
-                Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
-                helptopicItems.add(data);
+                Data data1 = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
+                helptopicItems.add(data1);
             }
 
             JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
             priorityItems = new ArrayList<>();
             priorityItems.add(new Data(0, "Please select the priority"));
             for (int i = 0; i < jsonArrayPriorities.length(); i++) {
-                Data data = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
-                priorityItems.add(data);
+                Data data2 = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
+                priorityItems.add(data2);
             }
         } catch (JSONException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-        autoCompleteTextView= (AutoCompleteTextView) findViewById(R.id.autocompletetext);
+        autoCompleteTextView= (Spinner) findViewById(R.id.autocompletetext);
 
         autoCompleteHelpTopic= (Spinner) findViewById(R.id.spinner_help);
         autoCompletePriority= (Spinner) findViewById(R.id.spinner_pri);
@@ -369,41 +514,41 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 //    }
 //});
 
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                autocompletetextview = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, staffitemsauto);
-                String name1=autoCompleteTextView.getText().toString();
-                for (int j = 0; j < staffitemsauto.size(); j++) {
-                    if (staffitemsauto.get(j).getName().equalsIgnoreCase(name1)) {
-                        Data data = staffitemsauto.get(j);
-                        id = data.getID();
-                        //Toast.makeText(CreateTicketActivity.this, "id:" + id, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-//                Data data=staffitemsauto.get(i);
-//                String name=autoCompleteTextView.getText().toString();
-//                if (staffitemsauto.contains(name)){
+//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 //
+//                autocompletetextview = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, staffitemsauto);
+//                String name1=autoCompleteTextView.getText().toString();
+//                for (int j = 0; j < staffitemsauto.size(); j++) {
+//                    if (staffitemsauto.get(j).getName().equalsIgnoreCase(name1)) {
+//                        Data data = staffitemsauto.get(j);
+//                        id = data.getID();
+//                        //Toast.makeText(CreateTicketActivity.this, "id:" + id, Toast.LENGTH_SHORT).show();
+//                    }
 //                }
-               //Toast.makeText(CreateTicketActivity.this, "Data:"+name1, Toast.LENGTH_SHORT).show();
-
-//                String name =autoCompleteTextView.getText().toString();
-//                if (name.equals(autocompletetextview.getItem(i).getName())){
-//                    id=autocompletetextview.getItem(i).getID();
-//                    Toast.makeText(CreateTicketActivity.this, ""+autocompletetextview.getItem(i).getID(), Toast.LENGTH_SHORT).show();
-//                }
-//                id=autocompletetextview.getItem(i).getID();
-//                String name=autocompletetextview.getItem(i).getName();
-//                Log.d("ID",""+id);
-                //Log.d("name",""+name);
-
-            }
-
-
-        });
+//
+////                Data data=staffitemsauto.get(i);
+////                String name=autoCompleteTextView.getText().toString();
+////                if (staffitemsauto.contains(name)){
+////
+////                }
+//               //Toast.makeText(CreateTicketActivity.this, "Data:"+name1, Toast.LENGTH_SHORT).show();
+//
+////                String name =autoCompleteTextView.getText().toString();
+////                if (name.equals(autocompletetextview.getItem(i).getName())){
+////                    id=autocompletetextview.getItem(i).getID();
+////                    Toast.makeText(CreateTicketActivity.this, ""+autocompletetextview.getItem(i).getID(), Toast.LENGTH_SHORT).show();
+////                }
+////                id=autocompletetextview.getItem(i).getID();
+////                String name=autocompletetextview.getItem(i).getName();
+////                Log.d("ID",""+id);
+//                //Log.d("name",""+name);
+//
+//            }
+//
+//
+//        });
 
 
 //
@@ -453,6 +598,383 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // AndroidNetworking.enableLogging();
     }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//
+//        if (requestCode == CAMERA_REQUEST) {
+//            // BEGIN_INCLUDE(permission_result)
+//            // Received permission result for camera permission.
+//            //Log.i(TAG, "Received response for Camera permission request.");
+//
+//            // Check if the only required permission has been granted
+//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Camera permission has been granted, preview can be displayed
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+//
+//
+//            } else {
+//                //Log.i(TAG, "CAMERA permission was NOT granted.");
+//                Snackbar.make(findViewById(android.R.id.content), R.string.permissions_not_granted,
+//                        Snackbar.LENGTH_SHORT).show();
+//
+//            }
+//            // END_INCLUDE(permission_result)
+//
+//        } else {
+//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        }
+//    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED){
+            switch (requestCode) {
+                case 3:
+                    break;
+                //Read External Storage
+                case 4:
+                    Intent imageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(imageIntent, 11);
+                    break;
+                //Camera
+                case 5:
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(takePictureIntent, 12);
+                    }
+                    break;
+
+            }
+
+            Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            i++;
+            attachment_layout.setVisibility(View.VISIBLE);
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+            File finalFile = new File(getRealPathFromURI(tempUri));
+            long fileSizeInBytes = finalFile.length();
+            long fileSizeInKB = fileSizeInBytes / 1024;
+            String path=finalFile.getPath();
+            Log.d("fileSize", String.valueOf(finalFile.length()/1024));
+            Log.d("FinalPath",path);
+            Log.d("DATA",data.toString());
+//            int bitmapHeight=photo.getHeight();
+//            int bitmapWidth=photo.getWidth();
+//            Log.d("bitmapheight",""+bitmapHeight);
+//            Log.d("bitmapwidth",""+bitmapWidth);
+//            int size=bitmapHeight*bitmapWidth;
+//            Log.d("photoSize",""+size);
+            //Uri uri=data.getData();
+            Picasso.with(this).load(String.valueOf(photo)).into(imageView);
+            //getMimeType(uri);
+           // Log.d("URI",uri.toString());
+            String picName=tempUri.toString();
+            if (!picName.equals("")){
+                int pos=picName.lastIndexOf("/");
+                String newName=picName.substring(pos+1,picName.length());
+                StringBuilder stringBuilder=new StringBuilder();
+                stringBuilder.append("Faveo"+i+".jpeg");
+                Log.d("newName",stringBuilder.toString());
+                attachmentFileName.setText(newName+".jpg");
+            }
+
+            //int bitmapByteCount= BitmapCompat.getAllocationByteCount(photo)/ (1024 * 1024);
+//            int size= 0;
+//            //int finalSize=0;
+//            if (photo != null) {
+//                size = photo.getRowBytes()*photo.getHeight();
+//                //finalSize=size/ (1024 * 1024);
+//            }
+
+
+            //int size=BitmapCompat.getAllocationByteCount(photo)/(1024*1024);
+
+            //Log.d("bitmapsize",""+size);
+//            long l = 9999999990L;
+//            long MEGABYTE = 1024L * 1024L;
+//            long b = l / MEGABYTE;
+
+            imageView.setImageBitmap(photo);
+            //Log.d("BitMapSize",finalSize+"");
+            attachmentFileSize.setText(""+fileSizeInKB+"KB");
+        }
+        else if (requestCode==PICKFILE_REQUEST_CODE&&resultCode == RESULT_OK&&null != data){
+            i++;
+            attachment_layout.setVisibility(View.VISIBLE);
+
+//            //Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Uri selectedImage = data.getData();
+            File file = new File(selectedImage.toString());
+            String strFileName = file.getName();
+            Log.d("FilePath", String.valueOf(file.length()));
+            Log.d("FileSize", String.valueOf(file.length()));
+            Log.d("ImageName",strFileName);
+            getMimeType(selectedImage);
+            if (mimeType.contains("image/jpeg")||mimeType.contains("image/png")||mimeType.contains("jpg")){
+                Bitmap bmp = null;
+                try {
+                    bmp = getBitmapFromUri(selectedImage);
+                    //bmp=ShrinkBitmap(String.valueOf(file),100,100);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Uri tempUri = getImageUri(getApplicationContext(), bmp);
+                File finalFile = new File(getRealPathFromURI(tempUri));
+                long fileSizeInBytes = finalFile.length();
+                long fileSizeInKB = fileSizeInBytes / 1024;
+// Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+                long fileSizeInMB = fileSizeInKB / 1024;
+                Log.d("fileSizeInMB",""+fileSizeInKB);
+                //Bitmap converetdImage = getResizedBitmap(bmp, 100);
+                //Log.d("convertedImage",converetdImage.toString());
+               //int size=BitmapCompat.getAllocationByteCount(bmp)/(1024*1024);
+                //Log.d("File Size",""+size);
+                String picName=selectedImage.toString();
+            if (!picName.equals("")){
+                int pos=strFileName.indexOf("A");
+                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
+                //String newName=picName.substring(pos+1,picName.length());
+                //StringBuilder stringBuilder=new StringBuilder(finalName);
+                //stringBuilder.append("Faveo"+ finalName+".jpeg");
+                Log.d("newName",finalName);
+                if (finalName.contains(".jpg")){
+                    attachmentFileName.setText(finalName);
+                }
+                else{
+                    attachmentFileName.setText(finalName+".jpg");
+                }
+
+            }
+
+//                int height=imageView.getDrawable().getIntrinsicWidth();;
+//                int width=imageView.getDrawable().getIntrinsicHeight();
+//                int bitmapHeight=bmp.getHeight();
+//                int bitmapWidth=bmp.getWidth();
+//                Log.d("imageviewheight",""+height);
+//                Log.d("imageviewweight",""+width);
+//                Log.d("bitmapheight",""+bitmapHeight);
+//                Log.d("bitmapwidth",""+bitmapWidth);
+
+
+//            int bitmapByteCount= BitmapCompat.getAllocationByteCount(bmp)/ (1024*1024);
+//            Log.d("ImageSize",""+bitmapByteCount);
+////                float aspectRatio = bmp.getWidth() /
+////                        (float) bmp.getHeight();
+////                int width = 480;
+////                int height = Math.round(width / aspectRatio);
+////
+////                bmp = Bitmap.createScaledBitmap(
+////                        bmp, width, height, false);
+            attachmentFileSize.setText(""+fileSizeInKB+"KB");
+            Picasso.with(this).load(selectedImage).into(imageView);
+            }
+            else if (mimeType.contains("application/pdf")){
+                Uri uri=data.getData();
+                Log.d("URI for PDF",uri.toString());
+                getMimeType(uri);
+                File file3 = new File(uri.toString());
+                long length = file3.length();
+                //length = length/1024;
+                //attachmentFileSize.setText(""+length+"kb");
+                //Log.d("fileLength", String.valueOf(file3.length()));
+                int pos=strFileName.indexOf("A");
+                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
+                attachmentFileName.setText(finalName);
+                Log.d("Pdf file name",file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1));
+                String data1=file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1);
+                //attachmentFileSize.setText(""+length+"mb");
+                imageView.setImageResource(R.drawable.ic_picture_as_pdf_black_24dp);
+
+            }
+            else if (mimeType.contains("text/plain")){
+                int pos=strFileName.indexOf("A");
+                Uri uri=data.getData();
+                getMimeType(uri);
+                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
+                File file1=new File(selectedImage.toString());
+                long length = file1.length();
+                length = length/1024;
+                //int file_size = Integer.parseInt(String.valueOf(file1.length()/1024));
+                //attachmentFileName.setText("Faveo"+i+".pdf");
+                attachmentFileName.setText(finalName);
+                Log.d("Pdf file name",file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1));
+                String data1=file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1);
+
+                String base64 = Base64.encodeToString(data1.getBytes(), Base64.DEFAULT);
+                Log.d("Base64",base64);
+                attachmentFileSize.setText(""+length+"kb");
+                Log.d("MimeType","Plain Text");
+                file3 = new File(uri.toString());
+                //openFile(file3);
+            }
+            else if (mimeType.contains("audio/mpeg")){
+                Uri audioFileUri = data.getData();
+                getRealPathFromURI(audioFileUri);
+                Log.d("URI",audioFileUri.toString());
+
+            }
+
+            else{
+                Toasty.warning(this, getString(R.string.unsupportedFileType),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
+
+        }
+
+
+
+//    private void requestCameraPermission() {
+//        Log.i("RequestingPermission", "CAMERA permission has NOT been granted. Requesting permission.");
+//
+//        // BEGIN_INCLUDE(camera_permission_request)
+//        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                Manifest.permission.CAMERA)) {
+//            // Provide an additional rationale to the user if the permission was not granted
+//            // and the user would benefit from additional context for the use of the permission.
+//            // For example if the user has previously denied the permission.
+//            Log.i("DisplayingPermission",
+//                    "Displaying camera permission rationale to provide additional context.");
+//            Snackbar.make(findViewById(android.R.id.content), R.string.permission_camera_rationale,
+//                    Snackbar.LENGTH_INDEFINITE)
+//                    .setAction(R.string.ok, new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            ActivityCompat.requestPermissions(CreateTicketActivity.this,
+//                                    new String[]{Manifest.permission.CAMERA},
+//                                    CAMERA_REQUEST);
+//                        }
+//                    })
+//                    .show();
+//        } else {
+//
+//            // Camera permission has not been granted yet. Request it directly.
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+//                    CAMERA_REQUEST);
+//        }
+//        // END_INCLUDE(camera_permission_request)
+//    }
+//    public void showCamera(View view) {
+//        Log.i("PressingCameraButton", "Show camera button pressed. Checking permission.");
+//        // BEGIN_INCLUDE(camera_permission)
+//        // Check if the Camera permission is already available.
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            // Camera permission has not been granted.
+//
+//            requestCameraPermission();
+//
+//        } else {
+//
+//            // Camera permissions is already available, show the camera preview.
+//            Log.i("AlreadyPermission",
+//                    "CAMERA permission has already been granted. Displaying camera preview.");
+//            //showCameraPreview();
+//
+//        }
+//        // END_INCLUDE(camera_permission)
+//
+//    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+//    public String getRealPathFromURI(Uri contentUri, Context activity) {
+//        String path = null;
+//        try {
+//            final String[] proj = {MediaStore.MediaColumns.DATA};
+//            final Cursor cursor = ((Activity) activity).managedQuery(contentUri, proj, null, null, null);
+//            final int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+//            cursor.moveToFirst();
+//            path = cursor.getString(column_index);
+//        } catch (Exception e) {
+//        }
+//        if (path != null && path.length() > 0) {
+//            return path;
+//        } else return contentUri.getPath();
+//    }
+    //this method compresses the image and saves into a location in sdcard
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+    public String getMimeType(Uri uri) {
+
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            ContentResolver cr = getApplicationContext().getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+        Log.d("MimeType",mimeType);
+        return mimeType;
+    }
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
+    }
+    private void reqPermissionCamera() {
+        new AskPermission.Builder(this).setPermissions(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .setCallback(this)
+                .setErrorCallback(this)
+                .request(PICKFILE_REQUEST_CODE);
+    }
+
+//    private void reqPermissionStorage(){
+//        new AskPermission.Builder(this).setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
+//                .setCallback(this)
+//                .setErrorCallback(this)
+//                .request(PICKFILE_REQUEST_CODE);
+//    }
+
+
+
 
 
     @Override
@@ -751,8 +1273,8 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 //        spinnerAssignto.setAdapter(spinnerStaffArrayAdapter);
         autocompletetextview = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,staffitemsauto);
         autoCompleteTextView.setAdapter(autocompletetextview);
-        autoCompleteTextView.setThreshold(0);
-        autoCompleteTextView.setDropDownWidth(1000);
+        //autoCompleteTextView.setThreshold(0);
+        //autoCompleteTextView.setDropDownWidth(1000);
 
 //if (autoCompleteTextView.getThreshold()==0){
 //    stringArrayAdapterHint = new ArrayAdapter<>
@@ -819,6 +1341,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
         email1 = editTextEmail.getText().toString();
+        Log.d("emialwithname",email1);
 
         if (!email1.equals("")&&email1.contains("<")){
             int pos=email1.indexOf("<");
@@ -920,7 +1443,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
         //int dept = spinnerDept.getSelectedItemPosition();
         Data priority = (Data) autoCompletePriority.getSelectedItem();
-//        Data staff= (Data) spinnerAssignto.getSelectedItem();
+        Data staff= (Data) autoCompleteTextView.getSelectedItem();
 
 //    if (phCode.equals("")){
 //        Toast.makeText(this, "Select the code", Toast.LENGTH_SHORT).show();
@@ -958,7 +1481,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
             allCorrect=false;
         }
         else if (subject.trim().length()>100){
-            Toasty.warning(this,"Subject must not exceed 100 characters"
+            Toasty.warning(this,"Subject must not exceed 150 characters"
                     , Toast.LENGTH_SHORT).show();
             allCorrect=false;
         }
@@ -977,7 +1500,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
             Toasty.warning(this, getString(R.string.msg_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         }
-       if (autoCompleteTextView.getText().toString().equals("")){
+       if (autoCompleteTextView.getSelectedItem().toString().equals("")){
             id=0;
         }
 
@@ -1014,10 +1537,79 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
                     e.printStackTrace();
                 }
                     progressDialog.show();
-                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, id, mobile ).execute();
+                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile ).execute();
             } else
                 Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
         }
+    }
+
+    @Override
+    public void onShowRationalDialog(final PermissionInterface permissionInterface, int requestCode) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("We need permissions for this app.");
+        builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                permissionInterface.onDialogShown();
+            }
+        });
+        builder.setNegativeButton(R.string.btn_cancel, null);
+        builder.show();
+    }
+
+    @Override
+    public void onShowSettings(final PermissionInterface permissionInterface, int requestCode) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("We need permissions for this app. Open setting screen?");
+        builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                permissionInterface.onSettingsShown();
+            }
+        });
+        builder.setNegativeButton(R.string.btn_cancel, null);
+        builder.show();
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode) {
+        //Toast.makeText(CreateTicketActivity.this, "Permission Received", Toast.LENGTH_SHORT).show();
+        Log.d("requestCode",""+requestCode);
+
+        if (document==1){
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("*/*");
+
+            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+            document=0;
+        }
+         if (gallery==2){
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+            gallery=0;
+        }
+         if (camera==3){
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA_REQUEST);
+            camera=0;
+        }
+        if (audio==4){
+            Intent intent;
+            intent = new Intent();
+            intent.setType("audio/mp3");
+            startActivityForResult(intent,PICKFILE_REQUEST_CODE);
+            audio=0;
+
+        }
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(intent, CAMERA_REQUEST);
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode) {
+        Toasty.warning(CreateTicketActivity.this,getString(R.string.permission_camera_denied),Toast.LENGTH_SHORT).show();
+        return;
     }
 
 
@@ -1074,20 +1666,20 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
             }
 
 
-            try{
-                JSONObject jsonObject=new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("response");
-                String message=jsonObject1.getString("message");
-                if (message.equals("Permission denied, you do not have permission to access the requested page.")){
-                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-                    Prefs.putString("403", "null");
-                    return;
-                }
-
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-//            String state=Prefs.getString("403",null);
+//            try{
+//                JSONObject jsonObject=new JSONObject(result);
+//                JSONObject jsonObject1=jsonObject.getJSONObject("response");
+//                String message=jsonObject1.getString("message");
+//                if (message.equals("Permission denied, you do not have permission to access the requested page.")){
+//                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+//                    Prefs.putString("403", "null");
+//                    return;
+//                }
+//
+//            }catch (JSONException e){
+//                e.printStackTrace();
+//            }
+            String state=Prefs.getString("403",null);
 ////                if (message1.contains("The ticket id field is required.")){
 ////                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
 ////                }
@@ -1095,15 +1687,15 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 ////                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
 ////                }
 ////               else
-//            try {
-//                if (state.equals("403") && !state.equals(null)) {
-//                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("403", "null");
-//                    return;
-//                }
-//            }catch (NullPointerException e){
-//                e.printStackTrace();
-//            }
+            try {
+                if (state.equals("403") && !state.equals("null")) {
+                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
 
 
             try {

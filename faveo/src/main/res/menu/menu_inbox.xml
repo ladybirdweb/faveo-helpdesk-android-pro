@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-        <item
-            android:id="@+id/action_noti"
-            android:icon="@drawable/ic_notifications_black_24dp_colored"
-            android:orderInCategory="100"
-            android:title="Notifications"
-            app:showAsAction="always" />
+
+    <item
+        android:id="@+id/actionsearch"
+        android:icon="@drawable/ic_action_search"
+        android:orderInCategory="100"
+        android:title="@string/abc_search_hint"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/action_noti"
+        android:icon="@drawable/ic_notifications_black_24dp_colored"
+        android:orderInCategory="100"
+        android:title="Notifications"
+        app:showAsAction="always" />
         <!--<item-->
             <!--android:id="@+id/spinner"-->
             <!--app:actionViewClass="android.widget.Spinner"-->
@@ -15,7 +23,6 @@
             <!--/>-->
     <item
         android:id="@+id/empty"
-        android:icon="@drawable/ic_camera"
         android:orderInCategory="101"
         android:title="Change Status"
         app:showAsAction="never">
@@ -39,6 +46,20 @@
                 app:showAsAction="never"
                 android:icon="@drawable/ic_delete_black_24dp"/>
         </menu>
+    </item>
+    <!--<item-->
+        <!--android:id="@+id/mergeticket"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/mergeticket"-->
+        <!--android:icon="@drawable/ic_merge_type_black_24dp"-->
+        <!--app:showAsAction="never">-->
+        <!--</item>-->
+    <item
+        android:id="@+id/assignticket"
+        android:orderInCategory="101"
+        android:title="@string/assignTicket"
+        android:icon="@drawable/ic_merge_type_black_24dp"
+        app:showAsAction="never">
     </item>
 
 

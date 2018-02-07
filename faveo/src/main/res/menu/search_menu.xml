@@ -7,38 +7,16 @@
             <!--android:title="Change Status"-->
             <!--app:showAsAction="never">-->
                 <!--<menu>-->
-
         <item
-            android:id="@+id/empty"
-            android:orderInCategory="101"
-            android:title="Change Status"
-            app:showAsAction="never"
-            >
-                <menu>
-
-        <item
-            android:id="@+id/action_statusClosed"
+            android:id="@+id/action_search"
+            android:icon="@drawable/ic_action_search"
             android:orderInCategory="100"
-            android:title="Closed"
-            app:showAsAction="always"
-            android:icon="@drawable/ic_close_black_24dp"
-            />
+            android:title="@string/abc_search_hint"
+            app:showAsAction="always" />
         <item
-            android:id="@+id/action_statusResolved"
+            android:id="@+id/action_noti"
+            android:icon="@drawable/ic_notifications_black_24dp_colored"
             android:orderInCategory="100"
-            android:title="Resolved"
-            app:showAsAction="always"
-            android:icon="@drawable/ic_check_black_24dp"/>
-        <item
-            android:id="@+id/action_statusDeleted"
-            android:orderInCategory="100"
-            android:title="Move to trash"
-            app:showAsAction="always"
-            android:icon="@drawable/ic_delete_black_24dp"/>
-                </menu>
-    </item>
-
-
+            android:title="Notifications"
+            app:showAsAction="always" />
 </menu>
-    <!--</item>-->
-<!--</menu>-->

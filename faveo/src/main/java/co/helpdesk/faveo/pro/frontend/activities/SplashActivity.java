@@ -1,6 +1,8 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +28,7 @@ import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.BuildConfig;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
@@ -48,6 +53,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @BindView(R.id.tryagain)
     TextView textViewtryAgain;
+    String error;
 
     public static String
             keyDepartment = "", valueDepartment = "",
@@ -64,16 +70,42 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+
+        //httpConnection=new HTTPConnection(getApplicationContext());
         //welcomeDialog=new WelcomeDialog();
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            int verCode = pInfo.versionCode;
+            Log.d("versionNo",""+verCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int versionCode = BuildConfig.VERSION_CODE;
+        String versionName = BuildConfig.VERSION_NAME;
+        Log.d("versionNo",""+versionCode);
+        Log.d("versionName",versionName);
+
+
+
 
         if (InternetReceiver.isConnected()) {
+//            if (error.equals("True")){
+//                Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+//                startActivity(intent);
+//                return;
+//            }
             progressDialog.setVisibility(View.VISIBLE);
-            new FetchDependency().execute();
-            Prefs.putString("came from filter","false");
-            //new FetchData(this).execute();
-        } else {
+                    new FetchDependency().execute();
+                    Prefs.putString("came from filter", "false");
+
+        }else
+            {
             progressDialog.setVisibility(View.INVISIBLE);
             loading.setText(getString(R.string.oops_no_internet));
             textViewtryAgain.setVisibility(View.VISIBLE);
@@ -87,8 +119,10 @@ public class SplashActivity extends AppCompatActivity {
                 }
             });
             //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
-        }
+            Prefs.putString("querry","null");
 
+        }
+        Prefs.putString("tickets", "null");
     }
 
     /**
@@ -116,82 +150,82 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         finish();
-                        Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                        Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
                         startActivity(intent);
                     }
                 });
                 return;
             }
 
-            switch (result) {
-
-                case "HTTP_UNAUTHORIZED":
-                    loading.setText("The credentials has been changed, \nplease LOGIN again.");
-                    textViewtryAgain.setVisibility(View.VISIBLE);
-                    textViewrefresh.setVisibility(View.VISIBLE);
-                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-
-                    return;
-                case "HTTP_NOT_FOUND":
-                    loading.setText("Oops! Page not found.");
-                    textViewtryAgain.setVisibility(View.VISIBLE);
-                    textViewrefresh.setVisibility(View.VISIBLE);
-                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    return;
-                case "HTTP_INTERNAL_ERROR":
-                    loading.setText("Oops!Internal error.");
-                    textViewtryAgain.setVisibility(View.VISIBLE);
-                    textViewrefresh.setVisibility(View.VISIBLE);
-                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    return;
-                case "HTTP_GATEWAY_TIMEOUT":
-                    loading.setText("Oops! Seems like you have a slower net connection.");
-                    textViewtryAgain.setVisibility(View.VISIBLE);
-                    textViewrefresh.setVisibility(View.VISIBLE);
-                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    return;
-                case "HTTP_UNAVAILABLE":
-                    loading.setText("Oops! Server busy.  ");
-                    textViewtryAgain.setVisibility(View.VISIBLE);
-                    textViewrefresh.setVisibility(View.VISIBLE);
-                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    return;
-            }
+//            switch (result) {
+//
+//                case "HTTP_UNAUTHORIZED":
+//                    loading.setText("The credentials has been changed, \nplease LOGIN again.");
+//                    textViewtryAgain.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            finish();
+//                            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//
+//                    return;
+//                case "HTTP_NOT_FOUND":
+//                    loading.setText("Oops! Page not found.");
+//                    textViewtryAgain.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            finish();
+//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    return;
+//                case "HTTP_INTERNAL_ERROR":
+//                    loading.setText("Oops!Internal error.");
+//                    textViewtryAgain.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            finish();
+//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    return;
+//                case "HTTP_GATEWAY_TIMEOUT":
+//                    loading.setText("Oops! Seems like you have a slower net connection.");
+//                    textViewtryAgain.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            finish();
+//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    return;
+//                case "HTTP_UNAVAILABLE":
+//                    loading.setText("Oops! Server busy.  ");
+//                    textViewtryAgain.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setVisibility(View.VISIBLE);
+//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            finish();
+//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    return;
+//            }
 
             try {
 

@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +46,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData().get("message"));
         Log.d(TAG, "Notification Message ticket_id: " + remoteMessage.getData().get("id"));
+        Prefs.putString("TICKETid", remoteMessage.getData().get("id"));
+
         //Log.d(TAG, "Notification Message noti_id: " + remoteMessage.getData().get("notification_id"));
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData());
         Log.d(TAG, "Notification Message Scenario: " + remoteMessage.getData().get("scenario"));
@@ -126,6 +129,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setAutoCancel(true);
         //notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody));
         notificationBuilder.setTicker(messageBody);
+
         notificationBuilder.setContentIntent(pendingIntent);
 
         if (defaultSoundUri == null) {
@@ -150,11 +154,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param profilePic
      */
     private void sendNotificationTicket(String messageBody, String ID, String noti_tittle, String profilePic) {
-
+        //Prefs.putString("TICKETid", ID);
+        //Prefs.putString("cameFromNotification","true");
         Intent intent = new Intent(this, TicketDetailActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 //                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("ticket_id", ID);
+        //intent.putExtra("ticket_id", ID);
+
         Log.d("intents from FCM", "ID :" + ID);
 
         int id = (int) System.currentTimeMillis();
@@ -186,7 +192,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody));
         notificationBuilder.setTicker(messageBody);
         notificationBuilder.setContentIntent(pendingIntent);
-
+        Log.d("messageBody",messageBody);
         if (defaultSoundUri == null) {
             notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
             Log.e("ringtone", "setDefault");

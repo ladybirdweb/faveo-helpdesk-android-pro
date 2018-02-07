@@ -5,34 +5,37 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -41,24 +44,34 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.loader.PicassoLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
+//import co.helpdesk.faveo.pro.Toolbar_ActionMode_Callback;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.MultiAssigningActivity;
 import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
+//import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
-import co.helpdesk.faveo.pro.frontend.adapters.RecyclerItemClickListener;
+//import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
+import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
+//import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
+import co.helpdesk.faveo.pro.frontend.fragments.RecyclerClick_Listener;
+import co.helpdesk.faveo.pro.frontend.fragments.RecyclerTouchListener;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 import es.dmoral.toasty.Toasty;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class InboxTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -78,7 +91,7 @@ public class InboxTickets extends Fragment {
     TextView noInternet_view;
     @BindView(R.id.totalcount)
     TextView textView;
-
+    private android.support.v7.view.ActionMode mActionMode;
     private boolean isMultiSelect = false;
     ArrayList<Integer> checked_items = new ArrayList<>();
     private ActionMode actionMode;
@@ -98,11 +111,12 @@ public class InboxTickets extends Fragment {
     Toolbar toolbar;
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
-    Toolbar toolbarMain;
+    Toolbar toolbarMain,toolbar1;
     private boolean loading = true;
     String filterwithsorting;
     int pastVisibleItems, visibleItemCount, totalItemCount;
     Activity context;
+    private List<Integer> selectedIds = new ArrayList<>();
     public String mParam1;
     public String mParam2;
 
@@ -192,15 +206,17 @@ public class InboxTickets extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (rootView == null) {
-             toolbarmain = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            toolbarmain = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            Prefs.putString("querry1", "null");
+            Prefs.putString("Show","inbox");
             //toolbarmain.setVisibility(View.GONE);
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
             Prefs.putString("source", "5");
 //            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_sort_black_24dp);
-
+            Prefs.putString("querry", "null");
             toolbar = (Toolbar) rootView.findViewById(R.id.toolbar2);
-            Toolbar toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
+            toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
             toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
 
@@ -434,7 +450,7 @@ public class InboxTickets extends Fragment {
                             progressDialog.setMessage(getString(R.string.pleasewait));
                             new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all", pageno).execute();
                             url = "show=" + show + "&departments=all";
-                            Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
                             Prefs.putString("URLFiltration", url);
                         } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
                             progressDialog.show();
@@ -550,15 +566,13 @@ public class InboxTickets extends Fragment {
                             new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority, pageno).execute();
                             url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority;
                             Prefs.putString("URLFiltration", url);
-                        }
-                        else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")){
+                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
                             progressDialog.show();
                             progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype;
+                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                            url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
                             Prefs.putString("URLFiltration", url);
-                        }
-                        else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
                             progressDialog.show();
                             progressDialog.setMessage(getString(R.string.pleasewait));
                             new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
@@ -618,12 +632,11 @@ public class InboxTickets extends Fragment {
                             new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                             url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
                             Prefs.putString("URLFiltration", url);
-                        }
-                        else if (!show.equals("null")&&!department.equals("null")&&!source.equals("null")&&!priority.equals("null")&&!assigned.equals("null")){
+                        } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
                             progressDialog.show();
                             progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source+"&assigned="+unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source+"&assigned="+unassigned;
+                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                            url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
                             Prefs.putString("URLFiltration", url);
                         }
 
@@ -803,19 +816,17 @@ public class InboxTickets extends Fragment {
                             new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                             url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
                             Prefs.putString("URLFiltration", url);
-                        }
-                        else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")){
+                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
                             progressDialog.show();
                             progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments="+department+"&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype, pageno).execute();
-                            url = "show=" + show + "&departments="+department+"&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype;
+                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                            url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
                             Prefs.putString("URLFiltration", url);
-                        }
-                        else if (!show.equals("null")&&!department.equals("null")&&!source.equals("null")&&!priority.equals("null")&&!assigned.equals("null")){
+                        } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
                             progressDialog.show();
                             progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments="+department+"&priority=" + priority + "&source=" + source+"&assigned="+unassigned, pageno).execute();
-                            url = "show=" + show + "&departments="+department+"&priority=" + priority + "&source=" + source+"&assigned="+unassigned;
+                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                            url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
                             Prefs.putString("URLFiltration", url);
                         }
 
@@ -857,7 +868,7 @@ public class InboxTickets extends Fragment {
                                 if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
                                     new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all", pageno).execute();
                                     url = "show=" + show + "&departments=all";
-                                    Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
                                     Prefs.putString("URLFiltration", url);
                                 } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
                                     new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source, pageno).execute();
@@ -975,18 +986,15 @@ public class InboxTickets extends Fragment {
                                     new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                     url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
                                     Prefs.putString("URLFiltration", url);
-                                }
-                                else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")){
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype;
+                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                    url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
+                                    Prefs.putString("URLFiltration", url);
+                                } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
+                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                    url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
                                     Prefs.putString("URLFiltration", url);
                                 }
-                                else if (!show.equals("null")&&!department.equals("null")&&!source.equals("null")&&!priority.equals("null")&&!assigned.equals("null")){
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source+"&assigned="+unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source+"&assigned="+unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                }
-
 
 
                             } else if (!department.equals("all")) {
@@ -1106,15 +1114,13 @@ public class InboxTickets extends Fragment {
                                     new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                     url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
                                     Prefs.putString("URLFiltration", url);
-                                }
-                                else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")){
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments="+department+"&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments="+department+"&source=" + source + "&priority=" + priority+"&assigned-to="+assignto+"&assigned="+unassigned+"&types="+tickettype;
+                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                    url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
                                     Prefs.putString("URLFiltration", url);
-                                }
-                                else if (!show.equals("null")&&!department.equals("null")&&!source.equals("null")&&!priority.equals("null")&&!assigned.equals("null")){
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments="+department+"&priority=" + priority + "&source=" + source+"&assigned="+unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments="+department+"&priority=" + priority + "&source=" + source+"&assigned="+unassigned;
+                                } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
+                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                    url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
                                     Prefs.putString("URLFiltration", url);
                                 }
 
@@ -1133,7 +1139,7 @@ public class InboxTickets extends Fragment {
                         } else if (check.equals("false")) {
                             noInternet_view.setVisibility(View.GONE);
                             // swipeRefresh.setRefreshing(true);
-                            progressDialog.show();
+                            //progressDialog.show();
                             new FetchFirst(getActivity(), page).execute();
                             ((MainActivity) getActivity()).setActionBarTitle("Inbox");
 
@@ -1150,75 +1156,74 @@ public class InboxTickets extends Fragment {
 
                 }
             });
-
-//            toolbarmain.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerClick_Listener() {
 //                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//                    int id=item.getItemId();
-//                    if (id==R.id.action_statusClosed){
-//                        Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
-//                        return true;
-//                    }
-//                    if (id==R.id.action_noti){
-//                        Intent intent = new Intent(getActivity(), NotificationActivity.class);
-//                        startActivity(intent);
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//            });
-            ticketOverviewAdapter = new TicketOverviewAdapter(context, ticketOverviewList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(ticketOverviewAdapter);
-//            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(View view, int position) {
-//                    if (isMultiSelect) {
-//                        //if multiple selection is enabled then select item on single click else perform normal click on item.
-//                        multiSelect(position);
-//                    }
-//                    else{
-//                        Intent intent = new Intent(getActivity(), TicketDetailActivity.class);
-//                        intent.putExtra("ticket_id", ticketOverview.ticketID + "");
-//                        Prefs.putString("TICKETid",ticketOverview.ticketID+"");
-//                        Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
-//                        intent.putExtra("ticket_number", ticketOverview.ticketNumber);
-//                        intent.putExtra("ticket_opened_by", ticketOverview.clientName);
-//                        intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
-//                        startActivity(intent);
-//
-//                    }
+//                public void onClick(View view, int position) {
+//                    //If ActionMode not null select item
+//                    if (mActionMode != null)
+//                        onListItemSelect(position);
 //                }
 //
 //                @Override
-//                public void onItemLongClick(View view, int position) {
-//                    if (!isMultiSelect) {
-//                        checked_items = new ArrayList<>();
-//                        isMultiSelect = true;
+//                public void onLongClick(View view, int position) {
+//                    //Select item on long click
 //
-//                        if (actionMode == null) {
-//                            //toolbarmain.setVisibility(View.GONE);
-//                            actionMode = getActivity().startActionMode(mActionModeCallback); //show ActionMode.
-//
-//                        }
-//                    }
-//
-//
-//
-//                    multiSelect(position);
+//                    onListItemSelect(position);
 //                }
-//
-//
 //            }));
-
-
-
             //((MainActivity) getActivity()).setActionBarTitle("Inbox");
+            //implementRecyclerViewClickListeners();
+
+             }
+            return rootView;
+        }
+
+
+    public void setNullToActionMode() {
+        Log.d("Inbox Ticket","Came from toolbar action mode");
+        if (mActionMode != null)
+            mActionMode = null;
+    }
+//    private void implementRecyclerViewClickListeners() {
+//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerClick_Listener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                //If ActionMode not null select item
+//                if (mActionMode != null) {
+//                    onListItemSelect(position);
+//                }
+//            }
+//
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//                //Select item on long click
+//                onListItemSelect(position);
+//            }
+//        }));
+//    }
+
+
+private void multiSelect(int position) {
+    TicketOverview data = ticketOverviewAdapter.getItem(position);
+    if (data != null){
+        if (actionMode != null) {
+            if (selectedIds.contains(data.getTicketID()))
+                selectedIds.remove(Integer.valueOf(data.getTicketID()));
+            else
+                selectedIds.add(data.getTicketID());
+
+            if (selectedIds.size() > 0)
+                actionMode.setTitle(String.valueOf(selectedIds.size())); //show selected item count on action mode.
+            else{
+                actionMode.setTitle(""); //remove item count from action mode.
+                actionMode.finish(); //hide action mode.
+            }
+            ticketOverviewAdapter.setSelectedIds(selectedIds);
 
         }
-        return rootView;
     }
-
+}
 //    private void multiSelect(int position) {
 //        TicketOverview data = ticketOverviewAdapter.getItem(position);
 //        if (data != null) {
@@ -1246,10 +1251,7 @@ public class InboxTickets extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    getActivity().getMenuInflater().inflate(R.menu.menu_inbox, menu);
-
-
-
+        getActivity().getMenuInflater().inflate(R.menu.menu_inbox, menu);
 
 
 //        }else{
@@ -1331,12 +1333,10 @@ public class InboxTickets extends Fragment {
                 } else {
 
 
-
                 }
 
             }
-        }
- else if (id == R.id.action_statusResolved) {
+        } else if (id == R.id.action_statusResolved) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -1369,8 +1369,7 @@ public class InboxTickets extends Fragment {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        }
-else if (id == R.id.action_statusDeleted) {
+        } else if (id == R.id.action_statusDeleted) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -1404,11 +1403,71 @@ else if (id == R.id.action_statusDeleted) {
                 e.printStackTrace();
             }
         }
- if (id == R.id.action_noti) {
+        if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
             return true;
         }
+
+//        if (id==R.id.mergeticket) {
+//            try {
+//                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                String ticketId = Prefs.getString("tickets", null);
+//                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+//                int itemCount = items.size();
+//                if (itemCount == 1) {
+//                    Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                } else {
+//                    Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//                    startActivity(intent);
+//                }
+//
+////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+////            startActivity(intent);
+//
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//            return true;
+//        }
+        if (id == R.id.actionsearch) {
+
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (id==R.id.assignticket){
+            try {
+                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                String ticketId = Prefs.getString("tickets", null);
+                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                int itemCount = items.size();
+                if (itemCount == 1) {
+                    Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
+                    return false;
+                } else {
+                    Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+                    startActivity(intent);
+                }
+
+//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//            startActivity(intent);
+
+            } catch (NullPointerException e) {
+                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -1541,23 +1600,32 @@ else if (id == R.id.action_statusDeleted) {
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-
             try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
-                JSONArray jsonArray=jsonObject1.getJSONArray("message");
-                for (int i=0;i<jsonArray.length();i++){
-                    String message=jsonArray.getString(i);
-                    if (message.equals("Permission denied, you do not have permission to access the requested page.")){
-                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
-                        Prefs.putString("403", "null");
-                        return;
-                    }
+                if (state.equals("403") && !state.equals("null")) {
+                    Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
                 }
-
-            }catch (JSONException e){
+            }catch (NullPointerException e){
                 e.printStackTrace();
             }
+
+//            try {
+//                JSONObject jsonObject = new JSONObject(result);
+//                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+//                JSONArray jsonArray = jsonObject1.getJSONArray("message");
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    String message = jsonArray.getString(i);
+//                    if (message.equals("Permission denied, you do not have permission to access the requested page.")) {
+//                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+//                        Prefs.putString("403", "null");
+//                        return;
+//                    }
+//                }
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
 
 
             try {
@@ -1686,7 +1754,7 @@ else if (id == R.id.action_statusDeleted) {
                 }
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++) {
-                     ticketOverview = Helper.parseTicketOverview(jsonArray, i);
+                    ticketOverview = Helper.parseTicketOverview(jsonArray, i);
                     if (ticketOverview != null)
                         ticketOverviewList.add(ticketOverview);
                 }
@@ -1777,7 +1845,7 @@ else if (id == R.id.action_statusDeleted) {
 
         protected String doInBackground(String... urls) {
             if (nextPageURL.equals("null")) {
-                pageNo=1;
+                pageNo = 1;
                 return "all done";
             }
             String result = new Helpdesk().nextpageurl(show, page);
@@ -1817,7 +1885,7 @@ else if (id == R.id.action_statusDeleted) {
                 return;
             }
             if (result.equals("all done")) {
-                pageNo=1;
+                pageNo = 1;
                 Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -1943,7 +2011,7 @@ else if (id == R.id.action_statusDeleted) {
 
         protected String doInBackground(String... urls) {
             if (nextPageURL.equals("null")) {
-                pageno=1;
+                pageno = 1;
                 return "all done";
             }
             String result = new Helpdesk().nextPageUrlFilter(url, page);
@@ -1979,7 +2047,7 @@ else if (id == R.id.action_statusDeleted) {
             if (result == null)
                 return;
             if (result.equals("all done")) {
-                pageno=1;
+                pageno = 1;
                 Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -2001,10 +2069,26 @@ else if (id == R.id.action_statusDeleted) {
      */
     @Override
     public void onStop() {
+        progressDialog.dismiss();
         // notice here that I keep a reference to the task being executed as a class member:
         if (this.new FetchFirst(getActivity(), page) != null && this.new FetchFirst(getActivity(), page).getStatus() == AsyncTask.Status.RUNNING)
             this.new FetchFirst(getActivity(), page).cancel(true);
         super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        Prefs.putString("tickets", null);
+        // notice here that I keep a reference to the task being executed as a class member:
+        if (this.new FetchFirst(getActivity(), page) != null && this.new FetchFirst(getActivity(), page).getStatus() == AsyncTask.Status.RUNNING)
+            this.new FetchFirst(getActivity(), page).cancel(true);
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("resumed","true");
     }
 
     /**
@@ -2016,6 +2100,7 @@ else if (id == R.id.action_statusDeleted) {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -2038,179 +2123,629 @@ else if (id == R.id.action_statusDeleted) {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-//    @Override
-//    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//        MenuInflater inflater = mode.getMenuInflater();
-//        inflater.inflate(R.menu.create_ticket_menu, menu);
-//        return true;
-//    }
+//    public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
+//        private List<TicketOverview> ticketOverviewList;
+//        String subject;
+//        int length=0;
+//        private Context context;
+//        ArrayList<Integer> checked_items= new ArrayList<>();
+//        ArrayList<String> ticketSubject=new ArrayList<>();
+//        private SparseBooleanArray mSelectedItemsIds;
+//        private List<Integer> selectedIds = new ArrayList<>();
 //
-//    @Override
-//    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//        return false;
-//    }
 //
-//    @Override
-//    public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
-//        switch (menuItem.getItemId()){
-//            case R.id.action_attach:
-//                //just to show selected items.
-//
-//                //Toast.makeText(this, "Selected items are :", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getActivity(), "action mode", Toast.LENGTH_SHORT).show();
-//                return true;
+//        public TicketOverviewAdapter(Context context,List<TicketOverview> ticketOverviewList) {
+//            this.ticketOverviewList = ticketOverviewList;
+//            this.context=context;
+//            mSelectedItemsIds = new SparseBooleanArray();
 //        }
-//        return false;
-//    }
 //
-//    @Override
-//    public void onDestroyActionMode(ActionMode mode) {
-//        actionMode = null;
-//        isMultiSelect = false;
-//        checked_items = new ArrayList<>();
-//        ticketOverviewAdapter.setSelectedIds(new ArrayList<Integer>());
+//        @Override
+//        public int getItemCount() {
+//            return ticketOverviewList.size();
+//        }
 //
-//    }
-//    private void multiSelect(int position) {
-//        TicketOverview data = ticketOverviewAdapter.getItem(position);
-//        if (data != null){
-//            if (actionMode != null) {
-//                if (checked_items.contains(data.getTicketID()))
-//                    checked_items.remove(Integer.valueOf(data.getTicketID()));
-//                else
-//                    checked_items.add(data.getTicketID());
+//        @Override
+//        public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
+//            final TicketOverview ticketOverview = ticketOverviewList.get(i);
+//            int id=ticketOverviewList.get(i).getTicketID();
+//            if (selectedIds.contains(id)){
+//                //if item is selected then,set foreground color of FrameLayout.
+//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+//            }
+//            else {
+//                //else remove selected item color.
+//                //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
+//            }
+//            subject=ticketOverview.ticketSubject;
+//            if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
+//                String first=subject.replace("=?UTF-8?Q?","");
+//                String second=first.replace("_"," ");
+//                String third=second.replace("=C2=A0","");
+//                String fourth=third.replace("?=","");
+//                String fifth=fourth.replace("=E2=80=99","'");
+//                ticketViewHolder.textViewSubject.setText(fifth);
+//            }
+//            else{
+//                ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
+//            }
 //
-//                if (checked_items.size() > 0)
-//                    actionMode.setTitle(String.valueOf(checked_items.size())); //show selected item count on action mode.
-//                else{
-//                    actionMode.setTitle(""); //remove item count from action mode.
-//                    actionMode.finish(); //hide action mode.
+//            ticketViewHolder.ticket
+//                    .setBackgroundColor(mSelectedItemsIds.get(i) ? 0x9934B5E4
+//                            : Color.TRANSPARENT);
+//
+////        if (checked_items.contains(id)){
+////            //if item is selected then,set foreground color of FrameLayout.
+////            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#B9FCFC"));
+////        }
+////        else {
+////            //else remove selected item color.
+////            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+////        }
+//
+//            //Toast.makeText(context, "no of items"+checked_items.toString(), Toast.LENGTH_SHORT).show();
+//
+//            ticketViewHolder.checkBox1.setOnCheckedChangeListener(null);
+//
+//            //ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+//            ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//
+//                    if (b){
+//                        ticketViewHolder.checkBox1.setChecked(true);
+//                        ticketOverview.setChecked(true);
+//                        //stringBuffer.append(""+ticketOverview.getTicketID()+",");
+//                        if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
+//                            String first=subject.replace("=?UTF-8?Q?","");
+//                            String second=first.replace("_"," ");
+//                            String third=second.replace("=C2=A0","");
+//                            String fourth=third.replace("?=","");
+//                            String fifth=fourth.replace("=E2=80=99","'");
+//                            ticketViewHolder.textViewSubject.setText(fifth);
+//                            ticketSubject.add(fifth);
+//                        }
+//                        else{
+//                            ticketSubject.add(ticketOverview.ticketSubject);
+//                        }
+//                        //ticketSubject.add(ticketOverview.ticketSubject);
+//                        checked_items.add(ticketOverview.getTicketID());
+////                  length=checked_items.size();
+//                        Log.d("ticketsubject",ticketSubject.toString());
+//                        Log.d("checkeditems",checked_items.toString().replace(" ",""));
+//                        Prefs.putString("tickets",checked_items.toString().replace(" ",""));
+//                        Prefs.putString("TicketSubject",ticketSubject.toString());
+//                        ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+//
+//                    }
+//                    else{
+//                        ticketOverview.setChecked(false);
+//                        int pos=checked_items.indexOf(ticketOverview.getTicketID());
+//                        int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
+//                        try {
+//                            checked_items.remove(pos);
+//                            ticketSubject.remove(pos1);
+//                        }
+//                        catch (ArrayIndexOutOfBoundsException e){
+//                            e.printStackTrace();
+//                        }
+//                        Log.d("Position",""+pos);
+//                        //checked_items.remove(checked_items.indexOf(ticketOverview.getTicketID()));
+//                        length--;
+//                        Log.d("NoOfItems",""+length);
+//                        Prefs.putInt("totalticketselected",length);
+//                        Log.d("checkeditems", "" + checked_items);
+//                        Prefs.putInt("NoOfItems",length);
+//                        Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+//                        Prefs.putString("TicketSubject",ticketSubject.toString());
+//                        Log.d("ticketsubject",ticketSubject.toString());
+//                        ticketViewHolder.checkBox1.setVisibility(View.GONE);
+//                        ticketViewHolder.checkBox1.setChecked(false);
+//                        if (!ticketOverview.lastReply.equals("client")){
+//                            int color=Color.parseColor("#e9e9e9");
+//                            ticketViewHolder.ticket.setBackgroundColor(color);
+//                        }
+//                        else{
+//                            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                        }
+//
+//
+//                        //notifyDataSetChanged();
+//
+//                    }
+//
+//
 //                }
-//                ticketOverviewAdapter.setSelectedIds(checked_items);
+//            });
+//
+//
+//
+//
+//            if (ticketOverview.getChecked()){
+//                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+//                ticketViewHolder.checkBox1.setChecked(true);
+//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+//            }
+//            else{
+//                ticketViewHolder.checkBox1.setVisibility(View.GONE);
+//                ticketViewHolder.checkBox1.setChecked(false);
+//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            }
+//
+//            if (ticketOverview.ticketAttachments.equals("0")) {
+//                ticketViewHolder.attachementView.setVisibility(View.GONE);
+//            } else {
+//                ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+//            }
+//            if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
+////            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+////                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+////            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+//
+//                if (Helper.compareDates(ticketOverview.dueDate) == 2) {
+//                    ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+//                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#ffff00"));
+//                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#A0A0A0"));
+//                    //ticketViewHolder.textViewOverdue.setBackgroundColor();
+//
+//                }
+//                else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+//                    ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
+////                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
+////
+//////set color
+////                 drawable.setColor(color);
+//                    ((GradientDrawable)ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#FF9999"));
+//                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
+//                }
+//                else {
+//                    ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+//                }
+//
+//
+//            ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
+//
+//            ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
+//            if (ticketOverview.getClientName().startsWith("=?")){
+//                String clientName=ticketOverview.getClientName().replaceAll("=?UTF-8?Q?","");
+//                String newClientName=clientName.replaceAll("=E2=84=A2","");
+//                String finalName=newClientName.replace("=??Q?","");
+//                String name=finalName.replace("?=","");
+//                String newName=name.replace("_"," ");
+//                Log.d("new name",newName);
+//                ticketViewHolder.textViewClientName.setText(newName);
+//            }
+//            else{
+//                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 //
 //            }
-//        }
-//    }
-//    private class ActionModeCallback implements ActionMode.Callback {
+//            if (ticketOverview.ticketPriorityColor.equals("null")){
+//                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+//            }
+//            else if (ticketOverview.ticketPriorityColor != null) {
+//                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+//            }
 //
 //
-//    @Override
-//    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//        MenuInflater inflater = mode.getMenuInflater();
-//        inflater.inflate(R.menu.create_ticket_menu, menu);
-//        return true;
-//    }
+////        else if (ticketOverview.ticketPriorityColor.equals("null")){
+////            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+////        }
+//            ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
 //
-//    @Override
-//    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//        return false;
-//    }
+//            if (!ticketOverview.countthread.equals("0")){
+//                ticketViewHolder.countThread.setText("("+ticketOverview.getCountthread()+")");
+//            }
+//            else{
+//                ticketViewHolder.countThread.setVisibility(View.GONE);
+//            }
 //
-//    @Override
-//    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.action_attach:
-//                //just to show selected items.
+//            if (ticketOverview.sourceTicket.equals("chat")){
+//                int color=Color.parseColor("#3da6d7");
+//                ticketViewHolder.source.setImageResource(R.drawable.chat);
+//                //ticketViewHolder.source.setColorFilter(color);
+//            }
+//            else if (ticketOverview.sourceTicket.equals("web")){
+//                int color=Color.parseColor("#3da6d7");
+//                ticketViewHolder.source.setImageResource(R.drawable.web);
+//                //ticketViewHolder.source.setColorFilter(color);
+//            }
+//            else if (ticketOverview.sourceTicket.equals("agent")){
+//                int color=Color.parseColor("#3da6d7");
+//                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+//                //ticketViewHolder.source.setColorFilter(color);
+//            }
+//            else if (ticketOverview.sourceTicket.equals("email")){
+//                int color=Color.parseColor("#3da6d7");
+//                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+//                //ticketViewHolder.source.setColorFilter(color);
+//            }
+//            else if (ticketOverview.sourceTicket.equals("facebook")){
+//                int color=Color.parseColor("#3da6d7");
+//                ticketViewHolder.source.setImageResource(R.drawable.facebook);
+//                //ticketViewHolder.source.setColorFilter(color);
+//            }
+//            else if (ticketOverview.sourceTicket.equals("twitter")){
+//                int color=Color.parseColor("#3da6d7");
+//                ticketViewHolder.source.setImageResource(R.drawable.twitter);
+//                //ticketViewHolder.source.setColorFilter(color);
+//            }
+//            else if (ticketOverview.sourceTicket.equals("call")){
+//                int color=Color.parseColor("#3da6d7");
+//                ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+//                //ticketViewHolder.source.setColorFilter(color);
+//            }
+//            else{
+//                ticketViewHolder.source.setVisibility(View.GONE);
+//            }
 //
-//                //Toast.makeText(this, "Selected items are :", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getActivity(), "action mode", Toast.LENGTH_SHORT).show();
-//                return true;
-//        }
-//        return false;
-//    }
+//            if (!ticketOverview.countcollaborator.equals("0")){
 //
-//    @Override
-//    public void onDestroyActionMode(ActionMode actionMode) {
-//        actionMode = null;
-//        isMultiSelect = false;
-//        checked_items = new ArrayList<>();
-//        ticketOverviewAdapter.setSelectedIds(new ArrayList<Integer>());
-//    }
-//}
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.search_menu, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-//            case R.id.action_delete:
-//                //just to show selected items.
-//                StringBuilder stringBuilder = new StringBuilder();
-//                for (MyData data : getList()) {
-//                    if (selectedIds.contains(data.getId()))
-//                        stringBuilder.append("\n").append(data.getTitle());
+//                ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
+//            }
+//            else if (ticketOverview.countcollaborator.equals("0")){
+//                ticketViewHolder.countCollaborator.setVisibility(View.GONE);
+//            }
+//
+//            if (!ticketOverview.agentName.equals("Unassigned")){
+//                ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
+//                ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
+//            }
+//            else{
+//                ticketViewHolder.agentAssigned.setText("Unassigned");
+//                ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+//            }
+//
+////else if (ticketOverview.getAgentName().equals("Unassigned")){
+////    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+////}
+//
+//
+//            if (!ticketOverview.lastReply.equals("client")){
+//                int color=Color.parseColor("#e9e9e9");
+//                ticketViewHolder.ticket.setBackgroundColor(color);
+//            }
+//
+//
+//
+//            if (ticketOverview.clientPicture.equals("")){
+//                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+//            }
+//            else if (ticketOverview.clientPicture.startsWith("")){
+//                IImageLoader imageLoader = new PicassoLoader();
+//                imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
+//                //imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
+//            }
+//
+////        if (ticketOverview.clientPicture != null && ticketOverview.clientPicture.trim().length() != 0)
+////            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
+////                    .load(ticketOverview.clientPicture)
+////                    .placeholder(R.drawable.default_pic)
+////                    .error(R.drawable.default_pic)
+////                    .into(ticketViewHolder.roundedImageViewProfilePic);
+//
+//        ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mActionMode != null) {
+//                    onListItemSelect(i);
+//                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
 //                }
-                //Toast.makeText(this, "Selected items are :" + stringBuilder.toString(), Toast.LENGTH_SHORT).show();
-                //return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            toolbarmain.setVisibility(View.VISIBLE);
-            actionMode = null;
-            isMultiSelect = false;
-            checked_items = new ArrayList<>();
-            ticketOverviewAdapter.setSelectedIds(new ArrayList<Integer>());
-        }
-
-    };
-}
- class ActionModeCallback implements ActionMode.Callback {
-
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        // inflate contextual menu
-        mode.getMenuInflater().inflate(R.menu.search_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-//        switch (item.getItemId()) {
-//            case R.id.menu_delete:
-//                // retrieve selected items and delete them out
-//                SparseBooleanArray selected = laptopListAdapter
-//                        .getSelectedIds();
-//                for (int i = (selected.size() - 1); i >= 0; i--) {
-//                    if (selected.valueAt(i)) {
-//                        Laptop selectedItem = laptopListAdapter
-//                                .getItem(selected.keyAt(i));
-//                        laptopListAdapter.remove(selectedItem);
-//                    }
+//
+//                else{
+//                    Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+//                    intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+//                    Prefs.putString("TICKETid",ticketOverview.ticketID+"");
+//                    Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
+//                    intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+//                    intent.putExtra("ticket_opened_by", ticketOverview.clientName);
+//                    intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
+//                    Log.d("clicked","onRecyclerView");
+//                    v.getContext().startActivity(intent);
 //                }
-//                mode.finish(); // Action picked, so close the CAB
+//
+//            }
+//        });
+//        ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                onListItemSelect(i);
+//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+////                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+////                ticketViewHolder.checkBox1.setChecked(true);
+//                length++;
+//                Log.d("noofitems",""+length);
+//                Prefs.putInt("NoOfItems",length);
+//
+////                ticketOverviewList.get(i).getTicketID();
+////                Log.d("position",""+ticketOverviewList.get(i).getTicketID());
+////                if (ticketViewHolder.checkBox1.isEnabled()){
+////
+////                }
+////                else{
+////                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+////                }
+////                if (ticketViewHolder.checkBox1.isChecked()){
+////
+////                }else{
+////                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+////                }
 //                return true;
-//            default:
-//                return false;
+//            }
+//        });
+//
+//
+//
+////        ticketViewHolder.checkBox1.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View view) {
+////                if (ticketViewHolder.checkBox1.isChecked())
+////                    ticketViewHolder.checkBox1.setChecked(false);
+////                else
+////                    ticketViewHolder.checkBox1.setChecked(true);
+////            }
+////        });
+//
+//
+//
+////        ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+////            @Override
+////            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+////
+////                if (isChecked){
+//////                    ticketViewHolder.checkBox1.setChecked(true);
+//////                    Prefs.putString("checkboxstate","checked");
+////
+////                    stringBuffer.append(ticketOverview.getTicketID()+",");
+////                    Log.d("ids",stringBuffer.toString());
+////
+////                }
+////                else{
+////                    Prefs.putString("checkboxstate","unchecked");
+////                    stringBuffer.toString().replace(""+ticketOverview.getTicketID(),"");
+////                    Log.d("ids",stringBuffer.toString());
+////                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+////                    notifyDataSetChanged();
+////                }
+//////
+//////                String state=Prefs.getString("checkboxstate",null);
+//////
+//////                if (state.equals("checked")){
+//////                    ticketViewHolder.checkBox1.setSelected(true);
+//////                    notifyDataSetChanged();
+//////                }
+//////                else{
+//////                    ticketViewHolder.checkBox1.setSelected(false);
+//////                    notifyDataSetChanged();
+//////                }
+////
+////
+////            }
+////        });
+//
 //        }
-            return false;
-    }
+//        private void onListItemSelect(int position) {
+//            ticketOverviewAdapter.toggleSelection(position);//Toggle the selection
+//
+//            boolean hasCheckedItems = ticketOverviewAdapter.getSelectedCount() > 0;//Check if any items are already selected or not
+//
+//
+//            if (hasCheckedItems && mActionMode == null)
+//                // there are some selected items, start the actionMode
+//                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new Toolbar_ActionMode_Callback(getActivity(),ticketOverviewAdapter, null, ticketOverviewList, false));
+//            else if (!hasCheckedItems && mActionMode != null)
+//                // there no selected items, finish the actionMode
+//                mActionMode.finish();
+//
+//            if (mActionMode != null)
+//                //set action mode title on item selection
+//                mActionMode.setTitle(String.valueOf(ticketOverviewAdapter
+//                        .getSelectedCount()) + " selected");
+//
+//
+//        }
+//
+//        public void toggleSelection(int position) {
+//            selectView(position, !mSelectedItemsIds.get(position));
+//        }
+//
+//
+//        //Remove selected selections
+//
+//
+//
+//        //Put or delete selected position into SparseBooleanArray
+//        public void selectView(int position, boolean value) {
+//            if (value)
+//                mSelectedItemsIds.put(position, value);
+//            else
+//                mSelectedItemsIds.delete(position);
+//
+//            notifyDataSetChanged();
+//        }
+//        public void setSelectedIds(List<Integer> selectedIds) {
+//            this.selectedIds = selectedIds;
+//            notifyDataSetChanged();
+//        }
+//        public void removeSelection() {
+//            mSelectedItemsIds = new SparseBooleanArray();
+//            notifyDataSetChanged();
+//        }
+//
+//        //Get total selected count
+//        public int getSelectedCount() {
+//            return mSelectedItemsIds.size();
+//        }
+//
+//        //Return all selected ids
+//        public SparseBooleanArray getSelectedIds() {
+//            return mSelectedItemsIds;
+//        }
+//        public void setSelectedIds(ArrayList<Integer> checked_items) {
+//            this.checked_items = checked_items;
+//            notifyDataSetChanged();
+//        }
+//        public TicketOverview getItem(int position){
+//            return ticketOverviewList.get(position);
+//        }
+//        @Override
+//        public TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+//            View itemView = LayoutInflater.
+//                    from(viewGroup.getContext()).
+//                    inflate(R.layout.card_ticket, viewGroup, false);
+//            return new TicketViewHolder(itemView);
+//        }
+//
+//        public  class TicketViewHolder extends RecyclerView.ViewHolder {
+//
+//            protected View ticket;
+//            AvatarView roundedImageViewProfilePic;
+//            TextView textViewTicketID;
+//            TextView textViewTicketNumber;
+//            TextView textViewClientName;
+//            TextView textViewSubject;
+//            RelativeTimeTextView textViewTime;
+//            TextView textViewOverdue;
+//            View ticketPriority;
+//            // TextView ticketStatus;
+//            ImageView attachementView;
+//            CheckBox checkBox1;
+//            ImageView countCollaborator;
+//            ImageView source;
+//            TextView countThread;
+//            TextView agentAssigned;
+//            ImageView agentAssignedImage;
+//            TextView textViewduetoday;
+//            TicketViewHolder(View v) {
+//                super(v);
+//                ticket = v.findViewById(R.id.ticket);
+//                attachementView = (ImageView) v.findViewById(R.id.attachment_icon);
+//                ticketPriority = v.findViewById(R.id.priority_view);
+//                roundedImageViewProfilePic = (AvatarView) v.findViewById(R.id.imageView_default_profile);
+//                textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
+//                textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
+//                textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
+//                textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
+//                textViewTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
+//                textViewOverdue = (TextView) v.findViewById(R.id.overdue_view);
+//                checkBox1= (CheckBox) v.findViewById(R.id.checkbox);
+//                countCollaborator= (ImageView) v.findViewById(R.id.collaborator);
+//                countThread= (TextView) v.findViewById(R.id.countthread);
+//                source= (ImageView) v.findViewById(R.id.source);
+//                agentAssigned= (TextView) v.findViewById(R.id.agentassigned);
+//                agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
+//                textViewduetoday= (TextView) v.findViewById(R.id.duetoday);
+//
+//
+//            }
+//
+//        }
+//
+//    }
 
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        // remove selection
 
-    }
+
+//    public class Toolbar_ActionMode_Callback implements android.support.v7.view.ActionMode.Callback {
+//
+//        private Context context;
+//        private TicketOverviewAdapter recyclerView_adapter;
+//        private ArrayList<TicketOverview> message_models;
+//        private boolean isListViewFragment;
+//
+//
+//        public Toolbar_ActionMode_Callback(Context context, TicketOverviewAdapter ticketOverviewAdapter, TicketOverviewAdapter recyclerView_adapter, List<TicketOverview> message_models, boolean b) {
+//            this.context = context;
+//            this.recyclerView_adapter = recyclerView_adapter;
+//            this.message_models = (ArrayList<TicketOverview>) message_models;
+//            this.isListViewFragment = isListViewFragment;
+//        }
+//
+//        @Override
+//        public boolean onCreateActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
+//            mode.getMenuInflater().inflate(R.menu.multiplemenu, menu);//Inflate the menu over action mode
+//            return true;
+//        }
+//
+//        @Override
+//        public boolean onPrepareActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
+//
+//            //Sometimes the meu will not be visible so for that we need to set their visibility manually in this method
+//            //So here show action menu according to SDK Levels
+//            if (Build.VERSION.SDK_INT < 11) {
+//                MenuItemCompat.setShowAsAction(menu.findItem(R.id.actionclosed), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+////            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_copy), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+////            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_forward), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+//            } else {
+//                menu.findItem(R.id.actionclosed).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+////            menu.findItem(R.id.action_copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+////            menu.findItem(R.id.action_forward).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//            }
+////
+//            return true;
+//        }
+//
+//        @Override
+//        public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.actionclosed:
+////                Toast.makeText(, "You selected close menu.", Toast.LENGTH_SHORT).show();//Show toast
+//                    Log.d("clicked on closed","closed");
+//                    setNullToActionMode();
+//                    mode.finish();
+//
+//                    //mode.finish();
+//                    break;
+////            case R.id.action_copy:
+////
+////                //Get selected ids on basis of current fragment action mode
+////
+////                Toast.makeText(context, "You selected Copy menu.", Toast.LENGTH_SHORT).show();//Show toast
+////                mode.finish();//Finish action mode
+////                break;
+////            case R.id.action_forward:
+////                Toast.makeText(context, "You selected Forward menu.", Toast.LENGTH_SHORT).show();//Show toast
+////                mode.finish();//Finish action mode
+////                break;
+//
+//
+//            }
+//            return false;
+//        }
+//
+//
+//        @Override
+//        public void onDestroyActionMode(android.support.v7.view.ActionMode mode) {
+//
+//            //When action mode destroyed remove selected selections and set action mode to null
+//            //First check current fragment action mode
+//            Log.d("onDestroyActionMode","CAME HERE");
+//            InboxTickets inboxTickets=new InboxTickets();
+//            //recyclerView_adapter.removeSelection();
+//            inboxTickets.setNullToActionMode();
+//            ticketOverviewAdapter.removeSelection();
+//            setNullToActionMode();
+////        ((InboxTickets) inboxTickets).setNullToActionMode();
+//            mode.finish();
+//
+//            // remove selection
+////            Fragment recyclerFragment = new MainActivity().getFragment(1);//Get recycler fragment
+////            if (recyclerFragment != null)
+////                ((RecyclerView_Fragment) recyclerFragment).setNullToActionMode();//Set action mode null
+//
+//        }
+//    }
+
+
+
 }
+
+
+
+
 
 
 

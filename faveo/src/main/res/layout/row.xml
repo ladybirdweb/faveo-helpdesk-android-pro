@@ -1,23 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/relative"
+    android:layout_width="match_parent"
+    android:layout_height="57dp"
+    android:background="@drawable/background_square"
+
+    >
+    <RelativeLayout
+    android:id="@+id/inbox_tickets"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="14dp"
+        android:layout_weight="1"
+        android:maxLines="2"
+        android:src="@drawable/ic_access_time_black_24dp" />
+
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:gravity="center"
-        android:textSize="20sp"/>
-    <TextView
-        android:id="@+id/count"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="count"/>
+        android:id="@+id/textView"
+        android:layout_width="300dp"
+        android:layout_height="53dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="35dp"
+        android:layout_toEndOf="@+id/imageView2"
+        android:layout_weight="7"
+        android:gravity="center|start"
+        android:maxLines="1"
+        android:text="@string/inbox"
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="#DCDCDC"-->
+        <!--android:layout_below="@id/textView">-->
+
+    <!--</View>-->
+
+
+</RelativeLayout>
 
 </LinearLayout>
+
+
+
+

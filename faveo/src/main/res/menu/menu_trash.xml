@@ -7,6 +7,12 @@
         android:orderInCategory="100"
         android:title="Notifications"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/actionsearch"
+        android:icon="@drawable/ic_action_search"
+        android:orderInCategory="100"
+        android:title="@string/abc_search_hint"
+        app:showAsAction="always"></item>
     <!--<item-->
     <!--android:id="@+id/spinner"-->
     <!--app:actionViewClass="android.widget.Spinner"-->
@@ -39,9 +45,25 @@
                 android:title="Closed"
                 app:showAsAction="never"
                 android:icon="@drawable/ic_close_black_24dp"/>
+            <item
+                android:id="@+id/deleteticket"
+                android:orderInCategory="101"
+                android:title="@string/deleteTicket"
+                android:icon="@drawable/ic_delete_forever_black_24dp"
+                app:showAsAction="never">
+            </item>
 
         </menu>
     </item>
+    <!--<item-->
+        <!--android:id="@+id/mergeticket"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/mergeticket"-->
+        <!--android:icon="@drawable/ic_merge_type_black_24dp"-->
+        <!--app:showAsAction="never">-->
+    <!--</item>-->
+
+
 
 
 </menu>

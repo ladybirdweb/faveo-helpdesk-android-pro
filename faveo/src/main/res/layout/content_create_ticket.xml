@@ -703,7 +703,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:id="@+id/autocompletetext"
@@ -816,7 +816,7 @@
 
             <RelativeLayout
                 android:id="@+id/attachment_layout"
-                android:layout_width="150dp"
+                android:layout_width="180dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="16dp"
                 android:visibility="gone">
@@ -826,8 +826,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/attach_fileimgview"
-                    android:layout_toLeftOf="@+id/attachment_close"
-                    android:layout_toStartOf="@+id/attachment_close"
+                    android:layout_centerHorizontal="true"
                     android:background="@color/grey_200"
                     android:ellipsize="end"
                     android:gravity="center"
@@ -839,13 +838,10 @@
 
                 <ImageView
                     android:id="@+id/attach_fileimgview"
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
+                    android:layout_centerHorizontal="true"
                     android:src="@drawable/ic_txt" />
 
                 <TextView
@@ -863,10 +859,9 @@
                     android:id="@+id/attachment_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/attach_fileimgview"
-                    android:layout_marginRight="2dp"
+                    android:layout_alignEnd="@+id/attachment_size"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="19dp"
                     android:background="@color/grey_200"
                     android:src="@drawable/ic_clear_black_18dp" />
             </RelativeLayout>

@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,10 +56,10 @@ public class Conversation extends Fragment {
 
     View rootView,view;
     LinearLayout linearLayout;
-
+    ProgressDialog progressDialog;
     TicketThreadAdapter ticketThreadAdapter;
     List<TicketThread> ticketThreadList = new ArrayList<>();
-
+    String ticketId;
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
@@ -96,9 +98,11 @@ public class Conversation extends Fragment {
             ButterKnife.bind(this, rootView);
             linearLayout= (LinearLayout) rootView.findViewById(R.id.toolbarview);
             linearLayout.setVisibility(View.GONE);
-
+            //ticketId=Prefs.getString("TICKETid",null);
             view=rootView.findViewById(R.id.separationview);
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+            swipeRefresh.setRefreshing( false );
+            swipeRefresh.setEnabled( false );
             Toolbar toolbar= (Toolbar)rootView.findViewById(R.id.toolbar2);
 //        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
             toolbar.setVisibility(View.GONE);
@@ -107,7 +111,10 @@ public class Conversation extends Fragment {
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
-                task = new FetchTicketThreads(getActivity());
+                progressDialog=new ProgressDialog(getActivity());
+                progressDialog.setMessage(getString(R.string.pleasewait));
+                progressDialog.show();
+                task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
                 task.execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -115,50 +122,56 @@ public class Conversation extends Fragment {
                 empty_view.setVisibility(View.GONE);
             }
 
-            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    if (InternetReceiver.isConnected()) {
-//                        loading = true;
-                        recyclerView.setVisibility(View.VISIBLE);
-                        noInternet_view.setVisibility(View.GONE);
-                        if (ticketThreadList.size() != 0) {
-                            ticketThreadList.clear();
-                            ticketThreadAdapter.notifyDataSetChanged();
-                            task = new FetchTicketThreads(getActivity());
-                            task.execute();
-                        }
-                    } else {
-                        recyclerView.setVisibility(View.INVISIBLE);
-                        swipeRefresh.setRefreshing(false);
-                        empty_view.setVisibility(View.GONE);
-                        noInternet_view.setVisibility(View.VISIBLE);
-                    }
-
-                }
-            });
+//            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//                @Override
+//                public void onRefresh() {
+//                    if (InternetReceiver.isConnected()) {
+////                        loading = true;
+//                        recyclerView.setVisibility(View.VISIBLE);
+//                        noInternet_view.setVisibility(View.GONE);
+//                        if (ticketThreadList.size() != 0) {
+//                            ticketThreadList.clear();
+//                            ticketThreadAdapter.notifyDataSetChanged();
+////                            progressDialog=new ProgressDialog(getActivity());
+////                            progressDialog.setMessage(getString(R.string.pleasewait));
+////                            progressDialog.show();
+//                            task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
+//                            task.execute();
+//                        }
+//                    } else {
+//                        recyclerView.setVisibility(View.INVISIBLE);
+//                        swipeRefresh.setRefreshing(false);
+//                        empty_view.setVisibility(View.GONE);
+//                        noInternet_view.setVisibility(View.VISIBLE);
+//                    }
+//
+//                }
+//            });
         }
 
         return rootView;
     }
 
-    private class FetchTicketThreads extends AsyncTask<String, Void, String> {
+     class FetchTicketThreads extends AsyncTask<String, Void, String> {
         Context context;
+         String ticketID;
 
-        FetchTicketThreads(Context context) {
+        FetchTicketThreads(Context context,String ticketID) {
             this.context = context;
+            this.ticketID = ticketID;
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().getTicketThread(TicketDetailActivity.ticketID);
+            return new Helpdesk().getTicketThread(ticketID);
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.dismiss();
             textView.setVisibility(View.GONE);
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
             if (result == null) {
-                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                //Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -204,10 +217,6 @@ public class Conversation extends Fragment {
                       else if (firstName!=null||lastName!=null) {
                             clientName = firstName+" "+lastName;
                         }
-
-
-
-
                         String messageTime = jsonArray.getJSONObject(i).getString("created_at");
                         String messageTitle = jsonArray.getJSONObject(i).getString("title");
                         String message = jsonArray.getJSONObject(i).getString("body");
@@ -229,7 +238,7 @@ public class Conversation extends Fragment {
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(linearLayoutManager);
             //Collections.reverse(ticketThreadList);
-            ticketThreadAdapter = new TicketThreadAdapter(ticketThreadList);
+            ticketThreadAdapter = new TicketThreadAdapter(getContext(),ticketThreadList);
             recyclerView.setAdapter(ticketThreadAdapter);
         }
     }
@@ -243,12 +252,14 @@ public class Conversation extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
@@ -275,7 +286,7 @@ public class Conversation extends Fragment {
             if (ticketThreadList.size() != 0) {
                 ticketThreadList.clear();
                 ticketThreadAdapter.notifyDataSetChanged();
-                task = new FetchTicketThreads(getActivity());
+                task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
                 task.execute();
             }
         } else {
@@ -286,12 +297,25 @@ public class Conversation extends Fragment {
         }
     }
 
+//    @Override
+//    public void onPause() {
+//        if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
+//            task.cancel(true);
+//            Log.d("Async Detail", "Cancelled");
+//        }
+//        super.onPause();
+//    }
+
     @Override
-    public void onPause() {
-        if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
-            task.cancel(true);
-            Log.d("Async Detail", "Cancelled");
+    public void onStart() {
+        super.onStart();
+        if (InternetReceiver.isConnected()) {
+//            noInternet_view.setVisibility(View.GONE);
+            // swipeRefresh.setRefreshing(true);
+            //Log.d("TICKETid",Prefs.getString("TICKETid", null));
+            refresh();
+//            task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
+//            task.execute();
         }
-        super.onPause();
     }
 }

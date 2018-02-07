@@ -168,7 +168,7 @@ public class SearchCustomerFragment extends Fragment implements View.OnClickList
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(linearLayoutManager);
 
-            clientOverviewAdapter = new ClientOverviewAdapter(clientOverviewList);
+            clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);

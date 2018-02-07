@@ -1,10 +1,15 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,23 +27,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import co.helpdesk.faveo.pro.FaveoApplication;
+import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Sumit
  */
-class HTTPConnection {
+class HTTPConnection{
     private StringBuilder sb = null;
     private InputStream is = null;
     private URL url;
+    Context context;
+
+   public HTTPConnection(Context context) {
+        super();
+        this.context = context;
+
+    }
     HTTPConnection() {
 
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
     }
-
-
-
     String HTTPResponsePost(String stringURL, String parameters) {
 
         try {
@@ -317,17 +327,22 @@ class HTTPConnection {
 
     private String refreshToken() {
         String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-        if (result == null)
+        if (result == null) {
             return null;
+        }
         try {
             JSONObject jsonObject = new JSONObject(result);
+            Log.d("result",result);
             String token = jsonObject.getString("token");
             Prefs.putString("TOKEN", token);
-            // Preference.setToken(token);
             Authenticate.token = token;
             Helpdesk.token = token;
+
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d("cameInException","true");
+            Prefs.clear();
+            Prefs.putString("NoToken","True");
             return null;
         }
         return "success";

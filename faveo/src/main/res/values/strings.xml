@@ -85,6 +85,7 @@
     <string name="created_date">Created Date</string>
     <string name="last_response_date">Last Response Date</string>
     <string name="assign_to" translatable="false">Assigned To</string>
+    <string name="assigneeName">Assignee Name</string>
     <string name="save">Save</string>
     <string name="trash">Trash</string>
     <string name="logout">Logout</string>
@@ -99,7 +100,7 @@
     <string name="due_by_time">Due by time</string>
     <string name="due_by_date">Due by date</string>
     <string name="gallery">Gallery</string>
-    <string name="search">Search</string>
+    <string name="search">Search....</string>
     <string name="oops_no_internet">Oops! No internet</string>
     <string name="unexpected_error">Unexpected Error</string>
     <string name="fetching_tickets">Fetching tickets</string>
@@ -128,9 +129,11 @@
     <string name="ex_number" translatable="false">EX:+91 9999999999</string>
     <string name="dummy_num" translatable="false">Unavailable</string>
     <string name="all_caught_up">All tickets are loaded!</string>
+    <string name="allClientsLoaded">All clients are loaded</string>
     <string name="enter_valid_email">Enter a valid Mail ID</string>
     <string name="updating_ticket">Updating ticket</string>
     <string name="tickets">Tickets</string>
+    <string name="users">Users</string>
     <string name="customers">Customers</string>
     <string name="restart_app">To apply the changes in settings, you must restart the app!</string>
     <string name="restarting">Restarting…</string>
@@ -257,7 +260,7 @@
     <string name="show">Show</string>
     <string name="addcolla">Add collaborator</string>
     <string name="emptyField">Please fill some fields</string>
-    <string name="assigned">Assigned</string>
+    <string name="assigned">Assigned/Unassigned</string>
     <string name="customerFilter">Filter Customer</string>
     <string name="editCustomer">Edit Customer Details</string>
     <string name="saveCustomer">Save</string>
@@ -278,6 +281,36 @@
     <string name="allClientsLodaded">All clients are loaded</string>
     <string name="requestornotfound">Requestor not found.Please add or search for new requestor.</string>
     <string name="collaboratorExisting">Collaborator not found,please search for existing collaborators.</string>
+    <string name="deleteduser">Deactivated User</string>
+    <string name="mergeticket">Merge ticket</string>
+    <string name="title_activity_ticket_merge_acttivity">TicketMergeActtivity</string>
+    <string name="merge_ticket">Merge Tickets</string>
+    <string name="selectParentTicket">Select Parent Ticket</string>
+    <string name="title">Title</string>
+    <string name="reasonForMerging">Reason For Merging</string>
+    <string name="hintsForTitle">Title of the ticket</string>
+    <string name="reasonForMergingHint">Specify the reason for merging</string>
+    <string name="PleaseSelectParentTicket">Please select the parent ticket</string>
+    <string name="selectMultipleTicket">Select two or more tickets to merge</string>
+    <string name="mergingTicket">Merging Ticket</string>
+    <string name="successfullyMerged">Successfully merged the tickets</string>
+    <string name="ticketsFromDifferentUsers">Tickets can not be merged as tickets belong to different users.</string>
+    <string name="unsupportedFileType">Unsupported file type,either image,pdf or mp3 file is supported</string>
+    <string name="permissions_not_granted">Camera Permission Required To Perform This Action</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="closeFab">Exit</string>
+    <string name="showMore">Show More</string>
+    <string name="unassigned">Unassigned</string>
+    <string name="deleteTicket">Delete ticket</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="AssignTickets">Assign Tickets</string>
+    <string name="selectAgent">Select Agent to Assign Tickets</string>
+    <string name="assignTicket">Assign Ticket</string>
+    <string name="multiAssign">Select two or more tickets to assign</string>
+    <string name="successfullyAssigned">Successfully assigned those tickets</string>
+    <string name="exit">Exit</string>
+
 
 
     <!-- TODO: Remove or change this placeholder text -->

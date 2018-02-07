@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.curioustechizen.ago.RelativeTimeTextView;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.List;
 
@@ -71,9 +72,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                     Intent intent = new Intent(view.getContext(), TicketDetailActivity.class);
                     Log.d("ticket_id", notiThread.getTicket_id() + "");
-                    intent.putExtra("ticket_id", notiThread.getTicket_id() + "");
+                    Prefs.putString("TICKETid",notiThread.getTicket_id()+"");
+                    Prefs.putString("cameFromNotification","true");
+                    // intent.putExtra("ticket_id", notiThread.getTicket_id() + "");
                     view.getContext().startActivity(intent);
                 } else {
+
                     Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
                     intent.putExtra("CLIENT_ID", notiThread.getClient_id() + "");
                     view.getContext().startActivity(intent);

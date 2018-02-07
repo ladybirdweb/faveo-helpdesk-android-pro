@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro;
 
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -23,9 +24,14 @@ import io.fabric.sdk.android.Fabric;
 public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
     InternetReceiver internetReceiver;
-
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(LocaleHelper.onAttach(base, "de"));
+//    }
     @Override
     public void onCreate() {
+        Thread.setDefaultUncaughtExceptionHandler(new LocalFileUncaughtExceptionHandler(this,
+                Thread.getDefaultUncaughtExceptionHandler()));
         internetReceiver = new InternetReceiver();
         registerReceiver(
                 internetReceiver,
@@ -38,6 +44,7 @@ public class FaveoApplication extends MultiDexApplication {
         stringBuilder.append("ccc");
         StringBuffer stringBuffer=new StringBuffer();
         stringBuffer.append("cvcv");
+
 
 //        if (BuildConfig.DEBUG) {
 //        if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -80,12 +87,17 @@ public class FaveoApplication extends MultiDexApplication {
         Fabric.with(this, new Crashlytics());
         instance = this;
 
+
         new Prefs.Builder()
                 .setContext(this)
                 .setMode(ContextWrapper.MODE_PRIVATE)
                 .setPrefsName(getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
+    }
+    public static Context getContext(){
+        return instance;
+        // or return instance.getApplicationContext();
     }
 
     public static synchronized FaveoApplication getInstance() {
