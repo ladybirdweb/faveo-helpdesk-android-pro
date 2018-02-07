@@ -27,7 +27,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -99,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
     AppCompatEditText passwordEdittext;
     @BindView(R.id.input_username)
     AppCompatEditText usernameEdittext;
-
     AutoCompleteTextView editTextCompanyURL;
     @BindView(R.id.viewFlipper)
     ViewFlipper viewflipper;
@@ -121,11 +123,15 @@ public class LoginActivity extends AppCompatActivity {
     ImageButton imageBackButton;
     @BindView(R.id.animationLayout)
     LinearLayout linearLayout;
+    String urlGivenByUser;
+    String error;
 
-String urlGivenByUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 //        try {
@@ -139,13 +145,12 @@ String urlGivenByUser;
 //            e.printStackTrace();
 //        }
 
-
-
-
-        //new Preference(getApplicationContext());
-
-        //Preference.setInstance(getApplicationContext());
-        //SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, MODE_PRIVATE);
+        try {
+            error = Prefs.getString("NoToken", null);
+//            Log.d("NoToken",error);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
         Boolean loginComplete = Prefs.getBoolean("LOGIN_COMPLETE", false);
         if (loginComplete) {
@@ -158,6 +163,14 @@ String urlGivenByUser;
             return;
         }
 
+//        if (error.equals("True")){
+//            Intent intent=new Intent(LoginActivity.this,LoginActivity.class);
+//            Log.d("Authentication Failed","true");
+//            startActivity(intent);
+//        }
+
+
+
         url.setVisibility(View.GONE);
         flipColor.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_200));
         buttonSignIn.setEnabled(true);
@@ -169,8 +182,8 @@ String urlGivenByUser;
         editTextCompanyURL.setAdapter(adapter);
         usernameEdittext.addTextChangedListener(mTextWatcher);
         passwordEdittext.addTextChangedListener(mTextWatcher);
-
-        //View init
+        //Prefs.putString("URLneedtoshow",null);
+        editTextCompanyURL.setText(Prefs.getString("URLneedtoshow",null));
 
         setUpViews();
         animation= AnimationUtils.loadAnimation(LoginActivity.this,R.anim.shake_error);
@@ -230,13 +243,14 @@ String urlGivenByUser;
             public void onClick(View v) {
                 //String companyURLUser = editTextCompanyURL.getText().toString();
                 //Prefs.putString("URL",companyURL);
-                urlGivenByUser=editTextCompanyURL.getText().toString().trim();
+                companyURL=editTextCompanyURL.getText().toString().trim();
+                Prefs.putString("URLneedtoshow",companyURL);
                 companyURLUser=new StringBuilder(editTextCompanyURL.getText().toString().trim());
                 companyURLUser.insert(0,"https://").toString();
                 companyURLUser1=new StringBuilder(editTextCompanyURL.getText().toString().trim());
                 companyURLUser1.insert(0,"http://");
                 companyURL1=companyURLUser1.toString();
-                companyURL=companyURLUser.toString();
+                //companyURL=companyURLUser.toString();
 
 
 //                if (!companyURL.contains("/public")){
@@ -460,13 +474,15 @@ String urlGivenByUser;
             progressDialogVerifyURL.dismiss();
             if (result == null) {
                 count++;
+                Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
+                return;
 //                if (count==0){
 //                    Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
 //                    count--;
 //                    return;
 //                }
 
-                new VerifyURLSecure(LoginActivity.this,companyURL1).execute();
+                //new VerifyURLSecure(LoginActivity.this,companyURL1).execute();
 
 
 
@@ -486,7 +502,9 @@ String urlGivenByUser;
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
                 Constants.URL1=Prefs.getString("companyurl",null);
-                Log.d("companyurl",Constants.URL1);
+                Prefs.putString("domain","https://");
+                Prefs.putString("companyUrl",companyURL);
+                Log.d("companyurl",companyURL);
                 if (BuildConfig.DEBUG) {
                     viewflipper.showNext();
                     imageBackButton.setVisibility(View.VISIBLE);
@@ -523,77 +541,69 @@ String urlGivenByUser;
             }
         }
     }
-    private class VerifyURLSecure extends AsyncTask<String, Void, String> {
-        Context context;
-        String companyURL;
-        String baseURL;
-
-        VerifyURLSecure(Context context, String companyURL) {
-            this.context = context;
-            this.companyURL = companyURL;
-            baseURL = companyURL;
-        }
-
-        protected String doInBackground(String... urls) {
-            if (!companyURL.endsWith("/"))
-                companyURL = companyURL.concat("/");
-            return new Helpdesk().getBaseURL(companyURL);
-        }
-
-        protected void onPostExecute(String result) {
-            progressDialogVerifyURL.dismiss();
-            if (result == null) {
-                linearLayout.startAnimation(animation);
-                urlError.setVisibility(View.VISIBLE);
-                urlError.setText(getString(R.string.error_verifying_url));
-                urlError.setTextColor(Color.parseColor("#ff0000"));
-                urlError.postDelayed(new Runnable() {
-                    public void run() {
-                        urlError.setVisibility(View.INVISIBLE);
-                    }
-                }, 9000);
-                //Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
-                return;
-
-            }
-
-            else if (result.contains("success")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                    dynamicShortcut();
-                }
-//                urlSuggestions.add(baseURL);
-//                Set<String> set = new HashSet<>(urlSuggestions);
-//                Prefs.putStringSet("URL_SUG", set);
-
-                Prefs.putString("BASE_URL", baseURL);
-                Prefs.putString("companyurl",urlGivenByUser);
-                Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
-                Constants.URL = Prefs.getString("COMPANY_URL", "");
-                Constants.URL1=Prefs.getString("companyurl",null);
-                Log.d("companyurl",Constants.URL1);
-                if (BuildConfig.DEBUG) {
-                    viewflipper.showNext();
-                    imageBackButton.setVisibility(View.VISIBLE);
-                    url.setText(baseURL);
-                    url.setVisibility(View.VISIBLE);
-                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
-                } else {
-
-                    progressDialogBilling.show();
-
-                    new VerifyBilling(LoginActivity.this, baseURL).execute();
-                }
-
-            } else {
-                linearLayout.startAnimation(animation);
-                urlError.setVisibility(View.VISIBLE);
-                urlError.setText(getString(R.string.error_verifying_url));
-                urlError.setTextColor(Color.parseColor("#ff0000"));
-                urlError.postDelayed(new Runnable() {
-                    public void run() {
-                        urlError.setVisibility(View.INVISIBLE);
-                    }
-                }, 5000);
+//    private class VerifyURLSecure extends AsyncTask<String, Void, String> {
+//        Context context;
+//        String companyURL;
+//        String baseURL;
+//
+//        VerifyURLSecure(Context context, String companyURL) {
+//            this.context = context;
+//            this.companyURL = companyURL;
+//            baseURL = companyURL;
+//        }
+//
+//        protected String doInBackground(String... urls) {
+//            if (!companyURL.endsWith("/"))
+//                companyURL = companyURL.concat("/");
+//            return new Helpdesk().getBaseURL(companyURL);
+//        }
+//
+//        protected void onPostExecute(String result) {
+//            progressDialogVerifyURL.dismiss();
+//            if (result == null) {
+//                linearLayout.startAnimation(animation);
+//                urlError.setVisibility(View.VISIBLE);
+//                urlError.setText(getString(R.string.error_verifying_url));
+//                urlError.setTextColor(Color.parseColor("#ff0000"));
+//                urlError.postDelayed(new Runnable() {
+//                    public void run() {
+//                        urlError.setVisibility(View.INVISIBLE);
+//                    }
+//                }, 9000);
+//                //Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
+//                return;
+//
+//            }
+//
+//            else if (result.contains("success")) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+//                    dynamicShortcut();
+//                }
+////                urlSuggestions.add(baseURL);
+////                Set<String> set = new HashSet<>(urlSuggestions);
+////                Prefs.putStringSet("URL_SUG", set);
+//
+//                Prefs.putString("BASE_URL", baseURL);
+//                Prefs.putString("companyurl",urlGivenByUser);
+//                Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
+//                Constants.URL = Prefs.getString("COMPANY_URL", "");
+//                Constants.URL1=Prefs.getString("companyurl",null);
+//                Prefs.putString("domain","http://");
+//                Log.d("companyurl",Constants.URL1);
+//                Prefs.putString("companyUrl",Constants.URL1);
+//                if (BuildConfig.DEBUG) {
+//                    viewflipper.showNext();
+//                    imageBackButton.setVisibility(View.VISIBLE);
+//                    url.setText(baseURL);
+//                    url.setVisibility(View.VISIBLE);
+//                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
+//                } else {
+//                    progressDialogBilling.show();
+//                    new VerifyBilling(LoginActivity.this, baseURL).execute();
+//                }
+//
+//            } else {
+//                linearLayout.startAnimation(animation);
 //                urlError.setVisibility(View.VISIBLE);
 //                urlError.setText(getString(R.string.error_verifying_url));
 //                urlError.setTextColor(Color.parseColor("#ff0000"));
@@ -602,11 +612,19 @@ String urlGivenByUser;
 //                        urlError.setVisibility(View.INVISIBLE);
 //                    }
 //                }, 5000);
-
-                //Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+////                urlError.setVisibility(View.VISIBLE);
+////                urlError.setText(getString(R.string.error_verifying_url));
+////                urlError.setTextColor(Color.parseColor("#ff0000"));
+////                urlError.postDelayed(new Runnable() {
+////                    public void run() {
+////                        urlError.setVisibility(View.INVISIBLE);
+////                    }
+////                }, 5000);
+//
+//                //Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 
     //N 7.0-> shortcuts
 
@@ -727,6 +745,8 @@ String urlGivenByUser;
             Log.d("Response login", result + "");
             //progressDialogSignIn.dismiss();
             if (result == null) {
+//                Intent intent=new Intent(LoginActivity.this,LoginActivity.class);
+//                startActivity(intent);
                 textInputLayoutUsername.setEnabled(true);
                 textInputLayoutPass.setEnabled(true);
                 buttonSignIn.setText(getString(R.string.sign_in));
@@ -736,7 +756,8 @@ String urlGivenByUser;
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String error = jsonObject.getString("status_code");
-                    if (error.equals("401")) {
+                    String statusCode=jsonObject.getString("status_code");
+                    if (error.equals("invalid_credentials")||statusCode.equals("401")) {
                         textInputLayoutUsername.setEnabled(true);
                         textInputLayoutPass.setEnabled(true);
                         buttonSignIn.setText(getString(R.string.sign_in));

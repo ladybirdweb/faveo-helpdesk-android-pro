@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -41,22 +42,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
-
-                <Button
-                    android:id="@+id/buttonSubmit"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:textSize="12sp"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:background="@drawable/ic_action_done"
-                    android:layout_alignBottom="@+id/titlesave"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="13dp"
-                    android:layout_marginEnd="13dp"
-                    android:layout_alignTop="@+id/titlesave" />
-
                 <ImageView
                     android:id="@+id/imageViewBack"
                     android:layout_width="wrap_content"
@@ -65,29 +50,181 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/ic_arrow_back_black_24dp" />
-
                 <TextView
                     android:id="@+id/titlesave"
                     android:layout_width="150dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
+                    android:layout_alignTop="@+id/imageViewBack"
+                    android:layout_marginStart="22dp"
+                    android:layout_toEndOf="@+id/imageViewBack"
                     android:text="@string/create_ticket"
+                    android:textAllCaps="true"
                     android:textColor="@color/theme"
                     android:textSize="16sp"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:layout_alignTop="@+id/imageViewBack"
-                    android:layout_toRightOf="@+id/imageViewBack"
-                    android:layout_toEndOf="@+id/imageViewBack" />
+                    android:textStyle="bold" />
+
+                <!--<Button-->
+                    <!--android:id="@+id/attachment"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_alignTop="@+id/titlesave"-->
+                    <!--android:layout_marginEnd="11dp"-->
+                    <!--android:layout_toStartOf="@+id/buttonSubmit"-->
+                    <!--android:background="@drawable/ic_action_attach_file"-->
+                    <!--android:textColor="#ffffff"-->
+                    <!--android:textSize="12sp" />-->
+
+                <Button
+                    android:id="@+id/buttonSubmit"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@id/titlesave"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/ic_action_done"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/faveo">
+
+        </View>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/bottom_navigation"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/transparent">
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/reveal_items"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginRight="16dp"
+                >
+
+                <!--row 1 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:background="#F0EFED"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/gallery_img_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/ic_perm_media_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Gallery" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/photo_img_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/ic_photo_camera_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Photo" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/document"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/ic_picture_as_pdf_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Document" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/audio_img_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/ic_audiotrack_black_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Audio" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <!--row 2 -->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="#F0EFED"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="16dp">-->
+
+                <!---->
+                <!--</LinearLayout>-->
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+
+
 
 
     </android.support.design.widget.AppBarLayout>
 
+
     <include layout="@layout/content_create_ticket" />
+
+
 
     <!--<Button-->
         <!--android:id="@+id/buttonsubmit"-->
@@ -107,4 +244,4 @@
     <!--android:layout_margin="@dimen/fab_margin"-->
     <!--app:srcCompat="@drawable/ic_done_white_24dp" />-->
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.fragments;
 
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -20,6 +21,8 @@ import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import es.dmoral.toasty.Toasty;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,8 +49,11 @@ private Context context;
                         (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancelAll();
                 FaveoApplication.getInstance().clearApplicationData();
+                String url=Prefs.getString("URLneedtoshow",null);
                 Prefs.clear();
+                Prefs.putString("URLneedtoshow",url);
                 getActivity().getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
+
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -64,4 +70,5 @@ private Context context;
         return builder.create();
 
     }
+
 }

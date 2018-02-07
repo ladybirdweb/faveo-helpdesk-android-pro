@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -51,6 +54,7 @@ public class collaboratorAdd extends AppCompatActivity {
     ArrayList<String> strings;
     Spinner recipients;
     String email2;
+    ProgressDialog progressDialog;
 //    ArrayList<String> strings;
 //    @BindView(R.id.toolbar)
 //    android.support.v7.widget.Toolbar toolbar;
@@ -58,11 +62,15 @@ public class collaboratorAdd extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_collaborator_add);
         recipients= (Spinner) findViewById(R.id.spinnerRecipients);
         relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
         strings = new ArrayList<>();
         strings.add("Show Recipients");
+        progressDialog=new ProgressDialog(collaboratorAdd.this);
         //recipients.setVisibility(View.VISIBLE);
 //        strings.add(getString(R.string.searchuser));
 
@@ -161,7 +169,13 @@ public class collaboratorAdd extends AppCompatActivity {
                     Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorEmpty), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                else if (!autoCompleteTextViewUser.getText().toString().contains("<")){
+                    Toasty.info(collaboratorAdd.this,getString(R.string.collaboratorExisting),Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 else {
+                    progressDialog.setMessage(getString(R.string.pleasewait));
+                    progressDialog.show();
                     new collaboratorAdduser(Prefs.getString("TICKETid", null), String.valueOf(id)).execute();
                 }
 //                if (email.contains("<")) {
@@ -210,6 +224,9 @@ public class collaboratorAdd extends AppCompatActivity {
                     }
                     else {
                         email2 = recipients.getSelectedItem().toString();
+                        progressDialog=new ProgressDialog(collaboratorAdd.this);
+                        progressDialog.setMessage(getString(R.string.pleasewait));
+                        progressDialog.show();
                         new collaboratorRemoveUser(Prefs.getString("TICKETid", null), email2).execute();
                     }
                 }catch (NullPointerException e){
@@ -296,6 +313,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
+            progressDialog.dismiss();
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -309,7 +327,7 @@ public class collaboratorAdd extends AppCompatActivity {
                     autoCompleteTextViewUser.setText("");
                     id = 0;
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
+                    Intent intent=new Intent(collaboratorAdd.this,TicketDetailActivity.class);
                     startActivity(intent);
                 }
 
@@ -343,6 +361,7 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.dismiss();
             if (isCancelled()) return;
             Log.d("result:",result);
             try {
@@ -350,7 +369,7 @@ public class collaboratorAdd extends AppCompatActivity {
                     String collaborator=jsonObject.getString("collaborator");
                     if (collaborator.equals("deleted successfully")){
                         Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
+                        Intent intent=new Intent(collaboratorAdd.this,TicketDetailActivity.class);
                         startActivity(intent);
                     }
 //                JSONArray jsonArray=jsonObject.getJSONArray("users");

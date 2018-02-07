@@ -17,7 +17,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal"
         android:id="@+id/toolbarview"
         >
@@ -42,8 +42,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/filter"
-                    android:textColor="#3da6d7"
-                    android:textSize="20sp"
+                    android:textColor="#808080"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
                     />
@@ -52,23 +52,23 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="11dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="22dp"
                     android:background="@drawable/ic_if_filter_383135"
                     android:foregroundGravity="clip_vertical" />
             </RelativeLayout>
 
-//android:minHeight="?attr/actionBarSize"
+            //android:minHeight="?attr/actionBarSize"
 
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Toolbar Title"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:id="@+id/toolbar_title"-->
-        <!--android:textColor="@color/faveo"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Toolbar Title"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:id="@+id/toolbar_title"-->
+            <!--android:textColor="@color/faveo"/>-->
 
-    </android.support.v7.widget.Toolbar>
+        </android.support.v7.widget.Toolbar>
         <View
             android:id="@+id/separationView"
             android:layout_width="1dp"
@@ -90,17 +90,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sort_by"
-                android:textColor="#3da6d7"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:id="@+id/toolbartextview"
-                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sort_by"
+                    android:textColor="#808080"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:id="@+id/toolbartextview"
+                    />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
@@ -111,10 +110,6 @@
         android:layout_height="1dp"
         android:background="#DCDCDC"
         />
-
-
-
-
     <TextView
         android:id="@+id/noiternet_view"
         android:layout_width="wrap_content"
@@ -142,16 +137,16 @@
         android:visibility="gone" />
 
 
-        <!--<android.support.design.widget.AppBarLayout-->
-            <!--android:id="@+id/appBarLayout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:elevation="4dp"-->
-            <!--android:theme="@style/AppThemeOverlay.ActionBar">-->
+    <!--<android.support.design.widget.AppBarLayout-->
+    <!--android:id="@+id/appBarLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:elevation="4dp"-->
+    <!--android:theme="@style/AppThemeOverlay.ActionBar">-->
     <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -218,4 +213,4 @@
 </LinearLayout>
 
 
-<!--</LinearLayout>-->
+    <!--</LinearLayout>-->

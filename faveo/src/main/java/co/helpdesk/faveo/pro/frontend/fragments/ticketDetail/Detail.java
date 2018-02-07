@@ -78,7 +78,7 @@ public class Detail extends Fragment {
     Animation animation;
     @BindView(R.id.spinner_staffs)
     Spinner spinnerStaffs;
-
+    String ticketId;
     public String mParam1;
     public String mParam2;
 
@@ -119,12 +119,13 @@ public class Detail extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         setUpViews(rootView);
+        ticketId=Prefs.getString("TICKETid",null);
         animation= AnimationUtils.loadAnimation(getActivity(),R.anim.shake_error);
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.fetching_detail));
         // progressDialog.show();
         if (InternetReceiver.isConnected()) {
-            task = new FetchTicketDetail(TicketDetailActivity.ticketID);
+            task = new FetchTicketDetail(Prefs.getString("TICKETid", null));
             task.execute();
         }
 
@@ -214,7 +215,6 @@ public class Detail extends Fragment {
             if (isCancelled()) return;
 //            if (progressDialog.isShowing())
 //                progressDialog.dismiss();
-
             if (result == null) {
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
@@ -426,79 +426,6 @@ public class Detail extends Fragment {
         }
         return index;
     }
-
-
-    private class SaveTicket extends AsyncTask<String, Void, String> {
-        Context context;
-        int ticketNumber;
-        String subject;
-        //int slaPlan;
-        int helpTopic;
-        int ticketSource;
-        int ticketPriority;
-        int ticketStatus;
-        int ticketType;
-        int staff;
-
-        SaveTicket(Context context, int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType,int staff) {
-            this.context = context;
-            this.ticketNumber = ticketNumber;
-            this.subject = subject;
-            // this.slaPlan = slaPlan;
-            this.helpTopic = helpTopic;
-            this.ticketSource = ticketSource;
-            this.ticketPriority = ticketPriority;
-            // this.ticketStatus = ticketStatus;
-            this.ticketType = ticketType;
-            this.staff=staff;
-        }
-
-        protected String doInBackground(String... urls) {
-            if (subject.equals("Not available"))
-                subject = "";
-            return new Helpdesk().postEditTicket(ticketNumber, subject,
-                    helpTopic, ticketSource, ticketPriority, ticketType,staff);
-        }
-
-        protected void onPostExecute(String result) {
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
-            if (result == null) {
-                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-            String state=Prefs.getString("403",null);
-//                if (message1.contains("The ticket id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
-//                }
-//                else if (message1.contains("The status id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
-//                }
-//               else
-            try {
-                if (state.equals("403") && !state.equals(null)) {
-                    Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
-                    Prefs.putString("403", "null");
-                    return;
-                }
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
-
-//            switch (result) {
-//                case "":
-//
-//            }
-
-            if (result.contains("Edited successfully")) {
-                Toasty.success(getActivity(), getString(R.string.update_success), Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-            } else
-                Toasty.error(getActivity(), getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
-        }
-    }
-
     private void setUpViews(View rootView) {
         Prefs.getString("keyStaff", null);
 
@@ -649,6 +576,7 @@ public class Detail extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
@@ -661,4 +589,12 @@ public class Detail extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (InternetReceiver.isConnected()) {
+            task = new FetchTicketDetail(Prefs.getString("TICKETid", null));
+            task.execute();
+        }
+    }
 }

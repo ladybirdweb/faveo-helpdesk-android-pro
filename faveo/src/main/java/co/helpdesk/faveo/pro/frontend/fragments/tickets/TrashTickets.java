@@ -32,7 +32,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,8 +44,11 @@ import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.MultiAssigningActivity;
 import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
+import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
@@ -154,6 +160,7 @@ public class TrashTickets extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
             Prefs.putString("source","4");
+            Prefs.putString("Show","trash");
 //            Toolbar toolbar1= (Toolbar) rootView.findViewById(R.id.toolbar3);
 //            toolbar1.setVisibility(View.VISIBLE);
 //            toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_filter_list_black_24dp));
@@ -405,12 +412,12 @@ public class TrashTickets extends Fragment {
             if (item != null) {
                 item.getSubMenu().clearHeader();
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        int id=item.getItemId();
-        StringBuffer stringBuffer=new StringBuffer();
-        if (id==R.id.action_statusOpen) {
+        int id = item.getItemId();
+        StringBuffer stringBuffer = new StringBuffer();
+        if (id == R.id.action_statusOpen) {
 
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
@@ -439,7 +446,7 @@ public class TrashTickets extends Fragment {
                     Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                     return false;
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
@@ -457,8 +464,7 @@ public class TrashTickets extends Fragment {
 //                }
 //
 //            }
-        }
-        else if (id==R.id.action_statusResolved) {
+        } else if (id == R.id.action_statusResolved) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -490,9 +496,7 @@ public class TrashTickets extends Fragment {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        }
-
-        else if (id==R.id.action_statusClosed) {
+        } else if (id == R.id.action_statusClosed) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -524,11 +528,110 @@ public class TrashTickets extends Fragment {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        }
-        else if (id==R.id.action_noti){
+        } else if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.actionsearch) {
+
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.deleteticket) {
+            try {
+                if (!Prefs.getString("tickets", null).isEmpty()) {
+                    String tickets = Prefs.getString("tickets", null);
+                    int pos = tickets.indexOf("[");
+                    int pos1 = tickets.lastIndexOf("]");
+                    String text1 = tickets.substring(pos + 1, pos1);
+                    Log.d("TEXT1", text1);
+                    String[] namesList = text1.split(",");
+                    for (String name : namesList) {
+                        stringBuffer.append("&id[]=").append(name);
+                    }
+//                    int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                    ticket = stringBuffer.toString().substring(0, pos2);
+                    ticket = stringBuffer.toString();
+                    Log.d("tickets", ticket);
+                    try {
+                        if (ticket.equals("&id[]=")){
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                        else{
+                            new DeleteTicket(ticket.trim()).execute();
+                            progressDialog.show();
+                            progressDialog.setMessage(getString(R.string.pleasewait));
+                        }
+
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+
+                    }
+                    return true;
+                } else {
+                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            } catch (NullPointerException e) {
+                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            //Toast.makeText(getActivity(), "Clicked On Delete", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+//        if (id == R.id.mergeticket) {
+//            try {
+//                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                String ticketId = Prefs.getString("tickets", null);
+//                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+//                int itemCount = items.size();
+//                if (itemCount == 1) {
+//                    Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                } else {
+//                    Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//                    startActivity(intent);
+//                }
+//
+////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+////            startActivity(intent);
+//
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+
+
+
+       // }
+        else if (id==R.id.assignticket){
+            try {
+                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                String ticketId = Prefs.getString("tickets", null);
+                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                int itemCount = items.size();
+                if (itemCount == 1) {
+                    Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
+                    return false;
+                } else {
+                    Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+                    startActivity(intent);
+                }
+
+//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//            startActivity(intent);
+
+            } catch (NullPointerException e) {
+                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -697,6 +800,80 @@ public class TrashTickets extends Fragment {
 
 
     }
+    private class DeleteTicket extends AsyncTask<String, Void, String> {
+        String ticketId;
+
+        DeleteTicket(String ticketId) {
+
+            this.ticketId=ticketId;
+
+
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().ticketDeleteForever(ticketId);
+            //return new Helpdesk().postStatusChanged(ticketId,statusId);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            String state=Prefs.getString("403",null);
+            //progressDialog.dismiss();
+            if (result == null) {
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+            try {
+                if (state.equals("403") && !state.equals("null")) {
+                    Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
+//            try {
+//                JSONObject jsonObject = new JSONObject(result);
+//                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+//                JSONArray jsonArray=jsonObject1.getJSONArray("message");
+//                for (int i=0;i<jsonArray.length();i++){
+//                    String message=jsonArray.getString(i);
+//                    if (message.equals("Permission denied, you do not have permission to access the requested page.")){
+//                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+//                        Prefs.putString("403", "null");
+//                        return;
+//                    }
+//                }
+//
+//            }catch (JSONException e){
+//                e.printStackTrace();
+//            }
+
+
+            try {
+
+                JSONObject jsonObject = new JSONObject(result);
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                String response=jsonObject.getString("success");
+                if (response.contains("deleted successfully")){
+                    Toasty.success(getActivity(),"Tickets are succesfully deleted",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(getActivity(),MainActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+
+
+            }catch (JSONException | NullPointerException e) {
+                e.printStackTrace();
+
+            }
+        }
+
+
+    }
+
+
     /**
      * Async task for getting the my tickets.
      */

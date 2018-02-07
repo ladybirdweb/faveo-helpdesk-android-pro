@@ -1,308 +1,450 @@
-//package co.helpdesk.faveo.pro.frontend.activities;
+package co.helpdesk.faveo.pro.frontend.activities;
+
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.pixplicity.easyprefs.library.Prefs;
+
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.frontend.adapters.MyPagerAdapter;
+import co.helpdesk.faveo.pro.frontend.adapters.TabsPagerAdapter;
+import co.helpdesk.faveo.pro.frontend.fragments.TicketFragment;
+import co.helpdesk.faveo.pro.frontend.fragments.UsersFragment;
+import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
+import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
+import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.Data;
+
+
+public class SearchActivity extends AppCompatActivity implements
+        Conversation.OnFragmentInteractionListener,
+        Detail.OnFragmentInteractionListener {
+    AutoCompleteTextView searchView;
+    ImageView imageViewback;
+    ImageView imageViewClearText;
+    private ViewPager vpPager;
+    ArrayList<String> colorList;
+    ArrayAdapter<String> suggestionAdapter;
+    Toolbar toolbar;
+    String term;
+    TabLayout tabLayout;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
+        vpPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout= (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(vpPager);
+        setupViewPager(vpPager);
+
+        //adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
+        //vpPager.setAdapter(adapterViewPager);
+        //handleIntent(getIntent());
+        toolbar= (Toolbar) findViewById(R.id.toolbar);
+        //ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        //myAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        //vpPager.setAdapter(myAdapter);
+        imageViewback= (ImageView) toolbar.findViewById(R.id.image_search_back);
+        searchView= (AutoCompleteTextView) toolbar.findViewById(R.id.edit_text_search);
+        imageViewClearText= (ImageView) toolbar.findViewById(R.id.cleartext);
+        imageViewClearText.setVisibility(View.GONE);
+        //imageViewSearchIcon= (ImageView) toolbar.findViewById(R.id.searchIcon);
+        colorList=new ArrayList<>();
+        colorList.clear();
+        String querry=Prefs.getString("querry",null);
+        if (querry.equals("null")){
+            searchView.setText("");
+        }
+        else{
+            searchView.setText(querry);
+            //searchView.setCursorVisible(false);
+        }
+        String recentSuggestion=Prefs.getString("RecentSearh",null);
+        try {
+            int pos = recentSuggestion.indexOf("[");
+            int pos2 = recentSuggestion.lastIndexOf("]");
+            String strin1 = recentSuggestion.substring(pos + 1, pos2);
+            String[] namesList = strin1.split(",");
+            for (String name : namesList) {
+                if (!colorList.contains(name)) {
+                    colorList.add(name.trim());
+                    Set set = new HashSet(colorList);
+                    colorList.clear();
+                    colorList.addAll(set);
+                }
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+//        colorList.add("Cat");
+//        colorList.add("Dog");
+//        colorList.add("Owl");
+//        colorList.add("Rhyno");
+//        colorList.add("Crow");
+//        colorList.add("Cow");
+//        try {
+//            if (recentSuggestion.startsWith("[")) {
+//                suggestionAdapter = new ArrayAdapter<String>(this, R.layout.row, R.id.textView, colorList);
+//                //suggestionAdapter = new ArrayAdapter<>(SearchActivity.this, android.R.layout.simple_dropdown_item_1line, colorList);
+//                searchView.setAdapter(suggestionAdapter);
 //
-//import android.app.SearchManager;
-//import android.content.Context;
-//import android.content.Intent;
-//import android.net.Uri;
-//import android.os.Bundle;
-//import android.provider.SearchRecentSuggestions;
-//import android.support.design.widget.TabLayout;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentManager;
-//import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.view.ViewPager;
-//import android.support.v4.widget.SwipeRefreshLayout;
-//import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.widget.LinearLayoutManager;
-//import android.support.v7.widget.RecyclerView;
-//import android.support.v7.widget.SearchView;
-//import android.support.v7.widget.Toolbar;
-//import android.view.LayoutInflater;
-//import android.view.Menu;
-//import android.view.MenuInflater;
-//import android.view.MenuItem;
-//import android.view.View;
-//import android.view.ViewGroup;
-//import android.widget.Toast;
+//                //searchView.showDropDown();
+//                searchView.setDropDownWidth(1100);
+//                searchView.setThreshold(1);
 //
-//import butterknife.BindView;
-//import butterknife.ButterKnife;
-//import co.helpdesk.faveo.pro.R;
-//import co.helpdesk.faveo.pro.frontend.MySuggestionProvider;
-//import co.helpdesk.faveo.pro.frontend.fragments.search.SearchCustomerFragment;
-//import co.helpdesk.faveo.pro.frontend.fragments.search.SearchTicketFragmnet;
-//
-//public class SearchActivity extends AppCompatActivity implements
-//        SearchCustomerFragment.OnFragmentInteractionListener,
-//        SearchTicketFragmnet.OnFragmentInteractionListener {
-//
-//    /**
-//     * The {@link android.support.v4.view.PagerAdapter} that will provide
-//     * fragments for each of the sections. We use a
-//     * {@link FragmentPagerAdapter} derivative, which will keep every
-//     * loaded fragment in memory. If this becomes too memory intensive, it
-//     * may be best to switch to a
-//     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-//     */
-//    private SectionsPagerAdapter mSectionsPagerAdapter;
-//
-//    /**
-//     * The {@link ViewPager} that will host the section contents.
-//     */
-//    private ViewPager mViewPager;
-//
-//    //    @BindView(R.id.searchView)
-//    SearchView searchView;
-//
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        setIntent(intent);
-//
-//        handledearch(intent);
-//    }
-//
-//    public void handledearch(Intent intent) {
-//        if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-//            SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
-//                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-//            searchRecentSuggestions.saveRecentQuery(query, null);
-//        }
-//    }
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_search);
-//        ButterKnife.bind(this);
-//
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setTitle("");
-//
-//        handledearch(getIntent());
-////
-////        Intent intent  = getIntent();
-////        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-////            String query = intent.getStringExtra(SearchManager.QUERY);
-////            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-////                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-////            suggestions.saveRecentQuery(query, null);
-////        }
-//
-//        // Do not iconify the widget; expand it by default
-//        //searchView.requestFocus();
-////        SearchManager searchManager = (SearchManager)
-////                getSystemService(Context.SEARCH_SERVICE);
-////
-////        searchView.setSearchableInfo(searchManager.
-////                getSearchableInfo(getComponentName()));
-////
-////        searchView.requestFocus();
-////        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-////            @Override
-////            public boolean onQueryTextSubmit(String query) {
-////                if (query.length() >= 2) {
-////                    //loadData(s);
-////                    Toast.makeText(getBaseContext(), query, Toast.LENGTH_SHORT).show();
-////                }
-////                return true;
-////            }
-////
-////            @Override
-////            public boolean onQueryTextChange(String newText) {
-////                return false;
-////            }
-////        });
-////        //*** setOnQueryTextFocusChangeListener ***
-////        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-////
-////            @Override
-////            public void onFocusChange(View v, boolean hasFocus) {
-////                // TODO Auto-generated method stub
-////
-////                Toast.makeText(getBaseContext(), String.valueOf(hasFocus),
-////                        Toast.LENGTH_SHORT).show();
-////            }
-////        });
-//        // Create the adapter that will return a fragment for each of the three
-//        // primary sections of the activity.
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//
-//        // Set up the ViewPager with the sections adapter.
-//        mViewPager = (ViewPager) findViewById(R.id.container);
-//        mViewPager.setAdapter(mSectionsPagerAdapter);
-//
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(mViewPager);
-//
-////        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-////        fab.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View view) {
-////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-////            }
-////        });
-//
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the options menu from XML
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.search_menu, menu);
-//
-//        // Get the SearchView and set the searchable configuration
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        // Assumes current activity is the searchable activity
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//        menu.findItem(R.id.action_search).expandActionView();
-//        searchView.setIconified(false);
-//        searchView.setFocusable(true);
-//
-//
-//        // Do not iconify the widget; expand it by default
-//        searchView.requestFocus();
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                if (query.length() >= 2) {
-//                    //loadData(s);
-//                    Toast.makeText(getBaseContext(), query, Toast.LENGTH_SHORT).show();
-//                }
-//                return true;
 //            }
-//
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
+
+        searchView.addTextChangedListener(passwordWatcheredittextSubject);
+//        else {
+//            suggestionAdapter = new ArrayAdapter<String>(this, R.layout.row, R.id.textView, colorList);
+//            searchView.showDropDown();
+//            searchView.setDropDownWidth(1100);
+//            searchView.setAdapter(suggestionAdapter);
+//            searchView.setThreshold(1);
+//        }
+
+        //searchView.onActionViewExpanded();
+
+
+//        imageViewSearchIcon.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
+//            public void onClick(View view) {
+//                String query=searchView.getText().toString();
+//                Log.d("CLICKED",query);
+////                Toast.makeText(SearchActivity.this, "came here", Toast.LENGTH_SHORT).show();
+////                Intent intent=new Intent(SearchActivity.this,MainActivity.class);
+////                    startActivity(intent);
+////                    colorList.add(query);
+//
+//                if (query.equals("")){
+//                    Toast.makeText(SearchActivity.this, "field is empty", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                else{
+//                    colorList.add(query);
+//                    suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+//                    searchView.setAdapter(suggestionAdapter);
+//                    searchView.setDropDownWidth(1100);
+//                    searchView.setThreshold(1);
+//                    searchView.showDropDown();
+//                    //Prefs.putString("RecentSearh",colorList.toString());
+////                    Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
+////                    finish();
+////                    startActivity(intent);
+//                    Log.d("suggestion",colorList.toString());
+//
+//                }
 //            }
 //        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
+        imageViewback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(SearchActivity.this,MainActivity.class);
+
+                startActivity(intent);
+            }
+        });
+
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String querry=searchView.getText().toString();
+                Prefs.putString("querry",querry);
+                try {
+                    String querry1 = URLEncoder.encode(querry, "utf-8");
+                    Prefs.putString("querry1",querry1);
+                    //Log.d("Msg", replyMessage);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                if (!colorList.contains(querry)){
+                    colorList.add(searchView.getText().toString());
+                }
+
+                Prefs.putString("RecentSearh",colorList.toString());
+                Log.d("suggestionss",colorList.toString());
+                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
+//                    Log.d("IME SEARCH",searchView.getText().toString());
+                Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
+                finish();
+                startActivity(intent);
+
+            }
+        });
+
+
+        searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String querry=searchView.getText().toString();
+                    Prefs.putString("querry",querry);
+                    try {
+                     String querry1 = URLEncoder.encode(querry, "utf-8");
+                        Prefs.putString("querry1",querry1);
+                        //Log.d("Msg", replyMessage);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (!colorList.contains(querry)){
+                        colorList.add(searchView.getText().toString());
+                    }
+
+                    Prefs.putString("RecentSearh",colorList.toString());
+                    Log.d("suggestionss",colorList.toString());
+                    //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
+//                    Log.d("IME SEARCH",searchView.getText().toString());
+                    Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
+                    finish();
+                    startActivity(intent);
+                    //colorList.add(searchView.getText().toString());
+
+                    //performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        searchView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+                searchView.setAdapter(suggestionAdapter);
+                searchView.setDropDownWidth(1500);
+                searchView.setThreshold(1);
+                searchView.showDropDown();
+                return false;
+            }
+        });
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+                    searchView.setAdapter(suggestionAdapter);
+                    searchView.setDropDownWidth(1500);
+                    searchView.setThreshold(1);
+//                    searchView.showDropDown();
+                }
+            }
+        });
+
+        imageViewClearText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.setText("");
+                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+                searchView.setAdapter(suggestionAdapter);
+                searchView.setDropDownWidth(1500);
+                searchView.setThreshold(1);
+                searchView.showDropDown();
+
+            }
+        });
+
+//        vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 //
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                //Write your logic here
-//                finish();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-//
-//    @Override
-//    public void onFragmentInteraction(Uri uri) {
-//
-//    }
-//
-//    /**
-//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-//     * one of the sections/tabs/pages.
-//     */
-//    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//
-//            if (position == 0) {
-//                return SearchTicketFragmnet.newInstance();
-//            } else {
-//                return SearchCustomerFragment.newInstance();
+//            // This method will be invoked when a new page becomes selected.
+//            @Override
+//            public void onPageSelected(int position) {
+//                //Toast.makeText(SearchActivity.this,
+//                       // "Selected page position: " + position, Toast.LENGTH_SHORT).show();
 //            }
-//            // getItem is called to instantiate the fragment for the given page.
-//            // Return a PlaceholderFragment (defined as a static inner class below).
-//            //return PlaceholderFragment.newInstance(position + 1);
-//        }
 //
-//        @Override
-//        public int getCount() {
-//            // Show 2 total pages.
-//            return 2;
-//        }
+//            // This method will be invoked when the current page is scrolled
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                // Code goes here
+//                if (position==1){
 //
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            switch (position) {
-//                case 0:
-//                    return getString(R.string.tickets);
-//                case 1:
-//                    return getString(R.string.customers);
+//                }
 //            }
-//            return null;
-//        }
-//    }
 //
-//    //    @Override
-////    public boolean onKeyDown(int keyCode, KeyEvent event) {
-////        //replaces the default 'Back' button action
-////        if (keyCode == KeyEvent.KEYCODE_BACK) {
-////            finish();
-////        }
-////        return true;
-////    }
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        this.finish();
-//    }
+//            // Called when the scroll state changes:
+//            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//                // Code goes here
+//            }
+//        });
+
+
+
+    }
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
+        adapter.addFrag(new UsersFragment(), getString(R.string.users));
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+
+    final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            searchView.showDropDown();
+
+            //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            term = searchView.getText().toString();
+            if (term.equals("")){
+                searchView.showDropDown();
+                imageViewClearText.setVisibility(View.GONE);
+                imageViewClearText.setClickable(false);
+            }
+            else{
+                imageViewClearText.setVisibility(View.VISIBLE);
+            }
+//            if (colorList.contains(term)){
+//                searchView.showDropDown();
+//            }
+//            else {
+//                searchView.dismissDropDown();
+//            }
+//            if (InternetReceiver.isConnected()) {
+//                if (term.contains(",")) {
+//                    int pos = term.lastIndexOf(",");
+//                    term = term.substring(pos + 1, term.length());
+//                    Log.d("newTerm", term);
+//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+//                    new collaboratorAdd.FetchCollaborator(term.trim()).execute();
+//                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
+//                }
+////            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
+//                else if (term.equals("")) {
+//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+//                    //new FetchCollaborator("s").execute();
+//                    Data data = new Data(0, "No result found");
+//                    stringArrayList.add(data);
+////                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
+////                stringArrayAdapterCC.notifyDataSetChanged();
+////                autoCompleteTextViewCC.setThreshold(0);
+////                autoCompleteTextViewCC.setDropDownWidth(1000);
 //
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
+//                } else {
+//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+//                    new collaboratorAdd.FetchCollaborator(term).execute();
+//                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
 //
-//        @BindView(R.id.cardList)
-//        RecyclerView recyclerView;
-//        @BindView(R.id.swipeRefresh)
-//        SwipeRefreshLayout swipeRefresh;
 //
-//        public PlaceholderFragment() {
-//        }
+//                    //stringArrayAdapterCC.notifyDataSetChanged();
+////                autoCompleteTextViewCC.setThreshold(0);
+////                autoCompleteTextViewCC.setDropDownWidth(1000);
 //
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
+//                }
 //
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
-//            ButterKnife.bind(this, rootView);
-//            swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
-//            swipeRefresh.setRefreshing(false);
 //
-//            recyclerView.setHasFixedSize(false);
-//            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-//            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//            recyclerView.setLayoutManager(linearLayoutManager);
-////            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-////            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
-//    }
-//}
+//                //buttonsave.setEnabled(true);
+//            }
+        }
+
+        public void afterTextChanged(Editable s) {
+            if (term.equals("")){
+                imageViewClearText.setVisibility(View.GONE);
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                searchView.showDropDown();
+                imageViewClearText.setClickable(false);
+            }
+            else{
+                imageViewClearText.setVisibility(View.VISIBLE);
+                searchView.showDropDown();
+                //searchView.showDropDown();
+            }
+        }
+    };
+
+
+    @Override
+    public void onBackPressed() {
+            super.onBackPressed();
+
+        this.finish();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+}
+
+
+

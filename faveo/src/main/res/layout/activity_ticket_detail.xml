@@ -4,54 +4,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".frontend.activities.TicketDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppThemeOverlay.ActionBar">
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbarTicketDetail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:layout_height="140dp"
+            android:background="#F5F5F5"
             android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppThemeOverlay.ActionBar">
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                >
+                <View
+                    android:id="@+id/viewPriority"
+                    android:layout_width="7dp"
+                    android:layout_height="150dp"
+                    android:visibility="gone"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/faveo">
+                </View>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:textColor="@color/faveo"
-                android:textSize="18sp" />
 
+                <ImageView
+                    android:id="@+id/imageviewback"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_above="@+id/textViewagentName"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_toEndOf="@+id/viewPriority"
+                    android:src="@drawable/ic_arrow_back_black_24dp" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@+id/textViewagentName"
+                    android:background="@drawable/rectangle1"
+                    android:text="Status"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:id="@+id/textViewagentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/title"
+                    android:layout_alignStart="@+id/imageviewback"
+                    android:background="@drawable/rectangle1"
+                    android:text="Agent Name"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_alignStart="@+id/textViewagentName"
+                    android:layout_below="@+id/status"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="13dp"
+                    android:text="@string/aaaa_0001_0000001"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/imageviewback"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="22dp"
+                    android:layout_toEndOf="@+id/imageviewback"
+                    android:text="Test Ticket For Faveo"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="15sp"
+                    android:maxLines="1"/>
+            </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
+            android:background="#F5F5F5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="5dp"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/faveo"
-            app:tabMode="fixed" />
+            app:tabMode="fixed"
+            android:visibility="visible">
+        </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="600dp"
         android:background="@color/transparent"
         android:clickable="true"
         android:visibility="invisible" />
@@ -60,7 +128,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        >
 
         <LinearLayout
             android:id="@+id/reveal"
@@ -132,7 +201,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,31 +209,6 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:alpha="0.3"-->
-                    <!--android:text="@string/cc"-->
-                    <!--android:textColor="@color/black"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:visibility="visible" />-->
-
-                <!--<EditText-->
-                    <!--android:id="@+id/editText_cc"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/edittext_modified_states"-->
-                    <!--android:imeOptions="actionNext"-->
-                    <!--android:maxLines="3"-->
-                    <!--android:paddingBottom="16dp"-->
-                    <!--android:paddingTop="16dp"-->
-                    <!--android:textCursorDrawable="@drawable/color_cursor"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:visibility="visible" />-->
-
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,7 +218,6 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
-
                 <EditText
                     android:id="@+id/editText_reply_message"
                     android:layout_width="match_parent"
@@ -190,23 +232,16 @@
                     android:paddingTop="16dp"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="14sp" />
-
-
-                    <TextView
+                <TextView
                         android:id="@+id/addcc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
+                        android:text="Add CC"
                         android:textColor="@color/faveo"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
+                        android:visibility="visible"
                         android:layout_marginRight="50dp"/>
-
-
-
-
 
                 <Button
                     android:id="@+id/button_send"
@@ -218,6 +253,7 @@
                     android:text="@string/send"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
+
 
             </LinearLayout>
 
@@ -263,7 +299,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/fab_sheet"
                 android:layout_width="200dp"
-                android:layout_height="160dp">
+                android:layout_height="170dp">
 
                 <!-- Sheet items -->
                 <LinearLayout
@@ -306,14 +342,35 @@
                             android:drawableTint="@color/faveo"
                             android:text="@string/internal_note" />
                     </LinearLayout>
-                    <!-- Note -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/faveo">
+                        android:background="@color/white">
 
-                        <TextView style="@style/TextAppearance.MaterialSheetFab.Sheet.Item" />
+                        <TextView
+                            android:id="@+id/fab_sheet_exit"
+                            style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:drawableLeft="@drawable/ic_exit_to_app_black_24dp"
+                            android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
+                            android:drawableTint="@color/faveo"
+                            android:text="@string/exit" />
                     </LinearLayout>
+
+                    <!-- Note -->
+                    <!--<TextView-->
+                        <!--android:id="@+id/closeFab"-->
+                        <!--style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="?attr/selectableItemBackground"-->
+                        <!--android:drawableLeft="@drawable/ic_exit_to_app_black_24dp"-->
+                        <!--android:drawableStart="@drawable/ic_exit_to_app_black_24dp"-->
+                        <!--android:drawableTint="@color/faveo"-->
+                        <!--android:text="@string/closeFab" />-->
+
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>

@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -55,13 +57,16 @@ public class EditCustomer extends AppCompatActivity {
     int i=0;
     TextView textViewActiveOrDeactivated;
     ProgressDialog progressDialog;
-    String userName,firstName,lastName,emailtext,phoneText,mobileText;
+    String firstName,lastName,emailtext,phoneText,mobileText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_edit_customer);
         clientID= Prefs.getString("clientId",null);
-        username= (EditText) findViewById(R.id.username);
+        //username= (EditText) findViewById(R.id.username);
         firstname= (EditText) findViewById(R.id.firstname);
         lastname= (EditText) findViewById(R.id.lastname);
         email= (EditText) findViewById(R.id.email);
@@ -115,7 +120,7 @@ public class EditCustomer extends AppCompatActivity {
                     return;
                 }
 
-                userName=username.getText().toString();
+                //userName=username.getText().toString();
                 firstName=firstname.getText().toString();
                 lastName=lastname.getText().toString();
                 emailtext=email.getText().toString();
@@ -126,7 +131,7 @@ public class EditCustomer extends AppCompatActivity {
 
                 try {
 
-                    userName = URLEncoder.encode(userName.trim(), "utf-8");
+                    //userName = URLEncoder.encode(userName.trim(), "utf-8");
                     firstName = URLEncoder.encode(firstName.trim(), "utf-8");
                     lastName = URLEncoder.encode(lastName.trim(), "utf-8");
                     emailtext = URLEncoder.encode(emailtext.trim(), "utf-8");
@@ -143,7 +148,7 @@ public class EditCustomer extends AppCompatActivity {
                 if (InternetReceiver.isConnected()){
                     progressDialog.show();
                     progressDialog.setMessage(getString(R.string.pleasewait));
-                    new EditClient(EditCustomer.this,clientID,userName,firstName,lastName,emailtext,phoneText,mobileText).execute();
+                    new EditClient(EditCustomer.this,clientID,firstName,lastName,emailtext,phoneText,mobileText).execute();
                     }
 
 
@@ -220,7 +225,7 @@ public class EditCustomer extends AppCompatActivity {
                 else
                     clientname1 = firstname1 + " " + lastName1;
 
-                username.setText(clientname1);
+                //username.setText(clientname1);
                 email.setText(requester.getString("email"));
                 if (firstname1.equals("null")||firstname1.equals("")){
                     firstname.setText("");
@@ -274,14 +279,13 @@ public class EditCustomer extends AppCompatActivity {
     private class EditClient extends AsyncTask<String, Void, String> {
         Context context;
         String clientid;
-        String username;
         String firstname;
         String lastname;
         String email;
         String mobile;
         String phone;
 
-        EditClient(Context context,String clientid,String username,
+        EditClient(Context context,String clientid,
                 String firstname,
                 String lastname,
                 String email,
@@ -289,7 +293,6 @@ public class EditCustomer extends AppCompatActivity {
                 String phone) {
             this.context = context;
             this.clientid=clientid;
-            this.username=username;
             this.firstname=firstname;
             this.lastname=lastname;
             this.email=email;
@@ -300,7 +303,7 @@ public class EditCustomer extends AppCompatActivity {
 
         protected String doInBackground(String... urls) {
 
-            return new Helpdesk().saveCustomerDetails(clientID,username,firstname,lastname,email,mobile,phone);
+            return new Helpdesk().saveCustomerDetails(clientID,firstname,lastname,email,mobile,phone);
         }
 
         protected void onPostExecute(String result) {

@@ -4,20 +4,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import co.helpdesk.faveo.pro.LocaleHelper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import es.dmoral.toasty.Toasty;
@@ -84,6 +88,7 @@ public class Settings extends Fragment implements CompoundButton.OnClickListener
         return rootView;
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -94,6 +99,10 @@ public class Settings extends Fragment implements CompoundButton.OnClickListener
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+    private void updateViews(String languageCode) {
+        Context context = LocaleHelper.setLocale(getActivity(), languageCode);
+        Resources resources = context.getResources();
     }
     /**
      * When the fragment is going to be attached

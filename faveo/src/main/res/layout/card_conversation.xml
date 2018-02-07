@@ -10,14 +10,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/thread"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true">
+        <!--<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:id="@+id/thread"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true">-->
 
             <RelativeLayout
+                android:id="@+id/thread"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:animateLayoutChanges="true"
@@ -26,24 +27,21 @@
                 android:paddingRight="16dp"
                 android:paddingTop="2dp">
 
-                <agency.tango.android.avatarview.views.AvatarView
+                <ImageView
                     android:id="@+id/imageView_default_profile"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/default_pic"
-                    app:av_border_color="@color/faveo"
-                    app:av_border_width="2dp"
-                    app:av_text_size_percentage="35" />
+                    android:background="@drawable/rounded_textview" />
 
                 <TextView
                     android:id="@+id/textView_client_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="18dp"
-                    android:layout_toLeftOf="@+id/textView_ticket_time"
-                    android:layout_toRightOf="@+id/imageView_default_profile"
+                    android:layout_alignTop="@+id/imageView_default_profile"
+                    android:layout_marginStart="14dp"
+                    android:layout_toEndOf="@+id/imageView_default_profile"
                     android:alpha="0.54"
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-bold"
@@ -56,10 +54,9 @@
                     android:id="@+id/textView_ticket_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/textView_client_name"
+                    android:layout_below="@+id/textView_client_name"
                     android:alpha=".86"
-                    android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/dummy_date"
                     android:textColor="@color/black"
@@ -69,31 +66,33 @@
                     android:id="@+id/textView_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textView_client_name"
+                    android:layout_alignBottom="@+id/textView_client_name"
+                    android:layout_marginStart="11dp"
+                    android:layout_toEndOf="@+id/textView_client_name"
                     android:text="@string/internal_note"
                     android:textColor="@color/error_red"
-                    android:textSize="12sp"
-                    android:layout_below="@+id/textView_client_name"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:textSize="12sp" />
 
+                <!--<TextView-->
+                    <!--android:id="@+id/textView_client_message_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_above="@+id/textView_type"-->
+                    <!--android:layout_alignStart="@+id/textView_client_name"-->
+                    <!--android:alpha=".67"-->
+                    <!--android:fontFamily="sans-serif-medium"-->
+                    <!--android:text="@string/dummy_title"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="12sp"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:visibility="visible" />-->
 
             </RelativeLayout>
-        </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView_client_message_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:alpha=".67"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/dummy_title"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+        <!--</android.support.v7.widget.CardView>-->
+
+
 
         <WebView
             android:id="@+id/webView"
@@ -102,12 +101,17 @@
             android:layout_marginLeft="8dp"
             android:background="@color/grey_200"
             android:textSize="16sp"
+            android:padding="5dp"
             android:visibility="gone" />
-
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/grey_200" />
+            android:layout_height="2dp"
+            android:background="#E0E0E0"/>
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.5dp"-->
+            <!--android:background="@color/grey_200" />-->
 
     </LinearLayout>
 

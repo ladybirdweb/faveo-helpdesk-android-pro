@@ -24,6 +24,8 @@
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+-keep class br.com.mauker.MsvAuthority
+-keepclassmembers class br.com.mauker.** { *; }
 
 -keepclasseswithmembers class * {
     @retrofit2.http.* <methods>;
@@ -56,7 +58,10 @@
     public static *** w(...);
     public static *** wtf(...);
 }
-
+-ignorewarnings
+-keep class * {
+    public private *;
+}
 ## ButterKnife
 -dontwarn butterknife.internal.**
 -keep class **$$ViewInjector { *; }

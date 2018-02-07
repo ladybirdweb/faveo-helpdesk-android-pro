@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context="co.helpdesk.faveo.pro.frontend.activities.SearchActivity">
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <!--<android.support.design.widget.FloatingActionButton-->
     <!--android:id="@+id/fab"-->
@@ -32,33 +27,103 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="45dp"
             app:layout_scrollFlags="scroll|enterAlways"
+            android:background="@drawable/background_square"
+            android:paddingStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
             app:popupTheme="@style/AppThemeOverlay.ActionBar">
 
-            <!--<android.support.v7.widget.SearchView-->
-            <!--android:id="@+id/searchView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginEnd="16dp"-->
-            <!--android:layout_marginRight="16dp"-->
-            <!--android:actionViewClass="android.widget.SearchView"-->
-            <!--android:inputType="text"-->
-            <!--android:textCursorDrawable="@drawable/color_cursor"-->
-            <!--android:textSize="16sp"-->
-            <!--app:iconifiedByDefault="false"-->
-            <!--app:searchIcon="@null" />-->
-        </android.support.v7.widget.Toolbar>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
 
+
+                <ImageView
+                    android:id="@+id/image_search_back"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="Back"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_back_black_24dp"
+                    />
+
+                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                    android:theme="@style/SearchViewStyle"
+                    android:id="@+id/edit_text_search"
+                    android:layout_width="290dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/image_search_back"
+                    android:layout_weight="1"
+                    android:background="#fff"
+                    android:inputType="text"
+                    android:gravity="center_vertical"
+                    android:hint="@string/search"
+                    android:imeOptions="actionSearch"
+                    android:paddingLeft="12dp"
+                    android:textColor="@color/faveo"
+                    android:paddingRight="8dp"
+                    android:singleLine="true"
+                    android:dropDownVerticalOffset="10dp"
+                    />
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/searchIcon"-->
+                    <!--android:layout_width="38dp"-->
+                    <!--android:layout_height="38dp"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_toStartOf="@+id/cleartext"-->
+                    <!--android:background="?android:attr/selectableItemBackground"-->
+                    <!--android:clickable="true"-->
+                    <!--android:contentDescription="Back"-->
+                    <!--android:padding="8dp"-->
+                    <!--android:src="@drawable/ic_action_search" />-->
+
+
+                <ImageView
+                    android:id="@+id/cleartext"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="10dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:contentDescription="Back"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_close_24dp"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
-            app:tabIndicatorColor="@color/faveo"
-            app:tabMode="fixed" />
-
+            app:tabMode="fixed"
+            android:background="@color/white"
+            />
     </android.support.design.widget.AppBarLayout>
+    <!--<View-->
+        <!--android:id="@+id/separationview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="#DCDCDC"-->
+        <!--/>-->
 
-</android.support.design.widget.CoordinatorLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

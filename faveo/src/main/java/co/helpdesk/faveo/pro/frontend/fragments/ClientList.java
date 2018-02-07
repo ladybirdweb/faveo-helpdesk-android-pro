@@ -15,7 +15,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +44,12 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.ClientDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.ClientOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.search.SearchCustomerFragment;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.DueByAsc;
+import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.ClientOverview;
 import es.dmoral.toasty.Toasty;
@@ -106,6 +112,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -142,7 +149,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                 toolbarTextview.setText(getString(R.string.bannedUser));
             }
             else if (heading.equals("deleted")){
-                toolbarTextview.setText(getString(R.string.deactivateUser));
+                toolbarTextview.setText(getString(R.string.deleteduser));
             }
             else if (heading.equals("admin")){
                 toolbarTextview.setText(getString(R.string.roleAdmin));
@@ -361,10 +368,10 @@ public class ClientList extends Fragment implements View.OnClickListener {
                             if (condition.equals("true")) {
                                 noInternet_view.setVisibility(View.GONE);
                                 //swipeRefresh.setRefreshing(true);
-                                progressDialog.show();
+                                //progressDialog.show();
                                 new FetchClients(getActivity()).execute();
                             } else if (condition.equals("false")){
-                                progressDialog.show();
+                                //progressDialog.show();
                                 new FetchClientsFilter(getActivity(), url, page).execute();
 //                        Toast.makeText(getActivity(), "came from filter", Toast.LENGTH_SHORT).show();
 //                        Toast.makeText(getActivity(), "url" + url, Toast.LENGTH_SHORT).show();
@@ -385,7 +392,30 @@ public class ClientList extends Fragment implements View.OnClickListener {
             empty_view.setText(R.string.no_clients);
         }
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.client_list));
+
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.search_menu, menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        if (id == R.id.action_search) {
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if (id==R.id.action_noti){
+            Intent intent=new Intent(getActivity(),NotificationActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private class FetchClients extends AsyncTask<String, Void, String> {
@@ -465,7 +495,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                     }
                 }
             });
-            clientOverviewAdapter = new ClientOverviewAdapter(clientOverviewList);
+            clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);
@@ -508,7 +538,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
             if (result == null)
                 return;
             if (result.equals("all done")) {
-                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
+                Toasty.info(context, getString(R.string.allClientsLoaded), Toast.LENGTH_SHORT).show();
                 return;
             }
             clientOverviewAdapter.notifyDataSetChanged();
@@ -594,7 +624,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                     }
                 }
             });
-            clientOverviewAdapter = new ClientOverviewAdapter(clientOverviewList);
+            clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);

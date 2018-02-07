@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
@@ -24,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.LocaleHelper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
@@ -87,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isShowing = true;
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         
@@ -190,7 +197,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        Crashlytics.setUserEmail(Constants.URL);
 //        Crashlytics.setUserName(Preference.getUsername());
 //    }
-
+//@Override
+//protected void attachBaseContext(Context base) {
+//    super.attachBaseContext(LocaleHelper.onAttach(base));
+//}
     @Override
     protected void onDestroy() {
         isShowing = false;
@@ -304,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //            startActivity(new Intent(MainActivity.this, SearchActivity.class));
 //            return true;
 //        }
+
         if (id == R.id.action_noti) {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);

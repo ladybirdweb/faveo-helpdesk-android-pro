@@ -28,6 +28,7 @@ public class Helper {
      * @return object for ticket overview.
      */
     public static TicketOverview parseTicketOverview(JSONArray jsonArray, int i) {
+        String agentName;
         try {
             //Date updated_at = null;
             String firstName = jsonArray.getJSONObject(i).getString("c_fname");
@@ -55,7 +56,85 @@ public class Helper {
             String priorityColor = jsonArray.getJSONObject(i).getString("color");
             String attachment = jsonArray.getJSONObject(i).getString("countattachment");
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
-            String agentName=jsonArray.getJSONObject(i).getString("a_fname")+" "+jsonArray.getJSONObject(i).getString("a_lname");
+            if (jsonArray.getJSONObject(i).getString("a_fname").equals("")||jsonArray.getJSONObject(i).getString("a_lname").equals("")){
+             agentName= jsonArray.getJSONObject(i).getString("a_uname");
+            }
+            else {
+                agentName = jsonArray.getJSONObject(i).getString("a_fname") + " " + jsonArray.getJSONObject(i).getString("a_lname");
+            }
+            String clientname;
+            //String agentname;
+
+            String agentname;
+            if (agentName.equals("null null")){
+                agentname="Unassigned";
+            }
+            else if (agentName.equals("nullnull")){
+                agentname="Unassigned";
+            }
+            else{
+                agentname=agentName;
+            }
+
+            if (firstName == null || firstName.equals(""))
+                clientname = username;
+            else
+                clientname = firstName + " " + lastName;
+            return new TicketOverview(Integer.parseInt(ID), profilePic,
+                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname,countcollaborator,countthread,source,last_replier,agentname);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static TicketOverview parseTicketSearchOverview(JSONArray jsonArray, int i) {
+        String agentName;
+        try {
+            JSONObject jsonObject2=jsonArray.getJSONObject(i);
+            String ticketNumber = jsonObject2.getString("ticket_number");
+            String assignedto=jsonObject2.getString("assigned_to");
+            String ID = jsonObject2.getString("id");
+            JSONObject user=jsonObject2.getJSONObject("user");
+            String firstName = user.getString("first_name");
+            String lastName = user.getString("last_name");
+            String username = user.getString("user_name");
+            String profilePic = user.getString("profile_pic");
+            if (assignedto.equals("null")){
+                        agentName="Unassigned";
+                    }
+                    else{
+                        JSONObject assigned=jsonObject2.getJSONObject("assigned");
+                        agentName=assigned.getString("first_name")+" "+assigned.getString("last_name");
+                    }
+//            JSONObject assigned=jsonObject2.getJSONObject("assigned");
+//            agentName=assigned.getString("first_name")+" "+assigned.getString("last_name");
+            JSONArray thread=jsonObject2.getJSONArray("thread");
+            JSONObject jsonObject5=thread.getJSONObject(0);
+            String title=jsonObject5.getString("title");
+            JSONObject statuses=jsonObject2.getJSONObject("statuses");
+            String ticketStatusName = statuses.getString("name");
+            JSONObject priority=jsonObject2.getJSONObject("priority");
+            String priorityColor = priority.getString("priority_color");
+            JSONObject jsonObjectSources=jsonObject2.getJSONObject("sources");
+            String source=jsonObjectSources.getString("name");
+//            String firstName = jsonArray.getJSONObject(i).getString("c_fname");
+//            String lastName = jsonArray.getJSONObject(i).getString("c_lname");
+//            String username = jsonArray.getJSONObject(i).getString("c_uname");
+//            String profilePic = jsonArray.getJSONObject(i).getString("profile_pic");
+//            String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
+//            String ID = jsonArray.getJSONObject(i).getString("id");
+            String countcollaborator=jsonArray.getJSONObject(i).getString("collaborator_count");
+            String countthread=jsonArray.getJSONObject(i).getString("thread_count");
+
+//            String title = jsonArray.getJSONObject(i).getString("ticket_title");
+//            String ticketStatusName = jsonArray.getJSONObject(i).getString("ticket_status_name");
+            String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
+            String dueDate = jsonArray.getJSONObject(i).getString("duedate");
+//            String priorityColor = jsonArray.getJSONObject(i).getString("color");
+           String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
+            String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
+//            String agentName=jsonArray.getJSONObject(i).getString("a_fname")+" "+jsonArray.getJSONObject(i).getString("a_lname");
             String clientname;
             String agentname;
 
@@ -80,6 +159,8 @@ public class Helper {
         }
         return null;
     }
+
+
     public static TicketOverview parseTicketOverviewSort(JSONArray jsonArray, int i) {
         try {
             //Date updated_at = null;
@@ -149,6 +230,38 @@ public class Helper {
             String clientEmail = jsonArray.getJSONObject(i).getString("email");
             String clientPhone = jsonArray.getJSONObject(i).getString("phone_number");
             String clientActive = jsonArray.getJSONObject(i).getString("active");
+            String clientname;
+            if (firstName == null || firstName.equals(""))
+                clientname = userName;
+            else
+                clientname = firstName + " " + lastName;
+            return new ClientOverview(Integer.parseInt(clientID), clientPicture,userName,clientEmail, clientPhone, clientActive, clientname);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ClientOverview parseSearchClientOverview(JSONArray jsonArray, int i) {
+        try {
+
+            JSONObject jsonObject2=jsonArray.getJSONObject(i);
+            //JSONObject user=jsonObject2.getJSONObject("user_name");
+            String clientID = jsonObject2.getString("id");
+            String firstName = jsonObject2.getString("first_name");
+            String lastName = jsonObject2.getString("last_name");
+            //String username = user.getString("user_name");
+            String clientEmail=jsonObject2.getString("email");
+            //String profilePic = user.getString("profile_pic");
+            String clientPicture = jsonObject2.getString("profile_pic");
+            String userName = jsonObject2.getString("user_name");
+            //String firstName = jsonArray.getJSONObject(i).getString("first_name");
+            //String lastName = jsonArray.getJSONObject(i).getString("last_name");
+            //String clientEmail = jsonArray.getJSONObject(i).getString("email");
+            String clientPhone = jsonArray.getJSONObject(i).getString("mobile");
+            String clientActive = jsonArray.getJSONObject(i).getString("active");
+
             String clientname;
             if (firstName == null || firstName.equals(""))
                 clientname = userName;

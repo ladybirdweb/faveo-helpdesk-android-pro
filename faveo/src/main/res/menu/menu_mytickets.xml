@@ -28,6 +28,12 @@
         android:orderInCategory="100"
         android:title="Move to trash"
         app:showAsAction="never"/>
-
+    <item
+        android:id="@+id/assignticket"
+        android:orderInCategory="101"
+        android:title="@string/assignTicket"
+        android:icon="@drawable/ic_merge_type_black_24dp"
+        app:showAsAction="never">
+    </item>
 
 </menu>

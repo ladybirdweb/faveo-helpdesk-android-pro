@@ -19,12 +19,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +43,7 @@ import agency.tango.android.avatarview.loader.PicassoLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
@@ -99,7 +104,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     @BindView(R.id.roleTv)
     TextView userRole;
     @BindView(R.id.imageView_default_profile)
-    AvatarView profilePic;
+    ImageView profilePic;
     @BindView(R.id.listviewNavigation)
     ListView listView;
     @BindView(R.id.ticket_list)
@@ -252,8 +257,18 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
             }
         });
-        IImageLoader imageLoader = new PicassoLoader();
-        imageLoader.loadImage(profilePic, Prefs.getString("PROFILE_PIC", null), Prefs.getString("USERNAME", " ").charAt(0) + "");
+//        IImageLoader imageLoader = new PicassoLoader();
+//        imageLoader.loadImage(profilePic, Prefs.getString("PROFILE_PIC", null), Prefs.getString("USERNAME", " ").charAt(0) + "");
+        String letter = String.valueOf(Prefs.getString("PROFILE_NAME", "").toUpperCase().charAt(0));
+        if (Prefs.getString("PROFILE_NAME", "").contains("jpg")||Prefs.getString("PROFILE_NAME", "").contains("png")){
+            Picasso.with(context).load(Prefs.getString("PROFILE_PIC", "")).transform(new CircleTransform()).into(profilePic);
+        }
+        else{
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(letter, generator.getRandomColor());
+            profilePic.setImageDrawable(drawable);
+        }
         userRole.setText(Prefs.getString("ROLE", ""));
         domainAddress.setText(Prefs.getString("BASE_URL", ""));
         userName.setText(Prefs.getString("PROFILE_NAME", ""));

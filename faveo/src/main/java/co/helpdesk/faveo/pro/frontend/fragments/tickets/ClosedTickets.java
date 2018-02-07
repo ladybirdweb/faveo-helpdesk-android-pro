@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,9 +42,12 @@ import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.MultiAssigningActivity;
 import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
+import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
@@ -60,7 +64,7 @@ public class ClosedTickets extends Fragment {
     ShimmerRecyclerView recyclerView;
 
     int currentPage = 1;
-    int page=1;
+    int page = 1;
 
     int total;
     static String nextPageURL = "";
@@ -72,7 +76,7 @@ public class ClosedTickets extends Fragment {
     @BindView(R.id.noiternet_view)
     TextView noInternet_view;
     @BindView(R.id.totalcount)
-            TextView textView;
+    TextView textView;
 
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
@@ -81,7 +85,7 @@ public class ClosedTickets extends Fragment {
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
     public String mParam1;
-   public String mParam2;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -107,26 +111,21 @@ public class ClosedTickets extends Fragment {
             JSONObject jsonObject;
             String json = Prefs.getString("DEPENDENCY", "");
             try {
-                jsonObject=new JSONObject(json);
-                JSONArray jsonArrayStaffs=jsonObject.getJSONArray("status");
-                for (int i=0;i<jsonArrayStaffs.length();i++){
-                    if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Open")){
-                        Prefs.putString("openid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                    }
-                    else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Resolved")){
-                        Prefs.putString("resolvedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                    }
-                    else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Closed")){
-                        Prefs.putString("closedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                    }
-                    else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Deleted")){
-                        Prefs.putString("deletedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                    }
-                    else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Archived")){
-                        Prefs.putString("archivedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
-                    }
-                    else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Verified")){
-                        Prefs.putString("verifiedid",jsonArrayStaffs.getJSONObject(i).getString("id"));
+                jsonObject = new JSONObject(json);
+                JSONArray jsonArrayStaffs = jsonObject.getJSONArray("status");
+                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                    if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Open")) {
+                        Prefs.putString("openid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                    } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Resolved")) {
+                        Prefs.putString("resolvedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                    } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Closed")) {
+                        Prefs.putString("closedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                    } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Deleted")) {
+                        Prefs.putString("deletedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                    } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Archived")) {
+                        Prefs.putString("archivedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                    } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Verified")) {
+                        Prefs.putString("verifiedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
                     }
 
                 }
@@ -142,7 +141,8 @@ public class ClosedTickets extends Fragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
-            Prefs.putString("source","3");
+            Prefs.putString("source", "3");
+            Prefs.putString("Show","closed");
 //         Toolbar toolbar1= (Toolbar) rootView.findViewById(R.id.toolbar3);
 //            toolbar1.setVisibility(View.GONE);
 //            toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_filter_list_black_24dp));
@@ -157,8 +157,8 @@ public class ClosedTickets extends Fragment {
 //                    return false;
 //                }
 //            });
-            Toolbar toolbar= (Toolbar) rootView.findViewById(R.id.toolbar2);
-            Toolbar toolbar1= (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
+            Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar2);
+            Toolbar toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
             toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
             //toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
@@ -176,7 +176,7 @@ public class ClosedTickets extends Fragment {
                 @Override
                 public void onClick(View view) {
                     //Toast.makeText(getActivity(), "clicked on toolbar", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(getActivity(), TicketFilter.class);
+                    Intent intent = new Intent(getActivity(), TicketFilter.class);
                     startActivity(intent);
 
                 }
@@ -196,7 +196,7 @@ public class ClosedTickets extends Fragment {
                         if (item != null) {
                             item.getSubMenu().clearHeader();
                         }
-                    }catch (NullPointerException e){
+                    } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
                     //Prefs.putString("source","3");
@@ -233,7 +233,7 @@ public class ClosedTickets extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.created_ascending){
+                    if (item.getItemId() == R.id.created_ascending) {
                         title = getString(R.string.createdat);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -247,7 +247,7 @@ public class ClosedTickets extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.created_descending){
+                    if (item.getItemId() == R.id.created_descending) {
                         title = getString(R.string.createdat);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -261,7 +261,7 @@ public class ClosedTickets extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.ticketnumber_ascending){
+                    if (item.getItemId() == R.id.ticketnumber_ascending) {
                         title = getString(R.string.sortbyticketnoasc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -274,7 +274,7 @@ public class ClosedTickets extends Fragment {
                             fragmentTransaction.commit();
                         }
                     }
-                    if (item.getItemId()==R.id.ticketnumber_descending){
+                    if (item.getItemId() == R.id.ticketnumber_descending) {
                         title = getString(R.string.sortbyticketnodesc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -287,7 +287,7 @@ public class ClosedTickets extends Fragment {
                             fragmentTransaction.commit();
                         }
                     }
-                    if (item.getItemId()==R.id.priorityasc){
+                    if (item.getItemId() == R.id.priorityasc) {
                         title = getString(R.string.sortbypriorityasc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -301,7 +301,7 @@ public class ClosedTickets extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.prioritydesc){
+                    if (item.getItemId() == R.id.prioritydesc) {
                         title = getString(R.string.sortbyprioritydesc);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -315,7 +315,7 @@ public class ClosedTickets extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.updatedatasc){
+                    if (item.getItemId() == R.id.updatedatasc) {
                         title = getString(R.string.updatedat);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -329,7 +329,7 @@ public class ClosedTickets extends Fragment {
                         }
                         return true;
                     }
-                    if (item.getItemId()==R.id.updatedatdesc){
+                    if (item.getItemId() == R.id.updatedatdesc) {
                         title = getString(R.string.updatedat);
                         fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                         if (fragment == null)
@@ -350,7 +350,7 @@ public class ClosedTickets extends Fragment {
                 }
             });
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
-            progressDialog=new ProgressDialog(getActivity());
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Please wait");
 
 //            swipeRefresh.setRefreshing(true);
@@ -359,7 +359,7 @@ public class ClosedTickets extends Fragment {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
                 progressDialog.show();
-                new FetchFirst(getActivity(),page).execute();
+                new FetchFirst(getActivity(), page).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
@@ -372,7 +372,7 @@ public class ClosedTickets extends Fragment {
                         loading = true;
                         recyclerView.setVisibility(View.VISIBLE);
                         noInternet_view.setVisibility(View.GONE);
-                        new FetchFirst(getActivity(),page).execute();
+                        new FetchFirst(getActivity(), page).execute();
                     } else {
                         recyclerView.setVisibility(View.INVISIBLE);
                         swipeRefresh.setRefreshing(false);
@@ -400,12 +400,12 @@ public class ClosedTickets extends Fragment {
             if (item != null) {
                 item.getSubMenu().clearHeader();
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        int id=item.getItemId();
-        StringBuffer stringBuffer=new StringBuffer();
-        if (id==R.id.action_statusOpen) {
+        int id = item.getItemId();
+        StringBuffer stringBuffer = new StringBuffer();
+        if (id == R.id.action_statusOpen) {
 
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
@@ -434,7 +434,7 @@ public class ClosedTickets extends Fragment {
                     Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                     return false;
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
@@ -452,8 +452,7 @@ public class ClosedTickets extends Fragment {
 //                }
 //
 //            }
-        }
-        else if (id==R.id.action_statusResolved) {
+        } else if (id == R.id.action_statusResolved) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -485,9 +484,7 @@ public class ClosedTickets extends Fragment {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        }
-
-        else if (id==R.id.action_statusDeleted) {
+        } else if (id == R.id.action_statusDeleted) {
             try {
                 if (!Prefs.getString("tickets", null).isEmpty()) {
                     String tickets = Prefs.getString("tickets", null);
@@ -519,14 +516,72 @@ public class ClosedTickets extends Fragment {
                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-        }
-        else if (id==R.id.action_noti){
+        } else if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
             return true;
         }
+        if (id == R.id.actionsearch) {
+
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
+            return true;
+        }
+//        if (id == R.id.mergeticket) {
+//            try {
+//                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                String ticketId = Prefs.getString("tickets", null);
+//                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+//                int itemCount = items.size();
+//                if (itemCount == 1) {
+//                    Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                } else {
+//                    Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//                    startActivity(intent);
+//                }
+//
+////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+////            startActivity(intent);
+//
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//
+//        }
+        else if (id==R.id.assignticket){
+            try {
+                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                String ticketId = Prefs.getString("tickets", null);
+                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                int itemCount = items.size();
+                if (itemCount == 1) {
+                    Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
+                    return false;
+                } else {
+                    Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+                    startActivity(intent);
+                }
+
+//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//            startActivity(intent);
+
+            } catch (NullPointerException e) {
+                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
+
 
 
 
@@ -576,29 +631,37 @@ public class ClosedTickets extends Fragment {
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
-            //String state=Prefs.getString("403",null);
+            String state=Prefs.getString("403",null);
             //progressDialog.dismiss();
             if (result == null) {
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-
             try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
-                JSONArray jsonArray=jsonObject1.getJSONArray("message");
-                for (int i=0;i<jsonArray.length();i++){
-                    String message=jsonArray.getString(i);
-                    if (message.equals("Permission denied, you do not have permission to access the requested page.")){
-                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
-                        Prefs.putString("403", "null");
-                        return;
-                    }
+                if (state.equals("403") && !state.equals("null")) {
+                    Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
                 }
-
-            }catch (JSONException e){
+            }catch (NullPointerException e){
                 e.printStackTrace();
             }
+//            try {
+//                JSONObject jsonObject = new JSONObject(result);
+//                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+//                JSONArray jsonArray=jsonObject1.getJSONArray("message");
+//                for (int i=0;i<jsonArray.length();i++){
+//                    String message=jsonArray.getString(i);
+//                    if (message.equals("Permission denied, you do not have permission to access the requested page.")){
+//                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+//                        Prefs.putString("403", "null");
+//                        return;
+//                    }
+//                }
+//
+//            }catch (JSONException e){
+//                e.printStackTrace();
+//            }
 
 
             try {

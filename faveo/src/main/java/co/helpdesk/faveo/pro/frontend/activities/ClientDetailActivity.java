@@ -18,13 +18,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,6 +46,7 @@ import agency.tango.android.avatarview.loader.PicassoLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -63,7 +69,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
     AsyncTask<String, Void, String> task;
     @BindView(R.id.imageView_default_profile)
-    AvatarView imageViewClientPicture;
+    ImageView imageViewClientPicture;
 
     @BindView(R.id.textView_client_name)
     TextView textViewClientName;
@@ -105,6 +111,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_client_profile);
         ButterKnife.bind(this);
 
@@ -254,6 +263,17 @@ public class ClientDetailActivity extends AppCompatActivity implements
             progressDialog.dismiss();
             if (result == null) return;
             listTicketGlimpse = new ArrayList<>();
+            try{
+                JSONObject jsonObject = new JSONObject(result);
+                String error=jsonObject.getString("error");
+                if (error.equals("This is not a client")){
+                    Toasty.info(ClientDetailActivity.this, "This is not a client", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject requester = jsonObject.getJSONObject("requester");
@@ -261,7 +281,19 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 String lastName = requester.getString("last_name");
                 String username = requester.getString("user_name");
                 String clientname;
+                String letter="A";
+                if (firstname.equals("")&&lastName.equals("")){
+                    letter= String.valueOf(username.toUpperCase().charAt(0));
+                }
+                else{
+                    letter= String.valueOf(firstname.toUpperCase().charAt(0));
+                }
 
+//                try {
+//                    letter = String.valueOf(firstname.charAt(0)).toUpperCase();
+//                }catch (StringIndexOutOfBoundsException e){
+//                    e.printStackTrace();
+//                }
                 if (firstname == null || firstname.equals(""))
                     clientname = username;
                 else
@@ -296,8 +328,34 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 textViewClientStatus.setText(requester.getString("active" +
                         "").equals("1") ? getString(R.string.active) : getString(R.string.inactive));
                 String clientPictureUrl = requester.getString("profile_pic");
-                IImageLoader imageLoader = new PicassoLoader();
-                imageLoader.loadImage(imageViewClientPicture, clientPictureUrl, clientname);
+                if (clientPictureUrl.contains("jpg")||clientPictureUrl.contains("png")){
+                    Picasso.with(context).load(clientPictureUrl).transform(new CircleTransform()).into(imageViewClientPicture);
+                }
+               else if (clientPictureUrl.equals("")){
+                    imageViewClientPicture.setVisibility(View.GONE);
+
+                }
+//                else if (clientOverview.clientPicture.contains(".jpg")){
+//                    //mDrawableBuilder = TextDrawable.builder()
+//                    //.round();
+////    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+//                    Picasso.with(context).load(clientOverview.getClientPicture()).transform(new CircleTransform()).into(clientViewHolder.roundedImageViewProfilePic);
+////        Glide.with(context)
+////            .load(ticketOverview.getClientPicture())
+////            .into(ticketViewHolder.roundedImageViewProfilePic);
+//
+//                    //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+//
+//                }
+                else{
+                    ColorGenerator generator = ColorGenerator.MATERIAL;
+                    TextDrawable drawable = TextDrawable.builder()
+                            .buildRound(letter, generator.getRandomColor());
+                    imageViewClientPicture.setImageDrawable(drawable);
+                }
+//                IImageLoader imageLoader = new PicassoLoader();
+//                imageLoader.loadImage(imageViewClientPicture, clientPictureUrl, clientname);
+
                 JSONArray jsonArray = jsonObject.getJSONArray("tickets");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     int ticketID = Integer.parseInt(jsonArray.getJSONObject(i).getString("id"));
