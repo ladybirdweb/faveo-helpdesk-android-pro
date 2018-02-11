@@ -198,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
         if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setTitle("Enable Permission")
-                    .setMessage("To get notifications, we requesting you to enable the permission in auto start for FAVEO. ")
+                    .setMessage("To get notifications on your phone in Faveo, you can simply enable the permission in auto start.")
                     .setIcon(R.drawable.ic_warning_black_36dp)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
