@@ -4,6 +4,7 @@
     package="co.helpdesk.faveo.pro">
 
     <uses-sdk tools:overrideLibrary="io.codetail.view" />
+
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -14,14 +15,14 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".FaveoApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme"
-        tools:replace="allowBackup, label"
-        >
+        tools:replace="allowBackup, label">
 
         <!-- <activity -->
         <!-- android:name=".SplashScreen" -->
@@ -101,9 +102,9 @@
             </intent-filter>
         </receiver>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />
+        <!-- <meta-data -->
+        <!-- android:name="io.fabric.ApiKey" -->
+        <!-- android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" /> -->
 
         <service android:name=".frontend.services.MyFirebaseInstanceIDService">
             <intent-filter>
@@ -158,8 +159,9 @@
             android:name=".frontend.activities.RegisterUser"
             android:label="@string/title_activity_register_user"
             android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".frontend.activities.collaboratorAdd"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity
+            android:name=".frontend.activities.collaboratorAdd"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".frontend.activities.TicketFilter" />
         <activity android:name=".frontend.activities.EditCustomer" />
         <activity
@@ -169,7 +171,9 @@
         <activity
             android:name=".frontend.activities.MultiAssigningActivity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/MyMaterialTheme"></activity>
+            android:theme="@style/MyMaterialTheme" />
+        <activity android:name=".frontend.activities.HelpSection" />
+        <activity android:name=".frontend.activities.LogIn"></activity>
     </application>
 
 </manifest>

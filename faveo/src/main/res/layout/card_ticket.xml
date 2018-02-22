@@ -235,11 +235,11 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height=".1dp"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:layout_toRightOf="@+id/textView_ticket_id"
-            android:background="@color/grey_200"
+            android:background="@color/grey_500"
             android:id="@+id/view4" />
 
         <ImageView

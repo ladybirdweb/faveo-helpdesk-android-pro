@@ -155,6 +155,8 @@ public class MyTickets extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
+            Prefs.putString("cameFromSearch","false");
+            Prefs.putString("cameFromNotification","false");
             ButterKnife.bind(this, rootView);
             Prefs.putString("source","1");
             Prefs.putString("Show","mytickets");

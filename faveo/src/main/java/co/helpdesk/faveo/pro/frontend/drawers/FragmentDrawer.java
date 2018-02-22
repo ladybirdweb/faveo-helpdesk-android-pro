@@ -50,6 +50,7 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UIUtils;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
+import co.helpdesk.faveo.pro.frontend.activities.HelpSection;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
@@ -486,6 +487,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         Fragment fragment = null;
         title = getString(R.string.app_name);
         switch (v.getId()) {
+
             case R.id.create_ticket:
 //                title = getString(R.string.create_ticket);
 //                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
@@ -498,9 +500,11 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 Intent inte = new Intent(getContext(), CreateTicketActivity.class);
                 startActivity(inte);
-
                 break;
-
+//            case R.id.help:
+//                Intent intent=new Intent(getContext(),CreateTicketActivity.class);
+//                startActivity(intent);
+//                break;
 //            case R.id.inbox_tickets:
 //
 //                title = getString(R.string.inbox);

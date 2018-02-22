@@ -75,7 +75,7 @@
     <string name="email_address" translatable="false">Email Address</string>
     <string name="version_2_0" translatable="false">Version: 2.0</string>
     <string name="faveo_helpdesk" translatable="false">Faveo HELPDESK</string>
-    <string name="faveo_content">Headquartered in Bangalore, Faveo HELPDESK provides Businesses with an automated Helpdesk system to manage customer support.  The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.</string>
+    <string name="faveo_content">Headquartered in Bangalore, Faveo Helpdesk provides Businesses with an automated Helpdesk system to manage customer support.  The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.</string>
     <string name="website">Website</string>
     <string name="faveo_url" translatable="false">www.faveohelpdesk.com</string>
     <string name="submit">Submit</string>
@@ -85,7 +85,7 @@
     <string name="created_date">Created Date</string>
     <string name="last_response_date">Last Response Date</string>
     <string name="assign_to" translatable="false">Assigned To</string>
-    <string name="assigneeName">Assignee Name</string>
+    <string name="assigneeName">Agent Name</string>
     <string name="save">Save</string>
     <string name="trash">Trash</string>
     <string name="logout">Logout</string>
@@ -310,9 +310,16 @@
     <string name="multiAssign">Select two or more tickets to assign</string>
     <string name="successfullyAssigned">Successfully assigned those tickets</string>
     <string name="exit">Exit</string>
-
-
-
+    <string name="helpSection">Help Section</string>
+    <string name="helpsection">Help section</string>
+    <string name="login">Login</string>
+    <string name="logginginto">Logging into the android app</string>
+    <string name="ticket">Tickets</string>
+    <string name="managingTickets">Managing tickets in android app</string>
+    <string name="userAndAgent">Users and agents</string>
+    <string name="other">Other features</string>
+    <string name="someOtheroptions">How to use some other features</string>
+    <string name="loggingIn">Logging in and logging out of the android app</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

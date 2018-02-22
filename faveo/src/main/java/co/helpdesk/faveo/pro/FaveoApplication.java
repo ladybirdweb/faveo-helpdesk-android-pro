@@ -8,6 +8,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.File;
@@ -84,7 +85,7 @@ public class FaveoApplication extends MultiDexApplication {
           Fabric.io.
           Crash reporting tool.
          */
-        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         instance = this;
 
 

@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,6 +52,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtAsc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * This is the main activity where we are loading the inbox fragment
@@ -90,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
         isShowing = true;
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
