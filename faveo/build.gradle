@@ -19,8 +19,8 @@ android {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 46
-        versionName "4.3"
+        versionCode 48
+        versionName "4.5"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -57,7 +57,7 @@ repositories {
 
     }
     maven { url 'https://maven.fabric.io/public' }
-    maven {url 'http://dl.bintray.com/amulyakhare/maven'}
+    maven { url 'http://dl.bintray.com/amulyakhare/maven' }
     mavenCentral()
     google()
 }
@@ -149,11 +149,21 @@ dependencies {
     releaseCompile 'com.google.firebase:firebase-crash:10.0.1'
     compile 'com.afollestad:material-cab:0.1.12'
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
+
     compile 'com.nbsp:library:1.09'
     compile files('libs/PhotoUtil.jar')
-
+    compile('com.crashlytics.sdk.android:crashlytics-ndk:2.0.2@aar') {
+        transitive = true;
+    }
+    //compile 'com.google.firebase:firebase-core:11.8.0'
 
 
 }
 apply plugin: 'com.google.gms.google-services'
 
+
+crashlytics {
+    enableNdk true
+    androidNdkOut 'src/main/obj'
+    androidNdkLibsOut 'src/main/libs'
+}

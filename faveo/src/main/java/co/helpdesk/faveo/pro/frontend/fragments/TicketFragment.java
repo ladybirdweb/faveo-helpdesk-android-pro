@@ -118,7 +118,6 @@ public class TicketFragment extends Fragment {
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
             progressDialog=new ProgressDialog(getActivity());
             progressDialog.setMessage("Please wait");
-
             querry=Prefs.getString("querry1",null);
 
 //            if (InternetReceiver.isConnected()) {
@@ -300,6 +299,7 @@ public class TicketFragment extends Fragment {
             //progressDialog.dismiss();
             //Toast.makeText(context, "Total is:"+total, Toast.LENGTH_SHORT).show();
             //Log.d("total",""+total);
+            Prefs.putString("cameFromSearch","true");
             textView.setVisibility(View.VISIBLE);
             textView.setText(""+total+" tickets");
             if (swipeRefresh.isRefreshing())

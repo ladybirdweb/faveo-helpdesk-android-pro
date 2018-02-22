@@ -73,15 +73,16 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         if (i==0){
             ticketViewHolder.webView.setVisibility(View.VISIBLE);
         }
-        else if (i==1){
+         if (i==1){
             ticketViewHolder.webView.setVisibility(View.VISIBLE);
         }
-        else if (i==ticketThreadList.size()-1){
+        if (i==ticketThreadList.size()-1){
             ticketViewHolder.webView.setVisibility(View.VISIBLE);
         }
-        else{
-            ticketViewHolder.webView.setVisibility(View.GONE);
-        }
+
+//        else{
+//            ticketViewHolder.webView.setVisibility(View.GONE);
+//        }
 
 //        while (i<1){
 //            ticketViewHolder.webView.setVisibility(View.VISIBLE);
@@ -93,11 +94,11 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ticketViewHolder.webView.getVisibility() == View.GONE) {
+                if (ticketViewHolder.webView.getVisibility() == View.VISIBLE) {
                     //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
-                    ticketViewHolder.webView.setVisibility(View.VISIBLE);
+                    ticketViewHolder.webView.setVisibility(View.GONE);
                 } else {
-                    ticketViewHolder.textViewMessageTitle.setVisibility(View.GONE);
+                    ticketViewHolder.webView.setVisibility(View.VISIBLE);
                     //ticketViewHolder.webView.setVisibility(View.VISIBLE);
                 }
             }

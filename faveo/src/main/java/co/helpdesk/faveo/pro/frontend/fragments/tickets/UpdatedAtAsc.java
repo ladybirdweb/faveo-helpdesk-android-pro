@@ -160,6 +160,8 @@ public class UpdatedAtAsc extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (rootView == null) {
+            Prefs.putString("cameFromSearch","false");
+            Prefs.putString("cameFromNotification","false");
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             ButterKnife.bind(this, rootView);
             progressDialog = new ProgressDialog(getActivity());

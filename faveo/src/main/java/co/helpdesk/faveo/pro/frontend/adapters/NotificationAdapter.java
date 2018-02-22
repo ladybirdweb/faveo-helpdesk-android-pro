@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,16 +11,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.loader.PicassoLoader;
 import agency.tango.android.avatarview.views.AvatarView;
+import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -33,9 +39,10 @@ import co.helpdesk.faveo.pro.model.NotificationThread;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.CardViewHolder> {
 
     private List<NotificationThread> notiThreadList;
-
-    public NotificationAdapter(List<NotificationThread> notiThreadList) {
+    Context context;
+    public NotificationAdapter(Context context,List<NotificationThread> notiThreadList) {
         this.notiThreadList = notiThreadList;
+        this.context=context;
     }
 
     // create new views (invoked by the layout manager)
@@ -49,10 +56,34 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(CardViewHolder viewHolder, final int position) {
         final NotificationThread notiThread = notiThreadList.get(position);
+        String letter = String.valueOf(notiThread.getRequesterName().charAt(0)).toUpperCase();
+        TextDrawable.IBuilder mDrawableBuilder;
         viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
         viewHolder.textSub.setText(notiThread.getRequesterName().trim()+", "+notiThread.getTicket_subject());
-        IImageLoader imageLoader = new PicassoLoader();
-        imageLoader.loadImage(viewHolder.roundedImageViewProfilePic, notiThread.profiel_pic, notiThread.placeHolder);
+        if (notiThread.getProfiel_pic().equals("")){
+            viewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+
+        }
+        else if (notiThread.getProfiel_pic().contains(".jpg")){
+            mDrawableBuilder = TextDrawable.builder()
+                    .round();
+//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+            Picasso.with(context).load(notiThread.getProfiel_pic()).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
+//        Glide.with(context)
+//            .load(ticketOverview.getClientPicture())
+//            .into(ticketViewHolder.roundedImageViewProfilePic);
+
+            //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+
+        }
+        else{
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(letter, generator.getRandomColor());
+            viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+        }
+//        IImageLoader imageLoader = new PicassoLoader();
+//        imageLoader.loadImage(viewHolder.roundedImageViewProfilePic, notiThread.profiel_pic, notiThread.placeHolder);
         if (notiThread.getNoti_seen().equals("1")) {
             viewHolder.textSub.setTypeface(null, Typeface.NORMAL);
             viewHolder.textSub.setTextColor(Color.parseColor("#7a7a7a"));
@@ -129,14 +160,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         CardView card;
         TextView textSub;
         RelativeTimeTextView textNotificationtime;
-        AvatarView roundedImageViewProfilePic;
+        ImageView roundedImageViewProfilePic;
 
         CardViewHolder(View itemView) {
             super(itemView);
             card = (CardView) itemView.findViewById(R.id.notification_cardview);
             textSub = (TextView) itemView.findViewById(R.id.noti_subject);
             textNotificationtime = (RelativeTimeTextView) itemView.findViewById(R.id.noti_time);
-            roundedImageViewProfilePic = (AvatarView) itemView.findViewById(R.id.dthumbnail);
+            roundedImageViewProfilePic = (ImageView) itemView.findViewById(R.id.dthumbnail);
         }
     }
 

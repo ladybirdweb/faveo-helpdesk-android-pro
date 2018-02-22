@@ -207,6 +207,8 @@ public class InboxTickets extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             toolbarmain = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            Prefs.putString("cameFromSearch","false");
+            Prefs.putString("cameFromNotification","false");
             Prefs.putString("querry1", "null");
             Prefs.putString("Show","inbox");
             //toolbarmain.setVisibility(View.GONE);

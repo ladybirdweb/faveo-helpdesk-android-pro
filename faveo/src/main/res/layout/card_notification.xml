@@ -19,7 +19,7 @@
         android:layout_margin="4dp">
 
 
-        <agency.tango.android.avatarview.views.AvatarView
+        <ImageView
             android:id="@+id/dthumbnail"
             android:layout_width="46dp"
             android:layout_height="46dp"
@@ -27,10 +27,11 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/default_pic"
-            app:av_border_color="@color/faveo"
-            app:av_border_width="2dp"
-            app:av_text_size_percentage="35" />
-
+            android:background="@drawable/rounded_textview"
+             />
+//app:av_border_color="@color/faveo"
+        app:av_border_width="2dp"
+        app:av_text_size_percentage="35"
         <TextView
             android:id="@+id/noti_subject"
             android:layout_width="match_parent"

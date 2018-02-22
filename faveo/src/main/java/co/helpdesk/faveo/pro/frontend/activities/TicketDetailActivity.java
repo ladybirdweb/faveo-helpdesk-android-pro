@@ -164,10 +164,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //                if (cameFromNotification.equals("true")){
 //                    Intent intent=new Intent(TicketDetailActivity.this,NotificationActivity.class);
 //                    startActivity(intent);
+                Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
 //                }
+                    if (Prefs.getString("cameFromSearch",null).equals("true")){
+                        Intent intent=new Intent(TicketDetailActivity.this,SearchActivity.class);
+                        startActivity(intent);
+                    }
+                    else if (Prefs.getString("cameFromNotification",null).equals("true")){
+                        Intent intent=new Intent(TicketDetailActivity.this,NotificationActivity.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
+                        startActivity(intent);
+                    }
 
-                Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
-                    startActivity(intent);
 
 
             }

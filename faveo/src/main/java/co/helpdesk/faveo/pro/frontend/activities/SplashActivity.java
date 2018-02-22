@@ -90,7 +90,8 @@ public class SplashActivity extends AppCompatActivity {
         String versionName = BuildConfig.VERSION_NAME;
         Log.d("versionNo",""+versionCode);
         Log.d("versionName",versionName);
-
+        Prefs.putString("cameFromSearch","false");
+        Prefs.putString("cameFromNotification","false");
 
 
 
