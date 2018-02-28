@@ -220,7 +220,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //FirebaseCrash.report(new Exception("App Name : My first Android non-fatal error"));
         setContentView(R.layout.activity_create_ticket);
+
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         collaboratorArray=new ArrayList<>();

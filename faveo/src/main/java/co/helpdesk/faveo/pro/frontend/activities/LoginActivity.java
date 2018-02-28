@@ -673,6 +673,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             if (result.contains("success")) {
+                Prefs.putString("BillingUrl",baseURL);
                 urlSuggestions.add(baseURL);
                 viewflipper.showNext();
                 imageBackButton.setVisibility(View.VISIBLE);
@@ -795,11 +796,14 @@ public class LoginActivity extends AppCompatActivity {
                 String firstName = jsonObject1.getString("first_name");
                 String lastName = jsonObject1.getString("last_name");
                 String userName = jsonObject1.getString("user_name");
+                String email=jsonObject1.getString("email");
                 String clientname;
                 if (firstName == null || firstName.equals(""))
                     clientname = userName;
                 else
                     clientname = firstName + " " + lastName;
+                Prefs.putString("clientNameForFeedback",clientname);
+                Prefs.putString("emailForFeedback",email);
                 SharedPreferences.Editor authenticationEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
                 authenticationEditor.putString("ID", userID);
                 authenticationEditor.putString("TOKEN", token);

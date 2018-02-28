@@ -704,7 +704,13 @@ public class Helpdesk {
         return result;
 
     }
-
+        public String customerFeedback(String subject,String message){
+        Log.d("customerFeedback",Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=sayarsamanta@gmail.com&help_subject="+subject+"&help_massage="+message);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=sayarsamanta@gmail.com&help_subject="+subject+"&help_massage="+message,null);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=sayarsamanta@gmail.com&help_subject="+subject+"&help_massage="+message,null);
+            return result;
+        }
 
 
 }

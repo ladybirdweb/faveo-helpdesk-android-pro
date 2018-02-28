@@ -53,6 +53,7 @@ import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
 import co.helpdesk.faveo.pro.frontend.activities.HelpSection;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SettingsActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
@@ -501,10 +502,10 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 Intent inte = new Intent(getContext(), CreateTicketActivity.class);
                 startActivity(inte);
                 break;
-//            case R.id.help:
-//                Intent intent=new Intent(getContext(),CreateTicketActivity.class);
-//                startActivity(intent);
-//                break;
+            case R.id.settings:
+                Intent intent=new Intent(getContext(),SettingsActivity.class);
+                startActivity(intent);
+                break;
 //            case R.id.inbox_tickets:
 //
 //                title = getString(R.string.inbox);
@@ -544,12 +545,14 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 if (fragment == null)
                     fragment = new ClientList();
                 break;
-            case R.id.settings:
-                title = getString(R.string.settings);
-                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                if (fragment == null)
-                    fragment = new Settings();
-                break;
+//            case R.id.settings:
+//                Intent intentSettings=new Intent(getContext(), SettingsActivity.class);
+//                startActivity(intentSettings);
+////                title = getString(R.string.settings);
+////                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
+////                if (fragment == null)
+////                    fragment = new Settings();
+//                break;
             case R.id.about:
                 title = getString(R.string.about);
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);

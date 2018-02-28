@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+        //FirebaseCrash.setCrashCollectionEnabled(false);
+
         //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
         isShowing = true;
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -102,6 +102,9 @@
             </intent-filter>
         </receiver>
 
+        <meta-data
+            android:name="firebase_crash_collection_enabled"
+            android:value="false" />
         <!-- <meta-data -->
         <!-- android:name="io.fabric.ApiKey" -->
         <!-- android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" /> -->
@@ -173,7 +176,23 @@
             android:label="@string/title_activity_main2"
             android:theme="@style/MyMaterialTheme" />
         <activity android:name=".frontend.activities.HelpSection" />
-        <activity android:name=".frontend.activities.LogIn"></activity>
+        <activity android:name=".frontend.activities.LogIn" />
+        <activity android:name=".frontend.activities.SettingsActivity" />
+        <activity android:name=".frontend.activities.HowToLogIn" />
+        <activity android:name=".frontend.activities.TicketsRelated" />
+        <activity android:name=".frontend.activities.Dashboard" />
+        <activity android:name=".frontend.activities.TicketList" />
+        <activity android:name=".frontend.activities.TicketViewAndEdit" />
+        <activity android:name=".frontend.activities.CustomersRelated" />
+        <activity android:name=".frontend.activities.OtherFeatures" />
+        <activity android:name=".frontend.activities.ViewClient" />
+        <activity android:name=".frontend.activities.CustomerFiltration" />
+        <activity android:name=".frontend.activities.SelectingMultipleTickets" />
+        <activity android:name=".frontend.activities.ChangingStatus" />
+        <activity android:name=".frontend.activities.MultipleTicketAssign" />
+        <activity android:name=".frontend.activities.MultipleTicketMerge" />
+        <activity android:name=".frontend.activities.FeedBackActivity" />
+        <activity android:name=".frontend.activities.GivingFeedback"></activity>
     </application>
 
 </manifest>

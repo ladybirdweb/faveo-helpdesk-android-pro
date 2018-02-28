@@ -582,32 +582,32 @@ public class  CreatedAtDesc extends Fragment {
             startActivity(intent);
             return true;
         }
-//        if (id==R.id.mergeticket) {
-//            try {
-//                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
-//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                    return false;
-//                }
-//                String ticketId = Prefs.getString("tickets", null);
-//                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
-//                int itemCount = items.size();
-//                if (itemCount == 1) {
-//                    Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
-//                    return false;
-//                } else {
-//                    Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-//                    startActivity(intent);
-//                }
-//
-////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-////            startActivity(intent);
-//
-//            } catch (NullPointerException e) {
-//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//    }
+        if (id==R.id.mergeticket) {
+            try {
+                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                String ticketId = Prefs.getString("tickets", null);
+                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                int itemCount = items.size();
+                if (itemCount == 1) {
+                    Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
+                    return false;
+                } else {
+                    Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+                    startActivity(intent);
+                }
+
+//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//            startActivity(intent);
+
+            } catch (NullPointerException e) {
+                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
+    }
         else if (id==R.id.assignticket){
             try {
                 if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
