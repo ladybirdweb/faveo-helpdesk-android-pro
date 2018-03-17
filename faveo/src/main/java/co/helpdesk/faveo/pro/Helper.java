@@ -59,6 +59,9 @@ public class Helper {
             if (jsonArray.getJSONObject(i).getString("a_fname").equals("")||jsonArray.getJSONObject(i).getString("a_lname").equals("")){
              agentName= jsonArray.getJSONObject(i).getString("a_uname");
             }
+            else if (jsonArray.getJSONObject(i).getString("a_fname").equals("null")||jsonArray.getJSONObject(i).getString("a_lname").equals("null")){
+                agentName=jsonArray.getJSONObject(i).getString("a_uname");
+            }
             else {
                 agentName = jsonArray.getJSONObject(i).getString("a_fname") + " " + jsonArray.getJSONObject(i).getString("a_lname");
             }
@@ -72,12 +75,16 @@ public class Helper {
             else if (agentName.equals("nullnull")){
                 agentname="Unassigned";
             }
+            else if (agentName.equals("null")){
+                agentname="Unassigned";
+            }
             else{
                 agentname=agentName;
             }
 
-            if (firstName == null || firstName.equals(""))
+            if (firstName == null || firstName.equals("")) {
                 clientname = username;
+            }
             else
                 clientname = firstName + " " + lastName;
             return new TicketOverview(Integer.parseInt(ID), profilePic,

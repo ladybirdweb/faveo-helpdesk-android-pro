@@ -37,11 +37,14 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 //import android.support.v4.content.ContextCompat;
 //import android.support.v4.widget.CursorAdapter;
 //import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AlertDialog;
@@ -117,6 +120,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.BottomNavigationBehavior;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -195,7 +199,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     ImageButton imageViewGallery,imageViewCamera,imageViewDocument,imageViewAudio;
     Toolbar toolbarAttachment;
     File file3;
+    Button button;
     int gallery,document,camera,audio=0;
+    BottomNavigationView bottomNavigationView;
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int PICKFILE_REQUEST_CODE = 1234;
@@ -225,17 +231,26 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
+        bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
-        toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
+        //toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
 //        getSupportActionBar().setHomeButtonEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        toolbarBottom= (Toolbar) findViewById(R.id.bottom_navigation);
 //        toolbarBottom.setVisibility(View.GONE);
-//        imageViewAudio= (ImageButton) toolbarAttachment.findViewById(R.id.audio_img_btn);
+        //imageViewAudio= (ImageButton) toolbarAttachment.findViewById(R.id.audio_img_btn);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // attaching bottom sheet behaviour - hide / show on scroll
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehavior());
 //        imageViewGallery= (ImageButton) toolbarAttachment.findViewById(R.id.gallery_img_btn);
 //        imageViewCamera= (ImageButton) toolbarAttachment.findViewById(R.id.photo_img_btn);
 //        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
+        button= (Button) findViewById(R.id.attachment);
 
 //        imageViewGallery.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -271,7 +286,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //
 //            }
 //        });
-
+//
 //        imageViewCamera.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -318,7 +333,7 @@ cc1=new String[0];
         multiAutoCompleteTextViewCC.setThreshold(3);
         multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
-        imageButtonAttachmentClose.setOnClickListener(new View.OnClickListener() {
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attachment_layout.setVisibility(View.GONE);
@@ -348,20 +363,20 @@ cc1=new String[0];
             }
         });
 
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (toolbarAttachment.getVisibility()==View.GONE){
-//                    toolbarAttachment.setVisibility(View.VISIBLE);
-//                }
-//                else if (toolbarAttachment.getVisibility()==View.VISIBLE){
-//                    toolbarAttachment.setVisibility(View.GONE);
-//                }
-//
-//
-//            }
-//        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (bottomNavigationView.getVisibility()==View.GONE){
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                }
+                else if (bottomNavigationView.getVisibility()==View.VISIBLE){
+                    bottomNavigationView.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
 
         //getSupportActionBar().setTitle(R.string.create_ticket);
         //ccp = (CountryCodePicker) findViewById(R.id.ccp);
@@ -600,6 +615,31 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // AndroidNetworking.enableLogging();
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_shop:
+                    gallery=2;
+                    reqPermissionCamera();
+                    return true;
+                case R.id.navigation_gifts:
+                    camera=3;
+                    reqPermissionCamera();
+                    return true;
+                case R.id.navigation_cart:
+                    document=1;
+                    reqPermissionCamera();
+                    return true;
+
+            }
+
+            return false;
+        }
+    };
+
 
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -825,12 +865,12 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
                 file3 = new File(uri.toString());
                 //openFile(file3);
             }
-            else if (mimeType.contains("audio/mpeg")){
-                Uri audioFileUri = data.getData();
-                getRealPathFromURI(audioFileUri);
-                Log.d("URI",audioFileUri.toString());
-
-            }
+//            else if (mimeType.contains("audio/mpeg")){
+//                Uri audioFileUri = data.getData();
+//                getRealPathFromURI(audioFileUri);
+//                Log.d("URI",audioFileUri.toString());
+//
+//            }
 
             else{
                 Toasty.warning(this, getString(R.string.unsupportedFileType),
@@ -1349,6 +1389,9 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
             int pos=email1.indexOf("<");
             int pos2=email1.lastIndexOf(">");
             email2=email1.substring(pos+1,pos2);
+        }
+        else if (!email1.contains("<")){
+            email2=editTextEmail.getText().toString();
         }
         else{
             allCorrect=false;

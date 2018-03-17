@@ -48,26 +48,19 @@ import co.helpdesk.faveo.pro.model.Data;
 import es.dmoral.toasty.Toasty;
 
 public class TicketSaveActivity extends AppCompatActivity {
-    Spinner spinnerSLAPlans, spinnerType, spinnerStatus, spinnerSource,
+    Spinner  spinnerType, spinnerStatus, spinnerSource,
             spinnerPriority, spinnerHelpTopics;
     ProgressDialog progressDialog;
-
     AsyncTask<String, Void, String> task;
     @BindView(R.id.spinner_staffs)
     Spinner spinnerStaffs;
     EditText edittextsubject;
     Button buttonsave;
-//    Spinner autoCompleteTextViewPriority,autoCompleteTextViewType,autoCompleteTextViewHelpTopic,autoCompleteTextViewSource;
+    ImageView imageView;
     Spinner autoCompleteTextViewstaff;
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems, staffItems;
-//    MultiAutoCompleteTextView autoCompleteTextViewCC;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter, staffArrayAdapter;
-    ArrayList<Data> stringArrayList;
-//    ArrayAdapter<Data> stringArrayAdapterCC;
-    Set<String> hs = new HashSet<>();
-//    TextView addCc;
-    int id;
-    int id1;
+    int id,id1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,52 +76,25 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarsave);
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
-        ImageView imageView= (ImageView) toolbar.findViewById(R.id.imageView);
+        imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
 
         textView.setText(getString(R.string.ticketProperties));
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TicketSaveActivity.this, TicketDetailActivity.class);
+                Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
                 startActivity(intent);
+//                if (!TicketDetailActivity.isShowing) {
+//                    Log.d("isShowing", "false");
+//                    Intent intent = new Intent(TicketSaveActivity.this, TicketDetailActivity.class);
+//                    startActivity(intent);
+//                }else {
+//                    Log.d("isShowing", "true");
+//                }
             }
         });
         setSupportActionBar(toolbar);
-        //autoCompleteTextViewCC.setOnItemClickListener(onItemClickListener);
-//        autoCompleteTextViewCC.addTextChangedListener(passwordWatcheredittextSubject);
-//        new FetchCollaborator("s").execute();
-//        autoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                stringArrayAdapterCC = new ArrayAdapter<Data>(TicketSaveActivity.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-//                String name1=autoCompleteTextViewCC.getText().toString();
-//                for (int j = 0; j < stringArrayList.size(); j++) {
-//                    if (stringArrayList.get(j).getName().equalsIgnoreCase(name1)) {
-//                        Data data = stringArrayList.get(j);
-//                        id = data.getID();
-//                        Toast.makeText(TicketSaveActivity.this, "clicked on item", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        });
-//        autoCompleteTextViewCC.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                stringArrayAdapterCC=new ArrayAdapter<String>(TicketSaveActivity.this,android.R.layout.simple_dropdown_item_1line,stringArrayList);
-//                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
-//                autoCompleteTextViewCC.showDropDown();
-//                return false;
-//            }
-//        });
-//        addCc= (TextView) findViewById(R.id.addcc);
-//        addCc.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent=new Intent(TicketSaveActivity.this,collaboratorAdd.class);
-//                    startActivity(intent);
-//                }
-//            });
         spinnerPriority.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -169,13 +135,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                 return false;
             }
         });
-//        autoCompleteTextViewType.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                buttonsave.setVisibility(View.VISIBLE);
-//                return false;
-//            }
-//        });
 
         edittextsubject.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -185,99 +144,16 @@ public class TicketSaveActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-
-//        autoCompleteTextViewstaff.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                buttonsave.setVisibility(View.VISIBLE);
-//                staffArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_dropdown_item_1line, staffItems);
-////                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-////                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//                //autoCompleteTextView.setThreshold(1);
-//                autoCompleteTextViewstaff.showDropDown();
-//                autoCompleteTextViewstaff.setDropDownWidth(1000);
-////                Data data=staffItems.get(pos);
-////                id=data.getID();
-//                //Toast.makeText(TicketSaveActivity.this, ""+id, Toast.LENGTH_SHORT).show();
-//////                if (name.equals(autocompletetextview.getItem(pos).getName())){
-//////                    Toast.makeText(CreateTicketActivity.this, ""+autocompletetextview.getItem(pos).getID(), Toast.LENGTH_SHORT).show();
-//////                }
-//////                id=autocompletetextview.getItem(pos).getID();
-//////                String name=autocompletetextview.getItem(i).getName();
-//////                Log.d("ID",""+id);
-////
-////                Log.d("id",""+id);
-//                return false;
-//            }
-//        });
-
-
-//
-//        autoCompleteTextViewstaff.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                staffArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_dropdown_item_1line, staffItems);
-//                //Data data= (Data) adapterView.getAdapter().getItem(i);
-//                String name1=autoCompleteTextViewstaff.getText().toString();
-//                for (int j = 0; j < staffItems.size(); j++) {
-//                    if (staffItems.get(j).getName().equalsIgnoreCase(name1)) {
-//                        Data data = staffItems.get(j);
-//                        id = data.getID();
-//                        //Toast.makeText(CreateTicketActivity.this, "id:" + id, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//
-//            }
-//        });
-
-//        autoCompleteTextViewstaff.setOnItemSelectedListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(View view, int i, long l) {
-//                staffArrayAdapter=new ArrayAdapter<Data>(TicketSaveActivity.this, android.R.layout.simple_dropdown_item_1line, staffItems);
-//                String name1=autoCompleteTextViewstaff.getSelectedItem().toString();
-//                for (int j = 0; j < staffItems.size(); j++) {
-//                    if (staffItems.get(j).getName().equalsIgnoreCase(name1)) {
-//                        Data data = staffItems.get(j);
-//                        id = data.getID();
-//                        Toast.makeText(TicketSaveActivity.this, "id:" + id, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected() {
-//
-//            }
-//        });
         buttonsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean allCorrect = true;
                 String subject = edittextsubject.getText().toString();
-                // int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
                 Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
                 Data source = (Data) spinnerSource.getSelectedItem();
                 Data priority = (Data) spinnerPriority.getSelectedItem();
                 Data type = (Data) spinnerType.getSelectedItem();
 
-
-                //Data  staff= (Data) spinnerStaffs.getSelectedItem();
-
-//                helptopicid=Prefs.getInt("helptopicid",0);
-//                priorityid=Prefs.getInt("priorityid",0);
-//                sourceid=Prefs.getInt("sourceid",0);
-//                typeid=Prefs.getInt("typeid",0);
-
-
-                //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
-
-//                if (SLAPlans == 0) {
-//                    allCorrect = false;
-//                    Toasty.warning(getContext(), "Please select some SLA plan", Toast.LENGTH_SHORT).show();
-//                } else
 
                 if (subject.trim().length() == 0) {
                     Toasty.warning(TicketSaveActivity.this, getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
@@ -296,10 +172,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                     allCorrect = false;
                     Toasty.warning(TicketSaveActivity.this, getString(R.string.select_source), Toast.LENGTH_SHORT).show();
                 }
-
-//
-//
-//
                 if (allCorrect) {
                     if (InternetReceiver.isConnected()) {
                         progressDialog=new ProgressDialog(TicketSaveActivity.this);
@@ -318,12 +190,8 @@ public class TicketSaveActivity extends AppCompatActivity {
                         }
                     }
                 }
-//            }
-//        });
             }
         });
-//
-//
     }
 
     @Override
@@ -333,75 +201,6 @@ public class TicketSaveActivity extends AppCompatActivity {
             new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
         }
     }
-
-    //    AdapterView.OnItemClickListener onItemClickListener =
-//            new AdapterView.OnItemClickListener(){
-//                @Override
-//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                    stringArrayAdapterCC = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-//                    //Data data= (Data) adapterView.getAdapter().getItem(i);
-//                    String email=autoCompleteTextViewstaff.getText().toString();
-//                    for (int j = 0; j < stringArrayList.size(); j++) {
-//                        if (staffItems.get(j).getName().equalsIgnoreCase(email)) {
-//                            Data data = stringArrayList.get(j);
-//                            id = data.getID();
-//                            Toast.makeText(TicketSaveActivity.this, "id:" + id, Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-////                    Toast.makeText(TicketSaveActivity.this,
-////                            "Clicked item from auto completion list "
-////                                    + email
-////                            , Toast.LENGTH_SHORT).show();
-//                    Log.d("collaborators",email);
-////                    autoCompleteTextViewCC.setText(email);
-//                }
-//            };
-
-//    final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
-//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            String term=autoCompleteTextViewCC.getText().toString();
-////            if (term.equals("")){
-////                stringArrayAdapterCC=new ArrayAdapter<Data>(TicketSaveActivity.this,android.R.layout.simple_dropdown_item_1line,stringArrayList);
-////                new FetchCollaborator("s").execute();
-////                Data data=new Data(0,"No result found");
-////                stringArrayList.add(data);
-//////                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
-//////                stringArrayAdapterCC.notifyDataSetChanged();
-//////                autoCompleteTextViewCC.setThreshold(0);
-//////                autoCompleteTextViewCC.setDropDownWidth(1000);
-////                autoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-////            }else
-//                stringArrayAdapterCC=new ArrayAdapter<Data>(TicketSaveActivity.this,android.R.layout.simple_dropdown_item_1line,stringArrayList);
-//                new FetchCollaborator("s").execute();
-//                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
-//                //stringArrayAdapterCC.notifyDataSetChanged();
-////                autoCompleteTextViewCC.setThreshold(0);
-////                autoCompleteTextViewCC.setDropDownWidth(1000);
-//                autoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-//
-//
-//
-//
-//
-//            //buttonsave.setEnabled(true);
-//        }
-//
-//        public void afterTextChanged(Editable s) {
-//
-//            //stringArrayList.clear();
-//            //new FetchCollaborator(Prefs.getString("ticketID",null)).execute();
-////                if (s.length() == 0) {
-////                    edittextsubject.setVisibility(View.GONE);
-////                } else{
-////                    textView.setText("You have entered : " + passwordEditText.getText());
-////                }
-//        }
-//    };
     private class SaveTicket extends AsyncTask<String, Void, String> {
         int ticketNumber;
         String subject;
@@ -441,13 +240,6 @@ public class TicketSaveActivity extends AppCompatActivity {
             }
             String state=Prefs.getString("403",null);
 
-//                if (message1.contains("The ticket id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
-//                }
-//                else if (message1.contains("The status id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
-//                }
-//               else
             try {
                 if (state.equals("403") && !state.equals(null)) {
                     Toasty.warning(TicketSaveActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
@@ -459,7 +251,6 @@ public class TicketSaveActivity extends AppCompatActivity {
             }
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 String message = jsonObject.getString("message");
                 if (message.equals("Permission denied, you do not have permission to access the requested page.")) {
                     Toasty.warning(TicketSaveActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
@@ -470,10 +261,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-//            switch (result) {
-//                case "":
-//
-//            }
 
             if (result.contains("Edited successfully")) {
                 Toasty.success(TicketSaveActivity.this, getString(R.string.update_success), Toast.LENGTH_LONG).show();
@@ -549,8 +336,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             protected void onPostExecute(String result) {
                 progressDialog.dismiss();
                 if (isCancelled()) return;
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
+
 
                 if (result == null) {
                     Toasty.error(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
@@ -563,14 +349,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                     edittextsubject.setText(title);
                     try {
                         if (!jsonObject1.getString("assignee_first_name").equals("null")&&!jsonObject1.getString("assignee_last_name").equals("null")) {
-                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-//                            for (int j = 0; j < spinnerStaffs.getCount(); j++) {
-//                                if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("assignee_first_name")+" "+jsonObject1.getString("assignee_last_name"))) {
-//                                    spinnerStaffs.setSelection(j);
-//                                }
-//                            }
-                            //staffArrayAdapter=new ArrayAdapter<Data>(TicketSaveActivity.this, android.R.layout.simple_dropdown_item_1line, staffItems);
-                            //String name1=autoCompleteTextViewstaff.getSelectedItem().toString();
                             id1= Integer.parseInt(jsonObject1.getString("assignee_id"));
                             Log.d("id of the assignee",""+id1);
                             for (int j = 0; j < staffItems.size(); j++) {
@@ -584,32 +362,23 @@ public class TicketSaveActivity extends AppCompatActivity {
 
                                 }
                             }
-                            //autoCompleteTextViewstaff.setText(jsonObject1.getString("assignee_first_name")+" "+jsonObject1.getString("assignee_last_name"));
-                            //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
 
-
-                            //Toast.makeText(TicketSaveActivity.this, "id:"+id, Toast.LENGTH_SHORT).show();
                         }
                         else if (jsonObject1.getString("assignee_first_name").equals("null")&&jsonObject1.getString("assignee_last_name").equals("null")){
                             autoCompleteTextViewstaff.setSelection(0);
                         }
-                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+
                     } catch (ArrayIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
-//                    spinnerHelpTopics.setVisibility(View.GONE);
-//                    tv_helpTopic.setVisibility(View.GONE);
+
                         e.printStackTrace();
                     }
 
                     try {
                         if (jsonObject1.getString("priority_name") != null) {
-                            // spinnerPriority.setSelection(Integer.parseInt(jsonObject1.getString("priority_id")) - 1);
 
                             spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject1.getString("priority_name")));
-//                            Prefs.putInt("priorityid", Integer.parseInt(jsonObject1.getString("priority_id")));
-//                            autoCompleteTextViewPriority.setText(jsonObject1.getString("priority_name"));
-//                        priorityid=Integer.parseInt(jsonObject1.getString("priority_id"));
 
 
                         }
@@ -621,13 +390,7 @@ public class TicketSaveActivity extends AppCompatActivity {
 
                     try {
                         if (jsonObject1.getString("type_name") != null) {
-                            // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
-                            //spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
-//                            Prefs.putInt("typeid", Integer.parseInt(jsonObject1.getString("type")));
-                            //autoCompleteTextViewType.setText(jsonObject1.getString("type_name"));
-                            //typeid=Integer.parseInt(jsonObject1.getString("type"));
-                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                            //spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type")));
+
                             for (int j = 0; j < spinnerType.getCount(); j++) {
                                 if (spinnerType.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("type_name"))) {
                                     spinnerType.setSelection(j);
@@ -642,16 +405,12 @@ public class TicketSaveActivity extends AppCompatActivity {
                     try {
                         if (jsonObject1.getString("helptopic_name") != null)
                             spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                            //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
-//                        Prefs.putInt("helptopicid", Integer.parseInt(jsonObject1.getString("helptopic_id")));
-                        //autoCompleteTextViewHelpTopic.setText(jsonObject1.getString("helptopic_name"));
-                        //helptopicid=Integer.parseInt(jsonObject1.getString("helptopic_id"));
+
 
                     } catch (ArrayIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
-//                    spinnerHelpTopics.setVisibility(View.GONE);
-//                    tv_helpTopic.setVisibility(View.GONE);
+
                         e.printStackTrace();
                     }
 
@@ -685,66 +444,6 @@ public class TicketSaveActivity extends AppCompatActivity {
             }
 
         }
-
-    private class FetchCollaborator extends AsyncTask<String, Void, String> {
-        String term;
-
-        FetchCollaborator(String term) {
-
-            this.term = term;
-        }
-
-        protected String doInBackground(String... urls) {
-            return new Helpdesk().getUser(term);
-        }
-
-        protected void onPostExecute(String result) {
-            if (isCancelled()) return;
-            stringArrayList.clear();
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-
-            if (result == null) {
-                Toasty.error(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            try {
-                JSONObject jsonObject=new JSONObject(result);
-                JSONArray jsonArray=jsonObject.getJSONArray("users");
-                for (int i=0;i<jsonArray.length();i++){
-                    JSONObject jsonObject1=jsonArray.getJSONObject(i);
-                    String email=jsonObject1.getString("email");
-                    int id= Integer.parseInt(jsonObject1.getString("id"));
-                    //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-                    Data data=new Data(id,email);
-                    stringArrayList.add(data);
-
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-//                if (jsonObject1.getString("last_message").equals("null")) {
-//                    editTextLastMessage.setText("Not available");
-//                } else
-//                    editTextLastMessage.setText(jsonObject1.getString("last_message"));
-
-
-            }
-        }
-
-
-
-
-
-
-
-
-
-
     private int getIndex(Spinner spinner, String myString) {
 
         int index = 0;
@@ -874,17 +573,22 @@ public class TicketSaveActivity extends AppCompatActivity {
         spinnerSource.setAdapter(spinnerSourceArrayAdapter);
 
 
-//        spinnerSource = (Spinner) findViewById(R.id.spinner_source);
-//        spinnerSourceArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_spinner_item, sourceItems); //selected item will look like a spinner set from XML
-//        spinnerSourceArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerSource.setAdapter(spinnerSourceArrayAdapter);
-
     }
 
     @Override
     public void onBackPressed() {
+        if (!TicketDetailActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, TicketDetailActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
         super.onBackPressed();
-        Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-        startActivity(intent);
+
     }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//        startActivity(intent);
+//    }
 }

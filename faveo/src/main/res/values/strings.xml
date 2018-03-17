@@ -399,6 +399,12 @@
     first you have to click on the hamburger icon on the top left corner of the main screen then you have to click on the settings
         and help section link,once you open you will get one option as "Reach Out To Us".If you click then the above page
         will open where you can provide the feedback or you can ask about any query regarding the app.</string>
+    <string name="chooseATopic">Choose a topic</string>
+    <string name="pleaseChooseATopic">Please select one topic</string>
+    <string name="pleaseSelectRequiredField">Please select all the required field</string>
+    <string name="ticketReply">Ticket Reply</string>
+    <string name="leaveYourMessage">Please leave your message here</string>
+    <string name="attachment">Attachment</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

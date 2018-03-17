@@ -58,6 +58,7 @@ public class TicketFragment extends Fragment {
     SwipeRefreshLayout swipeRefresh;
     TextView textView;
     TextView empty_view;
+
     List<TicketOverview> ticketOverviewList = new ArrayList<TicketOverview>();
     int total;
     static String nextPageURL = "";
@@ -113,6 +114,7 @@ public class TicketFragment extends Fragment {
             recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
             recyclerView.setVisibility(View.VISIBLE);
             empty_view= (TextView) rootView.findViewById(R.id.empty_view);
+            empty_view.setVisibility(View.VISIBLE);
             noInternet_view= (TextView) rootView.findViewById(R.id.noiternet_view);
             swipeRefresh= (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefresh);
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
@@ -142,10 +144,12 @@ public class TicketFragment extends Fragment {
                 if (querry.equals("")||querry.equals("null")){
                     Log.d("QUERRY","No Querry");
                     recyclerView.setVisibility(View.GONE);
+                    empty_view.setVisibility(View.VISIBLE);
                 }
                 else{
                     noInternet_view.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
+                    empty_view.setVisibility(View.GONE);
                     //progressDialog.show();
                     getActivity().getWindow().setSoftInputMode(
                             WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
@@ -168,11 +172,13 @@ public class TicketFragment extends Fragment {
                         if (querry.equals("")||querry.equals("null")){
                             Log.d("QUERRY","No Querry");
                             recyclerView.setVisibility(View.GONE);
+                            empty_view.setVisibility(View.VISIBLE);
                             swipeRefresh.setRefreshing(false);
                         }
                         else{
                             noInternet_view.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
+                            empty_view.setVisibility(View.GONE);
                             //progressDialog.show();
                             getActivity().getWindow().setSoftInputMode(
                                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN

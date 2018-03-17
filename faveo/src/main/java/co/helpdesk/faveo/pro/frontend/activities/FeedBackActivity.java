@@ -7,9 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
@@ -23,6 +29,7 @@ import java.net.URLEncoder;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.frontend.views.SmoothCheckBox;
 import es.dmoral.toasty.Toasty;
 
 public class FeedBackActivity extends AppCompatActivity {
@@ -32,16 +39,55 @@ Button buttonSend;
 EditText editTextsubjectFeedback,editTextmessageFeedback,editTextemail;
 String message,subject="";
 ProgressDialog progressDialog;
-String billingUrl,clientName,emailForFeedback;
+String billingUrl,clientName,emailForFeedback,issueOrSuggestion;
+CheckBox smoothCheckBoxIssue,smoothCheckBoxSuggestion;
+LinearLayout textViewSuggestion,textViewIssue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_feed_back);
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         editTextmessageFeedback= (EditText) findViewById(R.id.messageFeedback);
         editTextsubjectFeedback= (EditText) findViewById(R.id.subjectFeedback);
         buttonSend= (Button) findViewById(R.id.sendFeedback);
         editTextemail= (EditText) findViewById(R.id.emailfeedback);
+        smoothCheckBoxIssue= (CheckBox) findViewById(R.id.issueCheckBox);
+        smoothCheckBoxSuggestion= (CheckBox) findViewById(R.id.suggestionCheckBox);
+        textViewSuggestion= (LinearLayout) findViewById(R.id.suggestion);
+        textViewIssue= (LinearLayout) findViewById(R.id.issue);
+
+        smoothCheckBoxSuggestion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    //Toast.makeText(FeedBackActivity.this, "checked"+smoothCheckBoxSuggestion.getTag(), Toast.LENGTH_SHORT).show();
+                    //smoothCheckBoxIssue.setVisibility(View.GONE);
+                    textViewIssue.setVisibility(View.GONE);
+                    issueOrSuggestion="Suggestion";
+                }
+                else{
+                    textViewIssue.setVisibility(View.VISIBLE);
+                    //smoothCheckBoxIssue.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        smoothCheckBoxIssue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                        //smoothCheckBoxSuggestion.setVisibility(View.GONE);
+                    issueOrSuggestion="Issue";
+                        textViewSuggestion.setVisibility(View.GONE);
+                }else{
+                    textViewSuggestion.setVisibility(View.VISIBLE);
+                    //smoothCheckBoxSuggestion.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
         editTextemail.setEnabled(false);
         progressDialog=new ProgressDialog(this);
         try {
@@ -68,10 +114,10 @@ String billingUrl,clientName,emailForFeedback;
                 subject=editTextsubjectFeedback.getText().toString();
                 StringBuilder stringBuffer=new StringBuilder(message);
                 stringBuffer.append("URL: "+billingUrl);
-                String newMessage=message+"<br/><br/><br/><B>URL: </B>"+billingUrl+"<br/><B>Name: </B>"+clientName+"<br/><B>Email: </B>"+emailForFeedback;
+                String newMessage="<B>Topic: </B>"+issueOrSuggestion+"<br/><br/><B>Message: </B>"+message+"<br/><br/><br/><B>URL: </B>"+billingUrl+"<br/><B>Name: </B>"+clientName+"<br/><B>Email: </B>"+emailForFeedback;
 
-                if (message.equals("")&&subject.equals("")){
-                    Toasty.info(FeedBackActivity.this,getString(R.string.messageandsubject), Toast.LENGTH_LONG).show();
+                if (message.equals("")&&subject.equals("")&&!smoothCheckBoxIssue.isChecked()&&!smoothCheckBoxSuggestion.isChecked()){
+                    Toasty.info(FeedBackActivity.this,getString(R.string.pleaseSelectRequiredField), Toast.LENGTH_LONG).show();
                     return;
                 }
                 else if (subject.equals("")){
@@ -80,6 +126,10 @@ String billingUrl,clientName,emailForFeedback;
                 }
                 else if (message.equals("")){
                     Toasty.info(FeedBackActivity.this,getString(R.string.selectMessage), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if (!smoothCheckBoxIssue.isChecked()&&!smoothCheckBoxSuggestion.isChecked()){
+                    Toasty.info(FeedBackActivity.this,getString(R.string.pleaseChooseATopic),Toast.LENGTH_LONG).show();
                     return;
                 }
                 else{

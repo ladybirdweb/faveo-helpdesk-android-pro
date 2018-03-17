@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
+        android:background="#f2f2f2"
         android:theme="@style/AppThemeOverlay.ActionBar">
 
         <android.support.v7.widget.Toolbar
@@ -41,8 +42,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
-
-
                 <ImageView
                     android:id="@+id/image_search_back"
                     android:layout_width="38dp"
@@ -110,7 +109,7 @@
             android:layout_height="wrap_content"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            android:background="@color/white"
+            android:background="#f2f2f2"
             />
     </android.support.design.widget.AppBarLayout>
     <!--<View-->
@@ -122,6 +121,7 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v4.view.ViewPager>

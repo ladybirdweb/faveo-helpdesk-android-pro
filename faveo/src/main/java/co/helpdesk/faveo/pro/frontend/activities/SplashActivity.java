@@ -158,76 +158,6 @@ public class SplashActivity extends AppCompatActivity {
                 return;
             }
 
-//            switch (result) {
-//
-//                case "HTTP_UNAUTHORIZED":
-//                    loading.setText("The credentials has been changed, \nplease LOGIN again.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//
-//                    return;
-//                case "HTTP_NOT_FOUND":
-//                    loading.setText("Oops! Page not found.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
-//                case "HTTP_INTERNAL_ERROR":
-//                    loading.setText("Oops!Internal error.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
-//                case "HTTP_GATEWAY_TIMEOUT":
-//                    loading.setText("Oops! Seems like you have a slower net connection.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
-//                case "HTTP_UNAVAILABLE":
-//                    loading.setText("Oops! Server busy.  ");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
-//            }
-
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
@@ -388,7 +318,6 @@ public class SplashActivity extends AppCompatActivity {
                 progressDialog.setVisibility(View.INVISIBLE);
 
             }
-
             loading.setText(R.string.done_loading);
 
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);

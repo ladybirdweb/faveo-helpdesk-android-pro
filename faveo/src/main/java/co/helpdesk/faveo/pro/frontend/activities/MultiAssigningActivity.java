@@ -62,8 +62,9 @@ public class MultiAssigningActivity extends AppCompatActivity {
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
-                startActivity(intent);
+//                Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
+//                startActivity(intent);
+                onBackPressed();
             }
         });
         buttonAssign.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +127,21 @@ public class MultiAssigningActivity extends AppCompatActivity {
         }
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+            super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
     }
 
    private class FetchDependency extends AsyncTask<String, Void, String> {

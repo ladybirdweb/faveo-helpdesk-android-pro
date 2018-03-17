@@ -22,6 +22,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +156,9 @@ public class Conversation extends Fragment {
      class FetchTicketThreads extends AsyncTask<String, Void, String> {
         Context context;
          String ticketID;
-
+         String name;
+         String file;
+         String type;
         FetchTicketThreads(Context context,String ticketID) {
             this.context = context;
             this.ticketID = ticketID;
@@ -191,6 +194,22 @@ public class Conversation extends Fragment {
                         String firstName = jsonArray.getJSONObject(i).getString("first_name");
                         String userName=jsonArray.getJSONObject(i).getString("user_name");
                         String lastName = jsonArray.getJSONObject(i).getString("last_name");
+                        JSONArray jsonArray1=jsonArray.getJSONObject(i).getJSONArray("attach");
+                        if (jsonArray1.length()==0){
+                            Prefs.putString("imageBase64", "no attachment");
+                            Log.d("FileBase64", "no attachment");
+                            name="";
+                        }
+                            else {
+                            for (int j = 0; j < jsonArray1.length(); j++) {
+                                JSONObject jsonObject = jsonArray1.getJSONObject(j);
+                                file = jsonObject.getString("file");
+                                name = jsonObject.getString("name");
+                                type=jsonObject.getString("type");
+                                Log.d("FileBase64", file);
+                            }
+                        }
+
                         String clientName = firstName + " " + lastName;
                         String f = "", l = "";
                         if (firstName.trim().length() != 0) {
@@ -222,7 +241,7 @@ public class Conversation extends Fragment {
                         String message = jsonArray.getJSONObject(i).getString("body");
                         Log.d("body:", message);
                         String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
-                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l);
+                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l,name,file,type);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.github.curioustechizen.ago.RelativeTimeTextView;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -25,6 +28,7 @@ import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.ShowingAttachment;
 import co.helpdesk.faveo.pro.model.TicketThread;
 
 /**
@@ -33,6 +37,7 @@ import co.helpdesk.faveo.pro.model.TicketThread;
 public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapter.TicketViewHolder> {
     private List<TicketThread> ticketThreadList;
     Context context;
+
 
     public TicketThreadAdapter(Context context,List<TicketThread> ticketThreadList) {
         this.ticketThreadList = ticketThreadList;
@@ -45,8 +50,8 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
     }
 
     @Override
-    public void onBindViewHolder(final TicketViewHolder ticketViewHolder, int i) {
-        TicketThread ticketThread = ticketThreadList.get(i);
+    public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
+        final TicketThread ticketThread = ticketThreadList.get(i);
         String letter = String.valueOf(ticketThread.clientName.charAt(0)).toUpperCase();
         ticketViewHolder.textViewClientName.setText(ticketThread.clientName);
         ticketViewHolder.textViewMessageTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
@@ -64,6 +69,29 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
         }
 
+        if (ticketThread.getName().equals("")){
+            ticketViewHolder.relativeLayout.setVisibility(View.GONE);
+        }
+        else{
+            ticketViewHolder.relativeLayout.setVisibility(View.VISIBLE);
+            ticketViewHolder.textView.setText(ticketThread.getName());
+
+        }
+
+        ticketViewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TicketThread ticketThread1=ticketThreadList.get(i);
+                Intent intent=new Intent(view.getContext(), ShowingAttachment.class);
+                Prefs.putString("base64Image",ticketThread1.getFile());
+                Prefs.putString("attachmentTitle",ticketThread1.getName());
+                Prefs.putString("type",ticketThread1.getType());
+                //Log.d("TYPE",ticketThread1.getType());
+//                Log.d("imagefile", ticketThread1.getFile());
+                view.getContext().startActivity(intent);
+            }
+        });
+
 //        IImageLoader imageLoader = new PicassoLoader();
 //        imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketThread.clientPicture, ticketThread.placeholder);
 
@@ -71,13 +99,13 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 //            ticketViewHolder.webView.setVisibility(View.VISIBLE);
 //        }
         if (i==0){
-            ticketViewHolder.webView.setVisibility(View.VISIBLE);
+            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }
          if (i==1){
-            ticketViewHolder.webView.setVisibility(View.VISIBLE);
+            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }
         if (i==ticketThreadList.size()-1){
-            ticketViewHolder.webView.setVisibility(View.VISIBLE);
+            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }
 
 //        else{
@@ -94,11 +122,11 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ticketViewHolder.webView.getVisibility() == View.VISIBLE) {
+                if (ticketViewHolder.linearLayout.getVisibility() == View.VISIBLE) {
                     //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
-                    ticketViewHolder.webView.setVisibility(View.GONE);
+                    ticketViewHolder.linearLayout.setVisibility(View.GONE);
                 } else {
-                    ticketViewHolder.webView.setVisibility(View.VISIBLE);
+                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
                     //ticketViewHolder.webView.setVisibility(View.VISIBLE);
                 }
             }
@@ -126,7 +154,9 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         TextView textViewMessageTitle;
         TextView textViewType;
         WebView webView;
-
+        RelativeLayout relativeLayout;
+        TextView textView;
+        LinearLayout linearLayout;
         TicketViewHolder(View v) {
             super(v);
             thread = (RelativeLayout) v.findViewById(R.id.thread);
@@ -136,6 +166,9 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             //textViewMessageTitle = (TextView) v.findViewById(R.id.textView_client_message_title);
             textViewType = (TextView) v.findViewById(R.id.textView_type);
             webView = (WebView) v.findViewById(R.id.webView);
+            relativeLayout= (RelativeLayout) v.findViewById(R.id.attachmentlayout);
+            textView= (TextView) v.findViewById(R.id.attachmentname);
+            linearLayout= (LinearLayout) v.findViewById(R.id.linearWebView);
         }
 
     }

@@ -41,7 +41,7 @@
 //
 //    @Override
 //    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//        mode.getMenuInflater().inflate(R.menu.multiplemenu, menu);//Inflate the menu over action mode
+//        mode.getMenuInflater().inflate(R.menu.multiplemenuInbox, menu);//Inflate the menu over action mode
 //        return true;
 //    }
 //

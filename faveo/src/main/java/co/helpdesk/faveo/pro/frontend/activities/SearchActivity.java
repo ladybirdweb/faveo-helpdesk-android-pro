@@ -70,11 +70,10 @@ public class SearchActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+       setContentView(R.layout.activity_search);
+//        ButterKnife.bind(this);
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout= (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(vpPager);
@@ -95,6 +94,7 @@ public class SearchActivity extends AppCompatActivity implements
         colorList=new ArrayList<>();
         colorList.clear();
         String querry=Prefs.getString("querry",null);
+        Log.d("querry",querry);
         if (querry.equals("null")){
             searchView.setText("");
         }
@@ -119,6 +119,11 @@ public class SearchActivity extends AppCompatActivity implements
         }catch (NullPointerException e){
             e.printStackTrace();
         }
+//        suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+//        searchView.setAdapter(suggestionAdapter);
+//        searchView.setDropDownWidth(1500);
+//        searchView.setThreshold(1);
+//        searchView.showDropDown();
 
 //        colorList.add("Cat");
 //        colorList.add("Dog");
@@ -186,9 +191,7 @@ public class SearchActivity extends AppCompatActivity implements
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SearchActivity.this,MainActivity.class);
-
-                startActivity(intent);
+                onBackPressed();
             }
         });
 
@@ -255,23 +258,23 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
 
-        searchView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
-                searchView.setAdapter(suggestionAdapter);
-                searchView.setDropDownWidth(1500);
-                searchView.setThreshold(1);
-                searchView.showDropDown();
-                return false;
-            }
-        });
+//        searchView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+//                searchView.setAdapter(suggestionAdapter);
+//                searchView.setDropDownWidth(1090);
+//                searchView.setThreshold(1);
+//                searchView.showDropDown();
+//                return false;
+//            }
+//        });
         searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus) {
                     suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
                     searchView.setAdapter(suggestionAdapter);
-                    searchView.setDropDownWidth(1500);
+                    searchView.setDropDownWidth(1090);
                     searchView.setThreshold(1);
 //                    searchView.showDropDown();
                 }
@@ -319,6 +322,21 @@ public class SearchActivity extends AppCompatActivity implements
 
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+        super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -433,12 +451,6 @@ public class SearchActivity extends AppCompatActivity implements
     };
 
 
-    @Override
-    public void onBackPressed() {
-            super.onBackPressed();
-
-        this.finish();
-    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

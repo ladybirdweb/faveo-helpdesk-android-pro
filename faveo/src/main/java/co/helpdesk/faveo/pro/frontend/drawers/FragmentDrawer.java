@@ -147,7 +147,6 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
         layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         listView= (ListView) layout.findViewById(R.id.listviewNavigation);
-
         layout.findViewById(R.id.create_ticket).setOnClickListener(this);
 //        layout.findViewById(R.id.inbox_tickets).setOnClickListener(this);
 //        layout.findViewById(R.id.my_tickets).setOnClickListener(this);

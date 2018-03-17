@@ -242,6 +242,8 @@ class HTTPConnection{
                     case HttpURLConnection.HTTP_NOT_FOUND:
                         Log.e("Response code: ", "404-NOT_FOUND!");
                         ret="HTTP_NOT_FOUND";
+                        Log.d("404","came here");
+                        Prefs.putString("404","True");
                         break;
                     case HttpURLConnection.HTTP_INTERNAL_ERROR:
                         Log.e("Response code: ", "500-INTERNAL_ERROR!");

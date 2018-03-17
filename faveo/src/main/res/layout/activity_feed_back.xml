@@ -61,6 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
@@ -116,9 +118,103 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
+                android:text="@string/chooseATopic"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:id="@+id/suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <CheckBox
+                android:id="@+id/suggestionCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:buttonTint="@color/faveo"
+                />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/suggestionCheckBox"
+                android:text="Suggestion"
+                android:textSize="20sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/issue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <CheckBox
+                android:id="@+id/issueCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginStart="22dp"
+                android:textStyle="bold"
+                android:buttonTint="@color/faveo"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/suggestion"
+                android:layout_alignTop="@+id/issueCheckBox"
+                android:text="Issue"
+                android:textSize="20sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@color/grey_200">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="17dp"
+                android:layout_marginStart="17dp"
                 android:text="@string/subject"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
 
         </RelativeLayout>
         <LinearLayout
@@ -160,6 +256,16 @@
                 android:text="@string/message"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
 
         </RelativeLayout>
         <LinearLayout
@@ -197,6 +303,7 @@
         </View>
         <Button
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/sendFeedback"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"

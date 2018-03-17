@@ -166,10 +166,11 @@ ProgressDialog progressDialog;
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TicketMergeActtivity.this,MainActivity.class);
-                Prefs.putString("tickets", null);
-                dataArrayList.clear();
-                startActivity(intent);
+//                Intent intent=new Intent(TicketMergeActtivity.this,MainActivity.class);
+//                Prefs.putString("tickets", null);
+//                dataArrayList.clear();
+//                startActivity(intent);
+                onBackPressed();
             }
         });
 
@@ -254,6 +255,21 @@ ProgressDialog progressDialog;
             }
         });
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+        super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
     }
     private class MergeTicket extends AsyncTask<String, Void, String> {
         int parentId;
