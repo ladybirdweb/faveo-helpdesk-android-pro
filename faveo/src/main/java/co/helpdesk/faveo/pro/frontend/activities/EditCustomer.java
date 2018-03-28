@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -66,6 +67,7 @@ public class EditCustomer extends AppCompatActivity {
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_edit_customer);
         clientID= Prefs.getString("clientId",null);
+        Log.d("clientId",clientID);
         //username= (EditText) findViewById(R.id.username);
         firstname= (EditText) findViewById(R.id.firstname);
         lastname= (EditText) findViewById(R.id.lastname);
@@ -98,13 +100,9 @@ public class EditCustomer extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (username.getText().toString().equals("")&&firstname.getText().toString().equals("")&&lastname.getText().toString().equals("")
+                if (firstname.getText().toString().equals("")&&lastname.getText().toString().equals("")
                         &&email.getText().toString().equals("")){
                     Toasty.warning(EditCustomer.this,getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else if (username.getText().toString().equals("")){
-                    Toasty.warning(EditCustomer.this,getString(R.string.fillUsername), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else if (firstname.getText().toString().equals("")){

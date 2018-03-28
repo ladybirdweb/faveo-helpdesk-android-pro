@@ -2,7 +2,11 @@ package co.helpdesk.faveo.pro.frontend.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -19,6 +24,11 @@ import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URLConnection;
 import java.util.List;
 
 import agency.tango.android.avatarview.IImageLoader;
@@ -71,24 +81,68 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 
         if (ticketThread.getName().equals("")){
             ticketViewHolder.relativeLayout.setVisibility(View.GONE);
+            ticketViewHolder.view.setVisibility(View.GONE);
         }
         else{
             ticketViewHolder.relativeLayout.setVisibility(View.VISIBLE);
-            ticketViewHolder.textView.setText(ticketThread.getName());
+            ticketViewHolder.view.setVisibility(View.VISIBLE);
+            ticketViewHolder.textView.setText("Show Attachment "+"("+ticketThread.getNoOfAttachments()+")");
 
         }
 
         ticketViewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TicketThread ticketThread1=ticketThreadList.get(i);
                 Intent intent=new Intent(view.getContext(), ShowingAttachment.class);
-                Prefs.putString("base64Image",ticketThread1.getFile());
-                Prefs.putString("attachmentTitle",ticketThread1.getName());
-                Prefs.putString("type",ticketThread1.getType());
-                //Log.d("TYPE",ticketThread1.getType());
-//                Log.d("imagefile", ticketThread1.getFile());
+                Prefs.putString("fileName",ticketThread.getName());
+                Prefs.putString("file",ticketThread.getFile());
+                Prefs.putString("multipleName",ticketThread.getName());
+                Prefs.putString("multipleFile",ticketThread.getFile());
+                Log.d("MultipleFileNameFrom",ticketThread.getName());
                 view.getContext().startActivity(intent);
+
+//                String title;
+//                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//                StrictMode.setVmPolicy(builder.build());
+//                byte[] decodedString;
+//                String base64String;
+//                TicketThread ticketThread1=ticketThreadList.get(i);
+//                //Intent intent=new Intent(view.getContext(), ShowingAttachment.class);
+//                title=ticketThread1.getName();
+//                base64String=ticketThread1.getFile();
+//                decodedString = Base64.decode(base64String, Base64.DEFAULT);
+//                Prefs.putString("base64Image",ticketThread1.getFile());
+//                Prefs.putString("attachmentTitle",ticketThread1.getName());
+//                Prefs.putString("type",ticketThread1.getType());
+//                try {
+//                    String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                    File myFile = new File(path+"/"+title);
+//                    File file = new File(path+"/"+title);
+//                    Uri uri1 = Uri.fromFile(file);
+//                    Log.d("URI",uri1.toString());
+//                    myFile.createNewFile();
+//                    FileOutputStream fOut = new FileOutputStream(myFile);
+//                    fOut.write(decodedString);
+//                    OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+//                    myOutWriter.append(title + "came from storage");
+//                    myOutWriter.close();
+//                    fOut.close();
+//                    Intent myIntent = new Intent(Intent.ACTION_VIEW);
+//                    myIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                    String mime= URLConnection.guessContentTypeFromStream(new FileInputStream(myFile));
+//                    if(mime==null) mime=URLConnection.guessContentTypeFromName(myFile.getName());
+//                    myIntent.setDataAndType(Uri.fromFile(myFile), mime);
+//                    view.getContext().startActivity(myIntent);
+//                    //view.getContext().startActivity(Intent.createChooser(myIntent, "Choose an app to open with"));
+//
+//                    //Toast.makeText(ShowingAttachment.this, "Done writing SD 'mysdfile.txt'", Toast.LENGTH_SHORT).show();
+//                    //txtData.setText("");
+//                } catch (Exception e) {
+//                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//                Log.d("TYPE",ticketThread1.getType());
+//                Log.d("imagefile", ticketThread1.getFile());
+                //view.getContext().startActivity(intent);
             }
         });
 
@@ -108,13 +162,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }
 
-//        else{
-//            ticketViewHolder.webView.setVisibility(View.GONE);
-//        }
-
-//        while (i<1){
-//            ticketViewHolder.webView.setVisibility(View.VISIBLE);
-//        }
 
 
 
@@ -157,9 +204,11 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         RelativeLayout relativeLayout;
         TextView textView;
         LinearLayout linearLayout;
+        View view;
         TicketViewHolder(View v) {
             super(v);
             thread = (RelativeLayout) v.findViewById(R.id.thread);
+            view=v.findViewById(R.id.attachmentSeparation);
             roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewMessageTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
@@ -167,7 +216,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             textViewType = (TextView) v.findViewById(R.id.textView_type);
             webView = (WebView) v.findViewById(R.id.webView);
             relativeLayout= (RelativeLayout) v.findViewById(R.id.attachmentlayout);
-            textView= (TextView) v.findViewById(R.id.attachmentname);
+            textView= (TextView) v.findViewById(R.id.textView7);
             linearLayout= (LinearLayout) v.findViewById(R.id.linearWebView);
         }
 

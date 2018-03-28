@@ -310,13 +310,13 @@ public class ClientDetailActivity extends AppCompatActivity implements
 //                else
                     phone = requester.getString("phone_number");
                 mobile=requester.getString("mobile");
-                if (phone.equals("null")||phone.equals("")||phone.equals("Not available")){
+                if (phone.equals("null")||phone.equals(" ")||phone.equals("Not available")){
                     textViewClientPhone.setVisibility(View.GONE);
                 }else {
                     textViewClientPhone.setVisibility(View.VISIBLE);
                     textViewClientPhone.setText(phone);
                 }
-                if (mobile.equals("null")||mobile.equals("")||mobile.equals("Not available")){
+                if (mobile.equals("null")||mobile.equals(" ")||mobile.equals("Not available")){
                     textViewClientMobile.setVisibility(View.GONE);
                 }
             else {

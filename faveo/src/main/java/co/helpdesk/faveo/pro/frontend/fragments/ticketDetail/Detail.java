@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -211,6 +212,7 @@ public class Detail extends Fragment {
             return new Helpdesk().getTicketDetail(ticketID);
         }
 
+        @SuppressLint("SetTextI18n")
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
 //            if (progressDialog.isShowing())
@@ -221,20 +223,60 @@ public class Detail extends Fragment {
             }
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("result");
 
 //                Prefs.putString("ticketsubject",jsonObject1.getString("title"));
-                String title=jsonObject1.getString("title");
-                String ticketNumber = jsonObject1.getString("ticket_number");
+                String title=jsonObject2.getString("title");
                 editTextSubject.setText(title);
-                String ticketStatus=jsonObject1.getString("status_name");
-                if (ticketStatus.equals("Open")){
+                String statusName=jsonObject2.getString("status_name");
+                String ticketNumber = jsonObject2.getString("ticket_number");
+                String assignee=jsonObject2.getString("assignee");
+                JSONObject jsonObject4=jsonObject2.getJSONObject("from");
+                if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
+                    spinnerStaffs.setSelection(0);
+                }
+                else{
+                    JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
+                    try {
+                        if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
+                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                            for (int j=0;j<spinnerStaffs.getCount();j++){
+                                if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name"))) {
+                                    spinnerStaffs.setSelection(j);
+                                }
+                                spinnerStaffs.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                                        return true;
+                                    }
+                                });
+                            }
+                            //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+                        }
+                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                    } catch (ArrayIndexOutOfBoundsException e){
+                        e.printStackTrace();
+                    } catch (Exception e) {
+//                    spinnerHelpTopics.setVisibility(View.GONE);
+//                    tv_helpTopic.setVisibility(View.GONE);
+                        e.printStackTrace();
+                    }
+                }
+
+
+//                String name=jsonObject4.getString("first_name ")+jsonObject4.getString("last_name");
+                //Log.d("name",name);
+
+                //String ticketStatus=jsonObject1.getString("status_name");
+                if (statusName.equals("Open")){
                     Prefs.putString("status_name","Open");
                 }
-                else if (ticketStatus.equals("Closed")){
+                else if (statusName.equals("Closed")){
                     Prefs.putString("status_name","Closed");
                 }
-                else  if (ticketStatus.equals("Deleted")){
+                else  if (statusName.equals("Deleted")){
                     Prefs.putString("status_name","Deleted");
                 }
                 // textViewTicketNumber.setText(ticketNumber);
@@ -260,10 +302,10 @@ public class Detail extends Fragment {
 //                    e.printStackTrace();
 //                }
                 try {
-                    if (jsonObject1.getString("priority_name") != null) {
+                    if (jsonObject2.getString("priority_name") != null) {
                         // spinnerPriority.setSelection(Integer.parseInt(jsonObject1.getString("priority_id")) - 1);
 
-                        spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject1.getString("priority_name")));
+                        spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject2.getString("priority_name")));
                         spinnerPriority.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -281,9 +323,9 @@ public class Detail extends Fragment {
                 }
 
                 try {
-                    if (jsonObject1.getString("type_name") != null) {
+                    if (jsonObject2.getString("type_name") != null) {
                         // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
-                        spinnerType.setSelection(getIndex(spinnerType, jsonObject1.getString("type_name")));
+                        spinnerType.setSelection(getIndex(spinnerType, jsonObject2.getString("type_name")));
                         spinnerType.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -299,14 +341,14 @@ public class Detail extends Fragment {
                     e.printStackTrace();
                 }
                 try {
-                    if (jsonObject1.getString("helptopic_name") != null)
+                    if (jsonObject2.getString("helptopic_name") != null)
                         //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
 //                    for (int j=0;j<spinnerHelpTopics.getCount();j++){
 //                        if (spinnerHelpTopics.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("helptopic_id"))){
 //                            spinnerHelpTopics.setSelection(j);
 //                        }
 //                    }
-                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject2.getString("helptopic_name")));
 
 
                     spinnerHelpTopics.setOnTouchListener(new View.OnTouchListener() {
@@ -321,38 +363,15 @@ public class Detail extends Fragment {
 
                     e.printStackTrace();
                 }
-                try {
-                    if (jsonObject1.getString("assignee_first_name") != null&&jsonObject1.getString("assignee_last_name") != null) {
-                        //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                        for (int j=0;j<spinnerStaffs.getCount();j++){
-                            if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("assignee_first_name")+" "+jsonObject1.getString("assignee_last_name"))) {
-                                spinnerStaffs.setSelection(j);
-                            }
-                            spinnerStaffs.setOnTouchListener(new View.OnTouchListener() {
-                                @Override
-                                public boolean onTouch(View view, MotionEvent motionEvent) {
-                                    return true;
-                                }
-                            });
-                        }
-                        //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
-                    }
-                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
-                } catch (ArrayIndexOutOfBoundsException e){
-                    e.printStackTrace();
-                } catch (Exception e) {
-//                    spinnerHelpTopics.setVisibility(View.GONE);
-//                    tv_helpTopic.setVisibility(View.GONE);
-                    e.printStackTrace();
-                }
+
 
 
 
                 try {
-                    if (jsonObject1.getString("source_name") != null)
+                    if (jsonObject2.getString("source_name") != null)
                         //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
 
-                        spinnerSource.setSelection(getIndex(spinnerSource, jsonObject1.getString("source_name")));
+                        spinnerSource.setSelection(getIndex(spinnerSource, jsonObject2.getString("source_name")));
                     spinnerSource.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -365,39 +384,35 @@ public class Detail extends Fragment {
                 catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 }
-
-                if (jsonObject1.getString("first_name").equals("") || jsonObject1.getString("first_name") == null) {
-                    editTextFirstName.setText(getString(R.string.not_available));
-                } else
-                    editTextFirstName.setText(jsonObject1.getString("first_name"));
-
-//                if (jsonObject1.getString("last_name").equals("") || jsonObject1.getString("last_name") == null) {
-//                    editTextLastName.setText(getString(R.string.not_available));
-//                } else
-//                    editTextLastName.setText(jsonObject1.getString("last_name"));
-
-                if (jsonObject1.getString("email").equals("") || jsonObject1.getString("email") == null) {
-                    editTextEmail.setText(getString(R.string.not_available));
-                } else
-                    editTextEmail.setText(jsonObject1.getString("email"));
-
-                if (jsonObject1.getString("duedate").equals("") || jsonObject1.getString("duedate") == null) {
+                if (jsonObject2.getString("duedate").equals("") || jsonObject2.getString("duedate") == null) {
                     editTextDueDate.setText(getString(R.string.not_available));
                 } else {
-                    editTextDueDate.setText(Helper.parseDate(jsonObject1.getString("duedate")));
+                    editTextDueDate.setText(Helper.parseDate(jsonObject2.getString("duedate")));
                 }
 
-                if (jsonObject1.getString("created_at").equals("") || jsonObject1.getString("created_at") == null) {
+                if (jsonObject2.getString("created_at").equals("") || jsonObject2.getString("created_at") == null) {
                     editTextCreatedDate.setText(getString(R.string.not_available));
                 } else {
-                    editTextCreatedDate.setText(Helper.parseDate(jsonObject1.getString("created_at")));
+                    editTextCreatedDate.setText(Helper.parseDate(jsonObject2.getString("created_at")));
                 }
 
-                if (jsonObject1.getString("updated_at").equals("") || jsonObject1.getString("updated_at") == null) {
+                if (jsonObject2.getString("updated_at").equals("") || jsonObject2.getString("updated_at") == null) {
                     editTextLastResponseDate.setText(getString(R.string.not_available));
                 } else {
-                    editTextLastResponseDate.setText(Helper.parseDate(jsonObject1.getString("updated_at")));
+                    editTextLastResponseDate.setText(Helper.parseDate(jsonObject2.getString("updated_at")));
                 }
+                if (jsonObject4.getString("email").equals("") || jsonObject4.getString("email") == null) {
+                    editTextEmail.setText(getString(R.string.not_available));
+                } else
+                    editTextEmail.setText(jsonObject4.getString("email"));
+
+
+                if (jsonObject4.getString("first_name").equals("") || jsonObject4.getString("last_name") == null) {
+                    editTextFirstName.setText(getString(R.string.not_available));
+                } else
+                    editTextFirstName.setText(jsonObject4.getString("first_name")+" "+jsonObject4.getString("last_name"));
+
+
 
 
 //                if (jsonObject1.getString("last_message").equals("null")) {

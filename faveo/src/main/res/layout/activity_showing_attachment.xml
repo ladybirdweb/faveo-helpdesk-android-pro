@@ -74,29 +74,35 @@
         android:layout_height="2dp"
         android:background="@color/faveo"/>
 
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/textFile"
-        android:visibility="gone"
-        android:padding="6dp"
-        android:textSize="16sp"/>
+    <!--<WebView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/textFile"-->
+        <!--android:visibility="gone"-->
+        <!--android:padding="6dp"-->
+        <!--android:textSize="16sp"/>-->
 
-    <co.helpdesk.faveo.pro.TouchImageView
-        android:src="@mipmap/ic_launcher"
-        android:id="@+id/attachment_view"
-        android:layout_width="400dp"
-        android:layout_height="500dp"
-        android:visibility="visible"/>
-    <com.github.barteksc.pdfviewer.PDFView
-        android:id="@+id/pdfView"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <VideoView
+    <!--<co.helpdesk.faveo.pro.TouchImageView-->
+        <!--android:src="@mipmap/ic_launcher"-->
+        <!--android:id="@+id/attachment_view"-->
+        <!--android:layout_width="400dp"-->
+        <!--android:layout_height="500dp"-->
+        <!--android:visibility="visible"/>-->
+    <!--<com.github.barteksc.pdfviewer.PDFView-->
+        <!--android:id="@+id/pdfView"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+    <!--<VideoView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/videoView"-->
+        <!--android:visibility="gone"-->
+        <!--/>-->
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/videoView"
-        android:visibility="gone"
-        />
+       android:id="@+id/attachment_list" >
+
+    </ListView>
 </LinearLayout>

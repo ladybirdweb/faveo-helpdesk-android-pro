@@ -740,9 +740,9 @@ public class ClosedTickets extends Fragment {
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 //String message1=jsonObject2.getString("ticket_id");
-                String message2 = jsonObject1.getString("message");
+                String message2 = jsonObject.getString("message");
 
 
                 if (message2.contains("Status changed to Deleted")) {
@@ -800,16 +800,17 @@ public class ClosedTickets extends Fragment {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                    total=jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    total=jsonObject1.getInt("total");
                 try {
-                    data = jsonObject.getString("data");
-                    int closed = jsonObject.getInt("total");
+                    data = jsonObject1.getString("data");
+                    int closed = jsonObject1.getInt("total");
                     if (closed > 999)
                         Prefs.putString("closedTickets", "999+");
                     else
                         Prefs.putString("closedTickets", closed + "");
 
-                    nextPageURL = jsonObject.getString("next_page_url");
+                    nextPageURL = jsonObject1.getString("next_page_url");
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");
                 }
@@ -900,8 +901,9 @@ public class ClosedTickets extends Fragment {
             // databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                nextPageURL = jsonObject.getString("next_page_url");
-                String data = jsonObject.getString("data");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                nextPageURL = jsonObject1.getString("next_page_url");
+                String data = jsonObject1.getString("data");
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     TicketOverview ticketOverview = Helper.parseTicketOverview(jsonArray, i);

@@ -1698,9 +1698,9 @@ private void multiSelect(int position) {
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 //String message1=jsonObject2.getString("ticket_id");
-                String message2 = jsonObject1.getString("message");
+                String message2 = jsonObject.getString("message");
 
 
                 if (message2.contains("Status changed to Deleted")) {
@@ -1765,13 +1765,15 @@ private void multiSelect(int position) {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                total = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                total = jsonObject1.getInt("total");
                 try {
-                    data = jsonObject.getString("data");
-                    nextPageURL = jsonObject.getString("next_page_url");
+                    data = jsonObject1.getString("data");
+                    nextPageURL = jsonObject1.getString("next_page_url");
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");
                 }
+                
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ticketOverview = Helper.parseTicketOverview(jsonArray, i);
@@ -1880,9 +1882,10 @@ private void multiSelect(int position) {
             //databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                nextPageURL = jsonObject.getString("next_page_url");
-                String data = jsonObject.getString("data");
-                int count = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                nextPageURL = jsonObject1.getString("next_page_url");
+                String data = jsonObject1.getString("data");
+                int count = jsonObject1.getInt("total");
                 if (count > 999)
                     Prefs.putString("inboxTickets", "999+");
                 else
@@ -1944,15 +1947,16 @@ private void multiSelect(int position) {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                total = jsonObject.getInt("total");
-                nextPageURL = jsonObject.getString("next_page_url");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                total = jsonObject1.getInt("total");
+                nextPageURL = jsonObject1.getString("next_page_url");
 //                try {
 //                    data = jsonObject.getString("data");
 //
 //                } catch (JSONException e) {
 //                    data = jsonObject.getString("result");
 //                }
-                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                JSONArray jsonArray = jsonObject1.getJSONArray("data");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     TicketOverview ticketOverview = Helper.parseTicketOverviewSort(jsonArray, i);
                     if (ticketOverview != null)
@@ -2046,9 +2050,10 @@ private void multiSelect(int position) {
             // databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                nextPageURL = jsonObject.getString("next_page_url");
-                String data = jsonObject.getString("data");
-                int my_tickets = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                nextPageURL = jsonObject1.getString("next_page_url");
+                String data = jsonObject1.getString("data");
+                int my_tickets = jsonObject1.getInt("total");
                 if (my_tickets > 999)
                     Prefs.putString("myTickets", "999+");
                 else

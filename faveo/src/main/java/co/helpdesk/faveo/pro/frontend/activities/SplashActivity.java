@@ -1,10 +1,13 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,7 @@ import org.w3c.dom.Text;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BuildConfig;
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
@@ -54,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.tryagain)
     TextView textViewtryAgain;
     String error;
-
+    Context context;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -147,21 +151,29 @@ public class SplashActivity extends AppCompatActivity {
                 progressDialog.setVisibility(View.INVISIBLE);
                 textViewtryAgain.setVisibility(View.VISIBLE);
                 textViewrefresh.setVisibility(View.VISIBLE);
+
                 textViewrefresh.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        finish();
-                        Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-                        startActivity(intent);
+                        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+//                            ((ActivityManager)context.getSystemService(ACTIVITY_SERVICE))
+//                                    .clearApplicationUserData();
+                            FaveoApplication.getInstance().clearApplicationData();
+                            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            // note: it has a return value!
+                        } else {
+                            // use old hacky way, which can be removed
+                            // once minSdkVersion goes above 19 in a few years.
+                        }
                     }
                 });
                 return;
             }
 
             try {
-
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                 Prefs.putString("DEPENDENCY", jsonObject1.toString());
                 // Preference.setDependencyObject(jsonObject1, "dependency");
                 JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");

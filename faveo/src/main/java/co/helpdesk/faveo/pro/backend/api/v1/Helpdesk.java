@@ -7,6 +7,9 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.Arrays;
+
 import co.helpdesk.faveo.pro.Constants;
 
 /**
@@ -44,8 +47,25 @@ public class Helpdesk {
     }
 
     public String postCreateTicket(int userID, String subject, String body, int helpTopic,
-                                   int priority, String fname, String lname, String phone, String email, String code,int staff,String mobile) {
+                                   int priority, String fname, String lname, String phone, String email, String code, int staff, String mobile) {
         Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
+                "api_key=" + apiKey +
+                "&token=" + token+
+                "&ip=" + IP +
+                "&user_id=" + userID +
+                "&subject=" + subject +
+                "&body=" + body +
+                "&help_topic=" + helpTopic +
+                // "&sla=" + sla +
+                "&priority=" + priority +
+                //"&dept=" + dept +
+                "&first_name=" + fname +
+                "&last_name=" + lname +
+                "&email=" + email +
+                "&assigned=" + staff+ "&phone=" + mobile +
+                "&code=" + code +
+                "&mobile=" + phone);
+        Prefs.putString("createTicketApi",Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
                 "&token=" + token+
                 "&ip=" + IP +

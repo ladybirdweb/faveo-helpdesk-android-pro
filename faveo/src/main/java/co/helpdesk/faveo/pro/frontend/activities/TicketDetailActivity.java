@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -478,6 +479,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     private void setupFab() {
 
         fab = (Fab) findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
         fab.show();
         View sheetView = findViewById(R.id.fab_sheet);
         View overlay1 = findViewById(R.id.overlay1);
@@ -699,10 +701,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 //JSONObject jsonObject2=jsonObject.getJSONObject("error");
                 //String message1=jsonObject2.getString("ticket_id");
-                String message2 = jsonObject1.getString("message");
+                String message2 = jsonObject.getString("message");
 
 
 //                if (message2.contains("permission denied")&&Prefs.getString("403",null).equals("403")){
@@ -1021,11 +1023,16 @@ public class TicketDetailActivity extends AppCompatActivity implements
      */
     @Override
     protected void onResume() {
+
+        Log.d("onResume","CALLED");
+        checkConnection();
+        setupFab();
+        fab.bringToFront();
         super.onResume();
         progressDialog.setMessage(getString(R.string.pleasewait));
             progressDialog.show();
-            setupFab();
-        new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//            setupFab();
+       new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
 //        checkConnection();
 //        if (InternetReceiver.isConnected()){
 //            progressDialog.setMessage(getString(R.string.pleasewait));
@@ -1153,30 +1160,18 @@ public class TicketDetailActivity extends AppCompatActivity implements
             JSONObject jsonObject = null;
             try {
                 jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                String ticketNumber=jsonObject1.getString("ticket_number");
-                String statusName=jsonObject1.getString("status_name");
-                if (jsonObject1.getString("assignee_first_name").equals("")&&jsonObject1.getString("assignee_last_name").equals("")){
-                    agentName=jsonObject1.getString("assignee_user_name");
-                }
-                else {
-                    agentName = jsonObject1.getString("assignee_first_name") + " " + jsonObject1.getString("assignee_last_name");
-                }
-                String subject=jsonObject1.getString("title");
-                String priority=jsonObject1.getString("priority_id");
-
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                String ticketNumber=jsonObject2.getString("ticket_number");
+                String statusName=jsonObject2.getString("status_name");
+                String subject=jsonObject2.getString("title");
                 if (!statusName.equals("null")||!statusName.equals("")){
                     textViewStatus.setText(statusName);
                 }
                 else{
                     textViewStatus.setVisibility(View.GONE);
                 }
-                if (agentName.equals("null null")){
-                    textviewAgentName.setText(getString(R.string.unassigned));
-                }
-                else{
-                    textviewAgentName.setText(agentName);
-                }
+
 
                 textViewTitle.setText(ticketNumber);
                 if (subject.startsWith("=?")){
@@ -1188,12 +1183,53 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     Log.d("new name",newTitle2);
                     textViewSubject.setText(newTitle2);
                 }
-               else if (!subject.equals("null")){
+                else if (!subject.equals("null")){
                     textViewSubject.setText(subject);
                 }
                 else if (subject.equals("null")){
                     textViewSubject.setText("");
                 }
+                String assignee=jsonObject2.getString("assignee");
+                if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
+                 textviewAgentName.setText(getString(R.string.unassigned));
+                }
+                else{
+                    JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
+                    try {
+                        if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
+                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                            agentName=jsonObject3.getString("first_name") + " " + jsonObject3.getString("last_name");
+                            textviewAgentName.setText(agentName);
+
+                            //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+                        }
+                        else{
+                            agentName=jsonObject3.getString("user_name");
+                            textviewAgentName.setText(agentName);
+                        }
+                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                    } catch (ArrayIndexOutOfBoundsException e){
+                        e.printStackTrace();
+                    } catch (Exception e) {
+//                    spinnerHelpTopics.setVisibility(View.GONE);
+//                    tv_helpTopic.setVisibility(View.GONE);
+                        e.printStackTrace();
+                    }
+                }
+
+                //JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
+//                if (jsonObject3.getString("first_name").equals("")&&jsonObject3.getString("last_name").equals("")){
+//                    agentName=jsonObject3.getString("user_name");
+//                }
+//                else {
+//                    agentName = jsonObject3.getString("first_name") + " " + jsonObject3.getString("last_name");
+//                }
+
+                Log.d("TITLE",subject);
+                Log.d("TICKETNUMBER",ticketNumber);
+                //String priority=jsonObject1.getString("priority_id");
+
+
 
 
 
@@ -1203,11 +1239,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+
     @Override
     protected void onRestart() {
         super.onRestart();
 
     }
+
+
     //    /**
 //     * Callback will be triggered when there is change in
 //     * network connection

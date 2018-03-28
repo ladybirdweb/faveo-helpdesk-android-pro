@@ -159,6 +159,9 @@ public class Conversation extends Fragment {
          String name;
          String file;
          String type;
+         String noOfAttachment;
+         StringBuilder stringBuilderName;
+         StringBuilder stringBuilderFile;
         FetchTicketThreads(Context context,String ticketID) {
             this.context = context;
             this.ticketID = ticketID;
@@ -178,23 +181,28 @@ public class Conversation extends Fragment {
                 return;
             }
             try {
-                JSONArray jsonArray = new JSONArray(result);
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+
+                JSONArray jsonArray = jsonObject1.getJSONArray("threads");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     TicketThread ticketThread = null;
                     try {
                         String clientPicture = null;
                         try {
-                            clientPicture = jsonArray.getJSONObject(i).getString("profile_pic");
+                            clientPicture = jsonArray.getJSONObject(i).getJSONObject("user").getString("profile_pic");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 /*                        String clientName = jsonArray.getJSONObject(i).getString("poster");
                         if (clientName.equals("null") || clientName.equals(""))
                             clientName = "NOTE";*/
-                        String firstName = jsonArray.getJSONObject(i).getString("first_name");
-                        String userName=jsonArray.getJSONObject(i).getString("user_name");
-                        String lastName = jsonArray.getJSONObject(i).getString("last_name");
+                        String firstName = jsonArray.getJSONObject(i).getJSONObject("user").getString("first_name");
+                        String userName=jsonArray.getJSONObject(i).getJSONObject("user").getString("user_name");
+                        String lastName = jsonArray.getJSONObject(i).getJSONObject("user").getString("last_name");
                         JSONArray jsonArray1=jsonArray.getJSONObject(i).getJSONArray("attach");
+                        stringBuilderName=new StringBuilder();
+                        stringBuilderFile=new StringBuilder();
                         if (jsonArray1.length()==0){
                             Prefs.putString("imageBase64", "no attachment");
                             Log.d("FileBase64", "no attachment");
@@ -202,12 +210,23 @@ public class Conversation extends Fragment {
                         }
                             else {
                             for (int j = 0; j < jsonArray1.length(); j++) {
-                                JSONObject jsonObject = jsonArray1.getJSONObject(j);
-                                file = jsonObject.getString("file");
-                                name = jsonObject.getString("name");
-                                type=jsonObject.getString("type");
-                                Log.d("FileBase64", file);
+                                JSONObject jsonObject5 = jsonArray1.getJSONObject(j);
+                                file = jsonObject5.getString("file");
+                                name = jsonObject5.getString("name");
+                                //stringBuilderFile=new StringBuilder(file);
+                                stringBuilderName.append(name+",");
+                                stringBuilderFile.append(file+",");
+                                //stringBuilderFile.append(file+",");
+                                type=jsonObject5.getString("type");
+
+
                             }
+                            //Log.d("FileBase64", file);
+                            name=stringBuilderName.toString();
+                            file=stringBuilderFile.toString();
+                            Log.d("MultipleFileName",stringBuilderName.toString());
+                            noOfAttachment=""+jsonArray1.length();
+                            Log.d("Total Attachments",""+jsonArray1.length());
                         }
 
                         String clientName = firstName + " " + lastName;
@@ -240,8 +259,9 @@ public class Conversation extends Fragment {
                         String messageTitle = jsonArray.getJSONObject(i).getString("title");
                         String message = jsonArray.getJSONObject(i).getString("body");
                         Log.d("body:", message);
-                        String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
-                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l,name,file,type);
+                        //String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
+                        String isReply="0";
+                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l,name,file,type,noOfAttachment);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -305,6 +325,8 @@ public class Conversation extends Fragment {
             if (ticketThreadList.size() != 0) {
                 ticketThreadList.clear();
                 ticketThreadAdapter.notifyDataSetChanged();
+                progressDialog.setMessage(getString(R.string.pleasewait));
+                progressDialog.show();
                 task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
                 task.execute();
             }
@@ -328,6 +350,19 @@ public class Conversation extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (InternetReceiver.isConnected()) {
+//            noInternet_view.setVisibility(View.GONE);
+            // swipeRefresh.setRefreshing(true);
+            //Log.d("TICKETid",Prefs.getString("TICKETid", null));
+            refresh();
+//            task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
+//            task.execute();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if (InternetReceiver.isConnected()) {
 //            noInternet_view.setVisibility(View.GONE);
             // swipeRefresh.setRefreshing(true);

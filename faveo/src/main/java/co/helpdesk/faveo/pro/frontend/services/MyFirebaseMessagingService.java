@@ -44,7 +44,8 @@ import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
  */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
-
+    String by;
+    Context context;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -61,26 +62,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData());
         Log.d(TAG, "Notification Message Scenario: " + remoteMessage.getData().get("scenario"));
 
+        by=remoteMessage.getData().get("by");
         String pic = "";
         int client_id = 0;
         String clientname = "";
-        String requester = remoteMessage.getData().get("requester");
-//        Log.d("Requester", requester);
-        try {
-            JSONObject jsonObj = new JSONObject(requester);
-            pic = jsonObj.getString("profile_pic");
-            client_id = jsonObj.getInt("id");
-            String firstName = jsonObj.getString("first_name");
-            String lastName = jsonObj.getString("last_name");
-            String userName = jsonObj.getString("user_name");
-            if (firstName == null || firstName.equals(""))
-                clientname = userName;
-            else
-                clientname = firstName + " " + lastName;
-            Log.d("Profile_Pic", pic);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (by.equals("System")){
+              clientname="System";
+              pic=getURLForResource(R.mipmap.ic_launcher);
         }
+        else{
+            String requester = remoteMessage.getData().get("requester");
+//        Log.d("Requester", requester);
+
+            try {
+
+                JSONObject jsonObj = new JSONObject(requester);
+                pic = jsonObj.getString("profile_pic");
+                client_id = jsonObj.getInt("id");
+                String firstName = jsonObj.getString("first_name");
+                String lastName = jsonObj.getString("last_name");
+                String userName = jsonObj.getString("user_name");
+                if (firstName == null || firstName.equals(""))
+                    clientname = userName;
+                else
+                    clientname = firstName + " " + lastName;
+                Log.d("Profile_Pic", pic);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        //Log.d("by",remoteMessage.getData().get("by"));
+
 
         //Calling method to generate notification
 
@@ -190,8 +203,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
         Bitmap bitmap=getBitmapFromURL(profilePic);
-        Bitmap bitmap1=getCircleBitmap(bitmap);
-        notificationBuilder.setLargeIcon(bitmap1);
+        //Bitmap bitmap1=getCircleBitmap(bitmap);
+        notificationBuilder.setLargeIcon(bitmap);
         notificationBuilder.setContentTitle(noti_tittle);
         notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
@@ -218,7 +231,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("stackadded", "notification arrived");
 
     }
-
+    public String getURLForResource (int resourceId) {
+        return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId).toString();
+    }
     /**
      * Get bitmap image from requested url
      * @param strURL

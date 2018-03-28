@@ -165,7 +165,8 @@ public class MultiAssigningActivity extends AppCompatActivity {
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("result");
 
                 JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
                 for (int i = 0; i < jsonArrayStaffs.length(); i++) {

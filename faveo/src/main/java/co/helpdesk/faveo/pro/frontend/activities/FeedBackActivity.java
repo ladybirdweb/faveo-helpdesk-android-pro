@@ -34,7 +34,7 @@ import es.dmoral.toasty.Toasty;
 
 public class FeedBackActivity extends AppCompatActivity {
 ImageView imageView;
-String supportEmail="support@ladybirdweb.com";
+String supportEmail="saifbhai0011@gmail.com";
 Button buttonSend;
 EditText editTextsubjectFeedback,editTextmessageFeedback,editTextemail;
 String message,subject="";
@@ -168,7 +168,7 @@ LinearLayout textViewSuggestion,textViewIssue;
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
-            Log.d("result",result);
+//            Log.d("result",result);
             if (result == null) {
                 Toasty.error(FeedBackActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;

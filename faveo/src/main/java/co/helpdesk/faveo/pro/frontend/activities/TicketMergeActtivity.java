@@ -217,6 +217,7 @@ ProgressDialog progressDialog;
                 for (int i=0;i<cc1.length;i++){
                     sb1.append("&t_id[]="+cc1[i].toString());
                 }
+                String childId=sb1.toString();
                 Log.d("ids are :",sb1.toString());
 //                cc = sb.toString().split(",");
 //                for (String n : cc) {
@@ -232,7 +233,7 @@ ProgressDialog progressDialog;
                 try {
                     title = URLEncoder.encode(title.trim(), "utf-8");
                     reason = URLEncoder.encode(reason.trim(), "utf-8");
-
+                    childId=URLEncoder.encode(childId.trim(), "utf-8");
 
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();

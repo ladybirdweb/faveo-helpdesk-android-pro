@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 23
         versionCode 48
         versionName "4.5"
         multiDexEnabled true
@@ -106,11 +106,12 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.10.19'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.barteksc:android-pdf-viewer:2.7.0'
+    compile 'commons-io:commons-io:2.5'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'gr.escsoft.michaelprimez.searchablespinner:SearchableSpinner:1.0.9'
     compile 'com.kishan.askpermission:askpermission:1.0.3'
     compile 'com.github.mancj:MaterialSearchBar:0.7.5'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:design:25.4.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.hbb20:ccp:2.0.2'
     compile 'com.android.support:recyclerview-v7:25.3.1'
@@ -118,8 +119,10 @@ dependencies {
     compile 'com.github.rahatarmanahmed:circularprogressview:2.4.0'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
     compile 'com.google.firebase:firebase-core:11.8.0'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.okhttp3:okhttp:1.13.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.gordonwong:material-sheet-fab:1.2.1'
     compile 'com.github.curioustechizen.android-ago:library:+'
@@ -149,7 +152,6 @@ dependencies {
     debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
     releaseCompile 'com.google.firebase:firebase-crash:11.8.0'
     compile 'com.afollestad:material-cab:0.1.12'
-    compile 'com.squareup.okhttp3:okhttp:3.3.1'
     compile 'com.nbsp:library:1.09'
     compile files('libs/PhotoUtil.jar')
     compile('com.crashlytics.sdk.android:crashlytics-ndk:2.0.2@aar') {

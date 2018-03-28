@@ -742,9 +742,9 @@ public class MyTickets extends Fragment {
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 //String message1=jsonObject2.getString("ticket_id");
-                String message2 = jsonObject1.getString("message");
+                String message2 = jsonObject.getString("message");
 
 
                 if (message2.contains("Status changed to Deleted")) {
@@ -804,10 +804,11 @@ public class MyTickets extends Fragment {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                total = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                total = jsonObject1.getInt("total");
                 try {
-                    data = jsonObject.getString("data");
-                    nextPageURL = jsonObject.getString("next_page_url");
+                    data = jsonObject1.getString("data");
+                    nextPageURL = jsonObject1.getString("next_page_url");
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");
                 }
@@ -904,9 +905,10 @@ public class MyTickets extends Fragment {
             // databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                nextPageURL = jsonObject.getString("next_page_url");
-                String data = jsonObject.getString("data");
-                int my_tickets = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                nextPageURL = jsonObject1.getString("next_page_url");
+                String data = jsonObject1.getString("data");
+                int my_tickets = jsonObject1.getInt("total");
                 if (my_tickets > 999)
                     Prefs.putString("myTickets", "999+");
                 else

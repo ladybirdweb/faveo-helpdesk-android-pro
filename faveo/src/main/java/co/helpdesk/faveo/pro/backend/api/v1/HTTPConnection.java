@@ -53,9 +53,14 @@ class HTTPConnection{
 
         try {
             url = new URL(stringURL);
+
             final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Offer-type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setUseCaches(false);
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=xxxxxxxxxx");
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -145,7 +150,7 @@ class HTTPConnection{
             return null;
 
         String input = sb.toString();
-        if (input.contains("token_expired") || input.contains("token_invalid")) {
+        if (input.contains("token_expired") || input.contains("token_invalid")||input.contains("tokenRefreshed")) {
             if (refreshToken() == null)
                 return null;
             new Helpdesk();
@@ -334,8 +339,10 @@ class HTTPConnection{
         }
         try {
             JSONObject jsonObject = new JSONObject(result);
+            JSONObject jsonObject1=jsonObject.getJSONObject("data");
+            String token = jsonObject1.getString("token");
             Log.d("result",result);
-            String token = jsonObject.getString("token");
+            //String token = jsonObject.getString("token");
             Prefs.putString("TOKEN", token);
             Authenticate.token = token;
             Helpdesk.token = token;

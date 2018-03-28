@@ -344,41 +344,72 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                    String title=jsonObject1.getString("title");
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                    JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                    String title=jsonObject2.getString("title");
                     edittextsubject.setText(title);
-                    try {
-                        if (!jsonObject1.getString("assignee_first_name").equals("null")&&!jsonObject1.getString("assignee_last_name").equals("null")) {
-                            id1= Integer.parseInt(jsonObject1.getString("assignee_id"));
-                            Log.d("id of the assignee",""+id1);
-                            for (int j = 0; j < staffItems.size(); j++) {
-                                Data data=staffItems.get(j);
-                                if (data.getID()==id1) {
-                                    Log.d("cameHere","True");
-                                    Log.d("position",""+j);
-                                   autoCompleteTextViewstaff.setSelection(j);
-
-
-
-                                }
-                            }
-
-                        }
-                        else if (jsonObject1.getString("assignee_first_name").equals("null")&&jsonObject1.getString("assignee_last_name").equals("null")){
-                            autoCompleteTextViewstaff.setSelection(0);
-                        }
-
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
+                    String assignee=jsonObject2.getString("assignee");
+                    if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
+                        autoCompleteTextViewstaff.setSelection(0);
                     }
+                    else{
+                        JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
+                        try {
+                            if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
+                                //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                                id1= Integer.parseInt(jsonObject3.getString("id"));
+                                Log.d("id of the assignee",""+id1);
+                                for (int j = 0; j < staffItems.size(); j++) {
+                                    Data data=staffItems.get(j);
+                                    if (data.getID()==id1) {
+                                        Log.d("cameHere","True");
+                                        Log.d("position",""+j);
+                                        autoCompleteTextViewstaff.setSelection(j);
+                                    }
+                                }
+                                //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+                            }
+                            //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                        } catch (ArrayIndexOutOfBoundsException e){
+                            e.printStackTrace();
+                        } catch (Exception e) {
+//                    spinnerHelpTopics.setVisibility(View.GONE);
+//                    tv_helpTopic.setVisibility(View.GONE);
+                            e.printStackTrace();
+                        }
+                    }
+//                    try {
+//                        if (!jsonObject1.getString("assignee_first_name").equals("null")&&!jsonObject1.getString("assignee_last_name").equals("null")) {
+//                            id1= Integer.parseInt(jsonObject1.getString("assignee_id"));
+//                            Log.d("id of the assignee",""+id1);
+//                            for (int j = 0; j < staffItems.size(); j++) {
+//                                Data data=staffItems.get(j);
+//                                if (data.getID()==id1) {
+//                                    Log.d("cameHere","True");
+//                                    Log.d("position",""+j);
+//                                   autoCompleteTextViewstaff.setSelection(j);
+//
+//
+//
+//                                }
+//                            }
+//
+//                        }
+//                        else if (jsonObject1.getString("assignee_first_name").equals("null")&&jsonObject1.getString("assignee_last_name").equals("null")){
+//                            autoCompleteTextViewstaff.setSelection(0);
+//                        }
+//
+//                    } catch (ArrayIndexOutOfBoundsException e) {
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+//
+//                        e.printStackTrace();
+//                    }
 
                     try {
-                        if (jsonObject1.getString("priority_name") != null) {
+                        if (jsonObject2.getString("priority_name") != null) {
 
-                            spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject1.getString("priority_name")));
+                            spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject2.getString("priority_name")));
 
 
                         }
@@ -389,10 +420,10 @@ public class TicketSaveActivity extends AppCompatActivity {
                     }
 
                     try {
-                        if (jsonObject1.getString("type_name") != null) {
+                        if (jsonObject2.getString("type_name") != null) {
 
                             for (int j = 0; j < spinnerType.getCount(); j++) {
-                                if (spinnerType.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject1.getString("type_name"))) {
+                                if (spinnerType.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject2.getString("type_name"))) {
                                     spinnerType.setSelection(j);
                                 }
                             }
@@ -403,8 +434,8 @@ public class TicketSaveActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     try {
-                        if (jsonObject1.getString("helptopic_name") != null)
-                            spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                        if (jsonObject2.getString("helptopic_name") != null)
+                            spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject2.getString("helptopic_name")));
 
 
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -417,10 +448,10 @@ public class TicketSaveActivity extends AppCompatActivity {
 
 
                     try {
-                        if (jsonObject1.getString("source_name") != null)
+                        if (jsonObject2.getString("source_name") != null)
                             //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
 
-                            spinnerSource.setSelection(getIndex(spinnerSource, jsonObject1.getString("source_name")));
+                            spinnerSource.setSelection(getIndex(spinnerSource, jsonObject2.getString("source_name")));
 //                        Prefs.putInt("sourceid", Integer.parseInt(jsonObject1.getString("source")));
                         //autoCompleteTextViewSource.setText(jsonObject1.getString("source_name"));
                         //sourceid=Integer.parseInt(jsonObject1.getString("source"));
