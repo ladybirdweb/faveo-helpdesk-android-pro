@@ -35,8 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 import android.widget.VideoView;
-
-import com.github.barteksc.pdfviewer.PDFView;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
@@ -73,7 +71,6 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
     WebView textViewFileShow;
     String title, base64String;
     Context context;
-    PDFView pdfView;
     MediaPlayer mediaPlayer;
     String type;
     VideoView videoView;

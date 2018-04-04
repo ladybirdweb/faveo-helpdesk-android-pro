@@ -3,6 +3,8 @@ package co.helpdesk.faveo.pro.frontend.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +15,14 @@ import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import es.dmoral.toasty.Toasty;
 
@@ -30,6 +36,40 @@ public class InternalNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_internal_note);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                //
+                // Do the stuff
+                //
+                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                    String role1=jsonObject2.getString("role");
+                    if (role1.equals("user")){
+                        Prefs.clear();
+                        //Prefs.putString("role",role);
+                        Intent intent=new Intent(InternalNoteActivity.this,LoginActivity.class);
+                        Toasty.info(InternalNoteActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+
+
+                    }
+
+
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                handler.postDelayed(this, 30000);
+            }
+        };
+        runnable.run();
         imageView= (ImageView) findViewById(R.id.imageViewBackTicketInternalNote);
         editTextInternalNote = (EditText) findViewById(R.id.editText_internal_note);
         buttonCreate = (Button) findViewById(R.id.button_create);

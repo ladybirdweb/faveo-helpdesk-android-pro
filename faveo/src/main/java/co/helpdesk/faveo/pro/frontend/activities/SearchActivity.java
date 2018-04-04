@@ -11,6 +11,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -68,6 +69,7 @@ public class SearchActivity extends AppCompatActivity implements
     ArrayAdapter<String> suggestionAdapter;
     Toolbar toolbar;
     String term;
+    Context context;
     TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,10 @@ public class SearchActivity extends AppCompatActivity implements
         tabLayout.setupWithViewPager(vpPager);
         setupViewPager(vpPager);
 
+        tabLayout.setTabTextColors(
+                ContextCompat.getColor(this, R.color.black),
+                ContextCompat.getColor(this, R.color.faveo)
+        );
         //adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         //vpPager.setAdapter(adapterViewPager);
         //handleIntent(getIntent());
@@ -197,33 +203,33 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
 
-        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String querry=searchView.getText().toString();
-                Prefs.putString("querry",querry);
-                try {
-                    String querry1 = URLEncoder.encode(querry, "utf-8");
-                    Prefs.putString("querry1",querry1);
-                    //Log.d("Msg", replyMessage);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-
-                if (!colorList.contains(querry)){
-                    colorList.add(searchView.getText().toString());
-                }
-
-                Prefs.putString("RecentSearh",colorList.toString());
-                Log.d("suggestionss",colorList.toString());
-                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
-//                    Log.d("IME SEARCH",searchView.getText().toString());
-                Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
-                finish();
-                startActivity(intent);
-
-            }
-        });
+//        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String querry=searchView.getText().toString();
+//                Prefs.putString("querry",querry);
+//                try {
+//                    String querry1 = URLEncoder.encode(querry, "utf-8");
+//                    Prefs.putString("querry1",querry1);
+//                    //Log.d("Msg", replyMessage);
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                if (!colorList.contains(querry)){
+//                    colorList.add(searchView.getText().toString());
+//                }
+//
+//                Prefs.putString("RecentSearh",colorList.toString());
+//                Log.d("suggestionss",colorList.toString());
+//                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
+////                    Log.d("IME SEARCH",searchView.getText().toString());
+//                Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
+//                finish();
+//                startActivity(intent);
+//
+//            }
+//        });
 
 
         searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

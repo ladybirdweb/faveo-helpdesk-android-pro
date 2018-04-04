@@ -20,7 +20,7 @@ import co.helpdesk.faveo.pro.Constants;
 public class Helpdesk {
 
     static String apiKey;
-    static String token;
+    public static String token;
     static String IP;
     String domain=Prefs.getString("domain",null);
     String newurl=Prefs.getString("companyUrl",null);
@@ -663,12 +663,12 @@ public class Helpdesk {
         return result;
     }
 
-    public String saveCustomerDetails(String userid, String phone, String firstname, String lastname,
-                                      String email, String mobile){
-        Log.d("editCustomerApi",newurl + "api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile);
-        String result=new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile,null);
+    public String saveCustomerDetails(String userid,String firstname, String lastname,
+                                      String email,String username){
+        Log.d("editCustomerApi",newurl + "api/v2/helpdesk/user-edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&user_name="+username);
+        String result=new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user-edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&user_name="+username,null);
         if (result!=null&&result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile,null);
+            return new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user-edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&user_name="+username,null);
         return result;
 
     }
@@ -725,10 +725,10 @@ public class Helpdesk {
 
     }
         public String customerFeedback(String subject,String message){
-        Log.d("customerFeedback",Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=sayarsamanta@gmail.com&help_subject="+subject+"&help_massage="+message);
-        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=sayarsamanta@gmail.com&help_subject="+subject+"&help_massage="+message,null);
+        Log.d("customerFeedback",Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message,null);
         if (result!=null&&result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=sayarsamanta@gmail.com&help_subject="+subject+"&help_massage="+message,null);
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message,null);
             return result;
         }
 

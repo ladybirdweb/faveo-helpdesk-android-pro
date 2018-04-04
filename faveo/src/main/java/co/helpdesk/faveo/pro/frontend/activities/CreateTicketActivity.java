@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -102,6 +103,7 @@ import co.helpdesk.faveo.pro.MyDeserializer;
 import co.helpdesk.faveo.pro.MyResponse;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UserClient;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -220,7 +222,40 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         setContentView(R.layout.activity_create_ticket);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
+        StrictMode.setThreadPolicy(policy);
+//        final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            public void run() {
+//                //
+//                // Do the stuff
+//                //
+//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+//                try {
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+//                    String role1=jsonObject2.getString("role");
+//                    if (role1.equals("user")){
+//                        Prefs.clear();
+//                        //Prefs.putString("role",role);
+//                        Intent intent=new Intent(CreateTicketActivity.this,LoginActivity.class);
+//                        Toasty.info(CreateTicketActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                        startActivity(intent);
+//
+//
+//                    }
+//
+//
+//                } catch (JSONException | NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                handler.postDelayed(this, 30000);
+//            }
+//        };
+//        runnable.run();
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
@@ -695,8 +730,12 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-
-        Uri uri=data.getData();
+        Uri uri = null;
+        try {
+            uri = data.getData();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
         Uri uri1 = null;
         String path=getPath(CreateTicketActivity.this,uri);
@@ -2572,6 +2611,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                 JSONArray jsonArray = jsonObject.getJSONArray("users");
                 if (jsonArray.length()==0){
                     Prefs.putString("noUser","null");
+
                 }
                 else{
                     for (int i = 0; i < jsonArray.length(); i++) {

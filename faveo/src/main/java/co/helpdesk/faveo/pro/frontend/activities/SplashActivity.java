@@ -136,6 +136,7 @@ public class SplashActivity extends AppCompatActivity {
      * help topics.
      */
     private class FetchDependency extends AsyncTask<String, Void, String> {
+        String unauthorized;
 
         protected String doInBackground(String... urls) {
 
@@ -146,30 +147,44 @@ public class SplashActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.d("Depen Response : ", result + "");
 
-            if (result == null) {
-                loading.setText("Oops! Something went wrong.");
-                progressDialog.setVisibility(View.INVISIBLE);
-                textViewtryAgain.setVisibility(View.VISIBLE);
-                textViewrefresh.setVisibility(View.VISIBLE);
-
-                textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-//                            ((ActivityManager)context.getSystemService(ACTIVITY_SERVICE))
-//                                    .clearApplicationUserData();
-                            FaveoApplication.getInstance().clearApplicationData();
-                            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-                            startActivity(intent);
-                            // note: it has a return value!
-                        } else {
-                            // use old hacky way, which can be removed
-                            // once minSdkVersion goes above 19 in a few years.
-                        }
-                    }
-                });
-                return;
+            if (result==null) {
+//                try {
+//                    unauthorized = Prefs.getString("unauthorized", null);
+//                    if (unauthorized.equals("true")) {
+//                        loading.setText("Oops! Something went wrong.");
+//                        progressDialog.setVisibility(View.INVISIBLE);
+//                        textViewtryAgain.setVisibility(View.VISIBLE);
+//                        textViewrefresh.setVisibility(View.VISIBLE);
+//                        Prefs.putString("unauthorized", "false");
+//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//
+//                    }
+//
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
             }
+//            String state=Prefs.getString("403",null);
+//
+//            try {
+//                if (state.equals("403") && !state.equals(null)) {
+//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                    Prefs.clear();
+//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+//                    Prefs.putString("403", "null");
+//                    startActivity(intent);
+//                    return;
+//                }
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
+//            }
+
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -322,18 +337,31 @@ public class SplashActivity extends AppCompatActivity {
                     Prefs.putString("unassignedTickets", "999+");
                 else
                     Prefs.putString("unassignedTickets", unasigned + "");
+                loading.setText(R.string.done_loading);
 
-            } catch (JSONException e) {
-                Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            } catch (JSONException | NullPointerException e) {
+                //Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                loading.setVisibility(View.GONE);
+                textViewtryAgain.setVisibility(View.VISIBLE);
+                        textViewrefresh.setVisibility(View.VISIBLE);
+                        Prefs.putString("unauthorized", "false");
+                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+
                 e.printStackTrace();
             } finally {
                 progressDialog.setVisibility(View.INVISIBLE);
 
             }
-            loading.setText(R.string.done_loading);
 
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            startActivity(intent);
 //            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
 //            builder.setTitle("Welcome to FAVEO");
 //            //builder.setMessage("After 2 second, this dialog will be closed automatically!");

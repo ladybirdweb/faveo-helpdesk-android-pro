@@ -103,6 +103,7 @@
                     android:visibility="visible"/>
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
@@ -111,6 +112,12 @@
             app:tabMode="fixed"
             android:background="#f2f2f2"
             />
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:background="@color/faveo">-->
+
+        <!--</View>-->
     </android.support.design.widget.AppBarLayout>
     <!--<View-->
         <!--android:id="@+id/separationview"-->

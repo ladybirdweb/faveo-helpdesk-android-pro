@@ -34,7 +34,7 @@ import es.dmoral.toasty.Toasty;
 
 public class FeedBackActivity extends AppCompatActivity {
 ImageView imageView;
-String supportEmail="saifbhai0011@gmail.com";
+String supportEmail="test00478@gmail.com";
 Button buttonSend;
 EditText editTextsubjectFeedback,editTextmessageFeedback,editTextemail;
 String message,subject="";
@@ -193,7 +193,7 @@ LinearLayout textViewSuggestion,textViewIssue;
             try{
                 JSONObject jsonObject=new JSONObject(result);
                 //Log.d("feedbackresult",jsonObject.toString());
-                String resultFromResponse=jsonObject.getString("result");
+                String resultFromResponse=jsonObject.getString("message");
                 if (resultFromResponse.equals("Message Sent! Thanks for reaching out! Someone from our team will get back to you soon.")){
                     Toasty.success(FeedBackActivity.this,getString(R.string.feedbackPosted),Toast.LENGTH_LONG).show();
                 Intent intent=new Intent(FeedBackActivity.this,SettingsActivity.class);

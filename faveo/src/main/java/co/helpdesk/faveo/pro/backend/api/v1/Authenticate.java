@@ -19,7 +19,7 @@ import co.helpdesk.faveo.pro.Constants;
 public class Authenticate {
 
     static String apiKey;
-    static String token;
+    public static String token;
     static String IP;
 
 

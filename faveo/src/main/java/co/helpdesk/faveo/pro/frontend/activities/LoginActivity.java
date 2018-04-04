@@ -748,51 +748,72 @@ public class LoginActivity extends AppCompatActivity {
             if (result == null) {
 //                Intent intent=new Intent(LoginActivity.this,LoginActivity.class);
 //                startActivity(intent);
-                textInputLayoutUsername.setEnabled(true);
-                textInputLayoutPass.setEnabled(true);
-                buttonSignIn.setText(getString(R.string.sign_in));
+
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
-            } else {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String error = jsonObject.getString("status_code");
-                    String statusCode=jsonObject.getString("status_code");
-                    if (error.equals("invalid_credentials")||statusCode.equals("401")) {
-                        textInputLayoutUsername.setEnabled(true);
-                        textInputLayoutPass.setEnabled(true);
-                        buttonSignIn.setText(getString(R.string.sign_in));
-                        //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
-                        userNameError.setVisibility(View.VISIBLE);
-                        userNameError.setText("Please check your password and email");
-                        userNameError.setTextColor(Color.parseColor("#ff0000"));
-                        userNameError.postDelayed(new Runnable() {
-                            public void run() {
-                                userNameError.setVisibility(View.INVISIBLE);
-                            }
-                        }, 5000);
-                        //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
-                        passwordEdittext.startAnimation(animation);
-                        usernameEdittext.startAnimation(animation);
-//                        st.setBackgroundColor(Color.parseColor("#3da6d7"));
-//                        st.setBoldText();
-//                        st.setTextColor(Color.WHITE);
-//                        st.setCornerRadius(7);
-//                        st.show();
-                        return;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
+// else {
+//                try {
+//                    String unauthorized=Prefs.getString("unauthorized",null);
+//                    if (unauthorized.equals("true")){
+//                        Prefs.putString("unauthorized","false");
+//                        textInputLayoutUsername.setEnabled(true);
+//                        textInputLayoutPass.setEnabled(true);
+//                        buttonSignIn.setText(getString(R.string.sign_in));
+//                        //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
+//                        userNameError.setVisibility(View.VISIBLE);
+//                        userNameError.setText("Please check your password and email");
+//                        userNameError.setTextColor(Color.parseColor("#ff0000"));
+//                        userNameError.postDelayed(new Runnable() {
+//                            public void run() {
+//                                userNameError.setVisibility(View.INVISIBLE);
+//                            }
+//                        }, 5000);
+//                        //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
+//                        passwordEdittext.startAnimation(animation);
+//                        usernameEdittext.startAnimation(animation);
+//                    }
+//                    return;
+////                    JSONObject jsonObject = new JSONObject(result);
+////                    String error = jsonObject.getString("status_code");
+////                    String statusCode=jsonObject.getString("status_code");
+////                    if (error.equals("invalid_credentials")||statusCode.equals("401")) {
+////                        textInputLayoutUsername.setEnabled(true);
+////                        textInputLayoutPass.setEnabled(true);
+////                        buttonSignIn.setText(getString(R.string.sign_in));
+////                        //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
+////                        userNameError.setVisibility(View.VISIBLE);
+////                        userNameError.setText("Please check your password and email");
+////                        userNameError.setTextColor(Color.parseColor("#ff0000"));
+////                        userNameError.postDelayed(new Runnable() {
+////                            public void run() {
+////                                userNameError.setVisibility(View.INVISIBLE);
+////                            }
+////                        }, 5000);
+////                        //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
+////                        passwordEdittext.startAnimation(animation);
+////                        usernameEdittext.startAnimation(animation);
+////                        st.setBackgroundColor(Color.parseColor("#3da6d7"));
+////                        st.setBoldText();
+////                        st.setTextColor(Color.WHITE);
+////                        st.setCornerRadius(7);
+////                        st.show();
+////                        return;
+////                    }
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                Log.d("camehere","true");
                 JSONObject jsonObject1=jsonObject.getJSONObject("data");
                 String token = jsonObject1.getString("token");
                 JSONObject jsonObject2 = jsonObject1.getJSONObject("user");
                 String userID = jsonObject2.getString("id");
                 String profile_pic = jsonObject2.getString("profile_pic");
+                Prefs.putString("profilePicture",profile_pic);
                 String role = jsonObject2.getString("role");
                 Log.d("ROLE",role);
                 if (role.equals("user")){
@@ -842,7 +863,23 @@ public class LoginActivity extends AppCompatActivity {
 
 
             } catch (JSONException e) {
-                Toasty.error(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+                textInputLayoutUsername.setEnabled(true);
+                textInputLayoutPass.setEnabled(true);
+                buttonSignIn.setText(getString(R.string.sign_in));
+                buttonSignIn.setText(getString(R.string.sign_in));
+                //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
+                userNameError.setVisibility(View.VISIBLE);
+                userNameError.setText("Please check your password and email");
+                userNameError.setTextColor(Color.parseColor("#ff0000"));
+                userNameError.postDelayed(new Runnable() {
+                    public void run() {
+                        userNameError.setVisibility(View.INVISIBLE);
+                    }
+                }, 5000);
+                //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
+                passwordEdittext.startAnimation(animation);
+                usernameEdittext.startAnimation(animation);
+                //Toasty.error(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 

@@ -27,7 +27,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import co.helpdesk.faveo.pro.FaveoApplication;
+import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
+import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import es.dmoral.toasty.Toasty;
 
 /**
@@ -38,6 +40,8 @@ class HTTPConnection{
     private InputStream is = null;
     private URL url;
     Context context;
+    String response = "";
+    InputStream errorstream;
 
    public HTTPConnection(Context context) {
         super();
@@ -80,12 +84,15 @@ class HTTPConnection{
                 switch (connection.getResponseCode()) {
                     case HttpURLConnection.HTTP_UNAUTHORIZED:
                         Log.e("Response code: ", "401-UNAUTHORIZED!");
+                        Prefs.putString("unauthorized","true");
+                        ret="Unauthorized Access";
+                        break;
                         //ret="HTTP_UNAUTHORIZED";
-                        if (refreshToken() == null)
-                            return null;
-                        new Helpdesk();
-                        new Authenticate();
-                        return "tokenRefreshed";
+//                        if (refreshToken() == null)
+//                            return null;
+//                        new Helpdesk();
+//                        new Authenticate();
+//                        return "tokenRefreshed";
                     case HttpURLConnection.HTTP_NOT_FOUND:
                         Log.e("Response code: ", "NotFound-404!");
                         //ret = "notFound";
@@ -100,6 +107,8 @@ class HTTPConnection{
                         break;// retry, server is unstable
                     case HttpURLConnection.HTTP_BAD_REQUEST:
                         Log.e("Response code: ", "BadRequest!");
+                        ret="badRequest";
+                        Prefs.putString("400",ret);
                         if (refreshToken() == null)
                             return null;
                         new Helpdesk();
@@ -166,12 +175,11 @@ class HTTPConnection{
             url = new URL(stringURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("X-HTTP-Method-Override", "PATCH");
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod("PATCH");
             connection.setRequestProperty("Offer-type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setDoInput(true);
-
             OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(outputStream, "UTF-8"));
@@ -182,8 +190,56 @@ class HTTPConnection{
             writer.flush();
             writer.close();
             outputStream.close();
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                String ret = null;
+                switch (connection.getResponseCode()) {
+                    case HttpURLConnection.HTTP_UNAUTHORIZED:
+                        Log.e("Response code: ", "401-UNAUTHORIZED!");
+                        //ret="HTTP_UNAUTHORIZED";
+//                        if (refreshToken() == null)
+//                            return null;
+//                        new Helpdesk();
+//                        new Authenticate();
+                        return "tokenRefreshed";
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        Log.e("Response code: ", "NotFound-404!");
+                        //ret = "notFound";
+                        break;
+                    case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+                        Log.e("Response code: ", "Timeout!");
+                        // ret = "timeout";
+                        break;
+                    case HttpURLConnection.HTTP_UNAVAILABLE:
+                        Log.e("Response code: ", "Unavailable!");
+                        // ret = "unavailable";
+                        break;// retry, server is unstable
+                    case HttpURLConnection.HTTP_BAD_REQUEST:
+                        Log.e("Response code: ", "BadRequest!");
+                        ret="badRequest";
+                        Prefs.putString("400",ret);
+//                        if (refreshToken() == null)
+//                            return null;
+//                        new Helpdesk();
+//                        new Authenticate();
+//                        ret = "tokenRefreshed";
+                        break;
+                    case HttpURLConnection.HTTP_FORBIDDEN:
+                        Log.e("Response code","Forbidden");
+                        ret="Forbidden";
+                        Prefs.putString("403","403");
+
+                        break;
+                    default:
+
+                        break; // abort
+                }
+
+                return ret;
+            }
 
             is = connection.getInputStream();
+            errorstream=connection.getErrorStream();
+
             Log.e("Response Code", connection.getResponseCode() + "");
         } catch (IOException e) {
             if (e.getMessage().contains("No authentication challenges found")) {
@@ -198,9 +254,11 @@ class HTTPConnection{
         }
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+
             sb = new StringBuilder();
             sb.append(reader.readLine()).append("\n");
             String line;
+
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append("\n");
             }
@@ -264,6 +322,8 @@ class HTTPConnection{
                         break;// retry, server is unstable
                     case HttpURLConnection.HTTP_BAD_REQUEST:
                         Log.e("Response code: ", "400-BadRequest!");
+                        ret="badRequest";
+                        Prefs.putString("400",ret);
                         if (refreshToken() == null)
                             return null;
                         new Helpdesk();
@@ -272,10 +332,8 @@ class HTTPConnection{
                         break;
                     case HttpURLConnection.HTTP_FORBIDDEN:
                         Log.e("Response code","Forbidden");
-                        if (refreshToken() == null)
-                            return null;
-                        new Helpdesk();
-                        new Authenticate();
+                        ret="Forbidden";
+                        Prefs.putString("403","403");
 //                        ret = "tokenRefreshed";
 //                        ret="Forbidden";
 //                        Prefs.putString("403","403");
@@ -332,20 +390,38 @@ class HTTPConnection{
         return sb.toString();
     }
 
-    private String refreshToken() {
+    public String refreshToken() {
         String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
         if (result == null) {
             return null;
         }
         try {
             JSONObject jsonObject = new JSONObject(result);
+            Log.d("tokenExpired","called");
             JSONObject jsonObject1=jsonObject.getJSONObject("data");
             String token = jsonObject1.getString("token");
-            Log.d("result",result);
-            //String token = jsonObject.getString("token");
-            Prefs.putString("TOKEN", token);
-            Authenticate.token = token;
-            Helpdesk.token = token;
+            JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+            String role=jsonObject2.getString("role");
+//            if (role.equals("user")){
+//                //Prefs.clear();
+//                //Prefs.putString("role",role);
+//                Intent intent=new Intent(FaveoApplication.getContext(),LoginActivity.class);
+//                Toast.makeText(FaveoApplication.getContext(),FaveoApplication.getContext().getString(R.string.permission), Toast.LENGTH_SHORT).show();
+//                FaveoApplication.getContext().startActivity(intent);
+//
+//
+//            }
+
+                String profilePic = jsonObject2.getString("profile_pic");
+                //Prefs.putString("role",role);
+                Log.d("result", result);
+                Log.d("profilePicture", profilePic);
+                //String token = jsonObject.getString("token");
+                Prefs.putString("TOKEN", token);
+                Prefs.putString("profilePicture", profilePic);
+                Authenticate.token = token;
+                Helpdesk.token = token;
+
 
         } catch (JSONException e) {
             e.printStackTrace();

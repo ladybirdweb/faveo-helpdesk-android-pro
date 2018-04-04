@@ -368,10 +368,9 @@
     <string name="assignMultipleTicket">Assigning multiple tickets</string>
     <string name="mergingmultipleTickets">Merging multiple tickets</string>
     <string name="someOtherFeatures">Some other features</string>
-    <string name="howToSelectMultipleTicket">To select multiple ticket at a time you have to long press on ticket and if you have to select another ticket you have to
-        select another one then again you have to long press on that ticket.To deselect a ticket you have to just click on the checkbox
-        on the ticket.Once you select multiple ticket you can perform these tasks like you can change the status of those ticket,you can also assign those tickets
-        to specific agent and also you can merge those tickets.
+    <string name="howToSelectMultipleTicket">To select multiple ticket at a time you have to long press on ticket,it will give you the option to select multiple tickets at a time.
+        Once you select the tickets then you have option to assign those tickets or changing the status of the tickets and you can also merge tickets if the tickets belong to the same user.
+
     </string>
     <string name="multipleStatus">To change status of a ticket you can click on that ticket,on the ticket detail page just click on the three dots on the top right corner of the page
     then you will get the option to change the status like open,closed,resolved,move to trash.In case if you want to change the status of multiple tickets then you need to first select those tickets then you can select the three dots on the
@@ -406,6 +405,11 @@
     <string name="leaveYourMessage">Please leave your message here</string>
     <string name="attachment">Attachment</string>
     <string name="userLogIn">Sorry!User can not be able to log in to the app </string>
+    <string name="fill_username">Please provide the user name</string>
+    <string name="mobileCountryCode">For mobile number country code is required</string>
+    <string name="noTicket">No tickets found</string>
+    <string name="noUser">No users found</string>
+    <string name="roleChanged">Role has been changed!user can not use the app.</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

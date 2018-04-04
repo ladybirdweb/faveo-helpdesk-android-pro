@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -51,6 +53,7 @@ import java.util.List;
 import co.helpdesk.faveo.pro.Constants;
 //import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
@@ -97,6 +100,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     String cameFromNotification;
     public static boolean isShowing = false;
     TextView textViewStatus, textviewAgentName, textViewTitle, textViewSubject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +109,41 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ticket_detail);
         setupFab();
+
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//
+//        StrictMode.setThreadPolicy(policy);
+//        final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            public void run() {
+//                //
+//                // Do the stuff
+//                //
+//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+//                try {
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+//                    String role1=jsonObject2.getString("role");
+//                    if (role1.equals("user")){
+//                        Prefs.clear();
+//                        //Prefs.putString("role",role);
+//                        Intent intent=new Intent(TicketDetailActivity.this,LoginActivity.class);
+//                        Toasty.info(TicketDetailActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                        startActivity(intent);
+//
+//
+//                    }
+//
+//
+//                } catch (JSONException | NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                handler.postDelayed(this, 30000);
+//            }
+//        };
+//        runnable.run();
         Log.d("ticketDetailOnCreate","True");
 
 //        try {
@@ -1165,6 +1204,16 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 String ticketNumber=jsonObject2.getString("ticket_number");
                 String statusName=jsonObject2.getString("status_name");
                 String subject=jsonObject2.getString("title");
+                JSONObject jsonObject3=jsonObject2.getJSONObject("from");
+                String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                if (userName.equals("")||userName.equals("null null")){
+                    userName=jsonObject3.getString("user_name");
+                    textviewAgentName.setText(userName);
+                }
+                else{
+                    userName=jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                    textviewAgentName.setText(userName);
+                }
                 if (!statusName.equals("null")||!statusName.equals("")){
                     textViewStatus.setText(statusName);
                 }
@@ -1189,33 +1238,35 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 else if (subject.equals("null")){
                     textViewSubject.setText("");
                 }
-                String assignee=jsonObject2.getString("assignee");
-                if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
-                 textviewAgentName.setText(getString(R.string.unassigned));
-                }
-                else{
-                    JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
-                    try {
-                        if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
-                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                            agentName=jsonObject3.getString("first_name") + " " + jsonObject3.getString("last_name");
-                            textviewAgentName.setText(agentName);
 
-                            //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
-                        }
-                        else{
-                            agentName=jsonObject3.getString("user_name");
-                            textviewAgentName.setText(agentName);
-                        }
-                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
-                    } catch (ArrayIndexOutOfBoundsException e){
-                        e.printStackTrace();
-                    } catch (Exception e) {
-//                    spinnerHelpTopics.setVisibility(View.GONE);
-//                    tv_helpTopic.setVisibility(View.GONE);
-                        e.printStackTrace();
-                    }
-                }
+
+//                String assignee=jsonObject2.getString("assignee");
+//                if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
+//                 textviewAgentName.setText(getString(R.string.unassigned));
+//                }
+//                else{
+//                    JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
+//                    try {
+//                        if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
+//                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+//                            agentName=jsonObject3.getString("first_name") + " " + jsonObject3.getString("last_name");
+//                            textviewAgentName.setText(agentName);
+//
+//                            //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+//                        }
+//                        else{
+//                            agentName=jsonObject3.getString("user_name");
+//                            textviewAgentName.setText(agentName);
+//                        }
+//                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+//                    } catch (ArrayIndexOutOfBoundsException e){
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+////                    spinnerHelpTopics.setVisibility(View.GONE);
+////                    tv_helpTopic.setVisibility(View.GONE);
+//                        e.printStackTrace();
+//                    }
+//                }
 
                 //JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
 //                if (jsonObject3.getString("first_name").equals("")&&jsonObject3.getString("last_name").equals("")){

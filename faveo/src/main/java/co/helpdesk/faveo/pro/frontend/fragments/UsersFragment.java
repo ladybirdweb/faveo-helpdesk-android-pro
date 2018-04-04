@@ -122,6 +122,7 @@ public class UsersFragment extends Fragment {
                 Log.d("QUERRY","No Querry");
                 recyclerView.setVisibility(View.GONE);
                 empty_view.setVisibility(View.VISIBLE);
+                empty_view.setText(getString(R.string.noUser));
             }
             else{
                 noInternet_view.setVisibility(View.GONE);
@@ -150,6 +151,7 @@ public class UsersFragment extends Fragment {
                         Log.d("QUERRY","No Querry");
                         recyclerView.setVisibility(View.GONE);
                         empty_view.setVisibility(View.VISIBLE);
+                        empty_view.setText(getString(R.string.noUser));
                         swipeRefresh.setRefreshing(false);
                     }
                     else{

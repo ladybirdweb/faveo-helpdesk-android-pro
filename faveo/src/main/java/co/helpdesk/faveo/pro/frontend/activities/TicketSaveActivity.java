@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +44,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -65,6 +68,40 @@ public class TicketSaveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_save);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                //
+                // Do the stuff
+                //
+                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                    String role1=jsonObject2.getString("role");
+                    if (role1.equals("user")){
+                        Prefs.clear();
+                        //Prefs.putString("role",role);
+                        Intent intent=new Intent(TicketSaveActivity.this,LoginActivity.class);
+                        Toasty.info(TicketSaveActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+
+
+                    }
+
+
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                handler.postDelayed(this, 30000);
+            }
+        };
+        runnable.run();
         setUpViews();
         if (InternetReceiver.isConnected()) {
             progressDialog=new ProgressDialog(this);
@@ -234,6 +271,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
+            Log.d("Depen Response : ", result + "");
             if (result == null) {
                 Toasty.error(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;

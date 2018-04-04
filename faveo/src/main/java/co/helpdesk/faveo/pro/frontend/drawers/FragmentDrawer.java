@@ -48,12 +48,14 @@ import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UIUtils;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
 import co.helpdesk.faveo.pro.frontend.activities.HelpSection;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.SettingsActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SplashActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
@@ -88,6 +90,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     //int count=0;
     ProgressDialog progressDialog;
     String title;
+    static String token;
 
     //    @BindView(R.id.inbox_count)
 //    TextView inbox_count;
@@ -260,15 +263,20 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         });
 //        IImageLoader imageLoader = new PicassoLoader();
 //        imageLoader.loadImage(profilePic, Prefs.getString("PROFILE_PIC", null), Prefs.getString("USERNAME", " ").charAt(0) + "");
-        String letter = String.valueOf(Prefs.getString("PROFILE_NAME", "").toUpperCase().charAt(0));
-        if (Prefs.getString("PROFILE_NAME", "").contains("jpg")||Prefs.getString("PROFILE_NAME", "").contains("png")){
-            Picasso.with(context).load(Prefs.getString("PROFILE_PIC", "")).transform(new CircleTransform()).into(profilePic);
-        }
-        else{
-            ColorGenerator generator = ColorGenerator.MATERIAL;
-            TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter, generator.getRandomColor());
-            profilePic.setImageDrawable(drawable);
+        try {
+            String letter = Prefs.getString("profilePicture", null);
+            Log.d("profilePicture", letter);
+            if (letter.contains("jpg") || letter.contains("png") || letter.contains("jpeg")) {
+                Picasso.with(context).load(letter).transform(new CircleTransform()).into(profilePic);
+            } else {
+                String letter1 = String.valueOf(Prefs.getString("PROFILE_NAME", "").charAt(0));
+                ColorGenerator generator = ColorGenerator.MATERIAL;
+                TextDrawable drawable = TextDrawable.builder()
+                        .buildRound(letter1, generator.getRandomColor());
+                profilePic.setImageDrawable(drawable);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
         userRole.setText(Prefs.getString("ROLE", ""));
         domainAddress.setText(Prefs.getString("BASE_URL", ""));
@@ -283,6 +291,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         });
         return layout;
     }
+
 
     @Override
     public void onStart() {
@@ -371,6 +380,19 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             if (result == null) {
 
                 return;
+            }
+            String state=Prefs.getString("403",null);
+            try {
+                if (state.equals("403") && !state.equals(null)) {
+                    Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.clear();
+                    Intent intent=new Intent(getActivity(),LoginActivity.class);
+                    Prefs.putString("403", "null");
+                    startActivity(intent);
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
             }
 
             try {
@@ -596,6 +618,34 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
     public interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);
+    }
+    private String refreshToken() {
+        String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+        if (result == null) {
+            return null;
+        }
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            JSONObject jsonObject1=jsonObject.getJSONObject("data");
+            String token = jsonObject1.getString("token");
+            JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+            String profilePic=jsonObject2.getString("profile_pic");
+            Log.d("result",result);
+            Log.d("profilePicture",profilePic);
+            //String token = jsonObject.getString("token");
+            Prefs.putString("TOKEN", token);
+            Prefs.putString("profilePicture",profilePic);
+            Authenticate.token = token;
+            Helpdesk.token = token;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("cameInException","true");
+            Prefs.clear();
+            Prefs.putString("NoToken","True");
+            return null;
+        }
+        return "success";
     }
 
 

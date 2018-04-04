@@ -157,7 +157,7 @@ public class Conversation extends Fragment {
         Context context;
          String ticketID;
          String name;
-         String file;
+         String  file;
          String type;
          String noOfAttachment;
          StringBuilder stringBuilderName;
@@ -367,7 +367,7 @@ public class Conversation extends Fragment {
 //            noInternet_view.setVisibility(View.GONE);
             // swipeRefresh.setRefreshing(true);
             //Log.d("TICKETid",Prefs.getString("TICKETid", null));
-            refresh();
+            //refresh();
 //            task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
 //            task.execute();
         }

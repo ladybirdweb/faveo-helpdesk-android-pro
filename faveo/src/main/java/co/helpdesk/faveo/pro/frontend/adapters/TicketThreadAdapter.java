@@ -69,7 +69,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         String message1=message.replaceAll("\t","");
         Log.d("without",message1);
         ticketViewHolder.webView.loadDataWithBaseURL(null,message1.replaceAll("\\n", "<br/>"), "text/html", "UTF-8", null);
-        if (ticketThread.getClientPicture().contains("jpg")||ticketThread.getClientPicture().contains("png")){
+        if (ticketThread.getClientPicture().contains("jpg")||ticketThread.getClientPicture().contains("png")||ticketThread.getClientPicture().contains("jpeg")){
             Picasso.with(context).load(ticketThread.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
         }
         else{

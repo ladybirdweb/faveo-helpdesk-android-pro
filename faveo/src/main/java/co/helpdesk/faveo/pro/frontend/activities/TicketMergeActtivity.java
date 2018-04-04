@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -66,6 +69,40 @@ ProgressDialog progressDialog;
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ticket_merge_acttivity);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        //final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            public void run() {
+//                //
+//                // Do the stuff
+//                //
+//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+//                try {
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+//                    String role1=jsonObject2.getString("role");
+//                    if (role1.equals("user")){
+//                        Prefs.clear();
+//                        //Prefs.putString("role",role);
+//                        Intent intent=new Intent(TicketMergeActtivity.this,LoginActivity.class);
+//                        Toasty.info(TicketMergeActtivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                        startActivity(intent);
+//
+//
+//                    }
+//
+//
+//                } catch (JSONException | NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                handler.postDelayed(this, 30000);
+//            }
+//        };
+//        runnable.run();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
@@ -244,15 +281,6 @@ ProgressDialog progressDialog;
                     new MergeTicket(id, title, reason+sb1.toString()).execute();
 
                 }
-
-
-
-
-
-
-
-
-
             }
         });
 
@@ -320,7 +348,21 @@ ProgressDialog progressDialog;
             }catch (JSONException e){
                 e.printStackTrace();
             }
+            try{
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("response");
+                //JSONObject jsonObject2=jsonObject1.getJSONObject("message");
+                String message=jsonObject1.getString("message");
+                if (message.equals("tickets from different users")){
+                    Toasty.warning(TicketMergeActtivity.this, getString(R.string.ticketsFromDifferentUsers), Toast.LENGTH_LONG).show();
+                    return;
+                }
 
+
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             try {
 
@@ -333,10 +375,10 @@ ProgressDialog progressDialog;
                     Prefs.putString("tickets", null);
                     startActivity(intent);
                 }
-                else if (message.equals("tickets from different users")){
-                    Toasty.warning(TicketMergeActtivity.this, getString(R.string.ticketsFromDifferentUsers), Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                else if (message.equals("tickets from different users")){
+//                    Toasty.warning(TicketMergeActtivity.this, getString(R.string.ticketsFromDifferentUsers), Toast.LENGTH_LONG).show();
+//                    return;
+//                }
 
             } catch (JSONException e) {
                 e.printStackTrace();

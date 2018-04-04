@@ -6,17 +6,20 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -24,12 +27,17 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.LocaleHelper;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
+import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
@@ -52,6 +60,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtAsc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
+import es.dmoral.toasty.Toasty;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -93,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+
         //FirebaseCrash.setCrashCollectionEnabled(false);
 
         //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
@@ -102,6 +112,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+//        try {
+//            String role = Prefs.getString("role", null);
+//            if (role.equals("user")){
+//                finish();
+//                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+//                startActivity(intent);
+//            }
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
         
         // TODO: Move this to where you establish a user session
         //logUser();
@@ -113,6 +133,40 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        String nextPageURL = getIntent().getStringExtra("nextPageURL");
 //        Bundle bundle = new Bundle();
 //        bundle.putString("nextPageURL", nextPageURL);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                //
+                // Do the stuff
+                //
+                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                    String role1=jsonObject2.getString("role");
+                    if (role1.equals("user")){
+                        Prefs.clear();
+                        //Prefs.putString("role",role);
+                        Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+                        Toasty.info(MainActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+
+
+                    }
+
+
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                handler.postDelayed(this, 60000);
+            }
+        };
+        runnable.run();
         strings=new ArrayList<>();
         strings.add(0,"Sort by");
         strings.add(1,"Due by time");
@@ -127,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Prefs.putString("querry","null");
+        Prefs.putString("querry1","null");
 
 
 //Initializing the bottomNavigationView
@@ -445,4 +499,5 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
 }

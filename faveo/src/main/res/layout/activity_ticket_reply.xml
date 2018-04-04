@@ -70,7 +70,12 @@
 
 
         </android.support.design.widget.AppBarLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/faveo">
 
+        </View>
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -1154,8 +1154,8 @@ public class MyTickets extends Fragment {
                     ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
                     ticketViewHolder.textViewduetoday.setText(R.string.due_today);
                     //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-                    ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#ffff00"));
-                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#A0A0A0"));
+                    ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
+                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
                     //ticketViewHolder.textViewOverdue.setBackgroundColor();
 
                 } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
@@ -1166,7 +1166,7 @@ public class MyTickets extends Fragment {
 //
 ////set color
 //                 drawable.setColor(color);
-                    ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#FF9999"));
+                    ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
                     ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
                 } else {
                     ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
@@ -1266,7 +1266,7 @@ public class MyTickets extends Fragment {
             if (ticketOverview.clientPicture.equals("")) {
                 ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
-            } else if (ticketOverview.clientPicture.contains(".jpg")) {
+            } else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")) {
                 mDrawableBuilder = TextDrawable.builder()
                         .round();
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
