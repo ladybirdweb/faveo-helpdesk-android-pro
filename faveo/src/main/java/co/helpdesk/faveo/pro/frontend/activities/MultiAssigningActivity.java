@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
@@ -46,6 +49,40 @@ public class MultiAssigningActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                //
+                // Do the stuff
+                //
+                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                    String role1=jsonObject2.getString("role");
+                    if (role1.equals("user")){
+                        Prefs.clear();
+                        //Prefs.putString("role",role);
+                        Intent intent=new Intent(MultiAssigningActivity.this,LoginActivity.class);
+                        Toasty.info(MultiAssigningActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+
+
+                    }
+
+
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                handler.postDelayed(this, 30000);
+            }
+        };
+        runnable.run();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         staffItems=new ArrayList<>();
@@ -62,8 +99,9 @@ public class MultiAssigningActivity extends AppCompatActivity {
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
-                startActivity(intent);
+//                Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
+//                startActivity(intent);
+                onBackPressed();
             }
         });
         buttonAssign.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +165,21 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+            super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
+    }
 
    private class FetchDependency extends AsyncTask<String, Void, String> {
 
@@ -137,7 +190,7 @@ public class MultiAssigningActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            Log.d("Depen Response : ", result + "");
+            //Log.d("Depen Response : ", result + "");
 
             if (result == null) {
                 Toasty.error(MultiAssigningActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
@@ -149,7 +202,8 @@ public class MultiAssigningActivity extends AppCompatActivity {
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("result");
 
                 JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
                 for (int i = 0; i < jsonArrayStaffs.length(); i++) {
@@ -208,6 +262,17 @@ public class MultiAssigningActivity extends AppCompatActivity {
             if (result == null) {
                 Toasty.error(MultiAssigningActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
+            }
+            String state=Prefs.getString("403",null);
+
+            try {
+                if (state.equals("403") && !state.equals(null)) {
+                    Toasty.warning(MultiAssigningActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
             }
             try {
 

@@ -49,6 +49,12 @@
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/faveo">
+
+        </View>
     </android.support.design.widget.AppBarLayout>
     <TextView
         android:id="@+id/loggingin"
@@ -57,4 +63,8 @@
         android:layout_height="wrap_content"
         android:text="@string/loggingIn"
         android:textSize="20sp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/faveo"></View>
 </LinearLayout>

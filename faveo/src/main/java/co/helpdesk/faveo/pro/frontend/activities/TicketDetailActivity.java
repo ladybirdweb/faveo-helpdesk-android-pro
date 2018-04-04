@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,7 +17,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 //import android.support.v7.app.AlertDialog;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 //import android.text.SpannableString;
@@ -46,15 +47,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import co.helpdesk.faveo.pro.Constants;
 //import co.helpdesk.faveo.pro.Helper;
-import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
@@ -99,7 +98,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
     View viewpriority;
     ImageView imgaeviewBack;
     String cameFromNotification;
+    public static boolean isShowing = false;
     TextView textViewStatus, textviewAgentName, textViewTitle, textViewSubject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +109,43 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ticket_detail);
         setupFab();
+
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//
+//        StrictMode.setThreadPolicy(policy);
+//        final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            public void run() {
+//                //
+//                // Do the stuff
+//                //
+//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+//                try {
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+//                    String role1=jsonObject2.getString("role");
+//                    if (role1.equals("user")){
+//                        Prefs.clear();
+//                        //Prefs.putString("role",role);
+//                        Intent intent=new Intent(TicketDetailActivity.this,LoginActivity.class);
+//                        Toasty.info(TicketDetailActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                        startActivity(intent);
+//
+//
+//                    }
+//
+//
+//                } catch (JSONException | NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                handler.postDelayed(this, 30000);
+//            }
+//        };
+//        runnable.run();
+        Log.d("ticketDetailOnCreate","True");
+
 //        try {
 //            cameFromNoti = Prefs.getString("cameFromNotification", null);
 //            if (cameFromNoti.equals("true")){
@@ -134,9 +172,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         textviewAgentName = (TextView) mToolbar.findViewById(R.id.textViewagentName);
         textViewTitle = (TextView) mToolbar.findViewById(R.id.title);
         textViewSubject = (TextView) mToolbar.findViewById(R.id.subject);
-        imgaeviewBack= (ImageView) mToolbar.findViewById(R.id.imageviewback);
+        imgaeviewBack= (ImageView) findViewById(R.id.imageViewBackTicketDetail);
         viewpriority=mToolbar.findViewById(R.id.viewPriority);
         mToolbar.inflateMenu(R.menu.menu_main_new);
+        isShowing=true;
         //Log.d("came into ticket detail","true");
         mToolbar.getMenu().getItem(0).setEnabled(false);
         addCc = (TextView) findViewById(R.id.addcc);
@@ -144,17 +183,28 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //            progressDialog=new ProgressDialog(this);
 //            progressDialog.setMessage(getString(R.string.pleasewait));
 //            progressDialog.show();
-            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+            new Thread(new Runnable() {
+                public void run(){
+                    Log.d("threadisrunning","true");
+                    new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+                }
+            }).start();
+//            new Thread(new Runnable() {
+//                public void run(){
+//                    Log.d("threadisrunning","true");
+//                    new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+//                }
+//            }).start();
 
         }
 
-        addCc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(TicketDetailActivity.this, collaboratorAdd.class);
-                startActivity(intent);
-            }
-        });
+//        addCc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(TicketDetailActivity.this, collaboratorAdd.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
         imgaeviewBack.setOnClickListener(new View.OnClickListener() {
@@ -166,14 +216,15 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //                    startActivity(intent);
                 Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
 //                }
-                    if (Prefs.getString("cameFromSearch",null).equals("true")){
-                        Intent intent=new Intent(TicketDetailActivity.this,SearchActivity.class);
-                        startActivity(intent);
-                    }
-                    else if (Prefs.getString("cameFromNotification",null).equals("true")){
+//
+                     if (Prefs.getString("cameFromNotification",null).equals("true")){
                         Intent intent=new Intent(TicketDetailActivity.this,NotificationActivity.class);
                         startActivity(intent);
                     }
+                    else if (Prefs.getString("cameFromNotification",null).equals("false")){
+                         Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
+                         startActivity(intent);
+                     }
                     else{
                         Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
                         startActivity(intent);
@@ -231,74 +282,74 @@ public class TicketDetailActivity extends AppCompatActivity implements
         /*
           This button is for creating the internal note.
          */
-        buttonCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String note = editTextInternalNote.getText().toString();
-                if (note.trim().length() == 0) {
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
-                    return;
-                }
-                String userID = Prefs.getString("ID", null);
-                if (userID != null && userID.length() != 0) {
-                    try {
-                        note = URLEncoder.encode(note, "utf-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-
-                    new CreateInternalNote(Integer.parseInt(ticketID), Integer.parseInt(userID), note).execute();
-                    progressDialog.setMessage(getString(R.string.creating_note));
-                    progressDialog.show();
-
-
-                } else
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
-            }
-        });
+//        buttonCreate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String note = editTextInternalNote.getText().toString();
+//                if (note.trim().length() == 0) {
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                String userID = Prefs.getString("ID", null);
+//                if (userID != null && userID.length() != 0) {
+//                    try {
+//                        note = URLEncoder.encode(note, "utf-8");
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    new CreateInternalNoteActivity(Integer.parseInt(ticketID), Integer.parseInt(userID), note).execute();
+//                    progressDialog.setMessage(getString(R.string.creating_note));
+//                    progressDialog.show();
+//
+//
+//                } else
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
+//            }
+//        });
 
         /*
           This button is for getting the cc from the reply option
           here we are handling multiple cc items.
          */
-        buttonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                String cc = editTextCC.getText().toString();
-                String replyMessage = editTextReplyMessage.getText().toString();
-                if (replyMessage.trim().length() == 0) {
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-//                cc = cc.replace(", ", ",");
-//                if (cc.length() > 0) {
-//                    String[] multipleEmails = cc.split(",");
-//                    for (String email : multipleEmails) {
-//                        if (email.length() > 0 && !Helper.isValidEmail(email)) {
-//                            Toasty.warning(TicketDetailActivity.this, getString(R.string.invalid_cc), Toast.LENGTH_LONG).show();
-//                            return;
-//                        }
-//                    }
+//        buttonSend.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                String cc = editTextCC.getText().toString();
+//                String replyMessage = editTextReplyMessage.getText().toString();
+//                if (replyMessage.trim().length() == 0) {
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
+//                    return;
 //                }
-
-                String userID = Prefs.getString("ID", null);
-                if (userID != null && userID.length() != 0) {
-                    try {
-                        replyMessage = URLEncoder.encode(replyMessage, "utf-8");
-                        Log.d("Msg", replyMessage);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-
-                    new ReplyTicket(Integer.parseInt(ticketID), replyMessage).execute();
-                    progressDialog.setMessage(getString(R.string.sending_msg));
-                    progressDialog.show();
-
-                } else
-                    Toasty.warning(TicketDetailActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
-            }
-        });
+//
+////                cc = cc.replace(", ", ",");
+////                if (cc.length() > 0) {
+////                    String[] multipleEmails = cc.split(",");
+////                    for (String email : multipleEmails) {
+////                        if (email.length() > 0 && !Helper.isValidEmail(email)) {
+////                            Toasty.warning(TicketDetailActivity.this, getString(R.string.invalid_cc), Toast.LENGTH_LONG).show();
+////                            return;
+////                        }
+////                    }
+////                }
+//
+//                String userID = Prefs.getString("ID", null);
+//                if (userID != null && userID.length() != 0) {
+//                    try {
+//                        replyMessage = URLEncoder.encode(replyMessage, "utf-8");
+//                        Log.d("Msg", replyMessage);
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    new ReplyTicket(Integer.parseInt(ticketID), replyMessage).execute();
+//                    progressDialog.setMessage(getString(R.string.sending_msg));
+//                    progressDialog.show();
+//
+//                } else
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
+//            }
+//        });
 
 //        fabAdd = (FloatingActionButton) findViewById(R.id.fab);
 //        fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -467,6 +518,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
     private void setupFab() {
 
         fab = (Fab) findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+        fab.show();
         View sheetView = findViewById(R.id.fab_sheet);
         View overlay1 = findViewById(R.id.overlay1);
         int sheetColor = getResources().getColor(R.color.background_card);
@@ -503,16 +556,20 @@ public class TicketDetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 materialSheetFab.hideSheetThenFab();
-
-                enterReveal("Reply");
+                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                startActivity(intent);
+                exitReveal();
+                //enterReveal("Reply");
             }
         });
         findViewById(R.id.fab_sheet_item_note).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 materialSheetFab.hideSheetThenFab();
-
-                enterReveal("Internal notes");
+                Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+                startActivity(intent);
+                exitReveal();
+                //enterReveal("Internal notes");
             }
         });
 
@@ -590,36 +647,36 @@ public class TicketDetailActivity extends AppCompatActivity implements
     /**
      * This API is for creating the internal note.
      */
-    private class CreateInternalNote extends AsyncTask<String, Void, String> {
-        int ticketID;
-        int userID;
-        String note;
-
-        CreateInternalNote(int ticketID, int userID, String note) {
-            this.ticketID = ticketID;
-            this.userID = userID;
-            this.note = note;
-        }
-
-        protected String doInBackground(String... urls) {
-            return new Helpdesk().postCreateInternalNote(ticketID, userID, note);
-        }
-
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
-            if (result == null) {
-                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-            Toasty.success(TicketDetailActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
-            editTextInternalNote.getText().clear();
-            exitReveal();
-
-            Conversation conversation = (Conversation) adapter.getItem(0);
-            if (conversation != null)
-                conversation.refresh();
-        }
-    }
+//    private class CreateInternalNoteActivity extends AsyncTask<String, Void, String> {
+//        int ticketID;
+//        int userID;
+//        String note;
+//
+//        CreateInternalNoteActivity(int ticketID, int userID, String note) {
+//            this.ticketID = ticketID;
+//            this.userID = userID;
+//            this.note = note;
+//        }
+//
+//        protected String doInBackground(String... urls) {
+//            return new Helpdesk().postCreateInternalNote(ticketID, userID, note);
+//        }
+//
+//        protected void onPostExecute(String result) {
+//            progressDialog.dismiss();
+//            if (result == null) {
+//                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//            Toasty.success(TicketDetailActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
+//            editTextInternalNote.getText().clear();
+//            exitReveal();
+//
+//            Conversation conversation = (Conversation) adapter.getItem(0);
+//            if (conversation != null)
+//                conversation.refresh();
+//        }
+//    }
 
     /**
      * Async task for changing the status of the ticket.
@@ -683,10 +740,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 //JSONObject jsonObject2=jsonObject.getJSONObject("error");
                 //String message1=jsonObject2.getString("ticket_id");
-                String message2 = jsonObject1.getString("message");
+                String message2 = jsonObject.getString("message");
 
 
 //                if (message2.contains("permission denied")&&Prefs.getString("403",null).equals("403")){
@@ -724,138 +781,90 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     }
 
-    /**
-     * This API is for replying to the particular ticket.
-     */
-    private class ReplyTicket extends AsyncTask<String, Void, String> {
-        int ticketID;
-        String cc;
-        String replyContent;
-
-        ReplyTicket(int ticketID, String replyContent) {
-            this.ticketID = ticketID;
-            this.cc = cc;
-            this.replyContent = replyContent;
-        }
-
-        protected String doInBackground(String... urls) {
-            return new Helpdesk().postReplyTicket(ticketID, replyContent);
-        }
-
-        protected void onPostExecute(String result) {
-            Log.d("reply", result + "");
-            progressDialog.dismiss();
-            if (result == null) {
-                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-//            editTextCC.getText().clear();
-            editTextReplyMessage.getText().clear();
-            exitReveal();
-            Toasty.success(TicketDetailActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
-            Conversation conversation = (Conversation) adapter.getItem(0);
-            if (conversation != null)
-                conversation.refresh();
-            // try {
-//                TicketThread ticketThread;
+//    /**
+//     * This API is for replying to the particular ticket.
+//     */
+//    private class ReplyTicket extends AsyncTask<String, Void, String> {
+//        int ticketID;
+//        String cc;
+//        String replyContent;
+//
+//        ReplyTicket(int ticketID, String replyContent) {
+//            this.ticketID = ticketID;
+//            this.cc = cc;
+//            this.replyContent = replyContent;
+//        }
+//
+//        protected String doInBackground(String... urls) {
+//            return new Helpdesk().postReplyTicket(ticketID, replyContent);
+//        }
+//
+//        protected void onPostExecute(String result) {
+//            Log.d("reply", result + "");
+//            progressDialog.dismiss();
+//            if (result == null) {
+//                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//            editTextReplyMessage.getText().clear();
+//            exitReveal();
+//            Toasty.success(TicketDetailActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
+//            Conversation conversation = (Conversation) adapter.getItem(0);
+//            if (conversation != null)
+//                conversation.refresh();
+//        }
+//    }
+//
+//     class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
+//        String ticketid;
+//
+//        FetchCollaboratorAssociatedWithTicket(String ticketid) {
+//
+//            this.ticketid = ticketid;
+//        }
+//
+//        protected String doInBackground(String... urls) {
+//            return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
+//        }
+//
+//        protected void onPostExecute(String result) {
+//            progressDialog.dismiss();
+////            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//            Prefs.putString("cameFromNotification","false");
+//            //progressDialog.dismiss();
+//            int noOfCollaborator = 0;
+//            if (isCancelled()) return;
+////            if (progressDialog.isShowing())
+////                progressDialog.dismiss();
+//
+//            if (result == null) {
+//                //Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+////                Data data=new Data(0,"No recipients");
+////                stringArrayList.add(data);
+//                return;
+//            }
+//
+//            try {
 //                JSONObject jsonObject = new JSONObject(result);
-//                JSONObject res = jsonObject.getJSONObject("result");
-//                String clientPicture = "";
-//                try {
-//                    clientPicture = res.getString("profile_pic");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                String messageTitle = "";
-//                try {
-//                    messageTitle = res.getString("title");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                String clientName = "";
-//                try {
-//                    clientName = res.getString("first_name") + " " + res.getString("last_name");
-//                    if (clientName.equals("") || clientName == null)
-//                        clientName = res.getString("user_name");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
+//                JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
+//                if (jsonArray.length() == 0) {
+//                    addCc.setText("Add cc");
+//                    return;
+//                } else {
+//
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        noOfCollaborator++;
+//
+//                    }
+//                    addCc.setText("Add cc" + "(" + noOfCollaborator + " Recipients)");
+//                    //Toast.makeText(TicketDetailActivity.this, "noofcollaborators:" + noOfCollaborator, Toast.LENGTH_SHORT).show();
 //                }
 //
-//                String messageTime = res.getString("created_at");
-//                String message = res.getString("body");
-//                String isReply = "true";
-//                try {
-//                    isReply = res.getString("is_reply");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-            // ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
-            //ticketThread = new TicketThread(clientName, messageTime, message, isReply);
-
-//            if (fragmentConversation != null) {
-//                exitReveal();
-//                //fragmentConversation.addThreadAndUpdate(ticketThread);
-//            }
 //            } catch (JSONException e) {
-//                if (fragmentConversation != null) {
-//                    exitReveal();
-//                }
 //                e.printStackTrace();
-//                // Toast.makeText(TicketDetailActivity.this, "Unexpected Error ", Toast.LENGTH_LONG).show();
 //            }
-        }
-    }
-
-     class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
-        String ticketid;
-
-        FetchCollaboratorAssociatedWithTicket(String ticketid) {
-
-            this.ticketid = ticketid;
-        }
-
-        protected String doInBackground(String... urls) {
-            return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
-        }
-
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
-            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
-            Prefs.putString("cameFromNotification","false");
-            //progressDialog.dismiss();
-            int noOfCollaborator = 0;
-            if (isCancelled()) return;
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-
-            if (result == null) {
-                //Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                Data data=new Data(0,"No recipients");
-//                stringArrayList.add(data);
-                return;
-            }
-
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
-                if (jsonArray.length() == 0) {
-                    addCc.setText("Add cc");
-                    return;
-                } else {
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        noOfCollaborator++;
-
-                    }
-                    addCc.setText("Add cc" + "(" + noOfCollaborator + " Recipients)");
-                    //Toast.makeText(TicketDetailActivity.this, "noofcollaborators:" + noOfCollaborator, Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//        }
+//    }
 
     /**
      * Here we are initializing the view pager
@@ -907,7 +916,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     break;
 
                 default:
-                    fab.hide();
+                    fab.show();
                     break;
             }
         }
@@ -1030,6 +1039,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
      */
     @Override
     public void onBackPressed() {
+
         if (!MainActivity.isShowing) {
             Log.d("isShowing", "false");
             Intent intent = new Intent(this, MainActivity.class);
@@ -1052,11 +1062,43 @@ public class TicketDetailActivity extends AppCompatActivity implements
      */
     @Override
     protected void onResume() {
+
+        Log.d("onResume","CALLED");
+        checkConnection();
+        setupFab();
+        fab.bringToFront();
         super.onResume();
         progressDialog.setMessage(getString(R.string.pleasewait));
-        progressDialog.show();
-        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
-        checkConnection();
+            progressDialog.show();
+//            setupFab();
+       new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//        checkConnection();
+//        if (InternetReceiver.isConnected()){
+//            progressDialog.setMessage(getString(R.string.pleasewait));
+//            progressDialog.show();
+//            fab = (Fab) findViewById(R.id.fab);
+//            fab.show();
+//            new Thread(new Runnable() {
+//                public void run(){
+//                    Log.d("threadisrunning","true");
+//                    new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//                }
+//            }).start();
+//        }
+
+
+//        new Thread(new Runnable() {
+//            public void run(){
+//                Log.d("threadisrunning","true");
+//                new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+//            }
+//        }).start();
+    }
+    @Override
+    protected void onDestroy() {
+        isShowing = false;
+        super.onDestroy();
+
     }
 
     private void checkConnection() {
@@ -1133,6 +1175,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     private class FetchTicketDetail extends AsyncTask<String, Void, String> {
         String ticketID;
         String agentName;
+        String title;
         FetchTicketDetail(String ticketID) {
 
             this.ticketID = ticketID;
@@ -1156,38 +1199,88 @@ public class TicketDetailActivity extends AppCompatActivity implements
             JSONObject jsonObject = null;
             try {
                 jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-                String ticketNumber=jsonObject1.getString("ticket_number");
-                String statusName=jsonObject1.getString("status_name");
-                if (jsonObject1.getString("assignee_first_name").equals("")&&jsonObject1.getString("assignee_last_name").equals("")){
-                    agentName=jsonObject1.getString("assignee_user_name");
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                String ticketNumber=jsonObject2.getString("ticket_number");
+                String statusName=jsonObject2.getString("status_name");
+                String subject=jsonObject2.getString("title");
+                JSONObject jsonObject3=jsonObject2.getJSONObject("from");
+                String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                if (userName.equals("")||userName.equals("null null")){
+                    userName=jsonObject3.getString("user_name");
+                    textviewAgentName.setText(userName);
                 }
-                else {
-                    agentName = jsonObject1.getString("assignee_first_name") + " " + jsonObject1.getString("assignee_last_name");
+                else{
+                    userName=jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                    textviewAgentName.setText(userName);
                 }
-                String subject=jsonObject1.getString("title");
-                String priority=jsonObject1.getString("priority_id");
-
                 if (!statusName.equals("null")||!statusName.equals("")){
                     textViewStatus.setText(statusName);
                 }
                 else{
                     textViewStatus.setVisibility(View.GONE);
                 }
-                if (agentName.equals("null null")){
-                    textviewAgentName.setText(getString(R.string.unassigned));
-                }
-                else{
-                    textviewAgentName.setText(agentName);
-                }
+
 
                 textViewTitle.setText(ticketNumber);
-                if (!subject.equals("null")){
+                if (subject.startsWith("=?")){
+                    title=subject.replaceAll("=?UTF-8?Q?","");
+                    String newTitle=title.replaceAll("=E2=80=99","");
+                    String finalTitle=newTitle.replace("=??Q?","");
+                    String newTitle1=finalTitle.replace("?=","");
+                    String newTitle2=newTitle1.replace("_"," ");
+                    Log.d("new name",newTitle2);
+                    textViewSubject.setText(newTitle2);
+                }
+                else if (!subject.equals("null")){
                     textViewSubject.setText(subject);
                 }
                 else if (subject.equals("null")){
                     textViewSubject.setText("");
                 }
+
+
+//                String assignee=jsonObject2.getString("assignee");
+//                if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
+//                 textviewAgentName.setText(getString(R.string.unassigned));
+//                }
+//                else{
+//                    JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
+//                    try {
+//                        if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
+//                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+//                            agentName=jsonObject3.getString("first_name") + " " + jsonObject3.getString("last_name");
+//                            textviewAgentName.setText(agentName);
+//
+//                            //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
+//                        }
+//                        else{
+//                            agentName=jsonObject3.getString("user_name");
+//                            textviewAgentName.setText(agentName);
+//                        }
+//                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+//                    } catch (ArrayIndexOutOfBoundsException e){
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+////                    spinnerHelpTopics.setVisibility(View.GONE);
+////                    tv_helpTopic.setVisibility(View.GONE);
+//                        e.printStackTrace();
+//                    }
+//                }
+
+                //JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
+//                if (jsonObject3.getString("first_name").equals("")&&jsonObject3.getString("last_name").equals("")){
+//                    agentName=jsonObject3.getString("user_name");
+//                }
+//                else {
+//                    agentName = jsonObject3.getString("first_name") + " " + jsonObject3.getString("last_name");
+//                }
+
+                Log.d("TITLE",subject);
+                Log.d("TICKETNUMBER",ticketNumber);
+                //String priority=jsonObject1.getString("priority_id");
+
+
 
 
 
@@ -1197,11 +1290,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
+
     @Override
     protected void onRestart() {
         super.onRestart();
 
     }
+
+
     //    /**
 //     * Callback will be triggered when there is change in
 //     * network connection

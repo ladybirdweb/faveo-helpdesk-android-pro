@@ -1,49 +1,38 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 //import android.app.SearchManager;
 //import android.content.Context;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 //import android.graphics.Bitmap;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
+import android.os.Handler;
+import android.os.StrictMode;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.Settings;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 //import android.support.v4.content.ContextCompat;
 //import android.support.v4.widget.CursorAdapter;
 //import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -57,12 +46,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -71,23 +55,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.hbb20.CountryCodePicker;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
-import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.squareup.picasso.Picasso;
 //import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -98,35 +85,42 @@ import org.json.JSONObject;
 //import java.io.File;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 //import java.text.DecimalFormat;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 //import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.BottomNavigationBehavior;
 import co.helpdesk.faveo.pro.Helper;
+import co.helpdesk.faveo.pro.MyDeserializer;
+import co.helpdesk.faveo.pro.MyResponse;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.UserClient;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
-import droidninja.filepicker.models.Document;
 import es.dmoral.toasty.Toasty;
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Multipart;
 
 /**
  * This activity is for responsible for creating the ticket.
@@ -176,7 +170,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     String email2;
 //    @BindView(R.id.attachment)
 //    Button button;
-    String mimeType = null;
     @BindView(R.id.attachment_close)
     ImageButton imageButtonAttachmentClose;
     ProgressDialog progressDialog;
@@ -195,8 +188,13 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     ImageButton imageViewGallery,imageViewCamera,imageViewDocument,imageViewAudio;
     Toolbar toolbarAttachment;
     File file3;
+    String result;
+    Button button;
+    File file;
+    Thread t;
     int gallery,document,camera,audio=0;
-
+    BottomNavigationView bottomNavigationView;
+    String base64,fileName,fileSize,mimeType;
     private static final int CAMERA_REQUEST = 1888;
     private static final int PICKFILE_REQUEST_CODE = 1234;
 
@@ -220,20 +218,66 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //FirebaseCrash.report(new Exception("App Name : My first Android non-fatal error"));
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         setContentView(R.layout.activity_create_ticket);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+//        final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            public void run() {
+//                //
+//                // Do the stuff
+//                //
+//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+//                try {
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+//                    String role1=jsonObject2.getString("role");
+//                    if (role1.equals("user")){
+//                        Prefs.clear();
+//                        //Prefs.putString("role",role);
+//                        Intent intent=new Intent(CreateTicketActivity.this,LoginActivity.class);
+//                        Toasty.info(CreateTicketActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                        startActivity(intent);
+//
+//
+//                    }
+//
+//
+//                } catch (JSONException | NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                handler.postDelayed(this, 30000);
+//            }
+//        };
+//        runnable.run();
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
+        bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
-        toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
+        //toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
 //        getSupportActionBar().setHomeButtonEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        toolbarBottom= (Toolbar) findViewById(R.id.bottom_navigation);
 //        toolbarBottom.setVisibility(View.GONE);
-//        imageViewAudio= (ImageButton) toolbarAttachment.findViewById(R.id.audio_img_btn);
+        //imageViewAudio= (ImageButton) toolbarAttachment.findViewById(R.id.audio_img_btn);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // attaching bottom sheet behaviour - hide / show on scroll
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehavior());
 //        imageViewGallery= (ImageButton) toolbarAttachment.findViewById(R.id.gallery_img_btn);
 //        imageViewCamera= (ImageButton) toolbarAttachment.findViewById(R.id.photo_img_btn);
 //        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
+        button= (Button) findViewById(R.id.attachment);
 
 //        imageViewGallery.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -269,7 +313,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //
 //            }
 //        });
-
+//
 //        imageViewCamera.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -316,13 +360,13 @@ cc1=new String[0];
         multiAutoCompleteTextViewCC.setThreshold(3);
         multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
-        imageButtonAttachmentClose.setOnClickListener(new View.OnClickListener() {
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attachment_layout.setVisibility(View.GONE);
                 attachmentFileName.setText("");
                 attachmentFileSize.setText("");
-                toolbarAttachment.setVisibility(View.GONE);
+                //toolbarAttachment.setVisibility(View.GONE);
             }
         });
 
@@ -346,20 +390,20 @@ cc1=new String[0];
             }
         });
 
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (toolbarAttachment.getVisibility()==View.GONE){
-//                    toolbarAttachment.setVisibility(View.VISIBLE);
-//                }
-//                else if (toolbarAttachment.getVisibility()==View.VISIBLE){
-//                    toolbarAttachment.setVisibility(View.GONE);
-//                }
-//
-//
-//            }
-//        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (bottomNavigationView.getVisibility()==View.GONE){
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                }
+                else if (bottomNavigationView.getVisibility()==View.VISIBLE){
+                    bottomNavigationView.setVisibility(View.GONE);
+                }
+
+
+            }
+        });
 
         //getSupportActionBar().setTitle(R.string.create_ticket);
         //ccp = (CountryCodePicker) findViewById(R.id.ccp);
@@ -598,6 +642,31 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // AndroidNetworking.enableLogging();
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_shop:
+                    gallery=2;
+                    reqPermissionCamera();
+                    return true;
+                case R.id.navigation_gifts:
+                    camera=3;
+                    reqPermissionCamera();
+                    return true;
+                case R.id.navigation_cart:
+                    document=1;
+                    reqPermissionCamera();
+                    return true;
+
+            }
+
+            return false;
+        }
+    };
+
 
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -660,184 +729,537 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        Uri uri = null;
+        try {
+            uri = data.getData();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            i++;
-            attachment_layout.setVisibility(View.VISIBLE);
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            Uri tempUri = getImageUri(getApplicationContext(), photo);
-            File finalFile = new File(getRealPathFromURI(tempUri));
-            long fileSizeInBytes = finalFile.length();
-            long fileSizeInKB = fileSizeInBytes / 1024;
-            String path=finalFile.getPath();
-            Log.d("fileSize", String.valueOf(finalFile.length()/1024));
-            Log.d("FinalPath",path);
-            Log.d("DATA",data.toString());
-//            int bitmapHeight=photo.getHeight();
-//            int bitmapWidth=photo.getWidth();
-//            Log.d("bitmapheight",""+bitmapHeight);
-//            Log.d("bitmapwidth",""+bitmapWidth);
-//            int size=bitmapHeight*bitmapWidth;
-//            Log.d("photoSize",""+size);
-            //Uri uri=data.getData();
-            Picasso.with(this).load(String.valueOf(photo)).into(imageView);
-            //getMimeType(uri);
-           // Log.d("URI",uri.toString());
-            String picName=tempUri.toString();
-            if (!picName.equals("")){
-                int pos=picName.lastIndexOf("/");
-                String newName=picName.substring(pos+1,picName.length());
-                StringBuilder stringBuilder=new StringBuilder();
-                stringBuilder.append("Faveo"+i+".jpeg");
-                Log.d("newName",stringBuilder.toString());
-                attachmentFileName.setText(newName+".jpg");
-            }
+        Uri uri1 = null;
+        String path=getPath(CreateTicketActivity.this,uri);
+//        Log.d("PATH",path);
+        byte[] buf;
 
-            //int bitmapByteCount= BitmapCompat.getAllocationByteCount(photo)/ (1024 * 1024);
-//            int size= 0;
-//            //int finalSize=0;
-//            if (photo != null) {
-//                size = photo.getRowBytes()*photo.getHeight();
-//                //finalSize=size/ (1024 * 1024);
+
+//        try {
+//            assert path != null;
+//
+//            uri1=Uri.fromFile(new File(path));
+//            file = new File(String.valueOf(uri1));
+//            InputStream file1=getContentResolver().openInputStream(uri1);
+//            //FileInputStream fileInputStream = new FileInputStream(String.valueOf(file1));
+//            //result = IOUtils.toString(file1, StandardCharsets.UTF_8);
+//            Log.d("file",result);
+//            Log.d("File",file+"");
+//            Log.d("URI",""+uri1);
+//            buf=getBytesFromFile(file);
+//            //base64 = Base64.encodeToString(buf,Base64.DEFAULT);
+//            //Log.d("base64",base64);
+//        }catch (NullPointerException |IOException e){
+//            e.printStackTrace();
+//        }
+        mimeType = getContentResolver().getType(uri);
+
+        fileName=getFileName(uri);
+        uploadFile(uri);
+//        final Uri returnUri = data.getData();
+//        Cursor returnCursor =
+//                getContentResolver().query(returnUri, null, null, null, null);
+//    /*
+//     * Get the column indexes of the data in the Cursor,
+//     * move to the first row in the Cursor, get the data,
+//     * and display it.
+//     */
+//        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+//        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+//        returnCursor.moveToFirst();
+//        //Log.d("NAME",returnCursor.getString(nameIndex));
+//        //Log.d("SiZE",Long.toString(returnCursor.getLong(sizeIndex)));
+//        Long bytes= returnCursor.getLong(sizeIndex);
+//        long kibibytes = bytes / 1024;
+//        Log.d("MIMETYPE",mimeType);
+//        fileSize= String.valueOf(kibibytes);
+//        Log.d("sizeInKB",""+kibibytes);
+//        File file = new File(path);
+//        Log.d("FileName", "Filename " + file.getName());
+//        t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                File f  = new File(data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH));
+//                String content_type  = getMimeType(returnUri);
+//
+//                String file_path = f.getAbsolutePath();
+//                OkHttpClient client = new OkHttpClient();
+//                RequestBody file_body = RequestBody.create(MediaType.parse(content_type),f);
+//
+//                RequestBody request_body = new MultipartBody.Builder()
+//                        .setType(MultipartBody.FORM)
+//                        .addFormDataPart("type",content_type)
+//                        .addFormDataPart("media_attachment[]",file_path.substring(file_path.lastIndexOf("/")+1), file_body)
+//                        .build();
+//
+//                Request request = new Request.Builder()
+//                        .url("http://jamboreebliss.com/sayarnew/public/api/v1/helpdesk/create")
+//                        .post(request_body)
+//                        .build();
+//
+//                try {
+//                    Response response = client.newCall(request).execute();
+//
+//                    if(!response.isSuccessful()){
+//                        throw new IOException("Error : "+response);
+//                    }
+//
+//                    //progress.dismiss();
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
 //            }
+//        });
+        //t.start();
+        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//        RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
+//        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), mFile);
+//        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(UserClient.BASE_URL)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//        UserClient uploadImage = retrofit.create(UserClient.class);
+//        Call<UploadObject> fileUpload = uploadImage.uploadImage(fileToUpload, filename);
+//        fileUpload.enqueue(new Callback<UploadObject>() {
+//            @Override
+//            public void onResponse(Call<UploadObject> call, Response<UploadObject> response) {
+//                Toast.makeText(CreateTicketActivity.this, "Response " + response.raw().message(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(CreateTicketActivity.this, "Success " + response.body().getSuccess(), Toast.LENGTH_LONG).show();
+//            }
+//            @Override
+//            public void onFailure(Call<UploadObject> call, Throwable t) {
+//                Log.d("", "Error " + t.getMessage());
+//            }
+//        });
+    }
+
+//        try {
+//             buf=getBytesFromFile(file);
+//             base64 = Base64.encodeToString(buf,Base64.DEFAULT);
+//             Log.d("base64",base64);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        //encodeImage(path);
 
 
-            //int size=BitmapCompat.getAllocationByteCount(photo)/(1024*1024);
-
-            //Log.d("bitmapsize",""+size);
-//            long l = 9999999990L;
-//            long MEGABYTE = 1024L * 1024L;
-//            long b = l / MEGABYTE;
-
-            imageView.setImageBitmap(photo);
-            //Log.d("BitMapSize",finalSize+"");
-            attachmentFileSize.setText(""+fileSizeInKB+"KB");
-        }
-        else if (requestCode==PICKFILE_REQUEST_CODE&&resultCode == RESULT_OK&&null != data){
-            i++;
-            attachment_layout.setVisibility(View.VISIBLE);
-
-//            //Bitmap photo = (Bitmap) data.getExtras().get("data");
-            Uri selectedImage = data.getData();
-            File file = new File(selectedImage.toString());
-            String strFileName = file.getName();
-            Log.d("FilePath", String.valueOf(file.length()));
-            Log.d("FileSize", String.valueOf(file.length()));
-            Log.d("ImageName",strFileName);
-            getMimeType(selectedImage);
-            if (mimeType.contains("image/jpeg")||mimeType.contains("image/png")||mimeType.contains("jpg")){
-                Bitmap bmp = null;
-                try {
-                    bmp = getBitmapFromUri(selectedImage);
-                    //bmp=ShrinkBitmap(String.valueOf(file),100,100);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Uri tempUri = getImageUri(getApplicationContext(), bmp);
-                File finalFile = new File(getRealPathFromURI(tempUri));
-                long fileSizeInBytes = finalFile.length();
-                long fileSizeInKB = fileSizeInBytes / 1024;
-// Convert the KB to MegaBytes (1 MB = 1024 KBytes)
-                long fileSizeInMB = fileSizeInKB / 1024;
-                Log.d("fileSizeInMB",""+fileSizeInKB);
-                //Bitmap converetdImage = getResizedBitmap(bmp, 100);
-                //Log.d("convertedImage",converetdImage.toString());
-               //int size=BitmapCompat.getAllocationByteCount(bmp)/(1024*1024);
-                //Log.d("File Size",""+size);
-                String picName=selectedImage.toString();
-            if (!picName.equals("")){
-                int pos=strFileName.indexOf("A");
-                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
-                //String newName=picName.substring(pos+1,picName.length());
-                //StringBuilder stringBuilder=new StringBuilder(finalName);
-                //stringBuilder.append("Faveo"+ finalName+".jpeg");
-                Log.d("newName",finalName);
-                if (finalName.contains(".jpg")){
-                    attachmentFileName.setText(finalName);
-                }
-                else{
-                    attachmentFileName.setText(finalName+".jpg");
-                }
-
-            }
-
-//                int height=imageView.getDrawable().getIntrinsicWidth();;
-//                int width=imageView.getDrawable().getIntrinsicHeight();
-//                int bitmapHeight=bmp.getHeight();
-//                int bitmapWidth=bmp.getWidth();
-//                Log.d("imageviewheight",""+height);
-//                Log.d("imageviewweight",""+width);
-//                Log.d("bitmapheight",""+bitmapHeight);
-//                Log.d("bitmapwidth",""+bitmapWidth);
 
 
-//            int bitmapByteCount= BitmapCompat.getAllocationByteCount(bmp)/ (1024*1024);
-//            Log.d("ImageSize",""+bitmapByteCount);
-////                float aspectRatio = bmp.getWidth() /
-////                        (float) bmp.getHeight();
-////                int width = 480;
-////                int height = Math.round(width / aspectRatio);
+//        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+//            i++;
+//            attachment_layout.setVisibility(View.VISIBLE);
+//            Bitmap photo = (Bitmap) data.getExtras().get("data");
+//            Uri tempUri = getImageUri(getApplicationContext(), photo);
+//            File finalFile = new File(getRealPathFromURI(tempUri));
+//            long fileSizeInBytes = finalFile.length();
+//            long fileSizeInKB = fileSizeInBytes / 1024;
+//            String path=finalFile.getPath();
+//            Log.d("fileSize", String.valueOf(finalFile.length()/1024));
+//            Log.d("FinalPath",path);
+//            Log.d("DATA",data.toString());
+////            int bitmapHeight=photo.getHeight();
+////            int bitmapWidth=photo.getWidth();
+////            Log.d("bitmapheight",""+bitmapHeight);
+////            Log.d("bitmapwidth",""+bitmapWidth);
+////            int size=bitmapHeight*bitmapWidth;
+////            Log.d("photoSize",""+size);
+//            //Uri uri=data.getData();
+//            Picasso.with(this).load(String.valueOf(photo)).into(imageView);
+//            //getMimeType(uri);
+//           // Log.d("URI",uri.toString());
+//            String picName=tempUri.toString();
+//            if (!picName.equals("")){
+//                int pos=picName.lastIndexOf("/");
+//                String newName=picName.substring(pos+1,picName.length());
+//                StringBuilder stringBuilder=new StringBuilder();
+//                stringBuilder.append("Faveo"+i+".jpeg");
+//                Log.d("newName",stringBuilder.toString());
+//                attachmentFileName.setText(newName+".jpg");
+//            }
+//
+//            //int bitmapByteCount= BitmapCompat.getAllocationByteCount(photo)/ (1024 * 1024);
+////            int size= 0;
+////            //int finalSize=0;
+////            if (photo != null) {
+////                size = photo.getRowBytes()*photo.getHeight();
+////                //finalSize=size/ (1024 * 1024);
+////            }
+//
+//
+//            //int size=BitmapCompat.getAllocationByteCount(photo)/(1024*1024);
+//
+//            //Log.d("bitmapsize",""+size);
+////            long l = 9999999990L;
+////            long MEGABYTE = 1024L * 1024L;
+////            long b = l / MEGABYTE;
+//
+//            imageView.setImageBitmap(photo);
+//            //Log.d("BitMapSize",finalSize+"");
+//            attachmentFileSize.setText(""+fileSizeInKB+"KB");
+//        }
+//        else if (requestCode==PICKFILE_REQUEST_CODE&&resultCode == RESULT_OK&&null != data){
+//            i++;
+//            attachment_layout.setVisibility(View.VISIBLE);
+//
+////            //Bitmap photo = (Bitmap) data.getExtras().get("data");
+//            Uri selectedImage = data.getData();
+//            File file = new File(selectedImage.toString());
+//            File file1=new File(selectedImage.getPath());
+//            String strFileName = file.getName();
+//            Log.d("FilePath", String.valueOf(file.length()));
+//            Log.d("FileSize", String.valueOf(file.length()));
+//            Log.d("ImageName",strFileName);
+//            getMimeType(selectedImage);
+//            if (mimeType.contains("image/jpeg")||mimeType.contains("image/png")||mimeType.contains("jpg")){
+//                Bitmap bmp = null;
+//                try {
+//                    bmp = getBitmapFromUri(selectedImage);
+//                    //bmp=ShrinkBitmap(String.valueOf(file),100,100);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                Uri tempUri = getImageUri(getApplicationContext(), bmp);
+//                File finalFile = new File(getRealPathFromURI(tempUri));
+//                long fileSizeInBytes = finalFile.length();
+//                String path = tempUri.getPath();
+//                File file3 = new File(path);  //file Path
+//                byte[] b = new byte[(int) file.length()];
+//                try {
+//                    FileInputStream fileInputStream = new FileInputStream(file);
+//                    fileInputStream.read(b);
+//                    for (int j = 0; j < b.length; j++) {
+//                        System.out.print((char) b[j]);
+//                    }
+//                } catch (FileNotFoundException e) {
+//                    System.out.println("File Not Found.");
+//                    e.printStackTrace();
+//                } catch (IOException e1) {
+//                    System.out.println("Error Reading The File.");
+//                    e1.printStackTrace();
+//                }
+//
+//                byte[] byteFileArray = new byte[0];
+//                try {
+//                    byteFileArray = FileUtils.readFileToByteArray(file);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                String base64String = "";
+//                if (byteFileArray.length > 0) {
+//                    base64String = android.util.Base64.encodeToString(byteFileArray, android.util.Base64.NO_WRAP);
+//                    Log.i("File Base64 string", "IMAGE PARSE ==>" + base64String);
+//                }
+//                long fileSizeInKB = fileSizeInBytes / 1024;
+//// Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+//                long fileSizeInMB = fileSizeInKB / 1024;
+//                Log.d("fileSizeInMB",""+fileSizeInKB);
+//                //Bitmap converetdImage = getResizedBitmap(bmp, 100);
+//                //Log.d("convertedImage",converetdImage.toString());
+//               //int size=BitmapCompat.getAllocationByteCount(bmp)/(1024*1024);
+//                //Log.d("File Size",""+size);
+//                String picName=selectedImage.toString();
+//            if (!picName.equals("")){
+//                int pos=strFileName.indexOf("A");
+//                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
+//                //String newName=picName.substring(pos+1,picName.length());
+//                //StringBuilder stringBuilder=new StringBuilder(finalName);
+//                //stringBuilder.append("Faveo"+ finalName+".jpeg");
+//                Log.d("newName",finalName);
+//                if (finalName.contains(".jpg")){
+//                    attachmentFileName.setText(finalName);
+//                }
+//                else{
+//                    attachmentFileName.setText(finalName+".jpg");
+//                }
+//
+//            }
+//
+////                int height=imageView.getDrawable().getIntrinsicWidth();;
+////                int width=imageView.getDrawable().getIntrinsicHeight();
+////                int bitmapHeight=bmp.getHeight();
+////                int bitmapWidth=bmp.getWidth();
+////                Log.d("imageviewheight",""+height);
+////                Log.d("imageviewweight",""+width);
+////                Log.d("bitmapheight",""+bitmapHeight);
+////                Log.d("bitmapwidth",""+bitmapWidth);
+//
+//
+////            int bitmapByteCount= BitmapCompat.getAllocationByteCount(bmp)/ (1024*1024);
+////            Log.d("ImageSize",""+bitmapByteCount);
+//////                float aspectRatio = bmp.getWidth() /
+//////                        (float) bmp.getHeight();
+//////                int width = 480;
+//////                int height = Math.round(width / aspectRatio);
+//////
+//////                bmp = Bitmap.createScaledBitmap(
+//////                        bmp, width, height, false);
+//            attachmentFileSize.setText(""+fileSizeInKB+"KB");
+//            Picasso.with(this).load(selectedImage).into(imageView);
+//            }
+//            else if (mimeType.contains("application/pdf")){
+//                Uri uri=data.getData();
+//                Log.d("URI for PDF",uri.toString());
+//                getMimeType(uri);
+//                File file3 = new File(uri.toString());
+//                long length = file3.length();
+//                //length = length/1024;
+//                //attachmentFileSize.setText(""+length+"kb");
+//                //Log.d("fileLength", String.valueOf(file3.length()));
+//                int pos=strFileName.indexOf("A");
+//                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
+//                attachmentFileName.setText(finalName);
+//                Log.d("Pdf file name",file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1));
+//                String data1=file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1);
+//                //attachmentFileSize.setText(""+length+"mb");
+//                imageView.setImageResource(R.drawable.ic_picture_as_pdf_black_24dp);
+//
+//            }
+//            else if (mimeType.contains("text/plain")){
+//                int pos=strFileName.indexOf("A");
+//                Uri uriData=data.getData();
+//                getMimeType(uriData);
+//                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
+//                String path = uriData.getPath();
+//                File file3 = new File(path);  //file Path
+//                byte[] b = new byte[(int) file.length()];
+//                try {
+//                    FileInputStream fileInputStream = new FileInputStream(file);
+//                    fileInputStream.read(b);
+//                    for (int j = 0; j < b.length; j++) {
+//                        System.out.print((char) b[j]);
+//                    }
+//                } catch (FileNotFoundException e) {
+//                    System.out.println("File Not Found.");
+//                    e.printStackTrace();
+//                } catch (IOException e1) {
+//                    System.out.println("Error Reading The File.");
+//                    e1.printStackTrace();
+//                }
+//
+//                byte[] byteFileArray = new byte[0];
+//                try {
+//                    byteFileArray = FileUtils.readFileToByteArray(file);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                String base64String = "";
+//                if (byteFileArray.length > 0) {
+//                    base64String = android.util.Base64.encodeToString(byteFileArray, android.util.Base64.NO_WRAP);
+//                    Log.i("File Base64 string", "IMAGE PARSE ==>" + base64String);
+//                }
+//                long length = file1.length();
+//                length = length/1024;
+//                //int file_size = Integer.parseInt(String.valueOf(file1.length()/1024));
+//                //attachmentFileName.setText("Faveo"+i+".pdf");
+//                attachmentFileName.setText(finalName);
+//                Log.d("Pdf file name",file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1));
+//                String data1=file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1);
+//
+//                String base64 = Base64.encodeToString(data1.getBytes(), Base64.DEFAULT);
+//                Log.d("Base64",base64);
+//                attachmentFileSize.setText(""+length+"kb");
+//                Log.d("MimeType","Plain Text");
+//                //file3 = new File(uri.toString());
+//                //openFile(file3);
+//            }
+////            else if (mimeType.contains("audio/mpeg")){
+////                Uri audioFileUri = data.getData();
+////                getRealPathFromURI(audioFileUri);
+////                Log.d("URI",audioFileUri.toString());
 ////
-////                bmp = Bitmap.createScaledBitmap(
-////                        bmp, width, height, false);
-            attachmentFileSize.setText(""+fileSizeInKB+"KB");
-            Picasso.with(this).load(selectedImage).into(imageView);
-            }
-            else if (mimeType.contains("application/pdf")){
-                Uri uri=data.getData();
-                Log.d("URI for PDF",uri.toString());
-                getMimeType(uri);
-                File file3 = new File(uri.toString());
-                long length = file3.length();
-                //length = length/1024;
-                //attachmentFileSize.setText(""+length+"kb");
-                //Log.d("fileLength", String.valueOf(file3.length()));
-                int pos=strFileName.indexOf("A");
-                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
-                attachmentFileName.setText(finalName);
-                Log.d("Pdf file name",file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1));
-                String data1=file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1);
-                //attachmentFileSize.setText(""+length+"mb");
-                imageView.setImageResource(R.drawable.ic_picture_as_pdf_black_24dp);
+////            }
+//
+//            else{
+//                Toasty.warning(this, getString(R.string.unsupportedFileType),
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        }
 
-            }
-            else if (mimeType.contains("text/plain")){
-                int pos=strFileName.indexOf("A");
-                Uri uri=data.getData();
-                getMimeType(uri);
-                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
-                File file1=new File(selectedImage.toString());
-                long length = file1.length();
-                length = length/1024;
-                //int file_size = Integer.parseInt(String.valueOf(file1.length()/1024));
-                //attachmentFileName.setText("Faveo"+i+".pdf");
-                attachmentFileName.setText(finalName);
-                Log.d("Pdf file name",file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1));
-                String data1=file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1);
 
-                String base64 = Base64.encodeToString(data1.getBytes(), Base64.DEFAULT);
-                Log.d("Base64",base64);
-                attachmentFileSize.setText(""+length+"kb");
-                Log.d("MimeType","Plain Text");
-                file3 = new File(uri.toString());
-                //openFile(file3);
-            }
-            else if (mimeType.contains("audio/mpeg")){
-                Uri audioFileUri = data.getData();
-                getRealPathFromURI(audioFileUri);
-                Log.d("URI",audioFileUri.toString());
 
-            }
+    public static String getPath(final Context context, final Uri uri) {
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-            else{
-                Toasty.warning(this, getString(R.string.unsupportedFileType),
-                        Toast.LENGTH_LONG).show();
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            System.out.println("getPath() uri: " + uri.toString());
+            System.out.println("getPath() uri authority: " + uri.getAuthority());
+            System.out.println("getPath() uri path: " + uri.getPath());
+
+            // ExternalStorageProvider
+            if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                System.out.println("getPath() docId: " + docId + ", split: " + split.length + ", type: " + type);
+
+                // This is for checking Main Memory
+                if ("primary".equalsIgnoreCase(type)) {
+                    if (split.length > 1) {
+                        return Environment.getExternalStorageDirectory() + "/" + split[1] + "/";
+                    } else {
+                        return Environment.getExternalStorageDirectory() + "/";
+                    }
+                    // This is for checking SD Card
+                } else {
+                    return "storage" + "/" + docId.replace(":", "/");
+                }
+
             }
         }
+        return null;
+    }
+    public static byte[] getBytesFromFile(File file) throws IOException {
+        // Get the size of the file
+        long length = file.length();
 
-
+        // You cannot create an array using a long type.
+        // It needs to be an int type.
+        // Before converting to an int type, check
+        // to ensure that file is not larger than Integer.MAX_VALUE.
+        if (length > Integer.MAX_VALUE) {
+            // File is too large
+            throw new IOException("File is too large!");
         }
+
+        // Create the byte array to hold the data
+        byte[] bytes = new byte[(int)length];
+
+        // Read in the bytes
+        int offset = 0;
+        int numRead = 0;
+
+        InputStream is = new FileInputStream(file);
+        try {
+            while (offset < bytes.length
+                    && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+                offset += numRead;
+            }
+        } finally {
+            is.close();
+        }
+
+        // Ensure all the bytes have been read in
+        if (offset < bytes.length) {
+            throw new IOException("Could not completely read file "+file.getName());
+        }
+        return bytes;
+    }
+    private void uploadFile(Uri fileUri) {
+        File file = null;
+
+        RequestBody requestBody=RequestBody.create(MultipartBody.FORM, "subject");
+
+        File originalFile=FileUtils.getFile(fileName);
+       try {
+           file = new File(getPathFromUri(this,fileUri));
+       }catch (NullPointerException e){
+           e.printStackTrace();
+       }
+        RequestBody filePart=RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)),file);
+//        Gson gson = new GsonBuilder()
+//                .setLenient()
+//                .create();
+        final Gson gson =
+                new GsonBuilder()
+                        .registerTypeAdapter(MyResponse.class, new MyDeserializer())
+                        .create();
+        MultipartBody.Part part=MultipartBody.Part.createFormData("media_attachment",originalFile.getName(),filePart);
+        Retrofit.Builder builder=new Retrofit.Builder().baseUrl("http://jamboreebliss.com/")
+                .addConverterFactory(GsonConverterFactory.create(gson));
+
+        Retrofit retrofit=builder.build();
+        UserClient client=retrofit.create(UserClient.class);
+
+
+        Call<ResponseBody> responseBodyCall=client.createTicket(requestBody,part);
+        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
+                Log.d("status",""+response.code());
+                Log.d("URL",""+call.request().url());
+                Log.d("Call request header", call.request().headers().toString());
+                Log.d("Response raw header", response.headers().toString());
+                Log.d("Response raw", String.valueOf(response.raw().body()));
+                Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
+                //MyResponse c = gson.fromJson(myJson, MyResponse.class);
+//                if(response.isSuccessful()) {
+//                    //showResponse(response.body().toString());
+//                    Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
+//                }
+//                else{
+//                    try {
+//                        Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
+//                    }catch (NullPointerException e){
+//                        e.printStackTrace();
+//                    }
+//                    Log.i("responseFailure","true");
+//                }
+                //Log.d("jsonObject",response.body().getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("URL",""+call.request().url());
+                Log.d("Error",t.toString());
+
+            }
+        });
+//        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
+//
+//
+//                Toast.makeText(CreateTicketActivity.this, ""+response.body(), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+//                Log.d("callingUrl", "call failed against the url: " + call.request().url());
+//
+//            }
+//        });
+
+    }
+
+
+
+//    private String encodeImage(String path)
+//    {
+//        File imagefile = new File(path);
+//        FileInputStream fis = null;
+//        try{
+//            fis = new FileInputStream(imagefile);
+//        }catch(FileNotFoundException e){
+//            e.printStackTrace();
+//        }
+//        Bitmap bm = BitmapFactory.decodeStream(fis);
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
+//        byte[] b = baos.toByteArray();
+//        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+//        Log.d("base64",encImage);
+//        return encImage;
+//
+//    }
+
 
 
 
@@ -893,6 +1315,29 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 //
 //    }
 
+public String getFileName(Uri uri) {
+    String result = null;
+    if (uri.getScheme().equals("content")) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                Log.d("result",result);
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+    if (result == null) {
+        result = uri.getPath();
+        int cut = result.lastIndexOf('/');
+        if (cut != -1) {
+            result = result.substring(cut + 1);
+        }
+    }
+    return result;
+}
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -901,12 +1346,171 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
     }
 
 
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
+//    public String getRealPathFromURI (Uri contentUri) {
+//        String path = null;
+//        String[] proj = { MediaStore.MediaColumns.DATA };
+//        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+//        if (cursor.moveToFirst()) {
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+//            path = cursor.getString(column_index);
+//        }
+//        cursor.close();
+//        return path;
+//    }
+public static String getPathFromUri(final Context context, final Uri uri) {
+
+    final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+    // DocumentProvider
+    if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        // ExternalStorageProvider
+        if (isExternalStorageDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
+
+            if ("primary".equalsIgnoreCase(type)) {
+                return Environment.getExternalStorageDirectory() + "/" + split[1];
+            }
+
+            // TODO handle non-primary volumes
+        }
+        // DownloadsProvider
+        else if (isDownloadsDocument(uri)) {
+
+            final String id = DocumentsContract.getDocumentId(uri);
+            final Uri contentUri = ContentUris.withAppendedId(
+                    Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+            return getDataColumn(context, contentUri, null, null);
+        }
+        // MediaProvider
+        else if (isMediaDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
+
+            Uri contentUri = null;
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if ("video".equals(type)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if ("audio".equals(type)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            final String selection = "_id=?";
+            final String[] selectionArgs = new String[] {
+                    split[1]
+            };
+
+            return getDataColumn(context, contentUri, selection, selectionArgs);
+        }
     }
+    // MediaStore (and general)
+    else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+        // Return the remote address
+        if (isGooglePhotosUri(uri))
+            return uri.getLastPathSegment();
+
+        return getDataColumn(context, uri, null, null);
+    }
+    // File
+    else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        return uri.getPath();
+    }
+
+    return null;
+}
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     * @param context The context.
+     * @param uri The Uri to query.
+     * @param selection (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     */
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+    private String getRealPathFromURI(Uri contentURI)
+    {
+        String result = null;
+
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+
+        if (cursor == null)
+        { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        }
+        else
+        {
+            if(cursor.moveToFirst())
+            {
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                result = cursor.getString(idx);
+            }
+            cursor.close();
+        }
+        return result;
+    }
+
 //    public String getRealPathFromURI(Uri contentUri, Context activity) {
 //        String path = null;
 //        try {
@@ -951,14 +1555,14 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         Log.d("MimeType",mimeType);
         return mimeType;
     }
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
-    }
+//    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+//        ParcelFileDescriptor parcelFileDescriptor =
+//                getContentResolver().openFileDescriptor(uri, "r");
+//        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+//        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+//        parcelFileDescriptor.close();
+//        return image;
+//    }
     private void reqPermissionCamera() {
         new AskPermission.Builder(this).setPermissions(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .setCallback(this)
@@ -1040,15 +1644,15 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         }
     }
 
-    public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String ss = cursor.getString(column_index);
-        cursor.close();
-        return ss;
-    }
+//    public String getPath(Uri uri) {
+//        String[] projection = {MediaStore.Images.Media.DATA};
+//        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//        cursor.moveToFirst();
+//        String ss = cursor.getString(column_index);
+//        cursor.close();
+//        return ss;
+//    }
 
 //    /**
 //     * Here we are handling the activity result.
@@ -1348,6 +1952,9 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
             int pos2=email1.lastIndexOf(">");
             email2=email1.substring(pos+1,pos2);
         }
+        else if (!email1.contains("<")){
+            email2=editTextEmail.getText().toString();
+        }
         else{
             allCorrect=false;
             Toasty.info(this,getString(R.string.requestornotfound),Toast.LENGTH_SHORT).show();
@@ -1579,7 +2186,6 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         if (document==1){
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.setType("*/*");
-
             startActivityForResult(intent, PICKFILE_REQUEST_CODE);
             document=0;
         }
@@ -1613,10 +2219,12 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
     }
 
 
+
+
     /**
      * Async task for creating the ticket.
      */
-    private class CreateNewTicket extends AsyncTask<String, Void, String> {
+    private class CreateNewTicket extends AsyncTask<File, Void, String> {
         String fname, lname, email, code;
         String subject;
        public String body;
@@ -1628,7 +2236,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         //int dept;
         int userID;
         int staff;
-
+        String string;
 
         CreateNewTicket(int userID, String subject, String body,
                         int helpTopic, int priority, String phone, String fname, String lname, String email, String code,int staff,String mobile) {
@@ -1650,7 +2258,14 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 
         }
 
-        protected String doInBackground(String... urls) {
+//        protected String doInBackground(String... urls) {
+//
+//            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators, new File[]{new File(result)});
+//        }
+
+        @Override
+        protected String doInBackground(File... files) {
+
 
             return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators);
         }
@@ -1996,6 +2611,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
                 JSONArray jsonArray = jsonObject.getJSONArray("users");
                 if (jsonArray.length()==0){
                     Prefs.putString("noUser","null");
+
                 }
                 else{
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -2036,4 +2652,6 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 
         }
     }
+
+
 }

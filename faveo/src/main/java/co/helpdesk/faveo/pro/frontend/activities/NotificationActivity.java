@@ -3,10 +3,13 @@ package co.helpdesk.faveo.pro.frontend.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 //import android.content.Intent;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.os.Handler;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.adapters.NotificationAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
@@ -86,6 +90,40 @@ public class NotificationActivity extends AppCompatActivity {
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                //
+                // Do the stuff
+                //
+                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                    String role1=jsonObject2.getString("role");
+                    if (role1.equals("user")){
+                        Prefs.clear();
+                        //Prefs.putString("role",role);
+                        Intent intent=new Intent(NotificationActivity.this,LoginActivity.class);
+                        Toasty.warning(NotificationActivity.this,getString(R.string.permission), Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+
+
+                    }
+
+
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                handler.postDelayed(this, 30000);
+            }
+        };
+        runnable.run();
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

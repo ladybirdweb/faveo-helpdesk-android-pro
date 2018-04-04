@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -49,6 +51,7 @@ import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.fragments.client.ClosedTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.client.OpenTickets;
@@ -117,7 +120,40 @@ public class ClientDetailActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_client_profile);
         ButterKnife.bind(this);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
+        StrictMode.setThreadPolicy(policy);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                //
+                // Do the stuff
+                //
+                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                    String role1=jsonObject2.getString("role");
+                    if (role1.equals("user")){
+                        Prefs.clear();
+                        //Prefs.putString("role",role);
+                        Intent intent=new Intent(ClientDetailActivity.this,LoginActivity.class);
+                        Toasty.info(ClientDetailActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+
+
+                    }
+
+
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                handler.postDelayed(this, 30000);
+            }
+        };
+        runnable.run();
         imageViewClientEdit= (ImageView) findViewById(R.id.clientedit);
         Constants.URL = Prefs.getString("COMPANY_URL", "");
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -310,13 +346,13 @@ public class ClientDetailActivity extends AppCompatActivity implements
 //                else
                     phone = requester.getString("phone_number");
                 mobile=requester.getString("mobile");
-                if (phone.equals("null")||phone.equals("")||phone.equals("Not available")){
-                    textViewClientPhone.setVisibility(View.GONE);
-                }else {
-                    textViewClientPhone.setVisibility(View.VISIBLE);
-                    textViewClientPhone.setText(phone);
-                }
-                if (mobile.equals("null")||mobile.equals("")||mobile.equals("Not available")){
+//                if (phone.equals("null")||phone.equals(" ")||phone.equals("Not available")){
+//                    textViewClientPhone.setVisibility(View.GONE);
+//                }else {
+//                    textViewClientPhone.setVisibility(View.VISIBLE);
+//                    textViewClientPhone.setText(phone);
+//                }
+                if (mobile.equals("null")||mobile.equals(" ")||mobile.equals("Not available")){
                     textViewClientMobile.setVisibility(View.GONE);
                 }
             else {
@@ -491,6 +527,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
         // register connection status listener
         //FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
+        if (InternetReceiver.isConnected()){
+            new FetchClientTickets(ClientDetailActivity.this).execute();
+        }
     }
 
 

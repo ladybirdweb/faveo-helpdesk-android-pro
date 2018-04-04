@@ -31,6 +31,7 @@ public class FaveoApplication extends MultiDexApplication {
 //    }
     @Override
     public void onCreate() {
+
         Thread.setDefaultUncaughtExceptionHandler(new LocalFileUncaughtExceptionHandler(this,
                 Thread.getDefaultUncaughtExceptionHandler()));
         internetReceiver = new InternetReceiver();

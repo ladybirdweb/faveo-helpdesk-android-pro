@@ -46,7 +46,7 @@ public class collaboratorAdd extends AppCompatActivity {
     RelativeLayout relativeLayout;
     ArrayAdapter<String> spinnerPriArrayAdapter;
     int id = 0;
-    String email, finalEmail, finalEmail2;
+    String email;
     ImageView imageView;
     Toolbar toolbar;
     String email1;
@@ -55,10 +55,7 @@ public class collaboratorAdd extends AppCompatActivity {
     Spinner recipients;
     String email2;
     ProgressDialog progressDialog;
-//    ArrayList<String> strings;
-//    @BindView(R.id.toolbar)
-//    android.support.v7.widget.Toolbar toolbar;
-
+    public static boolean isShowing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +67,8 @@ public class collaboratorAdd extends AppCompatActivity {
         relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
         strings = new ArrayList<>();
         strings.add("Show Recipients");
+        isShowing=true;
         progressDialog=new ProgressDialog(collaboratorAdd.this);
-        //recipients.setVisibility(View.VISIBLE);
-//        strings.add(getString(R.string.searchuser));
-
         new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ImageView imageView = (ImageView) toolbar.findViewById(R.id.imageViewBack);
@@ -83,12 +78,9 @@ public class collaboratorAdd extends AppCompatActivity {
         searchUer = (Button) findViewById(R.id.buttonSearchUser);
         deleteUser = (Button) findViewById(R.id.buttonDeleteUser);
         stringArrayList = new ArrayList<Data>();
-
-
         arrayAdapterCC = new ArrayAdapter<Data>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-        autoCompleteTextViewUser.setThreshold(1);
+        autoCompleteTextViewUser.setThreshold(4);
         autoCompleteTextViewUser.addTextChangedListener(passwordWatcheredittextSubject);
-        //new FetchCollaborator("s").execute();
         email1 = autoCompleteTextViewUser.getText().toString();
 
         autoCompleteTextViewUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,9 +88,15 @@ public class collaboratorAdd extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-                Data data = stringArrayList.get(i);
-                id = data.getID();
-                email = data.getName();
+                try{
+                    Data data = stringArrayList.get(i);
+                    id = data.getID();
+                    email = data.getName();
+                    Log.d("idoftheuser",id+"");
+                }catch (IndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
 //                        int pos=email.indexOf("<");
 //                        int pos1=email.lastIndexOf(">");
 //                        finalEmail=email.substring(pos+1,pos1);
@@ -129,7 +127,7 @@ public class collaboratorAdd extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+                Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
                 startActivity(intent);
             }
         });
@@ -174,6 +172,8 @@ public class collaboratorAdd extends AppCompatActivity {
                     return;
                 }
                 else {
+
+                    Log.d("id of the user",String.valueOf(id));
                     progressDialog.setMessage(getString(R.string.pleasewait));
                     progressDialog.show();
                     new collaboratorAdduser(Prefs.getString("TICKETid", null), String.valueOf(id)).execute();
@@ -327,7 +327,7 @@ public class collaboratorAdd extends AppCompatActivity {
                     autoCompleteTextViewUser.setText("");
                     id = 0;
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorAdd.this,TicketDetailActivity.class);
+                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
                     startActivity(intent);
                 }
 
@@ -369,7 +369,7 @@ public class collaboratorAdd extends AppCompatActivity {
                     String collaborator=jsonObject.getString("collaborator");
                     if (collaborator.equals("deleted successfully")){
                         Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(collaboratorAdd.this,TicketDetailActivity.class);
+                        Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
                         startActivity(intent);
                     }
 //                JSONArray jsonArray=jsonObject.getJSONArray("users");
@@ -525,12 +525,13 @@ public class collaboratorAdd extends AppCompatActivity {
             term = autoCompleteTextViewUser.getText().toString();
             searchUer.setVisibility(View.VISIBLE);
             if (InternetReceiver.isConnected()) {
-                if (term.contains(",")) {
-                    int pos = term.lastIndexOf(",");
-                    term = term.substring(pos + 1, term.length());
-                    Log.d("newTerm", term);
+                if (term.length()>=2) {
+                    //int pos = term.lastIndexOf(",");
+                    //term = term.substring(pos + 1, term.length());
+                    String newTerm=term;
+                    Log.d("newTerm", newTerm);
                     arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-                    new FetchCollaborator(term.trim()).execute();
+                    new FetchCollaborator(newTerm.trim()).execute();
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
                 }
 //            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
@@ -545,9 +546,9 @@ public class collaboratorAdd extends AppCompatActivity {
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
                 } else {
-                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-                    new FetchCollaborator(term).execute();
-                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
+//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+//                    new FetchCollaborator(term).execute();
+//                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
 
 
                     //stringArrayAdapterCC.notifyDataSetChanged();
@@ -570,4 +571,20 @@ public class collaboratorAdd extends AppCompatActivity {
         }
         }
     };
+    @Override
+    public void onBackPressed() {
+        if (!TicketDetailActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, TicketDetailActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+        super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
+    }
+
 }

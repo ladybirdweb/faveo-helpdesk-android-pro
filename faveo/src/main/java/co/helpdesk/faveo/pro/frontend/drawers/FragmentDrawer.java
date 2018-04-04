@@ -48,11 +48,14 @@ import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UIUtils;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
 import co.helpdesk.faveo.pro.frontend.activities.HelpSection;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SettingsActivity;
+import co.helpdesk.faveo.pro.frontend.activities.SplashActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
@@ -87,6 +90,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     //int count=0;
     ProgressDialog progressDialog;
     String title;
+    static String token;
 
     //    @BindView(R.id.inbox_count)
 //    TextView inbox_count;
@@ -146,7 +150,6 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
         layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         listView= (ListView) layout.findViewById(R.id.listviewNavigation);
-
         layout.findViewById(R.id.create_ticket).setOnClickListener(this);
 //        layout.findViewById(R.id.inbox_tickets).setOnClickListener(this);
 //        layout.findViewById(R.id.my_tickets).setOnClickListener(this);
@@ -260,15 +263,20 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         });
 //        IImageLoader imageLoader = new PicassoLoader();
 //        imageLoader.loadImage(profilePic, Prefs.getString("PROFILE_PIC", null), Prefs.getString("USERNAME", " ").charAt(0) + "");
-        String letter = String.valueOf(Prefs.getString("PROFILE_NAME", "").toUpperCase().charAt(0));
-        if (Prefs.getString("PROFILE_NAME", "").contains("jpg")||Prefs.getString("PROFILE_NAME", "").contains("png")){
-            Picasso.with(context).load(Prefs.getString("PROFILE_PIC", "")).transform(new CircleTransform()).into(profilePic);
-        }
-        else{
-            ColorGenerator generator = ColorGenerator.MATERIAL;
-            TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter, generator.getRandomColor());
-            profilePic.setImageDrawable(drawable);
+        try {
+            String letter = Prefs.getString("profilePicture", null);
+            Log.d("profilePicture", letter);
+            if (letter.contains("jpg") || letter.contains("png") || letter.contains("jpeg")) {
+                Picasso.with(context).load(letter).transform(new CircleTransform()).into(profilePic);
+            } else {
+                String letter1 = String.valueOf(Prefs.getString("PROFILE_NAME", "").charAt(0));
+                ColorGenerator generator = ColorGenerator.MATERIAL;
+                TextDrawable drawable = TextDrawable.builder()
+                        .buildRound(letter1, generator.getRandomColor());
+                profilePic.setImageDrawable(drawable);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
         userRole.setText(Prefs.getString("ROLE", ""));
         domainAddress.setText(Prefs.getString("BASE_URL", ""));
@@ -283,6 +291,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         });
         return layout;
     }
+
 
     @Override
     public void onStart() {
@@ -372,11 +381,24 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
                 return;
             }
+            String state=Prefs.getString("403",null);
+            try {
+                if (state.equals("403") && !state.equals(null)) {
+                    Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.clear();
+                    Intent intent=new Intent(getActivity(),LoginActivity.class);
+                    Prefs.putString("403", "null");
+                    startActivity(intent);
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
 
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
 
                 int open = 0, closed = 0, trash = 0, unasigned = 0, my_tickets = 0;
                 JSONArray jsonArrayTicketsCount = jsonObject1.getJSONArray("tickets_count");
@@ -501,10 +523,10 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 Intent inte = new Intent(getContext(), CreateTicketActivity.class);
                 startActivity(inte);
                 break;
-//            case R.id.help:
-//                Intent intent=new Intent(getContext(),CreateTicketActivity.class);
-//                startActivity(intent);
-//                break;
+            case R.id.settings:
+                Intent intent=new Intent(getContext(),SettingsActivity.class);
+                startActivity(intent);
+                break;
 //            case R.id.inbox_tickets:
 //
 //                title = getString(R.string.inbox);
@@ -544,12 +566,14 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 if (fragment == null)
                     fragment = new ClientList();
                 break;
-            case R.id.settings:
-                title = getString(R.string.settings);
-                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                if (fragment == null)
-                    fragment = new Settings();
-                break;
+//            case R.id.settings:
+//                Intent intentSettings=new Intent(getContext(), SettingsActivity.class);
+//                startActivity(intentSettings);
+////                title = getString(R.string.settings);
+////                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
+////                if (fragment == null)
+////                    fragment = new Settings();
+//                break;
             case R.id.about:
                 title = getString(R.string.about);
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
@@ -594,6 +618,34 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
     public interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);
+    }
+    private String refreshToken() {
+        String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+        if (result == null) {
+            return null;
+        }
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            JSONObject jsonObject1=jsonObject.getJSONObject("data");
+            String token = jsonObject1.getString("token");
+            JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+            String profilePic=jsonObject2.getString("profile_pic");
+            Log.d("result",result);
+            Log.d("profilePicture",profilePic);
+            //String token = jsonObject.getString("token");
+            Prefs.putString("TOKEN", token);
+            Prefs.putString("profilePicture",profilePic);
+            Authenticate.token = token;
+            Helpdesk.token = token;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("cameInException","true");
+            Prefs.clear();
+            Prefs.putString("NoToken","True");
+            return null;
+        }
+        return "success";
     }
 
 

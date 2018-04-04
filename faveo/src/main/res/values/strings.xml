@@ -316,10 +316,100 @@
     <string name="logginginto">Logging into the android app</string>
     <string name="ticket">Tickets</string>
     <string name="managingTickets">Managing tickets in android app</string>
+    <string name="userDirectory">How to use the user directory</string>
     <string name="userAndAgent">Users and agents</string>
     <string name="other">Other features</string>
     <string name="someOtheroptions">How to use some other features</string>
     <string name="loggingIn">Logging in and logging out of the android app</string>
+    <string name="settingsAndInAppHelpSection">Settings and Help section</string>
+    <string name="logginginandout">Logging in and logging out of the Android app</string>
+    <string name="LoggingIn">1. Logging in and logging out</string>
+    <string name="logincontent">The Android app for Faveo lest you support your customers anytime from your smartphone or tablet
+        device.This solution will be a step-by-step walkthrough explaining to you everything you can do with the app. </string>
+    <string name="toLogIn">To log in into your app you need to use your helpdesk domain name,your agent email address and password.
+        Your domain name would be just the vanity URL where your helpdesk is present just an example support.yourcompany.com.</string>
+    <string name="toLogOut">To log out from the android app you need to click on the hamburger icon on the top left corner of the
+        main screen and then you have to select the log out option.Once you clicked then you will be logged out successfully
+        from the app.</string>
+    <string name="Ticket">Ticket</string>
+    <string name="dashboard">The Dashboard - Create ticket and ticket summary </string>
+    <string name="ticketGuide">The ticket guide - ticket list,search</string>
+    <string name="viewOfTicket">Ticket view and edit</string>
+    <string name="ticketDashboard">Ticket Dashboard</string>
+    <string name="dashboardContent">The dashboard shows you the summary of all tickets in your support and gives you an easy way to navigate within the app.To
+    see the dashboard you have to click on the hamburger icon on the top left corner of the main screen.The dashboard will give you the count of tickets
+    of different status in your helpdesk.</string>
+    <string name="ticketlist">Ticket list</string>
+    <string name="ticketSearch">Ticket search</string>
+    <string name="ticketview">Ticket view</string>
+    <string name="singleTicketView">Click on a ticket to open the conversation.Here you will be able to see all the conversation between the agent and the customer.
+    Here you will be able to see the status of the ticket and also the assignee to whom the ticket is assigned.If you swipe
+        to the right then you will be able to see all the ticket specific details like ticket subject,priority,type,
+        helptopic etc.</string>
+    <string name="ticketSave">Ticket edit</string>
+    <string name="howToEdit">To edit a ticket just click on the edit icon in the ticket detail page.Then you will get the
+        above screen where you will be able to change
+    the subject,assignee agent,priority,type,helptopic and source of the ticket.After selecting the value you have to press on
+        the save button and all the details will be changed of that ticket.</string>
+    <string name="ViewCustomersAndAgents">How to view and edit customers</string>
+    <string name="customerFilterWithEdit">How to filter customer</string>
+    <string name="customersAndAgents">Customers and agents</string>
+    <string name="viewOfCustomer">Customer view</string>
+    <string name="howToViewCustomer">To view customers in your helpdesk you have to click on the hamburger icon on the top left
+        corner of the main screen and you have to select the client list option to get the view of the customers and agents in
+        your helpdesk.If you click on any customers then it will open a new screen where you will be able to see the details about the customer and also you will be able to see
+    all the tickets related to the customer,all the open tickets will come under open ticket and close ticket will come under close ticket.Once you click on any ticket it will open the
+    ticket detail page.</string>
+    <string name="customerEdit">Customer edit</string>
+    <string name="howToFilterCustomer">How to filter customers and agents</string>
+    <string name="filteringCustomers">Filtering customers</string>
+    <string name="howtoselectmultipleticket">Selecting multiple tickets in android app</string>
+    <string name="changeStatus">How to change status of ticket</string>
+    <string name="assignMultipleTicket">Assigning multiple tickets</string>
+    <string name="mergingmultipleTickets">Merging multiple tickets</string>
+    <string name="someOtherFeatures">Some other features</string>
+    <string name="howToSelectMultipleTicket">To select multiple ticket at a time you have to long press on ticket,it will give you the option to select multiple tickets at a time.
+        Once you select the tickets then you have option to assign those tickets or changing the status of the tickets and you can also merge tickets if the tickets belong to the same user.
+
+    </string>
+    <string name="multipleStatus">To change status of a ticket you can click on that ticket,on the ticket detail page just click on the three dots on the top right corner of the page
+    then you will get the option to change the status like open,closed,resolved,move to trash.In case if you want to change the status of multiple tickets then you need to first select those tickets then you can select the three dots on the
+    main page and you will get the option to change the status.Just click on the status and the status will be change for the ticket or those tickets.</string>
+    <string name="selectingAgent">Select the agent</string>
+    <string name="multipleTicketAssign">To assign multiple tickets first you have to select the tickets and then you have to click on the three
+    dots located on the top right corner of the main screen and you have to select the assign ticket option then you will get the above screen
+    where you can select the agent name to whom you want to assign the tickets.You can just start typing the name of the agent then the suggestion will
+    load and you can select the value which you want.After that you can just click on the tick mark and those tickets will be assigned to the
+    agent.</string>
+    <string name="selectingTheTickets">Selecting the tickets</string>
+    <string name="mergingMultipleTickets">To merge multiple tickets first the selected tickets has to be from same customer only then you
+    will be able to merge tickets.Once you selected the tickets then you can click on the three dots on the top right corner and you can select the merge ticket option.If you
+    click on the merge ticket option you will get the above screen where you can select the ticket which you want to make parent,you can also
+    select the new title and the reason for merging the tickets.</string>
+    <string name="reachOutToUs">Reach Out To Us</string>
+    <string name="shareYourExperiance">Support</string>
+    <string name="supportEmailId">support@ladybirdweb.com</string>
+    <string name="messageandsubject">Please provide the message and subject</string>
+    <string name="submitFeedback">Submitting your feedback</string>
+    <string name="feedbackPosted">Thanks for giving your valuable feedback.Someone from our team will get back to you soon.</string>
+    <string name="selectSubject">Please select the subject</string>
+    <string name="selectMessage">Please select the message</string>
+    <string name="howToGiveFeedback">You can also give feedback or reach out to us at anytime.We do have option for providing feedback about the mobile app.For that
+    first you have to click on the hamburger icon on the top left corner of the main screen then you have to click on the settings
+        and help section link,once you open you will get one option as "Reach Out To Us".If you click then the above page
+        will open where you can provide the feedback or you can ask about any query regarding the app.</string>
+    <string name="chooseATopic">Choose a topic</string>
+    <string name="pleaseChooseATopic">Please select one topic</string>
+    <string name="pleaseSelectRequiredField">Please select all the required field</string>
+    <string name="ticketReply">Ticket Reply</string>
+    <string name="leaveYourMessage">Please leave your message here</string>
+    <string name="attachment">Attachment</string>
+    <string name="userLogIn">Sorry!User can not be able to log in to the app </string>
+    <string name="fill_username">Please provide the user name</string>
+    <string name="mobileCountryCode">For mobile number country code is required</string>
+    <string name="noTicket">No tickets found</string>
+    <string name="noUser">No users found</string>
+    <string name="roleChanged">Role has been changed!user can not use the app.</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

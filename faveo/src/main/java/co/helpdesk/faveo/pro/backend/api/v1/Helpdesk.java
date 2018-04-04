@@ -7,6 +7,9 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.Arrays;
+
 import co.helpdesk.faveo.pro.Constants;
 
 /**
@@ -17,7 +20,7 @@ import co.helpdesk.faveo.pro.Constants;
 public class Helpdesk {
 
     static String apiKey;
-    static String token;
+    public static String token;
     static String IP;
     String domain=Prefs.getString("domain",null);
     String newurl=Prefs.getString("companyUrl",null);
@@ -44,8 +47,25 @@ public class Helpdesk {
     }
 
     public String postCreateTicket(int userID, String subject, String body, int helpTopic,
-                                   int priority, String fname, String lname, String phone, String email, String code,int staff,String mobile) {
+                                   int priority, String fname, String lname, String phone, String email, String code, int staff, String mobile) {
         Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
+                "api_key=" + apiKey +
+                "&token=" + token+
+                "&ip=" + IP +
+                "&user_id=" + userID +
+                "&subject=" + subject +
+                "&body=" + body +
+                "&help_topic=" + helpTopic +
+                // "&sla=" + sla +
+                "&priority=" + priority +
+                //"&dept=" + dept +
+                "&first_name=" + fname +
+                "&last_name=" + lname +
+                "&email=" + email +
+                "&assigned=" + staff+ "&phone=" + mobile +
+                "&code=" + code +
+                "&mobile=" + phone);
+        Prefs.putString("createTicketApi",Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
                 "&token=" + token+
                 "&ip=" + IP +
@@ -643,12 +663,12 @@ public class Helpdesk {
         return result;
     }
 
-    public String saveCustomerDetails(String userid, String phone, String firstname, String lastname,
-                                      String email, String mobile){
-        Log.d("editCustomerApi",newurl + "api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile);
-        String result=new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile,null);
+    public String saveCustomerDetails(String userid,String firstname, String lastname,
+                                      String email,String username){
+        Log.d("editCustomerApi",newurl + "api/v2/helpdesk/user-edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&user_name="+username);
+        String result=new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user-edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&user_name="+username,null);
         if (result!=null&&result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user/edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&phone_number="+phone+"&mobile="+mobile,null);
+            return new HTTPConnection().HTTPResponsePatch(newurl + "api/v2/helpdesk/user-edit/"+userid+"?api_key=" + apiKey+"&token="+token+"&first_name="+firstname+"&last_name="+lastname+"&email="+email+"&user_name="+username,null);
         return result;
 
     }
@@ -704,7 +724,13 @@ public class Helpdesk {
         return result;
 
     }
-
+        public String customerFeedback(String subject,String message){
+        Log.d("customerFeedback",Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message,null);
+        if (result!=null&&result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message,null);
+            return result;
+        }
 
 
 }

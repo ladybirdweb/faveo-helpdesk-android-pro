@@ -13,6 +13,11 @@ public class TicketThread {
     public String message;
     public String isReply;
     public String placeholder;
+    public String name;
+    public String file;
+    public String type;
+    public String noOfAttachments;
+
 
 //    public TicketThread(String clientName, String messageTime, String message, String isReply) {
 //        this.messageTime = messageTime;
@@ -21,7 +26,7 @@ public class TicketThread {
 //        this.clientName = clientName;
 //    }
 
-    public TicketThread(String clientPicture, String clientName, String messageTime, String messageTitle, String message, String isReply, String placeholder) {
+    public TicketThread(String clientPicture, String clientName, String messageTime, String messageTitle, String message, String isReply, String placeholder,String name,String file,String type,String noOfAttachments) {
         this.clientPicture = clientPicture;
         this.clientName = clientName;
         this.messageTime = messageTime;
@@ -29,8 +34,43 @@ public class TicketThread {
         this.message = message;
         this.isReply = isReply;
         this.placeholder = placeholder;
+        this.name=name;
+        this.file=file;
+        this.type=type;
+        this.noOfAttachments=noOfAttachments;
     }
 
+    public String getNoOfAttachments() {
+        return noOfAttachments;
+    }
+
+    public void setNoOfAttachments(String noOfAttachments) {
+        this.noOfAttachments = noOfAttachments;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getPlaceholder() {
         return placeholder;

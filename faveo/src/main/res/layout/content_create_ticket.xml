@@ -285,7 +285,6 @@
                     android:layout_height="50dp"
                     android:id="@+id/countrycoode"
                     >
-
                 </com.hbb20.CountryCodePicker>
 
                 <EditText
@@ -842,7 +841,7 @@
                     android:layout_height="100dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_txt" />
+                     />
 
                 <TextView
                     android:id="@+id/attachment_size"

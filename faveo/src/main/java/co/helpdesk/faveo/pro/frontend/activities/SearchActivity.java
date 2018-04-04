@@ -3,12 +3,15 @@ package co.helpdesk.faveo.pro.frontend.activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -66,20 +69,24 @@ public class SearchActivity extends AppCompatActivity implements
     ArrayAdapter<String> suggestionAdapter;
     Toolbar toolbar;
     String term;
+    Context context;
     TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+       setContentView(R.layout.activity_search);
+//        ButterKnife.bind(this);
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout= (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(vpPager);
         setupViewPager(vpPager);
 
+        tabLayout.setTabTextColors(
+                ContextCompat.getColor(this, R.color.black),
+                ContextCompat.getColor(this, R.color.faveo)
+        );
         //adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         //vpPager.setAdapter(adapterViewPager);
         //handleIntent(getIntent());
@@ -95,6 +102,7 @@ public class SearchActivity extends AppCompatActivity implements
         colorList=new ArrayList<>();
         colorList.clear();
         String querry=Prefs.getString("querry",null);
+        Log.d("querry",querry);
         if (querry.equals("null")){
             searchView.setText("");
         }
@@ -119,6 +127,11 @@ public class SearchActivity extends AppCompatActivity implements
         }catch (NullPointerException e){
             e.printStackTrace();
         }
+//        suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+//        searchView.setAdapter(suggestionAdapter);
+//        searchView.setDropDownWidth(1500);
+//        searchView.setThreshold(1);
+//        searchView.showDropDown();
 
 //        colorList.add("Cat");
 //        colorList.add("Dog");
@@ -186,39 +199,37 @@ public class SearchActivity extends AppCompatActivity implements
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SearchActivity.this,MainActivity.class);
-
-                startActivity(intent);
+                onBackPressed();
             }
         });
 
-        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String querry=searchView.getText().toString();
-                Prefs.putString("querry",querry);
-                try {
-                    String querry1 = URLEncoder.encode(querry, "utf-8");
-                    Prefs.putString("querry1",querry1);
-                    //Log.d("Msg", replyMessage);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-
-                if (!colorList.contains(querry)){
-                    colorList.add(searchView.getText().toString());
-                }
-
-                Prefs.putString("RecentSearh",colorList.toString());
-                Log.d("suggestionss",colorList.toString());
-                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
-//                    Log.d("IME SEARCH",searchView.getText().toString());
-                Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
-                finish();
-                startActivity(intent);
-
-            }
-        });
+//        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String querry=searchView.getText().toString();
+//                Prefs.putString("querry",querry);
+//                try {
+//                    String querry1 = URLEncoder.encode(querry, "utf-8");
+//                    Prefs.putString("querry1",querry1);
+//                    //Log.d("Msg", replyMessage);
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                if (!colorList.contains(querry)){
+//                    colorList.add(searchView.getText().toString());
+//                }
+//
+//                Prefs.putString("RecentSearh",colorList.toString());
+//                Log.d("suggestionss",colorList.toString());
+//                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
+////                    Log.d("IME SEARCH",searchView.getText().toString());
+//                Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
+//                finish();
+//                startActivity(intent);
+//
+//            }
+//        });
 
 
         searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -255,23 +266,23 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
 
-        searchView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
-                searchView.setAdapter(suggestionAdapter);
-                searchView.setDropDownWidth(1500);
-                searchView.setThreshold(1);
-                searchView.showDropDown();
-                return false;
-            }
-        });
+//        searchView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+//                searchView.setAdapter(suggestionAdapter);
+//                searchView.setDropDownWidth(1090);
+//                searchView.setThreshold(1);
+//                searchView.showDropDown();
+//                return false;
+//            }
+//        });
         searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus) {
                     suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
                     searchView.setAdapter(suggestionAdapter);
-                    searchView.setDropDownWidth(1500);
+                    searchView.setDropDownWidth(1090);
                     searchView.setThreshold(1);
 //                    searchView.showDropDown();
                 }
@@ -319,6 +330,21 @@ public class SearchActivity extends AppCompatActivity implements
 
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+        super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -432,12 +458,54 @@ public class SearchActivity extends AppCompatActivity implements
         }
     };
 
+    private void checkConnection() {
+        boolean isConnected = InternetReceiver.isConnected();
+        showSnackIfNoInternet(isConnected);
+    }
 
-    @Override
-    public void onBackPressed() {
-            super.onBackPressed();
+    /**
+     * Display the snackbar if network connection is not there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
+    private void showSnackIfNoInternet(boolean isConnected) {
+        if (!isConnected) {
+            final Snackbar snackbar = Snackbar
+                    .make(findViewById(android.R.id.content), R.string.sry_not_connected_to_internet, Snackbar.LENGTH_INDEFINITE);
 
-        this.finish();
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(Color.RED);
+            snackbar.setAction("X", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackbar.dismiss();
+                }
+            });
+            snackbar.show();
+        }
+
+    }
+
+    /**
+     * Display the snackbar if network connection is there.
+     *
+     * @param isConnected is a boolean value of network connection.
+     */
+    private void showSnack(boolean isConnected) {
+
+        if (isConnected) {
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
+
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(Color.WHITE);
+            snackbar.show();
+        } else {
+            showSnackIfNoInternet(false);
+        }
+
     }
 
     @Override

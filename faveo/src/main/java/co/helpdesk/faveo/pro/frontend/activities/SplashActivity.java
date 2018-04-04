@@ -1,10 +1,13 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,7 @@ import org.w3c.dom.Text;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BuildConfig;
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
@@ -54,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.tryagain)
     TextView textViewtryAgain;
     String error;
-
+    Context context;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -132,6 +136,7 @@ public class SplashActivity extends AppCompatActivity {
      * help topics.
      */
     private class FetchDependency extends AsyncTask<String, Void, String> {
+        String unauthorized;
 
         protected String doInBackground(String... urls) {
 
@@ -142,96 +147,48 @@ public class SplashActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.d("Depen Response : ", result + "");
 
-            if (result == null) {
-                loading.setText("Oops! Something went wrong.");
-                progressDialog.setVisibility(View.INVISIBLE);
-                textViewtryAgain.setVisibility(View.VISIBLE);
-                textViewrefresh.setVisibility(View.VISIBLE);
-                textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        finish();
-                        Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-                        startActivity(intent);
-                    }
-                });
-                return;
+            if (result==null) {
+//                try {
+//                    unauthorized = Prefs.getString("unauthorized", null);
+//                    if (unauthorized.equals("true")) {
+//                        loading.setText("Oops! Something went wrong.");
+//                        progressDialog.setVisibility(View.INVISIBLE);
+//                        textViewtryAgain.setVisibility(View.VISIBLE);
+//                        textViewrefresh.setVisibility(View.VISIBLE);
+//                        Prefs.putString("unauthorized", "false");
+//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//
+//                    }
+//
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
             }
-
-//            switch (result) {
+//            String state=Prefs.getString("403",null);
 //
-//                case "HTTP_UNAUTHORIZED":
-//                    loading.setText("The credentials has been changed, \nplease LOGIN again.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//
+//            try {
+//                if (state.equals("403") && !state.equals(null)) {
+//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                    Prefs.clear();
+//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+//                    Prefs.putString("403", "null");
+//                    startActivity(intent);
 //                    return;
-//                case "HTTP_NOT_FOUND":
-//                    loading.setText("Oops! Page not found.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
-//                case "HTTP_INTERNAL_ERROR":
-//                    loading.setText("Oops!Internal error.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
-//                case "HTTP_GATEWAY_TIMEOUT":
-//                    loading.setText("Oops! Seems like you have a slower net connection.");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
-//                case "HTTP_UNAVAILABLE":
-//                    loading.setText("Oops! Server busy.  ");
-//                    textViewtryAgain.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setVisibility(View.VISIBLE);
-//                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            finish();
-//                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    return;
+//                }
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
 //            }
 
-            try {
 
+            try {
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("result");
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                 Prefs.putString("DEPENDENCY", jsonObject1.toString());
                 // Preference.setDependencyObject(jsonObject1, "dependency");
                 JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");
@@ -380,19 +337,31 @@ public class SplashActivity extends AppCompatActivity {
                     Prefs.putString("unassignedTickets", "999+");
                 else
                     Prefs.putString("unassignedTickets", unasigned + "");
+                loading.setText(R.string.done_loading);
 
-            } catch (JSONException e) {
-                Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            } catch (JSONException | NullPointerException e) {
+                //Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                loading.setVisibility(View.GONE);
+                textViewtryAgain.setVisibility(View.VISIBLE);
+                        textViewrefresh.setVisibility(View.VISIBLE);
+                        Prefs.putString("unauthorized", "false");
+                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+
                 e.printStackTrace();
             } finally {
                 progressDialog.setVisibility(View.INVISIBLE);
 
             }
 
-            loading.setText(R.string.done_loading);
-
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            startActivity(intent);
 //            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
 //            builder.setTitle("Welcome to FAVEO");
 //            //builder.setMessage("After 2 second, this dialog will be closed automatically!");

@@ -38,7 +38,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imageviewback"
+                    android:id="@+id/imageViewBackTicketDetail"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_above="@+id/textViewagentName"
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/title"
-                    android:layout_alignStart="@+id/imageviewback"
+                    android:layout_alignStart="@+id/imageViewBackTicketDetail"
                     android:background="@drawable/rectangle1"
                     android:text="Agent Name"
                     android:textColor="@color/black"
@@ -87,10 +87,10 @@
                     android:id="@+id/subject"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_alignTop="@+id/imageviewback"
+                    android:layout_alignTop="@+id/imageViewBackTicketDetail"
                     android:layout_gravity="start"
                     android:layout_marginStart="22dp"
-                    android:layout_toEndOf="@+id/imageviewback"
+                    android:layout_toEndOf="@+id/imageViewBackTicketDetail"
                     android:text="Test Ticket For Faveo"
                     android:textColor="@color/dark_grey"
                     android:textSize="15sp"

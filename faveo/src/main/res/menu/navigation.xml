@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_shop"
+        android:icon="@drawable/ic_perm_media_black_24dp"
+        android:title="@string/gallery" />
+
+    <item
+        android:id="@+id/navigation_gifts"
+        android:icon="@drawable/ic_photo_camera_black_24dp"
+        android:title="Photo" />
+
+    <item
+        android:id="@+id/navigation_cart"
+        android:icon="@drawable/ic_picture_as_pdf_black_24dp"
+        android:title="Document" />
+</menu>

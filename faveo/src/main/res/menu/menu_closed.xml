@@ -19,36 +19,36 @@
     <!--android:orderInCategory="100"-->
     <!--app:showAsAction="always"-->
     <!--/>-->
-    <item
-        android:id="@+id/empty"
-        android:icon="@drawable/ic_camera"
-        android:orderInCategory="101"
-        android:title="Change Status"
-        app:showAsAction="never">
-        <menu>
-            <item
-                android:id="@+id/action_statusOpen"
-                android:orderInCategory="100"
-                android:title="Open"
-                app:showAsAction="never|collapseActionView"
-                android:icon="@drawable/ic_open_in_new_black_24dp"
-                />
-            <item
-                android:id="@+id/action_statusResolved"
-                android:orderInCategory="100"
-                android:title="Resolved"
-                app:showAsAction="never"
-                android:icon="@drawable/ic_check_black_24dp"/>
-            <item
-                android:id="@+id/action_statusDeleted"
-                android:orderInCategory="100"
-                android:title="Delete"
-                app:showAsAction="never"
-                android:icon="@drawable/ic_delete_black_24dp"/>
+    <!--<item-->
+        <!--android:id="@+id/empty"-->
+        <!--android:icon="@drawable/ic_camera"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="Change Status"-->
+        <!--app:showAsAction="never">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/action_statusOpen"-->
+                <!--android:orderInCategory="100"-->
+                <!--android:title="Open"-->
+                <!--app:showAsAction="never|collapseActionView"-->
+                <!--android:icon="@drawable/ic_open_in_new_black_24dp"-->
+                <!--/>-->
+            <!--<item-->
+                <!--android:id="@+id/action_statusResolved"-->
+                <!--android:orderInCategory="100"-->
+                <!--android:title="Resolved"-->
+                <!--app:showAsAction="never"-->
+                <!--android:icon="@drawable/ic_check_black_24dp"/>-->
+            <!--<item-->
+                <!--android:id="@+id/action_statusDeleted"-->
+                <!--android:orderInCategory="100"-->
+                <!--android:title="Delete"-->
+                <!--app:showAsAction="never"-->
+                <!--android:icon="@drawable/ic_delete_black_24dp"/>-->
 
-        </menu>
+        <!--</menu>-->
 
-    </item>
+    <!--</item>-->
     <!--<item-->
         <!--android:id="@+id/mergeticket"-->
         <!--android:orderInCategory="101"-->
@@ -57,13 +57,13 @@
         <!--app:showAsAction="never">-->
     <!--</item>-->
 
-    <item
-        android:id="@+id/assignticket"
-        android:orderInCategory="101"
-        android:title="@string/assignTicket"
-        android:icon="@drawable/ic_merge_type_black_24dp"
-        app:showAsAction="never">
-    </item>
+    <!--<item-->
+        <!--android:id="@+id/assignticket"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/assignTicket"-->
+        <!--android:icon="@drawable/ic_merge_type_black_24dp"-->
+        <!--app:showAsAction="never">-->
+    <!--</item>-->
 
 
 </menu>

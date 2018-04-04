@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/empty"
+        android:orderInCategory="101"
+        android:title="Change Status"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/action_statusResolved"
+                android:orderInCategory="100"
+                android:title="Resolved"
+                app:showAsAction="never"
+                android:icon="@drawable/ic_check_black_24dp"/>
+            <item
+                android:id="@+id/action_statusClosed"
+                android:orderInCategory="100"
+                android:title="Closed"
+                app:showAsAction="never"
+                android:icon="@drawable/ic_close_black_24dp"/>
+            <item
+                android:id="@+id/action_statusDeleted"
+                android:orderInCategory="100"
+                android:title="Move to trash"
+                app:showAsAction="never"
+                android:icon="@drawable/ic_delete_black_24dp"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/mergeticket"
+        android:orderInCategory="101"
+        android:title="@string/mergeticket"
+        android:icon="@drawable/ic_merge_type_black_24dp"
+        app:showAsAction="never">
+    </item>
+    <item
+        android:id="@+id/assignticket"
+        android:orderInCategory="101"
+        android:title="@string/assignTicket"
+        android:icon="@drawable/ic_merge_type_black_24dp"
+        app:showAsAction="never">
+    </item>
+
+</menu>

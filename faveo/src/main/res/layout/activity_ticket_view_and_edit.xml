@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#ffff"
+        tools:context="co.helpdesk.faveo.pro.frontend.activities.HelpSection">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/MyMaterialTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/MyMaterialTheme.PopupOverlay">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
+
+                    <ImageView
+                        android:id="@+id/imageViewBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/ic_arrow_back_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/titlesave"
+                        android:layout_width="200dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/Ticket"
+                        android:textColor="@color/theme"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"
+                        android:layout_alignTop="@+id/imageViewBack"
+                        android:layout_toRightOf="@+id/imageViewBack"
+                        android:layout_toEndOf="@+id/imageViewBack" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/faveo">
+
+            </View>
+        </android.support.design.widget.AppBarLayout>
+        <TextView
+            android:padding="9dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/viewOfTicket"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:padding="9dp"
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ticketview"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:padding="9dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_width="300dp"
+            android:layout_height="500dp"
+            android:src="@drawable/particularticketview"
+            android:scaleType="fitXY"
+            android:background="@drawable/rectanglenew"
+            />
+        <!--<ImageView-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:padding="9dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="500dp"-->
+        <!--android:layout_marginTop="35dp"-->
+        <!--android:src="@drawable/loginusername"-->
+        <!--android:background="@drawable/rectanglenew"-->
+        <!--/>-->
+
+        <TextView
+            android:id="@+id/ticketlistview"
+            android:padding="9dp"
+            android:lineSpacingExtra="9.2dp"
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/singleTicketView"
+            />
+
+        <!--<ImageView-->
+            <!--android:padding="9dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginTop="35dp"-->
+            <!--android:layout_width="300dp"-->
+            <!--android:layout_height="500dp"-->
+            <!--android:src="@drawable/ticketsave"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:background="@drawable/rectanglenew"-->
+            <!--/>-->
+
+        <TextView
+            android:padding="9dp"
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/ticketSave"/>
+        <ImageView
+            android:scaleType="fitXY"
+            android:padding="9dp"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="500dp"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/ticketsave"
+            android:background="@drawable/rectanglenew"
+            />
+
+        <TextView
+            android:id="@+id/ticketsearch"
+            android:padding="9dp"
+            android:lineSpacingExtra="9.2dp"
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/howToEdit"
+            />
+
+
+
+    </LinearLayout>
+</ScrollView>

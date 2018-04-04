@@ -20,8 +20,15 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/AppThemeOverlay.ActionBar" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/faveo">
+
+        </View>
 
     </android.support.design.widget.AppBarLayout>
+
 
     <include layout="@layout/content_notification" />
 

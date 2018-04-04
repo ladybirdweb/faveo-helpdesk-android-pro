@@ -239,8 +239,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             imageViewback.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(TicketFilter.this, MainActivity.class);
-                    startActivity(intent);
+                    onBackPressed();
                 }
             });
 
@@ -646,15 +645,30 @@ private int getIndex(Spinner spinner, String myString) {
     }
     return index;
 }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent  intent=new Intent(TicketFilter.this,MainActivity.class);
-        startActivity(intent);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent  intent=new Intent(TicketFilter.this,MainActivity.class);
+//        startActivity(intent);
+//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+        super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
     }
 }

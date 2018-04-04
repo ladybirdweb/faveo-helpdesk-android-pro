@@ -21,13 +21,14 @@ TextView textView;
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+            Intent intent=new Intent(LogIn.this,HowToLogIn.class);
+            startActivity(intent);
             }
         });
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(LogIn.this,HelpSection.class);
+                Intent intent=new Intent(LogIn.this,SettingsActivity.class);
                 startActivity(intent);
             }
         });

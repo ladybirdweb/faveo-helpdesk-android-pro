@@ -7,11 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -35,7 +44,8 @@ import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
  */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
-
+    String by;
+    Context context;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -52,26 +62,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData());
         Log.d(TAG, "Notification Message Scenario: " + remoteMessage.getData().get("scenario"));
 
+        by=remoteMessage.getData().get("by");
         String pic = "";
         int client_id = 0;
         String clientname = "";
-        String requester = remoteMessage.getData().get("requester");
-//        Log.d("Requester", requester);
-        try {
-            JSONObject jsonObj = new JSONObject(requester);
-            pic = jsonObj.getString("profile_pic");
-            client_id = jsonObj.getInt("id");
-            String firstName = jsonObj.getString("first_name");
-            String lastName = jsonObj.getString("last_name");
-            String userName = jsonObj.getString("user_name");
-            if (firstName == null || firstName.equals(""))
-                clientname = userName;
-            else
-                clientname = firstName + " " + lastName;
-            Log.d("Profile_Pic", pic);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (by.equals("System")){
+              clientname="System";
+              pic=getURLForResource(R.mipmap.ic_launcher);
         }
+        else{
+            String requester = remoteMessage.getData().get("requester");
+//        Log.d("Requester", requester);
+
+            try {
+
+                JSONObject jsonObj = new JSONObject(requester);
+                pic = jsonObj.getString("profile_pic");
+                client_id = jsonObj.getInt("id");
+                String firstName = jsonObj.getString("first_name");
+                String lastName = jsonObj.getString("last_name");
+                String userName = jsonObj.getString("user_name");
+                if (firstName == null || firstName.equals(""))
+                    clientname = userName;
+                else
+                    clientname = firstName + " " + lastName;
+                Log.d("Profile_Pic", pic);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        //Log.d("by",remoteMessage.getData().get("by"));
+
 
         //Calling method to generate notification
 
@@ -112,10 +134,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 );
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
-        notificationBuilder.setLargeIcon(getBitmapFromURL(profilePic));
+        Bitmap bitmap=getBitmapFromURL(profilePic);
+        Bitmap bitmap1=getCircleBitmap(bitmap);
+
+        notificationBuilder.setLargeIcon(bitmap1);
+        //notificationBuilder.setLargeIcon(getBitmapFromURL(profilePic));
         notificationBuilder.setContentTitle(noti_tittle);
         notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
@@ -159,7 +184,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, TicketDetailActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 //                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        //intent.putExtra("ticket_id", ID);
+        intent.putExtra("ticket_id", ID);
 
         Log.d("intents from FCM", "ID :" + ID);
 
@@ -177,7 +202,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
-        notificationBuilder.setLargeIcon(getBitmapFromURL(profilePic));
+        Bitmap bitmap=getBitmapFromURL(profilePic);
+        //Bitmap bitmap1=getCircleBitmap(bitmap);
+        notificationBuilder.setLargeIcon(bitmap);
         notificationBuilder.setContentTitle(noti_tittle);
         notificationBuilder.setContentText(messageBody);
         notificationBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
@@ -204,7 +231,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("stackadded", "notification arrived");
 
     }
-
+    public String getURLForResource (int resourceId) {
+        return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId).toString();
+    }
     /**
      * Get bitmap image from requested url
      * @param strURL
@@ -222,5 +251,44 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             e.printStackTrace();
             return null;
         }
+    }
+    public static Bitmap getCircleBitmap(Bitmap bitmap) {
+        Bitmap output;
+        Rect srcRect, dstRect;
+        float r;
+        final int width = bitmap.getWidth();
+        final int height = bitmap.getHeight();
+
+        if (width > height){
+            output = Bitmap.createBitmap(height, height, Bitmap.Config.ARGB_8888);
+            int left = (width - height) / 2;
+            int right = left + height;
+            srcRect = new Rect(left, 0, right, height);
+            dstRect = new Rect(0, 0, height, height);
+            r = height / 2;
+        }else{
+            output = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
+            int top = (height - width)/2;
+            int bottom = top + width;
+            srcRect = new Rect(0, top, width, bottom);
+            dstRect = new Rect(0, 0, width, width);
+            r = width / 2;
+        }
+
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(r, r, r, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, srcRect, dstRect, paint);
+
+        bitmap.recycle();
+
+        return output;
     }
 }

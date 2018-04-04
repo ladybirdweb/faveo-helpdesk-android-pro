@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -29,29 +30,31 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import agency.tango.android.avatarview.IImageLoader;
-import agency.tango.android.avatarview.loader.PicassoLoader;
-import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.CircleTransform;
+import co.helpdesk.faveo.pro.FileCacher;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 //import co.helpdesk.faveo.pro.Toolbar_ActionMode_Callback;
@@ -66,9 +69,6 @@ import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
 //import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 //import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
-import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
-import co.helpdesk.faveo.pro.frontend.fragments.RecyclerClick_Listener;
-import co.helpdesk.faveo.pro.frontend.fragments.RecyclerTouchListener;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 import es.dmoral.toasty.Toasty;
@@ -207,6 +207,13 @@ public class InboxTickets extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             toolbarmain = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+//            ActionBar actionBar = getActivity().getActionBar();
+//            if (actionBar != null) {
+//                actionBar.setHomeButtonEnabled(false);
+//                actionBar.setDisplayHomeAsUpEnabled(false);
+//                actionBar.setDisplayShowHomeEnabled(false);
+//            }
             Prefs.putString("cameFromSearch","false");
             Prefs.putString("cameFromNotification","false");
             Prefs.putString("querry1", "null");
@@ -437,727 +444,733 @@ public class InboxTickets extends Fragment {
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
             try {
                 check = Prefs.getString("came from filter", null);
+                if (InternetReceiver.isConnected()) {
+                    if (check.equals("true")) {
+                        Prefs.putString("source", "6");
+                        if (department.equals("all")) {
+                            if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all", pageno).execute();
+                                url = "show=" + show + "&departments=all";
+                                //Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source, pageno).execute();
+                                url = "show=" + show + "&departments=all&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=all&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto, pageno).execute();
+                                url = "show=" + show + "&departments=all&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
+                                url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=a-" + assignto, pageno).execute();
+                                url = "show=" + show + "&departments=all&assigned-to=a-" + assignto;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            }
+
+
+                        } else if (!department.equals("all")) {
+                            if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department, pageno).execute();
+                                url = "show=" + show + "&departments=" + department;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + " &assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
+                                Prefs.putString("URLFiltration", url);
+                            } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
+                                Prefs.putString("URLFiltration", url);
+                            }
+
+
+//                        else if (!assignto.equals("null")){
+//                            new FetchFirstFilter(getActivity(),"show="+show+"&departments=all&assigned-to=a-"+assignto,pageno).execute();
+//                            url="show="+show+"&departments=all&assigned-to=a-"+assignto;
+//                        }
+                        }
+//                    else if (!assignto.equals("null")){
+//                        new FetchFirstFilter(getActivity(),"show="+show+"&departments="+department+"&assigned-to=a-"+assignto,pageno).execute();
+//                        url="show="+show+"&departments="+department+"&assigned-to=a-"+assignto;
+//                    }
+                    } else if (check.equals("false")) {
+                        noInternet_view.setVisibility(View.GONE);
+                        // swipeRefresh.setRefreshing(true);
+                        progressDialog.show();
+                        new FetchFirst(getActivity(), page).execute();
+                        ((MainActivity) getActivity()).setActionBarTitle("Inbox");
+
+                    }
+//                else if (filterwithsorting.equals("true")){
+//                    Toast.makeText(getActivity(), "filterwithsorting", Toast.LENGTH_SHORT).show();
+//                }
+
+                } else {
+                    noInternet_view.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    empty_view.setVisibility(View.GONE);
+                }
+
+                swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        if (InternetReceiver.isConnected()) {
+                            loading = true;
+                            if (check.equals("true")) {
+                                if (department.equals("all")) {
+                                    if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all", pageno).execute();
+                                        url = "show=" + show + "&departments=all";
+                                        //Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source, pageno).execute();
+                                        url = "show=" + show + "&departments=all&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=all&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto, pageno).execute();
+                                        url = "show=" + show + "&departments=all&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
+                                        url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=a-" + assignto, pageno).execute();
+                                        url = "show=" + show + "&departments=all&assigned-to=a-" + assignto;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    }
+
+
+                                } else if (!department.equals("all")) {
+                                    if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + " &assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
+                                        Prefs.putString("URLFiltration", url);
+                                    } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
+                                        new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
+                                        url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
+                                        Prefs.putString("URLFiltration", url);
+                                    }
+
+
+//                        else if (!assignto.equals("null")){
+//                            new FetchFirstFilter(getActivity(),"show="+show+"&departments=all&assigned-to=a-"+assignto,pageno).execute();
+//                            url="show="+show+"&departments=all&assigned-to=a-"+assignto;
+//                        }
+                                }
+
+//                    else if (!assignto.equals("null")){
+//                        new FetchFirstFilter(getActivity(),"show="+show+"&departments="+department+"&assigned-to=a-"+assignto,pageno).execute();
+//                        url="show="+show+"&departments="+department+"&assigned-to=a-"+assignto;
+//                    }
+
+                            } else if (check.equals("false")) {
+                                noInternet_view.setVisibility(View.GONE);
+                                // swipeRefresh.setRefreshing(true);
+                                //progressDialog.show();
+                                try {
+                                    mActionMode.finish();
+                                }catch (NullPointerException e){
+                                    e.printStackTrace();
+                                }
+                                new FetchFirst(getActivity(), page).execute();
+                                ((MainActivity) getActivity()).setActionBarTitle("Inbox");
+
+                            }
+//                        recyclerView.setVisibility(View.VISIBLE);
+//                        noInternet_view.setVisibility(View.GONE);
+//                        new FetchFirst(getActivity()).execute();
+                        } else {
+                            recyclerView.setVisibility(View.INVISIBLE);
+                            swipeRefresh.setRefreshing(false);
+                            empty_view.setVisibility(View.GONE);
+                            noInternet_view.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                });
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
 //show,department,source,priority,tickettype,assigned,assignto
 //            swipeRefresh.setRefreshing(true);
 //            new FetchFirst(getActivity()).execute();
-            if (InternetReceiver.isConnected()) {
-                if (check.equals("true")) {
-                    Prefs.putString("source", "6");
-                    if (department.equals("all")) {
-                        if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all", pageno).execute();
-                            url = "show=" + show + "&departments=all";
-                            //Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=all&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
-                            url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=a-" + assignto, pageno).execute();
-                            url = "show=" + show + "&departments=all&assigned-to=a-" + assignto;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        }
 
-
-                    } else if (!department.equals("all")) {
-                        if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department, pageno).execute();
-                            url = "show=" + show + "&departments=" + department;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + " &assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
-                            Prefs.putString("URLFiltration", url);
-                        } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                            url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
-                            Prefs.putString("URLFiltration", url);
-                        }
-
-
-//                        else if (!assignto.equals("null")){
-//                            new FetchFirstFilter(getActivity(),"show="+show+"&departments=all&assigned-to=a-"+assignto,pageno).execute();
-//                            url="show="+show+"&departments=all&assigned-to=a-"+assignto;
-//                        }
-                    }
-//                    else if (!assignto.equals("null")){
-//                        new FetchFirstFilter(getActivity(),"show="+show+"&departments="+department+"&assigned-to=a-"+assignto,pageno).execute();
-//                        url="show="+show+"&departments="+department+"&assigned-to=a-"+assignto;
-//                    }
-                } else if (check.equals("false")) {
-                    noInternet_view.setVisibility(View.GONE);
-                    // swipeRefresh.setRefreshing(true);
-                    progressDialog.show();
-                    new FetchFirst(getActivity(), page).execute();
-                    ((MainActivity) getActivity()).setActionBarTitle("Inbox");
-
-                }
-//                else if (filterwithsorting.equals("true")){
-//                    Toast.makeText(getActivity(), "filterwithsorting", Toast.LENGTH_SHORT).show();
-//                }
-
-            } else {
-                noInternet_view.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.INVISIBLE);
-                empty_view.setVisibility(View.GONE);
-            }
-
-            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    if (InternetReceiver.isConnected()) {
-                        loading = true;
-                        if (check.equals("true")) {
-                            if (department.equals("all")) {
-                                if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all", pageno).execute();
-                                    url = "show=" + show + "&departments=all";
-                                    //Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=all&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
-                                    url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=a-" + assignto, pageno).execute();
-                                    url = "show=" + show + "&departments=all&assigned-to=a-" + assignto;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                }
-
-
-                            } else if (!department.equals("all")) {
-                                if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + " &assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
-                                    Prefs.putString("URLFiltration", url);
-                                } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
-                                    new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
-                                    url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
-                                    Prefs.putString("URLFiltration", url);
-                                }
-
-
-//                        else if (!assignto.equals("null")){
-//                            new FetchFirstFilter(getActivity(),"show="+show+"&departments=all&assigned-to=a-"+assignto,pageno).execute();
-//                            url="show="+show+"&departments=all&assigned-to=a-"+assignto;
-//                        }
-                            }
-
-//                    else if (!assignto.equals("null")){
-//                        new FetchFirstFilter(getActivity(),"show="+show+"&departments="+department+"&assigned-to=a-"+assignto,pageno).execute();
-//                        url="show="+show+"&departments="+department+"&assigned-to=a-"+assignto;
-//                    }
-
-                        } else if (check.equals("false")) {
-                            noInternet_view.setVisibility(View.GONE);
-                            // swipeRefresh.setRefreshing(true);
-                            //progressDialog.show();
-                            new FetchFirst(getActivity(), page).execute();
-                            ((MainActivity) getActivity()).setActionBarTitle("Inbox");
-
-                        }
-//                        recyclerView.setVisibility(View.VISIBLE);
-//                        noInternet_view.setVisibility(View.GONE);
-//                        new FetchFirst(getActivity()).execute();
-                    } else {
-                        recyclerView.setVisibility(View.INVISIBLE);
-                        swipeRefresh.setRefreshing(false);
-                        empty_view.setVisibility(View.GONE);
-                        noInternet_view.setVisibility(View.VISIBLE);
-                    }
-
-                }
-            });
 //            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerClick_Listener() {
 //                @Override
 //                public void onClick(View view, int position) {
@@ -1291,120 +1304,126 @@ private void multiSelect(int position) {
         }
         int id = item.getItemId();
         StringBuffer stringBuffer = new StringBuffer();
-        if (id == R.id.action_statusClosed) {
-
-            try {
-                if (!Prefs.getString("tickets", null).isEmpty()) {
-                    String tickets = Prefs.getString("tickets", null);
-                    int pos = tickets.indexOf("[");
-                    int pos1 = tickets.lastIndexOf("]");
-                    String text1 = tickets.substring(pos + 1, pos1);
-                    String[] namesList = text1.split(",");
-                    for (String name : namesList) {
-                        stringBuffer.append(name + ",");
-                    }
-                    int pos2 = stringBuffer.toString().lastIndexOf(",");
-                    ticket = stringBuffer.toString().substring(0, pos2);
-
-                    Log.d("tickets", ticket);
-                    try {
-                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("closedid", null))).execute();
-                        Prefs.putString("tickets", null);
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-
-                    }
-                    return true;
-                } else {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            if (!Prefs.getString("tickets", null).equals("") || !Prefs.getString("tickets", null).equals("null") || !Prefs.getString("tickets", null).equals(null)) {
-
-
-                Log.d("tickets", ticket);
-                if (ticket.equals("") || ticket.equals(null)) {
-                    Toasty.warning(getActivity(), getString(R.string.noticket), Toast.LENGTH_SHORT).show();
-                    return false;
-                } else {
-
-
-                }
-
-            }
-        } else if (id == R.id.action_statusResolved) {
-            try {
-                if (!Prefs.getString("tickets", null).isEmpty()) {
-                    String tickets = Prefs.getString("tickets", null);
-                    int pos = tickets.indexOf("[");
-                    int pos1 = tickets.lastIndexOf("]");
-                    String text1 = tickets.substring(pos + 1, pos1);
-                    String[] namesList = text1.split(",");
-                    for (String name : namesList) {
-                        stringBuffer.append(name + ",");
-                    }
-                    int pos2 = stringBuffer.toString().lastIndexOf(",");
-                    ticket = stringBuffer.toString().substring(0, pos2);
-
-                    Log.d("tickets", ticket);
-                    try {
-                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
-                        Prefs.putString("tickets", null);
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-
-                    }
-                    return true;
-                } else {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        } else if (id == R.id.action_statusDeleted) {
-            try {
-                if (!Prefs.getString("tickets", null).isEmpty()) {
-                    String tickets = Prefs.getString("tickets", null);
-                    int pos = tickets.indexOf("[");
-                    int pos1 = tickets.lastIndexOf("]");
-                    String text1 = tickets.substring(pos + 1, pos1);
-                    String[] namesList = text1.split(",");
-                    for (String name : namesList) {
-                        stringBuffer.append(name + ",");
-                    }
-                    int pos2 = stringBuffer.toString().lastIndexOf(",");
-                    ticket = stringBuffer.toString().substring(0, pos2);
-
-                    Log.d("tickets", ticket);
-                    try {
-                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("deletedid", null))).execute();
-                        Prefs.putString("tickets", null);
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-
-                    }
-                    return true;
-                } else {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
+        if (id==android.R.id.home){
+            Toast.makeText(context, "clicked on back button", Toast.LENGTH_SHORT).show();
+            return true;
         }
+//        if (id == R.id.action_statusClosed) {
+//
+//            try {
+//                if (!Prefs.getString("tickets", null).isEmpty()) {
+//                    String tickets = Prefs.getString("tickets", null);
+//                    int pos = tickets.indexOf("[");
+//                    int pos1 = tickets.lastIndexOf("]");
+//                    String text1 = tickets.substring(pos + 1, pos1);
+//                    String[] namesList = text1.split(",");
+//                    for (String name : namesList) {
+//                        stringBuffer.append(name + ",");
+//                    }
+//                    int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                    ticket = stringBuffer.toString().substring(0, pos2);
+//
+//                    Log.d("tickets", ticket);
+//                    try {
+//                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("closedid", null))).execute();
+//                        Prefs.putString("tickets", null);
+//                        progressDialog.show();
+//                        progressDialog.setMessage(getString(R.string.pleasewait));
+//                    } catch (NumberFormatException e) {
+//                        e.printStackTrace();
+//
+//                    }
+//                    return true;
+//                } else {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//            if (!Prefs.getString("tickets", null).equals("") || !Prefs.getString("tickets", null).equals("null") || !Prefs.getString("tickets", null).equals(null)) {
+//
+//
+//                Log.d("tickets", ticket);
+//                if (ticket.equals("") || ticket.equals(null)) {
+//                    Toasty.warning(getActivity(), getString(R.string.noticket), Toast.LENGTH_SHORT).show();
+//                    return false;
+//                } else {
+//
+//
+//                }
+//
+//            }
+//        }
+//         if (id == R.id.action_statusResolved) {
+//            try {
+//                if (!Prefs.getString("tickets", null).isEmpty()) {
+//                    String tickets = Prefs.getString("tickets", null);
+//                    int pos = tickets.indexOf("[");
+//                    int pos1 = tickets.lastIndexOf("]");
+//                    String text1 = tickets.substring(pos + 1, pos1);
+//                    String[] namesList = text1.split(",");
+//                    for (String name : namesList) {
+//                        stringBuffer.append(name + ",");
+//                    }
+//                    int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                    ticket = stringBuffer.toString().substring(0, pos2);
+//
+//                    Log.d("tickets", ticket);
+//                    try {
+//                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
+//                        Prefs.putString("tickets", null);
+//                        progressDialog.show();
+//                        progressDialog.setMessage(getString(R.string.pleasewait));
+//                    } catch (NumberFormatException e) {
+//                        e.printStackTrace();
+//
+//                    }
+//                    return true;
+//                } else {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//        }
+//         if (id == R.id.action_statusDeleted) {
+//            try {
+//                if (!Prefs.getString("tickets", null).isEmpty()) {
+//                    String tickets = Prefs.getString("tickets", null);
+//                    int pos = tickets.indexOf("[");
+//                    int pos1 = tickets.lastIndexOf("]");
+//                    String text1 = tickets.substring(pos + 1, pos1);
+//                    String[] namesList = text1.split(",");
+//                    for (String name : namesList) {
+//                        stringBuffer.append(name + ",");
+//                    }
+//                    int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                    ticket = stringBuffer.toString().substring(0, pos2);
+//
+//                    Log.d("tickets", ticket);
+//                    try {
+//                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("deletedid", null))).execute();
+//                        Prefs.putString("tickets", null);
+//                        progressDialog.show();
+//                        progressDialog.setMessage(getString(R.string.pleasewait));
+//                    } catch (NumberFormatException e) {
+//                        e.printStackTrace();
+//
+//                    }
+//                    return true;
+//                } else {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//        }
         if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
@@ -1443,31 +1462,31 @@ private void multiSelect(int position) {
             startActivity(intent);
             return true;
         }
-        else if (id==R.id.assignticket){
-            try {
-                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                String ticketId = Prefs.getString("tickets", null);
-                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
-                int itemCount = items.size();
-                if (itemCount == 1) {
-                    Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
-                    return false;
-                } else {
-                    Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
-                    startActivity(intent);
-                }
-
-//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-//            startActivity(intent);
-
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        }
+//        else if (id==R.id.assignticket){
+//            try {
+//                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                String ticketId = Prefs.getString("tickets", null);
+//                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+//                int itemCount = items.size();
+//                if (itemCount == 1) {
+//                    Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
+//                    return false;
+//                } else {
+//                    Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+//                    startActivity(intent);
+//                }
+//
+////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+////            startActivity(intent);
+//
+//            } catch (NullPointerException e) {
+//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//        }
 
 
         return super.onOptionsItemSelected(item);
@@ -1680,9 +1699,9 @@ private void multiSelect(int position) {
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 //String message1=jsonObject2.getString("ticket_id");
-                String message2 = jsonObject1.getString("message");
+                String message2 = jsonObject.getString("message");
 
 
                 if (message2.contains("Status changed to Deleted")) {
@@ -1747,18 +1766,25 @@ private void multiSelect(int position) {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                total = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                total = jsonObject1.getInt("total");
                 try {
-                    data = jsonObject.getString("data");
-                    nextPageURL = jsonObject.getString("next_page_url");
+                    data = jsonObject1.getString("data");
+                    nextPageURL = jsonObject1.getString("next_page_url");
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");
                 }
+                
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ticketOverview = Helper.parseTicketOverview(jsonArray, i);
                     if (ticketOverview != null)
                         ticketOverviewList.add(ticketOverview);
+//                    try {
+//                        cacheTicket.writeCache(ticketOverview);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1776,9 +1802,11 @@ private void multiSelect(int position) {
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
 
-            if (result == null) {
-                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
+            if (isAdded()) {
+                if (result == null) {
+                    Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                    return;
+                }
             }
 //            if (result.equals("all done")) {
 //                Toast.makeText(context, "All tickets loaded", Toast.LENGTH_SHORT).show();
@@ -1857,9 +1885,10 @@ private void multiSelect(int position) {
             //databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                nextPageURL = jsonObject.getString("next_page_url");
-                String data = jsonObject.getString("data");
-                int count = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                nextPageURL = jsonObject1.getString("next_page_url");
+                String data = jsonObject1.getString("data");
+                int count = jsonObject1.getInt("total");
                 if (count > 999)
                     Prefs.putString("inboxTickets", "999+");
                 else
@@ -1921,15 +1950,16 @@ private void multiSelect(int position) {
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                total = jsonObject.getInt("total");
-                nextPageURL = jsonObject.getString("next_page_url");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                total = jsonObject1.getInt("total");
+                nextPageURL = jsonObject1.getString("next_page_url");
 //                try {
 //                    data = jsonObject.getString("data");
 //
 //                } catch (JSONException e) {
 //                    data = jsonObject.getString("result");
 //                }
-                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                JSONArray jsonArray = jsonObject1.getJSONArray("data");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     TicketOverview ticketOverview = Helper.parseTicketOverviewSort(jsonArray, i);
                     if (ticketOverview != null)
@@ -2023,9 +2053,10 @@ private void multiSelect(int position) {
             // databaseHandler.recreateTable();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                nextPageURL = jsonObject.getString("next_page_url");
-                String data = jsonObject.getString("data");
-                int my_tickets = jsonObject.getInt("total");
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                nextPageURL = jsonObject1.getString("next_page_url");
+                String data = jsonObject1.getString("data");
+                int my_tickets = jsonObject1.getInt("total");
                 if (my_tickets > 999)
                     Prefs.putString("myTickets", "999+");
                 else
@@ -2090,6 +2121,37 @@ private void multiSelect(int position) {
     @Override
     public void onResume() {
         super.onResume();
+//                progressDialog.setMessage(getString(R.string.pleasewait));
+        try {
+            checked_items.clear();
+            ticketOverviewAdapter.notifyDataSetChanged();
+            mActionMode.finish();
+            //ticketOverviewAdapter.notifyDataSetChanged();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+//        progressDialog.show();
+//       new FetchFirst(getActivity(), page).execute();
+
+//        progressDialog.setMessage(getString(R.string.pleasewait));
+//        progressDialog.show();
+//        new FetchFirst(getActivity(), page).execute();
+//        try {
+//            mActionMode.finish();
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
+//        if(cacheTicket.hasCache()){
+//            try {
+//                cacheTicket.readCache();
+//                List<TicketOverview> list=cacheTicket.getAllCaches();
+//                Log.d("fromCache",list.toString());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } catch (ClassCastException e){
+//                e.printStackTrace();
+//            }
+//        }
         Log.d("resumed","true");
     }
 
@@ -2125,68 +2187,79 @@ private void multiSelect(int position) {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-//    public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
-//        private List<TicketOverview> ticketOverviewList;
-//        String subject;
-//        int length=0;
-//        private Context context;
-//        ArrayList<Integer> checked_items= new ArrayList<>();
-//        ArrayList<String> ticketSubject=new ArrayList<>();
-//        private SparseBooleanArray mSelectedItemsIds;
-//        private List<Integer> selectedIds = new ArrayList<>();
-//
-//
-//        public TicketOverviewAdapter(Context context,List<TicketOverview> ticketOverviewList) {
-//            this.ticketOverviewList = ticketOverviewList;
-//            this.context=context;
-//            mSelectedItemsIds = new SparseBooleanArray();
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return ticketOverviewList.size();
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
-//            final TicketOverview ticketOverview = ticketOverviewList.get(i);
-//            int id=ticketOverviewList.get(i).getTicketID();
-//            if (selectedIds.contains(id)){
-//                //if item is selected then,set foreground color of FrameLayout.
-//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-//            }
-//            else {
-//                //else remove selected item color.
-//                //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
-//            }
-//            subject=ticketOverview.ticketSubject;
-//            if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
-//                String first=subject.replace("=?UTF-8?Q?","");
-//                String second=first.replace("_"," ");
-//                String third=second.replace("=C2=A0","");
-//                String fourth=third.replace("?=","");
-//                String fifth=fourth.replace("=E2=80=99","'");
-//                ticketViewHolder.textViewSubject.setText(fifth);
-//            }
-//            else{
-//                ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
-//            }
-//
+    public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
+        private List<TicketOverview> ticketOverviewList;
+        String subject;
+        int length = 0;
+        private Context context;
+        ArrayList<Integer> checked_items = new ArrayList<>();
+        ArrayList<String> ticketSubject = new ArrayList<>();
+        private SparseBooleanArray mSelectedItemsIds;
+        private List<Integer> selectedIds = new ArrayList<>();
+
+
+        public TicketOverviewAdapter(Context context, List<TicketOverview> ticketOverviewList) {
+            this.ticketOverviewList = ticketOverviewList;
+            this.context = context;
+            mSelectedItemsIds = new SparseBooleanArray();
+        }
+
+        @Override
+        public int getItemCount() {
+            return ticketOverviewList.size();
+        }
+
+        @Override
+        public void onBindViewHolder(final TicketOverviewAdapter.TicketViewHolder ticketViewHolder, final int i) {
+            final TicketOverview ticketOverview = ticketOverviewList.get(i);
+            String letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+            int id = ticketOverviewList.get(i).getTicketID();
+            TextDrawable.IBuilder mDrawableBuilder;
+            if (selectedIds.contains(id)) {
+                //if item is selected then,set foreground color of FrameLayout.
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+            } else {
+                //else remove selected item color.
+                //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
+            }
+            subject = ticketOverview.ticketSubject;
+            if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {
+                String first = subject.replace("=?UTF-8?Q?", "");
+                String second = first.replace("_", " ");
+                String third = second.replace("=C2=A0", "");
+                String fourth = third.replace("?=", "");
+                String fifth = fourth.replace("=E2=80=99", "'");
+                ticketViewHolder.textViewSubject.setText(fifth);
+            } else {
+                ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
+            }
+
 //            ticketViewHolder.ticket
 //                    .setBackgroundColor(mSelectedItemsIds.get(i) ? 0x9934B5E4
 //                            : Color.TRANSPARENT);
-//
-////        if (checked_items.contains(id)){
-////            //if item is selected then,set foreground color of FrameLayout.
-////            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#B9FCFC"));
-////        }
-////        else {
-////            //else remove selected item color.
-////            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-////        }
-//
-//            //Toast.makeText(context, "no of items"+checked_items.toString(), Toast.LENGTH_SHORT).show();
-//
+            if (checked_items.contains(id)) {
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
+            } else {
+                if (ticketOverview.lastReply.equals("client")) {
+                    int color = Color.parseColor("#ededed");
+                    ticketViewHolder.ticket.setBackgroundColor(color);
+                } else {
+                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
+                //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            }
+
+//        if (checked_items.contains(id)){
+//            //if item is selected then,set foreground color of FrameLayout.
+//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#B9FCFC"));
+//        }
+//        else {
+//            //else remove selected item color.
+//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//        }
+
+            //Toast.makeText(context, "no of items"+checked_items.toString(), Toast.LENGTH_SHORT).show();
+
 //            ticketViewHolder.checkBox1.setOnCheckedChangeListener(null);
 //
 //            //ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
@@ -2274,146 +2347,151 @@ private void multiSelect(int position) {
 //                ticketViewHolder.checkBox1.setChecked(false);
 //                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
 //            }
+
+            if (ticketOverview.ticketAttachments.equals("0")) {
+                ticketViewHolder.attachementView.setVisibility(View.GONE);
+            } else {
+                ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+            }
+            if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
+//            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+//                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+//            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+
+                if (Helper.compareDates(ticketOverview.dueDate) == 2) {
+                    ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+                    ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
+                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
+                    //ticketViewHolder.textViewOverdue.setBackgroundColor();
+
+                } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+                    ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
+//                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
 //
-//            if (ticketOverview.ticketAttachments.equals("0")) {
-//                ticketViewHolder.attachementView.setVisibility(View.GONE);
-//            } else {
-//                ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
-//            }
-//            if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
-////            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
-////                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-////            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
-//
-//                if (Helper.compareDates(ticketOverview.dueDate) == 2) {
-//                    ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
-//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-//                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#ffff00"));
-//                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#A0A0A0"));
-//                    //ticketViewHolder.textViewOverdue.setBackgroundColor();
-//
-//                }
-//                else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
-//                    ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
-//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
-////                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
-////
-//////set color
-////                 drawable.setColor(color);
-//                    ((GradientDrawable)ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#FF9999"));
-//                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
-//                }
-//                else {
-//                    ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
-//                }
-//
-//
-//            ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
-//
-//            ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
-//            if (ticketOverview.getClientName().startsWith("=?")){
-//                String clientName=ticketOverview.getClientName().replaceAll("=?UTF-8?Q?","");
-//                String newClientName=clientName.replaceAll("=E2=84=A2","");
-//                String finalName=newClientName.replace("=??Q?","");
-//                String name=finalName.replace("?=","");
-//                String newName=name.replace("_"," ");
-//                Log.d("new name",newName);
-//                ticketViewHolder.textViewClientName.setText(newName);
-//            }
-//            else{
-//                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
-//
-//            }
-//            if (ticketOverview.ticketPriorityColor.equals("null")){
-//                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-//            }
-//            else if (ticketOverview.ticketPriorityColor != null) {
-//                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
-//            }
-//
-//
-////        else if (ticketOverview.ticketPriorityColor.equals("null")){
-////            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-////        }
-//            ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
-//
-//            if (!ticketOverview.countthread.equals("0")){
-//                ticketViewHolder.countThread.setText("("+ticketOverview.getCountthread()+")");
-//            }
-//            else{
-//                ticketViewHolder.countThread.setVisibility(View.GONE);
-//            }
-//
-//            if (ticketOverview.sourceTicket.equals("chat")){
-//                int color=Color.parseColor("#3da6d7");
-//                ticketViewHolder.source.setImageResource(R.drawable.chat);
-//                //ticketViewHolder.source.setColorFilter(color);
-//            }
-//            else if (ticketOverview.sourceTicket.equals("web")){
-//                int color=Color.parseColor("#3da6d7");
-//                ticketViewHolder.source.setImageResource(R.drawable.web);
-//                //ticketViewHolder.source.setColorFilter(color);
-//            }
-//            else if (ticketOverview.sourceTicket.equals("agent")){
-//                int color=Color.parseColor("#3da6d7");
-//                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-//                //ticketViewHolder.source.setColorFilter(color);
-//            }
-//            else if (ticketOverview.sourceTicket.equals("email")){
-//                int color=Color.parseColor("#3da6d7");
-//                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-//                //ticketViewHolder.source.setColorFilter(color);
-//            }
-//            else if (ticketOverview.sourceTicket.equals("facebook")){
-//                int color=Color.parseColor("#3da6d7");
-//                ticketViewHolder.source.setImageResource(R.drawable.facebook);
-//                //ticketViewHolder.source.setColorFilter(color);
-//            }
-//            else if (ticketOverview.sourceTicket.equals("twitter")){
-//                int color=Color.parseColor("#3da6d7");
-//                ticketViewHolder.source.setImageResource(R.drawable.twitter);
-//                //ticketViewHolder.source.setColorFilter(color);
-//            }
-//            else if (ticketOverview.sourceTicket.equals("call")){
-//                int color=Color.parseColor("#3da6d7");
-//                ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
-//                //ticketViewHolder.source.setColorFilter(color);
-//            }
-//            else{
-//                ticketViewHolder.source.setVisibility(View.GONE);
-//            }
-//
-//            if (!ticketOverview.countcollaborator.equals("0")){
-//
-//                ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
-//            }
-//            else if (ticketOverview.countcollaborator.equals("0")){
-//                ticketViewHolder.countCollaborator.setVisibility(View.GONE);
-//            }
-//
-//            if (!ticketOverview.agentName.equals("Unassigned")){
-//                ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
-//                ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
-//            }
-//            else{
-//                ticketViewHolder.agentAssigned.setText("Unassigned");
-//                ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
-//            }
-//
-////else if (ticketOverview.getAgentName().equals("Unassigned")){
-////    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
-////}
-//
-//
+////set color
+//                 drawable.setColor(color);
+                    ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
+                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
+                } else {
+                    ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+                }
+
+
+            ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
+
+            ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
+            if (ticketOverview.getClientName().startsWith("=?")) {
+                String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
+                String newClientName = clientName.replaceAll("=E2=84=A2", "");
+                String finalName = newClientName.replace("=??Q?", "");
+                String name = finalName.replace("?=", "");
+                String newName = name.replace("_", " ");
+                Log.d("new name", newName);
+                ticketViewHolder.textViewClientName.setText(newName);
+            } else {
+                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+
+            }
+            if (ticketOverview.ticketPriorityColor.equals("null")) {
+                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+            } else if (ticketOverview.ticketPriorityColor != null) {
+                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+            }
+
+
+//        else if (ticketOverview.ticketPriorityColor.equals("null")){
+//            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+//        }
+            ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
+
+            if (!ticketOverview.countthread.equals("0")) {
+                ticketViewHolder.countThread.setText("(" + ticketOverview.getCountthread() + ")");
+            } else {
+                ticketViewHolder.countThread.setVisibility(View.GONE);
+            }
+
+            if (ticketOverview.sourceTicket.equals("chat")) {
+                int color = Color.parseColor("#3da6d7");
+                ticketViewHolder.source.setImageResource(R.drawable.chat);
+                //ticketViewHolder.source.setColorFilter(color);
+            } else if (ticketOverview.sourceTicket.equals("web")) {
+                int color = Color.parseColor("#3da6d7");
+                ticketViewHolder.source.setImageResource(R.drawable.web);
+                //ticketViewHolder.source.setColorFilter(color);
+            } else if (ticketOverview.sourceTicket.equals("agent")) {
+                int color = Color.parseColor("#3da6d7");
+                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                //ticketViewHolder.source.setColorFilter(color);
+            } else if (ticketOverview.sourceTicket.equals("email")) {
+                int color = Color.parseColor("#3da6d7");
+                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                //ticketViewHolder.source.setColorFilter(color);
+            } else if (ticketOverview.sourceTicket.equals("facebook")) {
+                int color = Color.parseColor("#3da6d7");
+                ticketViewHolder.source.setImageResource(R.drawable.facebook);
+                //ticketViewHolder.source.setColorFilter(color);
+            } else if (ticketOverview.sourceTicket.equals("twitter")) {
+                int color = Color.parseColor("#3da6d7");
+                ticketViewHolder.source.setImageResource(R.drawable.twitter);
+                //ticketViewHolder.source.setColorFilter(color);
+            } else if (ticketOverview.sourceTicket.equals("call")) {
+                int color = Color.parseColor("#3da6d7");
+                ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+                //ticketViewHolder.source.setColorFilter(color);
+            } else {
+                ticketViewHolder.source.setVisibility(View.GONE);
+            }
+
+            if (!ticketOverview.countcollaborator.equals("0")) {
+
+                ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
+            } else if (ticketOverview.countcollaborator.equals("0")) {
+                ticketViewHolder.countCollaborator.setVisibility(View.GONE);
+            }
+
+            if (!ticketOverview.agentName.equals("Unassigned")) {
+                ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
+                ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
+            } else {
+                ticketViewHolder.agentAssigned.setText("Unassigned");
+                ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+            }
+
+//else if (ticketOverview.getAgentName().equals("Unassigned")){
+//    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+//}
+
+
 //            if (!ticketOverview.lastReply.equals("client")){
 //                int color=Color.parseColor("#e9e9e9");
 //                ticketViewHolder.ticket.setBackgroundColor(color);
 //            }
-//
-//
-//
+
+            if (ticketOverview.clientPicture.equals("")) {
+                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+
+            } else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")) {
+                mDrawableBuilder = TextDrawable.builder()
+                        .round();
+//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+                Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
+//        Glide.with(context)
+//            .load(ticketOverview.getClientPicture())
+//            .into(ticketViewHolder.roundedImageViewProfilePic);
+
+                //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+
+            } else {
+                ColorGenerator generator = ColorGenerator.MATERIAL;
+                TextDrawable drawable = TextDrawable.builder()
+                        .buildRound(letter, generator.getRandomColor());
+                ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+            }
+
 //            if (ticketOverview.clientPicture.equals("")){
 //                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 //            }
@@ -2422,6 +2500,592 @@ private void multiSelect(int position) {
 //                imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
 //                //imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
 //            }
+
+//        if (ticketOverview.clientPicture != null && ticketOverview.clientPicture.trim().length() != 0)
+//            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
+//                    .load(ticketOverview.clientPicture)
+//                    .placeholder(R.drawable.default_pic)
+//                    .error(R.drawable.default_pic)
+//                    .into(ticketViewHolder.roundedImageViewProfilePic);
+
+            ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mActionMode != null) {
+                        onListItemSelect(i);
+                    } else {
+                        Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+                        intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+                        Prefs.putString("TICKETid", ticketOverview.ticketID + "");
+                        Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
+                        intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+                        intent.putExtra("ticket_opened_by", ticketOverview.clientName);
+                        intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
+                        Log.d("clicked", "onRecyclerView");
+                        v.getContext().startActivity(intent);
+                    }
+
+                }
+            });
+            ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    onListItemSelect(i);
+                    length++;
+                    Log.d("noofitems", "" + length);
+                    Prefs.putInt("NoOfItems", length);
+
+//                ticketOverviewList.get(i).getTicketID();
+//                Log.d("position",""+ticketOverviewList.get(i).getTicketID());
+//                if (ticketViewHolder.checkBox1.isEnabled()){
+//
+//                }
+//                else{
+//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+//                }
+//                if (ticketViewHolder.checkBox1.isChecked()){
+//
+//                }else{
+//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+//                }
+                    return true;
+                }
+            });
+
+
+//        ticketViewHolder.checkBox1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (ticketViewHolder.checkBox1.isChecked())
+//                    ticketViewHolder.checkBox1.setChecked(false);
+//                else
+//                    ticketViewHolder.checkBox1.setChecked(true);
+//            }
+//        });
+
+
+//        ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//
+//                if (isChecked){
+////                    ticketViewHolder.checkBox1.setChecked(true);
+////                    Prefs.putString("checkboxstate","checked");
+//
+//                    stringBuffer.append(ticketOverview.getTicketID()+",");
+//                    Log.d("ids",stringBuffer.toString());
+//
+//                }
+//                else{
+//                    Prefs.putString("checkboxstate","unchecked");
+//                    stringBuffer.toString().replace(""+ticketOverview.getTicketID(),"");
+//                    Log.d("ids",stringBuffer.toString());
+//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+//                    notifyDataSetChanged();
+//                }
+////
+////                String state=Prefs.getString("checkboxstate",null);
+////
+////                if (state.equals("checked")){
+////                    ticketViewHolder.checkBox1.setSelected(true);
+////                    notifyDataSetChanged();
+////                }
+////                else{
+////                    ticketViewHolder.checkBox1.setSelected(false);
+////                    notifyDataSetChanged();
+////                }
+//
+//
+//            }
+//        });
+
+        }
+
+        private void onListItemSelect(int position) {
+            ticketOverviewAdapter.toggleSelection(position);//Toggle the selection
+
+            boolean hasCheckedItems = ticketOverviewAdapter.getSelectedCount() > 0;//Check if any items are already selected or not
+
+
+            if (hasCheckedItems && mActionMode == null)
+                // there are some selected items, start the actionMode
+                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new Toolbar_ActionMode_Callback(getActivity(), ticketOverviewAdapter, null, ticketOverviewList, false));
+            else if (!hasCheckedItems && mActionMode != null)
+                // there no selected items, finish the actionMode
+                mActionMode.finish();
+
+            if (mActionMode != null)
+                //set action mode title on item selection
+                mActionMode.setTitle(String.valueOf(ticketOverviewAdapter
+                        .getSelectedCount()) + " ticket selected");
+
+
+        }
+
+        public void toggleSelection(int position) {
+            selectView(position, !mSelectedItemsIds.get(position));
+        }
+
+
+        //Remove selected selections
+
+
+        //Put or delete selected position into SparseBooleanArray
+        public void selectView(int position, boolean value) {
+            TicketOverview ticketOverview = ticketOverviewList.get(position);
+            if (value) {
+                ticketSubject.add(ticketOverview.ticketSubject);
+                checked_items.add(ticketOverview.getTicketID());
+                Log.d("ticketsubject", ticketSubject.toString());
+                Log.d("checkeditems", checked_items.toString().replace(" ", ""));
+                Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+                Prefs.putString("TicketSubject", ticketSubject.toString());
+                mSelectedItemsIds.put(position, value);
+            } else {
+
+                int pos = checked_items.indexOf(ticketOverview.getTicketID());
+                int pos1 = ticketSubject.indexOf(ticketOverview.getTicketSubject());
+                try {
+                    checked_items.remove(pos);
+                    ticketSubject.remove(pos1);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+                Log.d("ticketsubject", ticketSubject.toString());
+                Log.d("checkeditems", checked_items.toString().replace(" ", ""));
+                Prefs.putInt("totalticketselected", length);
+                Log.d("checkeditems", "" + checked_items);
+                Prefs.putInt("NoOfItems", length);
+                Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+                Prefs.putString("TicketSubject", ticketSubject.toString());
+                mSelectedItemsIds.delete(position);
+            }
+
+            notifyDataSetChanged();
+        }
+
+        public void setSelectedIds(List<Integer> selectedIds) {
+            this.selectedIds = selectedIds;
+            notifyDataSetChanged();
+        }
+
+        public void removeSelection() {
+            mSelectedItemsIds = new SparseBooleanArray();
+            notifyDataSetChanged();
+        }
+
+        //Get total selected count
+        public int getSelectedCount() {
+            return mSelectedItemsIds.size();
+        }
+
+        //        //Return all selected ids
+//        public SparseBooleanArray getSelectedIds() {
+//            return mSelectedItemsIds;
+//        }
+//        public void setSelectedIds(ArrayList<Integer> checked_items) {
+//            this.checked_items = checked_items;
+//            notifyDataSetChanged();
+//        }
+        public TicketOverview getItem(int position) {
+            return ticketOverviewList.get(position);
+        }
+
+        @Override
+        public TicketOverviewAdapter.TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.card_ticket, viewGroup, false);
+            return new TicketOverviewAdapter.TicketViewHolder(itemView);
+        }
+
+        public class TicketViewHolder extends RecyclerView.ViewHolder {
+
+            protected View ticket;
+            ImageView roundedImageViewProfilePic;
+            TextView textViewTicketID;
+            TextView textViewTicketNumber;
+            TextView textViewClientName;
+            TextView textViewSubject;
+            RelativeTimeTextView textViewTime;
+            TextView textViewOverdue;
+            View ticketPriority;
+            // TextView ticketStatus;
+            ImageView attachementView;
+            CheckBox checkBox1;
+            ImageView countCollaborator;
+            ImageView source;
+            TextView countThread;
+            TextView agentAssigned;
+            ImageView agentAssignedImage;
+            TextView textViewduetoday;
+
+            TicketViewHolder(View v) {
+                super(v);
+                ticket = v.findViewById(R.id.ticket);
+                attachementView = (ImageView) v.findViewById(R.id.attachment_icon);
+                ticketPriority = v.findViewById(R.id.priority_view);
+                roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
+                textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
+                textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
+                textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
+                textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
+                textViewTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
+                textViewOverdue = (TextView) v.findViewById(R.id.overdue_view);
+                checkBox1 = (CheckBox) v.findViewById(R.id.checkbox);
+                countCollaborator = (ImageView) v.findViewById(R.id.collaborator);
+                countThread = (TextView) v.findViewById(R.id.countthread);
+                source = (ImageView) v.findViewById(R.id.source);
+                agentAssigned = (TextView) v.findViewById(R.id.agentassigned);
+                agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
+                textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
+
+
+            }
+
+        }
+
+    }
+//    public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
+//        private List<TicketOverview> ticketOverviewList;
+//        String subject;
+//        int length=0;
+//        private Context context;
+//        ArrayList<Integer> checked_items= new ArrayList<>();
+//        ArrayList<String> ticketSubject=new ArrayList<>();
+//        private SparseBooleanArray mSelectedItemsIds;
+//        private List<Integer> selectedIds = new ArrayList<>();
+//
+//
+//        public TicketOverviewAdapter(Context context,List<TicketOverview> ticketOverviewList) {
+//            this.ticketOverviewList = ticketOverviewList;
+//            this.context=context;
+//            mSelectedItemsIds = new SparseBooleanArray();
+//        }
+//
+//        @Override
+//        public int getItemCount() {
+//            return ticketOverviewList.size();
+//        }
+//
+//        @Override
+//        public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
+//            final TicketOverview ticketOverview = ticketOverviewList.get(i);
+////            String letter=null;
+////            try {
+////                letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+////            }catch (StringIndexOutOfBoundsException e){
+////                e.printStackTrace();
+////            }
+//            String letter = "U";
+//            Log.d("customerUname", ticketOverview.clientName);
+//            try {
+//                if (!ticketOverview.clientName.equals("")) {
+//                    if (Character.isUpperCase(ticketOverview.clientName.charAt(0))) {
+//                        letter = String.valueOf(ticketOverview.clientName.charAt(0));
+//                    } else {
+//                        letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+//                    }
+//
+//                }
+////                else if (ticketOverview.clientName.equals("null")){
+////                    letter="U";
+////                }
+//                else {
+//                    ticketViewHolder.textViewClientName.setVisibility(View.GONE);
+//                }
+//            } catch (StringIndexOutOfBoundsException e) {
+//                e.printStackTrace();
+//            }
+//            int id = ticketOverviewList.get(i).getTicketID();
+//            TextDrawable.IBuilder mDrawableBuilder;
+////            if (selectedIds.contains(id)){
+////                //if item is selected then,set foreground color of FrameLayout.
+////                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#34B5E4"));
+////            }
+////            else {
+////                //else remove selected item color.
+////                //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
+////            }
+//            subject = ticketOverview.ticketSubject;
+//            if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {
+//                String first = subject.replace("=?UTF-8?Q?", "");
+//                String second = first.replace("_", " ");
+//                String third = second.replace("=C2=A0", "");
+//                String fourth = third.replace("?=", "");
+//                String fifth = fourth.replace("=E2=80=99", "'");
+//                ticketViewHolder.textViewSubject.setText(fifth);
+//            } else {
+//                ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
+//            }
+//
+//
+////            ticketViewHolder.ticket
+////                    .setBackgroundColor(mSelectedItemsIds.get(i) ? 0x9934B5E4
+////                            : Color.TRANSPARENT);
+//
+//
+//            if (checked_items.contains(id)) {
+//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
+//
+//            } else {
+//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//
+//
+////                if (ticketOverview.lastReply.equals("client")) {
+////
+////                            int color=Color.parseColor("#ededed");
+////                            ticketViewHolder.ticket.setBackgroundColor(color);
+////                    }
+////                else{
+////
+////                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+////
+////                    //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+////                }
+//
+//                //Toast.makeText(context, "no of items"+checked_items.toString(), Toast.LENGTH_SHORT).show();
+//
+////            ticketViewHolder.checkBox1.setOnCheckedChangeListener(null);
+////
+////            //ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+////            ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+////                @Override
+////                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+////
+////
+////                    if (b){
+////                        ticketViewHolder.checkBox1.setChecked(true);
+////                        ticketOverview.setChecked(true);
+////                        //stringBuffer.append(""+ticketOverview.getTicketID()+",");
+////                        if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
+////                            String first=subject.replace("=?UTF-8?Q?","");
+////                            String second=first.replace("_"," ");
+////                            String third=second.replace("=C2=A0","");
+////                            String fourth=third.replace("?=","");
+////                            String fifth=fourth.replace("=E2=80=99","'");
+////                            ticketViewHolder.textViewSubject.setText(fifth);
+////                            ticketSubject.add(fifth);
+////                        }
+////                        else{
+////                            ticketSubject.add(ticketOverview.ticketSubject);
+////                        }
+////                        //ticketSubject.add(ticketOverview.ticketSubject);
+////                        checked_items.add(ticketOverview.getTicketID());
+//////                  length=checked_items.size();
+////                        Log.d("ticketsubject",ticketSubject.toString());
+////                        Log.d("checkeditems",checked_items.toString().replace(" ",""));
+////                        Prefs.putString("tickets",checked_items.toString().replace(" ",""));
+////                        Prefs.putString("TicketSubject",ticketSubject.toString());
+////                        ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+////
+////                    }
+////                    else{
+////                        ticketOverview.setChecked(false);
+////                        int pos=checked_items.indexOf(ticketOverview.getTicketID());
+////                        int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
+////                        try {
+////                            checked_items.remove(pos);
+////                            ticketSubject.remove(pos1);
+////                        }
+////                        catch (ArrayIndexOutOfBoundsException e){
+////                            e.printStackTrace();
+////                        }
+////                        Log.d("Position",""+pos);
+////                        //checked_items.remove(checked_items.indexOf(ticketOverview.getTicketID()));
+////                        length--;
+////                        Log.d("NoOfItems",""+length);
+////                        Prefs.putInt("totalticketselected",length);
+////                        Log.d("checkeditems", "" + checked_items);
+////                        Prefs.putInt("NoOfItems",length);
+////                        Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+////                        Prefs.putString("TicketSubject",ticketSubject.toString());
+////                        Log.d("ticketsubject",ticketSubject.toString());
+////                        ticketViewHolder.checkBox1.setVisibility(View.GONE);
+////                        ticketViewHolder.checkBox1.setChecked(false);
+////                        if (!ticketOverview.lastReply.equals("client")){
+////                            int color=Color.parseColor("#e9e9e9");
+////                            ticketViewHolder.ticket.setBackgroundColor(color);
+////                        }
+////                        else{
+////                            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+////                        }
+////
+////
+////                        //notifyDataSetChanged();
+////
+////                    }
+////
+////
+////                }
+////            });
+////
+////
+////
+////
+////            if (ticketOverview.getChecked()){
+////                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+////                ticketViewHolder.checkBox1.setChecked(true);
+////                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+////            }
+////            else{
+////                ticketViewHolder.checkBox1.setVisibility(View.GONE);
+////                ticketViewHolder.checkBox1.setChecked(false);
+////                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+////            }
+//
+//                if (ticketOverview.ticketAttachments.equals("0")) {
+//                    ticketViewHolder.attachementView.setVisibility(View.GONE);
+//                } else {
+//                    ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+//                }
+//                if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
+////            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+////                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+////            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+//
+//                    if (Helper.compareDates(ticketOverview.dueDate) == 2) {
+//                        ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+//                        ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+//                        //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+//                        ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#ffff00"));
+//                        ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#A0A0A0"));
+//                        //ticketViewHolder.textViewOverdue.setBackgroundColor();
+//
+//                    } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+//                        ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+//                        ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+//                        //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
+////                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
+////
+//////set color
+////                 drawable.setColor(color);
+//                        ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#FF9999"));
+//                        ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
+//                    } else {
+//                        ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+//                    }
+//
+//
+//                ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
+//
+//                ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
+//                if (ticketOverview.getClientName().startsWith("=?")) {
+//                    String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
+//                    String newClientName = clientName.replaceAll("=E2=84=A2", "");
+//                    String finalName = newClientName.replace("=??Q?", "");
+//                    String name = finalName.replace("?=", "");
+//                    String newName = name.replace("_", " ");
+//                    Log.d("new name", newName);
+//                    ticketViewHolder.textViewClientName.setText(newName);
+//                } else {
+//                    ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+//
+//                }
+//                if (ticketOverview.ticketPriorityColor.equals("null")) {
+//                    ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+//                } else if (ticketOverview.ticketPriorityColor != null) {
+//                    ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+//                }
+//
+//
+////        else if (ticketOverview.ticketPriorityColor.equals("null")){
+////            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+////        }
+//                ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
+//
+//                if (!ticketOverview.countthread.equals("0")) {
+//                    ticketViewHolder.countThread.setText("(" + ticketOverview.getCountthread() + ")");
+//                } else {
+//                    ticketViewHolder.countThread.setVisibility(View.GONE);
+//                }
+//
+//                if (ticketOverview.sourceTicket.equals("chat")) {
+//                    int color = Color.parseColor("#3da6d7");
+//                    ticketViewHolder.source.setImageResource(R.drawable.chat);
+//                    //ticketViewHolder.source.setColorFilter(color);
+//                } else if (ticketOverview.sourceTicket.equals("web")) {
+//                    int color = Color.parseColor("#3da6d7");
+//                    ticketViewHolder.source.setImageResource(R.drawable.web);
+//                    //ticketViewHolder.source.setColorFilter(color);
+//                } else if (ticketOverview.sourceTicket.equals("agent")) {
+//                    int color = Color.parseColor("#3da6d7");
+//                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+//                    //ticketViewHolder.source.setColorFilter(color);
+//                } else if (ticketOverview.sourceTicket.equals("email")) {
+//                    int color = Color.parseColor("#3da6d7");
+//                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+//                    //ticketViewHolder.source.setColorFilter(color);
+//                } else if (ticketOverview.sourceTicket.equals("facebook")) {
+//                    int color = Color.parseColor("#3da6d7");
+//                    ticketViewHolder.source.setImageResource(R.drawable.facebook);
+//                    //ticketViewHolder.source.setColorFilter(color);
+//                } else if (ticketOverview.sourceTicket.equals("twitter")) {
+//                    int color = Color.parseColor("#3da6d7");
+//                    ticketViewHolder.source.setImageResource(R.drawable.twitter);
+//                    //ticketViewHolder.source.setColorFilter(color);
+//                } else if (ticketOverview.sourceTicket.equals("call")) {
+//                    int color = Color.parseColor("#3da6d7");
+//                    ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+//                    //ticketViewHolder.source.setColorFilter(color);
+//                } else {
+//                    ticketViewHolder.source.setVisibility(View.GONE);
+//                }
+//
+//                if (!ticketOverview.countcollaborator.equals("0")) {
+//
+//                    ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
+//                } else if (ticketOverview.countcollaborator.equals("0")) {
+//                    ticketViewHolder.countCollaborator.setVisibility(View.GONE);
+//                }
+//
+//                if (!ticketOverview.agentName.equals("Unassigned")) {
+//                    ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
+//                } else {
+//                    ticketViewHolder.agentAssigned.setText("Unassigned");
+//                    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+//                }
+//
+////else if (ticketOverview.getAgentName().equals("Unassigned")){
+////    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+////}
+//
+//
+////            if (!ticketOverview.lastReply.equals("client")){
+////                int color=Color.parseColor("#e9e9e9");
+////                ticketViewHolder.ticket.setBackgroundColor(color);
+////            }
+//
+//                if (ticketOverview.clientPicture.equals("")) {
+//                    ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+//
+//                } else if (ticketOverview.clientPicture.contains(".jpg")) {
+//                    mDrawableBuilder = TextDrawable.builder()
+//                            .round();
+////    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+//                    Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
+////        Glide.with(context)
+////            .load(ticketOverview.getClientPicture())
+////            .into(ticketViewHolder.roundedImageViewProfilePic);
+//
+//                    //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+//
+//                } else {
+//                    ColorGenerator generator = ColorGenerator.MATERIAL;
+//                    TextDrawable drawable = TextDrawable.builder()
+//                            .buildRound(letter, generator.getRandomColor());
+//                    ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+//                }
+//
+////            if (ticketOverview.clientPicture.equals("")){
+////                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+////            }
+////            else if (ticketOverview.clientPicture.startsWith("")){
+////                IImageLoader imageLoader = new PicassoLoader();
+////                imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
+////                //imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
+////            }
 //
 ////        if (ticketOverview.clientPicture != null && ticketOverview.clientPicture.trim().length() != 0)
 ////            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
@@ -2430,38 +3094,32 @@ private void multiSelect(int position) {
 ////                    .error(R.drawable.default_pic)
 ////                    .into(ticketViewHolder.roundedImageViewProfilePic);
 //
-//        ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mActionMode != null) {
-//                    onListItemSelect(i);
-//                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-//                }
+//                ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (mActionMode != null) {
+//                            onListItemSelect(i);
+//                        } else {
+//                            Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+//                            intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+//                            Prefs.putString("TICKETid", ticketOverview.ticketID + "");
+//                            Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
+//                            intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+//                            intent.putExtra("ticket_opened_by", ticketOverview.clientName);
+//                            intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
+//                            Log.d("clicked", "onRecyclerView");
+//                            v.getContext().startActivity(intent);
+//                        }
 //
-//                else{
-//                    Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
-//                    intent.putExtra("ticket_id", ticketOverview.ticketID + "");
-//                    Prefs.putString("TICKETid",ticketOverview.ticketID+"");
-//                    Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
-//                    intent.putExtra("ticket_number", ticketOverview.ticketNumber);
-//                    intent.putExtra("ticket_opened_by", ticketOverview.clientName);
-//                    intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
-//                    Log.d("clicked","onRecyclerView");
-//                    v.getContext().startActivity(intent);
-//                }
-//
-//            }
-//        });
-//        ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                onListItemSelect(i);
-//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-////                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-////                ticketViewHolder.checkBox1.setChecked(true);
-//                length++;
-//                Log.d("noofitems",""+length);
-//                Prefs.putInt("NoOfItems",length);
+//                    }
+//                });
+//                ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
+//                    @Override
+//                    public boolean onLongClick(View view) {
+//                        onListItemSelect(i);
+//                        length++;
+//                        Log.d("noofitems", "" + length);
+//                        Prefs.putInt("NoOfItems", length);
 //
 ////                ticketOverviewList.get(i).getTicketID();
 ////                Log.d("position",""+ticketOverviewList.get(i).getTicketID());
@@ -2476,10 +3134,9 @@ private void multiSelect(int position) {
 ////                }else{
 ////                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
 ////                }
-//                return true;
-//            }
-//        });
-//
+//                        return true;
+//                    }
+//                });
 //
 //
 ////        ticketViewHolder.checkBox1.setOnClickListener(new View.OnClickListener() {
@@ -2491,7 +3148,6 @@ private void multiSelect(int position) {
 ////                    ticketViewHolder.checkBox1.setChecked(true);
 ////            }
 ////        });
-//
 //
 //
 ////        ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -2529,6 +3185,7 @@ private void multiSelect(int position) {
 ////            }
 ////        });
 //
+//            }
 //        }
 //        private void onListItemSelect(int position) {
 //            ticketOverviewAdapter.toggleSelection(position);//Toggle the selection
@@ -2546,7 +3203,7 @@ private void multiSelect(int position) {
 //            if (mActionMode != null)
 //                //set action mode title on item selection
 //                mActionMode.setTitle(String.valueOf(ticketOverviewAdapter
-//                        .getSelectedCount()) + " selected");
+//                        .getSelectedCount()) + " ticket selected");
 //
 //
 //        }
@@ -2554,18 +3211,37 @@ private void multiSelect(int position) {
 //        public void toggleSelection(int position) {
 //            selectView(position, !mSelectedItemsIds.get(position));
 //        }
-//
-//
-//        //Remove selected selections
-//
-//
-//
 //        //Put or delete selected position into SparseBooleanArray
 //        public void selectView(int position, boolean value) {
-//            if (value)
+//            TicketOverview ticketOverview=ticketOverviewList.get(position);
+//            if (value) {
+//                ticketSubject.add(ticketOverview.ticketSubject);
+//                checked_items.add(ticketOverview.getTicketID());
+//                Log.d("ticketsubject",ticketSubject.toString());
+//                Log.d("checkeditems",checked_items.toString().replace(" ",""));
+//                Prefs.putString("tickets",checked_items.toString().replace(" ",""));
+//                Prefs.putString("TicketSubject",ticketSubject.toString());
 //                mSelectedItemsIds.put(position, value);
-//            else
+//            }
+//            else {
+//
+//                    int pos=checked_items.indexOf(ticketOverview.getTicketID());
+//                    int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
+//                try {
+//                    checked_items.remove(pos);
+//                    ticketSubject.remove(pos1);
+//                }catch (ArrayIndexOutOfBoundsException e){
+//                    e.printStackTrace();
+//                }
+//                Log.d("ticketsubject",ticketSubject.toString());
+//                Log.d("checkeditems",checked_items.toString().replace(" ",""));
+//                Prefs.putInt("totalticketselected",length);
+//                Log.d("checkeditems", "" + checked_items);
+//                Prefs.putInt("NoOfItems",length);
+//                Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+//                Prefs.putString("TicketSubject",ticketSubject.toString());
 //                mSelectedItemsIds.delete(position);
+//            }
 //
 //            notifyDataSetChanged();
 //        }
@@ -2575,6 +3251,7 @@ private void multiSelect(int position) {
 //        }
 //        public void removeSelection() {
 //            mSelectedItemsIds = new SparseBooleanArray();
+//            mActionMode=null;
 //            notifyDataSetChanged();
 //        }
 //
@@ -2583,14 +3260,14 @@ private void multiSelect(int position) {
 //            return mSelectedItemsIds.size();
 //        }
 //
-//        //Return all selected ids
-//        public SparseBooleanArray getSelectedIds() {
-//            return mSelectedItemsIds;
-//        }
-//        public void setSelectedIds(ArrayList<Integer> checked_items) {
-//            this.checked_items = checked_items;
-//            notifyDataSetChanged();
-//        }
+////        //Return all selected ids
+////        public SparseBooleanArray getSelectedIds() {
+////            return mSelectedItemsIds;
+////        }
+////        public void setSelectedIds(ArrayList<Integer> checked_items) {
+////            this.checked_items = checked_items;
+////            notifyDataSetChanged();
+////        }
 //        public TicketOverview getItem(int position){
 //            return ticketOverviewList.get(position);
 //        }
@@ -2605,7 +3282,7 @@ private void multiSelect(int position) {
 //        public  class TicketViewHolder extends RecyclerView.ViewHolder {
 //
 //            protected View ticket;
-//            AvatarView roundedImageViewProfilePic;
+//            ImageView roundedImageViewProfilePic;
 //            TextView textViewTicketID;
 //            TextView textViewTicketNumber;
 //            TextView textViewClientName;
@@ -2627,7 +3304,7 @@ private void multiSelect(int position) {
 //                ticket = v.findViewById(R.id.ticket);
 //                attachementView = (ImageView) v.findViewById(R.id.attachment_icon);
 //                ticketPriority = v.findViewById(R.id.priority_view);
-//                roundedImageViewProfilePic = (AvatarView) v.findViewById(R.id.imageView_default_profile);
+//                roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
 //                textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
 //                textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
 //                textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
@@ -2649,7 +3326,256 @@ private void multiSelect(int position) {
 //
 //    }
 
+    public class Toolbar_ActionMode_Callback implements android.support.v7.view.ActionMode.Callback {
 
+        private Context context;
+        private InboxTickets.TicketOverviewAdapter recyclerView_adapter;
+        private ArrayList<TicketOverview> message_models;
+        private boolean isListViewFragment;
+
+
+        public Toolbar_ActionMode_Callback(Context context, TicketOverviewAdapter ticketOverviewAdapter, InboxTickets.TicketOverviewAdapter recyclerView_adapter, List<TicketOverview> message_models, boolean b) {
+            this.context = context;
+            this.recyclerView_adapter = recyclerView_adapter;
+            this.message_models = (ArrayList<TicketOverview>) message_models;
+            this.isListViewFragment = isListViewFragment;
+        }
+
+        @Override
+        public boolean onCreateActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.multiplemenuinbox, menu);//Inflate the menu over action mode
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
+
+            //Sometimes the meu will not be visible so for that we need to set their visibility manually in this method
+            //So here show action menu according to SDK Levels
+            if (Build.VERSION.SDK_INT < 11) {
+                MenuItemCompat.setShowAsAction(menu.findItem(R.id.mergeticket), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+
+//            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_copy), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+//            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_forward), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+            } else {
+                menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//            menu.findItem(R.id.action_copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//            menu.findItem(R.id.action_forward).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            }
+//
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
+            StringBuffer stringBuffer = new StringBuffer();
+            try {
+                if (item != null) {
+                    item.getSubMenu().clearHeader();
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            switch (item.getItemId()) {
+                case R.id.mergeticket:
+//                Toast.makeText(, "You selected close menu.", Toast.LENGTH_SHORT).show();//Show toast
+                    try {
+                        if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                        String ticketId = Prefs.getString("tickets", null);
+                        List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                        int itemCount = items.size();
+                        if (itemCount == 1) {
+                            Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
+                            return false;
+                        } else {
+                            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+                            startActivity(intent);
+                        }
+
+//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//            startActivity(intent);
+
+                    } catch (NullPointerException e) {
+                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+//                    Log.d("clicked on closed","closed");
+                    setNullToActionMode();
+                    mode.finish();
+
+                    //mode.finish();
+                    break;
+                case R.id.action_statusClosed:
+                    try {
+                        if (!Prefs.getString("tickets", null).isEmpty()) {
+                            String tickets = Prefs.getString("tickets", null);
+                            int pos = tickets.indexOf("[");
+                            int pos1 = tickets.lastIndexOf("]");
+                            String text1 = tickets.substring(pos + 1, pos1);
+                            String[] namesList = text1.split(",");
+                            for (String name : namesList) {
+                                stringBuffer.append(name + ",");
+                            }
+                            int pos2 = stringBuffer.toString().lastIndexOf(",");
+                            ticket = stringBuffer.toString().substring(0, pos2);
+
+                            Log.d("tickets", ticket);
+                            try {
+                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("closedid", null))).execute();
+                                Prefs.putString("tickets", null);
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+
+                            }
+                            return true;
+                        } else {
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    } catch (NullPointerException e) {
+                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                    if (!Prefs.getString("tickets", null).equals("") || !Prefs.getString("tickets", null).equals("null") || !Prefs.getString("tickets", null).equals(null)) {
+
+
+                        Log.d("tickets", ticket);
+                        if (ticket.equals("") || ticket.equals(null)) {
+                            Toasty.warning(getActivity(), getString(R.string.noticket), Toast.LENGTH_SHORT).show();
+                            return false;
+                        } else {
+
+
+                        }
+
+                    } else {
+
+                    }
+                    break;
+                case R.id.action_statusResolved:
+                    try {
+                        if (!Prefs.getString("tickets", null).isEmpty()) {
+                            String tickets = Prefs.getString("tickets", null);
+                            int pos = tickets.indexOf("[");
+                            int pos1 = tickets.lastIndexOf("]");
+                            String text1 = tickets.substring(pos + 1, pos1);
+                            String[] namesList = text1.split(",");
+                            for (String name : namesList) {
+                                stringBuffer.append(name + ",");
+                            }
+                            int pos2 = stringBuffer.toString().lastIndexOf(",");
+                            ticket = stringBuffer.toString().substring(0, pos2);
+
+                            Log.d("tickets", ticket);
+                            try {
+                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
+                                Prefs.putString("tickets", null);
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+
+                            }
+                            return true;
+                        } else {
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    } catch (NullPointerException e) {
+                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.action_statusDeleted:
+                    try {
+                        if (!Prefs.getString("tickets", null).isEmpty()) {
+                            String tickets = Prefs.getString("tickets", null);
+                            int pos = tickets.indexOf("[");
+                            int pos1 = tickets.lastIndexOf("]");
+                            String text1 = tickets.substring(pos + 1, pos1);
+                            String[] namesList = text1.split(",");
+                            for (String name : namesList) {
+                                stringBuffer.append(name + ",");
+                            }
+                            int pos2 = stringBuffer.toString().lastIndexOf(",");
+                            ticket = stringBuffer.toString().substring(0, pos2);
+
+                            Log.d("tickets", ticket);
+                            try {
+                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("deletedid", null))).execute();
+                                Prefs.putString("tickets", null);
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+
+                            }
+                            return true;
+                        } else {
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    } catch (NullPointerException e) {
+                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                case R.id.assignticket:
+                    try {
+                        if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                        String ticketId = Prefs.getString("tickets", null);
+                        List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                        int itemCount = items.size();
+                        if (itemCount == 1) {
+                            Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
+                            return false;
+                        } else {
+                            Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+                            startActivity(intent);
+                        }
+
+//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//            startActivity(intent);
+
+                    } catch (NullPointerException e) {
+                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
+
+            }
+            return false;
+        }
+
+
+        @Override
+        public void onDestroyActionMode(android.support.v7.view.ActionMode mode) {
+
+            //When action mode destroyed remove selected selections and set action mode to null
+            //First check current fragment action mode
+            Log.d("onDestroyActionMode", "CAME HERE");
+            InboxTickets inboxTickets = new InboxTickets();
+            //recyclerView_adapter.removeSelection();
+            inboxTickets.setNullToActionMode();
+            ticketOverviewAdapter.removeSelection();
+            setNullToActionMode();
+//        ((InboxTickets) inboxTickets).setNullToActionMode();
+            mode.finish();
+
+            // remove selection
+//            Fragment recyclerFragment = new MainActivity().getFragment(1);//Get recycler fragment
+//            if (recyclerFragment != null)
+//                ((RecyclerView_Fragment) recyclerFragment).setNullToActionMode();//Set action mode null
+
+        }
+    }
 
 //    public class Toolbar_ActionMode_Callback implements android.support.v7.view.ActionMode.Callback {
 //
@@ -2668,7 +3594,7 @@ private void multiSelect(int position) {
 //
 //        @Override
 //        public boolean onCreateActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
-//            mode.getMenuInflater().inflate(R.menu.multiplemenu, menu);//Inflate the menu over action mode
+//            mode.getMenuInflater().inflate(R.menu.multiplemenuinbox, menu);//Inflate the menu over action mode
 //            return true;
 //        }
 //
@@ -2678,11 +3604,12 @@ private void multiSelect(int position) {
 //            //Sometimes the meu will not be visible so for that we need to set their visibility manually in this method
 //            //So here show action menu according to SDK Levels
 //            if (Build.VERSION.SDK_INT < 11) {
-//                MenuItemCompat.setShowAsAction(menu.findItem(R.id.actionclosed), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+//                MenuItemCompat.setShowAsAction(menu.findItem(R.id.mergeticket), MenuItemCompat.SHOW_AS_ACTION_NEVER);
+//
 ////            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_copy), MenuItemCompat.SHOW_AS_ACTION_NEVER);
 ////            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_forward), MenuItemCompat.SHOW_AS_ACTION_NEVER);
 //            } else {
-//                menu.findItem(R.id.actionclosed).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//                menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 ////            menu.findItem(R.id.action_copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 ////            menu.findItem(R.id.action_forward).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 //            }
@@ -2692,26 +3619,188 @@ private void multiSelect(int position) {
 //
 //        @Override
 //        public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
+//            StringBuffer stringBuffer = new StringBuffer();
+//            try {
+//                if (item != null) {
+//                    item.getSubMenu().clearHeader();
+//                }
+//            } catch (NullPointerException e) {
+//                e.printStackTrace();
+//            }
 //            switch (item.getItemId()) {
-//                case R.id.actionclosed:
+//                case R.id.mergeticket:
 ////                Toast.makeText(, "You selected close menu.", Toast.LENGTH_SHORT).show();//Show toast
-//                    Log.d("clicked on closed","closed");
+//                        try {
+//                            if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+//                                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                                return false;
+//                            }
+//                            String ticketId = Prefs.getString("tickets", null);
+//                            List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+//                            int itemCount = items.size();
+//                            if (itemCount == 1) {
+//                                Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
+//                                return false;
+//                            } else {
+//                                Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+//                                startActivity(intent);
+//                            }
+//
+////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+////            startActivity(intent);
+//
+//                        } catch (NullPointerException e) {
+//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                            e.printStackTrace();
+//                        }
+////                    Log.d("clicked on closed","closed");
 //                    setNullToActionMode();
 //                    mode.finish();
 //
 //                    //mode.finish();
 //                    break;
-////            case R.id.action_copy:
-////
-////                //Get selected ids on basis of current fragment action mode
-////
-////                Toast.makeText(context, "You selected Copy menu.", Toast.LENGTH_SHORT).show();//Show toast
-////                mode.finish();//Finish action mode
-////                break;
-////            case R.id.action_forward:
-////                Toast.makeText(context, "You selected Forward menu.", Toast.LENGTH_SHORT).show();//Show toast
-////                mode.finish();//Finish action mode
-////                break;
+//                case R.id.action_statusClosed:
+//                    try {
+//                        if (!Prefs.getString("tickets", null).isEmpty()) {
+//                            String tickets = Prefs.getString("tickets", null);
+//                            int pos = tickets.indexOf("[");
+//                            int pos1 = tickets.lastIndexOf("]");
+//                            String text1 = tickets.substring(pos + 1, pos1);
+//                            String[] namesList = text1.split(",");
+//                            for (String name : namesList) {
+//                                stringBuffer.append(name + ",");
+//                            }
+//                            int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                            ticket = stringBuffer.toString().substring(0, pos2);
+//
+//                            Log.d("tickets", ticket);
+//                            try {
+//                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("closedid", null))).execute();
+//                                Prefs.putString("tickets", null);
+//                                progressDialog.show();
+//                                progressDialog.setMessage(getString(R.string.pleasewait));
+//                            } catch (NumberFormatException e) {
+//                                e.printStackTrace();
+//
+//                            }
+//                            return true;
+//                        } else {
+//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }
+//                    } catch (NullPointerException e) {
+//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                    }
+//                    if (!Prefs.getString("tickets", null).equals("") || !Prefs.getString("tickets", null).equals("null") || !Prefs.getString("tickets", null).equals(null)) {
+//
+//
+//                        Log.d("tickets", ticket);
+//                        if (ticket.equals("") || ticket.equals(null)) {
+//                            Toasty.warning(getActivity(), getString(R.string.noticket), Toast.LENGTH_SHORT).show();
+//                            return false;
+//                        } else {
+//
+//
+//                        }
+//
+//                    }else {
+//
+//                    }
+//                    break;
+//                case R.id.action_statusResolved:
+//                    try {
+//                        if (!Prefs.getString("tickets", null).isEmpty()) {
+//                            String tickets = Prefs.getString("tickets", null);
+//                            int pos = tickets.indexOf("[");
+//                            int pos1 = tickets.lastIndexOf("]");
+//                            String text1 = tickets.substring(pos + 1, pos1);
+//                            String[] namesList = text1.split(",");
+//                            for (String name : namesList) {
+//                                stringBuffer.append(name + ",");
+//                            }
+//                            int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                            ticket = stringBuffer.toString().substring(0, pos2);
+//
+//                            Log.d("tickets", ticket);
+//                            try {
+//                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
+//                                Prefs.putString("tickets", null);
+//                                progressDialog.show();
+//                                progressDialog.setMessage(getString(R.string.pleasewait));
+//                            } catch (NumberFormatException e) {
+//                                e.printStackTrace();
+//
+//                            }
+//                            return true;
+//                        } else {
+//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }
+//                    } catch (NullPointerException e) {
+//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                    }
+//                    break;
+//                case R.id.action_statusDeleted:
+//                    try {
+//                        if (!Prefs.getString("tickets", null).isEmpty()) {
+//                            String tickets = Prefs.getString("tickets", null);
+//                            int pos = tickets.indexOf("[");
+//                            int pos1 = tickets.lastIndexOf("]");
+//                            String text1 = tickets.substring(pos + 1, pos1);
+//                            String[] namesList = text1.split(",");
+//                            for (String name : namesList) {
+//                                stringBuffer.append(name + ",");
+//                            }
+//                            int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                            ticket = stringBuffer.toString().substring(0, pos2);
+//
+//                            Log.d("tickets", ticket);
+//                            try {
+//                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("deletedid", null))).execute();
+//                                Prefs.putString("tickets", null);
+//                                progressDialog.show();
+//                                progressDialog.setMessage(getString(R.string.pleasewait));
+//                            } catch (NumberFormatException e) {
+//                                e.printStackTrace();
+//
+//                            }
+//                            return true;
+//                        } else {
+//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }
+//                    } catch (NullPointerException e) {
+//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                    }
+//                case R.id.assignticket:
+//                    try {
+//                        if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }
+//                        String ticketId = Prefs.getString("tickets", null);
+//                        List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+//                        int itemCount = items.size();
+//                        if (itemCount == 1) {
+//                            Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
+//                            return false;
+//                        } else {
+//                            Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+//                            startActivity(intent);
+//                        }
+//
+////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
+////            startActivity(intent);
+//
+//                    } catch (NullPointerException e) {
+//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                    }
+////                    case android.R.id.home:
+////                        Toast.makeText(context, "clicked on back button", Toast.LENGTH_SHORT).show();
 //
 //
 //            }
@@ -2728,11 +3817,15 @@ private void multiSelect(int position) {
 //            InboxTickets inboxTickets=new InboxTickets();
 //            //recyclerView_adapter.removeSelection();
 //            inboxTickets.setNullToActionMode();
+//
 //            ticketOverviewAdapter.removeSelection();
+//            mActionMode=null;
 //            setNullToActionMode();
 ////        ((InboxTickets) inboxTickets).setNullToActionMode();
 //            mode.finish();
-//
+//            //new FetchFirst(getActivity(), page).execute();
+////            progressDialog.setMessage(getString(R.string.pleasewait));
+////            progressDialog.show();
 //            // remove selection
 ////            Fragment recyclerFragment = new MainActivity().getFragment(1);//Get recycler fragment
 ////            if (recyclerFragment != null)
@@ -2740,6 +3833,7 @@ private void multiSelect(int position) {
 //
 //        }
 //    }
+
 
 
 

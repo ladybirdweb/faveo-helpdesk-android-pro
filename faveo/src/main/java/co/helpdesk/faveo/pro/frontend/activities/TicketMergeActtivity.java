@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -66,6 +69,40 @@ ProgressDialog progressDialog;
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ticket_merge_acttivity);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        //final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            public void run() {
+//                //
+//                // Do the stuff
+//                //
+//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+//                try {
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+//                    String role1=jsonObject2.getString("role");
+//                    if (role1.equals("user")){
+//                        Prefs.clear();
+//                        //Prefs.putString("role",role);
+//                        Intent intent=new Intent(TicketMergeActtivity.this,LoginActivity.class);
+//                        Toasty.info(TicketMergeActtivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                        startActivity(intent);
+//
+//
+//                    }
+//
+//
+//                } catch (JSONException | NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                handler.postDelayed(this, 30000);
+//            }
+//        };
+//        runnable.run();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
@@ -166,10 +203,11 @@ ProgressDialog progressDialog;
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TicketMergeActtivity.this,MainActivity.class);
-                Prefs.putString("tickets", null);
-                dataArrayList.clear();
-                startActivity(intent);
+//                Intent intent=new Intent(TicketMergeActtivity.this,MainActivity.class);
+//                Prefs.putString("tickets", null);
+//                dataArrayList.clear();
+//                startActivity(intent);
+                onBackPressed();
             }
         });
 
@@ -216,6 +254,7 @@ ProgressDialog progressDialog;
                 for (int i=0;i<cc1.length;i++){
                     sb1.append("&t_id[]="+cc1[i].toString());
                 }
+                String childId=sb1.toString();
                 Log.d("ids are :",sb1.toString());
 //                cc = sb.toString().split(",");
 //                for (String n : cc) {
@@ -231,7 +270,7 @@ ProgressDialog progressDialog;
                 try {
                     title = URLEncoder.encode(title.trim(), "utf-8");
                     reason = URLEncoder.encode(reason.trim(), "utf-8");
-
+                    childId=URLEncoder.encode(childId.trim(), "utf-8");
 
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -242,18 +281,24 @@ ProgressDialog progressDialog;
                     new MergeTicket(id, title, reason+sb1.toString()).execute();
 
                 }
-
-
-
-
-
-
-
-
-
             }
         });
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+
+        super.onBackPressed();
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
     }
     private class MergeTicket extends AsyncTask<String, Void, String> {
         int parentId;
@@ -303,7 +348,21 @@ ProgressDialog progressDialog;
             }catch (JSONException e){
                 e.printStackTrace();
             }
+            try{
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("response");
+                //JSONObject jsonObject2=jsonObject1.getJSONObject("message");
+                String message=jsonObject1.getString("message");
+                if (message.equals("tickets from different users")){
+                    Toasty.warning(TicketMergeActtivity.this, getString(R.string.ticketsFromDifferentUsers), Toast.LENGTH_LONG).show();
+                    return;
+                }
 
+
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             try {
 
@@ -316,10 +375,10 @@ ProgressDialog progressDialog;
                     Prefs.putString("tickets", null);
                     startActivity(intent);
                 }
-                else if (message.equals("tickets from different users")){
-                    Toasty.warning(TicketMergeActtivity.this, getString(R.string.ticketsFromDifferentUsers), Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                else if (message.equals("tickets from different users")){
+//                    Toasty.warning(TicketMergeActtivity.this, getString(R.string.ticketsFromDifferentUsers), Toast.LENGTH_LONG).show();
+//                    return;
+//                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
