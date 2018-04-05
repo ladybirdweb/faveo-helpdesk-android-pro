@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ActivityManager;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ import org.w3c.dom.Text;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BuildConfig;
+import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -59,6 +62,7 @@ public class SplashActivity extends AppCompatActivity {
     TextView textViewtryAgain;
     String error;
     Context context;
+    Button button;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -79,6 +83,7 @@ public class SplashActivity extends AppCompatActivity {
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        button= (Button) findViewById(R.id.clear_cache);
 
         //httpConnection=new HTTPConnection(getApplicationContext());
         //welcomeDialog=new WelcomeDialog();
@@ -344,6 +349,25 @@ public class SplashActivity extends AppCompatActivity {
 
             } catch (JSONException | NullPointerException e) {
                 //Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                button.setVisibility(View.VISIBLE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //new FaveoApplication().clearApplicationData();
+                        NotificationManager notificationManager =
+                                (NotificationManager) SplashActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancelAll();
+                        FaveoApplication.getInstance().clearApplicationData();
+                        String url=Prefs.getString("URLneedtoshow",null);
+                        Prefs.clear();
+                        Prefs.putString("URLneedtoshow",url);
+                        SplashActivity.this.getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
+                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        Toasty.success(SplashActivity.this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 loading.setVisibility(View.GONE);
                 textViewtryAgain.setVisibility(View.VISIBLE);
                         textViewrefresh.setVisibility(View.VISIBLE);

@@ -126,9 +126,9 @@
         <!-- <meta-data -->
         <!-- android:name="firebase_crash_collection_enabled" -->
         <!-- android:value="false" /> -->
-        <!--<meta-data-->
-            <!--android:name="io.fabric.ApiKey"-->
-            <!--android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />-->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />
         <service android:name=".frontend.services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
