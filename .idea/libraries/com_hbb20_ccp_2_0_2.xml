@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.hbb20:ccp-2.0.2">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ccp-2.0.2.aar/210c9d0825f3ecfe5797a4b56152e5af/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ccp-2.0.2.aar/210c9d0825f3ecfe5797a4b56152e5af/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ccp-2.0.2.aar/fa5db00f8a768b3c3f9727675584626e/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ccp-2.0.2.aar/fa5db00f8a768b3c3f9727675584626e/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

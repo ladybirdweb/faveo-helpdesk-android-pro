@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.joanzapata.iconify:android-iconify-2.2.2">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/android-iconify-2.2.2.aar/8d62de90f4e53fffa6f8efb24ef70738/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/android-iconify-2.2.2.aar/8d62de90f4e53fffa6f8efb24ef70738/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/android-iconify-2.2.2.aar/00c9e8080088d5d22e35c9c8a57cd671/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/android-iconify-2.2.2.aar/00c9e8080088d5d22e35c9c8a57cd671/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
