@@ -57,7 +57,6 @@ class HTTPConnection{
 
         try {
             url = new URL(stringURL);
-
             final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Offer-type", "application/json");
             connection.setRequestProperty("Accept", "application/json");

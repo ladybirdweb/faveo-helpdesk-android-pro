@@ -1,7 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 //import android.app.SearchManager;
 //import android.content.Context;
@@ -20,7 +19,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -41,7 +39,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -63,18 +60,15 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
 import com.hbb20.CountryCodePicker;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
-import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.pixplicity.easyprefs.library.Prefs;
 //import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -91,7 +85,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 //import java.text.DecimalFormat;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 //import java.util.List;
 
@@ -103,24 +96,21 @@ import co.helpdesk.faveo.pro.MyDeserializer;
 import co.helpdesk.faveo.pro.MyResponse;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UserClient;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.adapters.CollaboratorAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.CollaboratorSuggestion;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import es.dmoral.toasty.Toasty;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Multipart;
 
 /**
  * This activity is for responsible for creating the ticket.
@@ -131,8 +121,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     boolean allCorrect;
     String term;
     String collaborators=null;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter,autocompletetextview,stringArrayAdapterHint,arrayAdapterCC;
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter,autocompletetextview,stringArrayAdapterHint;
     ArrayAdapter<Data> arrayAdapterCollaborator;
+    ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
+    CollaboratorAdapter adapter=null;
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
     AutoCompleteTextView editTextEmail;
@@ -173,7 +165,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     @BindView(R.id.attachment_close)
     ImageButton imageButtonAttachmentClose;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,staffItemsHint,emailHint;
+    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,staffItemsHint;
+    ArrayList<CollaboratorSuggestion> emailHint;
     int id=0;
     int id1=0;
     String email1,collaborator;
@@ -354,11 +347,13 @@ cc=new String[0];
 cc1=new String[0];
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
         multiAutoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.collaborator);
-        stringArraylist=new ArrayList<>();
-        arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
+        stringArraylist=new ArrayList<Data>();
+        //adapter=new CollaboratorAdapter(this,stringArraylist);
+        //arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
         multiAutoCompleteTextViewCC.setDropDownWidth(1000);
         multiAutoCompleteTextViewCC.setThreshold(3);
         multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        multiAutoCompleteTextViewCC.setAdapter(adapter);
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -418,9 +413,10 @@ cc1=new String[0];
         });
         editTextEmail= (AutoCompleteTextView) findViewById(R.id.email_edittext);
         emailHint=new ArrayList<>();
-        arrayAdapterCC=new ArrayAdapter<Data>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,emailHint);
+        arrayAdapterCC=new CollaboratorAdapter(this,emailHint);
+        //arrayAdapterCC=new ArrayAdapter<Data>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,emailHint);
         editTextEmail.setThreshold(2);
-        editTextEmail.setDropDownWidth(1000);
+        editTextEmail.setDropDownWidth(1500);
         editTextEmail.addTextChangedListener(passwordWatcheredittextSubject);
         editTextEmail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -428,9 +424,15 @@ cc1=new String[0];
                 arrayAdapterCC = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                 String name1=editTextEmail.getText().toString();
                 for (int j=0;i<emailHint.size();i++){
-                    Data data = emailHint.get(j);
-                    id = data.getID();
-                    email1=data.getName();
+                    CollaboratorSuggestion data = emailHint.get(j);
+                    id = data.getId();
+                    email1=data.getEmail();
+                    firstname=data.getFirst_name();
+                    lastname=data.getLast_name();
+                    editTextEmail.setText(email1);
+                    editTextFirstName.setText(firstname);
+                    editTextLastName.setText(lastname);
+
                 }
 
             }
@@ -739,10 +741,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 
         Uri uri1 = null;
         String path=getPath(CreateTicketActivity.this,uri);
-//        Log.d("PATH",path);
-        byte[] buf;
-
-
+        Log.d("PATH",path);
 //        try {
 //            assert path != null;
 //
@@ -763,7 +762,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         mimeType = getContentResolver().getType(uri);
 
         fileName=getFileName(uri);
-        uploadFile(uri);
+        //uploadFile(uri);
 //        final Uri returnUri = data.getData();
 //        Cursor returnCursor =
 //                getContentResolver().query(returnUri, null, null, null, null);
@@ -1947,13 +1946,8 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         email1 = editTextEmail.getText().toString();
         Log.d("emialwithname",email1);
 
-        if (!email1.equals("")&&email1.contains("<")){
-            int pos=email1.indexOf("<");
-            int pos2=email1.lastIndexOf(">");
-            email2=email1.substring(pos+1,pos2);
-        }
-        else if (!email1.contains("<")){
-            email2=editTextEmail.getText().toString();
+        if (!email1.equals("")){
+            email2=email1;
         }
         else{
             allCorrect=false;
@@ -2456,17 +2450,19 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         String term = editTextEmail.getText().toString();
         if (InternetReceiver.isConnected()) {
             if (term.equals("")) {
-                arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+                //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                 //new FetchCollaborator("s").execute();
-                Data data = new Data(0, "No result found");
-                emailHint.add(data);
+                //Data data = new Data(0, "No result found");
+                //emailHint.add(data);
 //                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
 //                stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
             } else {
-                arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+                //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                 new FetchCollaborator(term).execute();
                 editTextEmail.setAdapter(arrayAdapterCC);
                 //stringArrayAdapterCC.notifyDataSetChanged();
@@ -2500,7 +2496,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                     arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                     new FetchCollaboratorCC(term.trim()).execute();
                     //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                    multiAutoCompleteTextViewCC.setAdapter(arrayAdapterCollaborator);
+                    multiAutoCompleteTextViewCC.setAdapter(arrayAdapterCC);
                 }
 //            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
                 else if (term.equals("")) {
@@ -2565,12 +2561,14 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                     id1 = Integer.parseInt(jsonObject1.getString("id"));
                     String first_name=jsonObject1.getString("first_name");
                     String last_name=jsonObject1.getString("last_name");
+                    String profilePic=jsonObject1.getString("profile_pic");
                     //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-                    Data data = new Data(id1,first_name + " " + last_name + " <" + email + ">");
-                    emailHint.add(data);
+                    CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id1,first_name,last_name,email,profilePic);
+                    //Data data = new Data(id1,first_name + " " + last_name + " <" + email + ">");
+                    emailHint.add(collaboratorSuggestion);
 
                 }
-                multiAutoCompleteTextViewCC.setAdapter(arrayAdapterCollaborator);
+                editTextEmail.setAdapter(arrayAdapterCC);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -2620,9 +2618,12 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                         id1 = Integer.parseInt(jsonObject1.getString("id"));
                         String first_name = jsonObject1.getString("first_name");
                         String last_name = jsonObject1.getString("last_name");
+                        String profilePic=jsonObject1.getString("profile_pic");
                         //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
+                        //CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(first_name,last_name,email,profilePic);
                         Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
                         stringArraylist.add(data);
+                        Log.d("array",stringArraylist.toString());
 
 //                        Set<String> stringSet=new HashSet<>(stringArraylist);
 //                        stringArraylist.clear();
@@ -2642,10 +2643,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
                 }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            catch (NullPointerException e){
+            } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
             }
 

@@ -73,7 +73,7 @@
                     android:background="@drawable/ic_action_attach_file"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
                 <Button
                     android:id="@+id/buttonSubmit"
