@@ -13,7 +13,7 @@
         android:theme="@style/AppThemeOverlay.ActionBar">
 
         <Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarCollaborator"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -92,6 +92,15 @@
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
                     android:visibility="visible"/>
+
+                <ProgressBar
+                    android:id="@+id/collaboratorProgressBarReply"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/buttonSearchUser"
+                    android:layout_marginEnd="12dp"
+                    android:layout_toStartOf="@+id/buttonSearchUser"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
         </Toolbar>

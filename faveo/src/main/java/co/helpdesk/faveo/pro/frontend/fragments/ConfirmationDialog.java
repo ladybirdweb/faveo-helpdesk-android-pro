@@ -4,6 +4,7 @@ package co.helpdesk.faveo.pro.frontend.fragments;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -70,5 +71,4 @@ private Context context;
         return builder.create();
 
     }
-
 }

@@ -86,9 +86,25 @@
                     android:textColor="#ffffff"
                     android:textSize="12sp" />
 
+                <ProgressBar
+                    android:id="@+id/createTicketProgressbar"
+                    android:layout_width="30dp"
+                    android:visibility="gone"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/attachment"
+                    android:layout_marginEnd="11dp"
+                    android:layout_toStartOf="@+id/attachment" />
+
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/faveo">
+
+        </View>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"

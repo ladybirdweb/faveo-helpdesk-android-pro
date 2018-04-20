@@ -86,7 +86,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         else{
             ticketViewHolder.relativeLayout.setVisibility(View.VISIBLE);
             ticketViewHolder.view.setVisibility(View.VISIBLE);
-            ticketViewHolder.textView.setText("Show Attachment "+"("+ticketThread.getNoOfAttachments()+")");
+            ticketViewHolder.textView.setText("Attachment "+"("+ticketThread.getNoOfAttachments()+")");
 
         }
 
@@ -101,48 +101,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
                 Log.d("MultipleFileNameFrom",ticketThread.getName());
                 view.getContext().startActivity(intent);
 
-//                String title;
-//                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-//                StrictMode.setVmPolicy(builder.build());
-//                byte[] decodedString;
-//                String base64String;
-//                TicketThread ticketThread1=ticketThreadList.get(i);
-//                //Intent intent=new Intent(view.getContext(), ShowingAttachment.class);
-//                title=ticketThread1.getName();
-//                base64String=ticketThread1.getFile();
-//                decodedString = Base64.decode(base64String, Base64.DEFAULT);
-//                Prefs.putString("base64Image",ticketThread1.getFile());
-//                Prefs.putString("attachmentTitle",ticketThread1.getName());
-//                Prefs.putString("type",ticketThread1.getType());
-//                try {
-//                    String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                    File myFile = new File(path+"/"+title);
-//                    File file = new File(path+"/"+title);
-//                    Uri uri1 = Uri.fromFile(file);
-//                    Log.d("URI",uri1.toString());
-//                    myFile.createNewFile();
-//                    FileOutputStream fOut = new FileOutputStream(myFile);
-//                    fOut.write(decodedString);
-//                    OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-//                    myOutWriter.append(title + "came from storage");
-//                    myOutWriter.close();
-//                    fOut.close();
-//                    Intent myIntent = new Intent(Intent.ACTION_VIEW);
-//                    myIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                    String mime= URLConnection.guessContentTypeFromStream(new FileInputStream(myFile));
-//                    if(mime==null) mime=URLConnection.guessContentTypeFromName(myFile.getName());
-//                    myIntent.setDataAndType(Uri.fromFile(myFile), mime);
-//                    view.getContext().startActivity(myIntent);
-//                    //view.getContext().startActivity(Intent.createChooser(myIntent, "Choose an app to open with"));
-//
-//                    //Toast.makeText(ShowingAttachment.this, "Done writing SD 'mysdfile.txt'", Toast.LENGTH_SHORT).show();
-//                    //txtData.setText("");
-//                } catch (Exception e) {
-//                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//                Log.d("TYPE",ticketThread1.getType());
-//                Log.d("imagefile", ticketThread1.getFile());
-                //view.getContext().startActivity(intent);
             }
         });
 

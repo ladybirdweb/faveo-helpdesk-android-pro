@@ -457,8 +457,9 @@ public class LoginActivity extends AppCompatActivity {
         Context context;
         String companyURL;
         String baseURL;
+        String apiDisabled;
 
-        VerifyURL(Context context, String companyURL) {
+            VerifyURL(Context context, String companyURL) {
             this.context = context;
             this.companyURL = companyURL;
             baseURL = companyURL;
@@ -472,7 +473,19 @@ public class LoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             progressDialogVerifyURL.dismiss();
-            if (result == null) {
+            //Log.d("result",result);
+            try {
+                apiDisabled = Prefs.getString("400", null);
+                if (apiDisabled.equals("badRequest")) {
+                    Toasty.warning(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
+
+             if (result == null) {
                 count++;
                 Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
                 return;
@@ -490,6 +503,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             else if (result.contains("success")) {
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     dynamicShortcut();
                 }

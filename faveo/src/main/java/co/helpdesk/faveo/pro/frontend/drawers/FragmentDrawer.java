@@ -473,8 +473,30 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             }
 
             catch (JSONException e) {
-                Toasty.error(getActivity(), "Parsing Error!", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
+                String state1=Prefs.getString("400",null);
+
+                try {
+                    if (state1.equals("badRequest")) {
+                        Toasty.info(getActivity(), getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
+//                        new AlertDialog.Builder(MainActivity.this)
+//                                .setTitle(getString(R.string.apidisabled))
+//                                .setMessage(getString(R.string.enableApi))
+//                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                }).setNegativeButton("Cancel", null).show();
+                    }
+                    else{
+                        Toasty.error(getActivity(), "Parsing Error!", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }catch (NullPointerException e1){
+                    e1.printStackTrace();
+                }
+
+
             }
 //            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
 //            builder.setTitle("Welcome to FAVEO");

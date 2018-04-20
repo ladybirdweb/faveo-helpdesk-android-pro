@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.loader.PicassoLoader;
+import agency.tango.android.avatarview.views.AvatarView;
 import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.model.CollaboratorSuggestion;
@@ -38,7 +40,12 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         CollaboratorSuggestion customer = getItem(position);
-        String letter= String.valueOf(customer.getFirst_name().charAt(0));
+        IImageLoader imageLoader;
+        try {
+            String letter = String.valueOf(customer.getFirst_name().charAt(0));
+        }catch (StringIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.collaborator_row, parent, false);
         }
@@ -51,15 +58,12 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
             txtCustomer.setText(customer.getFirst_name() + " " + customer.getLast_name());
 
         if (ivCustomerImage != null && customer.getProfile_pic() != null) {
-            if (customer.getProfile_pic().equals("jpg")||customer.getProfile_pic().equals("jpeg")||customer.getProfile_pic().equals("png")) {
-
+            if (customer.getProfile_pic().equals(".jpg")||customer.getProfile_pic().equals(".jpeg")||customer.getProfile_pic().equals(".png")) {
                 Picasso.with(context).load(customer.getProfile_pic()).transform(new CircleTransform()).into(ivCustomerImage);
             }
             else{
-                Picasso.with(context)
-                        .load(customer.getProfile_pic())
-                        .placeholder(R.drawable.avatar_empty)
-                        .into(ivCustomerImage);
+                Log.d("cameInThisBlock","true");
+                Picasso.with(context).load(customer.getProfile_pic()).transform(new CircleTransform()).into(ivCustomerImage);
             }
         }
 

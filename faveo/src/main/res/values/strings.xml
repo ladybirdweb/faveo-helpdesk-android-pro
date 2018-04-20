@@ -186,6 +186,7 @@
     <string name="status_deleted">Moved to trash</string>
     <string name="status_opened">Status changed to open</string>
     <string name="status_resolved">Status changed to resolved</string>
+    <string name="statusHalt">Status changed to Halt-SLA</string>
     <string name="status_request_for_close">Status changed to request for close</string>
     <string name="please_select_ticket">Please select a ticket to change status</string>
     <string name="please_select_status">Please select one status</string>
@@ -410,6 +411,13 @@
     <string name="noTicket">No tickets found</string>
     <string name="noUser">No users found</string>
     <string name="roleChanged">Role has been changed!user can not use the app.</string>
+    <string name="fileSize">File size should not exceed 6 MB</string>
+    <string name="apiDisabled">Please enable the API from the web application.</string>
+    <string name="successfullyChanged">Successfully changed the status</string>
+    <string name="urlchange">Please check your helpdesk url,username and password!Some credentials may have changed.try to log in again with the new credentials.</string>
+    <string name="apidisabled">API is disabled for the web application</string>
+    <string name="enableApi">Please enable the API from the web application to use the app</string>
+    <string name="errorFaveo">Error in Faveo</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

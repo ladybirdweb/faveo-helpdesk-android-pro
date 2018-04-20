@@ -59,6 +59,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.frontend.views.Fab;
+import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 //import co.helpdesk.faveo.pro.model.TicketDetail;
 import es.dmoral.toasty.Toasty;
@@ -100,7 +101,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     String cameFromNotification;
     public static boolean isShowing = false;
     TextView textViewStatus, textviewAgentName, textViewTitle, textViewSubject;
-
+    ArrayList<Data> statusItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,22 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ticket_detail);
         setupFab();
-
+        statusItems=new ArrayList<>();
+        JSONObject jsonObject1;
+        Data data;
+        String json1 = Prefs.getString("DEPENDENCY", "");
+        //statusItems.add(new Data(0, "Please select help topic"));
+        try {
+            jsonObject1 = new JSONObject(json1);
+            JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("status");
+            for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
+                Data data1 = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("name"));
+                statusItems.add(data1);
+                //menu.add("First Menu");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 //        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 //
 //        StrictMode.setThreadPolicy(policy);
@@ -222,12 +238,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         startActivity(intent);
                     }
                     else if (Prefs.getString("cameFromNotification",null).equals("false")){
-                         Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
-                         startActivity(intent);
+                         onBackPressed();
+//                         Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
+//                         startActivity(intent);
                      }
                     else{
-                        Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
-                        startActivity(intent);
+                        onBackPressed();
+//                        Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
+//                        startActivity(intent);
                     }
 
 
@@ -367,13 +385,31 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
 
+
+
     }
+
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu)
+//    {
+//
+////        if (statusItems.isEmpty()) return true;
+////        for (int i=0; i<statusItems.size(); i++ ){
+////
+////        }
+//        return true;
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        for (int i=0;i<statusItems.size();i++){
+            Data data=statusItems.get(i);
+            menu.add(data.getName());
+        }
+
         getMenuInflater().inflate(R.menu.menu_main_new, menu);
-        //mToolbar.getMenu();
+//        mToolbar.getMenu();
 
 
         return true;
@@ -389,23 +425,45 @@ public class TicketDetailActivity extends AppCompatActivity implements
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = 0;
+//        try {
+//            if (item != null) {
+//                item.getSubMenu().clearHeader();
+//            }
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
 
-        try {
-            if (item != null) {
-                item.getSubMenu().clearHeader();
+        for (int i=1;i<statusItems.size();i++){
+            Data data=statusItems.get(i);
+            if (data.getName().equals(item.toString())){
+                id=data.getID();
+                Log.d("ID",""+id);
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
-        Fragment fragment = null;
-        title = getString(R.string.app_name);
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        status = Prefs.getString("ticketstatus", null);
 
+        if (status.equalsIgnoreCase(item.toString())){
+            Toasty.warning(TicketDetailActivity.this, "Ticket is already in "+item.toString()+" state", Toast.LENGTH_SHORT).show();
+        }
+        else{
+                            new StatusChange(Integer.parseInt(ticketID),id).execute();
+                progressDialog.show();
+                progressDialog.setMessage(getString(R.string.pleasewait));
 
-        if (id == R.id.buttonsave) {
+                Toasty.success(TicketDetailActivity.this, getString(R.string.successfullyChanged), Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+        }
+        Log.d("item", String.valueOf(item));
+
+//        Fragment fragment = null;
+//        title = getString(R.string.app_name);
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+        int id1 = item.getItemId();
+        if (id1 == R.id.buttonsave) {
             Intent intent = new Intent(TicketDetailActivity.this, TicketSaveActivity.class);
             startActivity(intent);
             finish();
@@ -422,78 +480,73 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //            }
 
         }
-
-
-//        String ticketid1= Prefs.getString("ticketid",null);
-//        StringBuilder stringBuilder=new StringBuilder(ticketid1);
-//        stringBuilder.deleteCharAt(ticketid1.length()-1);
-//        String ticketid=stringBuilder.toString();
 //
-//        if (id == R.id.action_search) {
-//            startActivity(new Intent(MainActivity.this, SearchActivity.class));
-//            return true;
+//
+////        String ticketid1= Prefs.getString("ticketid",null);
+////        StringBuilder stringBuilder=new StringBuilder(ticketid1);
+////        stringBuilder.deleteCharAt(ticketid1.length()-1);
+////        String ticketid=stringBuilder.toString();
+//
+//
+//        if (id == R.id.action_statusOpen) {
+
+//            if (status.equals("Open")) {
+//                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_open), Toast.LENGTH_SHORT).show();
+//                return false;
+//            } else {
+//                new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("openid", null))).execute();
+//                progressDialog.show();
+//                progressDialog.setMessage(getString(R.string.pleasewait));
+//
+//                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_SHORT).show();
+////                finish();
+////                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+//            }
+//
+//        } else if (id == R.id.action_statusResolved) {
+//            status = Prefs.getString("ticketstatus", null);
+//            if (status.equals("Resolved")) {
+//                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_alreday_resolved), Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//            new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
+//            progressDialog.show();
+//            progressDialog.setMessage(getString(R.string.pleasewait));
+//
+//            //Toasty.success(TicketDetailActivity.this,getString(R.string.status_resolved),Toast.LENGTH_SHORT).show();
+////            finish();
+////            startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+//
+//        } else if (id == R.id.action_statusClosed) {
+//            status = Prefs.getString("ticketstatus", null);
+//            if (status.equals("Closed")) {
+//                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_closed), Toast.LENGTH_SHORT).show();
+//                return false;
+//            } else {
+//                new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("closedid", null))).execute();
+//                progressDialog.show();
+//                progressDialog.setMessage(getString(R.string.pleasewait));
+//                //Prefs.putString("ticketstatus","Closed");
+//                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_SHORT).show();
+////                finish();
+////                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
+//            }
+//
+//        } else if (id == R.id.action_statusDeleted) {
+//            status = Prefs.getString("ticketstatus", null);
+//            if (status.equals("Deleted")) {
+//                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_deleted), Toast.LENGTH_SHORT).show();
+//                return false;
+//            } else {
+//                new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("deletedid", null))).execute();
+//                progressDialog.show();
+//                progressDialog.setMessage(getString(R.string.pleasewait));
+//
+//                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_SHORT).show();
+//
+//            }
+//
 //        }
-
-
-        if (id == R.id.action_statusOpen) {
-            status = Prefs.getString("ticketstatus", null);
-            if (status.equals("Open")) {
-                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_open), Toast.LENGTH_SHORT).show();
-                return false;
-            } else {
-                new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("openid", null))).execute();
-                progressDialog.show();
-                progressDialog.setMessage(getString(R.string.pleasewait));
-
-                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_SHORT).show();
-//                finish();
-//                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
-            }
-
-        } else if (id == R.id.action_statusResolved) {
-            status = Prefs.getString("ticketstatus", null);
-            if (status.equals("Resolved")) {
-                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_alreday_resolved), Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
-            progressDialog.show();
-            progressDialog.setMessage(getString(R.string.pleasewait));
-
-            //Toasty.success(TicketDetailActivity.this,getString(R.string.status_resolved),Toast.LENGTH_SHORT).show();
-//            finish();
-//            startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
-
-        } else if (id == R.id.action_statusClosed) {
-            status = Prefs.getString("ticketstatus", null);
-            if (status.equals("Closed")) {
-                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_closed), Toast.LENGTH_SHORT).show();
-                return false;
-            } else {
-                new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("closedid", null))).execute();
-                progressDialog.show();
-                progressDialog.setMessage(getString(R.string.pleasewait));
-                //Prefs.putString("ticketstatus","Closed");
-                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_SHORT).show();
-//                finish();
-//                startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
-            }
-
-        } else if (id == R.id.action_statusDeleted) {
-            status = Prefs.getString("ticketstatus", null);
-            if (status.equals("Deleted")) {
-                Toasty.warning(TicketDetailActivity.this, getString(R.string.ticket_already_deleted), Toast.LENGTH_SHORT).show();
-                return false;
-            } else {
-                new StatusChange(Integer.parseInt(ticketID), Integer.parseInt(Prefs.getString("deletedid", null))).execute();
-                progressDialog.show();
-                progressDialog.setMessage(getString(R.string.pleasewait));
-
-                //Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_SHORT).show();
-
-            }
-
-        }
 //        else{
 //            Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
 //        }
@@ -1068,10 +1121,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         setupFab();
         fab.bringToFront();
         super.onResume();
-        progressDialog.setMessage(getString(R.string.pleasewait));
-            progressDialog.show();
-//            setupFab();
-       new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//        progressDialog.setMessage(getString(R.string.pleasewait));
+//            progressDialog.show();
+////            setupFab();
+//       new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
 //        checkConnection();
 //        if (InternetReceiver.isConnected()){
 //            progressDialog.setMessage(getString(R.string.pleasewait));

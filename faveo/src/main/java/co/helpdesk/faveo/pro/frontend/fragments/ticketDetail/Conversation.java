@@ -183,7 +183,6 @@ public class Conversation extends Fragment {
             try {
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("data");
-
                 JSONArray jsonArray = jsonObject1.getJSONArray("threads");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     TicketThread ticketThread = null;

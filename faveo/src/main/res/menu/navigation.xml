@@ -7,8 +7,13 @@
 
     <item
         android:id="@+id/navigation_gifts"
-        android:icon="@drawable/ic_photo_camera_black_24dp"
-        android:title="Photo" />
+        android:icon="@drawable/ic_videocam_black_24dp"
+        android:title="Video" />
+
+    <item
+    android:id="@+id/navigation_music"
+        android:icon="@drawable/ic_library_music_black_24dp"
+        android:title="Music"/>
 
     <item
         android:id="@+id/navigation_cart"
