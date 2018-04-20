@@ -57,7 +57,6 @@ class HTTPConnection{
 
         try {
             url = new URL(stringURL);
-
             final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Offer-type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
@@ -97,6 +96,11 @@ class HTTPConnection{
                         Log.e("Response code: ", "NotFound-404!");
                         //ret = "notFound";
                         break;
+                    case HttpURLConnection.HTTP_BAD_METHOD:
+                    Log.e("Response code: ", "405 MethodNotAllowed!");
+                    ret="MethodNotAllowed";
+                    Log.d("MethodNotAllowed","CAMEHERE");
+                    Prefs.putString("405","True");
                     case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
                         Log.e("Response code: ", "Timeout!");
                        // ret = "timeout";
@@ -109,11 +113,11 @@ class HTTPConnection{
                         Log.e("Response code: ", "BadRequest!");
                         ret="badRequest";
                         Prefs.putString("400",ret);
-                        if (refreshToken() == null)
-                            return null;
-                        new Helpdesk();
-                        new Authenticate();
-                        ret = "tokenRefreshed";
+//                        if (refreshToken() == null)
+//                            return null;
+//                        new Helpdesk();
+//                        new Authenticate();
+//                        ret = "tokenRefreshed";
                         break;
                     case HttpURLConnection.HTTP_FORBIDDEN:
                         Log.e("Response code","Forbidden");
@@ -128,7 +132,9 @@ class HTTPConnection{
 
                 return ret;
             }
-
+            Prefs.putString("405","False");
+            Prefs.putString("unauthorized","false");
+            Prefs.putString("400","false");
             is = connection.getInputStream();
             Log.e("Response Code", connection.getResponseCode() + "");
         } catch (IOException e) {
@@ -294,14 +300,20 @@ class HTTPConnection{
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 String ret = null;
                 switch (connection.getResponseCode()) {
+
+
                     case HttpURLConnection.HTTP_UNAUTHORIZED:
-                        Log.e("Response code: ", "401-UNAUTHORIZED!");
+//                        Log.e("Response code: ", "401-UNAUTHORIZED!");
+//                        ret="HTTP_UNAUTHORIZED";
+//                        Log.d("401","came here");
+//                        Prefs.putString("401","True");
                         //ret="HTTP_UNAUTHORIZED";
                         if (refreshToken() == null)
                             return null;
                         new Helpdesk();
                         new Authenticate();
-                        return "tokenRefreshed";
+                        ret = "tokenRefreshed";
+                        break;
                     case HttpURLConnection.HTTP_NOT_FOUND:
                         Log.e("Response code: ", "404-NOT_FOUND!");
                         ret="HTTP_NOT_FOUND";
@@ -316,6 +328,11 @@ class HTTPConnection{
                         Log.e("Response code: ", "504-Timeout!");
                         ret="HTTP_GATEWAY_TIMEOUT";
                         break;// retry
+                    case HttpURLConnection.HTTP_BAD_METHOD:
+                        Log.e("Response code: ", "405 MethodNotAllowed!");
+                        ret="MethodNotAllowed";
+                        Prefs.putString("405","True");
+                        break;
                     case HttpURLConnection.HTTP_UNAVAILABLE:
                         Log.e("Response code: ", "503-Unavailable!");
                         ret="HTTP_UNAVAILABLE";
@@ -324,11 +341,11 @@ class HTTPConnection{
                         Log.e("Response code: ", "400-BadRequest!");
                         ret="badRequest";
                         Prefs.putString("400",ret);
-                        if (refreshToken() == null)
-                            return null;
-                        new Helpdesk();
-                        new Authenticate();
-                        ret = "tokenRefreshed";
+//                        if (refreshToken() == null)
+//                            return null;
+//                        new Helpdesk();
+//                        new Authenticate();
+//                        ret = "tokenRefreshed";
                         break;
                     case HttpURLConnection.HTTP_FORBIDDEN:
                         Log.e("Response code","Forbidden");
@@ -345,10 +362,11 @@ class HTTPConnection{
                 }
                 return ret;
             }
+            Prefs.putString("400","false");
+            Prefs.putString("405","False");
+            Prefs.putString("401","false");
             is = connection.getInputStream();
-
         } catch (IOException e) {
-
             if (e.getMessage().contains("No authentication challenges found")) {
                 Log.e("IOException", "contains(\"No authentication challenges found\")");
                 if (refreshToken() == null)

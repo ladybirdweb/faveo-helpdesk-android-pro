@@ -372,6 +372,7 @@ public class SplashActivity extends AppCompatActivity {
                 textViewtryAgain.setVisibility(View.VISIBLE);
                         textViewrefresh.setVisibility(View.VISIBLE);
                         Prefs.putString("unauthorized", "false");
+                Prefs.putString("401","false");
                         textViewrefresh.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

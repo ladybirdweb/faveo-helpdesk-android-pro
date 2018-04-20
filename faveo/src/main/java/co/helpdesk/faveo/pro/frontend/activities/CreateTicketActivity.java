@@ -1,7 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 //import android.app.SearchManager;
 //import android.content.Context;
@@ -26,6 +25,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -41,7 +41,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -56,6 +55,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -63,18 +63,50 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
 import com.hbb20.CountryCodePicker;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.activity.AudioPickActivity;
+import com.vincent.filepicker.activity.ImagePickActivity;
+import com.vincent.filepicker.activity.NormalFilePickActivity;
+import com.vincent.filepicker.activity.VideoPickActivity;
+import com.vincent.filepicker.filter.entity.AudioFile;
+import com.vincent.filepicker.filter.entity.ImageFile;
+import com.vincent.filepicker.filter.entity.NormalFile;
+import com.vincent.filepicker.filter.entity.VideoFile;
 //import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.ServerResponse;
+import net.gotev.uploadservice.UploadInfo;
+import net.gotev.uploadservice.UploadNotificationConfig;
+import net.gotev.uploadservice.UploadServiceBroadcastReceiver;
+import net.gotev.uploadservice.UploadStatusDelegate;
+
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.FormBodyPart;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.apache.james.mime4j.message.Multipart;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -83,44 +115,69 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 //import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 //import java.text.DecimalFormat;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.regex.Pattern;
 //import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BottomNavigationBehavior;
+import co.helpdesk.faveo.pro.CameraUtils;
+import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.Helper;
+import co.helpdesk.faveo.pro.ImagePath_MarshMallow;
 import co.helpdesk.faveo.pro.MyDeserializer;
 import co.helpdesk.faveo.pro.MyResponse;
+import co.helpdesk.faveo.pro.PathUtil;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UserClient;
 import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.adapters.CollaboratorAdapter;
+import co.helpdesk.faveo.pro.frontend.adapters.MultiCollaboratorAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.CollaboratorSuggestion;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
+import co.helpdesk.faveo.pro.model.MultiCollaborator;
 import es.dmoral.toasty.Toasty;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Multipart;
+
+import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
+import static com.vincent.filepicker.activity.ImagePickActivity.IS_NEED_CAMERA;
 
 /**
  * This activity is for responsible for creating the ticket.
@@ -131,8 +188,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     boolean allCorrect;
     String term;
     String collaborators=null;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter,autocompletetextview,stringArrayAdapterHint,arrayAdapterCC;
-    ArrayAdapter<Data> arrayAdapterCollaborator;
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter,autocompletetextview,stringArrayAdapterHint;
+    ArrayAdapter<CollaboratorAdapter> arrayAdapterCollaborator;
+    ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
+    CollaboratorAdapter adapter=null;
+    MultiCollaboratorAdapter adapter1=null;
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
     AutoCompleteTextView editTextEmail;
@@ -144,12 +204,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
     TextView attachmentFileName;
-    @BindView(R.id.attachment_size)
-    TextView attachmentFileSize;
+//    @BindView(R.id.attachment_size)
+//    TextView attachmentFileSize;
     @BindView(R.id.attachment_layout)
     RelativeLayout attachment_layout;
-    @BindView(R.id.attach_fileimgview)
-    ImageView imageView;
     @BindView(R.id.sub_edittext)
     EditText subEdittext;
     @BindView(R.id.msg_edittext)
@@ -173,18 +231,19 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     @BindView(R.id.attachment_close)
     ImageButton imageButtonAttachmentClose;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,staffItemsHint,emailHint;
+    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,staffItemsHint;
+    ArrayList<CollaboratorSuggestion> emailHint;
     int id=0;
     int id1=0;
     String email1,collaborator;
-    ArrayList<Data> stringArraylist;
-    String mobile="";
+    ArrayList<MultiCollaborator> stringArraylist;
+    //String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
     int i=0;
     MultiAutoCompleteTextView multiAutoCompleteTextViewCC;
     CountryCodePicker countryCodePicker;
-    String firstname,lastname,email,phone;
+    String firstname,lastname,email;
     ImageButton imageViewGallery,imageViewCamera,imageViewDocument,imageViewAudio;
     Toolbar toolbarAttachment;
     File file3;
@@ -192,12 +251,21 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     Button button;
     File file;
     Thread t;
+    ProgressBar progressBar;
     int gallery,document,camera,audio=0;
     BottomNavigationView bottomNavigationView;
     String base64,fileName,fileSize,mimeType;
     private static final int CAMERA_REQUEST = 1888;
     private static final int PICKFILE_REQUEST_CODE = 1234;
-
+    private static final int PICKVIDEO_REQUEST_CODE = 1235;
+    File media;
+    String token1;
+    String path="";
+    String fname,lname,phone,mobile,subject,message;
+    private Uri fileUri = null;//Uri to capture image
+    private String getImageUrl = "";
+    String token;
+    public static final int FILE_PICKER_REQUEST_CODE = 1;
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -222,6 +290,16 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         setContentView(R.layout.activity_create_ticket);
+
+
+//        try {
+//            upload();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+
+        progressBar= (ProgressBar) findViewById(R.id.createTicketProgressbar);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
@@ -235,24 +313,26 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //                try {
 //                    JSONObject jsonObject = new JSONObject(result);
 //                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//                    token= jsonObject1.getString("token");
+//                    Prefs.putString("TOKEN", token);
 //                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
 //                    String role1=jsonObject2.getString("role");
-//                    if (role1.equals("user")){
-//                        Prefs.clear();
-//                        //Prefs.putString("role",role);
-//                        Intent intent=new Intent(CreateTicketActivity.this,LoginActivity.class);
-//                        Toasty.info(CreateTicketActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                        startActivity(intent);
-//
-//
-//                    }
+////                    if (role1.equals("user")){
+////                        Prefs.clear();
+////                        //Prefs.putString("role",role);
+////                        Intent intent=new Intent(CreateTicketActivity.this,LoginActivity.class);
+////                        Toasty.info(CreateTicketActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+////                        startActivity(intent);
+////
+////
+////                    }
 //
 //
 //                } catch (JSONException | NullPointerException e) {
 //                    e.printStackTrace();
 //                }
 //
-//                handler.postDelayed(this, 30000);
+//                handler.postDelayed(this, 6000);
 //            }
 //        };
 //        runnable.run();
@@ -354,18 +434,21 @@ cc=new String[0];
 cc1=new String[0];
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
         multiAutoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.collaborator);
-        stringArraylist=new ArrayList<>();
-        arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
-        multiAutoCompleteTextViewCC.setDropDownWidth(1000);
-        multiAutoCompleteTextViewCC.setThreshold(3);
+        stringArraylist=new ArrayList<MultiCollaborator>();
+        adapter1=new MultiCollaboratorAdapter(this,stringArraylist);
+        //arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
+        multiAutoCompleteTextViewCC.setDropDownWidth(1500);
+        multiAutoCompleteTextViewCC.setThreshold(2);
         multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        multiAutoCompleteTextViewCC.setAdapter(adapter1);
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attachment_layout.setVisibility(View.GONE);
                 attachmentFileName.setText("");
-                attachmentFileSize.setText("");
+                //attachmentFileSize.setText("");
+                path="";
                 //toolbarAttachment.setVisibility(View.GONE);
             }
         });
@@ -383,6 +466,7 @@ cc1=new String[0];
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
                 //editTextEmail.setText("");
                 Prefs.putString("newuseremail","");
@@ -418,19 +502,28 @@ cc1=new String[0];
         });
         editTextEmail= (AutoCompleteTextView) findViewById(R.id.email_edittext);
         emailHint=new ArrayList<>();
-        arrayAdapterCC=new ArrayAdapter<Data>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,emailHint);
-        editTextEmail.setThreshold(2);
-        editTextEmail.setDropDownWidth(1000);
+        arrayAdapterCC=new CollaboratorAdapter(this,emailHint);
+        //arrayAdapterCC=new ArrayAdapter<Data>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,emailHint);
+        editTextEmail.setThreshold(3);
+        editTextEmail.setDropDownWidth(1500);
         editTextEmail.addTextChangedListener(passwordWatcheredittextSubject);
         editTextEmail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                arrayAdapterCC = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                //arrayAdapterCC = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                 String name1=editTextEmail.getText().toString();
-                for (int j=0;i<emailHint.size();i++){
-                    Data data = emailHint.get(j);
-                    id = data.getID();
-                    email1=data.getName();
+                for (int j=0;j<emailHint.size();j++){
+                    CollaboratorSuggestion data = emailHint.get(j);
+                    id = data.getId();
+                    email1=data.getEmail();
+                    String profilePic=data.getProfile_pic();
+                    firstname=data.getFirst_name();
+                    lastname=data.getLast_name();
+                    editTextEmail.setText(email1);
+                    editTextFirstName.setText(firstname);
+                    editTextLastName.setText(lastname);
+                    Log.d("profilePic",profilePic);
+
                 }
 
             }
@@ -451,7 +544,11 @@ cc1=new String[0];
 multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-         emailfromsuggestion=adapterView.getItemAtPosition(i).toString();
+        try {
+            emailfromsuggestion = adapterView.getItemAtPosition(i).toString();
+        }catch (IndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
         //Toast.makeText(CreateTicketActivity.this, "email is:"+emailfromsuggestion, Toast.LENGTH_SHORT).show();
 
         //collaboratorArray.add(emailfromsuggestion);
@@ -461,9 +558,6 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 
     }
 });
-
-
-
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -660,6 +754,10 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
                     document=1;
                     reqPermissionCamera();
                     return true;
+                case R.id.navigation_music:
+                    audio=4;
+                    reqPermissionCamera();
+                    return true;
 
             }
 
@@ -730,121 +828,413 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        Uri uri = null;
+        String fileName;
+        String filePath = null;
         try {
-            uri = data.getData();
+            if (data.toString().equals("")) {
+                attachment_layout.setVisibility(View.GONE);
+            } else {
+                attachment_layout.setVisibility(View.VISIBLE);
+                switch (requestCode){
+                    case Constant.REQUEST_CODE_PICK_IMAGE:
+                        if (resultCode==RESULT_OK){
+                            ArrayList<ImageFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
+                            StringBuilder builder = new StringBuilder();
+                            for (ImageFile file : list) {
+                                filePath = file.getPath();
+                                Log.d("filePath",path);
+                                builder.append(path + "\n");
+                            }
+                            File file = new File(filePath);
+                            long size = file.length()/1024;
+                            if (size > 6000) {
+                                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                path = filePath;
+                                int pos=path.lastIndexOf("/");
+                                fileName=path.substring(pos+1,path.length());
+                                attachmentFileName.setText(fileName);
+                                Log.d("fileName",fileName);
+                            }
+                        }
+                        break;
+                    case Constant.REQUEST_CODE_PICK_VIDEO:
+                        if (resultCode == RESULT_OK) {
+                            ArrayList<VideoFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_VIDEO);
+                            StringBuilder builder = new StringBuilder();
+                            for (VideoFile file : list) {
+                                filePath = file.getPath();
+                                builder.append(path + "\n");
+                            }
+                            File file = new File(filePath);
+                            long size = file.length()/1024;
+                            if (size > 6000) {
+                                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                path = filePath;
+                                int pos=path.lastIndexOf("/");
+                                fileName=path.substring(pos+1,path.length());
+                                attachmentFileName.setText(fileName);
+                                Log.d("fileName",fileName);
+                            }
+                        }
+                        break;
+                    case Constant.REQUEST_CODE_PICK_AUDIO:
+                        if (resultCode == RESULT_OK) {
+                            ArrayList<AudioFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_AUDIO);
+                            StringBuilder builder = new StringBuilder();
+                            for (AudioFile file : list) {
+                                filePath = file.getPath();
+                                builder.append(path + "\n");
+                            }
+                            File file = new File(filePath);
+                            long size = file.length()/1024;
+                            if (size > 6000) {
+                                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                path = filePath;
+                                int pos=path.lastIndexOf("/");
+                                fileName=path.substring(pos+1,path.length());
+                                attachmentFileName.setText(fileName);
+                                Log.d("fileName",fileName);
+                            }
+                        }
+                        break;
+                    case Constant.REQUEST_CODE_PICK_FILE:
+                        if (resultCode == RESULT_OK) {
+                            ArrayList<NormalFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_FILE);
+                            StringBuilder builder = new StringBuilder();
+                            for (NormalFile file : list) {
+                                filePath = file.getPath();
+                                builder.append(path + "\n");
+                            }
+                            File file = new File(filePath);
+                            long size = file.length()/1024;
+                            if (size > 6000) {
+                                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                path = filePath;
+                                int pos=path.lastIndexOf("/");
+                                fileName=path.substring(pos+1,path.length());
+                                attachmentFileName.setText(fileName);
+                                Log.d("fileName",fileName);
+                            }
+                        }
+                        break;
+
+                }
+            }
         }catch (NullPointerException e){
             e.printStackTrace();
         }
 
-        Uri uri1 = null;
-        String path=getPath(CreateTicketActivity.this,uri);
-//        Log.d("PATH",path);
-        byte[] buf;
 
+
+
+//        if (requestCode == 1 && resultCode == RESULT_OK) {
+//            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+//            //getMimeType(data.getData());
+//            File file = new File(filePath);
+//            long size = file.length() / 1024;
+//            if (size > 6000) {
+//                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
+//                return;
+//            } else {
+//                path = filePath;
+//                int pos=path.lastIndexOf("/");
+//                fileName=path.substring(pos+1,path.length());
+//                attachmentFileName.setText(fileName+"("+size+"KB)");
+//                Log.d("fileName",fileName);
+//            }
+//            Log.d("fileSize", "" + size);
+//            Log.d("Path", filePath);
+//            // Do anything with file
+//        } else if (requestCode == PICKVIDEO_REQUEST_CODE && resultCode == RESULT_OK) {
+//            //Uri uri1 = data.getData();
+//            Log.d("BuildVersionSDK",""+Build.VERSION.SDK_INT);
+//            uri = data.getData();
+//            String filePath=getRealPathFromUri(CreateTicketActivity.this,uri);
+//            Log.d("PATH",filePath);
+//            File file = new File(filePath);
+//            long size = file.length()/1024;
+//            if (size > 6000) {
+//                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
+//                return;
+//            } else {
+//                path = filePath;
+//                int pos=path.lastIndexOf("/");
+//                fileName=path.substring(pos+1,path.length());
+//                attachmentFileName.setText(fileName);
+//                Log.d("fileName",fileName);
+//            }
+//        }
+
+//        else if (requestCode==PICKFILE_REQUEST_CODE&&resultCode==RESULT_OK){
+//            uri = data.getData();
+//            String filePath=getRealPathFromUri(CreateTicketActivity.this,uri);
+//            Log.d("PATH",filePath);
+//            File file = new File(filePath);
+//            long size = file.length()/1024;
+//            if (size > 6000) {
+//                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
+//                return;
+//            } else {
+//                path = filePath;
+//                int pos=path.lastIndexOf("/");
+//                fileName=path.substring(pos+1,path.length());
+//                attachmentFileName.setText(fileName);
+//                Log.d("fileName",fileName);
+//            }
+////            Log.d("fileSize", "" + size);
+////            Log.d("Path", filePath);
+//        }
+    }
+
+    public Uri getImageUriForCamera(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURIForImage(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    public class SendPostRequest extends AsyncTask<String, Void, String> {
+
+        protected void onPreExecute(){}
+
+        protected String doInBackground(String... arg0) {
+
+            try {
+
+                URL url = new URL(Constants.URL + "authenticate"); // here is your URL path
+
+                JSONObject postDataParams = new JSONObject();
+                postDataParams.put("username", Prefs.getString("USERNAME", null));
+                postDataParams.put("password", Prefs.getString("PASSWORD", null));
+                Log.e("params",postDataParams.toString());
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int responseCode=conn.getResponseCode();
+
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                    BufferedReader in=new BufferedReader(new
+                            InputStreamReader(
+                            conn.getInputStream()));
+
+                    StringBuffer sb = new StringBuffer("");
+                    String line="";
+
+                    while((line = in.readLine()) != null) {
+
+                        sb.append(line);
+                        break;
+                    }
+
+                    in.close();
+                    return sb.toString();
+
+                }
+                else {
+                    return new String("false : "+responseCode);
+                }
+            }
+            catch(Exception e){
+                return new String("Exception: " + e.getMessage());
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //progressDialog.dismiss();
+            //Toast.makeText(getApplicationContext(), result,
+                    //Toast.LENGTH_LONG).show();
+            Log.d("resultFromNewCall",result);
+            try {
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                token = jsonObject1.getString("token");
+                Prefs.putString("TOKEN", token);
+                Log.d("TOKEN",token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//            try {
+//                uploadMultipartData();
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+
+        }
+    }
+    public String getPostDataString(JSONObject params) throws Exception {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while(itr.hasNext()){
+
+            String key= itr.next();
+            Object value = params.get(key);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
+        }
+        return result.toString();
+    }
+
+    @Nullable
+    private static String multipost(String urlString, MultipartEntity reqEntity) {
+
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(60*1000);
+            conn.setConnectTimeout(60*1000);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "*****");
+
+            conn.addRequestProperty("Content-length", reqEntity.getContentLength()+"");
+            conn.addRequestProperty(reqEntity.getContentType().getName(), reqEntity.getContentType().getValue());
+
+            OutputStream os = conn.getOutputStream();
+            reqEntity.writeTo(conn.getOutputStream());
+            os.close();
+            conn.connect();
+
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                return readStream(conn.getInputStream());
+            }
+
+        } catch (Exception e) {
+            Log.e("MainActivity", "multipart post error " + e + "(" + urlString + ")");
+        }
+        return null;
+    }
+
+    private static String readStream(InputStream in) {
+        BufferedReader reader = null;
+        StringBuilder builder = new StringBuilder();
+        try {
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    private void uploadMultipartData() throws UnsupportedEncodingException {
+
+//        MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+//
+//        //FileBody fileBody = new FileBody();
+//        // FormBodyPart fileBodyPart = new FormBodyPart(fileName, new FileBody(file));
+//        reqEntity.addPart("media_attachment[]", new FileBody(file));
+//        //api_key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token="+token1+"&ip=null&user_id=1&subject=gggggggggg&body=hhzbbbsbbbsbbdhjanbsbdb&help_topic=1&priority=1&first_name=Adnan&last_name=Prasad&email=adnan@gmail.com&assigned=1&phone=null&code=91&mobile=5884889466"
+//        reqEntity.addPart("username", new StringBody("demoadmin"));
+//        reqEntity.addPart("password",new StringBody("demopass"));
 
 //        try {
-//            assert path != null;
 //
-//            uri1=Uri.fromFile(new File(path));
-//            file = new File(String.valueOf(uri1));
-//            InputStream file1=getContentResolver().openInputStream(uri1);
-//            //FileInputStream fileInputStream = new FileInputStream(String.valueOf(file1));
-//            //result = IOUtils.toString(file1, StandardCharsets.UTF_8);
-//            Log.d("file",result);
-//            Log.d("File",file+"");
-//            Log.d("URI",""+uri1);
-//            buf=getBytesFromFile(file);
-//            //base64 = Base64.encodeToString(buf,Base64.DEFAULT);
-//            //Log.d("base64",base64);
-//        }catch (NullPointerException |IOException e){
-//            e.printStackTrace();
-//        }
-        mimeType = getContentResolver().getType(uri);
+//            fname = URLEncoder.encode(fname.trim(), "utf-8");
+//            lname = URLEncoder.encode(lname.trim(), "utf-8");
+//            subject = URLEncoder.encode(subject.trim(), "utf-8");
+//            message = URLEncoder.encode(message.trim(), "utf-8");
+//            email1 = URLEncoder.encode(email1.trim(), "utf-8");
+//            phone = URLEncoder.encode(phone.trim(), "utf-8");
+//            mobile = URLEncoder.encode(mobile.trim(), "utf-8");
 
-        fileName=getFileName(uri);
-        uploadFile(uri);
-//        final Uri returnUri = data.getData();
-//        Cursor returnCursor =
-//                getContentResolver().query(returnUri, null, null, null, null);
-//    /*
-//     * Get the column indexes of the data in the Cursor,
-//     * move to the first row in the Cursor, get the data,
-//     * and display it.
-//     */
-//        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-//        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-//        returnCursor.moveToFirst();
-//        //Log.d("NAME",returnCursor.getString(nameIndex));
-//        //Log.d("SiZE",Long.toString(returnCursor.getLong(sizeIndex)));
-//        Long bytes= returnCursor.getLong(sizeIndex);
-//        long kibibytes = bytes / 1024;
-//        Log.d("MIMETYPE",mimeType);
-//        fileSize= String.valueOf(kibibytes);
-//        Log.d("sizeInKB",""+kibibytes);
-//        File file = new File(path);
-//        Log.d("FileName", "Filename " + file.getName());
-//        t = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                File f  = new File(data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH));
-//                String content_type  = getMimeType(returnUri);
-//
-//                String file_path = f.getAbsolutePath();
-//                OkHttpClient client = new OkHttpClient();
-//                RequestBody file_body = RequestBody.create(MediaType.parse(content_type),f);
-//
-//                RequestBody request_body = new MultipartBody.Builder()
-//                        .setType(MultipartBody.FORM)
-//                        .addFormDataPart("type",content_type)
-//                        .addFormDataPart("media_attachment[]",file_path.substring(file_path.lastIndexOf("/")+1), file_body)
-//                        .build();
-//
-//                Request request = new Request.Builder()
-//                        .url("http://jamboreebliss.com/sayarnew/public/api/v1/helpdesk/create")
-//                        .post(request_body)
-//                        .build();
-//
-//                try {
-//                    Response response = client.newCall(request).execute();
-//
-//                    if(!response.isSuccessful()){
-//                        throw new IOException("Error : "+response);
-//                    }
-//
-//                    //progress.dismiss();
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//            }
-//        });
-        //t.start();
-        //RequestBody mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//        RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
-//        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), mFile);
-//        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(UserClient.BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//        UserClient uploadImage = retrofit.create(UserClient.class);
-//        Call<UploadObject> fileUpload = uploadImage.uploadImage(fileToUpload, filename);
-//        fileUpload.enqueue(new Callback<UploadObject>() {
-//            @Override
-//            public void onResponse(Call<UploadObject> call, Response<UploadObject> response) {
-//                Toast.makeText(CreateTicketActivity.this, "Response " + response.raw().message(), Toast.LENGTH_LONG).show();
-//                Toast.makeText(CreateTicketActivity.this, "Success " + response.body().getSuccess(), Toast.LENGTH_LONG).show();
-//            }
-//            @Override
-//            public void onFailure(Call<UploadObject> call, Throwable t) {
-//                Log.d("", "Error " + t.getMessage());
-//            }
-//        });
+
     }
+//        catch (Exception exc) {
+//            //Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
+//            Log.d("exception",exc.getMessage());
+//        }
+
+//        reqEntity.addPart("token",new StringBody(token1));
+//        reqEntity.addPart("user_id",new StringBody(""+1));
+//        reqEntity.addPart("subject",new StringBody("ggggggggggggg"));
+//        reqEntity.addPart("body",new StringBody("hhhhhhhhhhhhhh"));
+//        reqEntity.addPart("help_topic",new StringBody(""+1));
+//        reqEntity.addPart("priority",new StringBody(""+1));
+//        reqEntity.addPart("first_name",new StringBody("sayar"));
+//        reqEntity.addPart("last_name",new StringBody("samanta"));
+
+        //reqEntity.addPart("password", new StringBody("demopass"));
+        //String response = multipost("http://www.jamboreebliss.com/sayar/public/api/v1/authenticate?", reqEntity);
+        //Log.d("MainActivity", "Response :"+response);
+
+
+
+
 
 //        try {
 //             buf=getBytesFromFile(file);
@@ -1098,10 +1488,12 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
+
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            System.out.println("getPath() uri: " + uri.toString());
-            System.out.println("getPath() uri authority: " + uri.getAuthority());
-            System.out.println("getPath() uri path: " + uri.getPath());
+                System.out.println("getPath() uri: " + uri.toString());
+                System.out.println("getPath() uri authority: " + uri.getAuthority());
+                System.out.println("getPath() uri path: " + uri.getPath());
+
 
             // ExternalStorageProvider
             if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
@@ -1126,102 +1518,102 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         }
         return null;
     }
-    public static byte[] getBytesFromFile(File file) throws IOException {
-        // Get the size of the file
-        long length = file.length();
-
-        // You cannot create an array using a long type.
-        // It needs to be an int type.
-        // Before converting to an int type, check
-        // to ensure that file is not larger than Integer.MAX_VALUE.
-        if (length > Integer.MAX_VALUE) {
-            // File is too large
-            throw new IOException("File is too large!");
-        }
-
-        // Create the byte array to hold the data
-        byte[] bytes = new byte[(int)length];
-
-        // Read in the bytes
-        int offset = 0;
-        int numRead = 0;
-
-        InputStream is = new FileInputStream(file);
-        try {
-            while (offset < bytes.length
-                    && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
-                offset += numRead;
-            }
-        } finally {
-            is.close();
-        }
-
-        // Ensure all the bytes have been read in
-        if (offset < bytes.length) {
-            throw new IOException("Could not completely read file "+file.getName());
-        }
-        return bytes;
-    }
-    private void uploadFile(Uri fileUri) {
-        File file = null;
-
-        RequestBody requestBody=RequestBody.create(MultipartBody.FORM, "subject");
-
-        File originalFile=FileUtils.getFile(fileName);
-       try {
-           file = new File(getPathFromUri(this,fileUri));
-       }catch (NullPointerException e){
-           e.printStackTrace();
-       }
-        RequestBody filePart=RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)),file);
-//        Gson gson = new GsonBuilder()
-//                .setLenient()
-//                .create();
-        final Gson gson =
-                new GsonBuilder()
-                        .registerTypeAdapter(MyResponse.class, new MyDeserializer())
-                        .create();
-        MultipartBody.Part part=MultipartBody.Part.createFormData("media_attachment",originalFile.getName(),filePart);
-        Retrofit.Builder builder=new Retrofit.Builder().baseUrl("http://jamboreebliss.com/")
-                .addConverterFactory(GsonConverterFactory.create(gson));
-
-        Retrofit retrofit=builder.build();
-        UserClient client=retrofit.create(UserClient.class);
-
-
-        Call<ResponseBody> responseBodyCall=client.createTicket(requestBody,part);
-        responseBodyCall.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
-                Log.d("status",""+response.code());
-                Log.d("URL",""+call.request().url());
-                Log.d("Call request header", call.request().headers().toString());
-                Log.d("Response raw header", response.headers().toString());
-                Log.d("Response raw", String.valueOf(response.raw().body()));
-                Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
-                //MyResponse c = gson.fromJson(myJson, MyResponse.class);
-//                if(response.isSuccessful()) {
-//                    //showResponse(response.body().toString());
-//                    Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
-//                }
-//                else{
-//                    try {
-//                        Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
-//                    }catch (NullPointerException e){
-//                        e.printStackTrace();
-//                    }
-//                    Log.i("responseFailure","true");
-//                }
-                //Log.d("jsonObject",response.body().getMessage());
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("URL",""+call.request().url());
-                Log.d("Error",t.toString());
-
-            }
-        });
+//    public static byte[] getBytesFromFile(File file) throws IOException {
+//        // Get the size of the file
+//        long length = file.length();
+//
+//        // You cannot create an array using a long type.
+//        // It needs to be an int type.
+//        // Before converting to an int type, check
+//        // to ensure that file is not larger than Integer.MAX_VALUE.
+//        if (length > Integer.MAX_VALUE) {
+//            // File is too large
+//            throw new IOException("File is too large!");
+//        }
+//
+//        // Create the byte array to hold the data
+//        byte[] bytes = new byte[(int)length];
+//
+//        // Read in the bytes
+//        int offset = 0;
+//        int numRead = 0;
+//
+//        InputStream is = new FileInputStream(file);
+//        try {
+//            while (offset < bytes.length
+//                    && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+//                offset += numRead;
+//            }
+//        } finally {
+//            is.close();
+//        }
+//
+//        // Ensure all the bytes have been read in
+//        if (offset < bytes.length) {
+//            throw new IOException("Could not completely read file "+file.getName());
+//        }
+//        return bytes;
+//    }
+//    private void uploadFile(Uri fileUri) {
+//        File file = null;
+//
+//        RequestBody requestBody=RequestBody.create(MultipartBody.FORM, "subject");
+//
+//        File originalFile=FileUtils.getFile(fileName);
+//       try {
+//           file = new File(getPathFromUri(this,fileUri));
+//       }catch (NullPointerException e){
+//           e.printStackTrace();
+//       }
+//        RequestBody filePart=RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)),file);
+////        Gson gson = new GsonBuilder()
+////                .setLenient()
+////                .create();
+//        final Gson gson =
+//                new GsonBuilder()
+//                        .registerTypeAdapter(MyResponse.class, new MyDeserializer())
+//                        .create();
+//        MultipartBody.Part part=MultipartBody.Part.createFormData("media_attachment",originalFile.getName(),filePart);
+//        Retrofit.Builder builder=new Retrofit.Builder().baseUrl("http://jamboreebliss.com/")
+//                .addConverterFactory(GsonConverterFactory.create(gson));
+//
+//        Retrofit retrofit=builder.build();
+//        UserClient client=retrofit.create(UserClient.class);
+//
+//
+//        Call<ResponseBody> responseBodyCall=client.createTicket(requestBody,part);
+//        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
+//                Log.d("status",""+response.code());
+//                Log.d("URL",""+call.request().url());
+//                Log.d("Call request header", call.request().headers().toString());
+//                Log.d("Response raw header", response.headers().toString());
+//                Log.d("Response raw", String.valueOf(response.raw().body()));
+//                Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
+//                //MyResponse c = gson.fromJson(myJson, MyResponse.class);
+////                if(response.isSuccessful()) {
+////                    //showResponse(response.body().toString());
+////                    Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
+////                }
+////                else{
+////                    try {
+////                        Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
+////                    }catch (NullPointerException e){
+////                        e.printStackTrace();
+////                    }
+////                    Log.i("responseFailure","true");
+////                }
+//                //Log.d("jsonObject",response.body().getMessage());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Log.d("URL",""+call.request().url());
+//                Log.d("Error",t.toString());
+//
+//            }
+//        });
 //        responseBodyCall.enqueue(new Callback<ResponseBody>() {
 //            @Override
 //            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
@@ -1237,7 +1629,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 //            }
 //        });
 
-    }
+    //}
 
 
 
@@ -1346,17 +1738,17 @@ public String getFileName(Uri uri) {
     }
 
 
-//    public String getRealPathFromURI (Uri contentUri) {
-//        String path = null;
-//        String[] proj = { MediaStore.MediaColumns.DATA };
-//        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-//        if (cursor.moveToFirst()) {
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-//            path = cursor.getString(column_index);
-//        }
-//        cursor.close();
-//        return path;
-//    }
+    public String getRealPathFromURIMethod (Uri contentUri) {
+        String path = null;
+        String[] proj = { MediaStore.MediaColumns.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            path = cursor.getString(column_index);
+        }
+        cursor.close();
+        return path;
+    }
 public static String getPathFromUri(final Context context, final Uri uri) {
 
     final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -1511,20 +1903,6 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         return result;
     }
 
-//    public String getRealPathFromURI(Uri contentUri, Context activity) {
-//        String path = null;
-//        try {
-//            final String[] proj = {MediaStore.MediaColumns.DATA};
-//            final Cursor cursor = ((Activity) activity).managedQuery(contentUri, proj, null, null, null);
-//            final int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-//            cursor.moveToFirst();
-//            path = cursor.getString(column_index);
-//        } catch (Exception e) {
-//        }
-//        if (path != null && path.length() > 0) {
-//            return path;
-//        } else return contentUri.getPath();
-//    }
     //this method compresses the image and saves into a location in sdcard
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
@@ -1541,20 +1919,6 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    public String getMimeType(Uri uri) {
-
-        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-            ContentResolver cr = getApplicationContext().getContentResolver();
-            mimeType = cr.getType(uri);
-        } else {
-            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
-                    .toString());
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileExtension.toLowerCase());
-        }
-        Log.d("MimeType",mimeType);
-        return mimeType;
-    }
 //    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
 //        ParcelFileDescriptor parcelFileDescriptor =
 //                getContentResolver().openFileDescriptor(uri, "r");
@@ -1669,7 +2033,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //            if (requestCode == RESULT_LOAD_FILE && resultCode == RESULT_OK
 //                    && null != data) {
 //                Uri selectedFile = data.getData();
-//                String uriString = getPath(selectedFile);
+                //String uriString = getPath(selectedFile);
 //                File myFile = new File(uriString);
 //                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_txt));
 //                attachmentFileSize.setText(getFileSize(myFile.length()));
@@ -1930,6 +2294,19 @@ public static String getPathFromUri(final Context context, final Uri uri) {
     }
 
     @Override
+    public void onBackPressed() {
+
+        if (!MainActivity.isShowing) {
+            Log.d("isShowing", "false");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else Log.d("isShowing", "true");
+
+//        if (fabExpanded)
+//            exitReveal();
+//        else super.onBackPressed();
+    }
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //replaces the default 'Back' button action
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -1942,67 +2319,126 @@ public static String getPathFromUri(final Context context, final Uri uri) {
      * Handling the create button here.
      */
     public void createButtonClick() {
+        new SendPostRequest().execute();
+        int res=0;
+        String first_user = null,second_user = null,third_user=null;
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
         email1 = editTextEmail.getText().toString();
-        Log.d("emialwithname",email1);
+        firstname=editTextFirstName.getText().toString();
+        lastname=editTextLastName.getText().toString();
+        Log.d("emialwithname", email1);
 
-        if (!email1.equals("")&&email1.contains("<")){
-            int pos=email1.indexOf("<");
-            int pos2=email1.lastIndexOf(">");
-            email2=email1.substring(pos+1,pos2);
-        }
-        else if (!email1.contains("<")){
-            email2=editTextEmail.getText().toString();
-        }
-        else{
-            allCorrect=false;
-            Toasty.info(this,getString(R.string.requestornotfound),Toast.LENGTH_SHORT).show();
+        if (!email1.equals("")) {
+            email2 = email1;
+        } else {
+            allCorrect = false;
+            Toasty.info(this, getString(R.string.requestornotfound), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        collaborator=multiAutoCompleteTextViewCC.getText().toString();
-        if (!collaborator.equals("")) {
-        if (collaborator.contains("<")) {
+        collaborator = multiAutoCompleteTextViewCC.getText().toString();
 
-                //collaboratorFinal = collaborator.replaceAll("\\s+,$", "");
-                //collaboratorFinal = collaborator.replaceAll(" ", "");
-                //Toast.makeText(this, "emails are :" + collaboratorFinal, Toast.LENGTH_LONG).show();
-                //Log.d("emails", collaboratorFinal);
+        for (int i=0; i<collaborator.length(); i++)
+        {
+            // checking character in string
+            if (collaborator.charAt(i) == ',')
+                res++;
+        }
+        if (res>3){
+            Toasty.info(this,"you can add upto 3 collaborators",Toast.LENGTH_LONG).show();
+            return;
+        }
+        else {
 
-                cc = collaborator.split(",");
-                sb = new StringBuilder();
+            if (!collaborator.equals("")) {
+                if (collaborator.contains("<")) {
 
-                for (int i = 0; i < cc.length; i++) {
-                    String one = cc[i].toString();
-                    int pos = one.indexOf("<");
-                    int pos2 = one.lastIndexOf(">");
-                    try {
-                        String two = one.substring(pos + 1, pos2);
-                        sb.append(two + ",");
-                        //String three=sb.toString();
+                    //collaboratorFinal = collaborator.replaceAll("\\s+,$", "");
+                    //collaboratorFinal = collaborator.replaceAll(" ", "");
+                    //Toast.makeText(this, "emails are :" + collaboratorFinal, Toast.LENGTH_LONG).show();
+                    //Log.d("emails", collaboratorFinal);
 
-                        //cc=three.split(",");
+                    cc = collaborator.split(",");
+                    sb = new StringBuilder();
 
-                    } catch (StringIndexOutOfBoundsException e) {
-                        e.printStackTrace();
+                    for (int i = 0; i < cc.length; i++) {
+                        String one = cc[i].toString();
+                        int pos = one.indexOf("<");
+                        int pos2 = one.lastIndexOf(">");
+                        try {
+                            String two = one.substring(pos + 1, pos2);
+                            sb.append(two + ",");
+
+                            //String three=sb.toString();
+
+                            //cc=three.split(",");
+
+                        } catch (StringIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                cc1 = sb.toString().split(",");
-                sb1 = new StringBuilder();
-                for (String n : cc1) {
-                    sb1.append("&cc[]=");
-                    sb1.append(n);
-                }
-            collaborators=sb1.toString();
-            }
-        else{
-            Toasty.info(this,getString(R.string.collaboratorExisting),Toast.LENGTH_SHORT).show();
-            allCorrect=false;
-            return;
-        }
-        }
 
+                    Log.d("sb", sb.toString());
+                    cc1 = sb.toString().split(",");
+                    sb1 = new StringBuilder();
+                    if (res==1){
+                        for (String n : cc1) {
+                            sb1.append("&cc[]=");
+                            sb1.append(n);
+                            first_user=cc1[0];
+
+                        }
+                        Log.d("first_user",first_user);
+                        collaborators = sb1.toString();
+                    }
+                    else if (res==2){
+                        for (String n : cc1) {
+                            sb1.append("&cc[]=");
+                            sb1.append(n);
+                            first_user=cc1[0];
+                            second_user=cc1[1];
+                            
+                        }
+                        Log.d("first_user",first_user);
+                        Log.d("second_user",second_user);
+                        collaborators = sb1.toString();
+                    }
+                    else if (res==3){
+                        for (String n : cc1) {
+                            sb1.append("&cc[]=");
+                            sb1.append(n);
+                            first_user=cc1[0];
+                            second_user=cc1[1];
+                            third_user=cc1[2];
+                        }
+                        Log.d("first_user",first_user);
+                        Log.d("second_user",second_user);
+                        Log.d("third_user",third_user);
+                        collaborators = sb1.toString();
+                    }
+
+
+                    for (String n : cc1) {
+                        sb1.append("&cc[]=");
+                        sb1.append(n);
+
+                    }
+                    collaborators = sb1.toString();
+
+                } else {
+                    Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+                    allCorrect = false;
+                    return;
+                }
+            }
+        }
+        Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
+//        Log.d("ID of objt", "" + helpTopic.ID);
+        //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
+        //int dept = spinnerDept.getSelectedItemPosition();
+        Data priority = (Data) autoCompletePriority.getSelectedItem();
+        Data staff = (Data) autoCompleteTextView.getSelectedItem();
 
 //        Toast.makeText(this, "Sending emails :"+sb1.toString(), Toast.LENGTH_LONG).show();
         //Toast.makeText(this, "final email:"+sb.toString(), Toast.LENGTH_SHORT).show();
@@ -2016,7 +2452,6 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
 
         //Toast.makeText(this, "collaborators finals are:"+sb.toString(), Toast.LENGTH_LONG).show();
-
 
 
 //        collaboratorFinal=collaborator.replaceAll("\\s+,$", "");
@@ -2039,76 +2474,62 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //            countrycode = cc[1];
 //        }
 
-        countrycode=countryCodePicker.getSelectedCountryCode();
+        countrycode = countryCodePicker.getSelectedCountryCode();
 
 
         allCorrect = true;
 
 
-        Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
-//        Log.d("ID of objt", "" + helpTopic.ID);
-        //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
-        //int dept = spinnerDept.getSelectedItemPosition();
-        Data priority = (Data) autoCompletePriority.getSelectedItem();
-        Data staff= (Data) autoCompleteTextView.getSelectedItem();
-
 //    if (phCode.equals("")){
 //        Toast.makeText(this, "Select the code", Toast.LENGTH_SHORT).show();
 //    }
-
-        if (fname.length()==0&&email2.length()==0&&subject.length()==0&&message.length()==0&& helpTopic.ID == 0&&priority.ID == 0){
-            Toasty.warning(this,getString(R.string.fill_all_the_details),Toast.LENGTH_SHORT).show();
-            allCorrect=false;
+        if (fname.length()==0&&firstname.length()==0){
+            Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
         }
-
-        else if (fname.trim().length() == 0) {
+        if (fname.length() == 0 && email2.length() == 0 && subject.length() == 0 && message.length() == 0 && helpTopic.ID == 0 && priority.ID == 0) {
+            Toasty.warning(this, getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (fname.trim().length() == 0||fname.equals("null")||fname.equals(null)) {
             Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (fname.trim().length() < 3) {
             Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        }
-        else if (fname.length()>20){
+        } else if (fname.length() > 20) {
             Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
-            allCorrect=false;
-        }   else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
+            allCorrect = false;
+        } else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
             Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        }
-        else if (subject.trim().length() == 0) {
+        } else if (subject.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        }
-        else if (subject.trim().length() < 5) {
+        } else if (subject.trim().length() < 5) {
             Toasty.warning(this, getString(R.string.sub_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        }
-        else if (subject.matches("[" + splChrs + "]+")){
+        } else if (subject.matches("[" + splChrs + "]+")) {
             Toasty.warning(this, getString(R.string.only_special_characters_not_allowed_here), Toast.LENGTH_SHORT).show();
-            allCorrect=false;
-        }
-        else if (subject.trim().length()>100){
-            Toasty.warning(this,"Subject must not exceed 150 characters"
+            allCorrect = false;
+        } else if (subject.trim().length() > 100) {
+            Toasty.warning(this, "Subject must not exceed 150 characters"
                     , Toast.LENGTH_SHORT).show();
-            allCorrect=false;
-        }
-        else if (priority.ID == 0) {
+            allCorrect = false;
+        } else if (priority.ID == 0) {
             allCorrect = false;
             Toasty.warning(CreateTicketActivity.this, getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
-        }
-        else if (helpTopic.ID == 0) {
+        } else if (helpTopic.ID == 0) {
             allCorrect = false;
             Toasty.warning(CreateTicketActivity.this, getString(R.string.select_some_helptopic), Toast.LENGTH_SHORT).show();
-        }
-        else if (message.trim().length() == 0) {
+        } else if (message.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        }  else if (message.trim().length() < 10) {
+        } else if (message.trim().length() < 10) {
             Toasty.warning(this, getString(R.string.msg_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         }
-       if (autoCompleteTextView.getSelectedItem().toString().equals("")){
-            id=0;
+        if (autoCompleteTextView.getSelectedItem().toString().equals("")) {
+            id = 0;
         }
 
 //        if (lname.trim().length() == 0) {
@@ -2126,29 +2547,483 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         if (allCorrect) {
 
             if (InternetReceiver.isConnected()) {
+
                 progressDialog = new ProgressDialog(CreateTicketActivity.this);
-                progressDialog.setMessage(getString(R.string.creating_ticket));
 
 
+                if (path.equals("")) {
 
-                try {
-                    fname = URLEncoder.encode(fname.trim(), "utf-8");
-                    lname = URLEncoder.encode(lname.trim(), "utf-8");
-                    subject = URLEncoder.encode(subject.trim(), "utf-8");
-                    message = URLEncoder.encode(message.trim(), "utf-8");
-                    email1 = URLEncoder.encode(email1.trim(), "utf-8");
-                    phone = URLEncoder.encode(phone.trim(), "utf-8");
-                    mobile = URLEncoder.encode(mobile.trim(), "utf-8");
 
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                    //Starting the upload
+                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                    progressDialog.setMessage(getString(R.string.creating_ticket));
+
+
+                    try {
+                        fname = URLEncoder.encode(fname.trim(), "utf-8");
+                        lname = URLEncoder.encode(lname.trim(), "utf-8");
+                        subject = URLEncoder.encode(subject.trim(), "utf-8");
+                        message = URLEncoder.encode(message.trim(), "utf-8");
+                        email1 = URLEncoder.encode(email1.trim(), "utf-8");
+                        phone = URLEncoder.encode(phone.trim(), "utf-8");
+                        mobile = URLEncoder.encode(mobile.trim(), "utf-8");
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     progressDialog.show();
-                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile ).execute();
-            } else
-                Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
+                    new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile).execute();
+                } else {
+                    progressDialog.setMessage(getString(R.string.creating_ticket));
+                    progressDialog.show();
+                    if (res==1){
+                        try {
+                            token = Prefs.getString("TOKEN", null);
+                            String uploadId = UUID.randomUUID().toString();
+                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
+                                    .addFileToUpload(path, "media_attachment[]")
+                                    //Adding file
+                                    //.addParameter("token", token1)
+                                    //.addParameter("token",token)
+                                    .addParameter("user_id", Prefs.getString("ID", null))
+                                    .addParameter("subject", subject)
+                                    .addParameter("body", message)
+                                    .addParameter("help_topic", "" + helpTopic.ID)
+                                    .addParameter("priority", "" + priority.ID)
+                                    .addParameter("assigned", "" + staff.ID)
+                                    .addParameter("first_name", firstname)
+                                    .addParameter("last_name", lastname)
+                                    .addParameter("phone", phone)
+                                    .addParameter("code", countrycode)
+                                    .addParameter("mobile", mobile)
+                                    .addArrayParameter("cc[]",first_user)
+                                    .addParameter("email", email2)
+                                    //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
+                                    //Adding text parameter to the request
+                                    //.setNotificationConfig(new UploadNotificationConfig())
+                                    .setMaxRetries(1)
+                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                @Override
+                                public void onProgress(UploadInfo uploadInfo) {
+
+                                }
+
+                                @Override
+                                public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                }
+
+                                @Override
+                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                    progressDialog.dismiss();
+                                    Log.d("newStyle", serverResponse.getBodyAsString());
+                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                        serverResponse.getBodyAsString()));
+//                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
+//                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
+//                                        finish();
+//                                        editTextEmail.setText("");
+//                                        id = 0;
+//                                        Prefs.putString("newuseremail", null);
+//                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+//
+//                                    }
+
+                                    try{
+                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
+                                        JSONObject jsonObject1=jsonObject.getJSONObject("response");
+                                        String message=jsonObject1.getString("message");
+                                        if (message.equals("Ticket created successfully!")){
+                                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+                                            editTextEmail.setText("");
+                                            startActivity(intent);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    String state=Prefs.getString("403",null);
+                                    try {
+                                        if (state.equals("403") && !state.equals("null")) {
+                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                            Prefs.putString("403", "null");
+                                            return;
+                                        }
+                                    }catch (NullPointerException e){
+                                        e.printStackTrace();
+                                    }
+
+
+                                    try {
+
+                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
+                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
+                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                        String message=jsonObject1.getString("code");
+                                        if (message.contains("The code feild is required.")){
+                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+
+
+//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+//                            startActivity(intent);
+
+                                }
+
+                                @Override
+                                public void onCancelled(UploadInfo uploadInfo) {
+
+                                }
+                            })
+                                    .startUpload(); //Starting the upload
+                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if (res==2){
+                        try {
+                            token = Prefs.getString("TOKEN", null);
+                            String uploadId = UUID.randomUUID().toString();
+                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
+                                    .addFileToUpload(path, "media_attachment[]")
+                                    //Adding file
+                                    //.addParameter("token", token1)
+                                    //.addParameter("token",token)
+                                    .addParameter("user_id", Prefs.getString("ID", null))
+                                    .addParameter("subject", subject)
+                                    .addParameter("body", message)
+                                    .addParameter("help_topic", "" + helpTopic.ID)
+                                    .addParameter("priority", "" + priority.ID)
+                                    .addParameter("assigned", "" + staff.ID)
+                                    .addParameter("first_name", firstname)
+                                    .addParameter("last_name", lastname)
+                                    .addParameter("phone", phone)
+                                    .addParameter("code", countrycode)
+                                    .addParameter("mobile", mobile)
+                                    .addArrayParameter("cc[]",first_user)
+                                    .addArrayParameter("cc[]",second_user)
+                                    .addParameter("email", email2)
+                                    //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
+                                    //Adding text parameter to the request
+                                    //.setNotificationConfig(new UploadNotificationConfig())
+                                    .setMaxRetries(1)
+                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                @Override
+                                public void onProgress(UploadInfo uploadInfo) {
+
+                                }
+
+                                @Override
+                                public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                }
+
+                                @Override
+                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                    progressDialog.dismiss();
+                                    Log.d("newStyle", serverResponse.getBodyAsString());
+                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                        serverResponse.getBodyAsString()));
+                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
+                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
+                                        finish();
+                                        editTextEmail.setText("");
+                                        id = 0;
+                                        Prefs.putString("newuseremail", null);
+                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+
+                                    }
+
+                                    String state=Prefs.getString("403",null);
+                                    try {
+                                        if (state.equals("403") && !state.equals("null")) {
+                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                            Prefs.putString("403", "null");
+                                            return;
+                                        }
+                                    }catch (NullPointerException e){
+                                        e.printStackTrace();
+                                    }
+
+
+                                    try {
+
+                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
+                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
+                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                        String message=jsonObject1.getString("code");
+                                        if (message.contains("The code feild is required.")){
+                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+
+
+//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+//                            startActivity(intent);
+
+                                }
+
+                                @Override
+                                public void onCancelled(UploadInfo uploadInfo) {
+
+                                }
+                            })
+                                    .startUpload(); //Starting the upload
+                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }else if (res==3){
+                        try {
+                            token = Prefs.getString("TOKEN", null);
+                            String uploadId = UUID.randomUUID().toString();
+                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
+                                    .addFileToUpload(path, "media_attachment[]")
+                                    //Adding file
+                                    //.addParameter("token", token1)
+                                    //.addParameter("token",token)
+                                    .addParameter("user_id", Prefs.getString("ID", null))
+                                    .addParameter("subject", subject)
+                                    .addParameter("body", message)
+                                    .addParameter("help_topic", "" + helpTopic.ID)
+                                    .addParameter("priority", "" + priority.ID)
+                                    .addParameter("assigned", "" + staff.ID)
+                                    .addParameter("first_name", firstname)
+                                    .addParameter("last_name", lastname)
+                                    .addParameter("phone", phone)
+                                    .addParameter("code", countrycode)
+                                    .addParameter("mobile", mobile)
+                                    .addArrayParameter("cc[]",first_user)
+                                    .addArrayParameter("cc[]",second_user)
+                                    .addArrayParameter("cc[]",third_user)
+                                    .addParameter("email", email2)
+                                    //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
+                                    //Adding text parameter to the request
+                                    //.setNotificationConfig(new UploadNotificationConfig())
+                                    .setMaxRetries(1)
+                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                @Override
+                                public void onProgress(UploadInfo uploadInfo) {
+
+                                }
+
+                                @Override
+                                public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                }
+
+                                @Override
+                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                    progressDialog.dismiss();
+                                    Log.d("newStyle", serverResponse.getBodyAsString());
+                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                        serverResponse.getBodyAsString()));
+                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
+                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
+                                        finish();
+                                        editTextEmail.setText("");
+                                        id = 0;
+                                        Prefs.putString("newuseremail", null);
+                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+
+                                    }
+
+                                    String state=Prefs.getString("403",null);
+                                    try {
+                                        if (state.equals("403") && !state.equals("null")) {
+                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                            Prefs.putString("403", "null");
+                                            return;
+                                        }
+                                    }catch (NullPointerException e){
+                                        e.printStackTrace();
+                                    }
+
+
+                                    try {
+
+                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
+                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
+                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                        String message=jsonObject1.getString("code");
+                                        if (message.contains("The code feild is required.")){
+                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+
+
+//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+//                            startActivity(intent);
+
+                                }
+
+                                @Override
+                                public void onCancelled(UploadInfo uploadInfo) {
+
+                                }
+                            })
+                                    .startUpload(); //Starting the upload
+                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        try {
+                            token = Prefs.getString("TOKEN", null);
+                            String uploadId = UUID.randomUUID().toString();
+                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
+                                    .addFileToUpload(path, "media_attachment[]")
+                                    //Adding file
+                                    .addParameter("user_id", Prefs.getString("ID", null))
+                                    .addParameter("subject", subject)
+                                    .addParameter("body", message)
+                                    .addParameter("help_topic", "" + helpTopic.ID)
+                                    .addParameter("priority", "" + priority.ID)
+                                    .addParameter("assigned", "" + staff.ID)
+                                    .addParameter("first_name", firstname)
+                                    .addParameter("last_name", lastname)
+                                    .addParameter("phone", phone)
+                                    .addParameter("code", countrycode)
+                                    .addParameter("mobile", mobile)
+                                    .addParameter("email", email2)
+                                    .setMaxRetries(1)
+                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                @Override
+                                public void onProgress(UploadInfo uploadInfo) {
+
+                                }
+
+                                @Override
+                                public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                }
+
+                                @Override
+                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                    progressDialog.dismiss();
+                                    Log.d("newStyle", serverResponse.getBodyAsString());
+                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                        serverResponse.getBodyAsString()));
+                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
+                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
+                                        finish();
+                                        editTextEmail.setText("");
+                                        id = 0;
+                                        Prefs.putString("newuseremail", null);
+                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
+
+                                    }
+
+                                    String state=Prefs.getString("403",null);
+                                    try {
+                                        if (state.equals("403") && !state.equals("null")) {
+                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                            Prefs.putString("403", "null");
+                                            return;
+                                        }
+                                    }catch (NullPointerException e){
+                                        e.printStackTrace();
+                                    }
+
+
+                                    try {
+
+                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
+                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
+                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                        String message=jsonObject1.getString("code");
+                                        if (message.contains("The code feild is required.")){
+                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+
+
+//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+//                            startActivity(intent);
+
+                                }
+
+                                @Override
+                                public void onCancelled(UploadInfo uploadInfo) {
+
+                                }
+                            })
+                                    .startUpload(); //Starting the upload
+                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+
+
+                    //Creating a multi part request
+
+
+//                try {
+//                    uploadMultipartData();
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+                } else {
+                    Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
+                }
+            }
+//                progressDialog = new ProgressDialog(CreateTicketActivity.this);
+//                progressDialog.setMessage(getString(R.string.creating_ticket));
+//
+//
+//
+//                try {
+//                    fname = URLEncoder.encode(fname.trim(), "utf-8");
+//                    lname = URLEncoder.encode(lname.trim(), "utf-8");
+//                    subject = URLEncoder.encode(subject.trim(), "utf-8");
+//                    message = URLEncoder.encode(message.trim(), "utf-8");
+//                    email1 = URLEncoder.encode(email1.trim(), "utf-8");
+//                    phone = URLEncoder.encode(phone.trim(), "utf-8");
+//                    mobile = URLEncoder.encode(mobile.trim(), "utf-8");
+//
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//                    progressDialog.show();
+            //new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile ).execute();
+//            }
         }
-    }
+
+
+
 
     @Override
     public void onShowRationalDialog(final PermissionInterface permissionInterface, int requestCode) {
@@ -2184,30 +3059,56 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         Log.d("requestCode",""+requestCode);
 
         if (document==1){
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("*/*");
-            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+            Intent intent4 = new Intent(this, NormalFilePickActivity.class);
+            intent4.putExtra(Constant.MAX_NUMBER, 1);
+            //intent4.putExtra(IS_NEED_FOLDER_LIST, true);
+            intent4.putExtra(NormalFilePickActivity.SUFFIX,
+                    new String[] {"xlsx", "xls", "doc", "dOcX", "ppt", ".pptx", "pdf"});
+            startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
+//            new MaterialFilePicker()
+//                    .withActivity(TicketReplyActivity.this)
+//                    .withRequestCode(FILE_PICKER_REQUEST_CODE)
+//                    .withHiddenFiles(true)
+//                    .start();
             document=0;
         }
-         if (gallery==2){
-            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType("image/*");
-            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+        if (gallery==2){
+            Intent intent1 = new Intent(this, ImagePickActivity.class);
+            intent1.putExtra(IS_NEED_CAMERA, true);
+            intent1.putExtra(Constant.MAX_NUMBER, 1);
+            startActivityForResult(intent1, Constant.REQUEST_CODE_PICK_IMAGE);
+//            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//            intent.setType("image/*");
+//            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
             gallery=0;
         }
-         if (camera==3){
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, CAMERA_REQUEST);
+
+        if (camera==3){
+            Intent intent2 = new Intent(this, VideoPickActivity.class);
+            intent2.putExtra(IS_NEED_CAMERA, true);
+            intent2.putExtra(Constant.MAX_NUMBER, 1);
+            startActivityForResult(intent2, Constant.REQUEST_CODE_PICK_VIDEO);
+//            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//            startActivityForResult(intent, CAMERA_REQUEST);
             camera=0;
         }
         if (audio==4){
-            Intent intent;
-            intent = new Intent();
-            intent.setType("audio/mp3");
-            startActivityForResult(intent,PICKFILE_REQUEST_CODE);
+            Intent intent3 = new Intent(this, AudioPickActivity.class);
+            intent3.putExtra(IS_NEED_RECORDER, true);
+            intent3.putExtra(Constant.MAX_NUMBER, 1);
+            startActivityForResult(intent3, Constant.REQUEST_CODE_PICK_AUDIO);
             audio=0;
 
         }
+//        if (audio==4){
+//            Intent intent;
+//            intent = new Intent();
+//            intent.setType("audio/mp3");
+//            startActivityForResult(intent,PICKFILE_REQUEST_CODE);
+//            audio=0;
+//
+//        }
 //        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        startActivityForResult(intent, CAMERA_REQUEST);
     }
@@ -2217,6 +3118,96 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         Toasty.warning(CreateTicketActivity.this,getString(R.string.permission_camera_denied),Toast.LENGTH_SHORT).show();
         return;
     }
+
+
+    public void upload() throws Exception {
+        //Url of the server
+//        String url = "https://www.jamboreebliss.com/sayar/public/api/v1/authenticate";
+//        HttpClient client = new DefaultHttpClient();
+//        HttpPost post = new HttpPost(url);
+//        MultipartEntity mpEntity = new MultipartEntity();
+//        //Path of the file to be uploaded
+//        String filepath = "";
+//        File file = new File(filepath);
+//        ContentBody cbFile = new FileBody(file, "image/jpeg");
+//
+//        //Add the data to the multipart entity
+//        //mpEntity.addPart("image", cbFile);
+//        mpEntity.addPart("username", new StringBody("demoadmin", Charset.forName("UTF-8")));
+//        mpEntity.addPart("password", new StringBody("demopass", Charset.forName("UTF-8")));
+//        post.setEntity(mpEntity);
+//
+//        //Execute the post request
+//        HttpResponse response1 = client.execute(post);
+//        //Get the response from the server
+//        HttpEntity resEntity = response1.getEntity();
+//        String Response= EntityUtils.toString(resEntity);
+//        Log.d("ResponseFromHttpClient:", Response);
+//        //Generate the array from the response
+////        JSONArray jsonarray = new JSONArray("["+Response+"]");
+////        JSONObject jsonobject = jsonarray.getJSONObject(0);
+////        //Get the result variables from response
+////        String succ=jsonobject.getString("success");
+////        Log.d("success",succ);
+////        String result = (jsonobject.getString("result"));
+////        String msg = (jsonobject.getString("msg"));
+//        //Close the connection
+//        client.getConnectionManager().shutdown();
+//
+//
+        JSONObject jsonObjSend = new JSONObject();
+        try {
+            jsonObjSend.put("username", "demoadmin");
+            jsonObjSend.put("password", "demopass");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        HttpClient client = new DefaultHttpClient();
+        HttpPost httpPostRequest = new HttpPost("https://www.jamboreebliss.com/sayar/public/api/v1/authenticate/");
+        httpPostRequest.setHeader("User-Agent", "com.altaver.android_PostJson2");
+        httpPostRequest.setHeader("Accept", "application/json");
+        httpPostRequest.setHeader("Content-Type", "application/json");
+
+        StringEntity se = null;
+        try {
+            se = new StringEntity(jsonObjSend.toString());
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        httpPostRequest.setEntity(se);
+        HttpResponse response = null;
+        try {
+            response = client.execute(httpPostRequest);
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            Toast.makeText(getApplicationContext(),
+                    "Please check your internet connection",
+                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        BasicResponseHandler responseHandler = new BasicResponseHandler();
+        String strResponse = null;
+        if (response != null) {
+            try {
+                strResponse = responseHandler.handleResponse(response);
+            } catch (HttpResponseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        Log.e("AltaVerDemoActivity", "Response: " + strResponse);
+    }
+
+
+
 
 
 
@@ -2260,7 +3251,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
 //        protected String doInBackground(String... urls) {
 //
-//            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators, new File[]{new File(result)});
+            //return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators, new File[]{new File(result)});
 //        }
 
         @Override
@@ -2317,6 +3308,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("error");
+               // JSONArray jsonArray=jsonObject1.getJSONArray("code");
                 String message=jsonObject1.getString("code");
                 if (message.contains("The code feild is required.")){
                     Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
@@ -2456,17 +3448,20 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         String term = editTextEmail.getText().toString();
         if (InternetReceiver.isConnected()) {
             if (term.equals("")) {
-                arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+                //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                 //new FetchCollaborator("s").execute();
-                Data data = new Data(0, "No result found");
-                emailHint.add(data);
+                //Data data = new Data(0, "No result found");
+                //emailHint.add(data);
 //                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
 //                stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
             } else {
-                arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+                progressBar.setVisibility(View.VISIBLE);
+                //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                 new FetchCollaborator(term).execute();
                 editTextEmail.setAdapter(arrayAdapterCC);
                 //stringArrayAdapterCC.notifyDataSetChanged();
@@ -2497,14 +3492,17 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                     int pos = term.lastIndexOf(",");
                     term = term.substring(pos + 1, term.length());
                     Log.d("newTerm", term);
-                    arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
+                    adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
+                    progressBar.setVisibility(View.VISIBLE);
+                    //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                     new FetchCollaboratorCC(term.trim()).execute();
                     //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                    multiAutoCompleteTextViewCC.setAdapter(arrayAdapterCollaborator);
+                    multiAutoCompleteTextViewCC.setAdapter(adapter1);
                 }
 //            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
                 else if (term.equals("")) {
-                    arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
+                    adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
+                    //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                     //new FetchCollaborator("s").execute();
                     //Data data=new Data(0,"No result found");
 
@@ -2514,9 +3512,11 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
                 } else {
-                    arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
+                    adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
+                    progressBar.setVisibility(View.VISIBLE);
+                    //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                     new FetchCollaboratorCC(term).execute();
-                    multiAutoCompleteTextViewCC.setAdapter(arrayAdapterCollaborator);
+                    multiAutoCompleteTextViewCC.setAdapter(adapter1);
 
 
                     //stringArrayAdapterCC.notifyDataSetChanged();
@@ -2547,6 +3547,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
+            progressBar.setVisibility(View.GONE);
             emailHint.clear();
 //            if (progressDialog.isShowing())
 //                progressDialog.dismiss();
@@ -2565,12 +3566,14 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                     id1 = Integer.parseInt(jsonObject1.getString("id"));
                     String first_name=jsonObject1.getString("first_name");
                     String last_name=jsonObject1.getString("last_name");
+                    String profilePic=jsonObject1.getString("profile_pic");
                     //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-                    Data data = new Data(id1,first_name + " " + last_name + " <" + email + ">");
-                    emailHint.add(data);
+                    CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id1,first_name,last_name,email,profilePic);
+                    //Data data = new Data(id1,first_name + " " + last_name + " <" + email + ">");
+                    emailHint.add(collaboratorSuggestion);
 
                 }
-                multiAutoCompleteTextViewCC.setAdapter(arrayAdapterCollaborator);
+                editTextEmail.setAdapter(arrayAdapterCC);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -2595,6 +3598,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         }
 
         protected void onPostExecute(String result) {
+            progressBar.setVisibility(View.GONE);
             if (isCancelled()) return;
             stringArraylist.clear();
 
@@ -2620,9 +3624,12 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                         id1 = Integer.parseInt(jsonObject1.getString("id"));
                         String first_name = jsonObject1.getString("first_name");
                         String last_name = jsonObject1.getString("last_name");
+                        String profilePic=jsonObject1.getString("profile_pic");
                         //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-                        Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
-                        stringArraylist.add(data);
+                        MultiCollaborator collaboratorSuggestion=new MultiCollaborator(first_name,last_name,email,profilePic,id1);
+                        //Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
+                        stringArraylist.add(collaboratorSuggestion);
+                        Log.d("array",stringArraylist.toString());
 
 //                        Set<String> stringSet=new HashSet<>(stringArraylist);
 //                        stringArraylist.clear();
@@ -2631,6 +3638,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
                        // Prefs.putString("noUser","1");
                     }
+                    multiAutoCompleteTextViewCC.setAdapter(adapter1);
 
 
 
@@ -2642,10 +3650,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
                 }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            catch (NullPointerException e){
+            } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
             }
 

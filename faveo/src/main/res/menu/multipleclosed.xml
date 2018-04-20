@@ -31,13 +31,13 @@
         </menu>
 
     </item>
-    <item
-        android:id="@+id/mergeticket"
-        android:orderInCategory="101"
-        android:title="@string/mergeticket"
-        android:icon="@drawable/ic_merge_type_black_24dp"
-        app:showAsAction="never">
-    </item>
+    <!--<item-->
+        <!--android:id="@+id/mergeticket"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/mergeticket"-->
+        <!--android:icon="@drawable/ic_merge_type_black_24dp"-->
+        <!--app:showAsAction="never">-->
+    <!--</item>-->
 
     <item
         android:id="@+id/assignticket"

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         >
         <android.support.design.widget.AppBarLayout
@@ -65,8 +65,38 @@
                         android:textColor="@color/theme"
                         android:textSize="19sp"
                         android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/attachment"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignTop="@+id/titlesave"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/ic_action_attach_file"
+                        android:textColor="#ffffff"
+                        android:textSize="12sp"
+                        android:visibility="visible" />
                 </RelativeLayout>
             </Toolbar>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/faveo">
+
+            </View>
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="?android:attr/windowBackground"
+                app:itemBackground="@color/white"
+                android:foreground="?attr/selectableItemBackground"
+                app:itemIconTint="@color/faveo"
+                android:visibility="gone"
+                app:itemTextColor="@color/faveo"
+                app:menu="@menu/navigation" />
 
 
         </android.support.design.widget.AppBarLayout>
@@ -100,7 +130,7 @@
         <LinearLayout
             android:id="@+id/section_reply"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="450dp"
             android:orientation="vertical">
             <EditText
                 android:id="@+id/editText_reply_message"
@@ -155,9 +185,57 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
 
+            <RelativeLayout
+                android:id="@+id/attachment_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+                android:background="@color/grey_200"
+                >
 
+                <TextView
+                    android:id="@+id/attachment_name"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/grey_200"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:maxLines="1"
+                    android:text="@string/img_name"
+                    android:textAlignment="center"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:textSize="18sp" />
+
+
+                <!--<TextView-->
+                <!--android:id="@+id/attachment_size"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/attachment_name"-->
+                <!--android:layout_marginEnd="17dp"-->
+                <!--android:layout_toStartOf="@+id/attachment_close"-->
+                <!--android:background="@color/grey_200"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/_300_kb"-->
+                <!--android:textSize="12sp" />-->
+
+                <ImageButton
+                    android:id="@+id/attachment_close"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/attachment_name"
+                    android:background="@color/grey_200"
+                    android:src="@drawable/ic_clear_black_18dp" />
+            </RelativeLayout>
         </LinearLayout>
 
 
     </LinearLayout>
+
 </ScrollView>

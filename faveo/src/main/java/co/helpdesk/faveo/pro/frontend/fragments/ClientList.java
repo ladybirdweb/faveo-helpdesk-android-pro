@@ -450,56 +450,58 @@ public class ClientList extends Fragment implements View.OnClickListener {
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
-           url="null";
+            url = "null";
             //Prefs.putString("customerfilter","null");
-            textView.setText(""+total+" clients");
+            textView.setText("" + total + " clients");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
+            if (isAdded()) {
+                if (result == null) {
+                    Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-            if (result == null) {
-                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-            if (result.equals("all done")) {
+                if (result.equals("all done")) {
 
-                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
-                //return;
-            }
-            // recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
-            recyclerView.setHasFixedSize(false);
-            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    if (dy > 0) {
-                        visibleItemCount = linearLayoutManager.getChildCount();
-                        totalItemCount = linearLayoutManager.getItemCount();
-                        pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-                        if (loading) {
-                            if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-                                loading = false;
-                                new FetchNextPage(getActivity()).execute();
-                                //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+                    Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
+                    //return;
+                }
+                // recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
+                recyclerView.setHasFixedSize(false);
+                final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        if (dy > 0) {
+                            visibleItemCount = linearLayoutManager.getChildCount();
+                            totalItemCount = linearLayoutManager.getItemCount();
+                            pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
+                            if (loading) {
+                                if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                                    loading = false;
+                                    new FetchNextPage(getActivity()).execute();
+                                    //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
 
-                                StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
-                                st.setBackgroundColor(Color.parseColor("#3da6d7"));
-                                st.setTextColor(Color.WHITE);
-                                st.setIcon(R.drawable.ic_autorenew_black_24dp);
-                                st.spinIcon();
-                                st.setMaxAlpha();
-                                st.show();
+                                    StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
+                                    st.setBackgroundColor(Color.parseColor("#3da6d7"));
+                                    st.setTextColor(Color.WHITE);
+                                    st.setIcon(R.drawable.ic_autorenew_black_24dp);
+                                    st.spinIcon();
+                                    st.setMaxAlpha();
+                                    st.show();
+                                }
                             }
                         }
                     }
-                }
-            });
-            clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
-            recyclerView.setAdapter(clientOverviewAdapter);
-            if (clientOverviewAdapter.getItemCount() == 0) {
-                empty_view.setVisibility(View.VISIBLE);
-            } else empty_view.setVisibility(View.GONE);
+                });
+                clientOverviewAdapter = new ClientOverviewAdapter(getContext(), clientOverviewList);
+                recyclerView.setAdapter(clientOverviewAdapter);
+                if (clientOverviewAdapter.getItemCount() == 0) {
+                    empty_view.setVisibility(View.VISIBLE);
+                } else empty_view.setVisibility(View.GONE);
+            }
         }
     }
 

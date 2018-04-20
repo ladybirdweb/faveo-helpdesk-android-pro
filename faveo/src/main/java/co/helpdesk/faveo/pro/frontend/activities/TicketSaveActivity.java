@@ -71,37 +71,6 @@ public class TicketSaveActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                //
-                // Do the stuff
-                //
-                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-                    String role1=jsonObject2.getString("role");
-                    if (role1.equals("user")){
-                        Prefs.clear();
-                        //Prefs.putString("role",role);
-                        Intent intent=new Intent(TicketSaveActivity.this,LoginActivity.class);
-                        Toasty.info(TicketSaveActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-                        startActivity(intent);
-
-
-                    }
-
-
-                } catch (JSONException | NullPointerException e) {
-                    e.printStackTrace();
-                }
-
-                handler.postDelayed(this, 30000);
-            }
-        };
-        runnable.run();
         setUpViews();
         if (InternetReceiver.isConnected()) {
             progressDialog=new ProgressDialog(this);

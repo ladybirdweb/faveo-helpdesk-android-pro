@@ -1,6 +1,9 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -33,6 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.LocaleHelper;
 import co.helpdesk.faveo.pro.R;
@@ -41,6 +45,7 @@ import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
+import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 
@@ -89,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     ArrayList<String> strings;
     ArrayList<String> strings1;
     Toolbar toolbar;
+    Context context;
 //    private ArrayList<String> mList = new ArrayList<>();
 //    @BindView(R.id.sort_view)
 //    RelativeLayout sortView;
@@ -134,8 +140,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        Bundle bundle = new Bundle();
 //        bundle.putString("nextPageURL", nextPageURL);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
+
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             public void run() {
@@ -144,29 +150,83 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 //
                 String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
                 try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-                    String role1=jsonObject2.getString("role");
-                    if (role1.equals("user")){
-                        Prefs.clear();
-                        //Prefs.putString("role",role);
-                        Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-                        Toasty.info(MainActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-                        startActivity(intent);
-
-
+                    String state = Prefs.getString("405", null);
+                    if (state.equals("True")) {
+//                        Prefs.clear();
+//                        NotificationManager notificationManager =
+//                                (NotificationManager) MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+//                        notificationManager.cancelAll();
+//                        FaveoApplication.getInstance().clearApplicationData();
+//                        String url=Prefs.getString("URLneedtoshow",null);
+//                        Prefs.clear();
+//                        Prefs.putString("URLneedtoshow",url);
+//                        Prefs.putString("405", "false");
+//                        MainActivity.this.getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
+//                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
+                        //startActivity(intent);
                     }
-
-
-                } catch (JSONException | NullPointerException e) {
+                }catch (NullPointerException e){
                     e.printStackTrace();
                 }
 
-                handler.postDelayed(this, 60000);
+                String credential=Prefs.getString("unauthorized",null);
+
+                try{
+                    if (credential.equals("true")){
+
+                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
+                String state=Prefs.getString("400",null);
+
+                try {
+                    if (state.equals("badRequest")) {
+                        Toasty.info(MainActivity.this, getString(R.string.apiDisabled), 5000).show();
+//                        new AlertDialog.Builder(MainActivity.this)
+//                                .setTitle(getString(R.string.apidisabled))
+//                                .setMessage(getString(R.string.enableApi))
+//                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                }).setNegativeButton("Cancel", null).show();
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        String token = jsonObject1.getString("token");
+                        Prefs.putString("TOKEN", token);
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject("user");
+                        String role1 = jsonObject2.getString("role");
+                        if (role1.equals("user")) {
+                            Prefs.clear();
+                            //Prefs.putString("role",role);
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            Toasty.info(MainActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                            startActivity(intent);
+                        }
+
+
+                    } catch (JSONException | NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
+
+                handler.postDelayed(this, 50000);
             }
         };
         runnable.run();
+        Prefs.putString("querry1","null");
         strings=new ArrayList<>();
         strings.add(0,"Sort by");
         strings.add(1,"Due by time");

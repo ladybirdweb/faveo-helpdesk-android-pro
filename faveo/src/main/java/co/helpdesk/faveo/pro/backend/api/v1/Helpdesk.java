@@ -192,14 +192,12 @@ public class Helpdesk {
                 "&ip=" + IP +
                 "&token=" + token +
                 "&ticket_id=" + ticketID +
-
                 "&reply_content=" + replyContent);
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/reply?" +
                         "api_key=" + apiKey +
                         "&ip=" + IP +
                         "&token=" + token +
                         "&ticket_id=" + ticketID +
-
                         "&reply_content=" + replyContent,
                 null);
         if (result != null && result.equals("tokenRefreshed"))
@@ -208,7 +206,6 @@ public class Helpdesk {
                     "&ip=" + IP +
                     "&token=" + token +
                     "&ticket_id=" + ticketID +
-
                     "&reply_content=" + replyContent, null);
         return result;
     }
@@ -725,10 +722,10 @@ public class Helpdesk {
 
     }
         public String customerFeedback(String subject,String message){
-        Log.d("customerFeedback",Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message);
-        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message,null);
+        Log.d("customerFeedback",Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=faveoservicedesk@gmail.com&help_subject="+subject+"&help_massage="+message);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=faveoservicedesk@gmail.com&help_subject="+subject+"&help_massage="+message,null);
         if (result!=null&&result.equals("tokenRefreshed"))
-            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=support@ladybirdweb.com&help_subject="+subject+"&help_massage="+message,null);
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=faveoservicedesk@gmail.com&help_subject="+subject+"&help_massage="+message,null);
             return result;
         }
 

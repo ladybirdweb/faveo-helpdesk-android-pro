@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,7 +34,9 @@ import java.util.ArrayList;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.adapters.CollaboratorAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.CollaboratorSuggestion;
 import co.helpdesk.faveo.pro.model.Data;
 import es.dmoral.toasty.Toasty;
 
@@ -41,8 +44,8 @@ public class collaboratorAdd extends AppCompatActivity {
 
     AutoCompleteTextView autoCompleteTextViewUser;
     Button searchUer, deleteUser;
-    ArrayList<Data> stringArrayList;
-    ArrayAdapter<Data> arrayAdapterCC;
+    ArrayList<CollaboratorSuggestion> stringArrayList;
+    ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
     RelativeLayout relativeLayout;
     ArrayAdapter<String> spinnerPriArrayAdapter;
     int id = 0;
@@ -56,6 +59,7 @@ public class collaboratorAdd extends AppCompatActivity {
     String email2;
     ProgressDialog progressDialog;
     public static boolean isShowing = false;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,18 +72,21 @@ public class collaboratorAdd extends AppCompatActivity {
         strings = new ArrayList<>();
         strings.add("Show Recipients");
         isShowing=true;
+        progressBar= (ProgressBar) findViewById(R.id.collaboratorProgressBarReply);
         progressDialog=new ProgressDialog(collaboratorAdd.this);
         new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCollaborator);
         ImageView imageView = (ImageView) toolbar.findViewById(R.id.imageViewBack);
         autoCompleteTextViewUser = (AutoCompleteTextView) findViewById(R.id.appCompatAutoCompleteTextView);
         autoCompleteTextViewUser.setHorizontallyScrolling(true);
         autoCompleteTextViewUser.setMovementMethod(new ScrollingMovementMethod());
         searchUer = (Button) findViewById(R.id.buttonSearchUser);
         deleteUser = (Button) findViewById(R.id.buttonDeleteUser);
-        stringArrayList = new ArrayList<Data>();
-        arrayAdapterCC = new ArrayAdapter<Data>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-        autoCompleteTextViewUser.setThreshold(4);
+        stringArrayList = new ArrayList<CollaboratorSuggestion>();
+        arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+        //arrayAdapterCC = new ArrayAdapter<CollaboratorSuggestion>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+        autoCompleteTextViewUser.setThreshold(2);
+        autoCompleteTextViewUser.setDropDownWidth(1500);
         autoCompleteTextViewUser.addTextChangedListener(passwordWatcheredittextSubject);
         email1 = autoCompleteTextViewUser.getText().toString();
 
@@ -87,11 +94,11 @@ public class collaboratorAdd extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                 try{
-                    Data data = stringArrayList.get(i);
-                    id = data.getID();
-                    email = data.getName();
+                    CollaboratorSuggestion data = stringArrayList.get(i);
+                    id = data.getId();
+                    email = data.getEmail();
                     Log.d("idoftheuser",id+"");
                 }catch (IndexOutOfBoundsException e){
                     e.printStackTrace();
@@ -165,10 +172,6 @@ public class collaboratorAdd extends AppCompatActivity {
 
                 if (autoCompleteTextViewUser.getText().toString().equals("")) {
                     Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorEmpty), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else if (!autoCompleteTextViewUser.getText().toString().contains("<")){
-                    Toasty.info(collaboratorAdd.this,getString(R.string.collaboratorExisting),Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else {
@@ -259,6 +262,7 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            progressBar.setVisibility(View.GONE);
             if (isCancelled()) return;
             stringArrayList.clear();
 //            if (progressDialog.isShowing())
@@ -281,13 +285,17 @@ public class collaboratorAdd extends AppCompatActivity {
                         id = Integer.parseInt(jsonObject1.getString("id"));
                         String first_name = jsonObject1.getString("first_name");
                         String last_name = jsonObject1.getString("last_name");
+                        String profilePic=jsonObject1.getString("profile_pic");
                         //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-                        Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
-                        stringArrayList.add(data);
+                        CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id,first_name,last_name,email,profilePic);
+//                        Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
+                        stringArrayList.add(collaboratorSuggestion);
                         Prefs.putString("noUser", "1");
                     }
+                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
 
                 }
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -525,33 +533,26 @@ public class collaboratorAdd extends AppCompatActivity {
             term = autoCompleteTextViewUser.getText().toString();
             searchUer.setVisibility(View.VISIBLE);
             if (InternetReceiver.isConnected()) {
-                if (term.length()>=2) {
+                if (!term.equals("")) {
                     //int pos = term.lastIndexOf(",");
                     //term = term.substring(pos + 1, term.length());
                     String newTerm=term;
                     Log.d("newTerm", newTerm);
-                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    progressBar.setVisibility(View.VISIBLE);
+                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
                 }
 //            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
-                else if (term.equals("")) {
-                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                else {
+                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     //new FetchCollaborator("s").execute();
-                    Data data = new Data(0, "No result found");
-                    stringArrayList.add(data);
+                    //Data data = new Data(0, "No result found");
+                    //stringArrayList.add(data);
 //                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
 //                stringArrayAdapterCC.notifyDataSetChanged();
-//                autoCompleteTextViewCC.setThreshold(0);
-//                autoCompleteTextViewCC.setDropDownWidth(1000);
-
-                } else {
-//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-//                    new FetchCollaborator(term).execute();
-//                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
-
-
-                    //stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
