@@ -128,6 +128,7 @@ public class InboxTickets extends Fragment {
     ArrayList<Data> statusItems;
     private OnFragmentInteractionListener mListener;
     String status;
+    int id = 0;
     public static InboxTickets newInstance(String param1, String param2) {
         InboxTickets fragment = new InboxTickets();
         Bundle args = new Bundle();
@@ -223,7 +224,7 @@ public class InboxTickets extends Fragment {
 //                actionBar.setDisplayShowHomeEnabled(false);
 //            }
 
-
+            Prefs.putString("querry","null");
             statusItems=new ArrayList<>();
             JSONObject jsonObject1;
             Data data;
@@ -1656,6 +1657,20 @@ private void multiSelect(int position) {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
+            try{
+                JSONObject jsonObject=new JSONObject(result);
+                JSONArray jsonArray=jsonObject.getJSONArray("message");
+                for (int i=0;i<jsonArray.length();i++){
+                    String message=jsonArray.getString(i);
+                    if (message.contains("Permission denied")){
+                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                        Prefs.putString("403", "null");
+                        return;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
 //            try {
 //                JSONObject jsonObject = new JSONObject(result);
@@ -1811,7 +1826,6 @@ private void multiSelect(int position) {
     private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
         int page;
-        String methodNotAllowed;
         FetchFirst(Context context, int page) {
             this.context = context;
             this.page = page;
@@ -1901,7 +1915,6 @@ private void multiSelect(int position) {
 //            }
             if (isAdded()) {
                 if (result == null) {
-
                     Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -2218,6 +2231,7 @@ private void multiSelect(int position) {
 
     @Override
     public void onResume() {
+        Log.d("cameInInboxResume","true");
         super.onResume();
 //                progressDialog.setMessage(getString(R.string.pleasewait));
         try {
@@ -3475,7 +3489,7 @@ private void multiSelect(int position) {
         @Override
         public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
             StringBuffer stringBuffer = new StringBuffer();
-            int id = 0;
+
 //        try {
 //            if (item != null) {
 //                item.getSubMenu().clearHeader();
@@ -3507,15 +3521,51 @@ private void multiSelect(int position) {
                                 ticket = stringBuffer.toString().substring(0, pos2);
 
                                 Log.d("tickets", ticket);
-                                try {
-                                    new StatusChange(ticket, id).execute();
-                                    Prefs.putString("tickets", null);
-                                    progressDialog.show();
-                                    progressDialog.setMessage(getString(R.string.pleasewait));
-                                } catch (NumberFormatException e) {
-                                    e.printStackTrace();
 
-                                }
+
+
+                                android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+                                // Setting Dialog Title
+                                alertDialog.setTitle("Changing status...");
+
+                                // Setting Dialog Message
+                                alertDialog.setMessage("Are you sure you want to change the status?");
+
+                                // Setting Icon to Dialog
+                                alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                                // Setting Positive "Yes" Button
+                                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to invoke YES event
+                                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                        new StatusChange(ticket, id).execute();
+                                        progressDialog.show();
+                                        progressDialog.setMessage(getString(R.string.pleasewait));
+                                    }
+                                });
+
+                                // Setting Negative "NO" Button
+                                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to invoke NO event
+                                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                // Showing Alert Message
+                                alertDialog.show();
+//                                try {
+//                                    new StatusChange(ticket, id).execute();
+//                                    Prefs.putString("tickets", null);
+//                                    progressDialog.show();
+//                                    progressDialog.setMessage(getString(R.string.pleasewait));
+//                                } catch (NumberFormatException e) {
+//                                    e.printStackTrace();
+//
+//                                }
                                 return true;
                             } else {
                                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
@@ -3735,267 +3785,6 @@ private void multiSelect(int position) {
 
         }
     }
-
-//    public class Toolbar_ActionMode_Callback implements android.support.v7.view.ActionMode.Callback {
-//
-//        private Context context;
-//        private TicketOverviewAdapter recyclerView_adapter;
-//        private ArrayList<TicketOverview> message_models;
-//        private boolean isListViewFragment;
-//
-//
-//        public Toolbar_ActionMode_Callback(Context context, TicketOverviewAdapter ticketOverviewAdapter, TicketOverviewAdapter recyclerView_adapter, List<TicketOverview> message_models, boolean b) {
-//            this.context = context;
-//            this.recyclerView_adapter = recyclerView_adapter;
-//            this.message_models = (ArrayList<TicketOverview>) message_models;
-//            this.isListViewFragment = isListViewFragment;
-//        }
-//
-//        @Override
-//        public boolean onCreateActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
-//            mode.getMenuInflater().inflate(R.menu.multiplemenuinbox, menu);//Inflate the menu over action mode
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onPrepareActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
-//
-//            //Sometimes the meu will not be visible so for that we need to set their visibility manually in this method
-//            //So here show action menu according to SDK Levels
-//            if (Build.VERSION.SDK_INT < 11) {
-//                MenuItemCompat.setShowAsAction(menu.findItem(R.id.mergeticket), MenuItemCompat.SHOW_AS_ACTION_NEVER);
-//
-////            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_copy), MenuItemCompat.SHOW_AS_ACTION_NEVER);
-////            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_forward), MenuItemCompat.SHOW_AS_ACTION_NEVER);
-//            } else {
-//                menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-////            menu.findItem(R.id.action_copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-////            menu.findItem(R.id.action_forward).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-//            }
-////
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
-//            StringBuffer stringBuffer = new StringBuffer();
-//            try {
-//                if (item != null) {
-//                    item.getSubMenu().clearHeader();
-//                }
-//            } catch (NullPointerException e) {
-//                e.printStackTrace();
-//            }
-//            switch (item.getItemId()) {
-//                case R.id.mergeticket:
-////                Toast.makeText(, "You selected close menu.", Toast.LENGTH_SHORT).show();//Show toast
-//                        try {
-//                            if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
-//                                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                                return false;
-//                            }
-//                            String ticketId = Prefs.getString("tickets", null);
-//                            List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
-//                            int itemCount = items.size();
-//                            if (itemCount == 1) {
-//                                Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
-//                                return false;
-//                            } else {
-//                                Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-//                                startActivity(intent);
-//                            }
-//
-////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-////            startActivity(intent);
-//
-//                        } catch (NullPointerException e) {
-//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                            e.printStackTrace();
-//                        }
-////                    Log.d("clicked on closed","closed");
-//                    setNullToActionMode();
-//                    mode.finish();
-//
-//                    //mode.finish();
-//                    break;
-//                case R.id.action_statusClosed:
-//                    try {
-//                        if (!Prefs.getString("tickets", null).isEmpty()) {
-//                            String tickets = Prefs.getString("tickets", null);
-//                            int pos = tickets.indexOf("[");
-//                            int pos1 = tickets.lastIndexOf("]");
-//                            String text1 = tickets.substring(pos + 1, pos1);
-//                            String[] namesList = text1.split(",");
-//                            for (String name : namesList) {
-//                                stringBuffer.append(name + ",");
-//                            }
-//                            int pos2 = stringBuffer.toString().lastIndexOf(",");
-//                            ticket = stringBuffer.toString().substring(0, pos2);
-//
-//                            Log.d("tickets", ticket);
-//                            try {
-//                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("closedid", null))).execute();
-//                                Prefs.putString("tickets", null);
-//                                progressDialog.show();
-//                                progressDialog.setMessage(getString(R.string.pleasewait));
-//                            } catch (NumberFormatException e) {
-//                                e.printStackTrace();
-//
-//                            }
-//                            return true;
-//                        } else {
-//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                            return false;
-//                        }
-//                    } catch (NullPointerException e) {
-//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                        e.printStackTrace();
-//                    }
-//                    if (!Prefs.getString("tickets", null).equals("") || !Prefs.getString("tickets", null).equals("null") || !Prefs.getString("tickets", null).equals(null)) {
-//
-//
-//                        Log.d("tickets", ticket);
-//                        if (ticket.equals("") || ticket.equals(null)) {
-//                            Toasty.warning(getActivity(), getString(R.string.noticket), Toast.LENGTH_SHORT).show();
-//                            return false;
-//                        } else {
-//
-//
-//                        }
-//
-//                    }else {
-//
-//                    }
-//                    break;
-//                case R.id.action_statusResolved:
-//                    try {
-//                        if (!Prefs.getString("tickets", null).isEmpty()) {
-//                            String tickets = Prefs.getString("tickets", null);
-//                            int pos = tickets.indexOf("[");
-//                            int pos1 = tickets.lastIndexOf("]");
-//                            String text1 = tickets.substring(pos + 1, pos1);
-//                            String[] namesList = text1.split(",");
-//                            for (String name : namesList) {
-//                                stringBuffer.append(name + ",");
-//                            }
-//                            int pos2 = stringBuffer.toString().lastIndexOf(",");
-//                            ticket = stringBuffer.toString().substring(0, pos2);
-//
-//                            Log.d("tickets", ticket);
-//                            try {
-//                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
-//                                Prefs.putString("tickets", null);
-//                                progressDialog.show();
-//                                progressDialog.setMessage(getString(R.string.pleasewait));
-//                            } catch (NumberFormatException e) {
-//                                e.printStackTrace();
-//
-//                            }
-//                            return true;
-//                        } else {
-//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                            return false;
-//                        }
-//                    } catch (NullPointerException e) {
-//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                        e.printStackTrace();
-//                    }
-//                    break;
-//                case R.id.action_statusDeleted:
-//                    try {
-//                        if (!Prefs.getString("tickets", null).isEmpty()) {
-//                            String tickets = Prefs.getString("tickets", null);
-//                            int pos = tickets.indexOf("[");
-//                            int pos1 = tickets.lastIndexOf("]");
-//                            String text1 = tickets.substring(pos + 1, pos1);
-//                            String[] namesList = text1.split(",");
-//                            for (String name : namesList) {
-//                                stringBuffer.append(name + ",");
-//                            }
-//                            int pos2 = stringBuffer.toString().lastIndexOf(",");
-//                            ticket = stringBuffer.toString().substring(0, pos2);
-//
-//                            Log.d("tickets", ticket);
-//                            try {
-//                                new StatusChange(ticket, Integer.parseInt(Prefs.getString("deletedid", null))).execute();
-//                                Prefs.putString("tickets", null);
-//                                progressDialog.show();
-//                                progressDialog.setMessage(getString(R.string.pleasewait));
-//                            } catch (NumberFormatException e) {
-//                                e.printStackTrace();
-//
-//                            }
-//                            return true;
-//                        } else {
-//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                            return false;
-//                        }
-//                    } catch (NullPointerException e) {
-//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                        e.printStackTrace();
-//                    }
-//                case R.id.assignticket:
-//                    try {
-//                        if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
-//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                            return false;
-//                        }
-//                        String ticketId = Prefs.getString("tickets", null);
-//                        List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
-//                        int itemCount = items.size();
-//                        if (itemCount == 1) {
-//                            Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
-//                            return false;
-//                        } else {
-//                            Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
-//                            startActivity(intent);
-//                        }
-//
-////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-////            startActivity(intent);
-//
-//                    } catch (NullPointerException e) {
-//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                        e.printStackTrace();
-//                    }
-////                    case android.R.id.home:
-////                        Toast.makeText(context, "clicked on back button", Toast.LENGTH_SHORT).show();
-//
-//
-//            }
-//            return false;
-//        }
-//
-//
-//        @Override
-//        public void onDestroyActionMode(android.support.v7.view.ActionMode mode) {
-//
-//            //When action mode destroyed remove selected selections and set action mode to null
-//            //First check current fragment action mode
-//            Log.d("onDestroyActionMode","CAME HERE");
-//            InboxTickets inboxTickets=new InboxTickets();
-//            //recyclerView_adapter.removeSelection();
-//            inboxTickets.setNullToActionMode();
-//
-//            ticketOverviewAdapter.removeSelection();
-//            mActionMode=null;
-//            setNullToActionMode();
-////        ((InboxTickets) inboxTickets).setNullToActionMode();
-//            mode.finish();
-//            //new FetchFirst(getActivity(), page).execute();
-////            progressDialog.setMessage(getString(R.string.pleasewait));
-////            progressDialog.show();
-//            // remove selection
-////            Fragment recyclerFragment = new MainActivity().getFragment(1);//Get recycler fragment
-////            if (recyclerFragment != null)
-////                ((RecyclerView_Fragment) recyclerFragment).setNullToActionMode();//Set action mode null
-//
-//        }
-//    }
-
-
-
-
 }
 
 

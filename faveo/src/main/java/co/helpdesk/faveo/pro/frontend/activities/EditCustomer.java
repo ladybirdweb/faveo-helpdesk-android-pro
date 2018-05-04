@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,8 +10,10 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -74,39 +77,8 @@ public class EditCustomer extends AppCompatActivity {
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_edit_customer);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                //
-//                // Do the stuff
-//                //
-//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-//                try {
-//                    JSONObject jsonObject = new JSONObject(result);
-//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-//                    String role1=jsonObject2.getString("role");
-//                    if (role1.equals("user")){
-//                        Prefs.clear();
-//                        //Prefs.putString("role",role);
-//                        Intent intent=new Intent(EditCustomer.this,LoginActivity.class);
-//                        Toasty.info(EditCustomer.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                        startActivity(intent);
-//
-//
-//                    }
-//
-//
-//                } catch (JSONException | NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                handler.postDelayed(this, 30000);
-//            }
-//        };
-//        runnable.run();
+        GetCountryZipCode();
         countryCodePicker= (CountryCodePicker) findViewById(R.id.countrycoode);
         Log.d("country code",countrycode);
         countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
@@ -138,6 +110,8 @@ public class EditCustomer extends AppCompatActivity {
 
 
         if (InternetReceiver.isConnected()){
+            progressDialog.setMessage(getString(R.string.pleasewait));
+            progressDialog.show();
             new FetchClientTickets(EditCustomer.this).execute();
         }
 
@@ -194,9 +168,33 @@ public class EditCustomer extends AppCompatActivity {
 
 
                         if (InternetReceiver.isConnected()) {
-                            progressDialog.show();
-                            progressDialog.setMessage(getString(R.string.pleasewait));
-                            new EditClient(EditCustomer.this, clientID, firstName, lastName, emailtext, userName + "&mobile=" + mobileText + "&code=" + countrycode).execute();
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditCustomer.this);
+                            // Setting Dialog Title
+                            alertDialog.setTitle("Editing user...");
+                            // Setting Dialog Message
+                            alertDialog.setMessage("Are you sure you want to edit the user?");
+                            // Setting Icon to Dialog
+                            alertDialog.setIcon(R.mipmap.ic_launcher);
+                            // Setting Positive "Yes" Button
+                            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to invoke YES event
+                                    progressDialog.show();
+                                    progressDialog.setMessage(getString(R.string.pleasewait));
+                                    new EditClient(EditCustomer.this, clientID, firstName, lastName, emailtext, userName + "&mobile=" + mobileText + "&code=" + countrycode).execute();
+                                }
+                            });
+                            // Setting Negative "NO" Button
+                            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to invoke NO event
+                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                    dialog.cancel();
+                                }
+                            });
+
+                            // Showing Alert Message
+                            alertDialog.show();
                         }
 
                     } catch (UnsupportedEncodingException e) {
@@ -218,12 +216,34 @@ public class EditCustomer extends AppCompatActivity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-
-
                     if (InternetReceiver.isConnected()) {
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                        new EditClient(EditCustomer.this, clientID, firstName, lastName, emailtext, userName).execute();
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditCustomer.this);
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Editing user...");
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want to edit the user?");
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+                        // Setting Positive "Yes" Button
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                progressDialog.show();
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                new EditClient(EditCustomer.this, clientID, firstName, lastName, emailtext, userName).execute();
+                                }
+                        });
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
                     }
                 }
 //                else{
@@ -231,11 +251,27 @@ public class EditCustomer extends AppCompatActivity {
 //                }
             }
         });
+        }
+    public String GetCountryZipCode(){
+        String CountryID="";
+        String CountryZipCode="";
 
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+        assert manager != null;
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        String[] rl=this.getResources().getStringArray(R.array.CountryCodes);
+        for (String aRl : rl) {
+            String[] g = aRl.split(",");
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
+                break;
+            }
+        }
 
-
-
-
+        Log.d("ZIPcode",CountryZipCode);
+        countrycode=CountryZipCode;
+        return CountryZipCode;
     }
     private class FetchClientTickets extends AsyncTask<String, Void, String> {
         Context context;
@@ -244,39 +280,11 @@ public class EditCustomer extends AppCompatActivity {
         }
 
         protected String doInBackground(String... urls) {
-//            listTicketGlimpse = new ArrayList<>();
-//            String result = new Helpdesk().getTicketsByUser(clientID);
-//            if (result == null)
-//                return null;
-//            try {
-//                JSONObject jsonObject = new JSONObject(result);
-//
-//                JSONArray jsonArray = jsonObject.getJSONArray("tickets");
-//                for (int i = 0; i < jsonArray.length(); i++) {
-//                    int ticketID = Integer.parseInt(jsonArray.getJSONObject(i).getString("id"));
-//                    boolean isOpen = true;
-//                    String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
-//                    String ticketSubject = jsonArray.getJSONObject(i).getString("title");
-//                    try {
-//                        isOpen = jsonArray.getJSONObject(i).getString("ticket_status_name").equals("Open");
-//                        if (isOpen)
-//                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
-//                        else
-//                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false));
-//                    } catch (Exception e) {
-//                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
-//                    }
-//                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen));
-//                }
-//            } catch (JSONException e) {
-//                Toast.makeText(ClientDetailActivity.this, R.string.unexpected_error, Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-            // return "success";
             return new Helpdesk().getTicketsByUser(clientID);
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.dismiss();
             if (isCancelled()) return;
 
             if (result == null) return;

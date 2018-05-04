@@ -1,12 +1,12 @@
 package co.helpdesk.faveo.pro.frontend.drawers;
 
 
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,37 +30,43 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.picasso.Picasso;
 
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import agency.tango.android.avatarview.IImageLoader;
-import agency.tango.android.avatarview.loader.PicassoLoader;
-import agency.tango.android.avatarview.views.AvatarView;
+import javax.net.ssl.HttpsURLConnection;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UIUtils;
 import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
-import co.helpdesk.faveo.pro.frontend.activities.HelpSection;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.SettingsActivity;
-import co.helpdesk.faveo.pro.frontend.activities.SplashActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
 import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
-import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
@@ -91,7 +97,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     ProgressDialog progressDialog;
     String title;
     static String token;
-
+    int responseCodeForShow;
     //    @BindView(R.id.inbox_count)
 //    TextView inbox_count;
 //    @BindView(R.id.my_tickets_count)
@@ -147,30 +153,16 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
-
         layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         listView= (ListView) layout.findViewById(R.id.listviewNavigation);
         layout.findViewById(R.id.create_ticket).setOnClickListener(this);
-//        layout.findViewById(R.id.inbox_tickets).setOnClickListener(this);
-//        layout.findViewById(R.id.my_tickets).setOnClickListener(this);
-//        layout.findViewById(R.id.unassigned_tickets).setOnClickListener(this);
-//        layout.findViewById(R.id.closed_tickets).setOnClickListener(this);
-//        layout.findViewById(R.id.trash_tickets).setOnClickListener(this);
         layout.findViewById(R.id.client_list).setOnClickListener(this);
         layout.findViewById(R.id.settings).setOnClickListener(this);
         layout.findViewById(R.id.about).setOnClickListener(this);
         layout.findViewById(R.id.logout).setOnClickListener(this);
         drawerItem = new DataModel[5];
-
-
         ButterKnife.bind(this, layout);
         confirmationDialog=new ConfirmationDialog();
-
-        //inbox_count.setText(Prefs.getString("inboxTickets",null));
-        //closed_tickets_count.setText(Prefs.getString("closedTickets", null));
-        //unassigned_tickets_count.setText(Prefs.getString("unassignedTickets",null));
-        //trash_tickets_count.setText(Prefs.getString("trashTickets", null));
-        //my_tickets_count.setText(Prefs.getString("myTickets", null));
         drawerItem[0] = new DataModel(R.drawable.inbox_tickets,getString(R.string.inbox),Prefs.getString("inboxTickets",null));
         drawerItem[1] = new DataModel(R.drawable.my_ticket,getString(R.string.my_tickets),Prefs.getString("myTickets", null));
         drawerItem[2] = new DataModel(R.drawable.unassigned_ticket,getString(R.string.unassigned_tickets),Prefs.getString("unassignedTickets",null));
@@ -252,7 +244,6 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.container_body, fragment);
-                        // fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                         ((MainActivity) getActivity()).setActionBarTitle(title);
                         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -318,35 +309,21 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                //Toast.makeText(getActivity(), "Drawer opened", Toast.LENGTH_SHORT).show();
-                //listView.setAdapter(null);
-                //progressDialog=new ProgressDialog(getActivity());
-
+                new SendPostRequest().execute();
                 new FetchDependency().execute();
                 getActivity().invalidateOptionsMenu();
-
-
-
-            }
+                }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                //listView.setAdapter(null);
-                //progressDialog=new ProgressDialog(getActivity());
-
-//                new FetchDependency().execute();
-                //Toasty.normal(getActivity(), "Getting Information", Toast.LENGTH_LONG).show();
+                new SendPostRequest().execute();
                 getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                //listView.setAdapter(null);
-                //progressDialog=new ProgressDialog(getActivity());
-
-//                new FetchDependency().execute();
                 toolbar.setAlpha(1 - slideOffset / 2);
             }
         };
@@ -359,6 +336,173 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             }
         });
 
+    }
+    public class SendPostRequest extends AsyncTask<String, Void, String> {
+
+        protected void onPreExecute(){}
+
+        protected String doInBackground(String... arg0) {
+            try {
+
+                URL url = new URL(Constants.URL + "authenticate"); // here is your URL path
+
+                JSONObject postDataParams = new JSONObject();
+                postDataParams.put("username", Prefs.getString("USERNAME", null));
+                postDataParams.put("password", Prefs.getString("PASSWORD", null));
+                Log.e("params",postDataParams.toString());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int responseCode=conn.getResponseCode();
+
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    Log.d("ifresponseCode",""+responseCode);
+                    BufferedReader in=new BufferedReader(new
+                            InputStreamReader(
+                            conn.getInputStream()));
+
+                    StringBuffer sb = new StringBuffer("");
+                    String line="";
+
+                    while((line = in.readLine()) != null) {
+                        sb.append(line);
+                        break;
+                    }
+                    in.close();
+                    return sb.toString();
+                    }
+                else {
+                    if (responseCode==400){
+                        Log.d("cameInThisBlock","true");
+                        responseCodeForShow=400;
+                        }
+                        else if (responseCode==405){
+                        responseCodeForShow=405;
+                    }
+                    else if (responseCode==302){
+                        responseCodeForShow=302;
+                    }
+                    Log.d("elseresponseCode",""+responseCode);
+                    return new String("false : "+responseCode);
+                    }
+            }
+            catch(Exception e){
+                return new String("Exception: " + e.getMessage());
+            }
+
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("resultFromNewCall",result);
+
+            if (responseCodeForShow==400){
+                final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange),Toast.LENGTH_SHORT);
+                toast.show();
+                new CountDownTimer(10000, 1000)
+                {
+                    public void onTick(long millisUntilFinished) {toast.show();}
+                    public void onFinish() {toast.cancel();}
+                }.start();
+                Prefs.clear();
+                Intent intent=new Intent(getActivity(),LoginActivity.class);
+                startActivity(intent);
+                return;
+            }
+
+            if (responseCodeForShow==405){
+                final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange),Toast.LENGTH_SHORT);
+                toast.show();
+                new CountDownTimer(10000, 1000)
+                {
+                    public void onTick(long millisUntilFinished) {toast.show();}
+                    public void onFinish() {toast.cancel();}
+                }.start();
+                Prefs.clear();
+                Intent intent=new Intent(getActivity(),LoginActivity.class);
+                startActivity(intent);
+                return;
+            }
+
+
+            if (responseCodeForShow==302){
+                final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange),Toast.LENGTH_SHORT);
+                toast.show();
+                new CountDownTimer(10000, 1000)
+                {
+                    public void onTick(long millisUntilFinished) {toast.show();}
+                    public void onFinish() {toast.cancel();}
+                }.start();
+                Prefs.clear();
+                Intent intent=new Intent(getActivity(),LoginActivity.class);
+                startActivity(intent);
+                return;
+            }
+
+            try {
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                token = jsonObject1.getString("token");
+                JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                String role=jsonObject2.getString("role");
+                if (role.equals("user")){
+                    final Toast toast = Toasty.info(getActivity(), getString(R.string.roleChanged),Toast.LENGTH_SHORT);
+                    toast.show();
+                    new CountDownTimer(10000, 1000)
+                    {
+                        public void onTick(long millisUntilFinished) {toast.show();}
+                        public void onFinish() {toast.cancel();}
+                    }.start();
+                    Prefs.clear();
+                    //Prefs.putString("role",role);
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    //Toasty.info(getActivity(), getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                }
+                Prefs.putString("TOKEN", token);
+                Log.d("TOKEN",token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public String getPostDataString(JSONObject params) throws Exception {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while(itr.hasNext()){
+
+            String key= itr.next();
+            Object value = params.get(key);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
+        }
+        return result.toString();
     }
     private class FetchDependency extends AsyncTask<String, Void, String> {
         @Override
@@ -478,15 +622,6 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 try {
                     if (state1.equals("badRequest")) {
                         Toasty.info(getActivity(), getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
-//                        new AlertDialog.Builder(MainActivity.this)
-//                                .setTitle(getString(R.string.apidisabled))
-//                                .setMessage(getString(R.string.enableApi))
-//                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                }).setNegativeButton("Cancel", null).show();
                     }
                     else{
                         Toasty.error(getActivity(), "Parsing Error!", Toast.LENGTH_LONG).show();
@@ -498,24 +633,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
 
             }
-//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-//            builder.setTitle("Welcome to FAVEO");
-//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
-//            builder.setCancelable(true);
-//
-//            final AlertDialog dlg = builder.create();
-//
-//            dlg.show();
-//
-//            final Timer t = new Timer();
-//            t.schedule(new TimerTask() {
-//                public void run() {
-//                    dlg.dismiss(); // when the task active then close the dialog
-//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
-//                }
-//            }, 3000);
-
-        }
+            }
     }
 
 

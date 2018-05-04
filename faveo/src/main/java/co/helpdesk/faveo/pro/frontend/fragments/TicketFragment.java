@@ -120,7 +120,7 @@ public class TicketFragment extends Fragment {
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
             progressDialog=new ProgressDialog(getActivity());
             progressDialog.setMessage("Please wait");
-            querry=Prefs.getString("querry1",null);
+            querry=Prefs.getString("querry",null);
 
 //            if (InternetReceiver.isConnected()) {
 //                if (querry.equals("")&&querry.equals("null")){

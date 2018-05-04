@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -477,6 +478,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 apiDisabled = Prefs.getString("400", null);
                 if (apiDisabled.equals("badRequest")) {
+                    Prefs.putString("400", "null");
                     Toasty.warning(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -512,6 +514,8 @@ public class LoginActivity extends AppCompatActivity {
 //                Prefs.putStringSet("URL_SUG", set);
 
                 Prefs.putString("BASE_URL", baseURL);
+                progressDialogBilling.show();
+                new VerifyBilling(LoginActivity.this, baseURL).execute();
                 Prefs.putString("companyurl",urlGivenByUser);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
                 Constants.URL = Prefs.getString("COMPANY_URL", "");
@@ -519,18 +523,17 @@ public class LoginActivity extends AppCompatActivity {
                 Prefs.putString("domain","https://");
                 Prefs.putString("companyUrl",companyURL);
                 Log.d("companyurl",companyURL);
-                if (BuildConfig.DEBUG) {
-                    viewflipper.showNext();
-                    imageBackButton.setVisibility(View.VISIBLE);
-                    url.setText(baseURL);
-                    url.setVisibility(View.VISIBLE);
-                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
-                } else {
 
-                    progressDialogBilling.show();
-
-                    new VerifyBilling(LoginActivity.this, baseURL).execute();
-                }
+//                if (BuildConfig.DEBUG) {
+//                    viewflipper.showNext();
+//                    imageBackButton.setVisibility(View.VISIBLE);
+//                    url.setText(baseURL);
+//                    url.setVisibility(View.VISIBLE);
+//                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
+//                } else {
+//                    progressDialogBilling.show();
+//                    new VerifyBilling(LoginActivity.this, baseURL).execute();
+//                }
 
             } else {
                 linearLayout.startAnimation(animation);
@@ -663,6 +666,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This async task is for verifying the url,for paid version only.
      */
+    @SuppressLint("StaticFieldLeak")
     private class VerifyBilling extends AsyncTask<String, Void, String> {
         Context context;
         String baseURL;
@@ -850,6 +854,7 @@ public class LoginActivity extends AppCompatActivity {
                         clientname = firstName + " " + lastName;
                     Prefs.putString("clientNameForFeedback",clientname);
                     Prefs.putString("emailForFeedback",email);
+                    Prefs.putString("PROFILE_NAME",clientname);
                     SharedPreferences.Editor authenticationEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
                     authenticationEditor.putString("ID", userID);
                     authenticationEditor.putString("TOKEN", token);

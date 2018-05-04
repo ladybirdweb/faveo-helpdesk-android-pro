@@ -83,15 +83,9 @@ class HTTPConnection{
                 switch (connection.getResponseCode()) {
                     case HttpURLConnection.HTTP_UNAUTHORIZED:
                         Log.e("Response code: ", "401-UNAUTHORIZED!");
-                        Prefs.putString("unauthorized","true");
                         ret="Unauthorized Access";
+                        Prefs.putString("unauthorized","true");
                         break;
-                        //ret="HTTP_UNAUTHORIZED";
-//                        if (refreshToken() == null)
-//                            return null;
-//                        new Helpdesk();
-//                        new Authenticate();
-//                        return "tokenRefreshed";
                     case HttpURLConnection.HTTP_NOT_FOUND:
                         Log.e("Response code: ", "NotFound-404!");
                         //ret = "notFound";
@@ -328,6 +322,10 @@ class HTTPConnection{
                         Log.e("Response code: ", "504-Timeout!");
                         ret="HTTP_GATEWAY_TIMEOUT";
                         break;// retry
+                    case HttpURLConnection.HTTP_PAYMENT_REQUIRED:
+                        ret="PaymentRequired";
+                        Prefs.putString("role","user");
+                        break;
                     case HttpURLConnection.HTTP_BAD_METHOD:
                         Log.e("Response code: ", "405 MethodNotAllowed!");
                         ret="MethodNotAllowed";
@@ -420,17 +418,12 @@ class HTTPConnection{
             String token = jsonObject1.getString("token");
             JSONObject jsonObject2=jsonObject1.getJSONObject("user");
             String role=jsonObject2.getString("role");
-//            if (role.equals("user")){
-//                //Prefs.clear();
-//                //Prefs.putString("role",role);
-//                Intent intent=new Intent(FaveoApplication.getContext(),LoginActivity.class);
-//                Toast.makeText(FaveoApplication.getContext(),FaveoApplication.getContext().getString(R.string.permission), Toast.LENGTH_SHORT).show();
-//                FaveoApplication.getContext().startActivity(intent);
-//
-//
-//            }
+            if (role.equals("user")){
+                //Prefs.clear();
+                Prefs.putString("role",role);
 
-                String profilePic = jsonObject2.getString("profile_pic");
+            }
+            String profilePic = jsonObject2.getString("profile_pic");
                 //Prefs.putString("role",role);
                 Log.d("result", result);
                 Log.d("profilePicture", profilePic);
@@ -443,6 +436,7 @@ class HTTPConnection{
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Prefs.putString("unauthorized","true");
             Log.d("cameInException","true");
             Prefs.clear();
             Prefs.putString("NoToken","True");

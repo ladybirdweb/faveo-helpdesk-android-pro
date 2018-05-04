@@ -119,11 +119,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         if (i==ticketThreadList.size()-1){
             ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }
-
-
-
-
-
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -110,17 +110,17 @@ ProgressBar progressBar;
     boolean isImageFitToScreen;
     int gallery,document,camera,audio=0;
     BottomNavigationView bottomNavigationView;
-    String path;
+    String path,realPath;
     private Uri fileUri = null;//Uri to capture image
     private String getImageUrl = "";
+
+    String replyMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_reply);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
-        final Handler handler = new Handler();
         button= (Button) findViewById(R.id.attachment);
         attachment_layout= (RelativeLayout) findViewById(R.id.attachment_layout);
         attachmentFileName= (TextView) findViewById(R.id.attachment_name);
@@ -131,11 +131,8 @@ ProgressBar progressBar;
             @Override
             public void onClick(View view) {
                 attachment_layout.setVisibility(View.GONE);
-//                attachmentFileName.setText("");
                 path="";
                 Log.d("path",path);
-//                attachmentFileName.setVisibility(View.GONE);
-//                imageButton.setVisibility(View.GONE);
             }
         });
         button.setOnClickListener(new View.OnClickListener() {
@@ -160,16 +157,10 @@ ProgressBar progressBar;
         addCc = (TextView) findViewById(R.id.addcc);
         editTextReplyMessage = (EditText) findViewById(R.id.editText_reply_message);
         editTextReplyMessage.setCursorVisible(true);
-//        byte[] decodedString = Base64.decode(Prefs.getString("imageBase64",null), Base64.DEFAULT);
-//        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//        imageViewAttachment.setImageBitmap(decodedByte);
-        //Glide.with(TicketReplyActivity.this).load(getString(R.string.attachment)).crossFade().fitCenter().into(imageViewAttachment);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
-//                Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
-//                startActivity(intent);
             }
         });
         addCc.setOnClickListener(new View.OnClickListener() {
@@ -183,96 +174,24 @@ ProgressBar progressBar;
                 buttonSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                String cc = editTextCC.getText().toString();
-                        new SendPostRequest().execute();
-                        String replyMessage = editTextReplyMessage.getText().toString();
+                        replyMessage = editTextReplyMessage.getText().toString();
+                        try {
+                            realPath = path;
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
                         if (replyMessage.trim().length() == 0) {
                             Toasty.warning(TicketReplyActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
                             return;
                         }
+                        else{
+                            progressDialog.setMessage(getString(R.string.sending_msg));
+                            progressDialog.show();
+                            new SendPostRequest().execute();
+                        }
 
-//                cc = cc.replace(", ", ",");
-//                if (cc.length() > 0) {
-//                    String[] multipleEmails = cc.split(",");
-//                    for (String email : multipleEmails) {
-//                        if (email.length() > 0 && !Helper.isValidEmail(email)) {
-//                            Toasty.warning(TicketDetailActivity.this, getString(R.string.invalid_cc), Toast.LENGTH_LONG).show();
-//                            return;
-//                        }
-//                    }
-//                }
-
-                        String userID = Prefs.getString("ID", null);
-                        if (userID != null && userID.length() != 0) {
-                            if (path.equals("")){
-                                try {
-                                    replyMessage = URLEncoder.encode(replyMessage, "utf-8");
-                                    Log.d("Msg", replyMessage);
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                                new ReplyTicket(Integer.parseInt(ticketID), replyMessage).execute();
-                                progressDialog.setMessage(getString(R.string.sending_msg));
-                                progressDialog.show();
-
-                            }
-                            else{
-                                try {
-                                    progressDialog.setMessage(getString(R.string.sending_msg));
-                                    progressDialog.show();
-                                    String token = Prefs.getString("TOKEN", null);
-                                    String uploadId = UUID.randomUUID().toString();
-                                    new MultipartUploadRequest(TicketReplyActivity.this, uploadId, Constants.URL + "helpdesk/reply?token="+token)
-                                            .addFileToUpload(path, "media_attachment[]")
-                                            //Adding file
-                                            //.addParameter("token", token1)
-                                            .addParameter("ticket_id", ticketID)
-                                            .addParameter("reply_content",replyMessage)
-                                            //Adding text parameter to the request
-                                            //.setNotificationConfig(new UploadNotificationConfig())
-                                            .setMaxRetries(1)
-                                            .setMethod("POST").setDelegate(new UploadStatusDelegate() {
-                                        @Override
-                                        public void onProgress(UploadInfo uploadInfo) {
-
-                                        }
-
-                                        @Override
-                                        public void onError(UploadInfo uploadInfo, Exception exception) {
-
-                                        }
-
-                                        @Override
-                                        public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
-                                            progressDialog.dismiss();
-                                            Log.d("newStyle", serverResponse.getBodyAsString());
-                                            Log.i("newStyle", String.format(Locale.getDefault(),
-                                                    "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
-                                                    uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
-                                                    uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
-                                                    serverResponse.getBodyAsString()));
-                                            editTextReplyMessage.getText().clear();
-                                            Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
-                                            Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
-                                            startActivity(intent);
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(UploadInfo uploadInfo) {
-
-                                        }
-                                    })
-                                            .startUpload(); //Starting the upload
-                                } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-
-                        } else
-                            Toasty.warning(TicketReplyActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
                     }
+
                 });
             }
 
@@ -284,12 +203,7 @@ ProgressBar progressBar;
             startActivity(intent);
         } else Log.d("isShowing", "true");
 
-
         super.onBackPressed();
-
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
     }
 
     public class SendPostRequest extends AsyncTask<String, Void, String> {
@@ -297,7 +211,6 @@ ProgressBar progressBar;
         protected void onPreExecute(){}
 
         protected String doInBackground(String... arg0) {
-
             try {
 
                 URL url = new URL(Constants.URL + "authenticate"); // here is your URL path
@@ -306,7 +219,6 @@ ProgressBar progressBar;
                 postDataParams.put("username", Prefs.getString("USERNAME", null));
                 postDataParams.put("password", Prefs.getString("PASSWORD", null));
                 Log.e("params",postDataParams.toString());
-
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(15000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);
@@ -314,7 +226,6 @@ ProgressBar progressBar;
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
-
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -357,9 +268,6 @@ ProgressBar progressBar;
 
         @Override
         protected void onPostExecute(String result) {
-            //progressDialog.dismiss();
-            //Toast.makeText(getApplicationContext(), result,
-            //Toast.LENGTH_LONG).show();
             Log.d("resultFromNewCall",result);
             try {
                 JSONObject jsonObject=new JSONObject(result);
@@ -367,15 +275,87 @@ ProgressBar progressBar;
                 token = jsonObject1.getString("token");
                 Prefs.putString("TOKEN", token);
                 Log.d("TOKEN",token);
+                String userID = Prefs.getString("ID", null);
+                try {
+                    if (userID != null && userID.length() != 0) {
+                        if (realPath.equals("")) {
+                        } else {
+
+                        }
+                    } else
+                        Toasty.warning(TicketReplyActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
+                }catch (NullPointerException e){
+                    Log.d("replyContent",replyMessage);
+                    try {
+                        replyMessage = URLEncoder.encode(replyMessage, "utf-8");
+                    } catch (UnsupportedEncodingException e1) {
+                        e1.printStackTrace();
+                    }
+                    new ReplyTicket(Integer.parseInt(ticketID),replyMessage).execute();
+//                    progressDialog.setMessage(getString(R.string.sending_msg));
+//                    progressDialog.show();
+                    e.printStackTrace();
+                }
+                try {
+                    try {
+                        String  replyMessag1 = URLEncoder.encode(replyMessage, "utf-8");
+                        Log.d("replyMessage",replyMessag1);
+//                        progressDialog.setMessage(getString(R.string.sending_msg));
+//                        progressDialog.show();
+                        String token = Prefs.getString("TOKEN", null);
+                        String uploadId = UUID.randomUUID().toString();
+                        new MultipartUploadRequest(TicketReplyActivity.this, uploadId, Constants.URL + "helpdesk/reply?token=" + token)
+                                .addFileToUpload(realPath, "media_attachment[]")
+                                //Adding file
+                                //.addParameter("token", token1)
+                                .addParameter("ticket_id", ticketID)
+                                .addParameter("reply_content", replyMessage)
+                                //Adding text parameter to the request
+                                //.setNotificationConfig(new UploadNotificationConfig())
+                                .setMaxRetries(1)
+                                .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                            @Override
+                            public void onProgress(UploadInfo uploadInfo) {
+
+                            }
+
+                            @Override
+                            public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                            }
+
+                            @Override
+                            public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                progressDialog.dismiss();
+                                Log.d("newStyle", serverResponse.getBodyAsString());
+                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                        serverResponse.getBodyAsString()));
+                                editTextReplyMessage.getText().clear();
+                                Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(TicketReplyActivity.this, TicketDetailActivity.class);
+                                startActivity(intent);
+
+                            }
+
+                            @Override
+                            public void onCancelled(UploadInfo uploadInfo) {
+
+                            }
+                        })
+                                .startUpload();
+                        //Starting the upload
+                    } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-//            try {
-//                uploadMultipartData();
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-
         }
     }
     public String getPostDataString(JSONObject params) throws Exception {
@@ -439,15 +419,9 @@ ProgressBar progressBar;
         if (document==1){
             Intent intent4 = new Intent(this, NormalFilePickActivity.class);
             intent4.putExtra(Constant.MAX_NUMBER, 1);
-            //intent4.putExtra(IS_NEED_FOLDER_LIST, true);
             intent4.putExtra(NormalFilePickActivity.SUFFIX,
                     new String[] {"xlsx", "xls", "doc", "dOcX", "ppt", ".pptx", "pdf"});
             startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
-//            new MaterialFilePicker()
-//                    .withActivity(TicketReplyActivity.this)
-//                    .withRequestCode(FILE_PICKER_REQUEST_CODE)
-//                    .withHiddenFiles(true)
-//                    .start();
             document=0;
         }
         if (gallery==2){
@@ -455,9 +429,6 @@ ProgressBar progressBar;
             intent1.putExtra(IS_NEED_CAMERA, true);
             intent1.putExtra(Constant.MAX_NUMBER, 1);
             startActivityForResult(intent1, Constant.REQUEST_CODE_PICK_IMAGE);
-//            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            intent.setType("image/*");
-//            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
             gallery=0;
         }
 
@@ -466,9 +437,6 @@ ProgressBar progressBar;
             intent2.putExtra(IS_NEED_CAMERA, true);
             intent2.putExtra(Constant.MAX_NUMBER, 1);
             startActivityForResult(intent2, Constant.REQUEST_CODE_PICK_VIDEO);
-//            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//            startActivityForResult(intent, CAMERA_REQUEST);
             camera=0;
         }
         if (audio==4){
@@ -483,7 +451,6 @@ ProgressBar progressBar;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         String filePath = null;
-        //attachment_layout.setVisibility(View.VISIBLE);
         String fileName;
         try {
             if (data.toString().equals("")) {
@@ -589,142 +556,6 @@ ProgressBar progressBar;
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-
-
-//        if (requestCode == PICKANYFILE_REQUEST_CODE && resultCode == RESULT_OK) {
-//            uri = data.getData();
-//            Log.d("URI",uri.toString());
-//            //String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-//            String filePath=getRealPathFromUri(TicketReplyActivity.this,uri);
-//            //uri = data.getData();
-//            //String filePath=getRealPathFromUri(TicketReplyActivity.this,uri);
-//            Log.d("PATH",filePath);
-//            File file = new File(filePath);
-//            long size = file.length()/1024;
-//            if (size > 4000) {
-//                Toasty.info(TicketReplyActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
-//                return;
-//            } else {
-//                path = filePath;
-//                int pos=path.lastIndexOf("/");
-//                fileName=path.substring(pos+1,path.length());
-//                attachmentFileName.setText(fileName);
-//                Log.d("fileName",fileName);
-//            }
-////            File file = new File(filePath);
-////            long size = file.length() / 1024;
-////            if (size > 6000) {
-////                Toasty.info(TicketReplyActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
-////                return;
-////            } else {
-////                path = filePath;
-////                int pos=path.lastIndexOf("/");
-////                fileName=path.substring(pos+1,path.length());
-////                attachmentFileName.setText(fileName+"("+size+"KB)");
-////                Log.d("fileName",fileName);
-////            }
-////            Log.d("fileSize", "" + size);
-////            Log.d("Path", filePath);
-//            // Do anything with file
-//        } else if (requestCode == PICKVIDEO_REQUEST_CODE && resultCode == RESULT_OK) {
-//            Log.d("BuildVersionSDK",""+Build.VERSION.SDK_INT);
-//            uri = data.getData();
-//            String filePath=getRealPathFromUri(TicketReplyActivity.this,uri);
-//            Log.d("PATH",filePath);
-//            File file = new File(filePath);
-//            long size = file.length()/1024;
-//            if (size > 4000) {
-//                Toasty.info(TicketReplyActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
-//                return;
-//            } else {
-//                path = filePath;
-//                int pos=path.lastIndexOf("/");
-//                fileName=path.substring(pos+1,path.length());
-//                attachmentFileName.setText(fileName);
-//                Log.d("fileName",fileName);
-//            }
-//        }
-//        else if (requestCode==PICKFILE_REQUEST_CODE&&resultCode==RESULT_OK){
-//            uri = data.getData();
-//            String filePath=getRealPathFromUri(TicketReplyActivity.this,uri);
-//            Log.d("PATH",filePath);
-//            File file = new File(filePath);
-//            long size = file.length()/1024;
-//            if (size > 4000) {
-//                Toasty.info(TicketReplyActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
-//                return;
-//            } else {
-//                path = filePath;
-//                int pos=path.lastIndexOf("/");
-//                fileName=path.substring(pos+1,path.length());
-//                attachmentFileName.setText(fileName);
-//                Log.d("fileName",fileName);
-//            }
-////            Log.d("fileSize", "" + size);
-////            Log.d("Path", filePath);
-//        }
-    }
-
-    File createImageFile() throws IOException {
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "IMAGE_" + timeStamp + "_";
-        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(imageFileName,".jpg", storageDirectory);
-        mImageFileLocation = image.getAbsolutePath();
-
-        return image;
-
-    }
-    public void takePhoto(View view) {
-        Intent callCameraApplicationIntent = new Intent();
-        callCameraApplicationIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        File photoFile = null;
-        try {
-            photoFile = createImageFile();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        callCameraApplicationIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-
-        startActivityForResult(callCameraApplicationIntent, CAMERA_REQUEST);
-    }
-//    void setReducedImageSize() {
-//        int targetImageViewWidth = mPhotoCapturedImageView.getWidth();
-//        int targetImageViewHeight = mPhotoCapturedImageView.getHeight();
-//
-//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//        bmOptions.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(mImageFileLocation, bmOptions);
-//        int cameraImageWidth = bmOptions.outWidth;
-//        int cameraImageHeight = bmOptions.outHeight;
-//
-//        int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
-//        bmOptions.inSampleSize = scaleFactor;
-//        bmOptions.inJustDecodeBounds = false;
-//
-//        Bitmap photoReducedSizeBitmp = BitmapFactory.decodeFile(mImageFileLocation, bmOptions);
-//        mPhotoCapturedImageView.setImageBitmap(photoReducedSizeBitmp);
-//
-//
-//    }
-
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
     }
 
     @Override
@@ -760,7 +591,6 @@ ProgressBar progressBar;
         builder.setNegativeButton(R.string.btn_cancel, null);
         builder.show();
     }
-
     private class ReplyTicket extends AsyncTask<String, Void, String> {
         int ticketID;
         String cc;
@@ -783,60 +613,20 @@ ProgressBar progressBar;
                 Toasty.error(TicketReplyActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-//            editTextCC.getText().clear();
-            editTextReplyMessage.getText().clear();
-            Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
-            startActivity(intent);
+            try{
+                JSONObject jsonObject=new JSONObject(result);
+                String message=jsonObject.getString("message");
 
-            // try {
-//                TicketThread ticketThread;
-//                JSONObject jsonObject = new JSONObject(result);
-//                JSONObject res = jsonObject.getJSONObject("result");
-//                String clientPicture = "";
-//                try {
-//                    clientPicture = res.getString("profile_pic");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                String messageTitle = "";
-//                try {
-//                    messageTitle = res.getString("title");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                String clientName = "";
-//                try {
-//                    clientName = res.getString("first_name") + " " + res.getString("last_name");
-//                    if (clientName.equals("") || clientName == null)
-//                        clientName = res.getString("user_name");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                String messageTime = res.getString("created_at");
-//                String message = res.getString("body");
-//                String isReply = "true";
-//                try {
-//                    isReply = res.getString("is_reply");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-            // ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply);
-            //ticketThread = new TicketThread(clientName, messageTime, message, isReply);
-
-//            if (fragmentConversation != null) {
-//                exitReveal();
-//                //fragmentConversation.addThreadAndUpdate(ticketThread);
-//            }
-//            } catch (JSONException e) {
-//                if (fragmentConversation != null) {
-//                    exitReveal();
-//                }
-//                e.printStackTrace();
-//                // Toast.makeText(TicketDetailActivity.this, "Unexpected Error ", Toast.LENGTH_LONG).show();
-//            }
-        }
+                if (message.contains("Successfully replied")){
+                    editTextReplyMessage.getText().clear();
+                    Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            }
     }
     class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
         String ticketid;
@@ -854,18 +644,10 @@ ProgressBar progressBar;
             progressDialog.dismiss();
             addCc.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
-//            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
             Prefs.putString("cameFromNotification","false");
-            //progressDialog.dismiss();
             int noOfCollaborator = 0;
             if (isCancelled()) return;
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-
             if (result == null) {
-                //Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                Data data=new Data(0,"No recipients");
-//                stringArrayList.add(data);
                 return;
             }
 
@@ -882,18 +664,12 @@ ProgressBar progressBar;
 
                     }
                     addCc.setText("Add cc" + "(" + noOfCollaborator + " Recipients)");
-                    //Toast.makeText(TicketDetailActivity.this, "noofcollaborators:" + noOfCollaborator, Toast.LENGTH_SHORT).show();
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void checkConnection() {
-        boolean isConnected = InternetReceiver.isConnected();
-        showSnackIfNoInternet(isConnected);
     }
     private void showSnackIfNoInternet(boolean isConnected) {
         if (!isConnected) {
@@ -920,9 +696,7 @@ ProgressBar progressBar;
      * @param isConnected is a boolean value of network connection.
      */
     private void showSnack(boolean isConnected) {
-
         if (isConnected) {
-
             Snackbar snackbar = Snackbar
                     .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
 
@@ -933,8 +707,7 @@ ProgressBar progressBar;
         } else {
             showSnackIfNoInternet(false);
         }
-
-    }
+        }
     private void reqPermissionCamera() {
         new AskPermission.Builder(this).setPermissions(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .setCallback(TicketReplyActivity.this)
@@ -949,20 +722,5 @@ ProgressBar progressBar;
         addCc.setVisibility(View.GONE);
         new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        if (!TicketDetailActivity.isShowing) {
-//            Log.d("isShowing", "false");
-//            Intent intent = new Intent(this, TicketDetailActivity.class);
-//            startActivity(intent);
-//        } else Log.d("isShowing", "true");
-//
-//
-//            super.onBackPressed();
-//        }
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
     }
 

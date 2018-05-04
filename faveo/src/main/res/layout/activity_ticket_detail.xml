@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="22dp"
                     android:layout_toEndOf="@+id/textViewagentName"
                     android:background="@drawable/rectangle1"
                     android:text="Status"
@@ -82,6 +82,17 @@
                     android:text="@string/aaaa_0001_0000001"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/department"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/title"
+                    android:layout_marginEnd="75dp"
+                    android:background="@drawable/rectangle1"
+                    android:text="@string/department"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/subject"

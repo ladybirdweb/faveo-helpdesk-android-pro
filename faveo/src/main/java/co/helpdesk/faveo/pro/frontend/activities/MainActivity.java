@@ -142,90 +142,66 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                //
-                // Do the stuff
-                //
-                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-                try {
-                    String state = Prefs.getString("405", null);
-                    if (state.equals("True")) {
-//                        Prefs.clear();
-//                        NotificationManager notificationManager =
-//                                (NotificationManager) MainActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
-//                        notificationManager.cancelAll();
-//                        FaveoApplication.getInstance().clearApplicationData();
-//                        String url=Prefs.getString("URLneedtoshow",null);
-//                        Prefs.clear();
-//                        Prefs.putString("URLneedtoshow",url);
-//                        Prefs.putString("405", "false");
-//                        MainActivity.this.getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
-//                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
-                        //startActivity(intent);
-                    }
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                }
-
-                String credential=Prefs.getString("unauthorized",null);
-
-                try{
-                    if (credential.equals("true")){
-
-                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
-                    }
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                }
-
-                String state=Prefs.getString("400",null);
-
-                try {
-                    if (state.equals("badRequest")) {
-                        Toasty.info(MainActivity.this, getString(R.string.apiDisabled), 5000).show();
-//                        new AlertDialog.Builder(MainActivity.this)
-//                                .setTitle(getString(R.string.apidisabled))
-//                                .setMessage(getString(R.string.enableApi))
-//                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
+//        final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            public void run() {
+//                //
+//                // Do the stuff
+//                //
+//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+////                try {
+////                    String state = Prefs.getString("405", null);
+////                    if (state.equals("True")) {
+////                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
+////
+////                    }
+////                }catch (NullPointerException e){
+////                    e.printStackTrace();
+////                }
+////
+////                String credential=Prefs.getString("unauthorized",null);
+////
+////                try{
+////                    if (credential.equals("true")){
+////
+////                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
+////                    }
+////                }catch (NullPointerException e){
+////                    e.printStackTrace();
+////                }
+////
+////                String state=Prefs.getString("400",null);
+////
+////                try {
+////                    if (state.equals("badRequest")) {
+////                        Toasty.info(MainActivity.this, getString(R.string.apiDisabled), 5000).show();
+////                    }
+////                }catch (NullPointerException e){
+////                    e.printStackTrace();
+////                }
+//                try {
+//                        JSONObject jsonObject = new JSONObject(result);
+//                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+//                        String token = jsonObject1.getString("token");
+//                        Prefs.putString("TOKEN", token);
+//                        JSONObject jsonObject2 = jsonObject1.getJSONObject("user");
+//                        String role1 = jsonObject2.getString("role");
+//                        if (role1.equals("user")) {
+//                            Prefs.clear();
+//                            //Prefs.putString("role",role);
+//                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                            Toasty.info(MainActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                            startActivity(intent);
+//                        }
+//                        } catch (JSONException | NullPointerException e) {
+//                        e.printStackTrace();
+//                    }
 //
-//                                    }
-//                                }).setNegativeButton("Cancel", null).show();
-                    }
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                }
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                        String token = jsonObject1.getString("token");
-                        Prefs.putString("TOKEN", token);
-                        JSONObject jsonObject2 = jsonObject1.getJSONObject("user");
-                        String role1 = jsonObject2.getString("role");
-                        if (role1.equals("user")) {
-                            Prefs.clear();
-                            //Prefs.putString("role",role);
-                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                            Toasty.info(MainActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-                            startActivity(intent);
-                        }
-
-
-                    } catch (JSONException | NullPointerException e) {
-                        e.printStackTrace();
-                    }
-
-
-                handler.postDelayed(this, 50000);
-            }
-        };
-        runnable.run();
+//
+//                handler.postDelayed(this, 90000);
+//            }
+//        };
+//        runnable.run();
         Prefs.putString("querry1","null");
         strings=new ArrayList<>();
         strings.add(0,"Sort by");
@@ -450,10 +426,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
      */
     @Override
     protected void onResume() {
+        Log.d("OnResumeMainActivity","TRUE");
+        Prefs.putString("cameFromNotification","false");
+        checkConnection();
         super.onResume();
         // register connection status listener
         //FaveoApplication.getInstance().setInternetListener(this);
-        checkConnection();
+
     }
 
     private void checkConnection() {

@@ -113,7 +113,7 @@ public class UsersFragment extends Fragment {
         swipeRefresh= (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefresh);
         progressDialog=new ProgressDialog(getActivity());
         progressDialog.setMessage("Please wait");
-        querry= Prefs.getString("querry1",null);
+        querry= Prefs.getString("querry",null);
 
 
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
