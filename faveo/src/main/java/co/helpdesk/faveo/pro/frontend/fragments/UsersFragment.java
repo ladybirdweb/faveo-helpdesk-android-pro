@@ -104,7 +104,7 @@ public class UsersFragment extends Fragment {
         toolbar1= (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
         toolbar1.setVisibility(View.GONE);
         textView= (TextView) rootView.findViewById(R.id.totalcount);
-        textView.setVisibility(View.GONE);
+
         recyclerView= (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
         recyclerView.setVisibility(View.GONE);
         empty_view= (TextView) rootView.findViewById(R.id.empty_view);
@@ -157,22 +157,13 @@ public class UsersFragment extends Fragment {
                     else{
                         noInternet_view.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
-                        progressDialog.show();
+                        //progressDialog.show();
                         empty_view.setVisibility(View.GONE);
                         getActivity().getWindow().setSoftInputMode(
                                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
                         );
                         new FetchClients(getActivity(),querry).execute();
                     }
-//                        loading = true;
-//                        recyclerView.setVisibility(View.VISIBLE);
-//                        noInternet_view.setVisibility(View.GONE);
-//                        if (ticketOverviewList.size() != 0) {
-////                            ticketThreadList.clear();
-////                            ticketThreadAdapter.notifyDataSetChanged();
-////                            task = new Conversation.FetchTicketThreads(getActivity());
-////                            task.execute();
-//                        }
                 } else {
                     recyclerView.setVisibility(View.INVISIBLE);
                     swipeRefresh.setRefreshing(false);
@@ -189,7 +180,7 @@ public class UsersFragment extends Fragment {
     private class FetchClients extends AsyncTask<String, Void, String> {
         Context context;
         String querry;
-
+        int total=0;
         FetchClients(Context context,String querry) {
             this.context = context;
             this.querry=querry;
@@ -209,10 +200,13 @@ public class UsersFragment extends Fragment {
                 //nextPageURL = jsonObject1.getString("next_page_url");
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++) {
+                    total++;
                     ClientOverview clientOverview = Helper.parseSearchClientOverview(jsonArray, i);
                     if (clientOverview != null)
                         clientOverviewList.add(clientOverview);
                 }
+
+                Log.d("total",""+total);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -221,8 +215,8 @@ public class UsersFragment extends Fragment {
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
+            textView.setText(total+" users");
             //url="null";
-            textView.setVisibility(View.GONE);
             //Prefs.putString("customerfilter","null");
             //textView.setText(""+total+" clients");
             if (swipeRefresh.isRefreshing())

@@ -346,7 +346,18 @@ public class TicketSaveActivity extends AppCompatActivity {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                     JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
                     String title=jsonObject2.getString("title");
-                    edittextsubject.setText(title);
+
+                    if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
+                        String first = title.replace("=?UTF-8?Q?", "");
+                        String second = first.replace("_", " ");
+                        String third = second.replace("=C2=A0", "");
+                        String fourth = third.replace("?=", "");
+                        String fifth = fourth.replace("=E2=80=99", "'");
+                        edittextsubject.setText(fifth);
+                    } else {
+                        edittextsubject.setText(title);
+                    }
+                    //edittextsubject.setText(title);
                     String assignee=jsonObject2.getString("assignee");
                     if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
                         autoCompleteTextViewstaff.setSelection(0);

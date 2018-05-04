@@ -229,7 +229,17 @@ public class Detail extends Fragment {
 
 //                Prefs.putString("ticketsubject",jsonObject1.getString("title"));
                 String title=jsonObject2.getString("title");
-                editTextSubject.setText(title);
+                if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
+                    String first = title.replace("=?UTF-8?Q?", "");
+                    String second = first.replace("_", " ");
+                    String third = second.replace("=C2=A0", "");
+                    String fourth = third.replace("?=", "");
+                    String fifth = fourth.replace("=E2=80=99", "'");
+                    editTextSubject.setText(fifth);
+                } else {
+                    editTextSubject.setText(title);
+                }
+                //editTextSubject.setText(title);
                 String statusName=jsonObject2.getString("status_name");
                 String ticketNumber = jsonObject2.getString("ticket_number");
                 String assignee=jsonObject2.getString("assignee");
