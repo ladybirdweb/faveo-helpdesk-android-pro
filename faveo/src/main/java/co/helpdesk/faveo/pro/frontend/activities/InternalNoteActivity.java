@@ -108,7 +108,8 @@ public class InternalNoteActivity extends AppCompatActivity {
             }
         });
 
-    }class CreateInternalNoteForTicket extends AsyncTask<String, Void, String> {
+    }
+    class CreateInternalNoteForTicket extends AsyncTask<String, Void, String> {
         int ticketID;
         int userID;
         String note;

@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 //import android.app.SearchManager;
 //import android.content.Context;
@@ -150,6 +151,7 @@ import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BottomNavigationBehavior;
 import co.helpdesk.faveo.pro.CameraUtils;
 import co.helpdesk.faveo.pro.Constants;
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.ImagePath_MarshMallow;
 import co.helpdesk.faveo.pro.MyDeserializer;
@@ -266,6 +268,16 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     private String getImageUrl = "";
     String token;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
+    public static String
+            keyDepartment = "", valueDepartment = "",
+            keySLA = "", valueSLA = "",
+            keyStatus = "", valueStatus = "",
+            keyStaff = "", valueStaff = "",
+            keyName="",
+            keyPriority = "", valuePriority = "",
+            keyTopic = "", valueTopic = "",
+            keySource = "", valueSource = "",
+            keyType = "", valueType = "";
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -290,7 +302,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         setContentView(R.layout.activity_create_ticket);
-
+        if (InternetReceiver.isConnected()){
+            new FetchDependency().execute();
+        }
 
 //        try {
 //            upload();
@@ -510,7 +524,6 @@ cc1=new String[0];
         editTextEmail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //arrayAdapterCC = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                 String name1=editTextEmail.getText().toString();
                 for (int j=0;j<emailHint.size();j++){
                     CollaboratorSuggestion data = emailHint.get(j);
@@ -530,16 +543,6 @@ cc1=new String[0];
         });
 
 
-        //editTextEmail.requestFocus();
-
-//        if (!Prefs.getString("newuseremail",null).equals("")||!Prefs.getString("newuseremail",null).equals(null)){
-//            editTextEmail.setText(Prefs.getString("newuseremail",null));
-//        }
-//        else{
-//            editTextEmail.setText("");
-//            editTextEmail.requestFocus();
-//        }
-
 
 multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
@@ -549,11 +552,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         }catch (IndexOutOfBoundsException e){
             e.printStackTrace();
         }
-        //Toast.makeText(CreateTicketActivity.this, "email is:"+emailfromsuggestion, Toast.LENGTH_SHORT).show();
 
-        //collaboratorArray.add(emailfromsuggestion);
-//        Log.d("EMAIL",email);
-//        stringArraylist.remove(email);
 
 
     }
@@ -564,8 +563,6 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
                 createButtonClick();
             }
         });
-        //Toast.makeText(this, "For mobile no code is mandatory", Toast.LENGTH_LONG).show();
-
         JSONObject jsonObject;
         Data data;
         String json = Prefs.getString("DEPENDENCY", "");
@@ -2433,12 +2430,12 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                 }
             }
         }
-        Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
+        final Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
 //        Log.d("ID of objt", "" + helpTopic.ID);
         //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
         //int dept = spinnerDept.getSelectedItemPosition();
-        Data priority = (Data) autoCompletePriority.getSelectedItem();
-        Data staff = (Data) autoCompleteTextView.getSelectedItem();
+        final Data priority = (Data) autoCompletePriority.getSelectedItem();
+        final Data staff = (Data) autoCompleteTextView.getSelectedItem();
 
 //        Toast.makeText(this, "Sending emails :"+sb1.toString(), Toast.LENGTH_LONG).show();
         //Toast.makeText(this, "final email:"+sb.toString(), Toast.LENGTH_SHORT).show();
@@ -2549,11 +2546,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
             if (InternetReceiver.isConnected()) {
 
                 progressDialog = new ProgressDialog(CreateTicketActivity.this);
-
-
                 if (path.equals("")) {
-
-
                     //Starting the upload
                     progressDialog = new ProgressDialog(CreateTicketActivity.this);
                     progressDialog.setMessage(getString(R.string.creating_ticket));
@@ -2571,57 +2564,120 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    progressDialog.show();
-                    new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile).execute();
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Creating ticket...");
+
+                    // Setting Dialog Message
+                    alertDialog.setMessage("Are you sure you want to create the ticket?");
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+                    final String finalSubject = subject;
+                    final String finalMessage = message;
+                    final String finalPhone = phone;
+                    final String finalFname = fname;
+                    final String finalLname = lname;
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                            if (InternetReceiver.isConnected()){
+                                progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                progressDialog.setMessage("Please wait");
+                                progressDialog.show();
+                                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID, finalPhone, finalFname, finalLname, email2, countrycode, staff.ID, mobile).execute();
+                                }
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
                 } else {
-                    progressDialog.setMessage(getString(R.string.creating_ticket));
-                    progressDialog.show();
-                    if (res==1){
-                        try {
-                            token = Prefs.getString("TOKEN", null);
-                            String uploadId = UUID.randomUUID().toString();
-                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
-                                    .addFileToUpload(path, "media_attachment[]")
-                                    //Adding file
-                                    //.addParameter("token", token1)
-                                    //.addParameter("token",token)
-                                    .addParameter("user_id", Prefs.getString("ID", null))
-                                    .addParameter("subject", subject)
-                                    .addParameter("body", message)
-                                    .addParameter("help_topic", "" + helpTopic.ID)
-                                    .addParameter("priority", "" + priority.ID)
-                                    .addParameter("assigned", "" + staff.ID)
-                                    .addParameter("first_name", firstname)
-                                    .addParameter("last_name", lastname)
-                                    .addParameter("phone", phone)
-                                    .addParameter("code", countrycode)
-                                    .addParameter("mobile", mobile)
-                                    .addArrayParameter("cc[]",first_user)
-                                    .addParameter("email", email2)
-                                    //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
-                                    //Adding text parameter to the request
-                                    //.setNotificationConfig(new UploadNotificationConfig())
-                                    .setMaxRetries(1)
-                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
-                                @Override
-                                public void onProgress(UploadInfo uploadInfo) {
+                    if (res == 1) {
+//                    progressDialog.setMessage(getString(R.string.creating_ticket));
+//                    progressDialog.show();
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
-                                }
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Creating ticket...");
 
-                                @Override
-                                public void onError(UploadInfo uploadInfo, Exception exception) {
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want to create the ticket?");
 
-                                }
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
 
-                                @Override
-                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
-                                    progressDialog.dismiss();
-                                    Log.d("newStyle", serverResponse.getBodyAsString());
-                                Log.i("newStyle", String.format(Locale.getDefault(),
-                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
-                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
-                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
-                                        serverResponse.getBodyAsString()));
+                        // Setting Positive "Yes" Button
+                        final String finalSubject1 = subject;
+                        final String finalMessage1 = message;
+                        final String finalPhone1 = phone;
+                        final String finalFirst_user = first_user;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage(getString(R.string.creating_ticket));
+                                    progressDialog.show();
+                                    try {
+                                        token = Prefs.getString("TOKEN", null);
+                                        String uploadId = UUID.randomUUID().toString();
+                                        new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token=" + token)
+                                                .addFileToUpload(path, "media_attachment[]")
+                                                //Adding file
+                                                //.addParameter("token", token1)
+                                                //.addParameter("token",token)
+                                                .addParameter("user_id", Prefs.getString("ID", null))
+                                                .addParameter("subject", finalSubject1)
+                                                .addParameter("body", finalMessage1)
+                                                .addParameter("help_topic", "" + helpTopic.ID)
+                                                .addParameter("priority", "" + priority.ID)
+                                                .addParameter("assigned", "" + staff.ID)
+                                                .addParameter("first_name", firstname)
+                                                .addParameter("last_name", lastname)
+                                                .addParameter("phone", finalPhone1)
+                                                .addParameter("code", countrycode)
+                                                .addParameter("mobile", mobile)
+                                                .addArrayParameter("cc[]", finalFirst_user)
+                                                .addParameter("email", email2)
+                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
+                                                //Adding text parameter to the request
+                                                //.setNotificationConfig(new UploadNotificationConfig())
+                                                .setMaxRetries(1)
+                                                .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                            @Override
+                                            public void onProgress(UploadInfo uploadInfo) {
+
+                                            }
+
+                                            @Override
+                                            public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                            }
+
+                                            @Override
+                                            public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                                progressDialog.dismiss();
+                                                Log.d("newStyle", serverResponse.getBodyAsString());
+                                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                                        serverResponse.getBodyAsString()));
 //                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
 //                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
 //                                        finish();
@@ -2632,359 +2688,521 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //
 //                                    }
 
-                                    try{
-                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
-                                        JSONObject jsonObject1=jsonObject.getJSONObject("response");
-                                        String message=jsonObject1.getString("message");
-                                        if (message.equals("Ticket created successfully!")){
-                                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-                                            editTextEmail.setText("");
-                                            startActivity(intent);
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                                if (serverResponse.getBodyAsString().contains("Permission denied")){
+                                                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                    return;
+                                                }
 
-                                    String state=Prefs.getString("403",null);
-                                    try {
-                                        if (state.equals("403") && !state.equals("null")) {
-                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-                                            Prefs.putString("403", "null");
-                                            return;
-                                        }
-                                    }catch (NullPointerException e){
-                                        e.printStackTrace();
-                                    }
+                                                try {
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                                                    String message = jsonObject1.getString("message");
+                                                    if (message.equals("Ticket created successfully!")) {
+                                                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                                                        editTextEmail.setText("");
+                                                        startActivity(intent);
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
 
-
-                                    try {
-
-                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
-                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
-                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
-                                        String message=jsonObject1.getString("code");
-                                        if (message.contains("The code feild is required.")){
-                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                                String state = Prefs.getString("403", null);
+                                                try {
+                                                    if (state.equals("403") && !state.equals("null")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                        Prefs.putString("403", "null");
+                                                        return;
+                                                    }
+                                                } catch (NullPointerException e) {
+                                                    e.printStackTrace();
+                                                }
 
 
+                                                try {
+
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("error");
+                                                    // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                                    String message = jsonObject1.getString("code");
+                                                    if (message.contains("The code feild is required.")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.select_code), Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
 
 
 //                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
 //                            startActivity(intent);
 
-                                }
+                                            }
 
-                                @Override
-                                public void onCancelled(UploadInfo uploadInfo) {
+                                            @Override
+                                            public void onCancelled(UploadInfo uploadInfo) {
 
+                                            }
+                                        })
+                                                .startUpload(); //Starting the upload
+                                    } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            })
-                                    .startUpload(); //Starting the upload
-                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+                    } else if (res == 2) {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Creating ticket...");
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want to create the ticket?");
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        final String finalSubject1 = subject;
+                        final String finalMessage1 = message;
+                        final String finalPhone1 = phone;
+                        final String finalFirst_user = first_user;
+                        final String finalSecond_user = second_user;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage(getString(R.string.creating_ticket));
+                                    progressDialog.show();
+                                    try {
+                                        token = Prefs.getString("TOKEN", null);
+                                        String uploadId = UUID.randomUUID().toString();
+                                        new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token=" + token)
+                                                .addFileToUpload(path, "media_attachment[]")
+                                                //Adding file
+                                                //.addParameter("token", token1)
+                                                //.addParameter("token",token)
+                                                .addParameter("user_id", Prefs.getString("ID", null))
+                                                .addParameter("subject", finalSubject1)
+                                                .addParameter("body", finalMessage1)
+                                                .addParameter("help_topic", "" + helpTopic.ID)
+                                                .addParameter("priority", "" + priority.ID)
+                                                .addParameter("assigned", "" + staff.ID)
+                                                .addParameter("first_name", firstname)
+                                                .addParameter("last_name", lastname)
+                                                .addParameter("phone", finalPhone1)
+                                                .addParameter("code", countrycode)
+                                                .addParameter("mobile", mobile)
+                                                .addArrayParameter("cc[]", finalFirst_user)
+                                                .addArrayParameter("cc[]", finalSecond_user)
+                                                .addParameter("email", email2)
+                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
+                                                //Adding text parameter to the request
+                                                //.setNotificationConfig(new UploadNotificationConfig())
+                                                .setMaxRetries(1)
+                                                .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                            @Override
+                                            public void onProgress(UploadInfo uploadInfo) {
+
+                                            }
+
+                                            @Override
+                                            public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                            }
+
+                                            @Override
+                                            public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                                progressDialog.dismiss();
+                                                Log.d("newStyle", serverResponse.getBodyAsString());
+                                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                                        serverResponse.getBodyAsString()));
+                                                if (serverResponse.getBodyAsString().contains("Permission denied")){
+                                                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                    return;
+                                                }
+
+                                                try {
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                                                    String message = jsonObject1.getString("message");
+                                                    if (message.equals("Ticket created successfully!")) {
+                                                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                                                        editTextEmail.setText("");
+                                                        startActivity(intent);
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                String state = Prefs.getString("403", null);
+                                                try {
+                                                    if (state.equals("403") && !state.equals("null")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                        Prefs.putString("403", "null");
+                                                        return;
+                                                    }
+                                                } catch (NullPointerException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                try {
+
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("error");
+                                                    // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                                    String message = jsonObject1.getString("code");
+                                                    if (message.contains("The code feild is required.")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.select_code), Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+//                            startActivity(intent);
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(UploadInfo uploadInfo) {
+
+                                            }
+                                        })
+                                                .startUpload(); //Starting the upload
+                                    } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+                    } else if (res == 3) {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Creating ticket...");
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want to create the ticket?");
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        final String finalSubject1 = subject;
+                        final String finalMessage1 = message;
+                        final String finalPhone1 = phone;
+                        final String finalFirst_user = first_user;
+                        final String finalSecond_user = second_user;
+                        final String finalThird_user = third_user;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage(getString(R.string.creating_ticket));
+                                    progressDialog.show();
+                                    try {
+                                        token = Prefs.getString("TOKEN", null);
+                                        String uploadId = UUID.randomUUID().toString();
+                                        new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token=" + token)
+                                                .addFileToUpload(path, "media_attachment[]")
+                                                //Adding file
+                                                //.addParameter("token", token1)
+                                                //.addParameter("token",token)
+                                                .addParameter("user_id", Prefs.getString("ID", null))
+                                                .addParameter("subject", finalSubject1)
+                                                .addParameter("body", finalMessage1)
+                                                .addParameter("help_topic", "" + helpTopic.ID)
+                                                .addParameter("priority", "" + priority.ID)
+                                                .addParameter("assigned", "" + staff.ID)
+                                                .addParameter("first_name", firstname)
+                                                .addParameter("last_name", lastname)
+                                                .addParameter("phone", finalPhone1)
+                                                .addParameter("code", countrycode)
+                                                .addParameter("mobile", mobile)
+                                                .addArrayParameter("cc[]", finalFirst_user)
+                                                .addArrayParameter("cc[]", finalSecond_user)
+                                                .addArrayParameter("cc[]", finalThird_user)
+                                                .addParameter("email", email2)
+                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
+                                                //Adding text parameter to the request
+                                                //.setNotificationConfig(new UploadNotificationConfig())
+                                                .setMaxRetries(1)
+                                                .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                            @Override
+                                            public void onProgress(UploadInfo uploadInfo) {
+
+                                            }
+
+                                            @Override
+                                            public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                            }
+
+                                            @Override
+                                            public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                                progressDialog.dismiss();
+                                                Log.d("newStyle", serverResponse.getBodyAsString());
+                                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                                        serverResponse.getBodyAsString()));
+                                                if (serverResponse.getBodyAsString().contains("Permission denied")){
+                                                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                    return;
+                                                }
+
+                                                try {
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                                                    String message = jsonObject1.getString("message");
+                                                    if (message.equals("Ticket created successfully!")) {
+                                                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                                                        editTextEmail.setText("");
+                                                        startActivity(intent);
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                String state = Prefs.getString("403", null);
+                                                try {
+                                                    if (state.equals("403") && !state.equals("null")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                        Prefs.putString("403", "null");
+                                                        return;
+                                                    }
+                                                } catch (NullPointerException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                try {
+
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("error");
+                                                    // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                                    String message = jsonObject1.getString("code");
+                                                    if (message.contains("The code feild is required.")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.select_code), Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+//                            startActivity(intent);
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(UploadInfo uploadInfo) {
+
+                                            }
+                                        })
+                                                .startUpload(); //Starting the upload
+                                    } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+                    } else {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Creating ticket...");
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want to create the ticket?");
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        final String finalSubject1 = subject;
+                        final String finalMessage1 = message;
+                        final String finalPhone1 = phone;
+                        final String finalFirst_user = first_user;
+                        final String finalSecond_user = second_user;
+                        final String finalThird_user = third_user;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage(getString(R.string.creating_ticket));
+                                    progressDialog.show();
+                                    try {
+                                        token = Prefs.getString("TOKEN", null);
+                                        String uploadId = UUID.randomUUID().toString();
+                                        new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token=" + token)
+                                                .addFileToUpload(path, "media_attachment[]")
+                                                //Adding file
+                                                //.addParameter("token", token1)
+                                                //.addParameter("token",token)
+                                                .addParameter("user_id", Prefs.getString("ID", null))
+                                                .addParameter("subject", finalSubject1)
+                                                .addParameter("body", finalMessage1)
+                                                .addParameter("help_topic", "" + helpTopic.ID)
+                                                .addParameter("priority", "" + priority.ID)
+                                                .addParameter("assigned", "" + staff.ID)
+                                                .addParameter("first_name", firstname)
+                                                .addParameter("last_name", lastname)
+                                                .addParameter("phone", finalPhone1)
+                                                .addParameter("code", countrycode)
+                                                .addParameter("mobile", mobile)
+                                                .addParameter("email", email2)
+                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
+                                                //Adding text parameter to the request
+                                                //.setNotificationConfig(new UploadNotificationConfig())
+                                                .setMaxRetries(1)
+                                                .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                            @Override
+                                            public void onProgress(UploadInfo uploadInfo) {
+
+                                            }
+
+                                            @Override
+                                            public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                            }
+
+                                            @Override
+                                            public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                                progressDialog.dismiss();
+                                                Log.d("newStyle", serverResponse.getBodyAsString());
+                                                Log.i("newStyle", String.format(Locale.getDefault(),
+                                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                                        serverResponse.getBodyAsString()));
+
+                                                if (serverResponse.getBodyAsString().contains("Permission denied")){
+                                                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                    return;
+                                                }
+                                                try {
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("response");
+                                                    String message = jsonObject1.getString("message");
+                                                    if (message.equals("Ticket created successfully!")) {
+                                                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                                                        editTextEmail.setText("");
+                                                        startActivity(intent);
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                String state = Prefs.getString("403", null);
+                                                try {
+                                                    if (state.equals("403") && !state.equals("null")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                                                        Prefs.putString("403", "null");
+                                                        return;
+                                                    }
+                                                } catch (NullPointerException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                try {
+
+                                                    JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
+                                                    JSONObject jsonObject1 = jsonObject.getJSONObject("error");
+                                                    // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                                                    String message = jsonObject1.getString("code");
+                                                    if (message.contains("The code feild is required.")) {
+                                                        Toasty.warning(CreateTicketActivity.this, getString(R.string.select_code), Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
+//                            startActivity(intent);
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(UploadInfo uploadInfo) {
+
+                                            }
+                                        })
+                                                .startUpload(); //Starting the upload
+                                    } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+
                     }
-                    else if (res==2){
-                        try {
-                            token = Prefs.getString("TOKEN", null);
-                            String uploadId = UUID.randomUUID().toString();
-                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
-                                    .addFileToUpload(path, "media_attachment[]")
-                                    //Adding file
-                                    //.addParameter("token", token1)
-                                    //.addParameter("token",token)
-                                    .addParameter("user_id", Prefs.getString("ID", null))
-                                    .addParameter("subject", subject)
-                                    .addParameter("body", message)
-                                    .addParameter("help_topic", "" + helpTopic.ID)
-                                    .addParameter("priority", "" + priority.ID)
-                                    .addParameter("assigned", "" + staff.ID)
-                                    .addParameter("first_name", firstname)
-                                    .addParameter("last_name", lastname)
-                                    .addParameter("phone", phone)
-                                    .addParameter("code", countrycode)
-                                    .addParameter("mobile", mobile)
-                                    .addArrayParameter("cc[]",first_user)
-                                    .addArrayParameter("cc[]",second_user)
-                                    .addParameter("email", email2)
-                                    //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
-                                    //Adding text parameter to the request
-                                    //.setNotificationConfig(new UploadNotificationConfig())
-                                    .setMaxRetries(1)
-                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
-                                @Override
-                                public void onProgress(UploadInfo uploadInfo) {
-
-                                }
-
-                                @Override
-                                public void onError(UploadInfo uploadInfo, Exception exception) {
-
-                                }
-
-                                @Override
-                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
-                                    progressDialog.dismiss();
-                                    Log.d("newStyle", serverResponse.getBodyAsString());
-                                Log.i("newStyle", String.format(Locale.getDefault(),
-                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
-                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
-                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
-                                        serverResponse.getBodyAsString()));
-                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
-                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
-                                        finish();
-                                        editTextEmail.setText("");
-                                        id = 0;
-                                        Prefs.putString("newuseremail", null);
-                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
-
-                                    }
-
-                                    String state=Prefs.getString("403",null);
-                                    try {
-                                        if (state.equals("403") && !state.equals("null")) {
-                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-                                            Prefs.putString("403", "null");
-                                            return;
-                                        }
-                                    }catch (NullPointerException e){
-                                        e.printStackTrace();
-                                    }
-
-
-                                    try {
-
-                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
-                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
-                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
-                                        String message=jsonObject1.getString("code");
-                                        if (message.contains("The code feild is required.")){
-                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-
-
-//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-//                            startActivity(intent);
-
-                                }
-
-                                @Override
-                                public void onCancelled(UploadInfo uploadInfo) {
-
-                                }
-                            })
-                                    .startUpload(); //Starting the upload
-                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }else if (res==3){
-                        try {
-                            token = Prefs.getString("TOKEN", null);
-                            String uploadId = UUID.randomUUID().toString();
-                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
-                                    .addFileToUpload(path, "media_attachment[]")
-                                    //Adding file
-                                    //.addParameter("token", token1)
-                                    //.addParameter("token",token)
-                                    .addParameter("user_id", Prefs.getString("ID", null))
-                                    .addParameter("subject", subject)
-                                    .addParameter("body", message)
-                                    .addParameter("help_topic", "" + helpTopic.ID)
-                                    .addParameter("priority", "" + priority.ID)
-                                    .addParameter("assigned", "" + staff.ID)
-                                    .addParameter("first_name", firstname)
-                                    .addParameter("last_name", lastname)
-                                    .addParameter("phone", phone)
-                                    .addParameter("code", countrycode)
-                                    .addParameter("mobile", mobile)
-                                    .addArrayParameter("cc[]",first_user)
-                                    .addArrayParameter("cc[]",second_user)
-                                    .addArrayParameter("cc[]",third_user)
-                                    .addParameter("email", email2)
-                                    //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
-                                    //Adding text parameter to the request
-                                    //.setNotificationConfig(new UploadNotificationConfig())
-                                    .setMaxRetries(1)
-                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
-                                @Override
-                                public void onProgress(UploadInfo uploadInfo) {
-
-                                }
-
-                                @Override
-                                public void onError(UploadInfo uploadInfo, Exception exception) {
-
-                                }
-
-                                @Override
-                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
-                                    progressDialog.dismiss();
-                                    Log.d("newStyle", serverResponse.getBodyAsString());
-                                Log.i("newStyle", String.format(Locale.getDefault(),
-                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
-                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
-                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
-                                        serverResponse.getBodyAsString()));
-                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
-                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
-                                        finish();
-                                        editTextEmail.setText("");
-                                        id = 0;
-                                        Prefs.putString("newuseremail", null);
-                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
-
-                                    }
-
-                                    String state=Prefs.getString("403",null);
-                                    try {
-                                        if (state.equals("403") && !state.equals("null")) {
-                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-                                            Prefs.putString("403", "null");
-                                            return;
-                                        }
-                                    }catch (NullPointerException e){
-                                        e.printStackTrace();
-                                    }
-
-
-                                    try {
-
-                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
-                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
-                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
-                                        String message=jsonObject1.getString("code");
-                                        if (message.contains("The code feild is required.")){
-                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-
-
-//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-//                            startActivity(intent);
-
-                                }
-
-                                @Override
-                                public void onCancelled(UploadInfo uploadInfo) {
-
-                                }
-                            })
-                                    .startUpload(); //Starting the upload
-                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }else{
-                        try {
-                            token = Prefs.getString("TOKEN", null);
-                            String uploadId = UUID.randomUUID().toString();
-                            new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token="+token)
-                                    .addFileToUpload(path, "media_attachment[]")
-                                    //Adding file
-                                    .addParameter("user_id", Prefs.getString("ID", null))
-                                    .addParameter("subject", subject)
-                                    .addParameter("body", message)
-                                    .addParameter("help_topic", "" + helpTopic.ID)
-                                    .addParameter("priority", "" + priority.ID)
-                                    .addParameter("assigned", "" + staff.ID)
-                                    .addParameter("first_name", firstname)
-                                    .addParameter("last_name", lastname)
-                                    .addParameter("phone", phone)
-                                    .addParameter("code", countrycode)
-                                    .addParameter("mobile", mobile)
-                                    .addParameter("email", email2)
-                                    .setMaxRetries(1)
-                                    .setMethod("POST").setDelegate(new UploadStatusDelegate() {
-                                @Override
-                                public void onProgress(UploadInfo uploadInfo) {
-
-                                }
-
-                                @Override
-                                public void onError(UploadInfo uploadInfo, Exception exception) {
-
-                                }
-
-                                @Override
-                                public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
-                                    progressDialog.dismiss();
-                                    Log.d("newStyle", serverResponse.getBodyAsString());
-                                Log.i("newStyle", String.format(Locale.getDefault(),
-                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
-                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
-                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
-                                        serverResponse.getBodyAsString()));
-                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
-                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
-                                        finish();
-                                        editTextEmail.setText("");
-                                        id = 0;
-                                        Prefs.putString("newuseremail", null);
-                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
-
-                                    }
-
-                                    String state=Prefs.getString("403",null);
-                                    try {
-                                        if (state.equals("403") && !state.equals("null")) {
-                                            Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-                                            Prefs.putString("403", "null");
-                                            return;
-                                        }
-                                    }catch (NullPointerException e){
-                                        e.printStackTrace();
-                                    }
-
-
-                                    try {
-
-                                        JSONObject jsonObject=new JSONObject(serverResponse.getBodyAsString());
-                                        JSONObject jsonObject1=jsonObject.getJSONObject("error");
-                                        // JSONArray jsonArray=jsonObject1.getJSONArray("code");
-                                        String message=jsonObject1.getString("code");
-                                        if (message.contains("The code feild is required.")){
-                                            Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-
-
-//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-//                            startActivity(intent);
-
-                                }
-
-                                @Override
-                                public void onCancelled(UploadInfo uploadInfo) {
-
-                                }
-                            })
-                                    .startUpload(); //Starting the upload
-                        } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
                 }
 
 
@@ -3021,11 +3239,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
             //new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile ).execute();
 //            }
         }
-
-
-
-
-    @Override
+        @Override
     public void onShowRationalDialog(final PermissionInterface permissionInterface, int requestCode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We need permissions for this app.");
@@ -3655,6 +3869,255 @@ public static String getPathFromUri(final Context context, final Uri uri) {
             }
 
 
+        }
+    }
+    private class FetchDependency extends AsyncTask<String, Void, String> {
+        String unauthorized;
+
+        protected String doInBackground(String... urls) {
+
+            return new Helpdesk().getDependency();
+
+        }
+
+        protected void onPostExecute(String result) {
+            Log.d("Depen Response : ", result + "");
+
+            if (result==null) {
+//                try {
+//                    unauthorized = Prefs.getString("unauthorized", null);
+//                    if (unauthorized.equals("true")) {
+//                        loading.setText("Oops! Something went wrong.");
+//                        progressDialog.setVisibility(View.INVISIBLE);
+//                        textViewtryAgain.setVisibility(View.VISIBLE);
+//                        textViewrefresh.setVisibility(View.VISIBLE);
+//                        Prefs.putString("unauthorized", "false");
+//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//
+//                    }
+//
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+            }
+//            String state=Prefs.getString("403",null);
+//
+//            try {
+//                if (state.equals("403") && !state.equals(null)) {
+//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                    Prefs.clear();
+//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+//                    Prefs.putString("403", "null");
+//                    startActivity(intent);
+//                    return;
+//                }
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
+//            }
+
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                Prefs.putString("DEPENDENCY", jsonObject1.toString());
+                // Preference.setDependencyObject(jsonObject1, "dependency");
+                JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");
+                for (int i = 0; i < jsonArrayDepartments.length(); i++) {
+                    keyDepartment += jsonArrayDepartments.getJSONObject(i).getString("id") + ",";
+                    valueDepartment += jsonArrayDepartments.getJSONObject(i).getString("name") + ",";
+                }
+                Prefs.putString("keyDept", keyDepartment);
+                Prefs.putString("valueDept", valueDepartment);
+
+
+                JSONArray jsonArraySla = jsonObject1.getJSONArray("sla");
+                for (int i = 0; i < jsonArraySla.length(); i++) {
+                    keySLA += jsonArraySla.getJSONObject(i).getString("id") + ",";
+                    valueSLA += jsonArraySla.getJSONObject(i).getString("name") + ",";
+                }
+                Prefs.putString("keySLA", keySLA);
+                Prefs.putString("valueSLA", valueSLA);
+
+                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                    keyName +=jsonArrayStaffs.getJSONObject(i).getString("first_name") + jsonArrayStaffs.getJSONObject(i).getString("last_name") +",";
+                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
+                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
+                }
+                Prefs.putString("keyName",keyName);
+                Prefs.putString("keyStaff", keyStaff);
+                Prefs.putString("valueStaff", valueStaff);
+
+                JSONArray jsonArrayType = jsonObject1.getJSONArray("type");
+                for (int i = 0; i < jsonArrayType.length(); i++) {
+                    keyType += jsonArrayType.getJSONObject(i).getString("id") + ",";
+                    valueType += jsonArrayType.getJSONObject(i).getString("name") + ",";
+                }
+                Prefs.putString("keyType", keyType);
+                Prefs.putString("valueType", valueType);
+
+//                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+//                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+//                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
+//                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
+//                }
+
+
+//                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
+//                for (int i = 0; i < jsonArrayTeams.length(); i++) {
+//                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
+//                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
+//                }
+
+                //Set<String> keyPri = new LinkedHashSet<>();
+                // Set<String> valuePri = new LinkedHashSet<>();
+                JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
+                for (int i = 0; i < jsonArrayPriorities.length(); i++) {
+                    // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));
+                    //valuePri.add(jsonArrayPriorities.getJSONObject(i).getString("priority"));
+                    keyPriority += jsonArrayPriorities.getJSONObject(i).getString("priority_id") + ",";
+                    valuePriority += jsonArrayPriorities.getJSONObject(i).getString("priority") + ",";
+                }
+                Prefs.putString("keyPri", keyPriority);
+                Prefs.putString("valuePri", valuePriority);
+                //Prefs.putOrderedStringSet("keyPri", keyPri);
+                // Prefs.putOrderedStringSet("valuePri", valuePri);
+                //Log.d("Testtttttt", Prefs.getOrderedStringSet("keyPri", keyPri) + "   " + Prefs.getOrderedStringSet("valuePri", valuePri));
+
+
+                JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("helptopics");
+                for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
+
+                    keyTopic += jsonArrayHelpTopics.getJSONObject(i).getString("id") + ",";
+                    valueTopic += jsonArrayHelpTopics.getJSONObject(i).getString("topic") + ",";
+                }
+
+                Prefs.putString("keyHelpTopic", keyTopic);
+                Prefs.putString("valueHelptopic", valueTopic);
+
+                JSONArray jsonArrayStatus = jsonObject1.getJSONArray("status");
+                for (int i = 0; i < jsonArrayStatus.length(); i++) {
+
+                    keyStatus += jsonArrayStatus.getJSONObject(i).getString("id") + ",";
+                    valueStatus += jsonArrayStatus.getJSONObject(i).getString("name") + ",";
+
+                }
+                Prefs.putString("keyStatus", keyStatus);
+                Prefs.putString("valueStatus", valueStatus);
+
+                JSONArray jsonArraySources = jsonObject1.getJSONArray("sources");
+                for (int i = 0; i < jsonArraySources.length(); i++) {
+                    keySource += jsonArraySources.getJSONObject(i).getString("id") + ",";
+                    valueSource += jsonArraySources.getJSONObject(i).getString("name") + ",";
+                }
+
+                Prefs.putString("keySource", keySource);
+                Prefs.putString("valueSource", valueSource);
+
+                int open = 0, closed = 0, trash = 0, unasigned = 0, my_tickets = 0;
+                JSONArray jsonArrayTicketsCount = jsonObject1.getJSONArray("tickets_count");
+                for (int i = 0; i < jsonArrayTicketsCount.length(); i++) {
+                    String name = jsonArrayTicketsCount.getJSONObject(i).getString("name");
+                    String count = jsonArrayTicketsCount.getJSONObject(i).getString("count");
+
+                    switch (name) {
+                        case "Open":
+                            open = Integer.parseInt(count);
+                            break;
+                        case "Closed":
+                            closed = Integer.parseInt(count);
+                            break;
+                        case "Deleted":
+                            trash = Integer.parseInt(count);
+                            break;
+                        case "unassigned":
+                            unasigned = Integer.parseInt(count);
+                            break;
+                        case "mytickets":
+                            my_tickets = Integer.parseInt(count);
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+
+
+                if (open > 999)
+                    Prefs.putString("inboxTickets", "999+");
+                else
+                    Prefs.putString("inboxTickets", open + "");
+
+                if (closed > 999)
+                    Prefs.putString("closedTickets", "999+");
+                else
+                    Prefs.putString("closedTickets", closed + "");
+
+                if (my_tickets > 999)
+                    Prefs.putString("myTickets", "999+");
+                else
+                    Prefs.putString("myTickets", my_tickets + "");
+
+                if (trash > 999)
+                    Prefs.putString("trashTickets", "999+");
+                else
+                    Prefs.putString("trashTickets", trash + "");
+
+                if (unasigned > 999)
+                    Prefs.putString("unassignedTickets", "999+");
+                else
+                    Prefs.putString("unassignedTickets", unasigned + "");
+
+            } catch (JSONException | NullPointerException e) {
+                //Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                button.setVisibility(View.VISIBLE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //new FaveoApplication().clearApplicationData();
+                        NotificationManager notificationManager =
+                                (NotificationManager) CreateTicketActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancelAll();
+                        FaveoApplication.getInstance().clearApplicationData();
+                        String url=Prefs.getString("URLneedtoshow",null);
+                        Prefs.clear();
+                        Prefs.putString("URLneedtoshow",url);
+                        CreateTicketActivity.this.getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE).edit().clear().apply();
+                        Intent intent = new Intent(CreateTicketActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        Toasty.success(CreateTicketActivity.this, "Logged out successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Prefs.putString("unauthorized", "false");
+                Prefs.putString("401","false");
+                e.printStackTrace();
+            } finally {
+
+            }
+
+//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+//            builder.setTitle("Welcome to FAVEO");
+//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
+//            builder.setCancelable(true);
+//
+//            final AlertDialog dlg = builder.create();
+//
+//            dlg.show();
+//
+//            final Timer t = new Timer();
+//            t.schedule(new TimerTask() {
+//                public void run() {
+//                    dlg.dismiss(); // when the task active then close the dialog
+//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+//                }
+//            }, 3000);
         }
     }
 

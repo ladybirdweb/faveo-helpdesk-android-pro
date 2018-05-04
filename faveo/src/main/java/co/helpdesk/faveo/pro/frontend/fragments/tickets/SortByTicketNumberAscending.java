@@ -3,6 +3,7 @@ package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -109,6 +110,7 @@ public class SortByTicketNumberAscending extends Fragment {
     private android.support.v7.view.ActionMode mActionMode;
     ArrayList<Data> statusItems;
     String status;
+    int id=0;
     public static SortByTicketNumberAscending newInstance(String param1, String param2) {
         // Required empty public constructor
         SortByTicketNumberAscending fragment=new SortByTicketNumberAscending();
@@ -741,7 +743,20 @@ public class SortByTicketNumberAscending extends Fragment {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
-
+            try{
+                JSONObject jsonObject=new JSONObject(result);
+                JSONArray jsonArray=jsonObject.getJSONArray("message");
+                for (int i=0;i<jsonArray.length();i++){
+                    String message=jsonArray.getString(i);
+                    if (message.contains("Permission denied")){
+                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                        Prefs.putString("403", "null");
+                        return;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 //            try {
 //                JSONObject jsonObject = new JSONObject(result);
 //                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
@@ -1847,7 +1862,6 @@ public class SortByTicketNumberAscending extends Fragment {
         @Override
         public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
             StringBuffer stringBuffer = new StringBuffer();
-            int id=0;
             try {
                 if (item != null) {
                     item.getSubMenu().clearHeader();
@@ -1877,15 +1891,41 @@ public class SortByTicketNumberAscending extends Fragment {
                                 ticket = stringBuffer.toString().substring(0, pos2);
 
                                 Log.d("tickets", ticket);
-                                try {
-                                    new StatusChange(ticket, id).execute();
-                                    Prefs.putString("tickets", null);
-                                    progressDialog.show();
-                                    progressDialog.setMessage(getString(R.string.pleasewait));
-                                } catch (NumberFormatException e) {
-                                    e.printStackTrace();
+                                android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
 
-                                }
+                                // Setting Dialog Title
+                                alertDialog.setTitle("Changing status...");
+
+                                // Setting Dialog Message
+                                alertDialog.setMessage("Are you sure you want to change the status?");
+
+                                // Setting Icon to Dialog
+                                alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                                // Setting Positive "Yes" Button
+                                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to invoke YES event
+                                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                        new StatusChange(ticket, id).execute();
+                                        progressDialog.show();
+                                        progressDialog.setMessage(getString(R.string.pleasewait));
+                                        Toasty.success(getActivity(), getString(R.string.successfullyChanged), Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getActivity(), MainActivity.class));
+                                    }
+                                });
+
+                                // Setting Negative "NO" Button
+                                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to invoke NO event
+                                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                // Showing Alert Message
+                                alertDialog.show();
                                 return true;
                             } else {
                                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();

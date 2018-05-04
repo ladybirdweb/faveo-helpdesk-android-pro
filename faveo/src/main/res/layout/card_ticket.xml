@@ -164,19 +164,19 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/duetoday"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/textView_ticket_time"
-            android:layout_alignTop="@+id/agentassigned"
-            android:background="@drawable/rectangle2"
-            android:gravity="center"
-            android:paddingBottom="2dp"
-            android:text="@string/due_today"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/duetoday"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/textView_ticket_time"
+                android:layout_alignTop="@+id/agentassigned"
+                android:background="@drawable/rectangle2"
+                android:gravity="center"
+                android:paddingBottom="2dp"
+                android:text="@string/due_today"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
         <TextView
             android:id="@+id/countthread"

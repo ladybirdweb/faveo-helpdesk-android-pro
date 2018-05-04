@@ -22,7 +22,6 @@
         android:orderInCategory="100"
         android:title="Active Users"
         app:showAsAction="never">
-
     </item>
     <item
         android:id="@+id/inactive"
@@ -31,21 +30,18 @@
         app:showAsAction="never">
 
     </item>
-
     <item
         android:id="@+id/banned"
         android:orderInCategory="100"
         android:title="Banned User"
         app:showAsAction="never">
     </item>
-
     <item
         android:id="@+id/deleted"
         android:orderInCategory="100"
-        android:title="Deleted User"
+        android:title="Deactivate User"
         app:showAsAction="never">
     </item>
-
     <item
         android:id="@+id/role"
         android:orderInCategory="100"

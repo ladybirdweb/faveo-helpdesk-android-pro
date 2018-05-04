@@ -1,6 +1,9 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,6 +46,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.BindView;
+import co.helpdesk.faveo.pro.Constants;
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -64,6 +69,16 @@ public class TicketSaveActivity extends AppCompatActivity {
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems, staffItems;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter, staffArrayAdapter;
     int id,id1;
+    public static String
+            keyDepartment = "", valueDepartment = "",
+            keySLA = "", valueSLA = "",
+            keyStatus = "", valueStatus = "",
+            keyStaff = "", valueStaff = "",
+            keyName="",
+            keyPriority = "", valuePriority = "",
+            keyTopic = "", valueTopic = "",
+            keySource = "", valueSource = "",
+            keyType = "", valueType = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +86,9 @@ public class TicketSaveActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
+        if (InternetReceiver.isConnected()){
+            new FetchDependency().execute();
+        }
         setUpViews();
         if (InternetReceiver.isConnected()) {
             progressDialog=new ProgressDialog(this);
@@ -79,7 +97,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             Log.d("FromTicketSave","true");
             task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
             task.execute();
-        }
+            }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarsave);
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
         imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
@@ -91,13 +109,6 @@ public class TicketSaveActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
                 startActivity(intent);
-//                if (!TicketDetailActivity.isShowing) {
-//                    Log.d("isShowing", "false");
-//                    Intent intent = new Intent(TicketSaveActivity.this, TicketDetailActivity.class);
-//                    startActivity(intent);
-//                }else {
-//                    Log.d("isShowing", "true");
-//                }
             }
         });
         setSupportActionBar(toolbar);
@@ -154,11 +165,11 @@ public class TicketSaveActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean allCorrect = true;
-                String subject = edittextsubject.getText().toString();
-                Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
-                Data source = (Data) spinnerSource.getSelectedItem();
-                Data priority = (Data) spinnerPriority.getSelectedItem();
-                Data type = (Data) spinnerType.getSelectedItem();
+                final String subject = edittextsubject.getText().toString();
+                final Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
+                final Data source = (Data) spinnerSource.getSelectedItem();
+                final Data priority = (Data) spinnerPriority.getSelectedItem();
+                final Data type = (Data) spinnerType.getSelectedItem();
 
 
                 if (subject.trim().length() == 0) {
@@ -180,20 +191,54 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
                 if (allCorrect) {
                     if (InternetReceiver.isConnected()) {
-                        progressDialog=new ProgressDialog(TicketSaveActivity.this);
-                        progressDialog.setMessage(getString(R.string.updating_ticket));
-                        progressDialog.show();
-                        try {
-                            new SaveTicket(
-                                    Integer.parseInt(Prefs.getString("TICKETid",null)),
-                                    URLEncoder.encode(subject.trim(), "utf-8"),
-                                    helpTopic.ID,
-                                    source.ID,
-                                    priority.ID, type.ID,id1)
-                                    .execute();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Saving ticket...");
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want to make the changes?");
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()){
+                                    progressDialog=new ProgressDialog(TicketSaveActivity.this);
+                                    progressDialog.setMessage(getString(R.string.updating_ticket));
+                                    progressDialog.show();
+                                    try {
+                                        new SaveTicket(
+                                                Integer.parseInt(Prefs.getString("TICKETid",null)),
+                                                URLEncoder.encode(subject.trim(), "utf-8"),
+                                                helpTopic.ID,
+                                                source.ID,
+                                                priority.ID, type.ID,id1)
+                                                .execute();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
                     }
                 }
             }
@@ -267,65 +312,12 @@ public class TicketSaveActivity extends AppCompatActivity {
             }catch (JSONException e){
                 e.printStackTrace();
             }
-
-
             if (result.contains("Edited successfully")) {
                 Toasty.success(TicketSaveActivity.this, getString(R.string.update_success), Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(TicketSaveActivity.this, MainActivity.class);
+                Intent intent=new Intent(TicketSaveActivity.this, TicketDetailActivity.class);
                 startActivity(intent);
             } else
                 Toasty.error(TicketSaveActivity.this, getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
-        }
-    }
-    class SpaceTokenizer implements MultiAutoCompleteTextView.Tokenizer {
-
-        public int findTokenStart(CharSequence text, int cursor) {
-            int i = cursor;
-
-            while (i > 0 && text.charAt(i - 1) != ' ') {
-                i--;
-            }
-            while (i < cursor && text.charAt(i) == ' ') {
-                i++;
-            }
-
-            return i;
-        }
-
-        public int findTokenEnd(CharSequence text, int cursor) {
-            int i = cursor;
-            int len = text.length();
-
-            while (i < len) {
-                if (text.charAt(i) == ' ') {
-                    return i;
-                } else {
-                    i++;
-                }
-            }
-
-            return len;
-        }
-
-        public CharSequence terminateToken(CharSequence text) {
-            int i = text.length();
-
-            while (i > 0 && text.charAt(i - 1) == ' ') {
-                i--;
-            }
-
-            if (i > 0 && text.charAt(i - 1) == ' ') {
-                return text;
-            } else {
-                if (text instanceof Spanned) {
-                    SpannableString sp = new SpannableString(text + " ");
-                    TextUtils.copySpansFrom((Spanned) text, 0, text.length(),
-                            Object.class, sp, 0);
-                    return sp;
-                } else {
-                    return text + " ";
-                }
-            }
         }
     }
     private class FetchTicketDetail extends AsyncTask<String, Void, String> {
@@ -354,7 +346,18 @@ public class TicketSaveActivity extends AppCompatActivity {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                     JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
                     String title=jsonObject2.getString("title");
-                    edittextsubject.setText(title);
+
+                    if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
+                        String first = title.replace("=?UTF-8?Q?", "");
+                        String second = first.replace("_", " ");
+                        String third = second.replace("=C2=A0", "");
+                        String fourth = third.replace("?=", "");
+                        String fifth = fourth.replace("=E2=80=99", "'");
+                        edittextsubject.setText(fifth);
+                    } else {
+                        edittextsubject.setText(title);
+                    }
+                    //edittextsubject.setText(title);
                     String assignee=jsonObject2.getString("assignee");
                     if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
                         autoCompleteTextViewstaff.setSelection(0);
@@ -385,33 +388,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-//                    try {
-//                        if (!jsonObject1.getString("assignee_first_name").equals("null")&&!jsonObject1.getString("assignee_last_name").equals("null")) {
-//                            id1= Integer.parseInt(jsonObject1.getString("assignee_id"));
-//                            Log.d("id of the assignee",""+id1);
-//                            for (int j = 0; j < staffItems.size(); j++) {
-//                                Data data=staffItems.get(j);
-//                                if (data.getID()==id1) {
-//                                    Log.d("cameHere","True");
-//                                    Log.d("position",""+j);
-//                                   autoCompleteTextViewstaff.setSelection(j);
-//
-//
-//
-//                                }
-//                            }
-//
-//                        }
-//                        else if (jsonObject1.getString("assignee_first_name").equals("null")&&jsonObject1.getString("assignee_last_name").equals("null")){
-//                            autoCompleteTextViewstaff.setSelection(0);
-//                        }
-//
-//                    } catch (ArrayIndexOutOfBoundsException e) {
-//                        e.printStackTrace();
-//                    } catch (Exception e) {
-//
-//                        e.printStackTrace();
-//                    }
 
                     try {
                         if (jsonObject2.getString("priority_name") != null) {
@@ -456,24 +432,15 @@ public class TicketSaveActivity extends AppCompatActivity {
 
                     try {
                         if (jsonObject2.getString("source_name") != null)
-                            //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
+
 
                             spinnerSource.setSelection(getIndex(spinnerSource, jsonObject2.getString("source_name")));
-//                        Prefs.putInt("sourceid", Integer.parseInt(jsonObject1.getString("source")));
-                        //autoCompleteTextViewSource.setText(jsonObject1.getString("source_name"));
-                        //sourceid=Integer.parseInt(jsonObject1.getString("source"));
 
                     } catch (JSONException | NumberFormatException e) {
                         e.printStackTrace();
                     } catch (ArrayIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
-
-
-//                if (jsonObject1.getString("last_message").equals("null")) {
-//                    editTextLastMessage.setText("Not available");
-//                } else
-//                    editTextLastMessage.setText(jsonObject1.getString("last_message"));
 
 
                 } catch (JSONException | IllegalStateException e) {
@@ -553,32 +520,14 @@ public class TicketSaveActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        autoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.autocompletecc);
-//        stringArrayList=new ArrayList<Data>();
-//        autoCompleteTextViewCC.setThreshold(1);
-//        autoCompleteTextViewCC.setDropDownWidth(3000);
-//        autoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         edittextsubject= (EditText) findViewById(R.id.editTextsubject);
         buttonsave= (Button) findViewById(R.id.buttonsave);
-
-
-
-//        spinnerPriority = (Spinner) findViewById(R.id.spinner_priority);
-//        spinnerPriArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_spinner_item, priorityItems); //selected item will look like a spinner set from XML
-//        spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerPriority.setAdapter(spinnerPriArrayAdapter);
         spinnerPriority= (Spinner) findViewById(R.id.spinner_priority);
         spinnerPriArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_spinner_dropdown_item, priorityItems);
         //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPriority.setAdapter(spinnerPriArrayAdapter);
 
-
-//        spinnerType = (Spinner) findViewById(R.id.spinner_type);
-//        spinnerTypeArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_spinner_item, typeItems); //selected item will look like a spinner set from XML
-//        spinnerTypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerType.setAdapter(spinnerTypeArrayAdapter);
         spinnerType= (Spinner) findViewById(R.id.spinner_type);
         spinnerTypeArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_spinner_dropdown_item, typeItems);
         //selected item will look like a spinner set from XML
@@ -592,10 +541,6 @@ public class TicketSaveActivity extends AppCompatActivity {
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelpTopics.setAdapter(spinnerHelpArrayAdapter);
 
-//        spinnerHelpTopics = (Spinner) findViewById(R.id.spinner_help_topics);
-//        spinnerHelpArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_spinner_item, helptopicItems); //selected item will look like a spinner set from XML
-//        spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerHelpTopics.setAdapter(spinnerHelpArrayAdapter);
 
         autoCompleteTextViewstaff= (Spinner) findViewById(R.id.spinner_staffs);
         staffArrayAdapter=new ArrayAdapter<>(TicketSaveActivity.this,android.R.layout.simple_dropdown_item_1line,staffItems);
@@ -612,7 +557,6 @@ public class TicketSaveActivity extends AppCompatActivity {
 
 
     }
-
     @Override
     public void onBackPressed() {
         if (!TicketDetailActivity.isShowing) {
@@ -623,10 +567,235 @@ public class TicketSaveActivity extends AppCompatActivity {
         super.onBackPressed();
 
     }
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-//        startActivity(intent);
-//    }
+    private class FetchDependency extends AsyncTask<String, Void, String> {
+        String unauthorized;
+
+        protected String doInBackground(String... urls) {
+
+            return new Helpdesk().getDependency();
+
+        }
+
+        protected void onPostExecute(String result) {
+            Log.d("Depen Response : ", result + "");
+            Log.d("cameHere","True");
+
+            if (result==null) {
+//                try {
+//                    unauthorized = Prefs.getString("unauthorized", null);
+//                    if (unauthorized.equals("true")) {
+//                        loading.setText("Oops! Something went wrong.");
+//                        progressDialog.setVisibility(View.INVISIBLE);
+//                        textViewtryAgain.setVisibility(View.VISIBLE);
+//                        textViewrefresh.setVisibility(View.VISIBLE);
+//                        Prefs.putString("unauthorized", "false");
+//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//
+//                    }
+//
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+            }
+//            String state=Prefs.getString("403",null);
+//
+//            try {
+//                if (state.equals("403") && !state.equals(null)) {
+//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+//                    Prefs.clear();
+//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
+//                    Prefs.putString("403", "null");
+//                    startActivity(intent);
+//                    return;
+//                }
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
+//            }
+
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                Prefs.putString("DEPENDENCY", jsonObject1.toString());
+                // Preference.setDependencyObject(jsonObject1, "dependency");
+                JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");
+                for (int i = 0; i < jsonArrayDepartments.length(); i++) {
+                    keyDepartment += jsonArrayDepartments.getJSONObject(i).getString("id") + ",";
+                    valueDepartment += jsonArrayDepartments.getJSONObject(i).getString("name") + ",";
+                }
+                Prefs.putString("keyDept", keyDepartment);
+                Prefs.putString("valueDept", valueDepartment);
+
+
+                JSONArray jsonArraySla = jsonObject1.getJSONArray("sla");
+                for (int i = 0; i < jsonArraySla.length(); i++) {
+                    keySLA += jsonArraySla.getJSONObject(i).getString("id") + ",";
+                    valueSLA += jsonArraySla.getJSONObject(i).getString("name") + ",";
+                }
+                Prefs.putString("keySLA", keySLA);
+                Prefs.putString("valueSLA", valueSLA);
+
+                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                    keyName +=jsonArrayStaffs.getJSONObject(i).getString("first_name") + jsonArrayStaffs.getJSONObject(i).getString("last_name") +",";
+                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
+                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
+                }
+                Prefs.putString("keyName",keyName);
+                Prefs.putString("keyStaff", keyStaff);
+                Prefs.putString("valueStaff", valueStaff);
+
+                JSONArray jsonArrayType = jsonObject1.getJSONArray("type");
+                for (int i = 0; i < jsonArrayType.length(); i++) {
+                    keyType += jsonArrayType.getJSONObject(i).getString("id") + ",";
+                    valueType += jsonArrayType.getJSONObject(i).getString("name") + ",";
+                }
+                Prefs.putString("keyType", keyType);
+                Prefs.putString("valueType", valueType);
+
+//                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+//                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+//                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
+//                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
+//                }
+
+
+//                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
+//                for (int i = 0; i < jsonArrayTeams.length(); i++) {
+//                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
+//                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
+//                }
+
+                //Set<String> keyPri = new LinkedHashSet<>();
+                // Set<String> valuePri = new LinkedHashSet<>();
+                JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
+                for (int i = 0; i < jsonArrayPriorities.length(); i++) {
+                    // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));
+                    //valuePri.add(jsonArrayPriorities.getJSONObject(i).getString("priority"));
+                    keyPriority += jsonArrayPriorities.getJSONObject(i).getString("priority_id") + ",";
+                    valuePriority += jsonArrayPriorities.getJSONObject(i).getString("priority") + ",";
+                }
+                Prefs.putString("keyPri", keyPriority);
+                Prefs.putString("valuePri", valuePriority);
+                //Prefs.putOrderedStringSet("keyPri", keyPri);
+                // Prefs.putOrderedStringSet("valuePri", valuePri);
+                //Log.d("Testtttttt", Prefs.getOrderedStringSet("keyPri", keyPri) + "   " + Prefs.getOrderedStringSet("valuePri", valuePri));
+
+
+                JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("helptopics");
+                for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
+
+                    keyTopic += jsonArrayHelpTopics.getJSONObject(i).getString("id") + ",";
+                    valueTopic += jsonArrayHelpTopics.getJSONObject(i).getString("topic") + ",";
+                }
+
+                Prefs.putString("keyHelpTopic", keyTopic);
+                Prefs.putString("valueHelptopic", valueTopic);
+
+                JSONArray jsonArrayStatus = jsonObject1.getJSONArray("status");
+                for (int i = 0; i < jsonArrayStatus.length(); i++) {
+
+                    keyStatus += jsonArrayStatus.getJSONObject(i).getString("id") + ",";
+                    valueStatus += jsonArrayStatus.getJSONObject(i).getString("name") + ",";
+
+                }
+                Prefs.putString("keyStatus", keyStatus);
+                Prefs.putString("valueStatus", valueStatus);
+
+                JSONArray jsonArraySources = jsonObject1.getJSONArray("sources");
+                for (int i = 0; i < jsonArraySources.length(); i++) {
+                    keySource += jsonArraySources.getJSONObject(i).getString("id") + ",";
+                    valueSource += jsonArraySources.getJSONObject(i).getString("name") + ",";
+                }
+
+                Prefs.putString("keySource", keySource);
+                Prefs.putString("valueSource", valueSource);
+
+                int open = 0, closed = 0, trash = 0, unasigned = 0, my_tickets = 0;
+                JSONArray jsonArrayTicketsCount = jsonObject1.getJSONArray("tickets_count");
+                for (int i = 0; i < jsonArrayTicketsCount.length(); i++) {
+                    String name = jsonArrayTicketsCount.getJSONObject(i).getString("name");
+                    String count = jsonArrayTicketsCount.getJSONObject(i).getString("count");
+
+                    switch (name) {
+                        case "Open":
+                            open = Integer.parseInt(count);
+                            break;
+                        case "Closed":
+                            closed = Integer.parseInt(count);
+                            break;
+                        case "Deleted":
+                            trash = Integer.parseInt(count);
+                            break;
+                        case "unassigned":
+                            unasigned = Integer.parseInt(count);
+                            break;
+                        case "mytickets":
+                            my_tickets = Integer.parseInt(count);
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+
+
+                if (open > 999)
+                    Prefs.putString("inboxTickets", "999+");
+                else
+                    Prefs.putString("inboxTickets", open + "");
+
+                if (closed > 999)
+                    Prefs.putString("closedTickets", "999+");
+                else
+                    Prefs.putString("closedTickets", closed + "");
+
+                if (my_tickets > 999)
+                    Prefs.putString("myTickets", "999+");
+                else
+                    Prefs.putString("myTickets", my_tickets + "");
+
+                if (trash > 999)
+                    Prefs.putString("trashTickets", "999+");
+                else
+                    Prefs.putString("trashTickets", trash + "");
+
+                if (unasigned > 999)
+                    Prefs.putString("unassignedTickets", "999+");
+                else
+                    Prefs.putString("unassignedTickets", unasigned + "");
+
+            } catch (JSONException | NullPointerException e) {
+                //Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                Prefs.putString("unauthorized", "false");
+                Prefs.putString("401","false");
+                e.printStackTrace();
+            } finally {
+
+            }
+
+//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+//            builder.setTitle("Welcome to FAVEO");
+//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
+//            builder.setCancelable(true);
+//
+//            final AlertDialog dlg = builder.create();
+//
+//            dlg.show();
+//
+//            final Timer t = new Timer();
+//            t.schedule(new TimerTask() {
+//                public void run() {
+//                    dlg.dismiss(); // when the task active then close the dialog
+//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+//                }
+//            }, 3000);
+        }
+    }
 }

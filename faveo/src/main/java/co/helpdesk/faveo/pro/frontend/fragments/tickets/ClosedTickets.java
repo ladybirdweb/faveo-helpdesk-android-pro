@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -96,6 +97,7 @@ public class ClosedTickets extends Fragment {
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
     String status;
+    int id = 0;
     private boolean loading = true;
     int pastVisibleItems, visibleItemCount, totalItemCount;
 
@@ -166,6 +168,7 @@ public class ClosedTickets extends Fragment {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
+            Prefs.putString("querry","null");
             statusItems=new ArrayList<>();
             JSONObject jsonObject1;
             Data data;
@@ -700,6 +703,21 @@ public class ClosedTickets extends Fragment {
                     return;
                 }
             }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
+            try{
+                JSONObject jsonObject=new JSONObject(result);
+                JSONArray jsonArray=jsonObject.getJSONArray("message");
+                for (int i=0;i<jsonArray.length();i++){
+                    String message=jsonArray.getString(i);
+                    if (message.contains("Permission denied")){
+                        Toasty.warning(getActivity(), getString(R.string.permission), Toast.LENGTH_LONG).show();
+                        Prefs.putString("403", "null");
+                        return;
+                    }
+                }
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 //            try {
@@ -1654,7 +1672,7 @@ public class ClosedTickets extends Fragment {
         @Override
         public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
             StringBuffer stringBuffer = new StringBuffer();
-            int id = 0;
+
             try {
                 if (item != null) {
                     item.getSubMenu().clearHeader();
@@ -1685,15 +1703,39 @@ public class ClosedTickets extends Fragment {
                                 ticket = stringBuffer.toString().substring(0, pos2);
 
                                 Log.d("tickets", ticket);
-                                try {
-                                    new StatusChange(ticket, id).execute();
-                                    Prefs.putString("tickets", null);
-                                    progressDialog.show();
-                                    progressDialog.setMessage(getString(R.string.pleasewait));
-                                } catch (NumberFormatException e) {
-                                    e.printStackTrace();
+                                android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
 
-                                }
+                                // Setting Dialog Title
+                                alertDialog.setTitle("Changing status...");
+
+                                // Setting Dialog Message
+                                alertDialog.setMessage("Are you sure you want to change the status?");
+
+                                // Setting Icon to Dialog
+                                alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                                // Setting Positive "Yes" Button
+                                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to invoke YES event
+                                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                        new StatusChange(ticket, id).execute();
+                                        progressDialog.show();
+                                        progressDialog.setMessage(getString(R.string.pleasewait));
+                                    }
+                                });
+
+                                // Setting Negative "NO" Button
+                                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Write your code here to invoke NO event
+                                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                // Showing Alert Message
+                                alertDialog.show();
                                 return true;
                             } else {
                                 Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();

@@ -1,11 +1,13 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -59,15 +61,6 @@ public class RegisterUser extends AppCompatActivity {
         editTextLastName= (EditText) findViewById(R.id.lastname_edittext);
         editTextPhone= (EditText) findViewById(R.id.phone_edittextUser);
         editTextCompany= (EditText) findViewById(R.id.company_edittextUser);
-        //countryCodePicker= (CountryCodePicker) findViewById(R.id.countrycoodeUser);
-//        countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
-//            @Override
-//            public void onCountrySelected() {
-//                //Toast.makeText(MainActivity.this, "code :"+countryCodePicker.getSelectedCountryCode(), Toast.LENGTH_SHORT).show();
-//
-//                countrycode=countryCodePicker.getSelectedCountryCode();
-//            }
-//        });
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,11 +122,47 @@ public class RegisterUser extends AppCompatActivity {
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
-                        progressDialog = new ProgressDialog(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this);
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.UserCreating ));
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterUser.this);
 
-                        new RegisterUserNew(firstname,lastname,email,phone,company).execute();
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Register user...");
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want create the user?");
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        final String finalFirstname = firstname;
+                        final String finalLastname = lastname;
+                        final String finalEmail = email;
+                        final String finalPhone = phone;
+                        final String finalCompany = company;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()){
+                                    progressDialog = new ProgressDialog(RegisterUser.this);
+                                    progressDialog.show();
+                                    progressDialog.setMessage(getString(R.string.UserCreating ));
+                                    new RegisterUserNew(finalFirstname, finalLastname, finalEmail, finalPhone, finalCompany).execute();
+                                    }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
                         // new CreateNewTicket(Integer.parseInt(Preference.getUserID()), subject, message, helpTopic, SLAPlans, priority, dept, phone, fname, lname, email, countrycode).execute();
                     } else
                         Toasty.info(RegisterUser.this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();

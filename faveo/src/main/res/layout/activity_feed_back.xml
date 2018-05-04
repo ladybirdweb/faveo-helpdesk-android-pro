@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
+<android.support.v4.widget.NestedScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffff"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -52,6 +52,16 @@
                     android:layout_toRightOf="@+id/imageViewBack"
                     android:layout_toEndOf="@+id/imageViewBack" />
 
+                <Button
+                    android:id="@+id/sendFeedback"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@id/titlesave"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/ic_action_done"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
@@ -307,16 +317,6 @@
             android:background="@color/grey_500">
 
         </View>
-        <Button
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/sendFeedback"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectanglereachout"
-            android:text="@string/send"
-            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

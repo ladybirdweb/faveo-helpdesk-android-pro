@@ -1,8 +1,10 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -44,11 +46,12 @@ public class collaboratorAdd extends AppCompatActivity {
 
     AutoCompleteTextView autoCompleteTextViewUser;
     Button searchUer, deleteUser;
-    ArrayList<CollaboratorSuggestion> stringArrayList;
-    ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
+    ArrayList<Data> stringArrayList;
+    ArrayAdapter<Data> arrayAdapterCC;
     RelativeLayout relativeLayout;
     ArrayAdapter<String> spinnerPriArrayAdapter;
     int id = 0;
+    int id1 = 0;
     String email;
     ImageView imageView;
     Toolbar toolbar;
@@ -82,9 +85,9 @@ public class collaboratorAdd extends AppCompatActivity {
         autoCompleteTextViewUser.setMovementMethod(new ScrollingMovementMethod());
         searchUer = (Button) findViewById(R.id.buttonSearchUser);
         deleteUser = (Button) findViewById(R.id.buttonDeleteUser);
-        stringArrayList = new ArrayList<CollaboratorSuggestion>();
-        arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
-        //arrayAdapterCC = new ArrayAdapter<CollaboratorSuggestion>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+        stringArrayList = new ArrayList<Data>();
+        //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+        arrayAdapterCC = new ArrayAdapter<Data>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
         autoCompleteTextViewUser.setThreshold(2);
         autoCompleteTextViewUser.setDropDownWidth(1500);
         autoCompleteTextViewUser.addTextChangedListener(passwordWatcheredittextSubject);
@@ -93,40 +96,20 @@ public class collaboratorAdd extends AppCompatActivity {
         autoCompleteTextViewUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                 try{
-                    CollaboratorSuggestion data = stringArrayList.get(i);
-                    id = data.getId();
-                    email = data.getEmail();
-                    Log.d("idoftheuser",id+"");
+                    Data data = stringArrayList.get(i);
+
+                    id1 = data.getID();
+                    email = data.getName();
+                    Log.d("idoftheuser",id1+"");
+                    Log.d("ccobject",stringArrayList.get(i).toString());
                 }catch (IndexOutOfBoundsException e){
                     e.printStackTrace();
                 }
-
-//                        int pos=email.indexOf("<");
-//                        int pos1=email.lastIndexOf(">");
-//                        finalEmail=email.substring(pos+1,pos1);
-                //Toast.makeText(collaboratorAdd.this, "email:" + email, Toast.LENGTH_SHORT).show();
-
-//                for (int j=0;j<stringArrayList.size();j++){
-//                    if (stringArrayList.get(i).getName().equalsIgnoreCase(email)){
-//                       // strings.add(finalEmail);
-//                        Toast.makeText(collaboratorAdd.this, "match found", Toast.LENGTH_SHORT).show();
-//                        //autoCompleteTextViewUser.setText("");
-//                        //Log.d("strings",strings+"");
-//                    }
-//                    else{
-//                        strings.remove(finalEmail);
-//                        Toast.makeText(collaboratorAdd.this, "match not found", Toast.LENGTH_SHORT).show();
-//
-//                    }
             }
 
 
         });
-
-
 
         spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strings); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -162,24 +145,47 @@ public class collaboratorAdd extends AppCompatActivity {
 
                 String email=autoCompleteTextViewUser.getText().toString();
 
-//                String email=autoCompleteTextViewUser.getText().toString();
-//                int pos=email.lastIndexOf(",");
-//                String newemail=email.substring(0,pos);
-                //List<String> list = new ArrayList<String>(Arrays.asList(string.split(" , ")));
-//                String newresult= Arrays.toString(result);
-                //Log.d("newemail",newresult);
-
-
                 if (autoCompleteTextViewUser.getText().toString().equals("")) {
                     Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorEmpty), Toast.LENGTH_SHORT).show();
-                    return;
                 }
-                else {
+                else if (id1==0){
+                    Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
+                    }
+                else{
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Adding collaborator...");
+                    // Setting Dialog Message
+                    alertDialog.setMessage("Are you sure you want to " +
+                            "add this user as collaborator?");
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+                    // Setting Positive "Yes" Button
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            Log.d("id of the user", String.valueOf(id));
+                            if (id1==0){
+                                Toasty.error(collaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            progressDialog.setMessage(getString(R.string.pleasewait));
+                            progressDialog.show();
+                            new collaboratorAdduser(Prefs.getString("TICKETid", null), String.valueOf(id1)).execute();
 
-                    Log.d("id of the user",String.valueOf(id));
-                    progressDialog.setMessage(getString(R.string.pleasewait));
-                    progressDialog.show();
-                    new collaboratorAdduser(Prefs.getString("TICKETid", null), String.valueOf(id)).execute();
+                        }
+                    });
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
                 }
 //                if (email.contains("<")) {
 ////                    int pos = email.indexOf("<");
@@ -226,11 +232,37 @@ public class collaboratorAdd extends AppCompatActivity {
 
                     }
                     else {
-                        email2 = recipients.getSelectedItem().toString();
-                        progressDialog=new ProgressDialog(collaboratorAdd.this);
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                        progressDialog.show();
-                        new collaboratorRemoveUser(Prefs.getString("TICKETid", null), email2).execute();
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
+                        // Setting Dialog Title
+                        alertDialog.setTitle("Removing collaborator...");
+                        // Setting Dialog Message
+                        alertDialog.setMessage("Are you sure you want to remove this user as collaborator?");
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+                        // Setting Positive "Yes" Button
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                email2 = recipients.getSelectedItem().toString();
+                                progressDialog=new ProgressDialog(collaboratorAdd.this);
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                progressDialog.show();
+                                new collaboratorRemoveUser(Prefs.getString("TICKETid", null), email2).execute();
+                            }
+                        });
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+
+
                     }
                 }catch (NullPointerException e){
                     e.printStackTrace();
@@ -287,9 +319,9 @@ public class collaboratorAdd extends AppCompatActivity {
                         String last_name = jsonObject1.getString("last_name");
                         String profilePic=jsonObject1.getString("profile_pic");
                         //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-                        CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id,first_name,last_name,email,profilePic);
-//                        Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
-                        stringArrayList.add(collaboratorSuggestion);
+                        //CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id,first_name,last_name,email,profilePic);
+                        Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
+                        stringArrayList.add(data);
                         Prefs.putString("noUser", "1");
                     }
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
@@ -538,16 +570,16 @@ public class collaboratorAdd extends AppCompatActivity {
                     //term = term.substring(pos + 1, term.length());
                     String newTerm=term;
                     Log.d("newTerm", newTerm);
-                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
                     progressBar.setVisibility(View.VISIBLE);
-                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
                 }
 //            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
                 else {
-                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
-                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                    //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     //new FetchCollaborator("s").execute();
                     //Data data = new Data(0, "No result found");
                     //stringArrayList.add(data);

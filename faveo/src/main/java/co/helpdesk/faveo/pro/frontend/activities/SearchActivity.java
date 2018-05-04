@@ -199,6 +199,7 @@ public class SearchActivity extends AppCompatActivity implements
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Prefs.putString("querry","null");
                 onBackPressed();
             }
         });

@@ -271,7 +271,6 @@ public class Helpdesk {
         Log.d("getBillingURL", Constants.BILLING_URL + "?url=" + baseURL);
         return new HTTPConnection().HTTPResponseGet(Constants.BILLING_URL + "?url=" + baseURL);
     }
-
 //    public String postDeleteTicket(int ticketID) {
 //        String parameters = null;
 //        JSONObject obj = new JSONObject();
