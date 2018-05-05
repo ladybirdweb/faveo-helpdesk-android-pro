@@ -486,7 +486,7 @@ public class UpdatedAtAsc extends Fragment {
                         }
                         else if (show.equals("4")){
                             dept="trash";
-                           // progressDialog.show();
+                            // progressDialog.show();
                             new FetchFirstAscending(getActivity(),dept,"updated_at","ASC",1).execute();
                             ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.trash));
                         }
@@ -1895,7 +1895,7 @@ public class UpdatedAtAsc extends Fragment {
 //            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_copy), MenuItemCompat.SHOW_AS_ACTION_NEVER);
 //            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_forward), MenuItemCompat.SHOW_AS_ACTION_NEVER);
             } else {
-               // menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                // menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 //            menu.findItem(R.id.action_copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 //            menu.findItem(R.id.action_forward).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             }

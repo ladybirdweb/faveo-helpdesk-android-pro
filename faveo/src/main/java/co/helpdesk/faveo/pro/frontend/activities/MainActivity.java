@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     ArrayList<String> strings1;
     Toolbar toolbar;
     Context context;
-//    private ArrayList<String> mList = new ArrayList<>();
+    //    private ArrayList<String> mList = new ArrayList<>();
 //    @BindView(R.id.sort_view)
 //    RelativeLayout sortView;
 //    @BindView(R.id.sorting_type_textview)
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        }catch (NullPointerException e){
 //            e.printStackTrace();
 //        }
-        
+
         // TODO: Move this to where you establish a user session
         //logUser();
 //        if (BuildConfig.DEBUG) {
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
 
-//    private void logUser() {
+    //    private void logUser() {
 //        // TODO: Use the current user's information
 //        // You can call any combination of these three methods
 //        Crashlytics.setUserIdentifier(Preference.getUserID());

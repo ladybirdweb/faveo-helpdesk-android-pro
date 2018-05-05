@@ -89,7 +89,7 @@ public class TrashTickets extends Fragment {
     int total;
     String ticket;
     @BindView(R.id.totalcount)
-            TextView textView;
+    TextView textView;
 
     TicketOverviewAdapter ticketOverviewAdapter;
     List<TicketOverview> ticketOverviewList = new ArrayList<>();
@@ -575,7 +575,7 @@ public class TrashTickets extends Fragment {
 //                e.printStackTrace();
 //            }
 //        }
-         if (id == R.id.action_noti) {
+        if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
             return true;
@@ -1004,7 +1004,7 @@ public class TrashTickets extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-        progressDialog.dismiss();
+            progressDialog.dismiss();
             textView.setText(""+total+" tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
@@ -1766,7 +1766,7 @@ public class TrashTickets extends Fragment {
 //            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_copy), MenuItemCompat.SHOW_AS_ACTION_NEVER);
 //            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_forward), MenuItemCompat.SHOW_AS_ACTION_NEVER);
             } else {
-               // menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                // menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 //            menu.findItem(R.id.action_copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 //            menu.findItem(R.id.action_forward).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             }

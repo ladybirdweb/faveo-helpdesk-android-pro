@@ -312,7 +312,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 new SendPostRequest().execute();
                 new FetchDependency().execute();
                 getActivity().invalidateOptionsMenu();
-                }
+            }
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -383,13 +383,13 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                     }
                     in.close();
                     return sb.toString();
-                    }
+                }
                 else {
                     if (responseCode==400){
                         Log.d("cameInThisBlock","true");
                         responseCodeForShow=400;
-                        }
-                        else if (responseCode==405){
+                    }
+                    else if (responseCode==405){
                         responseCodeForShow=405;
                     }
                     else if (responseCode==302){
@@ -397,7 +397,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                     }
                     Log.d("elseresponseCode",""+responseCode);
                     return new String("false : "+responseCode);
-                    }
+                }
             }
             catch(Exception e){
                 return new String("Exception: " + e.getMessage());
@@ -633,7 +633,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
 
             }
-            }
+        }
     }
 
 
@@ -759,35 +759,5 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     public interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);
     }
-    private String refreshToken() {
-        String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-        if (result == null) {
-            return null;
-        }
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            JSONObject jsonObject1=jsonObject.getJSONObject("data");
-            String token = jsonObject1.getString("token");
-            JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-            String profilePic=jsonObject2.getString("profile_pic");
-            Log.d("result",result);
-            Log.d("profilePicture",profilePic);
-            //String token = jsonObject.getString("token");
-            Prefs.putString("TOKEN", token);
-            Prefs.putString("profilePicture",profilePic);
-            Authenticate.token = token;
-            Helpdesk.token = token;
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.d("cameInException","true");
-            Prefs.clear();
-            Prefs.putString("NoToken","True");
-            return null;
-        }
-        return "success";
-    }
-
-
 }
 

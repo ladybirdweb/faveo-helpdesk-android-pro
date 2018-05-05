@@ -430,7 +430,7 @@ public class UpdatedAtDesc extends Fragment {
                         show =Prefs.getString("source",null);
                         if (show.equals("1")){
                             dept="mytickets";
-                           // progressDialog.show();
+                            // progressDialog.show();
                             new FetchFirstAscending(getActivity(),dept,"updated_at","DESC",1).execute();
                             ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.my_tickets));
                         }
@@ -788,7 +788,7 @@ public class UpdatedAtDesc extends Fragment {
                     Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                     return;
                 }
-                }catch (JSONException | NullPointerException e) {
+            }catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
 
             }
@@ -1812,7 +1812,7 @@ public class UpdatedAtDesc extends Fragment {
                         Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
-                    }
+            }
             return false;
         }
 

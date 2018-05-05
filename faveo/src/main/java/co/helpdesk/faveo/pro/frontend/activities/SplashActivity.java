@@ -111,11 +111,11 @@ public class SplashActivity extends AppCompatActivity {
 //                return;
 //            }
             progressDialog.setVisibility(View.VISIBLE);
-                    new FetchDependency().execute();
-                    Prefs.putString("came from filter", "false");
+            new FetchDependency().execute();
+            Prefs.putString("came from filter", "false");
 
         }else
-            {
+        {
             progressDialog.setVisibility(View.INVISIBLE);
             loading.setText(getString(R.string.oops_no_internet));
             textViewtryAgain.setVisibility(View.VISIBLE);
@@ -370,16 +370,16 @@ public class SplashActivity extends AppCompatActivity {
                 });
                 loading.setVisibility(View.GONE);
                 textViewtryAgain.setVisibility(View.VISIBLE);
-                        textViewrefresh.setVisibility(View.VISIBLE);
-                        Prefs.putString("unauthorized", "false");
+                textViewrefresh.setVisibility(View.VISIBLE);
+                Prefs.putString("unauthorized", "false");
                 Prefs.putString("401","false");
-                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                            }
-                        });
+                textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
 
                 e.printStackTrace();
             } finally {

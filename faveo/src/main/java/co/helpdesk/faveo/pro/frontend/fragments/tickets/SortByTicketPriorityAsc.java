@@ -522,7 +522,7 @@ public class SortByTicketPriorityAsc extends Fragment {
                         show =Prefs.getString("source",null);
                         if (show.equals("1")){
                             dept="mytickets";
-                           // progressDialog.show();
+                            // progressDialog.show();
                             new FetchFirstAscending(getActivity(),dept,"priority","ASC",1).execute();
                             ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.my_tickets));
                         }
@@ -1222,7 +1222,7 @@ public class SortByTicketPriorityAsc extends Fragment {
             if (result == null)
                 return;
             if (result.equals("all done")) {
-            pageno=1;
+                pageno=1;
                 Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
                 return;
             }

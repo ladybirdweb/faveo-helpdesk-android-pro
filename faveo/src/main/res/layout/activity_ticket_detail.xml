@@ -108,10 +108,10 @@
                     android:maxLines="1"/>
 
                 <!--<ImageView-->
-                    <!--android:id="@+id/buttonsave"-->
-                    <!--android:layout_width="30dp"-->
-                    <!--android:layout_height="30dp"-->
-                    <!--android:src="@drawable/ic_arrow_back_black_24dp" />-->
+                <!--android:id="@+id/buttonsave"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:src="@drawable/ic_arrow_back_black_24dp" />-->
 
 
             </RelativeLayout>
@@ -252,15 +252,15 @@
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="14sp" />
                 <TextView
-                        android:id="@+id/addcc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Add CC"
-                        android:textColor="@color/faveo"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:visibility="visible"
-                        android:layout_marginRight="50dp"/>
+                    android:id="@+id/addcc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add CC"
+                    android:textColor="@color/faveo"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    android:layout_marginRight="50dp"/>
 
                 <Button
                     android:id="@+id/button_send"
@@ -380,15 +380,15 @@
 
                     <!-- Note -->
                     <!--<TextView-->
-                        <!--android:id="@+id/closeFab"-->
-                        <!--style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="?attr/selectableItemBackground"-->
-                        <!--android:drawableLeft="@drawable/ic_exit_to_app_black_24dp"-->
-                        <!--android:drawableStart="@drawable/ic_exit_to_app_black_24dp"-->
-                        <!--android:drawableTint="@color/faveo"-->
-                        <!--android:text="@string/closeFab" />-->
+                    <!--android:id="@+id/closeFab"-->
+                    <!--style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="?attr/selectableItemBackground"-->
+                    <!--android:drawableLeft="@drawable/ic_exit_to_app_black_24dp"-->
+                    <!--android:drawableStart="@drawable/ic_exit_to_app_black_24dp"-->
+                    <!--android:drawableTint="@color/faveo"-->
+                    <!--android:text="@string/closeFab" />-->
 
 
                 </LinearLayout>

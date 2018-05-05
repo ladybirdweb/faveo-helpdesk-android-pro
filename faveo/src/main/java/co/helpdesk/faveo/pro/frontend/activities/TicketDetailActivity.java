@@ -186,18 +186,18 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
 //                }
 //
-                     if (Prefs.getString("cameFromNotification",null).equals("true")){
-                        Intent intent=new Intent(TicketDetailActivity.this,NotificationActivity.class);
-                        startActivity(intent);
-                    }
-                    else if (Prefs.getString("cameFromNotification",null).equals("false")){
-                         onBackPressed();
+                if (Prefs.getString("cameFromNotification",null).equals("true")){
+                    Intent intent=new Intent(TicketDetailActivity.this,NotificationActivity.class);
+                    startActivity(intent);
+                }
+                else if (Prefs.getString("cameFromNotification",null).equals("false")){
+                    onBackPressed();
 //                         Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
 //                         startActivity(intent);
-                     }
-                    else{
-                        onBackPressed();
-                    }
+                }
+                else{
+                    onBackPressed();
+                }
 
 
 
@@ -317,54 +317,54 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         else{
 
-        for (int i=0;i<statusItems.size();i++){
-            Data data=statusItems.get(i);
-            if (data.getName().equals(item.toString())){
-                id=data.getID();
-                Log.d("ID",""+id);
+            for (int i=0;i<statusItems.size();i++){
+                Data data=statusItems.get(i);
+                if (data.getName().equals(item.toString())){
+                    id=data.getID();
+                    Log.d("ID",""+id);
+                }
             }
-        }
-        status = Prefs.getString("ticketstatus", null);
+            status = Prefs.getString("ticketstatus", null);
 
-        if (status.equalsIgnoreCase(item.toString())){
-            Toasty.warning(TicketDetailActivity.this, "Ticket is already in "+item.toString()+" state", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketDetailActivity.this);
+            if (status.equalsIgnoreCase(item.toString())){
+                Toasty.warning(TicketDetailActivity.this, "Ticket is already in "+item.toString()+" state", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketDetailActivity.this);
 
-            // Setting Dialog Title
-            alertDialog.setTitle("Changing status...");
+                // Setting Dialog Title
+                alertDialog.setTitle("Changing status...");
 
-            // Setting Dialog Message
-            alertDialog.setMessage("Are you sure you want to change the status?");
+                // Setting Dialog Message
+                alertDialog.setMessage("Are you sure you want to change the status?");
 
-            // Setting Icon to Dialog
-            alertDialog.setIcon(R.mipmap.ic_launcher);
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.mipmap.ic_launcher);
 
-            // Setting Positive "Yes" Button
-            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // Write your code here to invoke YES event
-                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    new StatusChange(Integer.parseInt(ticketID), id).execute();
-                    progressDialog.show();
-                    progressDialog.setMessage(getString(R.string.pleasewait));
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke YES event
+                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                        new StatusChange(Integer.parseInt(ticketID), id).execute();
+                        progressDialog.show();
+                        progressDialog.setMessage(getString(R.string.pleasewait));
 
-                }
-            });
+                    }
+                });
 
-            // Setting Negative "NO" Button
-            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // Write your code here to invoke NO event
-                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                    dialog.cancel();
-                }
-            });
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
 
-            // Showing Alert Message
-            alertDialog.show();
-        }
+                // Showing Alert Message
+                alertDialog.show();
+            }
         }
         Log.d("item", String.valueOf(item));
 
@@ -970,7 +970,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 else{
                     textViewStatus.setVisibility(View.GONE);
                 }
-                 textViewTitle.setText(ticketNumber);
+                textViewTitle.setText(ticketNumber);
                 if (subject.startsWith("=?")){
                     title=subject.replaceAll("=?UTF-8?Q?","");
                     String newTitle=title.replaceAll("=E2=80=99","");

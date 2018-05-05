@@ -177,7 +177,7 @@ public class SortByTicketNumberAscending extends Fragment {
             TextView textView= (TextView) toolbar.findViewById(R.id.toolbartextview);
 //        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
             textView.setText(getString(R.string.sortbyticketnumber));
-           url=Prefs.getString("URLFiltration",null);
+            url=Prefs.getString("URLFiltration",null);
             statusItems=new ArrayList<>();
             JSONObject jsonObject1;
             Data data;
@@ -320,7 +320,7 @@ public class SortByTicketNumberAscending extends Fragment {
                     }
                     if (item.getItemId()==R.id.ticketnumber_ascending){
                         Toasty.info(getActivity(),getString(R.string.alreadysorted),Toast.LENGTH_SHORT).show();
-                        }
+                    }
 
                     if (item.getItemId()==R.id.ticketnumber_descending){
                         title = getString(R.string.sortbyticketnodesc);
@@ -482,7 +482,7 @@ public class SortByTicketNumberAscending extends Fragment {
                         }
                         else if (show.equals("4")){
                             dept="trash";
-                           // progressDialog.show();
+                            // progressDialog.show();
                             new FetchFirstAscending(getActivity(),dept,"ticket_number","ASC",1).execute();
                             ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.trash));
                         }

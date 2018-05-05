@@ -107,8 +107,8 @@ public class SortByTicketPriorityDesc extends Fragment {
     public String mParam2;
     String ticket;
     int pageno=1;
-        String status;
-        int id=0;
+    String status;
+    int id=0;
     private SortByTicketPriorityDesc.OnFragmentInteractionListener mListener;
 
     public static SortByTicketPriorityDesc newInstance(String param1, String param2) {

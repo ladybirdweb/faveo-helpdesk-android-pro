@@ -40,7 +40,7 @@ public class RegisterUser extends AppCompatActivity {
     ImageView imageViewBack;
     Button submit;
     EditText editTextEmail,editTextFirstName,editTextPhone,editTextCompany,editTextLastName;
-//    CountryCodePicker countryCodePicker;
+    //    CountryCodePicker countryCodePicker;
     //String countrycode;
     boolean allCorect;
     ProgressDialog progressDialog;
@@ -114,7 +114,7 @@ public class RegisterUser extends AppCompatActivity {
                             lastname=URLEncoder.encode(lastname,"utf-8");
                             email = URLEncoder.encode(email.trim(), "utf-8");
                             phone = URLEncoder.encode(phone.trim(), "utf-8");
-                           company=URLEncoder.encode(company,"utf-8");
+                            company=URLEncoder.encode(company,"utf-8");
 
 
 
@@ -148,7 +148,7 @@ public class RegisterUser extends AppCompatActivity {
                                     progressDialog.show();
                                     progressDialog.setMessage(getString(R.string.UserCreating ));
                                     new RegisterUserNew(finalFirstname, finalLastname, finalEmail, finalPhone, finalCompany).execute();
-                                    }
+                                }
                             }
                         });
 
@@ -174,7 +174,7 @@ public class RegisterUser extends AppCompatActivity {
     }
 
     private class RegisterUserNew extends AsyncTask<String, Void, String> {
-     String firstname,email,mobile,company,lastname;
+        String firstname,email,mobile,company,lastname;
 
         RegisterUserNew(String firstname,String lastname,String email,String mobile,String company) {
 

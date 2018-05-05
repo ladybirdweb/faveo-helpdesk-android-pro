@@ -220,7 +220,7 @@ public class SortByTicketNumberDescending extends Fragment {
 //                    return false;
 //                }
 //            });
-           // url=Prefs.getString("URLFiltration",null);
+            // url=Prefs.getString("URLFiltration",null);
             toolbar1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -512,7 +512,7 @@ public class SortByTicketNumberDescending extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.menu_inbox, menu);
-     }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

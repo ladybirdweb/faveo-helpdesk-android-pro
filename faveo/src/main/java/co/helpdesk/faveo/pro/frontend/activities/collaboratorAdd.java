@@ -122,23 +122,23 @@ public class collaboratorAdd extends AppCompatActivity {
             }
         });
 
-      recipients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-          @Override
-          public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            if (i==0){
-                email2=null;
+        recipients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    email2=null;
+                }
+                else{
+                    email2=recipients.getSelectedItem().toString();
+                    //Toast.makeText(collaboratorAdd.this, "email is:"+email2, Toast.LENGTH_SHORT).show();
+                }
             }
-            else{
-               email2=recipients.getSelectedItem().toString();
-                //Toast.makeText(collaboratorAdd.this, "email is:"+email2, Toast.LENGTH_SHORT).show();
-            }
-          }
 
-          @Override
-          public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
                 email2=null;
-          }
-      });
+            }
+        });
         searchUer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +150,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 }
                 else if (id1==0){
                     Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
-                    }
+                }
                 else{
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
                     // Setting Dialog Title
@@ -269,7 +269,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 }
 
 
-                    //Toast.makeText(collaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(collaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
 
 
 
@@ -405,13 +405,13 @@ public class collaboratorAdd extends AppCompatActivity {
             if (isCancelled()) return;
             Log.d("result:",result);
             try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String collaborator=jsonObject.getString("collaborator");
-                    if (collaborator.equals("deleted successfully")){
-                        Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
-                        startActivity(intent);
-                    }
+                JSONObject jsonObject = new JSONObject(result);
+                String collaborator=jsonObject.getString("collaborator");
+                if (collaborator.equals("deleted successfully")){
+                    Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
+                    startActivity(intent);
+                }
 //                JSONArray jsonArray=jsonObject.getJSONArray("users");
 //                if (jsonArray.length()==0){
 //                    Toast.makeText(collaboratorAdd.this, "user not found", Toast.LENGTH_SHORT).show();
@@ -472,7 +472,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
                 if (jsonArray.length()==0){
                     recipients.setVisibility(View.GONE);
-                   return;
+                    return;
                 }else {
                     relativeLayout.setVisibility(View.VISIBLE);
                     recipients.setVisibility(View.VISIBLE);
@@ -596,12 +596,12 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         public void afterTextChanged(Editable s) {
-        if (term.equals("")){
-            searchUer.setVisibility(View.GONE);
-        }
-        else{
-            searchUer.setVisibility(View.VISIBLE);
-        }
+            if (term.equals("")){
+                searchUer.setVisibility(View.GONE);
+            }
+            else{
+                searchUer.setVisibility(View.VISIBLE);
+            }
         }
     };
     @Override

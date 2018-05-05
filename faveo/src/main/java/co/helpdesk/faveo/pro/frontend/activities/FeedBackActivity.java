@@ -1,10 +1,8 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,15 +58,19 @@ LinearLayout textViewSuggestion,textViewIssue;
         smoothCheckBoxSuggestion= (CheckBox) findViewById(R.id.suggestionCheckBox);
         textViewSuggestion= (LinearLayout) findViewById(R.id.suggestion);
         textViewIssue= (LinearLayout) findViewById(R.id.issue);
+
         smoothCheckBoxSuggestion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
+                    //Toast.makeText(FeedBackActivity.this, "checked"+smoothCheckBoxSuggestion.getTag(), Toast.LENGTH_SHORT).show();
+                    //smoothCheckBoxIssue.setVisibility(View.GONE);
                     textViewIssue.setVisibility(View.GONE);
                     issueOrSuggestion="Suggestion";
                 }
                 else{
                     textViewIssue.setVisibility(View.VISIBLE);
+                    //smoothCheckBoxIssue.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -76,11 +78,14 @@ LinearLayout textViewSuggestion,textViewIssue;
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
+                        //smoothCheckBoxSuggestion.setVisibility(View.GONE);
                     issueOrSuggestion="Issue";
                         textViewSuggestion.setVisibility(View.GONE);
                 }else{
                     textViewSuggestion.setVisibility(View.VISIBLE);
-                    }
+                    //smoothCheckBoxSuggestion.setVisibility(View.VISIBLE);
+
+                }
             }
         });
         editTextemail.setEnabled(false);
@@ -135,44 +140,9 @@ LinearLayout textViewSuggestion,textViewIssue;
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
-
-
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(FeedBackActivity.this);
-
-                        // Setting Dialog Title
-                        alertDialog.setTitle("Giving feedback...");
-
-                        // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want to submit the feedback?");
-
-                        // Setting Icon to Dialog
-                        alertDialog.setIcon(R.mipmap.ic_launcher);
-
-                        // Setting Positive "Yes" Button
-                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to invoke YES event
-                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                if (InternetReceiver.isConnected()){
-                                    progressDialog = new ProgressDialog(FeedBackActivity.this);
-                                    progressDialog.setMessage(getString(R.string.submitFeedback));
-                                    progressDialog.show();
-                                    new CustomerFeedback(subject,message).execute();
-                                    }
-                            }
-                        });
-
-                        // Setting Negative "NO" Button
-                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to invoke NO event
-                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                                dialog.cancel();
-                            }
-                        });
-
-                        // Showing Alert Message
-                        alertDialog.show();
+                        progressDialog.setMessage(getString(R.string.submitFeedback));
+                        progressDialog.show();
+                        new CustomerFeedback(subject,message).execute();
                     }
                 }
 
