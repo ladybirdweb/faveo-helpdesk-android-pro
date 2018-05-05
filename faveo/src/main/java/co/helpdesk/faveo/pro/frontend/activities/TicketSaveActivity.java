@@ -97,7 +97,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             Log.d("FromTicketSave","true");
             task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
             task.execute();
-            }
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarsave);
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
         imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
@@ -119,22 +119,22 @@ public class TicketSaveActivity extends AppCompatActivity {
                 return false;
             }
         });
-       autoCompleteTextViewstaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-           @Override
-           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               Data data=staffItems.get(position);
-               id1=data.getID();
-           }
+        autoCompleteTextViewstaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Data data=staffItems.get(position);
+                id1=data.getID();
+            }
 
-           @Override
-           public void onNothingSelected(AdapterView<?> parent) {
-            id1=0;
-           }
-       });
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                id1=0;
+            }
+        });
         spinnerSource.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-            buttonsave.setVisibility(View.VISIBLE);
+                buttonsave.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -321,134 +321,134 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
     }
     private class FetchTicketDetail extends AsyncTask<String, Void, String> {
-            String ticketID;
+        String ticketID;
 
-            FetchTicketDetail(String ticketID) {
+        FetchTicketDetail(String ticketID) {
 
-                this.ticketID = ticketID;
+            this.ticketID = ticketID;
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().getTicketDetail(ticketID);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            if (isCancelled()) return;
+
+
+            if (result == null) {
+                Toasty.error(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
             }
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                String title=jsonObject2.getString("title");
 
-            protected String doInBackground(String... urls) {
-                return new Helpdesk().getTicketDetail(ticketID);
-            }
-
-            protected void onPostExecute(String result) {
-                progressDialog.dismiss();
-                if (isCancelled()) return;
-
-
-                if (result == null) {
-                    Toasty.error(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                    return;
+                if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
+                    String first = title.replace("=?UTF-8?Q?", "");
+                    String second = first.replace("_", " ");
+                    String third = second.replace("=C2=A0", "");
+                    String fourth = third.replace("?=", "");
+                    String fifth = fourth.replace("=E2=80=99", "'");
+                    edittextsubject.setText(fifth);
+                } else {
+                    edittextsubject.setText(title);
                 }
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                    JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
-                    String title=jsonObject2.getString("title");
-
-                    if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
-                        String first = title.replace("=?UTF-8?Q?", "");
-                        String second = first.replace("_", " ");
-                        String third = second.replace("=C2=A0", "");
-                        String fourth = third.replace("?=", "");
-                        String fifth = fourth.replace("=E2=80=99", "'");
-                        edittextsubject.setText(fifth);
-                    } else {
-                        edittextsubject.setText(title);
-                    }
-                    //edittextsubject.setText(title);
-                    String assignee=jsonObject2.getString("assignee");
-                    if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
-                        autoCompleteTextViewstaff.setSelection(0);
-                    }
-                    else{
-                        JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
-                        try {
-                            if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
-                                //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
-                                id1= Integer.parseInt(jsonObject3.getString("id"));
-                                Log.d("id of the assignee",""+id1);
-                                for (int j = 0; j < staffItems.size(); j++) {
-                                    Data data=staffItems.get(j);
-                                    if (data.getID()==id1) {
-                                        Log.d("cameHere","True");
-                                        Log.d("position",""+j);
-                                        autoCompleteTextViewstaff.setSelection(j);
-                                    }
-                                }
-                                //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
-                            }
-                            //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
-                        } catch (ArrayIndexOutOfBoundsException e){
-                            e.printStackTrace();
-                        } catch (Exception e) {
-//                    spinnerHelpTopics.setVisibility(View.GONE);
-//                    tv_helpTopic.setVisibility(View.GONE);
-                            e.printStackTrace();
-                        }
-                    }
-
+                //edittextsubject.setText(title);
+                String assignee=jsonObject2.getString("assignee");
+                if (assignee.equals(null)||assignee.equals("null")||assignee.equals("")){
+                    autoCompleteTextViewstaff.setSelection(0);
+                }
+                else{
+                    JSONObject jsonObject3=jsonObject2.getJSONObject("assignee");
                     try {
-                        if (jsonObject2.getString("priority_name") != null) {
-
-                            spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject2.getString("priority_name")));
-
-
-                        }
-                    } catch (JSONException | NumberFormatException e) {
-                        e.printStackTrace();
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        if (jsonObject2.getString("type_name") != null) {
-
-                            for (int j = 0; j < spinnerType.getCount(); j++) {
-                                if (spinnerType.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject2.getString("type_name"))) {
-                                    spinnerType.setSelection(j);
+                        if (jsonObject3.getString("first_name") != null&&jsonObject3.getString("last_name") != null) {
+                            //spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject1.getString("helptopic_name")));
+                            id1= Integer.parseInt(jsonObject3.getString("id"));
+                            Log.d("id of the assignee",""+id1);
+                            for (int j = 0; j < staffItems.size(); j++) {
+                                Data data=staffItems.get(j);
+                                if (data.getID()==id1) {
+                                    Log.d("cameHere","True");
+                                    Log.d("position",""+j);
+                                    autoCompleteTextViewstaff.setSelection(j);
                                 }
                             }
+                            //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
                         }
-                    } catch (JSONException | NumberFormatException e) {
-                        e.printStackTrace();
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        if (jsonObject2.getString("helptopic_name") != null)
-                            spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject2.getString("helptopic_name")));
-
-
-                    } catch (ArrayIndexOutOfBoundsException e) {
+                        //spinnerHelpTopics.setSelection(Integer.parseInt(jsonObject1.getString("helptopic_id")));
+                    } catch (ArrayIndexOutOfBoundsException e){
                         e.printStackTrace();
                     } catch (Exception e) {
-
+//                    spinnerHelpTopics.setVisibility(View.GONE);
+//                    tv_helpTopic.setVisibility(View.GONE);
                         e.printStackTrace();
                     }
+                }
+
+                try {
+                    if (jsonObject2.getString("priority_name") != null) {
+
+                        spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject2.getString("priority_name")));
 
 
-
-                    try {
-                        if (jsonObject2.getString("source_name") != null)
-
-
-                            spinnerSource.setSelection(getIndex(spinnerSource, jsonObject2.getString("source_name")));
-
-                    } catch (JSONException | NumberFormatException e) {
-                        e.printStackTrace();
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        e.printStackTrace();
                     }
-
-
-                } catch (JSONException | IllegalStateException e) {
+                } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
+                } catch (ArrayIndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
-            }
 
+                try {
+                    if (jsonObject2.getString("type_name") != null) {
+
+                        for (int j = 0; j < spinnerType.getCount(); j++) {
+                            if (spinnerType.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject2.getString("type_name"))) {
+                                spinnerType.setSelection(j);
+                            }
+                        }
+                    }
+                } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (jsonObject2.getString("helptopic_name") != null)
+                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject2.getString("helptopic_name")));
+
+
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                }
+
+
+
+                try {
+                    if (jsonObject2.getString("source_name") != null)
+
+
+                        spinnerSource.setSelection(getIndex(spinnerSource, jsonObject2.getString("source_name")));
+
+                } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+
+
+            } catch (JSONException | IllegalStateException e) {
+                e.printStackTrace();
+            }
         }
+
+    }
     private int getIndex(Spinner spinner, String myString) {
 
         int index = 0;

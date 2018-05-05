@@ -460,7 +460,7 @@ public class LoginActivity extends AppCompatActivity {
         String baseURL;
         String apiDisabled;
 
-            VerifyURL(Context context, String companyURL) {
+        VerifyURL(Context context, String companyURL) {
             this.context = context;
             this.companyURL = companyURL;
             baseURL = companyURL;
@@ -487,7 +487,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
 
-             if (result == null) {
+            if (result == null) {
                 count++;
                 Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
                 return;

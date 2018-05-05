@@ -151,7 +151,7 @@
     <string name="error_verifying_url">Please check your Helpdesk URL</string>
     <string name="format_error">URL should be in this format \n domainname/foldername \n eg: faveohelpdesk.in/test</string>
     <string name="access_denied">Access denied!</string>
-    <string name="please_purchase_faveo">Please purchase Faveo PRO edition to use this app.Contact support team.</string>
+    <string name="please_purchase_faveo">Please purchase Faveo PRO edition to use this app.</string>
     <string name="ok">OK</string>
     <string name="error_checking_pro">Error, while checking Access to Pro Edition!</string>
     <string name="signing_in">Signing in…</string>
@@ -413,8 +413,8 @@
     <string name="roleChanged">Role has been changed!user can not use the app.</string>
     <string name="fileSize">File size should not exceed 6 MB</string>
     <string name="apiDisabled">Please enable the API from the web application.</string>
-    <string name="successfullyChanged">Successfully changed the status.</string>
-    <string name="urlchange">Please check your helpdesk url,username and password!Some credentials may have changed.API should be enabled from web app.try to log in again with the new credentials.</string>
+    <string name="successfullyChanged">Successfully changed the status</string>
+    <string name="urlchange">Please check your helpdesk url,username and password!Some credentials may have changed.try to log in again with the new credentials.</string>
     <string name="apidisabled">API is disabled for the web application</string>
     <string name="enableApi">Please enable the API from the web application to use the app</string>
     <string name="errorFaveo">Error in Faveo</string>

@@ -92,17 +92,17 @@ import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER
 import static com.vincent.filepicker.activity.ImagePickActivity.IS_NEED_CAMERA;
 
 public class TicketReplyActivity extends AppCompatActivity implements PermissionCallback, ErrorCallback {
-ImageView imageView;public static String ticketID;
-Button buttonSend;
-EditText editTextReplyMessage;
-ProgressDialog progressDialog;
-TextView addCc;
-Button button;
-ImageButton imageButton;
-RelativeLayout attachment_layout;
-TextView attachmentFileName;
-String token;private String mImageFileLocation = "";
-ProgressBar progressBar;
+    ImageView imageView;public static String ticketID;
+    Button buttonSend;
+    EditText editTextReplyMessage;
+    ProgressDialog progressDialog;
+    TextView addCc;
+    Button button;
+    ImageButton imageButton;
+    RelativeLayout attachment_layout;
+    TextView attachmentFileName;
+    String token;private String mImageFileLocation = "";
+    ProgressBar progressBar;
     private static final int CAMERA_REQUEST = 1888;
     private static final int PICKFILE_REQUEST_CODE = 1234;
     private static final int PICKVIDEO_REQUEST_CODE = 1235;
@@ -171,29 +171,29 @@ ProgressBar progressBar;
             }
         });
 
-                buttonSend.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        replyMessage = editTextReplyMessage.getText().toString();
-                        try {
-                            realPath = path;
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                        if (replyMessage.trim().length() == 0) {
-                            Toasty.warning(TicketReplyActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        else{
-                            progressDialog.setMessage(getString(R.string.sending_msg));
-                            progressDialog.show();
-                            new SendPostRequest().execute();
-                        }
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replyMessage = editTextReplyMessage.getText().toString();
+                try {
+                    realPath = path;
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                if (replyMessage.trim().length() == 0) {
+                    Toasty.warning(TicketReplyActivity.this, getString(R.string.msg_must_not_be_empty), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else{
+                    progressDialog.setMessage(getString(R.string.sending_msg));
+                    progressDialog.show();
+                    new SendPostRequest().execute();
+                }
 
-                    }
-
-                });
             }
+
+        });
+    }
 
     @Override
     public void onBackPressed() {
@@ -626,7 +626,7 @@ ProgressBar progressBar;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            }
+        }
     }
     class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
         String ticketid;
@@ -707,7 +707,7 @@ ProgressBar progressBar;
         } else {
             showSnackIfNoInternet(false);
         }
-        }
+    }
     private void reqPermissionCamera() {
         new AskPermission.Builder(this).setPermissions(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .setCallback(TicketReplyActivity.this)
@@ -722,5 +722,4 @@ ProgressBar progressBar;
         addCc.setVisibility(View.GONE);
         new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
     }
-    }
-
+}

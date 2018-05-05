@@ -110,7 +110,7 @@ public class CreatedAtAsc extends Fragment {
     ArrayList<Data> statusItems;
     int id=0;
     private CreatedAtAsc.OnFragmentInteractionListener mListener;
-String status;
+    String status;
     public static CreatedAtAsc newInstance(String param1, String param2) {
         CreatedAtAsc fragment = new CreatedAtAsc();
         Bundle args = new Bundle();
@@ -861,7 +861,7 @@ String status;
         String show;
         String title;
         String order;
-//        int assigned;
+        //        int assigned;
         FetchFirstAscending(Context context,String show,String title,String order,int page) {
             this.context = context;
             this.page=page;

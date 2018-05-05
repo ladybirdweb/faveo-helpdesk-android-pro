@@ -408,44 +408,44 @@ public class DueByAsc extends Fragment {
 
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
-             show =Prefs.getString("source",null);
-             if (show.equals("1")){
-                 dept="mytickets";
-                 progressDialog.show();
-                 new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
-                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.my_tickets));
-             }
-             else if (show.equals("2")){
-                 dept="inbox";
-                 assigned=0;
-                 progressDialog.show();
-                 new FetchFirstAscending(getActivity(),dept+"&assigned=0","due","ASC",1).execute();
-                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.unassigned_tickets));
-             }
-             else if (show.equals("3")){
-                 dept="closed";
-                 progressDialog.show();
-                 new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
-                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.closed_ticket));
-             }
-             else if (show.equals("4")){
-                 dept="trash";
-                 progressDialog.show();
-                 new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
-                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.trash));
-             }
-             else if (show.equals("5")){
-                 dept="inbox";
-                 progressDialog.show();
-                 new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
-                 ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox));
-             }
-             else if (show.equals("6")&&!url.equals(null)){
+                show =Prefs.getString("source",null);
+                if (show.equals("1")){
+                    dept="mytickets";
+                    progressDialog.show();
+                    new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
+                    ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.my_tickets));
+                }
+                else if (show.equals("2")){
+                    dept="inbox";
+                    assigned=0;
+                    progressDialog.show();
+                    new FetchFirstAscending(getActivity(),dept+"&assigned=0","due","ASC",1).execute();
+                    ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.unassigned_tickets));
+                }
+                else if (show.equals("3")){
+                    dept="closed";
+                    progressDialog.show();
+                    new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
+                    ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.closed_ticket));
+                }
+                else if (show.equals("4")){
+                    dept="trash";
+                    progressDialog.show();
+                    new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
+                    ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.trash));
+                }
+                else if (show.equals("5")){
+                    dept="inbox";
+                    progressDialog.show();
+                    new FetchFirstAscending(getActivity(),dept,"due","ASC",1).execute();
+                    ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox));
+                }
+                else if (show.equals("6")&&!url.equals(null)){
 
-                 progressDialog.show();
-                 new FetchFirstFilter(getActivity(),url+"&sort-by=due&order=ASC",pageNo).execute();
-                 //Toast.makeText(getActivity(), "came here", Toast.LENGTH_SHORT).show();
-             }
+                    progressDialog.show();
+                    new FetchFirstFilter(getActivity(),url+"&sort-by=due&order=ASC",pageNo).execute();
+                    //Toast.makeText(getActivity(), "came here", Toast.LENGTH_SHORT).show();
+                }
 
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);

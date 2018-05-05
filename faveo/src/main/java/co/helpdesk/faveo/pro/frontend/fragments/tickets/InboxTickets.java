@@ -1216,9 +1216,9 @@ public class InboxTickets extends Fragment {
             //((MainActivity) getActivity()).setActionBarTitle("Inbox");
             //implementRecyclerViewClickListeners();
 
-             }
-            return rootView;
         }
+        return rootView;
+    }
 
 
     public void setNullToActionMode() {
@@ -1246,26 +1246,26 @@ public class InboxTickets extends Fragment {
 //    }
 
 
-private void multiSelect(int position) {
-    TicketOverview data = ticketOverviewAdapter.getItem(position);
-    if (data != null){
-        if (actionMode != null) {
-            if (selectedIds.contains(data.getTicketID()))
-                selectedIds.remove(Integer.valueOf(data.getTicketID()));
-            else
-                selectedIds.add(data.getTicketID());
+    private void multiSelect(int position) {
+        TicketOverview data = ticketOverviewAdapter.getItem(position);
+        if (data != null){
+            if (actionMode != null) {
+                if (selectedIds.contains(data.getTicketID()))
+                    selectedIds.remove(Integer.valueOf(data.getTicketID()));
+                else
+                    selectedIds.add(data.getTicketID());
 
-            if (selectedIds.size() > 0)
-                actionMode.setTitle(String.valueOf(selectedIds.size())); //show selected item count on action mode.
-            else{
-                actionMode.setTitle(""); //remove item count from action mode.
-                actionMode.finish(); //hide action mode.
+                if (selectedIds.size() > 0)
+                    actionMode.setTitle(String.valueOf(selectedIds.size())); //show selected item count on action mode.
+                else{
+                    actionMode.setTitle(""); //remove item count from action mode.
+                    actionMode.finish(); //hide action mode.
+                }
+                ticketOverviewAdapter.setSelectedIds(selectedIds);
+
             }
-            ticketOverviewAdapter.setSelectedIds(selectedIds);
-
         }
     }
-}
 //    private void multiSelect(int position) {
 //        TicketOverview data = ticketOverviewAdapter.getItem(position);
 //        if (data != null) {
@@ -1743,16 +1743,16 @@ private void multiSelect(int position) {
                 //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
                 //String message1=jsonObject2.getString("ticket_id");
                 String message2 = jsonObject.getString("message");
-                    if (!message2.equals("null")||!message2.equals("")){
-                        Toasty.success(getActivity(),getString(R.string.successfullyChanged),Toast.LENGTH_LONG).show();
-                        Prefs.putString("tickets", null);
-                        getActivity().finish();
-                        startActivity(new Intent(getActivity(), MainActivity.class));
-                    }
-                    else{
-                        Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                if (!message2.equals("null")||!message2.equals("")){
+                    Toasty.success(getActivity(),getString(R.string.successfullyChanged),Toast.LENGTH_LONG).show();
+                    Prefs.putString("tickets", null);
+                    getActivity().finish();
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                }
+                else{
+                    Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 //Toasty.success(getActivity(), getString(R.string.successfullyChanged), Toast.LENGTH_SHORT).show();
 //                if (message2.contains("Status changed to Deleted")) {
@@ -1850,7 +1850,7 @@ private void multiSelect(int position) {
                 } catch (JSONException e) {
                     data = jsonObject.getString("result");
                 }
-                
+
                 JSONArray jsonArray = new JSONArray(data);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ticketOverview = Helper.parseTicketOverview(jsonArray, i);
@@ -3786,10 +3786,3 @@ private void multiSelect(int position) {
         }
     }
 }
-
-
-
-
-
-
-

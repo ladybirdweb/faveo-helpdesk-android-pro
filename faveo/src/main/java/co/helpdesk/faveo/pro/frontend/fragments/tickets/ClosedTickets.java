@@ -575,7 +575,7 @@ public class ClosedTickets extends Fragment {
 //                e.printStackTrace();
 //            }
 //        }
-         if (id == R.id.action_noti) {
+        if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
             return true;
@@ -858,7 +858,7 @@ public class ClosedTickets extends Fragment {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("data");
-                    total=jsonObject1.getInt("total");
+                total=jsonObject1.getInt("total");
                 try {
                     data = jsonObject1.getString("data");
                     int closed = jsonObject1.getInt("total");

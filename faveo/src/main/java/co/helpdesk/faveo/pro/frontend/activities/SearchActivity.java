@@ -71,12 +71,13 @@ public class SearchActivity extends AppCompatActivity implements
     String term;
     Context context;
     TabLayout tabLayout;
+    String querry1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-                requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-       setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_search);
 //        ButterKnife.bind(this);
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout= (TabLayout) findViewById(R.id.tabs);
@@ -200,6 +201,7 @@ public class SearchActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Prefs.putString("querry","null");
+                Prefs.putString("querry1","null");
                 onBackPressed();
             }
         });
@@ -240,7 +242,7 @@ public class SearchActivity extends AppCompatActivity implements
                     String querry=searchView.getText().toString();
                     Prefs.putString("querry",querry);
                     try {
-                     String querry1 = URLEncoder.encode(querry, "utf-8");
+                        String querry1 = URLEncoder.encode(querry, "utf-8");
                         Prefs.putString("querry1",querry1);
                         //Log.d("Msg", replyMessage);
                     } catch (UnsupportedEncodingException e) {
@@ -302,36 +304,7 @@ public class SearchActivity extends AppCompatActivity implements
 
             }
         });
-
-//        vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//
-//            // This method will be invoked when a new page becomes selected.
-//            @Override
-//            public void onPageSelected(int position) {
-//                //Toast.makeText(SearchActivity.this,
-//                       // "Selected page position: " + position, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            // This method will be invoked when the current page is scrolled
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                // Code goes here
-//                if (position==1){
-//
-//                }
-//            }
-//
-//            // Called when the scroll state changes:
-//            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                // Code goes here
-//            }
-//        });
-
-
-
-    }
+        }
     @Override
     public void onBackPressed() {
         if (!MainActivity.isShowing) {
@@ -514,6 +487,3 @@ public class SearchActivity extends AppCompatActivity implements
 
     }
 }
-
-
-

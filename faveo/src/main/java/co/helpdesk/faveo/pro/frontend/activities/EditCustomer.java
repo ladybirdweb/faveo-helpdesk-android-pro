@@ -231,7 +231,7 @@ public class EditCustomer extends AppCompatActivity {
                                 progressDialog.show();
                                 progressDialog.setMessage(getString(R.string.pleasewait));
                                 new EditClient(EditCustomer.this, clientID, firstName, lastName, emailtext, userName).execute();
-                                }
+                            }
                         });
                         // Setting Negative "NO" Button
                         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -251,7 +251,7 @@ public class EditCustomer extends AppCompatActivity {
 //                }
             }
         });
-        }
+    }
     public String GetCountryZipCode(){
         String CountryID="";
         String CountryZipCode="";
@@ -364,9 +364,9 @@ public class EditCustomer extends AppCompatActivity {
         String username1;
         String badRequest;
         EditClient(Context context,String clientid,
-                String firstname,
-                String lastname,
-                String email,String username1) {
+                   String firstname,
+                   String lastname,
+                   String email,String username1) {
             this.context = context;
             this.clientid=clientid;
             this.firstname=firstname;

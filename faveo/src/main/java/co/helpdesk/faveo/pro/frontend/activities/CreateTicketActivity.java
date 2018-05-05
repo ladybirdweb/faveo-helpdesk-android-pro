@@ -206,7 +206,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
     TextView attachmentFileName;
-//    @BindView(R.id.attachment_size)
+    //    @BindView(R.id.attachment_size)
 //    TextView attachmentFileSize;
     @BindView(R.id.attachment_layout)
     RelativeLayout attachment_layout;
@@ -228,7 +228,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     StringBuilder sb,sb1;
     String emailfromsuggestion;
     String email2;
-//    @BindView(R.id.attachment)
+    //    @BindView(R.id.attachment)
 //    Button button;
     @BindView(R.id.attachment_close)
     ImageButton imageButtonAttachmentClose;
@@ -444,8 +444,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        }catch (NullPointerException e){
 //            e.printStackTrace();
 //        }
-cc=new String[0];
-cc1=new String[0];
+        cc=new String[0];
+        cc1=new String[0];
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
         multiAutoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.collaborator);
         stringArraylist=new ArrayList<MultiCollaborator>();
@@ -544,19 +544,19 @@ cc1=new String[0];
 
 
 
-multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        try {
-            emailfromsuggestion = adapterView.getItemAtPosition(i).toString();
-        }catch (IndexOutOfBoundsException e){
-            e.printStackTrace();
-        }
+        multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                try {
+                    emailfromsuggestion = adapterView.getItemAtPosition(i).toString();
+                }catch (IndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
 
 
 
-    }
-});
+            }
+        });
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -698,12 +698,12 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
             e.printStackTrace();
         }
 
-      if (firstname.equals("null")){
-          editTextFirstName.setText("");
-      }
-      else{
-          editTextFirstName.setText(firstname);
-      }
+        if (firstname.equals("null")){
+            editTextFirstName.setText("");
+        }
+        else{
+            editTextFirstName.setText(firstname);
+        }
 
 
         if (lastname.equals("null")){
@@ -1085,7 +1085,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         protected void onPostExecute(String result) {
             //progressDialog.dismiss();
             //Toast.makeText(getApplicationContext(), result,
-                    //Toast.LENGTH_LONG).show();
+            //Toast.LENGTH_LONG).show();
             Log.d("resultFromNewCall",result);
             try {
                 JSONObject jsonObject=new JSONObject(result);
@@ -1225,9 +1225,9 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 //        reqEntity.addPart("first_name",new StringBody("sayar"));
 //        reqEntity.addPart("last_name",new StringBody("samanta"));
 
-        //reqEntity.addPart("password", new StringBody("demopass"));
-        //String response = multipost("http://www.jamboreebliss.com/sayar/public/api/v1/authenticate?", reqEntity);
-        //Log.d("MainActivity", "Response :"+response);
+    //reqEntity.addPart("password", new StringBody("demopass"));
+    //String response = multipost("http://www.jamboreebliss.com/sayar/public/api/v1/authenticate?", reqEntity);
+    //Log.d("MainActivity", "Response :"+response);
 
 
 
@@ -1242,7 +1242,7 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 //            e.printStackTrace();
 //        }
 
-        //encodeImage(path);
+    //encodeImage(path);
 
 
 
@@ -1487,9 +1487,9 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
         // DocumentProvider
 
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-                System.out.println("getPath() uri: " + uri.toString());
-                System.out.println("getPath() uri authority: " + uri.getAuthority());
-                System.out.println("getPath() uri path: " + uri.getPath());
+            System.out.println("getPath() uri: " + uri.toString());
+            System.out.println("getPath() uri authority: " + uri.getAuthority());
+            System.out.println("getPath() uri path: " + uri.getPath());
 
 
             // ExternalStorageProvider
@@ -1704,28 +1704,28 @@ multiAutoCompleteTextViewCC.setOnItemClickListener(new AdapterView.OnItemClickLi
 //
 //    }
 
-public String getFileName(Uri uri) {
-    String result = null;
-    if (uri.getScheme().equals("content")) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                Log.d("result",result);
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    Log.d("result",result);
+                }
+            } finally {
+                cursor.close();
             }
-        } finally {
-            cursor.close();
         }
-    }
-    if (result == null) {
-        result = uri.getPath();
-        int cut = result.lastIndexOf('/');
-        if (cut != -1) {
-            result = result.substring(cut + 1);
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
         }
+        return result;
     }
-    return result;
-}
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -1746,72 +1746,72 @@ public String getFileName(Uri uri) {
         cursor.close();
         return path;
     }
-public static String getPathFromUri(final Context context, final Uri uri) {
+    public static String getPathFromUri(final Context context, final Uri uri) {
 
-    final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-    // DocumentProvider
-    if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-        // ExternalStorageProvider
-        if (isExternalStorageDocument(uri)) {
-            final String docId = DocumentsContract.getDocumentId(uri);
-            final String[] split = docId.split(":");
-            final String type = split[0];
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
 
-            if ("primary".equalsIgnoreCase(type)) {
-                return Environment.getExternalStorageDirectory() + "/" + split[1];
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+
+                // TODO handle non-primary volumes
             }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
 
-            // TODO handle non-primary volumes
-        }
-        // DownloadsProvider
-        else if (isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
-            final String id = DocumentsContract.getDocumentId(uri);
-            final Uri contentUri = ContentUris.withAppendedId(
-                    Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-            return getDataColumn(context, contentUri, null, null);
-        }
-        // MediaProvider
-        else if (isMediaDocument(uri)) {
-            final String docId = DocumentsContract.getDocumentId(uri);
-            final String[] split = docId.split(":");
-            final String type = split[0];
-
-            Uri contentUri = null;
-            if ("image".equals(type)) {
-                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            } else if ("video".equals(type)) {
-                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            } else if ("audio".equals(type)) {
-                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                return getDataColumn(context, contentUri, null, null);
             }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
 
-            final String selection = "_id=?";
-            final String[] selectionArgs = new String[] {
-                    split[1]
-            };
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
 
-            return getDataColumn(context, contentUri, selection, selectionArgs);
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] {
+                        split[1]
+                };
+
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
         }
-    }
-    // MediaStore (and general)
-    else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-        // Return the remote address
-        if (isGooglePhotosUri(uri))
-            return uri.getLastPathSegment();
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
 
-        return getDataColumn(context, uri, null, null);
-    }
-    // File
-    else if ("file".equalsIgnoreCase(uri.getScheme())) {
-        return uri.getPath();
-    }
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
 
-    return null;
-}
+        return null;
+    }
 
     /**
      * Get the value of the data column for this Uri. This is useful for
@@ -1916,7 +1916,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-//    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+    //    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
 //        ParcelFileDescriptor parcelFileDescriptor =
 //                getContentResolver().openFileDescriptor(uri, "r");
 //        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
@@ -2030,7 +2030,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //            if (requestCode == RESULT_LOAD_FILE && resultCode == RESULT_OK
 //                    && null != data) {
 //                Uri selectedFile = data.getData();
-                //String uriString = getPath(selectedFile);
+    //String uriString = getPath(selectedFile);
 //                File myFile = new File(uriString);
 //                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_txt));
 //                attachmentFileSize.setText(getFileSize(myFile.length()));
@@ -2395,7 +2395,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                             sb1.append(n);
                             first_user=cc1[0];
                             second_user=cc1[1];
-                            
+
                         }
                         Log.d("first_user",first_user);
                         Log.d("second_user",second_user);
@@ -2590,7 +2590,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                                 progressDialog.setMessage("Please wait");
                                 progressDialog.show();
                                 new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID, finalPhone, finalFname, finalLname, email2, countrycode, staff.ID, mobile).execute();
-                                }
+                            }
                         }
                     });
 
@@ -3206,7 +3206,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                 }
 
 
-                    //Creating a multi part request
+                //Creating a multi part request
 
 
 //                try {
@@ -3214,10 +3214,10 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //                } catch (UnsupportedEncodingException e) {
 //                    e.printStackTrace();
 //                }
-                } else {
-                    Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
-                }
+            } else {
+                Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
             }
+        }
 //                progressDialog = new ProgressDialog(CreateTicketActivity.this);
 //                progressDialog.setMessage(getString(R.string.creating_ticket));
 //
@@ -3236,10 +3236,10 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //                    e.printStackTrace();
 //                }
 //                    progressDialog.show();
-            //new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile ).execute();
+        //new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile ).execute();
 //            }
-        }
-        @Override
+    }
+    @Override
     public void onShowRationalDialog(final PermissionInterface permissionInterface, int requestCode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We need permissions for this app.");
@@ -3432,7 +3432,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
     private class CreateNewTicket extends AsyncTask<File, Void, String> {
         String fname, lname, email, code;
         String subject;
-       public String body;
+        public String body;
         String phone;
         String mobile;
         int helpTopic;
@@ -3465,7 +3465,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
 //        protected String doInBackground(String... urls) {
 //
-            //return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators, new File[]{new File(result)});
+        //return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators, new File[]{new File(result)});
 //        }
 
         @Override
@@ -3522,7 +3522,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("error");
-               // JSONArray jsonArray=jsonObject1.getJSONArray("code");
+                // JSONArray jsonArray=jsonObject1.getJSONArray("code");
                 String message=jsonObject1.getString("code");
                 if (message.contains("The code feild is required.")){
                     Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
@@ -3532,7 +3532,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                 e.printStackTrace();
             }
 
-  if (result.contains("Ticket created successfully!")) {
+            if (result.contains("Ticket created successfully!")) {
                 Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
                 finish();
                 editTextEmail.setText("");
@@ -3543,14 +3543,14 @@ public static String getPathFromUri(final Context context, final Uri uri) {
             }
 
 
-  }
-
-
         }
 
 
+    }
 
-     /**
+
+
+    /**
      * This method will be called when a MessageEvent is posted (in the UI thread for Toast).
      *
      * @param event
@@ -3632,7 +3632,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 
     }
 
-//    private TextWatcher mTextWatcher = new TextWatcher() {
+    //    private TextWatcher mTextWatcher = new TextWatcher() {
 //        @Override
 //        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 //        }
@@ -3652,46 +3652,46 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //            //checkFieldsForEmptyValues();
 //        }
 //    };
- TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
-    }
+            //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
+        }
 
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        String term = editTextEmail.getText().toString();
-        if (InternetReceiver.isConnected()) {
-            if (term.equals("")) {
-                arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
-                //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
-                //new FetchCollaborator("s").execute();
-                //Data data = new Data(0, "No result found");
-                //emailHint.add(data);
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String term = editTextEmail.getText().toString();
+            if (InternetReceiver.isConnected()) {
+                if (term.equals("")) {
+                    arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+                    //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                    //new FetchCollaborator("s").execute();
+                    //Data data = new Data(0, "No result found");
+                    //emailHint.add(data);
 //                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
 //                stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
-            } else {
-                arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
-                progressBar.setVisibility(View.VISIBLE);
-                //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
-                new FetchCollaborator(term).execute();
-                editTextEmail.setAdapter(arrayAdapterCC);
-                //stringArrayAdapterCC.notifyDataSetChanged();
+                } else {
+                    arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+                    progressBar.setVisibility(View.VISIBLE);
+                    //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                    new FetchCollaborator(term).execute();
+                    editTextEmail.setAdapter(arrayAdapterCC);
+                    //stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
+                }
+
+
+                //buttonsave.setEnabled(true);
             }
-
-
-            //buttonsave.setEnabled(true);
         }
-    }
 
-    public void afterTextChanged(Editable s) {
-    }
-};
+        public void afterTextChanged(Editable s) {
+        }
+    };
 
     TextWatcher ccedittextwatcher = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -3743,7 +3743,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
                 //buttonsave.setEnabled(true);
             }
         }
-//String[] cc=[sayarsamanta@gmail.com,demoadmin@gmail.com,demopass@gmail.com]
+        //String[] cc=[sayarsamanta@gmail.com,demoadmin@gmail.com,demopass@gmail.com]
         public void afterTextChanged(Editable s) {
         }
     };
@@ -3850,7 +3850,7 @@ public static String getPathFromUri(final Context context, final Uri uri) {
 //                        stringArraylist.addAll(stringSet);
 
 
-                       // Prefs.putString("noUser","1");
+                        // Prefs.putString("noUser","1");
                     }
                     multiAutoCompleteTextViewCC.setAdapter(adapter1);
 

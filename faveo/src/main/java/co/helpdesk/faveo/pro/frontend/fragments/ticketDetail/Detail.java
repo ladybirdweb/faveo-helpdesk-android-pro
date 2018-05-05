@@ -50,7 +50,7 @@ import es.dmoral.toasty.Toasty;
  */
 public class Detail extends Fragment {
 
-//    private InputFilter filter = new InputFilter() {
+    //    private InputFilter filter = new InputFilter() {
 //
 //        @Override
 //        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {

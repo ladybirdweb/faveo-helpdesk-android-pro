@@ -174,14 +174,14 @@ public class MultiAssigningActivity extends AppCompatActivity {
         } else Log.d("isShowing", "true");
 
 
-            super.onBackPressed();
+        super.onBackPressed();
 
 //        if (fabExpanded)
 //            exitReveal();
 //        else super.onBackPressed();
     }
 
-   private class FetchDependency extends AsyncTask<String, Void, String> {
+    private class FetchDependency extends AsyncTask<String, Void, String> {
 
         protected String doInBackground(String... urls) {
 
@@ -216,7 +216,7 @@ public class MultiAssigningActivity extends AppCompatActivity {
     private class MultipleAssign extends AsyncTask<String, Void, String> {
         String ticketid,assignid;
 
-         MultipleAssign(String ticketid, String assignid) {
+        MultipleAssign(String ticketid, String assignid) {
             this.ticketid = ticketid;
             this.assignid = assignid;
         }
@@ -224,7 +224,7 @@ public class MultiAssigningActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
 
             return new Helpdesk().multipleTicketAssign(ticketid,assignid);
-            }
+        }
         protected void onPostExecute(String result) {
             Log.d("Depen Response : ", result + "");
             progressDialog.dismiss();
@@ -244,6 +244,8 @@ public class MultiAssigningActivity extends AppCompatActivity {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
+
+
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
@@ -253,7 +255,7 @@ public class MultiAssigningActivity extends AppCompatActivity {
                     Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
                     startActivity(intent);
                 }
-                } catch (JSONException e) {
+            } catch (JSONException e) {
                 Toasty.error(MultiAssigningActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             } finally {
