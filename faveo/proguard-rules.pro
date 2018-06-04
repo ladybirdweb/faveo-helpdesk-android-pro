@@ -71,6 +71,8 @@
 -keep class com.crashlytics.** { *; }
 
 -keepattributes *Annotation*
+# hide warnings caused by Retrolamdba
+
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }

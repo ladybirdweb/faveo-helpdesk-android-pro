@@ -25,7 +25,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -179,7 +179,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -243,7 +243,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -298,7 +298,7 @@
                 <!--android:textSize="14sp" />-->
                 <EditText
                     android:id="@+id/mobile"
-                    android:layout_width="match_parent"
+                    android:layout_width="180dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
@@ -309,12 +309,21 @@
                     android:nextFocusForward="@+id/phone_edittext10"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="16sp" />
-            </LinearLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="36dp"-->
-                <!--android:background="#EEEEEE">-->
+                <ImageView
+                    android:id="@+id/forCalling"
+                    android:layout_width="30dp"
+                    android:autoLink="phone"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/formobile"
+                    android:tint="@color/faveo"
+                     />
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="#f2f2f2">
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -327,128 +336,61 @@
                 <!--android:text="Required"-->
                 <!--android:textSize="12sp" />-->
 
-                <!--<TextView-->
-                    <!--android:id="@+id/textView44"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_alignParentStart="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginStart="16dp"-->
-                    <!--android:text="@string/phone"-->
-                    <!--android:textSize="16sp"-->
-                    <!--android:textStyle="bold" />-->
-            <!--</RelativeLayout>-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:focusable="true"-->
-                <!--android:focusableInTouchMode="true">-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/phone"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
-                <!--<EditText-->
-                    <!--android:id="@+id/phone"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginRight="16dp"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:digits="0123456789"-->
-                    <!--android:imeOptions="actionNext"-->
-                    <!--android:inputType="phone"-->
-                    <!--android:nextFocusForward="@+id/sub_edittext"-->
-                    <!--android:textCursorDrawable="@drawable/color_cursor"-->
-                    <!--android:textSize="16sp" />-->
-            <!--</LinearLayout>-->
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="36dp"-->
-                <!--android:background="#EEEEEE">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
 
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_marginEnd="8dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_marginRight="8dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:text="Required"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:textSize="12sp" />&ndash;&gt;-->
+                <!--<com.toptoche.searchablespinnerlibrary.SearchableSpinner-->
+                <!--android:id="@+id/spinner_code"-->
+                <!--android:layout_width="60dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:drawSelectorOnTop="true"-->
+                <!--android:entries="@array/codes"-->
+                <!--android:imeOptions="actionNext"-->
+                <!--android:textSize="14sp" />-->
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="270dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@android:color/transparent"
+                    android:digits="0123456789"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:nextFocusForward="@+id/phone_edittext10"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="16sp" />
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_alignParentStart="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginStart="16dp"-->
-                    <!--android:text="@string/company"-->
-                    <!--android:textSize="16sp"-->
-                    <!--android:textStyle="bold" />-->
-            <!--</RelativeLayout>-->
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:focusable="true"-->
-                <!--android:focusableInTouchMode="true">-->
-
-                <!--<EditText-->
-                    <!--android:id="@+id/companyEdittext"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginRight="16dp"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:imeOptions="actionNext"-->
-                    <!--android:inputType="text"-->
-                    <!--android:nextFocusForward="@+id/sub_edittext"-->
-                    <!--android:textCursorDrawable="@drawable/color_cursor"-->
-                    <!--android:textSize="16sp" />-->
-            <!--</LinearLayout>-->
-            <!--&lt;!&ndash;<RelativeLayout&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="36dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:background="#EEEEEE">&ndash;&gt;-->
-
-                <!--&lt;!&ndash;&lt;!&ndash;<TextView&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:layout_marginEnd="8dp"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:layout_marginRight="8dp"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:text="Required"&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;android:textSize="12sp" />&ndash;&gt;&ndash;&gt;-->
-
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/activateordeactivate"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_alignParentLeft="true"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_alignParentStart="true"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_marginLeft="16dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_marginStart="16dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:text="@string/deactivateUser"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textSize="16sp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textStyle="bold"&ndash;&gt;-->
-                   <!--&lt;!&ndash;/>&ndash;&gt;-->
-
-                <!--&lt;!&ndash;<Switch&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/default_switch"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="50dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textColor="#3da6d7" />&ndash;&gt;-->
-            <!--&lt;!&ndash;</RelativeLayout>&ndash;&gt;-->
-
+                <ImageView
+                    android:id="@+id/forCallingPhone"
+                    android:layout_width="30dp"
+                    android:autoLink="phone"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/forcall"
+                    android:tint="@color/faveo" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

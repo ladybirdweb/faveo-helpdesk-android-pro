@@ -122,8 +122,6 @@ public class Detail extends Fragment {
         setUpViews(rootView);
         ticketId=Prefs.getString("TICKETid",null);
         animation= AnimationUtils.loadAnimation(getActivity(),R.anim.shake_error);
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage(getString(R.string.fetching_detail));
         // progressDialog.show();
         if (InternetReceiver.isConnected()) {
             task = new FetchTicketDetail(Prefs.getString("TICKETid", null));
@@ -232,10 +230,13 @@ public class Detail extends Fragment {
                 if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
                     String first = title.replace("=?UTF-8?Q?", "");
                     String second = first.replace("_", " ");
-                    String third = second.replace("=C2=A0", "");
+                    String second1=second.replace("=C3=BA","");
+                    String third = second1.replace("=C2=A0", "");
                     String fourth = third.replace("?=", "");
                     String fifth = fourth.replace("=E2=80=99", "'");
-                    editTextSubject.setText(fifth);
+                    String sixth=fifth.replace("=3F","?");
+                    editTextSubject.setText(sixth);
+
                 } else {
                     editTextSubject.setText(title);
                 }
@@ -290,10 +291,14 @@ public class Detail extends Fragment {
                     Prefs.putString("status_name","Deleted");
                 }
                 // textViewTicketNumber.setText(ticketNumber);
-                ActionBar actionBar = ((TicketDetailActivity) getActivity()).getSupportActionBar();
-                if (actionBar != null) {
-                    actionBar.setTitle(ticketNumber == null ? "TicketDetail" : ticketNumber);
+                try {
+                    ActionBar actionBar = ((TicketDetailActivity) getActivity()).getSupportActionBar();
+                    if (actionBar != null) {
+                        actionBar.setTitle(ticketNumber == null ? "TicketDetail" : ticketNumber);
 
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
                 }
 //                try {
 //                    if (jsonObject1.getString("sla_name") != null) {

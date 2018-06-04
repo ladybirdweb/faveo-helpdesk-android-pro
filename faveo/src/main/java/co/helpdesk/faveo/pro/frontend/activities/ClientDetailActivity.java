@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -101,7 +103,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     List<TicketGlimpse> listTicketGlimpse;
     ProgressDialog progressDialog;
     ImageView imageViewClientEdit;
-
+    ImageView imageViewBack;
     @Override
     public void onPause() {
         if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
@@ -118,51 +120,37 @@ public class ClientDetailActivity extends AppCompatActivity implements
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_client_profile);
+        Window window = ClientDetailActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(ClientDetailActivity.this,R.color.faveo));
         ButterKnife.bind(this);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                //
-//                // Do the stuff
-//                //
-//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-//                try {
-//                    JSONObject jsonObject = new JSONObject(result);
-//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-//                    String role1=jsonObject2.getString("role");
-//                    if (role1.equals("user")){
-//                        Prefs.clear();
-//                        //Prefs.putString("role",role);
-//                        Intent intent=new Intent(ClientDetailActivity.this,LoginActivity.class);
-//                        Toasty.info(ClientDetailActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                        startActivity(intent);
-//
-//
-//                    }
-//
-//
-//                } catch (JSONException | NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                handler.postDelayed(this, 30000);
-//            }
-//        };
-//        runnable.run();
+        imageViewBack= (ImageView) findViewById(R.id.imageViewBackClient);
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         imageViewClientEdit= (ImageView) findViewById(R.id.clientedit);
         Constants.URL = Prefs.getString("COMPANY_URL", "");
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+//            getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        }
         TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
         mTitle.setText(R.string.profile);
 
@@ -172,23 +160,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
         textViewClientStatus= (TextView) findViewById(R.id.textView_client_status);
         final Intent intent = getIntent();
         clientID = intent.getStringExtra("CLIENT_ID");
-        //Toast.makeText(this, "client id"+clientID, Toast.LENGTH_SHORT).show();
-        // clientName = intent.getStringExtra("CLIENT_NAME");
-//        textViewClientName.setText(clientName);
-//        textViewClientEmail.setText(intent.getStringExtra("CLIENT_EMAIL"));
-//        if (intent.getStringExtra("CLIENT_PHONE") == null || intent.getStringExtra("CLIENT_PHONE").equals(""))
-//            textViewClientPhone.setVisibility(View.INVISIBLE);
-//        else
-//            textViewClientPhone.setText(intent.getStringExtra("CLIENT_PHONE"));
-//        String clientPictureUrl = intent.getStringExtra("CLIENT_PICTURE");
-//        if (intent.getStringExtra("CLIENT_COMPANY").equals("null") || intent.getStringExtra("CLIENT_COMPANY").equals(""))
-//            textViewClientCompany.setText("");
-//        else
-//            textViewClientCompany.setText(intent.getStringExtra("CLIENT_COMPANY"));
-//        textViewClientStatus.setText(intent.getStringExtra("CLIENT_ACTIVE").equals("1") ? getString(R.string.active) : getString(R.string.inactive));
-
-        //IImageLoader imageLoader = new PicassoLoader();
-        //imageLoader.loadImage(imageViewClientPicture, clientPictureUrl, clientName);
 
         imageViewClientEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -346,12 +317,12 @@ public class ClientDetailActivity extends AppCompatActivity implements
 //                else
                     phone = requester.getString("phone_number");
                 mobile=requester.getString("mobile");
-//                if (phone.equals("null")||phone.equals(" ")||phone.equals("Not available")){
-//                    textViewClientPhone.setVisibility(View.GONE);
-//                }else {
-//                    textViewClientPhone.setVisibility(View.VISIBLE);
-//                    textViewClientPhone.setText(phone);
-//                }
+                if (phone.equals("null")||phone.equals(" ")||phone.equals("Not available")||phone.equals("")){
+                    textViewClientPhone.setVisibility(View.GONE);
+                }else {
+                    textViewClientPhone.setVisibility(View.VISIBLE);
+                    textViewClientPhone.setText(phone);
+                }
                 if (mobile.equals("null")||mobile.equals(" ")||mobile.equals("Not available")){
                     textViewClientMobile.setVisibility(View.GONE);
                 }
@@ -364,7 +335,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 textViewClientStatus.setText(requester.getString("active" +
                         "").equals("1") ? getString(R.string.active) : getString(R.string.inactive));
                 String clientPictureUrl = requester.getString("profile_pic");
-                if (clientPictureUrl.contains("jpg")||clientPictureUrl.contains("png")){
+                if (clientPictureUrl.contains(".jpg")||clientPictureUrl.contains(".png")||clientPictureUrl.contains(".jpeg")){
                     Picasso.with(context).load(clientPictureUrl).transform(new CircleTransform()).into(imageViewClientPicture);
                 }
                else if (clientPictureUrl.equals("")){
@@ -384,10 +355,13 @@ public class ClientDetailActivity extends AppCompatActivity implements
 //
 //                }
                 else{
+                    int color=Color.parseColor("#ffffff");
                     ColorGenerator generator = ColorGenerator.MATERIAL;
                     TextDrawable drawable = TextDrawable.builder()
-                            .buildRound(letter, generator.getRandomColor());
+                            .buildRound(letter,color);
+                    imageViewClientPicture.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
                     imageViewClientPicture.setImageDrawable(drawable);
+                    //imageViewClientPicture.setImageResource(R.drawable.default_pic);
                 }
 //                IImageLoader imageLoader = new PicassoLoader();
 //                imageLoader.loadImage(imageViewClientPicture, clientPictureUrl, clientname);

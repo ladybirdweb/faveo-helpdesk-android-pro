@@ -35,7 +35,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         //Displaying token on logcat
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
-//        SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, 0);
+//      SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE, 0);
         Boolean loginComplete = Prefs.getBoolean("LOGIN_COMPLETE", false);
         if (loginComplete) {
             Log.d("LoginComplete", "FCM ID Service");

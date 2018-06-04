@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.frontend.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
                 clientViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
             }
-            else if (clientOverview.clientPicture.contains(".jpg")){
+            else if (clientOverview.clientPicture.contains(".jpg")||clientOverview.clientPicture.contains(".png")||clientOverview.clientPicture.contains(".jpeg")){
                 //mDrawableBuilder = TextDrawable.builder()
                 //.round();
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
@@ -72,9 +73,11 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
 
             }
             else{
+                int color= Color.parseColor("#cdc5bf");
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(letter, generator.getRandomColor());
+                        .buildRound(letter,generator.getRandomColor());
+                clientViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 clientViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
 
 

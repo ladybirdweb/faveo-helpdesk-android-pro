@@ -37,6 +37,7 @@ import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.adapters.ClientOverviewAdapter;
+import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.ClientOverview;
 import es.dmoral.toasty.Toasty;
@@ -69,6 +70,7 @@ public class UsersFragment extends Fragment {
     LinearLayout toolbarView;
     int pastVisibleItems, visibleItemCount, totalItemCount;
     private boolean loading = true;
+    private String lastQuerry;
 
     public static UsersFragment newInstance(int page, String title) {
         UsersFragment fragmentFirst = new UsersFragment();
@@ -95,6 +97,7 @@ public class UsersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
         toolbarView= (LinearLayout) rootView.findViewById(R.id.toolbarview);
+
         toolbarView.setVisibility(View.GONE);
         toolbar= (Toolbar) rootView.findViewById(R.id.toolbar2);
         toolbar.setVisibility(View.GONE);
@@ -104,18 +107,17 @@ public class UsersFragment extends Fragment {
         toolbar1= (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
         toolbar1.setVisibility(View.GONE);
         textView= (TextView) rootView.findViewById(R.id.totalcount);
-
+        textView.setVisibility(View.GONE);
         recyclerView= (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
         recyclerView.setVisibility(View.GONE);
         empty_view= (TextView) rootView.findViewById(R.id.empty_view);
         empty_view.setVisibility(View.VISIBLE);
         noInternet_view= (TextView) rootView.findViewById(R.id.noiternet_view);
         swipeRefresh= (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefresh);
+        swipeRefresh.setRefreshing(false);
         progressDialog=new ProgressDialog(getActivity());
         progressDialog.setMessage("Please wait");
         querry= Prefs.getString("querry",null);
-
-
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
         if (InternetReceiver.isConnected()) {
             if (querry.equals("")||querry.equals("null")){
@@ -143,36 +145,36 @@ public class UsersFragment extends Fragment {
             recyclerView.setVisibility(View.INVISIBLE);
             empty_view.setVisibility(View.GONE);
         }
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (InternetReceiver.isConnected()) {
-                    if (querry.equals("")||querry.equals("null")){
-                        Log.d("QUERRY","No Querry");
-                        recyclerView.setVisibility(View.GONE);
-                        empty_view.setVisibility(View.VISIBLE);
-                        empty_view.setText(getString(R.string.noUser));
-                        swipeRefresh.setRefreshing(false);
-                    }
-                    else{
-                        noInternet_view.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
-                        //progressDialog.show();
-                        empty_view.setVisibility(View.GONE);
-                        getActivity().getWindow().setSoftInputMode(
-                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-                        );
-                        new FetchClients(getActivity(),querry).execute();
-                    }
-                } else {
-                    recyclerView.setVisibility(View.INVISIBLE);
-                    swipeRefresh.setRefreshing(false);
-                    empty_view.setVisibility(View.GONE);
-                    noInternet_view.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
+//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                if (InternetReceiver.isConnected()) {
+//                    if (querry.equals("")||querry.equals("null")){
+//                        Log.d("QUERRY","No Querry");
+//                        recyclerView.setVisibility(View.GONE);
+//                        empty_view.setVisibility(View.VISIBLE);
+//                        empty_view.setText(getString(R.string.noUser));
+//                        swipeRefresh.setRefreshing(false);
+//                    }
+//                    else{
+//                        noInternet_view.setVisibility(View.GONE);
+//                        recyclerView.setVisibility(View.VISIBLE);
+//                        //progressDialog.show();
+//                        empty_view.setVisibility(View.GONE);
+//                        getActivity().getWindow().setSoftInputMode(
+//                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+//                        );
+//                        new FetchClients(getActivity(),querry).execute();
+//                    }
+//                } else {
+//                    recyclerView.setVisibility(View.INVISIBLE);
+//                    swipeRefresh.setRefreshing(false);
+//                    empty_view.setVisibility(View.GONE);
+//                    noInternet_view.setVisibility(View.VISIBLE);
+//                }
+//
+//            }
+//        });
         return rootView;
     }
 
@@ -194,6 +196,7 @@ public class UsersFragment extends Fragment {
             clientOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                Prefs.putString("searchUser",jsonObject.toString());
                 //JSONObject jsonObject1=jsonObject.getJSONObject("result");
                 //total=jsonObject1.getInt("total");
                 data = jsonObject.getString("users");
@@ -215,6 +218,7 @@ public class UsersFragment extends Fragment {
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
+            textView.setVisibility(View.VISIBLE);
             textView.setText(total+" users");
             //url="null";
             //Prefs.putString("customerfilter","null");
@@ -323,6 +327,85 @@ public class UsersFragment extends Fragment {
     @Override
     public void onResume() {
         //Toast.makeText(getActivity(), "onResume", Toast.LENGTH_SHORT).show();
+        Log.d("onResumeOfUsers","called");
+        try {
+            lastQuerry = Prefs.getString("searchUser", null);
+            if (InternetReceiver.isConnected()) {
+                if (querry.equals("") || querry.equals("null")) {
+                    Log.d("QUERRY", "No Querry");
+                    recyclerView.setVisibility(View.GONE);
+                    empty_view.setVisibility(View.VISIBLE);
+                    empty_view.setText(getString(R.string.noUser));
+                } else {
+                    if (lastQuerry.equals(null) || lastQuerry.equals("")) {
+                        noInternet_view.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        empty_view.setVisibility(View.GONE);
+                        progressDialog.show();
+                        getActivity().getWindow().setSoftInputMode(
+                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+                        );
+                        new FetchClients(getActivity(), querry).execute();
+                    }
+                    else{
+                        Log.d("lastQuerry",lastQuerry);
+                        String result=Prefs.getString("searchUser",null);
+                        String data;
+                        clientOverviewList.clear();
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            data = jsonObject.getString("users");
+                            JSONArray jsonArray = new JSONArray(data);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                total++;
+                                ClientOverview clientOverview = Helper.parseSearchClientOverview(jsonArray, i);
+                                if (clientOverview != null)
+                                    clientOverviewList.add(clientOverview);
+                            }
+
+                            Log.d("total",""+total);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        progressDialog.dismiss();
+                        textView.setVisibility(View.VISIBLE);
+                        textView.setText(total+" users");
+                        //url="null";
+                        //Prefs.putString("customerfilter","null");
+                        //textView.setText(""+total+" clients");
+                        if (swipeRefresh.isRefreshing())
+                            swipeRefresh.setRefreshing(false);
+
+                        if (result == null) {
+                            Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        if (result.equals("all done")) {
+
+                            Toasty.info(getActivity(), getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
+                            //return;
+                        }
+                        // recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
+                        recyclerView.setHasFixedSize(false);
+                        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                        clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
+                        recyclerView.setAdapter(clientOverviewAdapter);
+                        if (clientOverviewAdapter.getItemCount() == 0) {
+                            empty_view.setVisibility(View.VISIBLE);
+                        } else empty_view.setVisibility(View.GONE);
+            }
+        }
+            }
+            else {
+                noInternet_view.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+                empty_view.setVisibility(View.GONE);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         super.onResume();
     }
     @Override

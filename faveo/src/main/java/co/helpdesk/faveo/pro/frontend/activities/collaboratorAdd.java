@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,8 +47,8 @@ public class collaboratorAdd extends AppCompatActivity {
 
     AutoCompleteTextView autoCompleteTextViewUser;
     Button searchUer, deleteUser;
-    ArrayList<Data> stringArrayList;
-    ArrayAdapter<Data> arrayAdapterCC;
+    ArrayList<CollaboratorSuggestion> stringArrayList;
+    CollaboratorAdapter arrayAdapterCC;
     RelativeLayout relativeLayout;
     ArrayAdapter<String> spinnerPriArrayAdapter;
     int id = 0;
@@ -70,6 +71,16 @@ public class collaboratorAdd extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_collaborator_add);
+        Window window = collaboratorAdd.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(collaboratorAdd.this,R.color.faveo));
         recipients= (Spinner) findViewById(R.id.spinnerRecipients);
         relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
         strings = new ArrayList<>();
@@ -84,33 +95,49 @@ public class collaboratorAdd extends AppCompatActivity {
         autoCompleteTextViewUser.setHorizontallyScrolling(true);
         autoCompleteTextViewUser.setMovementMethod(new ScrollingMovementMethod());
         searchUer = (Button) findViewById(R.id.buttonSearchUser);
+
         deleteUser = (Button) findViewById(R.id.buttonDeleteUser);
-        stringArrayList = new ArrayList<Data>();
-        //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
-        arrayAdapterCC = new ArrayAdapter<Data>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+        stringArrayList = new ArrayList<CollaboratorSuggestion>();
+        arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+        //arrayAdapterCC = new ArrayAdapter<Data>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
         autoCompleteTextViewUser.setThreshold(2);
         autoCompleteTextViewUser.setDropDownWidth(1500);
         autoCompleteTextViewUser.addTextChangedListener(passwordWatcheredittextSubject);
         email1 = autoCompleteTextViewUser.getText().toString();
-
         autoCompleteTextViewUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                try{
-                    Data data = stringArrayList.get(i);
-
-                    id1 = data.getID();
-                    email = data.getName();
-                    Log.d("idoftheuser",id1+"");
-                    Log.d("ccobject",stringArrayList.get(i).toString());
-                }catch (IndexOutOfBoundsException e){
-                    e.printStackTrace();
+                String name1=autoCompleteTextViewUser.getText().toString();
+                for (int i1=0;i1<stringArrayList.size();i1++){
+                    CollaboratorSuggestion data1=stringArrayList.get(i1);
+                    if (data1.getEmail().equals(name1)){
+                        CollaboratorSuggestion data2=stringArrayList.get(i1);
+                        id1=data2.getId();
+                        Log.d("id",id+"");
+                        email1=data2.getEmail();
+                        Log.d("email1",email1);
+                        autoCompleteTextViewUser.setText(email1);
+//                        editTextEmail.setText(email1);
+//                        firstname=data2.getFirst_name();
+//                        lastname=data2.getLast_name();
+//                        editTextEmail.setText(email1);
+//                        editTextFirstName.setText(firstname);
+//                        editTextLastName.setText(lastname);
+                    }
                 }
+//                try{
+//                    Data data = stringArrayList.get(i);
+//                    id1 = data.getID();
+//                    email = data.getName();
+//                    Log.d("idoftheuser",id1+"");
+//                    Log.d("ccobject",stringArrayList.get(i).toString());
+//                }catch (IndexOutOfBoundsException e){
+//                    e.printStackTrace();
+//                }
             }
 
 
         });
-
         spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strings); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         recipients.setAdapter(spinnerPriArrayAdapter);
@@ -270,11 +297,6 @@ public class collaboratorAdd extends AppCompatActivity {
 
 
                 //Toast.makeText(collaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
-
-
-
-
-
             }
         });
 
@@ -295,6 +317,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             progressBar.setVisibility(View.GONE);
+            searchUer.setVisibility(View.VISIBLE);
             if (isCancelled()) return;
             stringArrayList.clear();
 //            if (progressDialog.isShowing())
@@ -319,9 +342,9 @@ public class collaboratorAdd extends AppCompatActivity {
                         String last_name = jsonObject1.getString("last_name");
                         String profilePic=jsonObject1.getString("profile_pic");
                         //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-                        //CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id,first_name,last_name,email,profilePic);
-                        Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
-                        stringArrayList.add(data);
+                        CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id,first_name,last_name,email,profilePic);
+                        //Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
+                        stringArrayList.add(collaboratorSuggestion);
                         Prefs.putString("noUser", "1");
                     }
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
@@ -403,7 +426,6 @@ public class collaboratorAdd extends AppCompatActivity {
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
             if (isCancelled()) return;
-            Log.d("result:",result);
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 String collaborator=jsonObject.getString("collaborator");
@@ -423,7 +445,7 @@ public class collaboratorAdd extends AppCompatActivity {
 //                    Toasty.success(collaboratorAdd.this,getString(R.string.collaboratoraddedsuccesfully),Toast.LENGTH_SHORT).show();
 //                }
 
-            } catch (JSONException e) {
+            } catch (JSONException |NullPointerException e) {
                 e.printStackTrace();
             }
 
@@ -566,20 +588,21 @@ public class collaboratorAdd extends AppCompatActivity {
             searchUer.setVisibility(View.VISIBLE);
             if (InternetReceiver.isConnected()) {
                 if (!term.equals("")) {
+                    searchUer.setVisibility(View.GONE);
                     //int pos = term.lastIndexOf(",");
                     //term = term.substring(pos + 1, term.length());
                     String newTerm=term;
                     Log.d("newTerm", newTerm);
-                    //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
                     progressBar.setVisibility(View.VISIBLE);
-                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
                 }
 //            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
                 else {
-                    //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
-                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     //new FetchCollaborator("s").execute();
                     //Data data = new Data(0, "No result found");
                     //stringArrayList.add(data);
@@ -596,12 +619,12 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         public void afterTextChanged(Editable s) {
-            if (term.equals("")){
-                searchUer.setVisibility(View.GONE);
-            }
-            else{
-                searchUer.setVisibility(View.VISIBLE);
-            }
+//            if (term.equals("")){
+//                searchUer.setVisibility(View.GONE);
+//            }
+//            else{
+//                searchUer.setVisibility(View.VISIBLE);
+//            }
         }
     };
     @Override
@@ -611,8 +634,6 @@ public class collaboratorAdd extends AppCompatActivity {
             Intent intent = new Intent(this, TicketDetailActivity.class);
             startActivity(intent);
         } else Log.d("isShowing", "true");
-
-
         super.onBackPressed();
 
 //        if (fabExpanded)

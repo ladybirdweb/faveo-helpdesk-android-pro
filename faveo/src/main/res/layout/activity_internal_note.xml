@@ -6,6 +6,7 @@
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/colorAccent"
         >
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -117,6 +118,12 @@
             android:cursorVisible="true"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="18sp" />
+        <com.andexert.library.RippleView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            rv_centered="true"
+            android:layout_gravity="end"
+            >
         <Button
             android:id="@+id/button_create"
             android:layout_width="70dp"
@@ -127,6 +134,7 @@
             android:text="@string/create"
             android:textAllCaps="false"
             android:textColor="@color/white" />
+        </com.andexert.library.RippleView>
 
     </LinearLayout>
     </LinearLayout>

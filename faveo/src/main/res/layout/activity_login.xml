@@ -6,6 +6,7 @@
     android:fillViewport="true"
     android:overScrollMode="never"
     android:scrollbars="none"
+    android:background="@color/colorAccent"
     tools:context=".frontend.activities.LoginActivity">
 
     <LinearLayout

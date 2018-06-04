@@ -4,12 +4,15 @@ package co.helpdesk.faveo.pro.frontend.drawers;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,9 +32,6 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.picasso.Picasso;
-
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -258,12 +258,18 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             String letter = Prefs.getString("profilePicture", null);
             Log.d("profilePicture", letter);
             if (letter.contains("jpg") || letter.contains("png") || letter.contains("jpeg")) {
+                //profilePic.setColorFilter(getContext().getResources().getColor(R.color.white));
+                //profilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
                 Picasso.with(context).load(letter).transform(new CircleTransform()).into(profilePic);
-            } else {
+            }
+            else {
+                int color= Color.parseColor("#ffffff");
                 String letter1 = String.valueOf(Prefs.getString("PROFILE_NAME", "").charAt(0));
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(letter1, generator.getRandomColor());
+                        .buildRound(letter1,color);
+                //profilePic.setAlpha(0.2f);
+                profilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
                 profilePic.setImageDrawable(drawable);
             }
         }catch (NullPointerException e){
@@ -353,7 +359,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(15000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);
-                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                //MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);

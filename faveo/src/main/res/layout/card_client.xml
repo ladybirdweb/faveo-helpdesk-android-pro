@@ -3,11 +3,14 @@
     android:id="@+id/client"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:background="?attr/selectableItemBackground"
     android:paddingBottom="4dp"
+    android:backgroundTint="@color/colorAccent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="4dp">
+    android:paddingTop="4dp"
+    android:focusable="true"
+
+    android:background="@drawable/custom_ripple">
 
     <!--<TextView-->
         <!--android:id="@+id/textView_client_id"-->

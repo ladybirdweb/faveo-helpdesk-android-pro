@@ -36,15 +36,31 @@
     <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/actionbar</item>
-        <item name="android:textColorPrimary">@color/actionbar</item>
-        <item name="android:textColorSecondary">@color/actionbar</item>
+        <item name="colorControlNormal">@color/faveo</item>
+        <item name="android:textColorPrimary">@color/faveo</item>
+        <item name="android:textColorSecondary">@color/faveo</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="actionModeCloseDrawable">@color/colorPrimary</item>
+        <item name="actionModeCloseDrawable">@color/white</item>
         <item name="actionModeCloseButtonStyle">@style/Widget.AppCompat.ActionMode</item>
+    </style>
 
+
+
+    <style name="AppThemeOverlay.ActionBar.Client" parent="ThemeOverlay.AppCompat.ActionBar">
+    <item name="android:colorControlNormal">@color/white</item>
+    <item name="android:textColorPrimary">@color/white</item>
+    <item name="android:textColorSecondary">@color/white</item>
+    <item name="windowActionModeOverlay">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <item name="actionModeCloseDrawable">@color/white</item>
+    <item name="actionModeCloseButtonStyle">@style/Widget.AppCompat.ActionMode</item>
+    </style>
+    <style name="MenuItems" parent="AppTheme">
+        <item name="android:textSize">30sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
     <style name="Theme.MyCompatTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">

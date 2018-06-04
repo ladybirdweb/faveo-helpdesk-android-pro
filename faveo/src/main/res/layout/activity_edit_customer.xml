@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/colorAccent"
     tools:context="co.helpdesk.faveo.pro.frontend.activities.EditCustomer">
 
     <android.support.design.widget.AppBarLayout
@@ -52,7 +53,8 @@
                     android:background="@drawable/ic_action_done"
                     android:gravity="center"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/imageViewBack"

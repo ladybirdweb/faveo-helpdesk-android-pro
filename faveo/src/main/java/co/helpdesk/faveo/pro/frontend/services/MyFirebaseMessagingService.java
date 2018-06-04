@@ -57,7 +57,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData().get("message"));
         Log.d(TAG, "Notification Message ticket_id: " + remoteMessage.getData().get("id"));
         Prefs.putString("TICKETid", remoteMessage.getData().get("id"));
-
         //Log.d(TAG, "Notification Message noti_id: " + remoteMessage.getData().get("notification_id"));
         Log.d(TAG, "Notification Message Data: " + remoteMessage.getData());
         Log.d(TAG, "Notification Message Scenario: " + remoteMessage.getData().get("scenario"));
@@ -75,7 +74,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        Log.d("Requester", requester);
 
             try {
-
                 JSONObject jsonObj = new JSONObject(requester);
                 pic = jsonObj.getString("profile_pic");
                 client_id = jsonObj.getInt("id");
@@ -92,9 +90,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
         }
-        //Log.d("by",remoteMessage.getData().get("by"));
-
-
         //Calling method to generate notification
 
         if (remoteMessage.getData().get("scenario").equals("tickets"))
@@ -138,7 +133,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
         Bitmap bitmap=getBitmapFromURL(profilePic);
         Bitmap bitmap1=getCircleBitmap(bitmap);
-
         notificationBuilder.setLargeIcon(bitmap1);
         //notificationBuilder.setLargeIcon(getBitmapFromURL(profilePic));
         notificationBuilder.setContentTitle(noti_tittle);

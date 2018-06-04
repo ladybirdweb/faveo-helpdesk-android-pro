@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.Xml;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -88,6 +91,14 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_showing_attachment);
+        Window window = ShowingAttachment.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(ShowingAttachment.this,R.color.faveo));
         ListView listView = (ListView) findViewById(R.id.attachment_list);
         reqPermissionCamera();
 //        if (shouldAskPermissions()) {
@@ -228,8 +239,7 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
         {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ShowingAttachment.this, TicketDetailActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

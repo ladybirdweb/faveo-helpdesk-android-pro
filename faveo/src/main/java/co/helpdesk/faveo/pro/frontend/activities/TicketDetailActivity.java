@@ -11,11 +11,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 //import android.support.v7.app.AlertDialog;
 import android.support.v7.app.ActionBar;
@@ -36,9 +39,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -69,6 +72,8 @@ import co.helpdesk.faveo.pro.model.TicketDetail;
 import es.dmoral.toasty.Toasty;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 /**
  * This splash activity is responsible for
@@ -76,7 +81,7 @@ import io.codetail.animation.ViewAnimationUtils;
  */
 public class TicketDetailActivity extends AppCompatActivity implements
         Conversation.OnFragmentInteractionListener,
-        Detail.OnFragmentInteractionListener {
+        Detail.OnFragmentInteractionListener,View.OnClickListener {
 
     ViewPager viewPager;
     public ViewPagerAdapter adapter;
@@ -97,24 +102,62 @@ public class TicketDetailActivity extends AppCompatActivity implements
     String title;
     LinearLayout linearLayout;
     TextView addCc;
-    View viewpriority;
+    View viewpriority,viewCollapsePriority;
     ImageView imgaeviewBack;
     String cameFromNotification;
     public static boolean isShowing = false;
     TextView textViewStatus, textviewAgentName, textViewTitle, textViewSubject,textViewDepartment;
     ArrayList<Data> statusItems;
     int id = 0;
+    ProgressBar progressBar;
+    FabSpeedDial fabSpeedDial;
+    View view;
+    CoordinatorLayout coordinatorLayout;
+    private boolean isFabOpen;
+    private Menu menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ticket_detail);
-        setupFab();
+        Window window = TicketDetailActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(TicketDetailActivity.this,R.color.faveo));
+        view=findViewById(R.id.overlay);
+        fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
+
+//       fabSpeedDial.setOnClickListener(this);
+        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+               int id=menuItem.getItemId();
+
+               if (id==R.id.fab_reply){
+                   Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                   startActivity(intent);
+               }
+               else if (id==R.id.fab_internalnote){
+                   Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+                   startActivity(intent);
+               }
+                //TODO: Start some activity
+                return false;
+            }
+        });
+
+
+        //setupFab();
         Prefs.putString("querry","null");
         statusItems=new ArrayList<>();
         JSONObject jsonObject1;
+        //progressBar= (ProgressBar) findViewById(R.id.TicketDetailProgressbar);
         Data data;
         String json1 = Prefs.getString("DEPENDENCY", "");
         //statusItems.add(new Data(0, "Please select help topic"));
@@ -130,28 +173,45 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
         Log.d("ticketDetailOnCreate","True");
         ticketID=Prefs.getString("TICKETid",null);
-        try {
-            cameFromNotification = Prefs.getString("cameFromNotification", null);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbarTicketDetail);
         setSupportActionBar(mToolbar);
         //Log.d("cameFromNotification",cameFromNotification);
         ticketNumber = getIntent().getStringExtra("ticket_number");
-        linearLayout= (LinearLayout) findViewById(R.id.section_internal_note);
+        //linearLayout= (LinearLayout) findViewById(R.id.section_internal_note);
         //mToolbar = (Toolbar) findViewById(R.id.toolbarTicketDetail);
-        textViewStatus = (TextView) mToolbar.findViewById(R.id.status);
-        textviewAgentName = (TextView) mToolbar.findViewById(R.id.textViewagentName);
-        textViewTitle = (TextView) mToolbar.findViewById(R.id.title);
-        textViewDepartment= (TextView) mToolbar.findViewById(R.id.department);
+        textViewStatus = (TextView) mAppBarLayout.findViewById(R.id.status);
+        textviewAgentName = (TextView) mAppBarLayout.findViewById(R.id.textViewagentName);
+        textViewTitle = (TextView) mAppBarLayout.findViewById(R.id.title);
+        textViewDepartment= (TextView) mAppBarLayout.findViewById(R.id.department);
         textViewSubject = (TextView) mToolbar.findViewById(R.id.subject);
         imgaeviewBack= (ImageView) mToolbar.findViewById(R.id.imageViewBackTicketDetail);
         viewpriority=mToolbar.findViewById(R.id.viewPriority);
+        viewCollapsePriority=mAppBarLayout.findViewById(R.id.viewPriority1);
+        //viewCollapsePriority.setBackgroundColor(Color.parseColor("#FF0000"));
         mToolbar.inflateMenu(R.menu.menu_main_new);
         isShowing=true;
         //Log.d("came into ticket detail","true");
         mToolbar.getMenu().getItem(0).setEnabled(false);
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    isShow = true;
+                    //showOption(R.id.action_info);
+                } else if (isShow) {
+                    isShow = false;
+                    //hideOption(R.id.action_info);
+                }
+            }
+        });
         addCc = (TextView) findViewById(R.id.addcc);
         if (InternetReceiver.isConnected()){
 //            progressDialog=new ProgressDialog(this);
@@ -163,51 +223,71 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
                 }
             }).start();
-
-
-        }
-
-//        addCc.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(TicketDetailActivity.this, collaboratorAdd.class);
-//                startActivity(intent);
-//            }
-//        });
-
-
+            }
         imgaeviewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                if (cameFromNotification.equals("true")){
-//                    Intent intent=new Intent(TicketDetailActivity.this,NotificationActivity.class);
-//                    startActivity(intent);
                 Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
+                String option=Prefs.getString("cameFromNotification",null);
+
+
+                switch (option) {
+                    case "true": {
+                        Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case "none": {
+                        //finish();
+                        Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
+                        startActivity(intent1);
+                        break;
+                    }
+                    case "false": {
+                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                   startActivity(intent1);
+                        break;
+                    }
+                    default: {
+                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+                        startActivity(intent1);
+                        break;
+                    }
+                }
+//                if (Prefs.getString("cameFromNotification",null).equals("true")){
+//                    Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
+//                    startActivity(intent);
+//                }
+//               if (Prefs.getString("cameFromNotification",null).equals("false")){
+//                    Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+//                    startActivity(intent1);
+//                }if (Prefs.getString("cameFromnotification", null).equals("none")){
+//                    Intent intent = new Intent(TicketDetailActivity.this, SearchActivity.class);
+//                    startActivity(intent);
 //                }
 //
-                if (Prefs.getString("cameFromNotification",null).equals("true")){
-                    Intent intent=new Intent(TicketDetailActivity.this,NotificationActivity.class);
-                    startActivity(intent);
-                }
-                else if (Prefs.getString("cameFromNotification",null).equals("false")){
-                    onBackPressed();
-//                         Intent intent=new Intent(TicketDetailActivity.this,MainActivity.class);
-//                         startActivity(intent);
-                }
-                else{
-                    onBackPressed();
-                }
-
-
-
-            }
+//                else{
+//                    Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+//                    startActivity(intent1);
+//                }
+////                switch (Prefs.getString("cameFromNotification", null)) {
+////                    case "true":
+////                        Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
+////                        startActivity(intent);
+////                        break;
+////                    case "false":
+////                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+////                        startActivity(intent1);
+////                        break;
+////                    default:
+////                        finish();
+////                        break;
+////                }
+              }
         });
 
         setSupportActionBar(mToolbar);
-
         Constants.URL = Prefs.getString("COMPANY_URL", "");
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
@@ -217,18 +297,25 @@ public class TicketDetailActivity extends AppCompatActivity implements
             JSONArray jsonArrayStaffs = jsonObject.getJSONArray("status");
 
             for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-                if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Open")) {
-                    Prefs.putString("openid", jsonArrayStaffs.getJSONObject(i).getString("id"));
-                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Resolved")) {
-                    Prefs.putString("resolvedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
-                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Closed")) {
-                    Prefs.putString("closedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
-                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Deleted")) {
-                    Prefs.putString("deletedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
-                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Archived")) {
-                    Prefs.putString("archivedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
-                } else if (jsonArrayStaffs.getJSONObject(i).getString("name").equals("Verified")) {
-                    Prefs.putString("verifiedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                switch (jsonArrayStaffs.getJSONObject(i).getString("name")) {
+                    case "Open":
+                        Prefs.putString("openid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                        break;
+                    case "Resolved":
+                        Prefs.putString("resolvedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                        break;
+                    case "Closed":
+                        Prefs.putString("closedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                        break;
+                    case "Deleted":
+                        Prefs.putString("deletedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                        break;
+                    case "Archived":
+                        Prefs.putString("archivedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                        break;
+                    case "Verified":
+                        Prefs.putString("verifiedid", jsonArrayStaffs.getJSONObject(i).getString("id"));
+                        break;
                 }
 
             }
@@ -239,35 +326,32 @@ public class TicketDetailActivity extends AppCompatActivity implements
         setupViewPager();
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setOnTabSelectedListener(onTabSelectedListener);
-
         progressDialog = new ProgressDialog(this);
         editTextInternalNote = (EditText) findViewById(R.id.editText_internal_note);
-        //editTextCC = (EditText) findViewById(R.id.editText_cc);
         editTextReplyMessage = (EditText) findViewById(R.id.editText_reply_message);
         buttonCreate = (Button) findViewById(R.id.button_create);
         buttonSend = (Button) findViewById(R.id.button_send);
 
-        overlay = findViewById(R.id.overlay);
-        overlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exitReveal();
-            }
-        });
-
-
-
+        //overlay = findViewById(R.id.overlay);
+//        overlay.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //exitReveal();
+//            }
+//        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_main_new, menu);
         for (int i=0;i<statusItems.size();i++){
             Data data=statusItems.get(i);
             menu.add(data.getName());
         }
 
-        getMenuInflater().inflate(R.menu.menu_main_new, menu);
+
 //        mToolbar.getMenu();
 
 
@@ -333,10 +417,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketDetailActivity.this);
 
                 // Setting Dialog Title
-                alertDialog.setTitle("Changing status...");
+                alertDialog.setTitle(getString(R.string.changingStatus));
 
                 // Setting Dialog Message
-                alertDialog.setMessage("Are you sure you want to change the status?");
+                alertDialog.setMessage(getString(R.string.statusConfirmation));
 
                 // Setting Icon to Dialog
                 alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -377,74 +461,83 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
+    private void hideOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(false);
+    }
+
+    private void showOption(int id) {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(true);
+    }
 
     /**
      * Sets up the Floating action button.
      */
-    private void setupFab() {
-
-        fab = (Fab) findViewById(R.id.fab);
-        fab.setVisibility(View.VISIBLE);
-        fab.show();
-        View sheetView = findViewById(R.id.fab_sheet);
-        View overlay1 = findViewById(R.id.overlay1);
-        int sheetColor = getResources().getColor(R.color.background_card);
-        int fabColor = getResources().getColor(R.color.theme_accent);
-
-        /**
-         * Create material sheet FAB.
-         */
-        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay1, sheetColor, fabColor);
-
-        /**
-         * Set material sheet event listener.
-         */
-        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
-            @Override
-            public void onShowSheet() {
-                // Save current status bar color
-                statusBarColor = getStatusBarColor();
-                // Set darker status bar color to match the dim overlay
-                setStatusBarColor(getResources().getColor(R.color.theme_primary_dark2));
-            }
-
-            @Override
-            public void onHideSheet() {
-                // Restore status bar color
-                setStatusBarColor(statusBarColor);
-            }
-        });
+//    private void setupFab() {
+//
+//        fab = (Fab) findViewById(R.id.fab);
+//        fab.setVisibility(View.VISIBLE);
+//        fab.show();
+//        View sheetView = findViewById(R.id.fab_sheet);
+//        View overlay1 = findViewById(R.id.overlay1);
+//        int sheetColor = getResources().getColor(R.color.background_card);
+//        int fabColor = getResources().getColor(R.color.theme_accent);
+//
+//        /**
+//         * Create material sheet FAB.
+//         */
+//        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay1, sheetColor, fabColor);
+//
+//        /**
+//         * Set material sheet event listener.
+//         */
+//        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
+//            @Override
+//            public void onShowSheet() {
+//                // Save current status bar color
+//                statusBarColor = getStatusBarColor();
+//                // Set darker status bar color to match the dim overlay
+//                setStatusBarColor(getResources().getColor(R.color.theme_primary_dark2));
+//            }
+//
+//            @Override
+//            public void onHideSheet() {
+//                // Restore status bar color
+//                setStatusBarColor(statusBarColor);
+//            }
+//        });
 
         /**
          * Set material sheet item click listeners.
          */
-        findViewById(R.id.fab_sheet_item_reply).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                materialSheetFab.hideSheetThenFab();
-                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
-                startActivity(intent);
-                exitReveal();
-                //enterReveal("Reply");
-            }
-        });
-        findViewById(R.id.fab_sheet_item_note).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                materialSheetFab.hideSheetThenFab();
-                Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
-                startActivity(intent);
-                exitReveal();
-                //enterReveal("Internal notes");
-            }
-        });
-
-        findViewById(R.id.fab_sheet_exit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                materialSheetFab.hideSheet();
-            }
-        });
+//        findViewById(R.id.fab_sheet_item_reply).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                materialSheetFab.hideSheetThenFab();
+//                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+//                startActivity(intent);
+//                exitReveal();
+//                //enterReveal("Reply");
+//            }
+//        });
+//        findViewById(R.id.fab_sheet_item_note).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                materialSheetFab.hideSheetThenFab();
+//                Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+//                startActivity(intent);
+//                exitReveal();
+//                //enterReveal("Internal notes");
+//            }
+//        });
+//
+//        findViewById(R.id.fab_sheet_exit).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                materialSheetFab.hideSheet();
+//            }
+//        });
 
 //        findViewById(R.id.closeFab).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -454,7 +547,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        });
 //        findViewById(R.id.fab_sheet_item_photo).setOnClickListener(this);
 //        findViewById(R.id.fab_sheet_item_note).setOnClickListener(this);
-    }
+    //}
 
     private int getStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -466,6 +559,40 @@ public class TicketDetailActivity extends AppCompatActivity implements
     private void setStatusBarColor(int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(color);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id){
+            case R.id.fab_reply:
+
+                animateFAB();
+                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.fab_internalnote:
+                Intent intent1=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+                startActivity(intent1);
+                Log.d("Raj", "Fab 1");
+                break;
+
+        }
+    }
+    public void animateFAB(){
+
+        if(fabSpeedDial.isMenuOpen()){
+
+            view.setVisibility(View.VISIBLE);
+            isFabOpen = false;
+            Log.d("Raj", "close");
+
+        } else {
+            view.setVisibility(View.GONE);
+            isFabOpen = true;
+            Log.d("Raj","open");
+
         }
     }
 
@@ -635,7 +762,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     }
 
-
+public void fabOpen(){
+        if (fabSpeedDial.isMenuOpen()){
+            viewPager.setVisibility(View.GONE);
+        }
+        else{
+            viewPager.setVisibility(View.VISIBLE);
+        }
+}
     /**
      * Here we are initializing the view pager
      * for the conversation and detail fragment.
@@ -671,9 +805,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            fabSpeedDial.setRotation(positionOffset * 180.0f);
 
         }
-
         /**
          * This method is for controlling the FAB button.
          * @param position of the FAB button.
@@ -682,11 +816,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         public void onPageSelected(int position) {
             switch (position) {
                 case 0:
-                    fab.show();
+                    fabSpeedDial.show();
                     break;
 
+                case 1:
+                    fabSpeedDial.hide();
+                    break;
                 default:
-                    fab.show();
+                    fabSpeedDial.show();
                     break;
             }
         }
@@ -736,34 +873,34 @@ public class TicketDetailActivity extends AppCompatActivity implements
      *
      * @param type
      */
-    void enterReveal(String type) {
-        fab.setVisibility(View.GONE);
-        final View myView = findViewById(R.id.reveal);
-        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-        SupportAnimator anim =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-        if (type.equals("Reply")) {
-            myView.setVisibility(View.VISIBLE);
-            myView.findViewById(R.id.section_reply).setVisibility(View.VISIBLE);
-            myView.findViewById(R.id.section_internal_note).setVisibility(View.GONE);
-            overlay.setVisibility(View.VISIBLE);
-        } else {
-            myView.setVisibility(View.VISIBLE);
-            myView.findViewById(R.id.section_reply).setVisibility(View.GONE);
-            myView.findViewById(R.id.section_internal_note).setVisibility(View.VISIBLE);
-            overlay.setVisibility(View.VISIBLE);
-        }
+//    void enterReveal(String type) {
+//        fab.setVisibility(View.GONE);
+//        final View myView = findViewById(R.id.reveal);
+//        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+//        SupportAnimator anim =
+//                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+//        if (type.equals("Reply")) {
+//            myView.setVisibility(View.VISIBLE);
+//            myView.findViewById(R.id.section_reply).setVisibility(View.VISIBLE);
+//            myView.findViewById(R.id.section_internal_note).setVisibility(View.GONE);
+//            overlay.setVisibility(View.VISIBLE);
+//        } else {
+//            myView.setVisibility(View.VISIBLE);
+//            myView.findViewById(R.id.section_reply).setVisibility(View.GONE);
+//            myView.findViewById(R.id.section_internal_note).setVisibility(View.VISIBLE);
+//            overlay.setVisibility(View.VISIBLE);
+//        }
+//
+//        anim.start();
+//    }
 
-        anim.start();
-    }
-
-    void exitReveal() {
-
-        View myView = findViewById(R.id.reveal);
-        fab.show();
-        fabExpanded = false;
-        myView.setVisibility(View.GONE);
-        overlay.setVisibility(View.GONE);
+//    void exitReveal() {
+//
+//        View myView = findViewById(R.id.reveal);
+//        fab.show();
+//        fabExpanded = false;
+//        myView.setVisibility(View.GONE);
+//        overlay.setVisibility(View.GONE);
 //        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
 //        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
 //        animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -797,7 +934,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        });
 //        animator.start();
 
-    }
+    //}
 
 //    public int dpToPx(int dp) {
 //        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -814,11 +951,12 @@ public class TicketDetailActivity extends AppCompatActivity implements
             Log.d("isShowing", "false");
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        } else {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            Log.d("isShowing", "true");
         }
+//        else {
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//            Log.d("isShowing", "true");
+//        }
 
         if (materialSheetFab.isSheetVisible()) {
             materialSheetFab.hideSheet();
@@ -836,20 +974,101 @@ public class TicketDetailActivity extends AppCompatActivity implements
      */
     @Override
     protected void onResume() {
-
+        JSONObject jsonObject = null;
+//        progressDialog.setMessage(getString(R.string.pleasewait));
+//        progressDialog.show();
+        //new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
         Log.d("onResume","CALLED");
+        if (Prefs.getString("TicketRelated",null).equals("")){
+//                    progressDialog.setMessage(getString(R.string.pleasewait));
+//                    progressDialog.show();
+//            progressBar.setVisibility(View.VISIBLE);
+            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+        }
+        else{
+            String ticketInformation=Prefs.getString("TicketRelated",null);
+            try {
+                jsonObject = new JSONObject(ticketInformation);
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                String ticketNumber=jsonObject2.getString("ticket_number");
+                String statusName=jsonObject2.getString("status_name");
+                String subject=jsonObject2.getString("title");
+                String department=jsonObject2.getString("dept_name");
+                String priorityColor=jsonObject2.getString("priority_color");
+                if (!priorityColor.equals("")||!priorityColor.equals("null")){
+                    viewpriority.setBackgroundColor(Color.parseColor(priorityColor));
+                    viewCollapsePriority.setBackgroundColor(Color.parseColor(priorityColor));
+                }
+                else{
+                    viewpriority.setVisibility(View.GONE);
+                    viewCollapsePriority.setVisibility(View.GONE);
+                }
+                JSONObject jsonObject3=jsonObject2.getJSONObject("from");
+                String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
+                    userName=jsonObject3.getString("user_name");
+                    textviewAgentName.setText(userName);
+                }
+                else{
+                    userName=jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                    textviewAgentName.setText(userName);
+                }
+                if (!statusName.equals("null")||!statusName.equals("")){
+                    textViewStatus.setText(statusName);
+                }
+                else{
+                    textViewStatus.setVisibility(View.GONE);
+                }
+                textViewTitle.setText(ticketNumber);
+                if (subject.startsWith("=?")){
+                    title=subject.replaceAll("=?UTF-8?Q?","");
+                    String newTitle=title.replaceAll("=E2=80=99","");
+                    String second1=newTitle.replace("=C3=BA","");
+                    String third = second1.replace("=C2=A0", "");
+                    String finalTitle=third.replace("=??Q?","");
+                    String newTitle1=finalTitle.replace("?=","");
+                    String newTitle2=newTitle1.replace("_"," ");
+                    Log.d("new name",newTitle2);
+                    textViewSubject.setText(newTitle2);
+                }
+                else if (!subject.equals("null")){
+                    textViewSubject.setText(subject);
+                }
+                else if (subject.equals("null")){
+                    textViewSubject.setText("");
+                }
+                if (!department.equals("")||!department.equals("null")){
+                    textViewDepartment.setText(department);
+                }
+                else{
+                    textViewDepartment.setVisibility(View.GONE);
+                }
+
+                Log.d("TITLE",subject);
+                Log.d("TICKETNUMBER",ticketNumber);
+                //String priority=jsonObject1.getString("priority_id");
+
+
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Prefs.putString("filePath","");
         checkConnection();
-        setupFab();
-        fab.bringToFront();
+        //setupFab();
+//        fab.bringToFront();
         super.onResume();
     }
+
     @Override
     protected void onDestroy() {
         isShowing = false;
         super.onDestroy();
-
-    }
-
+        }
     private void checkConnection() {
         boolean isConnected = InternetReceiver.isConnected();
         showSnackIfNoInternet(isConnected);
@@ -936,6 +1155,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
+            //progressBar.setVisibility(View.GONE);
             if (isCancelled()) return;
 //            if (progressDialog.isShowing())
 //                progressDialog.dismiss();
@@ -954,9 +1174,18 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 String statusName=jsonObject2.getString("status_name");
                 String subject=jsonObject2.getString("title");
                 String department=jsonObject2.getString("dept_name");
+                String priorityColor=jsonObject2.getString("priority_color");
+                if (!priorityColor.equals("")||!priorityColor.equals("null")){
+                    viewpriority.setBackgroundColor(Color.parseColor(priorityColor));
+                    viewCollapsePriority.setBackgroundColor(Color.parseColor(priorityColor));
+                }
+                else{
+                    viewpriority.setVisibility(View.GONE);
+                    viewCollapsePriority.setVisibility(View.GONE);
+                }
                 JSONObject jsonObject3=jsonObject2.getJSONObject("from");
                 String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
-                if (userName.equals("")||userName.equals("null null")){
+                if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
                     userName=jsonObject3.getString("user_name");
                     textviewAgentName.setText(userName);
                 }
@@ -974,7 +1203,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 if (subject.startsWith("=?")){
                     title=subject.replaceAll("=?UTF-8?Q?","");
                     String newTitle=title.replaceAll("=E2=80=99","");
-                    String finalTitle=newTitle.replace("=??Q?","");
+                    String second1=newTitle.replace("=C3=BA","");
+                    String third = second1.replace("=C2=A0", "");
+                    String finalTitle=third.replace("=??Q?","");
                     String newTitle1=finalTitle.replace("?=","");
                     String newTitle2=newTitle1.replace("_"," ");
                     Log.d("new name",newTitle2);

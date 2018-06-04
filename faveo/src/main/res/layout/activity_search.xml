@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorAccent"
     android:fitsSystemWindows="true"
     tools:context="co.helpdesk.faveo.pro.frontend.activities.SearchActivity">
 
@@ -69,7 +70,6 @@
                     android:hint="@string/search"
                     android:imeOptions="actionSearch"
                     android:paddingLeft="12dp"
-                    android:textColor="@color/faveo"
                     android:paddingRight="8dp"
                     android:singleLine="true"
                     android:dropDownVerticalOffset="10dp"
@@ -109,8 +109,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
+            app:tabIndicatorColor="@color/faveo"
             app:tabMode="fixed"
-            android:background="#f2f2f2"
             />
         <!--<View-->
             <!--android:layout_width="match_parent"-->

@@ -71,7 +71,8 @@ public class SearchActivity extends AppCompatActivity implements
     String term;
     Context context;
     TabLayout tabLayout;
-    String querry1;
+    String querry;
+    public static boolean isShowing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,13 +80,23 @@ public class SearchActivity extends AppCompatActivity implements
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_search);
 //        ButterKnife.bind(this);
+        Window window = SearchActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(SearchActivity.this,R.color.faveo));
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout= (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(vpPager);
         setupViewPager(vpPager);
-
+        isShowing = true;
         tabLayout.setTabTextColors(
-                ContextCompat.getColor(this, R.color.black),
+                ContextCompat.getColor(this, R.color.grey_500),
                 ContextCompat.getColor(this, R.color.faveo)
         );
         //adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
@@ -301,24 +312,50 @@ public class SearchActivity extends AppCompatActivity implements
                 searchView.setDropDownWidth(1500);
                 searchView.setThreshold(1);
                 searchView.showDropDown();
-
-            }
+                }
         });
         }
+
+    @Override
+    protected void onResume() {
+        Prefs.putString("searchResult", "");
+        Log.d("calledOnResume","true");
+        try {
+            querry = Prefs.getString("querry", null);
+            Log.d("QUERRYonResume",querry);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        if (querry.equals("")||querry.equals(null)||querry.equals("null")){
+            searchView.setText("");
+        }
+        else{
+            searchView.setText(querry);
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        isShowing = false;
+        super.onDestroy();
+        }
+
+
     @Override
     public void onBackPressed() {
+        Prefs.putString("querry","null");
+        Prefs.putString("querry1","null");
         if (!MainActivity.isShowing) {
             Log.d("isShowing", "false");
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        } else Log.d("isShowing", "true");
-
-
+        } else{
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            Log.d("isShowing", "true");
+        }
         super.onBackPressed();
-
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -326,7 +363,6 @@ public class SearchActivity extends AppCompatActivity implements
         adapter.addFrag(new UsersFragment(), getString(R.string.users));
         viewPager.setAdapter(adapter);
     }
-
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -359,7 +395,7 @@ public class SearchActivity extends AppCompatActivity implements
 
     final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            searchView.showDropDown();
+            //searchView.showDropDown();
 
             //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
         }
@@ -367,7 +403,7 @@ public class SearchActivity extends AppCompatActivity implements
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             term = searchView.getText().toString();
             if (term.equals("")){
-                searchView.showDropDown();
+//                searchView.showDropDown();
                 imageViewClearText.setVisibility(View.GONE);
                 imageViewClearText.setClickable(false);
             }
@@ -421,12 +457,12 @@ public class SearchActivity extends AppCompatActivity implements
             if (term.equals("")){
                 imageViewClearText.setVisibility(View.GONE);
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                searchView.showDropDown();
+                //searchView.showDropDown();
                 imageViewClearText.setClickable(false);
             }
             else{
                 imageViewClearText.setVisibility(View.VISIBLE);
-                searchView.showDropDown();
+                //searchView.showDropDown();
                 //searchView.showDropDown();
             }
         }

@@ -883,15 +883,10 @@ public class TrashTickets extends Fragment {
     }
     private class DeleteTicket extends AsyncTask<String, Void, String> {
         String ticketId;
-
         DeleteTicket(String ticketId) {
-
             this.ticketId=ticketId;
-
-
-        }
-
-        protected String doInBackground(String... urls) {
+            }
+            protected String doInBackground(String... urls) {
             return new Helpdesk().ticketDeleteForever(ticketId);
             //return new Helpdesk().postStatusChanged(ticketId,statusId);
         }
@@ -1170,7 +1165,13 @@ public class TrashTickets extends Fragment {
         @Override
         public void onBindViewHolder(final TicketOverviewAdapter.TicketViewHolder ticketViewHolder, final int i) {
             final TicketOverview ticketOverview = ticketOverviewList.get(i);
-            String letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+            String letter;
+            if (!ticketOverview.getClientName().equals("")){
+                letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+            }
+            else{
+                letter="N";
+            }
             int id=ticketOverviewList.get(i).getTicketID();
             TextDrawable.IBuilder mDrawableBuilder;
             if (selectedIds.contains(id)){
@@ -1185,7 +1186,8 @@ public class TrashTickets extends Fragment {
             if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
                 String first=subject.replace("=?UTF-8?Q?","");
                 String second=first.replace("_"," ");
-                String third=second.replace("=C2=A0","");
+                String second1=second.replace("=C3=BA","");
+                String third = second1.replace("=C2=A0", "");
                 String fourth=third.replace("?=","");
                 String fifth=fourth.replace("=E2=80=99","'");
                 ticketViewHolder.textViewSubject.setText(fifth);
@@ -1202,13 +1204,14 @@ public class TrashTickets extends Fragment {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
             }
             else {
-                if (ticketOverview.lastReply.equals("client")){
-                    int color=Color.parseColor("#ededed");
-                    ticketViewHolder.ticket.setBackgroundColor(color);
-                }
-                else{
-                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                }
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                if (ticketOverview.lastReply.equals("client")){
+//                    int color=Color.parseColor("#ededed");
+//                    ticketViewHolder.ticket.setBackgroundColor(color);
+//                }
+//                else{
+//                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                }
                 //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
 
@@ -1314,7 +1317,9 @@ public class TrashTickets extends Fragment {
             if (ticketOverview.ticketAttachments.equals("0")) {
                 ticketViewHolder.attachementView.setVisibility(View.GONE);
             } else {
+                int color = Color.parseColor("#808080");
                 ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+                ticketViewHolder.attachementView.setColorFilter(color);
             }
             if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
 //            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
@@ -1382,48 +1387,59 @@ public class TrashTickets extends Fragment {
                 ticketViewHolder.countThread.setVisibility(View.GONE);
             }
 
-            if (ticketOverview.sourceTicket.equals("chat")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.chat);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("web")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.web);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("agent")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("email")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("facebook")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.facebook);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("twitter")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.twitter);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("call")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else{
-                ticketViewHolder.source.setVisibility(View.GONE);
+            switch (ticketOverview.sourceTicket) {
+                case "chat": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.chat);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "web": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.web);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "agent": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "email": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "facebook": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.facebook);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "twitter": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.twitter);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "call": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                default:
+                    ticketViewHolder.source.setVisibility(View.GONE);
+                    break;
             }
 
             if (!ticketOverview.countcollaborator.equals("0")){
 
+                int color = Color.parseColor("#808080");
                 ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
+                ticketViewHolder.countCollaborator.setColorFilter(color);
             }
             else if (ticketOverview.countcollaborator.equals("0")){
                 ticketViewHolder.countCollaborator.setVisibility(View.GONE);
@@ -1465,9 +1481,11 @@ public class TrashTickets extends Fragment {
 
             }
             else{
+                int color=Color.parseColor("#cdc5bf");
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(letter, generator.getRandomColor());
+                        .buildRound(letter,generator.getRandomColor());
+                ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
             }
 
@@ -1674,6 +1692,10 @@ public class TrashTickets extends Fragment {
             return ticketOverviewList.get(position);
         }
         @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+        @Override
         public TicketOverviewAdapter.TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
@@ -1744,9 +1766,10 @@ public class TrashTickets extends Fragment {
 
         @Override
         public boolean onCreateActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
-            //mode.getMenuInflater().inflate(R.menu.multipletrash, menu);//Inflate the menu over action mode
-            mode.getMenuInflater().inflate(R.menu.multiplemenuinbox, menu);
+            mode.getMenuInflater().inflate(R.menu.multipletrash, menu);//Inflate the menu over action mode
+            //mode.getMenuInflater().inflate(R.menu.multiplemenuinbox, menu);
             SubMenu fileMenu = menu.addSubMenu("Change Status");
+
             //menu.addSubMenu("Change Status");
             for (int i=0;i<statusItems.size();i++){
                 Data data=statusItems.get(i);
@@ -1810,11 +1833,10 @@ public class TrashTickets extends Fragment {
                                 android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
 
                                 // Setting Dialog Title
-                                alertDialog.setTitle("Changing status...");
+                                alertDialog.setTitle(getString(R.string.changingStatus));
 
                                 // Setting Dialog Message
-                                alertDialog.setMessage("Are you sure you want to change the status?");
-
+                                alertDialog.setMessage(getString(R.string.statusConfirmation));
                                 // Setting Icon to Dialog
                                 alertDialog.setIcon(R.mipmap.ic_launcher);
 
@@ -1968,46 +1990,80 @@ public class TrashTickets extends Fragment {
 //                        e.printStackTrace();
 //                    }
 //                    break;
-//                case R.id.deleteticket:
-//                    try {
-//                        if (!Prefs.getString("tickets", null).isEmpty()) {
-//                            String tickets = Prefs.getString("tickets", null);
-//                            int pos = tickets.indexOf("[");
-//                            int pos1 = tickets.lastIndexOf("]");
-//                            String text1 = tickets.substring(pos + 1, pos1);
-//                            Log.d("TEXT1", text1);
-//                            String[] namesList = text1.split(",");
-//                            for (String name : namesList) {
-//                                stringBuffer.append("&id[]=").append(name);
-//                            }
-////                    int pos2 = stringBuffer.toString().lastIndexOf(",");
-////                    ticket = stringBuffer.toString().substring(0, pos2);
-//                            ticket = stringBuffer.toString();
-//                            Log.d("tickets", ticket);
-//                            try {
-//                                if (ticket.equals("&id[]=")){
-//                                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                                    return false;
-//                                }
-//                                else{
+                case R.id.deleteticket:
+                    try {
+                        if (!Prefs.getString("tickets", null).isEmpty()) {
+                            String tickets = Prefs.getString("tickets", null);
+                            int pos = tickets.indexOf("[");
+                            int pos1 = tickets.lastIndexOf("]");
+                            String text1 = tickets.substring(pos + 1, pos1);
+                            Log.d("TEXT1", text1);
+                            String[] namesList = text1.split(",");
+                            for (String name : namesList) {
+                                stringBuffer.append("&id[]=").append(name);
+                            }
+//                    int pos2 = stringBuffer.toString().lastIndexOf(",");
+//                    ticket = stringBuffer.toString().substring(0, pos2);
+                            ticket = stringBuffer.toString();
+                            Log.d("tickets", ticket);
+                            try {
+                                if (ticket.equals("&id[]=")){
+                                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                                    return false;
+                                }
+                                else{
+
+                                    android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+                                    // Setting Dialog Title
+                                    alertDialog.setTitle(getString(R.string.deleteTickets));
+
+                                    // Setting Dialog Message
+                                    alertDialog.setMessage(getString(R.string.deleteConfirm));
+                                    // Setting Icon to Dialog
+                                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                                    // Setting Positive "Yes" Button
+                                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Write your code here to invoke YES event
+                                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                            new DeleteTicket(ticket.trim()).execute();
+                                            progressDialog.show();
+                                            progressDialog.setMessage(getString(R.string.pleasewait));
+                                        }
+                                    });
+
+                                    // Setting Negative "NO" Button
+                                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Write your code here to invoke NO event
+                                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                                    // Showing Alert Message
+                                    alertDialog.show();
+
 //                                    new DeleteTicket(ticket.trim()).execute();
 //                                    progressDialog.show();
 //                                    progressDialog.setMessage(getString(R.string.pleasewait));
-//                                }
-//
-//                            } catch (NumberFormatException e) {
-//                                e.printStackTrace();
-//
-//                            }
-//                            return true;
-//                        } else {
-//                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                            return false;
-//                        }
-//                    } catch (NullPointerException e) {
-//                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                        e.printStackTrace();
-//                    }
+                                }
+
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+
+                            }
+                            return true;
+                        } else {
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    } catch (NullPointerException e) {
+                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
                 case R.id.assignticket:
                     try {
                         if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
