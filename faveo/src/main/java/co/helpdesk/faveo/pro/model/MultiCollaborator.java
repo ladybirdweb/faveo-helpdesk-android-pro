@@ -57,6 +57,10 @@ public class MultiCollaborator {
     }
     @Override
     public String toString() {
-        return this.first_name + " " + this.last_name+"<"+this.email+">";
+        return this.email;
     }
+//    @Override
+//    public String toString() {
+//        return this.first_name + " " + this.last_name+"<"+this.email+">";
+//    }
 }

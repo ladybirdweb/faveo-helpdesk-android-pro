@@ -41,11 +41,13 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
     public View getView(int position, View convertView, ViewGroup parent) {
         CollaboratorSuggestion customer = getItem(position);
         IImageLoader imageLoader;
-        try {
-            String letter = String.valueOf(customer.getFirst_name().charAt(0));
-        }catch (StringIndexOutOfBoundsException e){
-            e.printStackTrace();
-        }
+//        String letter = null;
+        TextDrawable.IBuilder mDrawableBuilder;
+//        try {
+//            letter = String.valueOf(customer.getFirst_name().charAt(0));
+//        }catch (StringIndexOutOfBoundsException e){
+//            e.printStackTrace();
+//        }
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.collaborator_row, parent, false);
         }
@@ -56,6 +58,27 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
 
         if (txtCustomer != null&&customer.getFirst_name()!=null)
             txtCustomer.setText(customer.getFirst_name() + " " + customer.getLast_name());
+
+//        if (customer.getProfile_pic().equals("")) {
+//            ivCustomerImage.setVisibility(View.GONE);
+//
+//        } else if (customer.getProfile_pic().contains(".jpg")||customer.getProfile_pic().contains(".jpeg")||customer.getProfile_pic().contains(".png")) {
+//            mDrawableBuilder = TextDrawable.builder()
+//                    .round();
+////    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+//            Picasso.with(context).load(customer.getProfile_pic()).transform(new CircleTransform()).into(ivCustomerImage);
+////        Glide.with(context)
+////            .load(ticketOverview.getClientPicture())
+////            .into(ticketViewHolder.roundedImageViewProfilePic);
+//
+//            //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+//
+//        } else {
+//            ColorGenerator generator = ColorGenerator.MATERIAL;
+//            TextDrawable drawable = TextDrawable.builder()
+//                    .buildRound(letter, generator.getRandomColor());
+//            ivCustomerImage.setImageDrawable(drawable);
+//        }
 
         if (ivCustomerImage != null && customer.getProfile_pic() != null) {
             if (customer.getProfile_pic().equals(".jpg")||customer.getProfile_pic().equals(".jpeg")||customer.getProfile_pic().equals(".png")) {

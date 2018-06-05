@@ -45,6 +45,7 @@ import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.ClientDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
+import co.helpdesk.faveo.pro.frontend.activities.RegisterUser;
 import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.ClientOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.search.SearchCustomerFragment;
@@ -412,6 +413,10 @@ public class ClientList extends Fragment implements View.OnClickListener {
         }
         else if (id==R.id.action_noti){
             Intent intent=new Intent(getActivity(),NotificationActivity.class);
+            startActivity(intent);
+        }
+        else if (id==R.id.action_add){
+            Intent intent=new Intent(getActivity(),RegisterUser.class);
             startActivity(intent);
         }
 

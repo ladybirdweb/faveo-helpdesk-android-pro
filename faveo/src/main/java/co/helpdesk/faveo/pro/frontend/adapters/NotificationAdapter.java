@@ -77,13 +77,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         }
         else{
+            int color=Color.parseColor("#cdc5bf");
             ColorGenerator generator = ColorGenerator.MATERIAL;
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter, generator.getRandomColor());
+                    .buildRound(letter,generator.getRandomColor());
+            viewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
             viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
         }
-//        IImageLoader imageLoader = new PicassoLoader();
-//        imageLoader.loadImage(viewHolder.roundedImageViewProfilePic, notiThread.profiel_pic, notiThread.placeHolder);
         if (notiThread.getNoti_seen().equals("1")) {
             viewHolder.textSub.setTypeface(null, Typeface.NORMAL);
             viewHolder.textSub.setTextColor(Color.parseColor("#7a7a7a"));

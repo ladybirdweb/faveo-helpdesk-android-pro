@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     String urlGivenByUser;
     String error;
-
+    TextView findHelp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,18 +134,18 @@ public class LoginActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-//        try {
-//            if (!Prefs.getString("companyurl", null).equals("") || !Prefs.getString("companyurl", null).equals(null)) {
-//                editTextCompanyURL.setText(Prefs.getString("companyurl", null));
-//            } else {
-//                editTextCompanyURL.setText("");
-//                editTextCompanyURL.setHint("eg: faveohelpdesk.com/public");
-//            }
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
+        Window window = LoginActivity.this.getWindow();
 
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(LoginActivity.this,R.color.faveo));
+
+        ButterKnife.bind(this);
         try {
             error = Prefs.getString("NoToken", null);
 //            Log.d("NoToken",error);
@@ -163,16 +163,15 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-//        if (error.equals("True")){
-//            Intent intent=new Intent(LoginActivity.this,LoginActivity.class);
-//            Log.d("Authentication Failed","true");
-//            startActivity(intent);
-//        }
-
-
-
         url.setVisibility(View.GONE);
+        findHelp= (TextView) findViewById(R.id.helpUrl);
+        findHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(LoginActivity.this,HelpingActivity.class);
+                startActivity(intent);
+            }
+        });
         flipColor.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_200));
         buttonSignIn.setEnabled(true);
         editTextCompanyURL= (AutoCompleteTextView) findViewById(R.id.editText_company_url);
@@ -253,32 +252,25 @@ public class LoginActivity extends AppCompatActivity {
                 companyURL1=companyURLUser1.toString();
                 //companyURL=companyURLUser.toString();
 
-
-//                if (!companyURL.contains("/public")){
-//                    companyURL=companyURLUser.insert(companyURL.length(),"/public").toString();
-//                }
-//                count++;
-//                Prefs.putInt("count",count);
-
-                //Toast.makeText(LoginActivity.this, "url :"+companyURL, Toast.LENGTH_SHORT).show();
-
                 InputMethodManager inputManager = (InputMethodManager)
                         getSystemService(Context.INPUT_METHOD_SERVICE);
 
+                assert inputManager != null;
                 inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
 
-
                 if (companyURL.trim().length() == 0 || !Patterns.WEB_URL.matcher(companyURL).matches()) {
                     linearLayout.startAnimation(animation);
+                    findHelp.setVisibility(View.GONE);
                     urlError.setVisibility(View.VISIBLE);
-                    urlError.setText(getString(R.string.format_error));
+                    urlError.setText(getString(R.string.please_enter_a_valid_url));
                     urlError.setTextColor(Color.parseColor("#ff0000"));
                     urlError.postDelayed(new Runnable() {
                         public void run() {
-                            urlError.setVisibility(View.INVISIBLE);
+                            urlError.setVisibility(View.GONE);
+                            findHelp.setVisibility(View.VISIBLE);
                         }
-                    }, 9000);
+                    }, 5000);
 //                    linearLayout.startAnimation(animation);
 //                    urlError.setVisibility(View.VISIBLE);
 //
@@ -291,25 +283,16 @@ public class LoginActivity extends AppCompatActivity {
 //                    urlError.setTextColor(Color.parseColor("#ff0000"));
                     //Toasty.warning(v.getContext(), getString(R.string.please_enter_valid_url), Toast.LENGTH_LONG).show();
                     return;
-
-                }
+                    }
                 if (InternetReceiver.isConnected()) {
                     urlSuggestions.add(companyURL);
-//                    Set<String> set=new HashSet<>(urlSuggestions);
-//                    ArrayAdapter<String> adapter= new ArrayAdapter<String>(LoginActivity.this,
-//                            android.R.layout.simple_dropdown_item_1line,urlSuggestions);
-//                    editTextCompanyURL.setThreshold(2);
-//                    editTextCompanyURL.setAdapter(adapter);
-//                    Prefs.putStringSet("URL_SUG", set);
                     progressDialogVerifyURL.show();
                     new VerifyURL(LoginActivity.this, companyURL).execute();
-
-
-
-                } else
+                    } else
                     Toasty.warning(v.getContext(), getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
             }
         });
+
 
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -479,14 +462,12 @@ public class LoginActivity extends AppCompatActivity {
                 apiDisabled = Prefs.getString("400", null);
                 if (apiDisabled.equals("badRequest")) {
                     Prefs.putString("400", "null");
-                    Toasty.warning(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
+                    Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
                     return;
                 }
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
-
-
             if (result == null) {
                 count++;
                 Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();

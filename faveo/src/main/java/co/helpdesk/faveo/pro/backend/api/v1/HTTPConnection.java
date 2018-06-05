@@ -83,15 +83,15 @@ class HTTPConnection{
                 switch (connection.getResponseCode()) {
                     case HttpURLConnection.HTTP_UNAUTHORIZED:
                         Log.e("Response code: ", "401-UNAUTHORIZED!");
-                        Prefs.putString("unauthorized","true");
-                        ret="Unauthorized Access";
-                        break;
+//                        Prefs.putString("unauthorized","true");
+//                        ret="Unauthorized Access";
+//                        break;
                         //ret="HTTP_UNAUTHORIZED";
-//                        if (refreshToken() == null)
-//                            return null;
-//                        new Helpdesk();
-//                        new Authenticate();
-//                        return "tokenRefreshed";
+                        if (refreshToken() == null)
+                            return null;
+                        new Helpdesk();
+                        new Authenticate();
+                        return "tokenRefreshed";
                     case HttpURLConnection.HTTP_NOT_FOUND:
                         Log.e("Response code: ", "NotFound-404!");
                         //ret = "notFound";
@@ -163,7 +163,6 @@ class HTTPConnection{
         }
         if (sb == null)
             return null;
-
         String input = sb.toString();
         if (input.contains("token_expired") || input.contains("token_invalid")||input.contains("tokenRefreshed")) {
             if (refreshToken() == null)

@@ -79,14 +79,14 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
         int id=ticketOverviewList.get(i).getTicketID();
 
         Log.d("letter",letter);
-        if (selectedIds.contains(id)){
-            //if item is selected then,set foreground color of FrameLayout.
-            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-        }
-        else {
-            //else remove selected item color.
-            //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
-        }
+//        if (selectedIds.contains(id)){
+//            //if item is selected then,set foreground color of FrameLayout.
+//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+//        }
+//        else {
+//            //else remove selected item color.
+//            //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
+//        }
         subject=ticketOverview.ticketSubject;
         if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
             String first=subject.replace("=?UTF-8?Q?","");
@@ -100,9 +100,9 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
         }
 
-        ticketViewHolder.ticket
-                .setBackgroundColor(mSelectedItemsIds.get(i) ? 0x9934B5E4
-                        : Color.TRANSPARENT);
+//        ticketViewHolder.ticket
+//                .setBackgroundColor(mSelectedItemsIds.get(i) ? 0x9934B5E4
+//                        : Color.TRANSPARENT);
 
 //        if (checked_items.contains(id)){
 //            //if item is selected then,set foreground color of FrameLayout.
@@ -115,95 +115,97 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
 
         //Toast.makeText(context, "no of items"+checked_items.toString(), Toast.LENGTH_SHORT).show();
 
-        ticketViewHolder.checkBox1.setOnCheckedChangeListener(null);
-       //ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-        ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//        ticketViewHolder.checkBox1.setOnCheckedChangeListener(null);
+//       //ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+//        ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//
+//                if (b){
+//                    ticketViewHolder.checkBox1.setChecked(true);
+//                    ticketOverview.setChecked(true);
+//                    //stringBuffer.append(""+ticketOverview.getTicketID()+",");
+//                    if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
+//                        String first=subject.replace("=?UTF-8?Q?","");
+//                        String second=first.replace("_"," ");
+//                        String third=second.replace("=C2=A0","");
+//                        String fourth=third.replace("?=","");
+//                        String fifth=fourth.replace("=E2=80=99","'");
+//                        ticketViewHolder.textViewSubject.setText(fifth);
+//                        ticketSubject.add(fifth);
+//                    }
+//                    else{
+//                        ticketSubject.add(ticketOverview.ticketSubject);
+//                    }
+//                    //ticketSubject.add(ticketOverview.ticketSubject);
+//                    checked_items.add(ticketOverview.getTicketID());
+////                  length=checked_items.size();
+//                    Log.d("ticketsubject",ticketSubject.toString());
+//                    Log.d("checkeditems",checked_items.toString().replace(" ",""));
+//                    Prefs.putString("tickets",checked_items.toString().replace(" ",""));
+//                    Prefs.putString("TicketSubject",ticketSubject.toString());
+//                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+//
+//                }
+//                else{
+//                        ticketOverview.setChecked(false);
+//                        int pos=checked_items.indexOf(ticketOverview.getTicketID());
+//                        int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
+//                        try {
+//                        checked_items.remove(pos);
+//                        ticketSubject.remove(pos1);
+//                    }
+//                        catch (ArrayIndexOutOfBoundsException e){
+//                        e.printStackTrace();
+//                    }
+//                        Log.d("Position",""+pos);
+//                        //checked_items.remove(checked_items.indexOf(ticketOverview.getTicketID()));
+//                        length--;
+//                        Log.d("NoOfItems",""+length);
+//                        Prefs.putInt("totalticketselected",length);
+//                        Log.d("checkeditems", "" + checked_items);
+//                        Prefs.putInt("NoOfItems",length);
+//                        Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+//                        Prefs.putString("TicketSubject",ticketSubject.toString());
+//                        Log.d("ticketsubject",ticketSubject.toString());
+//                        ticketViewHolder.checkBox1.setVisibility(View.GONE);
+//                        ticketViewHolder.checkBox1.setChecked(false);
+//                    if (!ticketOverview.lastReply.equals("client")){
+//                        int color=Color.parseColor("#e9e9e9");
+//                        ticketViewHolder.ticket.setBackgroundColor(color);
+//                    }
+//                    else{
+//                        ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                    }
+//
+//
+//                        //notifyDataSetChanged();
+//
+//                }
+//
+//
+//            }
+//        });
 
 
-                if (b){
-                    ticketViewHolder.checkBox1.setChecked(true);
-                    ticketOverview.setChecked(true);
-                    //stringBuffer.append(""+ticketOverview.getTicketID()+",");
-                    if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
-                        String first=subject.replace("=?UTF-8?Q?","");
-                        String second=first.replace("_"," ");
-                        String third=second.replace("=C2=A0","");
-                        String fourth=third.replace("?=","");
-                        String fifth=fourth.replace("=E2=80=99","'");
-                        ticketViewHolder.textViewSubject.setText(fifth);
-                        ticketSubject.add(fifth);
-                    }
-                    else{
-                        ticketSubject.add(ticketOverview.ticketSubject);
-                    }
-                    //ticketSubject.add(ticketOverview.ticketSubject);
-                    checked_items.add(ticketOverview.getTicketID());
-//                  length=checked_items.size();
-                    Log.d("ticketsubject",ticketSubject.toString());
-                    Log.d("checkeditems",checked_items.toString().replace(" ",""));
-                    Prefs.putString("tickets",checked_items.toString().replace(" ",""));
-                    Prefs.putString("TicketSubject",ticketSubject.toString());
-                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-
-                }
-                else{
-                        ticketOverview.setChecked(false);
-                        int pos=checked_items.indexOf(ticketOverview.getTicketID());
-                        int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
-                        try {
-                        checked_items.remove(pos);
-                        ticketSubject.remove(pos1);
-                    }
-                        catch (ArrayIndexOutOfBoundsException e){
-                        e.printStackTrace();
-                    }
-                        Log.d("Position",""+pos);
-                        //checked_items.remove(checked_items.indexOf(ticketOverview.getTicketID()));
-                        length--;
-                        Log.d("NoOfItems",""+length);
-                        Prefs.putInt("totalticketselected",length);
-                        Log.d("checkeditems", "" + checked_items);
-                        Prefs.putInt("NoOfItems",length);
-                        Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
-                        Prefs.putString("TicketSubject",ticketSubject.toString());
-                        Log.d("ticketsubject",ticketSubject.toString());
-                        ticketViewHolder.checkBox1.setVisibility(View.GONE);
-                        ticketViewHolder.checkBox1.setChecked(false);
-                    if (!ticketOverview.lastReply.equals("client")){
-                        int color=Color.parseColor("#e9e9e9");
-                        ticketViewHolder.ticket.setBackgroundColor(color);
-                    }
-                    else{
-                        ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    }
-
-
-                        //notifyDataSetChanged();
-
-                }
-
-
-            }
-        });
-
-
-        if (ticketOverview.getChecked()){
-            ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-            ticketViewHolder.checkBox1.setChecked(true);
-            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-        }
-        else{
-            ticketViewHolder.checkBox1.setVisibility(View.GONE);
-            ticketViewHolder.checkBox1.setChecked(false);
-            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-        }
+//        if (ticketOverview.getChecked()){
+//            ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+//            ticketViewHolder.checkBox1.setChecked(true);
+//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
+//        }
+//        else{
+//            ticketViewHolder.checkBox1.setVisibility(View.GONE);
+//            ticketViewHolder.checkBox1.setChecked(false);
+//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//        }
 
         if (ticketOverview.ticketAttachments.equals("0")) {
             ticketViewHolder.attachementView.setVisibility(View.GONE);
         } else {
+            int color = Color.parseColor("#808080");
             ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+            ticketViewHolder.attachementView.setColorFilter(color);
         }
         if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
 //            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
@@ -276,48 +278,58 @@ else{
     ticketViewHolder.countThread.setVisibility(View.GONE);
 }
 
-if (ticketOverview.sourceTicket.equals("chat")){
-    int color=Color.parseColor("#3da6d7");
-ticketViewHolder.source.setImageResource(R.drawable.chat);
-    //ticketViewHolder.source.setColorFilter(color);
-}
-else if (ticketOverview.sourceTicket.equals("web")){
-   int color=Color.parseColor("#3da6d7");
-    ticketViewHolder.source.setImageResource(R.drawable.web);
-    //ticketViewHolder.source.setColorFilter(color);
-}
-else if (ticketOverview.sourceTicket.equals("agent")){
-    int color=Color.parseColor("#3da6d7");
-ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-    //ticketViewHolder.source.setColorFilter(color);
-}
-else if (ticketOverview.sourceTicket.equals("email")){
-    int color=Color.parseColor("#3da6d7");
-    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-    //ticketViewHolder.source.setColorFilter(color);
-}
-else if (ticketOverview.sourceTicket.equals("facebook")){
-    int color=Color.parseColor("#3da6d7");
-    ticketViewHolder.source.setImageResource(R.drawable.facebook);
-    //ticketViewHolder.source.setColorFilter(color);
-}
-else if (ticketOverview.sourceTicket.equals("twitter")){
-    int color=Color.parseColor("#3da6d7");
-    ticketViewHolder.source.setImageResource(R.drawable.twitter);
-    //ticketViewHolder.source.setColorFilter(color);
-}
-else if (ticketOverview.sourceTicket.equals("call")){
-    int color=Color.parseColor("#3da6d7");
-    ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
-    //ticketViewHolder.source.setColorFilter(color);
-}
-else{
-    ticketViewHolder.source.setVisibility(View.GONE);
-}
-
+        switch (ticketOverview.sourceTicket) {
+            case "chat": {
+                int color = Color.parseColor("#808080");
+                ticketViewHolder.source.setImageResource(R.drawable.chat);
+                ticketViewHolder.source.setColorFilter(color);
+                break;
+            }
+            case "web": {
+                int color = Color.parseColor("#808080");
+                ticketViewHolder.source.setImageResource(R.drawable.web);
+                ticketViewHolder.source.setColorFilter(color);
+                break;
+            }
+            case "agent": {
+                int color = Color.parseColor("#808080");
+                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                ticketViewHolder.source.setColorFilter(color);
+                break;
+            }
+            case "email": {
+                int color = Color.parseColor("#808080");
+                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                ticketViewHolder.source.setColorFilter(color);
+                break;
+            }
+            case "facebook": {
+                int color = Color.parseColor("#808080");
+                ticketViewHolder.source.setImageResource(R.drawable.facebook);
+                ticketViewHolder.source.setColorFilter(color);
+                break;
+            }
+            case "twitter": {
+                int color = Color.parseColor("#808080");
+                ticketViewHolder.source.setImageResource(R.drawable.twitter);
+                ticketViewHolder.source.setColorFilter(color);
+                break;
+            }
+            case "call": {
+                int color = Color.parseColor("#808080");
+                ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+                ticketViewHolder.source.setColorFilter(color);
+                break;
+            }
+            default:
+                ticketViewHolder.source.setVisibility(View.GONE);
+                break;
+        }
 if (!ticketOverview.countcollaborator.equals("0")){
 
-ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
+    int color = Color.parseColor("#808080");
+    ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
+    ticketViewHolder.countCollaborator.setColorFilter(color);
 }
 else if (ticketOverview.countcollaborator.equals("0")){
 ticketViewHolder.countCollaborator.setVisibility(View.GONE);
@@ -361,10 +373,13 @@ else if (ticketOverview.clientPicture.contains(".jpg")){
 
 }
 else{
+    int color=Color.parseColor("#cdc5bf");
     ColorGenerator generator = ColorGenerator.MATERIAL;
     TextDrawable drawable = TextDrawable.builder()
-            .buildRound(letter, generator.getRandomColor());
+            .buildRound(letter,generator.getRandomColor());
+    ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
     ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+
 }
 //   else if (ticketOverview.clientPicture.startsWith("")){
 ////    Glide.with(context)
@@ -398,12 +413,12 @@ else{
         ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+                Prefs.putString("cameFromNotification","none");
+                Prefs.putString("ticketThread","");
                 intent.putExtra("ticket_id", ticketOverview.ticketID + "");
                 Prefs.putString("TICKETid",ticketOverview.ticketID+"");
                 Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
-                Prefs.putString("cameFromNotification","false");
                 intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                 intent.putExtra("ticket_opened_by", ticketOverview.clientName);
                 intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
@@ -411,31 +426,31 @@ else{
                 v.getContext().startActivity(intent);
             }
         });
-        ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-                ticketViewHolder.checkBox1.setChecked(true);
-                length++;
-                Log.d("noofitems",""+length);
-                Prefs.putInt("NoOfItems",length);
-
-//                ticketOverviewList.get(i).getTicketID();
-//                Log.d("position",""+ticketOverviewList.get(i).getTicketID());
-//                if (ticketViewHolder.checkBox1.isEnabled()){
+//        ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
+//                ticketViewHolder.checkBox1.setChecked(true);
+//                length++;
+//                Log.d("noofitems",""+length);
+//                Prefs.putInt("NoOfItems",length);
 //
-//                }
-//                else{
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                }
-//                if (ticketViewHolder.checkBox1.isChecked()){
-//
-//                }else{
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                }
-                return true;
-            }
-        });
+////                ticketOverviewList.get(i).getTicketID();
+////                Log.d("position",""+ticketOverviewList.get(i).getTicketID());
+////                if (ticketViewHolder.checkBox1.isEnabled()){
+////
+////                }
+////                else{
+////                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+////                }
+////                if (ticketViewHolder.checkBox1.isChecked()){
+////
+////                }else{
+////                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
+////                }
+//                return true;
+//            }
+//        });
 
 
 //        ticketViewHolder.checkBox1.setOnClickListener(new View.OnClickListener() {
@@ -529,6 +544,10 @@ else{
     }
     public TicketOverview getItem(int position){
         return ticketOverviewList.get(position);
+    }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
     @Override
     public TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

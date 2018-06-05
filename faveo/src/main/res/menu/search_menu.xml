@@ -8,6 +8,12 @@
             <!--app:showAsAction="never">-->
                 <!--<menu>-->
         <item
+            android:id="@+id/action_add"
+            android:icon="@drawable/ic_action_add_circle_outline"
+            android:orderInCategory="100"
+            android:title="@string/abc_search_hint"
+            app:showAsAction="always" />
+        <item
             android:id="@+id/action_search"
             android:icon="@drawable/ic_action_search"
             android:orderInCategory="100"

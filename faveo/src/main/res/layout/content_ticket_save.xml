@@ -36,7 +36,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#EEEEEE">
+            android:background="#f2f2f2">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#EEEEEE">
+            android:background="#f2f2f2">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -197,7 +197,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#EEEEEE">
+            android:background="#f2f2f2">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -231,7 +231,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#EEEEEE">
+            android:background="#f2f2f2">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -263,7 +263,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#EEEEEE">
+            android:background="#f2f2f2">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -326,7 +326,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#EEEEEE">
+            android:background="#f2f2f2">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -387,20 +387,20 @@
 
 
 
-        <Button
-            android:id="@+id/buttonsave"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="56dp"
-            android:background="@drawable/button_background"
-            android:text="@string/save"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-          />
+        <!--<Button-->
+            <!--android:id="@+id/buttonsave"-->
+            <!--android:layout_width="180dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginBottom="56dp"-->
+            <!--android:background="@drawable/button_background"-->
+            <!--android:text="@string/save"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:visibility="gone"-->
+          <!--/>-->
 
 
     </LinearLayout>

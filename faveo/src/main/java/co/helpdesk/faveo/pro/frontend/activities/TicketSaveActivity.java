@@ -5,10 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +44,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,9 +70,11 @@ public class TicketSaveActivity extends AppCompatActivity {
     Button buttonsave;
     ImageView imageView;
     Spinner autoCompleteTextViewstaff;
+    ImageView refresh;
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems, staffItems;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter, staffArrayAdapter;
     int id,id1;
+    String option;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -84,12 +90,35 @@ public class TicketSaveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_save);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        Window window = TicketSaveActivity.this.getWindow();
 
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(TicketSaveActivity.this,R.color.faveo));
         StrictMode.setThreadPolicy(policy);
         if (InternetReceiver.isConnected()){
             new FetchDependency().execute();
         }
+        option=Prefs.getString("cameFromNotification", null);
+        switch (option) {
+            case "true":
+                Prefs.putString("cameFromNotification","true");
+                break;
+            case "false":
+                Prefs.putString("cameFromNotification","false");
+                break;
+            case "none":
+                Prefs.putString("cameFromNotification","none");
+                break;
+            default:
+                Prefs.putString("cameFromNotification","");
+                break;
+        }
         setUpViews();
+
         if (InternetReceiver.isConnected()) {
             progressDialog=new ProgressDialog(this);
             progressDialog.setMessage(getString(R.string.pleasewait));
@@ -101,8 +130,54 @@ public class TicketSaveActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarsave);
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
         imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
-
+        refresh= (ImageView) findViewById(R.id.imageViewRefresh);
         textView.setText(getString(R.string.ticketProperties));
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                // Setting Dialog Title
+                alertDialog.setTitle(getString(R.string.refreshingPage));
+
+                // Setting Dialog Message
+                alertDialog.setMessage(getString(R.string.refreshPage));
+
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke YES event
+                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                        if (InternetReceiver.isConnected()){
+                            progressDialog=new ProgressDialog(TicketSaveActivity.this);
+                            progressDialog.setMessage(getString(R.string.refreshing));
+                            progressDialog.show();
+
+                            new FetchDependency().execute();
+                            setUpViews();
+                            task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
+                            task.execute();
+                            }
+                    }
+                });
+
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+
+                // Showing Alert Message
+                alertDialog.show();
+            }
+        });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,36 +204,6 @@ public class TicketSaveActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 id1=0;
-            }
-        });
-        spinnerSource.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        spinnerHelpTopics.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        autoCompleteTextViewstaff.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-
-        edittextsubject.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                edittextsubject.setCursorVisible(true);
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
             }
         });
         buttonsave.setOnClickListener(new View.OnClickListener() {
@@ -195,10 +240,10 @@ public class TicketSaveActivity extends AppCompatActivity {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
 
                         // Setting Dialog Title
-                        alertDialog.setTitle("Saving ticket...");
+                        alertDialog.setTitle(getString(R.string.editingticket));
 
                         // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want to make the changes?");
+                        alertDialog.setMessage(getString(R.string.editingConfirmation));
 
                         // Setting Icon to Dialog
                         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -252,6 +297,42 @@ public class TicketSaveActivity extends AppCompatActivity {
             new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
         }
     }
+    private class FetchTicketDetail1 extends AsyncTask<String, Void, String> {
+        String ticketID;
+        String agentName;
+        String title;
+        FetchTicketDetail1(String ticketID) {
+
+            this.ticketID = ticketID;
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().getTicketDetail(ticketID);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            if (isCancelled()) return;
+//            if (progressDialog.isShowing())
+//                progressDialog.dismiss();
+
+            if (result == null) {
+                //Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(result);
+                Prefs.putString("TicketRelated",jsonObject.toString());
+                Toasty.success(TicketSaveActivity.this, getString(R.string.update_success), Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(TicketSaveActivity.this, MainActivity.class);
+                startActivity(intent);
+                } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private class SaveTicket extends AsyncTask<String, Void, String> {
         int ticketNumber;
         String subject;
@@ -283,8 +364,9 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
+//            if (progressDialog.isShowing())
+               progressDialog.dismiss();
+            Prefs.putString("ticketThread","");
             Log.d("Depen Response : ", result + "");
             if (result == null) {
                 Toasty.error(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
@@ -313,9 +395,8 @@ public class TicketSaveActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             if (result.contains("Edited successfully")) {
-                Toasty.success(TicketSaveActivity.this, getString(R.string.update_success), Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(TicketSaveActivity.this, TicketDetailActivity.class);
-                startActivity(intent);
+                new FetchTicketDetail1(Prefs.getString("TICKETid",null)).execute();
+
             } else
                 Toasty.error(TicketSaveActivity.this, getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
         }
@@ -324,7 +405,6 @@ public class TicketSaveActivity extends AppCompatActivity {
         String ticketID;
 
         FetchTicketDetail(String ticketID) {
-
             this.ticketID = ticketID;
         }
 
@@ -350,10 +430,12 @@ public class TicketSaveActivity extends AppCompatActivity {
                 if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
                     String first = title.replace("=?UTF-8?Q?", "");
                     String second = first.replace("_", " ");
-                    String third = second.replace("=C2=A0", "");
+                    String second1=second.replace("=C3=BA","");
+                    String third = second1.replace("=C2=A0", "");
                     String fourth = third.replace("?=", "");
                     String fifth = fourth.replace("=E2=80=99", "'");
-                    edittextsubject.setText(fifth);
+                    String sixth=fifth.replace("=3F","?");
+                    edittextsubject.setText(sixth);
                 } else {
                     edittextsubject.setText(title);
                 }
@@ -482,6 +564,12 @@ public class TicketSaveActivity extends AppCompatActivity {
                     data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("first_name")+" "+jsonArrayStaffs.getJSONObject(i).getString("last_name"));
                 }
                 staffItems.add(data);
+                Collections.sort(staffItems, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
             }
             helptopicItems = new ArrayList<>();
             helptopicItems.add(new Data(0, "--"));
@@ -490,6 +578,12 @@ public class TicketSaveActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
                 Data data1 = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
                 helptopicItems.add(data1);
+                Collections.sort(helptopicItems, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
             }
 
             JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
@@ -498,6 +592,12 @@ public class TicketSaveActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArrayPriorities.length(); i++) {
                 Data data2 = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
                 priorityItems.add(data2);
+                Collections.sort(priorityItems, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
             }
 
             JSONArray jsonArrayType = jsonObject.getJSONArray("type");
@@ -506,6 +606,12 @@ public class TicketSaveActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArrayType.length(); i++) {
                 Data data3 = new Data(Integer.parseInt(jsonArrayType.getJSONObject(i).getString("id")), jsonArrayType.getJSONObject(i).getString("name"));
                 typeItems.add(data3);
+                Collections.sort(typeItems, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
 
             }
 
@@ -515,6 +621,12 @@ public class TicketSaveActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArraySources.length(); i++) {
                 Data data4 = new Data(Integer.parseInt(jsonArraySources.getJSONObject(i).getString("id")), jsonArraySources.getJSONObject(i).getString("name"));
                 sourceItems.add(data4);
+                Collections.sort(sourceItems, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
             }
 
         } catch (JSONException e) {
@@ -563,7 +675,11 @@ public class TicketSaveActivity extends AppCompatActivity {
             Log.d("isShowing", "false");
             Intent intent = new Intent(this, TicketDetailActivity.class);
             startActivity(intent);
-        } else Log.d("isShowing", "true");
+        } else {
+            Intent intent = new Intent(this, TicketDetailActivity.class);
+            startActivity(intent);
+            Log.d("isShowing", "true");
+        }
         super.onBackPressed();
 
     }
@@ -776,8 +892,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                 Prefs.putString("unauthorized", "false");
                 Prefs.putString("401","false");
                 e.printStackTrace();
-            } finally {
-
             }
 
 //            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);

@@ -22,7 +22,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/faveo">
 
         <ImageView
             android:id="@+id/imageView_default_profile"
@@ -34,8 +35,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="54dp"
-            android:src="@drawable/default_pic"
-            android:transitionName="@string/blue_name"
+            android:backgroundTint="@color/white"
             android:background="@drawable/rounded_textview"/>
 
         <TextView
@@ -46,8 +46,9 @@
             android:layout_alignStart="@+id/imageView_default_profile"
             android:layout_below="@+id/imageView_default_profile"
             android:layout_marginTop="8dp"
-            android:text="sdfghdfh"
-            android:textSize="14sp" />
+            android:text="Roger Federer"
+            android:textSize="16sp"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/domaintv"
@@ -58,8 +59,9 @@
             android:layout_below="@+id/usernametv"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="4dp"
-            android:text="www.lady"
-            android:textSize="12sp" />
+            android:text="faveohelpdesk.co.in"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/roleTv"
@@ -73,7 +75,8 @@
             android:textAllCaps="true"
             android:text="Agent"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
     </RelativeLayout>
 
     <View

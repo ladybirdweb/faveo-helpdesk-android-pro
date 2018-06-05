@@ -24,7 +24,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
-                    android:background="#EEEEEE">
+                    android:background="#f2f2f2">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -70,9 +70,10 @@
                         android:inputType="textEmailAddress"
                         android:nextFocusForward="@+id/editText_firstname"
                         android:textCursorDrawable="@drawable/color_cursor"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:hint="@string/searchRequestor"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/usercreate"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -81,16 +82,18 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="22dp"
                         android:layout_marginRight="22dp"
-                        android:background="@drawable/ic_add_black_24dp"
-                        android:backgroundTint="@color/faveo"
-                        android:visibility="visible" />
+                        android:background="@drawable/rounded_button"
+                        android:src="@drawable/ic_add_black_24dp"
+                        android:visibility="visible"
+                        android:tint="@color/faveo"
+                        />
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
-                    android:background="#EEEEEE">
+                    android:background="#f2f2f2">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -124,12 +127,13 @@
                         android:nextFocusForward="@+id/fname_edittext"
                         android:textCursorDrawable="@drawable/color_cursor"
                         android:textSize="16sp"
+
                         />
                 </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
-                    android:background="#EEEEEE">
+                    android:background="#f2f2f2">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -180,7 +184,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -234,7 +238,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -305,7 +309,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -462,7 +466,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -513,7 +517,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -602,7 +606,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -681,7 +685,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -759,7 +763,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#EEEEEE">
+                android:background="#f2f2f2">
 
                 <TextView
                     android:layout_width="wrap_content"

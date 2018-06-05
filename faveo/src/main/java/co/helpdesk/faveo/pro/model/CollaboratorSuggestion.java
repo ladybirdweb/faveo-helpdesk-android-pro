@@ -6,7 +6,7 @@ package co.helpdesk.faveo.pro.model;
 
 public class CollaboratorSuggestion {
     public String first_name,last_name,email,profile_pic;
-    int id;
+    private int id;
 
     public CollaboratorSuggestion(int id,String first_name, String last_name, String email, String profile_pic) {
         this.first_name = first_name;
@@ -57,6 +57,6 @@ public class CollaboratorSuggestion {
     }
     @Override
     public String toString() {
-        return this.first_name + " " + this.last_name;
+        return this.email;
     }
 }

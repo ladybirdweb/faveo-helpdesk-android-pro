@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.frontend.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -62,7 +63,28 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
     @Override
     public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
         final TicketThread ticketThread = ticketThreadList.get(i);
-        String letter = String.valueOf(ticketThread.clientName.charAt(0)).toUpperCase();
+        String letter="U";
+        Log.d("customerUname",ticketThread.clientName);
+        try {
+            if (!ticketThread.clientName.equals("")) {
+                if (Character.isUpperCase(ticketThread.clientName.charAt(0))){
+                    letter = String.valueOf(ticketThread.clientName.charAt(0));
+                }
+                else{
+                    letter = String.valueOf(ticketThread.clientName.charAt(0)).toUpperCase();
+                }
+
+            }
+//                else if (ticketOverview.clientName.equals("null")){
+//                    letter="U";
+//                }
+            else{
+                ticketViewHolder.textViewClientName.setVisibility(View.GONE);
+            }
+        }catch (StringIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+        //String letter = String.valueOf(ticketThread.clientName.charAt(0)).toUpperCase();
         ticketViewHolder.textViewClientName.setText(ticketThread.clientName);
         ticketViewHolder.textViewMessageTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
         String message=ticketThread.message.replaceAll("\n","");
@@ -73,9 +95,11 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             Picasso.with(context).load(ticketThread.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
         }
         else{
+            int color= Color.parseColor("#cdc5bf");
             ColorGenerator generator = ColorGenerator.MATERIAL;
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter, generator.getRandomColor());
+                    .buildRound(letter,generator.getRandomColor());
+            ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
             ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
         }
 
@@ -113,9 +137,9 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         if (i==0){
             ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }
-         if (i==1){
-            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-        }
+//         if (i==1){
+//            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+//        }
         if (i==ticketThreadList.size()-1){
             ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }

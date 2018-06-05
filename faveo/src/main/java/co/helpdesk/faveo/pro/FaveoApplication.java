@@ -42,10 +42,10 @@ public class FaveoApplication extends MultiDexApplication {
         super.onCreate();
         MultiDex.install(this);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("ccc");
-        StringBuffer stringBuffer=new StringBuffer();
-        stringBuffer.append("cvcv");
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.append("ccc");
+//        StringBuffer stringBuffer=new StringBuffer();
+//        stringBuffer.append("cvcv");
 
 
 //        if (BuildConfig.DEBUG) {

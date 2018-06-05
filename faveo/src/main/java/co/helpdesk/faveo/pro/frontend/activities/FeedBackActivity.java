@@ -3,6 +3,7 @@ package co.helpdesk.faveo.pro.frontend.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,6 +50,16 @@ LinearLayout textViewSuggestion,textViewIssue;
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_feed_back);
+        Window window = FeedBackActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(FeedBackActivity.this,R.color.faveo));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         editTextmessageFeedback= (EditText) findViewById(R.id.messageFeedback);
         editTextsubjectFeedback= (EditText) findViewById(R.id.subjectFeedback);

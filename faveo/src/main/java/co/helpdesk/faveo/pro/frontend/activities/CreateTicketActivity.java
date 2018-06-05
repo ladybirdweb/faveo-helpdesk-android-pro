@@ -34,19 +34,25 @@ import android.support.design.widget.Snackbar;
 //import android.support.v4.widget.CursorAdapter;
 //import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 //import android.telephony.TelephonyManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -64,6 +70,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import com.hbb20.CountryCodePicker;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
@@ -90,24 +99,24 @@ import net.gotev.uploadservice.UploadNotificationConfig;
 import net.gotev.uploadservice.UploadServiceBroadcastReceiver;
 import net.gotev.uploadservice.UploadStatusDelegate;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.FormBodyPart;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.ContentBody;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.apache.james.mime4j.message.Multipart;
+//import org.apache.commons.io.FileUtils;
+//import org.apache.http.HttpEntity;
+//import org.apache.http.HttpResponse;
+//import org.apache.http.client.ClientProtocolException;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.HttpResponseException;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.entity.StringEntity;
+//import org.apache.http.entity.mime.FormBodyPart;
+//import org.apache.http.entity.mime.HttpMultipartMode;
+//import org.apache.http.entity.mime.MultipartEntity;
+//import org.apache.http.entity.mime.content.ContentBody;
+//import org.apache.http.entity.mime.content.FileBody;
+//import org.apache.http.entity.mime.content.StringBody;
+//import org.apache.http.impl.client.BasicResponseHandler;
+//import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.util.EntityUtils;
+//import org.apache.james.mime4j.message.Multipart;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -138,7 +147,10 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -206,8 +218,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
     TextView attachmentFileName;
-    //    @BindView(R.id.attachment_size)
-//    TextView attachmentFileSize;
     @BindView(R.id.attachment_layout)
     RelativeLayout attachment_layout;
     @BindView(R.id.sub_edittext)
@@ -220,7 +230,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     Spinner autoCompleteHelpTopic;
     @BindView(R.id.buttonSubmit)
     Button buttonSubmit;
-    Button buttonUserCreate;
+    ImageButton buttonUserCreate;
     ImageView imageViewBack;
     Spinner autoCompleteTextView;
     ArrayList<String> collaboratorArray;
@@ -243,6 +253,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
     int i=0;
+    int res=0;
     MultiAutoCompleteTextView multiAutoCompleteTextViewCC;
     CountryCodePicker countryCodePicker;
     String firstname,lastname,email;
@@ -251,17 +262,15 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     File file3;
     String result;
     Button button;
+    ImageView refresh;
     File file;
     Thread t;
     ProgressBar progressBar;
     int gallery,document,camera,audio=0;
     BottomNavigationView bottomNavigationView;
-    String base64,fileName,fileSize,mimeType;
     private static final int CAMERA_REQUEST = 1888;
     private static final int PICKFILE_REQUEST_CODE = 1234;
     private static final int PICKVIDEO_REQUEST_CODE = 1235;
-    File media;
-    String token1;
     String path="";
     String fname,lname,phone,mobile,subject,message;
     private Uri fileUri = null;//Uri to capture image
@@ -278,6 +287,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             keyTopic = "", valueTopic = "",
             keySource = "", valueSource = "",
             keyType = "", valueType = "";
+    String CountryID="";
+    String CountryZipCode="";
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -302,54 +313,23 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         setContentView(R.layout.activity_create_ticket);
+        Window window = CreateTicketActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.faveo));
+        GetCountryZipCode();
         if (InternetReceiver.isConnected()){
             new FetchDependency().execute();
         }
-
-//        try {
-//            upload();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
         progressBar= (ProgressBar) findViewById(R.id.createTicketProgressbar);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                //
-//                // Do the stuff
-//                //
-//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-//                try {
-//                    JSONObject jsonObject = new JSONObject(result);
-//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-//                    token= jsonObject1.getString("token");
-//                    Prefs.putString("TOKEN", token);
-//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-//                    String role1=jsonObject2.getString("role");
-////                    if (role1.equals("user")){
-////                        Prefs.clear();
-////                        //Prefs.putString("role",role);
-////                        Intent intent=new Intent(CreateTicketActivity.this,LoginActivity.class);
-////                        Toasty.info(CreateTicketActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-////                        startActivity(intent);
-////
-////
-////                    }
-//
-//
-//                } catch (JSONException | NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                handler.postDelayed(this, 6000);
-//            }
-//        };
-//        runnable.run();
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
@@ -372,84 +352,57 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        imageViewCamera= (ImageButton) toolbarAttachment.findViewById(R.id.photo_img_btn);
 //        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
         button= (Button) findViewById(R.id.attachment);
+        refresh= (ImageView) findViewById(R.id.imageRefresh);
 
-//        imageViewGallery.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //int currentAPIVersion = Build.VERSION.SDK_INT;
-//                    gallery=2;
-//                    reqPermissionCamera();
-//
-//
-////                else{
-////                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-////                    intent.setType("image/*");
-////                    startActivityForResult(intent, PICKFILE_REQUEST_CODE);
-////                }
-//
-//
-//
-//            }
-//        });
-//        imageViewDocument.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent intent = new Intent();
-////                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-////                Uri uri = Uri.fromParts("package", getPackageName(), null);
-////                intent.setData(uri);
-////                startActivity(intent);
-//                    document=1;
-//                    reqPermissionCamera();
-//
-//
-//
-//
-//            }
-//        });
-//
-//        imageViewCamera.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                if (ContextCompat.checkSelfPermission(CreateTicketActivity.this, Manifest.permission.CAMERA)
-////                        == PackageManager.PERMISSION_DENIED){
-////                    Toasty.warning(CreateTicketActivity.this,"Permission Denied By The User",Toast.LENGTH_SHORT).show();
-////                    return;
-////                }
-////                ActivityCompat.requestPermissions(CreateTicketActivity.this, new String[] {Manifest.permission.CAMERA}, CAMERA_REQUEST);
-//
-//                    camera=3;
-//                    reqPermissionCamera();
-//
-//
-//                //requestCameraPermission();
-//
-//            }
-//        });
-//    imageViewAudio.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            audio=4;
-//            reqPermissionCamera();
-//        }
-//    });
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
+                // Setting Dialog Title
+                alertDialog.setTitle(getString(R.string.refreshingPage));
 
-        buttonUserCreate= (Button) findViewById(R.id.usercreate);
-//        String emailregister=Prefs.getString("newuseremail",null);
-//        try {
-//            if (!emailregister.equals("")){
-//                editTextEmail.setText(Prefs.getString("newuseremail",null));
-//            }
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
+                // Setting Dialog Message
+                alertDialog.setMessage(getString(R.string.refreshPage));
+
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke YES event
+                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                        if (InternetReceiver.isConnected()){
+                            progressDialog=new ProgressDialog(CreateTicketActivity.this);
+                            progressDialog.setMessage(getString(R.string.refreshing));
+                            progressDialog.show();
+                            new FetchDependency().execute();
+                            setUpViews();
+                            }
+                    }
+                });
+
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+
+                // Showing Alert Message
+                alertDialog.show();
+            }
+        });
+        buttonUserCreate= (ImageButton) findViewById(R.id.usercreate);
         cc=new String[0];
         cc1=new String[0];
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
         multiAutoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.collaborator);
         stringArraylist=new ArrayList<MultiCollaborator>();
-        adapter1=new MultiCollaboratorAdapter(this,stringArraylist);
+        adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
         //arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
         multiAutoCompleteTextViewCC.setDropDownWidth(1500);
         multiAutoCompleteTextViewCC.setThreshold(2);
@@ -480,10 +433,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-                //editTextEmail.setText("");
                 Prefs.putString("newuseremail","");
+                //onBackPressed();
+                Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -518,26 +470,50 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         emailHint=new ArrayList<>();
         arrayAdapterCC=new CollaboratorAdapter(this,emailHint);
         //arrayAdapterCC=new ArrayAdapter<Data>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,emailHint);
-        editTextEmail.setThreshold(3);
+        editTextEmail.setThreshold(2);
         editTextEmail.setDropDownWidth(1500);
         editTextEmail.addTextChangedListener(passwordWatcheredittextSubject);
         editTextEmail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String name1=editTextEmail.getText().toString();
-                for (int j=0;j<emailHint.size();j++){
-                    CollaboratorSuggestion data = emailHint.get(j);
-                    id = data.getId();
-                    email1=data.getEmail();
-                    String profilePic=data.getProfile_pic();
-                    firstname=data.getFirst_name();
-                    lastname=data.getLast_name();
+                for (int i1=0;i1<emailHint.size();i1++){
+                    CollaboratorSuggestion data1=emailHint.get(i1);
+                    if (data1.getEmail().equals(name1)){
+                        CollaboratorSuggestion data2=emailHint.get(i1);
+                        id=data2.getId();
+                        Log.d("id",id+"");
+                        email1=data2.getEmail();
+                        Log.d("email1",email1);
+                        editTextEmail.setText(email1);
+                        firstname=data2.getFirst_name();
+                    lastname=data2.getLast_name();
                     editTextEmail.setText(email1);
                     editTextFirstName.setText(firstname);
                     editTextLastName.setText(lastname);
-                    Log.d("profilePic",profilePic);
-
+                    }
                 }
+//                CollaboratorSuggestion data = emailHint.get(i);
+//                id=data.getId();
+//                Log.d("id",id+"");
+//                email1=data.getEmail();
+//                Log.d("email1",email1);
+                //editTextEmail.setText(email1);
+//              for (int j=0;j<emailHint.size();j++){
+//                    CollaboratorSuggestion data = emailHint.get(j);
+//                    id = data.getId();
+//                    Log.d("id",id+"");
+//                    email1=data.getEmail();
+//                    Log.d("email1",email1);
+//                    String profilePic=data.getProfile_pic();
+//                    firstname=data.getFirst_name();
+//                    lastname=data.getLast_name();
+//                    editTextEmail.setText(email1);
+//                    editTextFirstName.setText(firstname);
+//                    editTextLastName.setText(lastname);
+//                    Log.d("profilePic",profilePic);
+//
+//                }
 
             }
         });
@@ -563,131 +539,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 createButtonClick();
             }
         });
-        JSONObject jsonObject;
-        Data data;
-        String json = Prefs.getString("DEPENDENCY", "");
-        try {
-            staffItems=new ArrayList<>();
-            staffitemsauto=new ArrayList<>();
-            staffitemsauto.add(new Data(0,"select assignee"));
-            jsonObject=new JSONObject(json);
-            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
-            for (int i=0;i<jsonArrayStaffs.length();i++){
-                if (jsonArrayStaffs.getJSONObject(i).getString("first_name").equals("")&&jsonArrayStaffs.getJSONObject(i).getString("last_name").equals("")){
-                    Log.d("cameHere","TRUE");
-                    data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("email"));
-                }
-                else {
-                    data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("first_name")+" "+jsonArrayStaffs.getJSONObject(i).getString("last_name"));
-                }
-                staffItems.add(data);
-                staffitemsauto.add(data);
-            }
-
-            helptopicItems = new ArrayList<>();
-            helptopicItems.add(new Data(0, "Please select help topic"));
-            jsonObject = new JSONObject(json);
-            JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
-            for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
-                Data data1 = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
-                helptopicItems.add(data1);
-            }
-
-            JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
-            priorityItems = new ArrayList<>();
-            priorityItems.add(new Data(0, "Please select the priority"));
-            for (int i = 0; i < jsonArrayPriorities.length(); i++) {
-                Data data2 = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
-                priorityItems.add(data2);
-            }
-        } catch (JSONException | ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
         autoCompleteTextView= (Spinner) findViewById(R.id.autocompletetext);
-
         autoCompleteHelpTopic= (Spinner) findViewById(R.id.spinner_help);
         autoCompletePriority= (Spinner) findViewById(R.id.spinner_pri);
-
-
-//        autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                autocompletetextview = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, staffitemsauto);
-////                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-////                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//              //autoCompleteTextView.setThreshold(1);
-//                autoCompleteTextView.showDropDown();
-//                autoCompleteTextView.setDropDownWidth(1000);
-////                String name=staffitemsauto.get(pos).toString();
-////                Data data=staffItems.get(pos);
-////                id=data.getID();
-////                //Toast.makeText(CreateTicketActivity.this, ""+id, Toast.LENGTH_SHORT).show();
-//////                if (name.equals(autocompletetextview.getItem(pos).getName())){
-//////                    Toast.makeText(CreateTicketActivity.this, ""+autocompletetextview.getItem(pos).getID(), Toast.LENGTH_SHORT).show();
-//////                }
-//////                id=autocompletetextview.getItem(pos).getID();
-//////                String name=autocompletetextview.getItem(i).getName();
-//////                Log.d("ID",""+id);
-////                Log.d("name",""+name);
-////                Log.d("id",""+id);
-//                return false;
-//            }
-//        });
-//autoCompleteTextView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//    @Override
-//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        autocompletetextview = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, staffitemsauto);
-//        Data data=staffitemsauto.get(i);
-//        id=data.getID();
-//        Toast.makeText(CreateTicketActivity.this, ""+id, Toast.LENGTH_SHORT).show();
-//        Log.d("assigneeid",""+id);
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
-//});
-
-//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                autocompletetextview = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, staffitemsauto);
-//                String name1=autoCompleteTextView.getText().toString();
-//                for (int j = 0; j < staffitemsauto.size(); j++) {
-//                    if (staffitemsauto.get(j).getName().equalsIgnoreCase(name1)) {
-//                        Data data = staffitemsauto.get(j);
-//                        id = data.getID();
-//                        //Toast.makeText(CreateTicketActivity.this, "id:" + id, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-////                Data data=staffitemsauto.get(i);
-////                String name=autoCompleteTextView.getText().toString();
-////                if (staffitemsauto.contains(name)){
-////
-////                }
-//               //Toast.makeText(CreateTicketActivity.this, "Data:"+name1, Toast.LENGTH_SHORT).show();
-//
-////                String name =autoCompleteTextView.getText().toString();
-////                if (name.equals(autocompletetextview.getItem(i).getName())){
-////                    id=autocompletetextview.getItem(i).getID();
-////                    Toast.makeText(CreateTicketActivity.this, ""+autocompletetextview.getItem(i).getID(), Toast.LENGTH_SHORT).show();
-////                }
-////                id=autocompletetextview.getItem(i).getID();
-////                String name=autocompletetextview.getItem(i).getName();
-////                Log.d("ID",""+id);
-//                //Log.d("name",""+name);
-//
-//            }
-//
-//
-//        });
-
-
-//
-
         setUpViews();
         try {
             firstname = Prefs.getString("firstusername", null);
@@ -732,6 +586,25 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // AndroidNetworking.enableLogging();
+    }
+
+    public String GetCountryZipCode(){
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        //getNetworkCountryIso
+        assert manager != null;
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        String[] rl=this.getResources().getStringArray(R.array.CountryCodes);
+        for (String aRl : rl) {
+            String[] g = aRl.split(",");
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
+                break;
+            }
+        }
+
+        Log.d("ZIPcode",CountryZipCode);
+        countrycode=CountryZipCode;
+        return CountryZipCode;
     }
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -1036,7 +909,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(15000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);
-                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                //MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
@@ -1129,64 +1002,64 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         return result.toString();
     }
 
-    @Nullable
-    private static String multipost(String urlString, MultipartEntity reqEntity) {
-
-        try {
-            URL url = new URL(urlString);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(60*1000);
-            conn.setConnectTimeout(60*1000);
-            conn.setRequestMethod("POST");
-            conn.setUseCaches(false);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "*****");
-
-            conn.addRequestProperty("Content-length", reqEntity.getContentLength()+"");
-            conn.addRequestProperty(reqEntity.getContentType().getName(), reqEntity.getContentType().getValue());
-
-            OutputStream os = conn.getOutputStream();
-            reqEntity.writeTo(conn.getOutputStream());
-            os.close();
-            conn.connect();
-
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                return readStream(conn.getInputStream());
-            }
-
-        } catch (Exception e) {
-            Log.e("MainActivity", "multipart post error " + e + "(" + urlString + ")");
-        }
-        return null;
-    }
-
-    private static String readStream(InputStream in) {
-        BufferedReader reader = null;
-        StringBuilder builder = new StringBuilder();
-        try {
-            reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return builder.toString();
-    }
+//    @Nullable
+//    private static String multipost(String urlString, MultipartEntity reqEntity) {
+//
+//        try {
+//            URL url = new URL(urlString);
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            conn.setReadTimeout(60*1000);
+//            conn.setConnectTimeout(60*1000);
+//            conn.setRequestMethod("POST");
+//            conn.setUseCaches(false);
+//            conn.setDoInput(true);
+//            conn.setDoOutput(true);
+//
+//            conn.setRequestProperty("Connection", "Keep-Alive");
+//            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+//            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+//            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "*****");
+//
+//            conn.addRequestProperty("Content-length", reqEntity.getContentLength()+"");
+//            conn.addRequestProperty(reqEntity.getContentType().getName(), reqEntity.getContentType().getValue());
+//
+//            OutputStream os = conn.getOutputStream();
+//            reqEntity.writeTo(conn.getOutputStream());
+//            os.close();
+//            conn.connect();
+//
+//            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+//                return readStream(conn.getInputStream());
+//            }
+//
+//        } catch (Exception e) {
+//            Log.e("MainActivity", "multipart post error " + e + "(" + urlString + ")");
+//        }
+//        return null;
+//    }
+//
+//    private static String readStream(InputStream in) {
+//        BufferedReader reader = null;
+//        StringBuilder builder = new StringBuilder();
+//        try {
+//            reader = new BufferedReader(new InputStreamReader(in));
+//            String line = "";
+//            while ((line = reader.readLine()) != null) {
+//                builder.append(line);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (reader != null) {
+//                try {
+//                    reader.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return builder.toString();
+//    }
 
     private void uploadMultipartData() throws UnsupportedEncodingException {
 
@@ -2119,6 +1992,66 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
      * Setting up the views here.
      */
     public void setUpViews() {
+        JSONObject jsonObject;
+        Data data;
+        String json = Prefs.getString("DEPENDENCY", "");
+        try {
+            staffItems=new ArrayList<>();
+            staffitemsauto=new ArrayList<>();
+            staffitemsauto.add(new Data(0,"--"));
+
+            jsonObject=new JSONObject(json);
+            JSONArray jsonArrayStaffs=jsonObject.getJSONArray("staffs");
+            for (int i=0;i<jsonArrayStaffs.length();i++){
+                if (jsonArrayStaffs.getJSONObject(i).getString("first_name").equals("")&&jsonArrayStaffs.getJSONObject(i).getString("last_name").equals("")){
+                    Log.d("cameHere","TRUE");
+                    data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("email"));
+                }
+                else {
+                    data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("first_name")+" "+jsonArrayStaffs.getJSONObject(i).getString("last_name"));
+                }
+                staffItems.add(data);
+                staffitemsauto.add(data);
+                Collections.sort(staffitemsauto, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
+            }
+
+            helptopicItems = new ArrayList<>();
+            helptopicItems.add(new Data(0, "--"));
+            jsonObject = new JSONObject(json);
+            JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("helptopics");
+            for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
+                Data data1 = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
+                helptopicItems.add(data1);
+                Collections.sort(helptopicItems, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
+            }
+
+
+            JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
+            priorityItems = new ArrayList<>();
+            priorityItems.add(new Data(0, "--"));
+            for (int i = 0; i < jsonArrayPriorities.length(); i++) {
+                Data data2 = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
+                priorityItems.add(data2);
+                Collections.sort(priorityItems, new Comparator<Data>() {
+                    @Override
+                    public int compare(Data lhs, Data rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
+            }
+        } catch (JSONException | ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
         // selectValue(phCode, getCountryZipCode());
         // phCode.setSelection(getCountryZipCode());
 //        final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
@@ -2297,11 +2230,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             Log.d("isShowing", "false");
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        } else Log.d("isShowing", "true");
-
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
+        } else {
+            Log.d("isShowing", "true");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -2311,13 +2244,41 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
         return true;
     }
+    private boolean isValidPhoneNumber(CharSequence phoneNumber) {
+        if (!TextUtils.isEmpty(phoneNumber)) {
+            return Patterns.PHONE.matcher(phoneNumber).matches();
+        }
+        return false;
+    }
+    private boolean validateUsing_libphonenumber(String countryCode, String phNumber) {
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
+        Phonenumber.PhoneNumber phoneNumber = null;
+        try {
+            //phoneNumber = phoneNumberUtil.parse(phNumber, "IN");  //if you want to pass region code
+            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
+        } catch (NumberParseException e) {
+            System.err.println(e);
+        }
+
+        boolean isValid = phoneNumberUtil.isValidNumber(phoneNumber);
+        if (isValid) {
+            String internationalFormat = phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
+            //Toast.makeText(this, "Phone Number is Valid " + internationalFormat, Toast.LENGTH_LONG).show();
+            return true;
+        } else {
+            //Toast.makeText(this, "Phone Number is Invalid " + phoneNumber, Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
 
     /**
      * Handling the create button here.
      */
     public void createButtonClick() {
         new SendPostRequest().execute();
-        int res=0;
+        res=0;
+        int pos3 = 0,pos2=0;
         String first_user = null,second_user = null,third_user=null;
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
@@ -2325,17 +2286,21 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         firstname=editTextFirstName.getText().toString();
         lastname=editTextLastName.getText().toString();
         Log.d("emialwithname", email1);
-
         if (!email1.equals("")) {
             email2 = email1;
-        } else {
+        } else if (email1.contains("<")){
+            int pos=email1.indexOf("<");
+            int pos1=email1.lastIndexOf(">");
+            email2=email1.substring(pos,pos1+1);
+            Log.d("email2",email2);
+        }
+        else{
             allCorrect = false;
             Toasty.info(this, getString(R.string.requestornotfound), Toast.LENGTH_SHORT).show();
             return;
         }
 
         collaborator = multiAutoCompleteTextViewCC.getText().toString();
-
         for (int i=0; i<collaborator.length(); i++)
         {
             // checking character in string
@@ -2343,13 +2308,98 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 res++;
         }
         if (res>3){
-            Toasty.info(this,"you can add upto 3 collaborators",Toast.LENGTH_LONG).show();
+            Toasty.info(this,"you can add up to 3 collaborators",Toast.LENGTH_LONG).show();
             return;
         }
         else {
-
             if (!collaborator.equals("")) {
-                if (collaborator.contains("<")) {
+                if (!(collaborator.charAt(collaborator.length()-1) ==',')){
+                    collaborator.replace(""+collaborator.charAt(collaborator.length()-1),",");
+                    cc = collaborator.split(",");
+                    sb = new StringBuilder();
+                    for (int i = 0; i < cc.length; i++) {
+                        String one = cc[i].toString();
+                        if (Helper.isValidEmail(one)){
+                            Log.d("one", one);
+                            sb.append(one + ",");
+                        }
+//                        else{
+//                            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+//                            allCorrect = false;
+//                        }
+
+//                        if (one.contains("<")) {
+//                             pos3 = one.indexOf("<");
+//                             pos2 = one.lastIndexOf(">");
+//                            try {
+//                                String two = one.substring(pos3 + 1, pos2);
+//                                sb.append(two + ",");
+//                                } catch (StringIndexOutOfBoundsException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                        else{
+//                            sb.append(one + ",");
+////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+////                            allCorrect = false;
+////                            return;
+//                        }
+
+//                        else {
+//                            if (Helper.isValidEmail(one.trim())){
+//                                Log.d("cameHere","validemail");
+//                                sb.append(one + ",");
+//                            }
+////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+////                            allCorrect = false;
+////                            return;
+//                        }
+
+                    }
+                    Log.d("sb", sb.toString());
+                    cc1 = sb.toString().split(",");
+                    sb1 = new StringBuilder();
+                    if (res == 1) {
+                        for (String n : cc1) {
+                            sb1.append("&cc[]=");
+                            sb1.append(n);
+                            first_user = cc1[0];
+
+                        }
+                        Log.d("first_user", first_user);
+                        collaborators = sb1.toString();
+                    } else if (res == 2) {
+                        for (String n : cc1) {
+                            sb1.append("&cc[]=");
+                            sb1.append(n);
+                            first_user = cc1[0];
+                            second_user = cc1[1];
+
+                        }
+                        Log.d("first_user", first_user);
+                        Log.d("second_user", second_user);
+                        collaborators = sb1.toString();
+                    } else if (res == 3) {
+                        for (String n : cc1) {
+                            sb1.append("&cc[]=");
+                            sb1.append(n);
+                            first_user = cc1[0];
+                            second_user = cc1[1];
+                            third_user = cc1[2];
+                        }
+                        Log.d("first_user", first_user);
+                        Log.d("second_user", second_user);
+                        Log.d("third_user", third_user);
+                        collaborators = sb1.toString();
+                    }
+                    for (String n : cc1) {
+                        sb1.append("&cc[]=");
+                        sb1.append(n);
+                    }
+                    collaborators = sb1.toString();
+                }
+                else {
+                    //if (collaborator.contains("<")) {
 
                     //collaboratorFinal = collaborator.replaceAll("\\s+,$", "");
                     //collaboratorFinal = collaborator.replaceAll(" ", "");
@@ -2361,104 +2411,95 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                     for (int i = 0; i < cc.length; i++) {
                         String one = cc[i].toString();
-                        int pos = one.indexOf("<");
-                        int pos2 = one.lastIndexOf(">");
-                        try {
-                            String two = one.substring(pos + 1, pos2);
-                            sb.append(two + ",");
-
-                            //String three=sb.toString();
-
-                            //cc=three.split(",");
-
-                        } catch (StringIndexOutOfBoundsException e) {
-                            e.printStackTrace();
+                        if (Helper.isValidEmail(one)){
+                            Log.d("one", one);
+                            sb.append(one + ",");
                         }
-                    }
+//                        else{
+//                            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+//                            allCorrect = false;
+//                        }
+//                        if (one.contains("<")) {
+//                             pos3 = one.indexOf("<");
+//                             pos2 = one.lastIndexOf(">");
+//                            try {
+//                                String two = one.substring(pos3 + 1, pos2);
+//                                sb.append(two + ",");
+//                                } catch (StringIndexOutOfBoundsException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                        else{
+//                            sb.append(one + ",");
+////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+////                            allCorrect = false;
+////                            return;
+//                        }
 
+//                        else {
+//                            if (Helper.isValidEmail(one.trim())){
+//                                Log.d("cameHere","validemail");
+//                                sb.append(one + ",");
+//                            }
+////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+////                            allCorrect = false;
+////                            return;
+//                        }
+
+                    }
                     Log.d("sb", sb.toString());
                     cc1 = sb.toString().split(",");
                     sb1 = new StringBuilder();
-                    if (res==1){
+                    if (res == 1) {
                         for (String n : cc1) {
                             sb1.append("&cc[]=");
                             sb1.append(n);
-                            first_user=cc1[0];
+                            first_user = cc1[0];
 
                         }
-                        Log.d("first_user",first_user);
+                        Log.d("first_user", first_user);
                         collaborators = sb1.toString();
-                    }
-                    else if (res==2){
+                    } else if (res == 2) {
                         for (String n : cc1) {
                             sb1.append("&cc[]=");
                             sb1.append(n);
-                            first_user=cc1[0];
-                            second_user=cc1[1];
+                            first_user = cc1[0];
+                            second_user = cc1[1];
 
                         }
-                        Log.d("first_user",first_user);
-                        Log.d("second_user",second_user);
+                        Log.d("first_user", first_user);
+                        Log.d("second_user", second_user);
                         collaborators = sb1.toString();
-                    }
-                    else if (res==3){
+                    } else if (res == 3) {
                         for (String n : cc1) {
                             sb1.append("&cc[]=");
                             sb1.append(n);
-                            first_user=cc1[0];
-                            second_user=cc1[1];
-                            third_user=cc1[2];
+                            first_user = cc1[0];
+                            second_user = cc1[1];
+                            third_user = cc1[2];
                         }
-                        Log.d("first_user",first_user);
-                        Log.d("second_user",second_user);
-                        Log.d("third_user",third_user);
+                        Log.d("first_user", first_user);
+                        Log.d("second_user", second_user);
+                        Log.d("third_user", third_user);
                         collaborators = sb1.toString();
                     }
-
-
                     for (String n : cc1) {
                         sb1.append("&cc[]=");
                         sb1.append(n);
-
                     }
                     collaborators = sb1.toString();
-
-                } else {
-                    Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-                    allCorrect = false;
-                    return;
                 }
-            }
+                }
+//                else {
+//                    Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+//                    allCorrect = false;
+//                    return;
+//                }
+
         }
         final Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
-//        Log.d("ID of objt", "" + helpTopic.ID);
-        //  int SLAPlans = spinnerSLA.getSelectedItemPosition();
-        //int dept = spinnerDept.getSelectedItemPosition();
         final Data priority = (Data) autoCompletePriority.getSelectedItem();
         final Data staff = (Data) autoCompleteTextView.getSelectedItem();
-
-//        Toast.makeText(this, "Sending emails :"+sb1.toString(), Toast.LENGTH_LONG).show();
-        //Toast.makeText(this, "final email:"+sb.toString(), Toast.LENGTH_SHORT).show();
-        //collaboratorArray.clear();
-        //Toast.makeText(this, "collaborators are:"+sb.toString(), Toast.LENGTH_LONG).show();
-        //ArrayList aList = new ArrayList(Arrays.asList(collaboratorFinal.split(",")));
-//        for (int i = 0; i < aList.size(); i++) {
-//            //Toast.makeText(TicketFilter.this, "staffs:"+"a-"+aList.get(i), Toast.LENGTH_SHORT).show();
-//            collaboratorArray.add("&cc[]=" + aList.get(i));
-//        }
-
-
-        //Toast.makeText(this, "collaborators finals are:"+sb.toString(), Toast.LENGTH_LONG).show();
-
-
-//        collaboratorFinal=collaborator.replaceAll("\\s+,$", "");
-//        collaboratorFinal = collaborator.replaceAll(" ", "");
-//         collaboratorArray = Arrays.asList(collaboratorFinal.split("\\s*,\\s*"));
-        //Toast.makeText(this, "collaborators are :"+collaboratorArray.toString(), Toast.LENGTH_SHORT).show();
-
-//        if (finalEmail.equals("")){
-//            email=editTextEmail.getText().toString();
-//        }
         String fname = editTextFirstName.getText().toString();
         String lname = editTextLastName.getText().toString();
         String phone = editTextPhone.getText().toString();
@@ -2528,19 +2569,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         if (autoCompleteTextView.getSelectedItem().toString().equals("")) {
             id = 0;
         }
-
-//        if (lname.trim().length() == 0) {
-//            Toasty.warning(this, getString(R.string.fill_lastname), Toast.LENGTH_SHORT).show();
-//            allCorrect = false;
-//        } else
-//        if (dept == 0) {
-//            allCorrect = false;
-//            Toasty.warning(CreateTicketActivity.this, "Please select some Department", Toast.LENGTH_SHORT).show();
-//        } else if (SLAPlans == 0) {
-//            allCorrect = false;
-//            Toasty.warning(CreateTicketActivity.this, "Please select some SLA plan", Toast.LENGTH_SHORT).show();
-//        } else
-
         if (allCorrect) {
 
             if (InternetReceiver.isConnected()) {
@@ -2567,10 +2595,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
                     // Setting Dialog Title
-                    alertDialog.setTitle("Creating ticket...");
+                    alertDialog.setTitle(getString(R.string.creatingTicket));
 
                     // Setting Dialog Message
-                    alertDialog.setMessage("Are you sure you want to create the ticket?");
+                    alertDialog.setMessage(getString(R.string.createConfirmation));
 
                     // Setting Icon to Dialog
                     alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -2612,10 +2640,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
                         // Setting Dialog Title
-                        alertDialog.setTitle("Creating ticket...");
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
 
                         // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want to create the ticket?");
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
 
                         // Setting Icon to Dialog
                         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -2766,10 +2795,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
                         // Setting Dialog Title
-                        alertDialog.setTitle("Creating ticket...");
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
 
                         // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want to create the ticket?");
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
 
                         // Setting Icon to Dialog
                         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -2912,10 +2942,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
                         // Setting Dialog Title
-                        alertDialog.setTitle("Creating ticket...");
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
 
                         // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want to create the ticket?");
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
 
                         // Setting Icon to Dialog
                         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -3059,11 +3090,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     } else {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
-                        // Setting Dialog Title
-                        alertDialog.setTitle("Creating ticket...");
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
 
                         // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want to create the ticket?");
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
 
                         // Setting Icon to Dialog
                         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -3144,7 +3175,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
-
                                                 String state = Prefs.getString("403", null);
                                                 try {
                                                     if (state.equals("403") && !state.equals("null")) {
@@ -3332,100 +3362,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         Toasty.warning(CreateTicketActivity.this,getString(R.string.permission_camera_denied),Toast.LENGTH_SHORT).show();
         return;
     }
-
-
-    public void upload() throws Exception {
-        //Url of the server
-//        String url = "https://www.jamboreebliss.com/sayar/public/api/v1/authenticate";
-//        HttpClient client = new DefaultHttpClient();
-//        HttpPost post = new HttpPost(url);
-//        MultipartEntity mpEntity = new MultipartEntity();
-//        //Path of the file to be uploaded
-//        String filepath = "";
-//        File file = new File(filepath);
-//        ContentBody cbFile = new FileBody(file, "image/jpeg");
-//
-//        //Add the data to the multipart entity
-//        //mpEntity.addPart("image", cbFile);
-//        mpEntity.addPart("username", new StringBody("demoadmin", Charset.forName("UTF-8")));
-//        mpEntity.addPart("password", new StringBody("demopass", Charset.forName("UTF-8")));
-//        post.setEntity(mpEntity);
-//
-//        //Execute the post request
-//        HttpResponse response1 = client.execute(post);
-//        //Get the response from the server
-//        HttpEntity resEntity = response1.getEntity();
-//        String Response= EntityUtils.toString(resEntity);
-//        Log.d("ResponseFromHttpClient:", Response);
-//        //Generate the array from the response
-////        JSONArray jsonarray = new JSONArray("["+Response+"]");
-////        JSONObject jsonobject = jsonarray.getJSONObject(0);
-////        //Get the result variables from response
-////        String succ=jsonobject.getString("success");
-////        Log.d("success",succ);
-////        String result = (jsonobject.getString("result"));
-////        String msg = (jsonobject.getString("msg"));
-//        //Close the connection
-//        client.getConnectionManager().shutdown();
-//
-//
-        JSONObject jsonObjSend = new JSONObject();
-        try {
-            jsonObjSend.put("username", "demoadmin");
-            jsonObjSend.put("password", "demopass");
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        HttpClient client = new DefaultHttpClient();
-        HttpPost httpPostRequest = new HttpPost("https://www.jamboreebliss.com/sayar/public/api/v1/authenticate/");
-        httpPostRequest.setHeader("User-Agent", "com.altaver.android_PostJson2");
-        httpPostRequest.setHeader("Accept", "application/json");
-        httpPostRequest.setHeader("Content-Type", "application/json");
-
-        StringEntity se = null;
-        try {
-            se = new StringEntity(jsonObjSend.toString());
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        httpPostRequest.setEntity(se);
-        HttpResponse response = null;
-        try {
-            response = client.execute(httpPostRequest);
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            Toast.makeText(getApplicationContext(),
-                    "Please check your internet connection",
-                    Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        BasicResponseHandler responseHandler = new BasicResponseHandler();
-        String strResponse = null;
-        if (response != null) {
-            try {
-                strResponse = responseHandler.handleResponse(response);
-            } catch (HttpResponseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        Log.e("AltaVerDemoActivity", "Response: " + strResponse);
-    }
-
-
-
-
-
-
-
     /**
      * Async task for creating the ticket.
      */
@@ -3662,7 +3598,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             String term = editTextEmail.getText().toString();
             if (InternetReceiver.isConnected()) {
                 if (term.equals("")) {
-                    arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+                    //arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
                     //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                     //new FetchCollaborator("s").execute();
                     //Data data = new Data(0, "No result found");
@@ -3673,10 +3609,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
                 } else {
-                    arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
+
                     progressBar.setVisibility(View.VISIBLE);
                     //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                     new FetchCollaborator(term).execute();
+                    arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
                     editTextEmail.setAdapter(arrayAdapterCC);
                     //stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
@@ -3881,47 +3818,16 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
 
         protected void onPostExecute(String result) {
+            try {
+                progressDialog.dismiss();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
             Log.d("Depen Response : ", result + "");
 
             if (result==null) {
-//                try {
-//                    unauthorized = Prefs.getString("unauthorized", null);
-//                    if (unauthorized.equals("true")) {
-//                        loading.setText("Oops! Something went wrong.");
-//                        progressDialog.setVisibility(View.INVISIBLE);
-//                        textViewtryAgain.setVisibility(View.VISIBLE);
-//                        textViewrefresh.setVisibility(View.VISIBLE);
-//                        Prefs.putString("unauthorized", "false");
-//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        });
-//
-//                    }
-//
-//                } catch (NullPointerException e) {
-//                    e.printStackTrace();
-//                }
+
             }
-//            String state=Prefs.getString("403",null);
-//
-//            try {
-//                if (state.equals("403") && !state.equals(null)) {
-//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                    Prefs.clear();
-//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-//                    Prefs.putString("403", "null");
-//                    startActivity(intent);
-//                    return;
-//                }
-//            }catch (NullPointerException e){
-//                e.printStackTrace();
-//            }
-
-
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
@@ -4120,6 +4026,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //            }, 3000);
         }
     }
+
 
 
 }

@@ -1,13 +1,18 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +44,16 @@ public class InternalNoteActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
+        Window window = InternalNoteActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(InternalNoteActivity.this,R.color.faveo));
 //        final Handler handler = new Handler();
 //        Runnable runnable = new Runnable() {
 //            public void run() {
@@ -108,7 +123,8 @@ public class InternalNoteActivity extends AppCompatActivity {
             }
         });
 
-    }class CreateInternalNoteForTicket extends AsyncTask<String, Void, String> {
+    }
+    class CreateInternalNoteForTicket extends AsyncTask<String, Void, String> {
         int ticketID;
         int userID;
         String note;
@@ -129,10 +145,48 @@ public class InternalNoteActivity extends AppCompatActivity {
                 Toasty.error(InternalNoteActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            Toasty.success(InternalNoteActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
-            startActivity(intent);
-            editTextInternalNote.getText().clear();
+            new FetchTicketThreads(InternalNoteActivity.this, Prefs.getString("TICKETid", null)).execute();
+
+        }
+    }
+    class FetchTicketThreads extends AsyncTask<String, Void, String> {
+        Context context;
+        String ticketID;
+
+
+        FetchTicketThreads(Context context,String ticketID) {
+            this.context = context;
+            this.ticketID = ticketID;
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().getTicketThread(ticketID);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            Log.d("calledFromReply","true");
+            try {
+                progressDialog.dismiss();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            if (result == null) {
+                //Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+            try {
+                JSONObject jsonObject=new JSONObject(result);
+                Log.d("ticketThreadReply",jsonObject.toString());
+                Prefs.putString("ticketThread",jsonObject.toString());
+                Toasty.success(InternalNoteActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+                startActivity(intent);
+                editTextInternalNote.getText().clear();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

@@ -28,7 +28,7 @@ public class Helper {
      * @return object for ticket overview.
      */
     public static TicketOverview parseTicketOverview(JSONArray jsonArray, int i) {
-        String agentName;
+        String agentName = null;
         try {
             //Date updated_at = null;
 
@@ -59,12 +59,32 @@ public class Helper {
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
 
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
-            if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")||jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
+            if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&& jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
              agentName= jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
             }
-            else if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("null")||jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("null")){
+            else if ((jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("null")||
+                    jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals(""))&&
+                    (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("null")||jsonArray.getJSONObject(i).getJSONObject("assignee").
+                            getString("last_name").equals(""))){
                 agentName=jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
             }
+
+
+
+            else if (!jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&&
+                    jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
+                agentName=jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name");
+            }
+
+
+
+            else if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&&
+                    !jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
+                agentName=jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name");
+            }
+
+
+
             else {
                 agentName = jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name") + " " + jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name");
             }
@@ -202,11 +222,22 @@ public class Helper {
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
 
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
-            if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")||jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
+            if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&& jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
                 agentName= jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
             }
-            else if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("null")||jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("null")){
+            else if ((jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("null")||
+                    jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals(""))&&
+                    (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("null")||jsonArray.getJSONObject(i).getJSONObject("assignee").
+                            getString("last_name").equals(""))){
                 agentName=jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
+            }
+            else if (!jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&&
+                    jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
+                agentName=jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name");
+            }
+            else if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&&
+                    !jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
+                agentName=jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name");
             }
             else {
                 agentName = jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name") + " " + jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name");

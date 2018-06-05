@@ -276,12 +276,12 @@
     <string name="emailRequired">Please fill the email</string>
     <string name="editedcustomerdetails">Successfully edited customer details</string>
     <string name="Unassigned">Unassigned</string>
-    <string name="UserCreating">Creating the user</string>
+    <string name="UserCreating">Registering the user</string>
     <string name="activateUser">Activate User</string>
     <string name="deactivateuser">Deactivate User</string>
     <string name="allClientsLodaded">All clients are loaded</string>
     <string name="requestornotfound">Requestor not found.Please add or search for new requestor.</string>
-    <string name="collaboratorExisting">Collaborator not found,please search for existing collaborators.</string>
+    <string name="collaboratorExisting">Collaborator not found,please search from existing collaborators.</string>
     <string name="deleteduser">Deactivated User</string>
     <string name="mergeticket">Merge ticket</string>
     <string name="title_activity_ticket_merge_acttivity">TicketMergeActtivity</string>
@@ -303,7 +303,7 @@
     <string name="closeFab">Exit</string>
     <string name="showMore">Show More</string>
     <string name="unassigned">Unassigned</string>
-    <string name="deleteTicket">Delete ticket</string>
+    <string name="deleteTicket">Delete forever</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="AssignTickets">Assign Tickets</string>
     <string name="selectAgent">Select Agent to Assign Tickets</string>
@@ -418,7 +418,48 @@
     <string name="apidisabled">API is disabled for the web application</string>
     <string name="enableApi">Please enable the API from the web application to use the app</string>
     <string name="errorFaveo">Error in Faveo</string>
+    <string name="firstNameCharacter">First name can not contain only numbers</string>
+    <string name="lastNameCharacter">Last name can not contain only numbers</string>
+    <string name="validMobileNumber">Please provide valid mobile number</string>
+    <string name="registerUser">Registering user</string>
+    <string name="userConfirmation">Are you sure you want create the user?</string>
+    <string name="editUser">Editing user</string>
+    <string name="editConfirmation">Are you sure you want to edit the user?</string>
+    <string name="creatingTicket">Creating ticket</string>
+    <string name="createConfirmation">Are you sure you want to create the ticket?</string>
+    <string name="changingStatus">Changing status</string>
+    <string name="statusConfirmation">Are you sure you want to change the status?</string>
+    <string name="editingticket">Editing ticket</string>
+    <string name="editingConfirmation">Are you sure you want to make the changes?</string>
+    <string name="assigningTickets">Assigning tickets</string>
+    <string name="assigningConfirmation">Are you sure you want to assign these tickets?</string>
+    <string name="userStatus">User status</string>
+    <string name="changedUserStatus">Successfully changed user status</string>
+    <string name="confirmLogOut">Exit the application</string>
+    <string name="confirmMessage">Are you sure you want to exit?</string>
+    <string name="deleteTickets">Deleting tickets</string>
+    <string name="deleteConfirm">Are you sure you want to delete these tickets permanently?</string>
+    <string name="userstatus">Changing user status</string>
+    <string name="userStatusConfirm">Are you sure you want to change the user status?</string>
+    <string name="refreshingPage">Refreshing page</string>
+    <string name="refreshPage">Are you sure you want to refresh this page?</string>
+    <string name="refreshing">Refreshing! Please wait…</string>
+    <string name="makingCall">Making call</string>
+    <string name="makingCallConfirmation">Are you sure you want to make call?</string>
+    <string name="needPermissionToMakeCall">We need permission to make call</string>
+    <string name="searchRequestor">Search requestor</string>
+    <string name="addCollaborator">Add collaborator</string>
+    <string name="enterFirstName">Enter first name</string>
+    <string name="enterLastName">Enter last name</string>
+    <string name="enterPhoneNumber">Enter mobile number</string>
+    <string name="enterMobileNumber">Enter phone number</string>
+    <string name="need_help_with_your_servicedesk_url">Need help with your servicedesk URL?</string>
+    <string name="wondering_what_will_be_your_helpdesk_url">Wondering what will be your helpdesk URL?</string>
+    <string name="this_is_the_url">This is the URL where your help desk is installed.You can reach out to your IT admin to know more.</string>
+    <string name="for_more_information_please_drop_a_mail_to_support_ladybirdweb_com">For more information please drop a mail to support@ladybirdweb.com</string>
+    <string name="please_enter_a_valid_url">Please enter a valid url</string>
     <string-array name="CountryCodes" >
+
         <item>93,AF</item>
         <item>355,AL</item>
         <item>213,DZ</item>

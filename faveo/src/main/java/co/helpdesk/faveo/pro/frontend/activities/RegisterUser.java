@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -40,8 +41,6 @@ public class RegisterUser extends AppCompatActivity {
     ImageView imageViewBack;
     Button submit;
     EditText editTextEmail,editTextFirstName,editTextPhone,editTextCompany,editTextLastName;
-    //    CountryCodePicker countryCodePicker;
-    //String countrycode;
     boolean allCorect;
     ProgressDialog progressDialog;
     String email;
@@ -53,6 +52,14 @@ public class RegisterUser extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_register_user);
+        Window window = RegisterUser.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(RegisterUser.this,R.color.faveo));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         submit= (Button) findViewById(R.id.buttonCreateUser);
@@ -65,9 +72,7 @@ public class RegisterUser extends AppCompatActivity {
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent  intent=new Intent(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,CreateTicketActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -88,23 +93,33 @@ public class RegisterUser extends AppCompatActivity {
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
                 }
-                else if (email.length()==0){
+                else if (email.length()==0||!Helper.isValidEmail(email)){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.invalid_email),Toast.LENGTH_SHORT).show();
                 }
-                else if (firstname.length()==0||!Helper.isValidEmail(email)){
+                else if (firstname.length()==0){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.fill_Firstname),Toast.LENGTH_SHORT).show();
                 }
-                else if (lastname.length()==0||!Helper.isValidEmail(email)){
+                else if (firstname.matches("^[0-9]*$")){
+                    allCorect=false;
+                    Toasty.warning(RegisterUser.this,getString(R.string.firstNameCharacter),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if (lastname.length()==0){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.fill_Lastname),Toast.LENGTH_SHORT).show();
+                }
+                else if (lastname.matches("^[0-9]*$")){
+                    allCorect=false;
+                    Toasty.warning(RegisterUser.this,getString(R.string.lastNameCharacter),Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 if (allCorect) {
                     Prefs.putString("firstusername",firstname);
                     Prefs.putString("lastusername",lastname);
-                    Prefs.putString("firstuseremail",firstname + " " + lastname + " <" + email + ">");
+                    Prefs.putString("firstuseremail",email);
                     Prefs.putString("firstusermobile",phone);
 
                     if (InternetReceiver.isConnected()) {
@@ -125,10 +140,10 @@ public class RegisterUser extends AppCompatActivity {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterUser.this);
 
                         // Setting Dialog Title
-                        alertDialog.setTitle("Register user...");
+                        alertDialog.setTitle(getString(R.string.registerUser));
 
                         // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want create the user?");
+                        alertDialog.setMessage(getString(R.string.userConfirmation));
 
                         // Setting Icon to Dialog
                         alertDialog.setIcon(R.mipmap.ic_launcher);
@@ -261,11 +276,7 @@ public class RegisterUser extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-
-
-        }
+            }
 
 
     }

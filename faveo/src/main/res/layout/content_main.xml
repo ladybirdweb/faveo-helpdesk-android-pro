@@ -5,6 +5,7 @@
     android:id="@+id/container_body"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".frontend.activities.MainActivity"
     tools:showIn="@layout/activity_main">

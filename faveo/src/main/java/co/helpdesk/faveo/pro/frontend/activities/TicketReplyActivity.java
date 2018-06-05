@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,16 +20,27 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,8 +66,8 @@ import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
 import net.gotev.uploadservice.UploadStatusDelegate;
 
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
+//import org.apache.http.entity.mime.HttpMultipartMode;
+//import org.apache.http.entity.mime.MultipartEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,18 +97,24 @@ import javax.net.ssl.HttpsURLConnection;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
+import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.Data;
+import co.helpdesk.faveo.pro.model.TicketThread;
 import es.dmoral.toasty.Toasty;
 
 import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
 import static com.vincent.filepicker.activity.ImagePickActivity.IS_NEED_CAMERA;
 
 public class TicketReplyActivity extends AppCompatActivity implements PermissionCallback, ErrorCallback {
-    ImageView imageView;public static String ticketID;
+    ImageView imageView;
+    public static String ticketID;
     Button buttonSend;
     EditText editTextReplyMessage;
     ProgressDialog progressDialog;
     TextView addCc;
+    Button searchUer, deleteUser;
     Button button;
     ImageButton imageButton;
     RelativeLayout attachment_layout;
@@ -110,17 +128,33 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     boolean isImageFitToScreen;
     int gallery,document,camera,audio=0;
     BottomNavigationView bottomNavigationView;
-    String path,realPath;
+    String path="1",realPath="1";
     private Uri fileUri = null;//Uri to capture image
     private String getImageUrl = "";
-
     String replyMessage;
+    LinearLayout linearLayout;
+    ArrayList<Data> stringArrayList;
+    ArrayAdapter<Data> arrayAdapterCC;
+    ArrayAdapter<String> spinnerPriArrayAdapter;
+    AutoCompleteTextView autoCompleteTextViewUser;
+    int id;
+    String email;
+    String term;
+    ArrayList<String> strings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_reply);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        Window window = TicketReplyActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(TicketReplyActivity.this,R.color.faveo));
         button= (Button) findViewById(R.id.attachment);
         attachment_layout= (RelativeLayout) findViewById(R.id.attachment_layout);
         attachmentFileName= (TextView) findViewById(R.id.attachment_name);
@@ -131,8 +165,10 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
             @Override
             public void onClick(View view) {
                 attachment_layout.setVisibility(View.GONE);
-                path="";
-                Log.d("path",path);
+                realPath="1";
+                path="1";
+                Prefs.putString("filePath","1");
+                Log.d("path",realPath);
             }
         });
         button.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +196,8 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
+                startActivity(intent);
             }
         });
         addCc.setOnClickListener(new View.OnClickListener() {
@@ -185,23 +222,27 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                     return;
                 }
                 else{
+                    Log.d("realPath",path);
                     progressDialog.setMessage(getString(R.string.sending_msg));
                     progressDialog.show();
                     new SendPostRequest().execute();
-                }
 
-            }
+                }
+                }
 
         });
     }
-
     @Override
     public void onBackPressed() {
         if (!TicketDetailActivity.isShowing) {
             Log.d("isShowing", "false");
             Intent intent = new Intent(this, TicketDetailActivity.class);
             startActivity(intent);
-        } else Log.d("isShowing", "true");
+        } else {
+            Intent intent = new Intent(this, TicketDetailActivity.class);
+            startActivity(intent);
+            Log.d("isShowing", "true");
+        }
 
         super.onBackPressed();
     }
@@ -222,7 +263,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(15000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);
-                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
@@ -277,83 +317,86 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                 Log.d("TOKEN",token);
                 String userID = Prefs.getString("ID", null);
                 try {
+                    Log.d("realPath",realPath);
                     if (userID != null && userID.length() != 0) {
-                        if (realPath.equals("")) {
+                        if (realPath.equals("1")) {
+                            try {
+                                replyMessage = URLEncoder.encode(replyMessage, "utf-8");
+                            } catch (UnsupportedEncodingException e1) {
+                                e1.printStackTrace();
+                            }
+                            new ReplyTicket(Integer.parseInt(ticketID),replyMessage).execute();
                         } else {
+                            try {
+                                try {
+                                    String  replyMessag1 = URLEncoder.encode(replyMessage, "utf-8");
+                                    Log.d("replyMessage",replyMessag1);
+//                        progressDialog.setMessage(getString(R.string.sending_msg));
+//                        progressDialog.show();
+                                    String token = Prefs.getString("TOKEN", null);
+                                    String uploadId = UUID.randomUUID().toString();
+                                    new MultipartUploadRequest(TicketReplyActivity.this, uploadId, Constants.URL + "helpdesk/reply?token=" + token)
+                                            .addFileToUpload(realPath, "media_attachment[]")
+                                            //Adding file
+                                            //.addParameter("token", token1)
+                                            .addParameter("ticket_id", ticketID)
+                                            .addParameter("reply_content", replyMessage)
+                                            //Adding text parameter to the request
+                                            //.setNotificationConfig(new UploadNotificationConfig())
+                                            .setMaxRetries(1)
+                                            .setMethod("POST").setDelegate(new UploadStatusDelegate() {
+                                        @Override
+                                        public void onProgress(UploadInfo uploadInfo) {
 
+                                        }
+
+                                        @Override
+                                        public void onError(UploadInfo uploadInfo, Exception exception) {
+
+                                        }
+
+                                        @Override
+                                        public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
+                                            //progressDialog.dismiss();
+                                            Log.d("newStyle", serverResponse.getBodyAsString());
+                                            Log.i("newStyle", String.format(Locale.getDefault(),
+                                                    "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
+                                                    uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
+                                                    uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
+                                                    serverResponse.getBodyAsString()));
+                                            //new FetchTicketThreads(TicketReplyActivity.this, Prefs.getString("TICKETid", null)).execute();
+                                editTextReplyMessage.getText().clear();
+                                Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(TicketReplyActivity.this, MainActivity.class);
+                                startActivity(intent);
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(UploadInfo uploadInfo) {
+
+                                        }
+                                    })
+                                            .startUpload();
+                                    //Starting the upload
+                                } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
                         }
                     } else
                         Toasty.warning(TicketReplyActivity.this, getString(R.string.wrong_user_id), Toast.LENGTH_LONG).show();
                 }catch (NullPointerException e){
                     Log.d("replyContent",replyMessage);
-                    try {
-                        replyMessage = URLEncoder.encode(replyMessage, "utf-8");
-                    } catch (UnsupportedEncodingException e1) {
-                        e1.printStackTrace();
-                    }
-                    new ReplyTicket(Integer.parseInt(ticketID),replyMessage).execute();
 //                    progressDialog.setMessage(getString(R.string.sending_msg));
 //                    progressDialog.show();
                     e.printStackTrace();
                 }
-                try {
-                    try {
-                        String  replyMessag1 = URLEncoder.encode(replyMessage, "utf-8");
-                        Log.d("replyMessage",replyMessag1);
-//                        progressDialog.setMessage(getString(R.string.sending_msg));
-//                        progressDialog.show();
-                        String token = Prefs.getString("TOKEN", null);
-                        String uploadId = UUID.randomUUID().toString();
-                        new MultipartUploadRequest(TicketReplyActivity.this, uploadId, Constants.URL + "helpdesk/reply?token=" + token)
-                                .addFileToUpload(realPath, "media_attachment[]")
-                                //Adding file
-                                //.addParameter("token", token1)
-                                .addParameter("ticket_id", ticketID)
-                                .addParameter("reply_content", replyMessage)
-                                //Adding text parameter to the request
-                                //.setNotificationConfig(new UploadNotificationConfig())
-                                .setMaxRetries(1)
-                                .setMethod("POST").setDelegate(new UploadStatusDelegate() {
-                            @Override
-                            public void onProgress(UploadInfo uploadInfo) {
 
-                            }
-
-                            @Override
-                            public void onError(UploadInfo uploadInfo, Exception exception) {
-
-                            }
-
-                            @Override
-                            public void onCompleted(UploadInfo uploadInfo, ServerResponse serverResponse) {
-                                progressDialog.dismiss();
-                                Log.d("newStyle", serverResponse.getBodyAsString());
-                                Log.i("newStyle", String.format(Locale.getDefault(),
-                                        "ID %1$s: completed in %2$ds at %3$.2f Kbit/s. Response code: %4$d, body:[%5$s]",
-                                        uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
-                                        uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
-                                        serverResponse.getBodyAsString()));
-                                editTextReplyMessage.getText().clear();
-                                Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(TicketReplyActivity.this, TicketDetailActivity.class);
-                                startActivity(intent);
-
-                            }
-
-                            @Override
-                            public void onCancelled(UploadInfo uploadInfo) {
-
-                            }
-                        })
-                                .startUpload();
-                        //Starting the upload
-                    } catch (MalformedURLException | NullPointerException | IllegalArgumentException | FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            } catch (JSONException e) {
+            }
+            catch (JSONException e) {
                 e.printStackTrace();
             }
         }
@@ -415,7 +458,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     @Override
     public void onPermissionsGranted(int requestCode) {
         Log.d("requestCode",""+requestCode);
-
         if (document==1){
             Intent intent4 = new Intent(this, NormalFilePickActivity.class);
             intent4.putExtra(Constant.MAX_NUMBER, 1);
@@ -474,6 +516,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                             } else {
                                 attachment_layout.setVisibility(View.VISIBLE);
                                 path = filePath;
+                                Prefs.putString("filePath",path);
                                 int pos=path.lastIndexOf("/");
                                 fileName=path.substring(pos+1,path.length());
                                 attachmentFileName.setText(fileName);
@@ -498,6 +541,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                             } else {
                                 attachment_layout.setVisibility(View.VISIBLE);
                                 path = filePath;
+                                Prefs.putString("filePath",path);
                                 int pos=path.lastIndexOf("/");
                                 fileName=path.substring(pos+1,path.length());
                                 attachmentFileName.setText(fileName);
@@ -521,6 +565,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                             } else {
                                 attachment_layout.setVisibility(View.VISIBLE);
                                 path = filePath;
+                                Prefs.putString("filePath",path);
                                 int pos=path.lastIndexOf("/");
                                 fileName=path.substring(pos+1,path.length());
                                 attachmentFileName.setText(fileName);
@@ -542,6 +587,8 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                                 Toasty.info(TicketReplyActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
                                 return;
                             } else {
+                                path=filePath;
+                                Prefs.putString("filePath",path);
                                 attachment_layout.setVisibility(View.VISIBLE);                                path = filePath;
                                 int pos=path.lastIndexOf("/");
                                 fileName=path.substring(pos+1,path.length());
@@ -577,7 +624,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         builder.setNegativeButton(R.string.btn_cancel, null);
         builder.show();
     }
-
     @Override
     public void onShowSettings(final PermissionInterface permissionInterface, int requestCode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -608,7 +654,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 
         protected void onPostExecute(String result) {
             Log.d("reply", result + "");
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
             if (result == null) {
                 Toasty.error(TicketReplyActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
@@ -618,16 +664,59 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                 String message=jsonObject.getString("message");
 
                 if (message.contains("Successfully replied")){
-                    editTextReplyMessage.getText().clear();
                     Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
-                    Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
+                    Intent intent=new Intent(TicketReplyActivity.this,MainActivity.class);
                     startActivity(intent);
+                    //new FetchTicketThreads(TicketReplyActivity.this, Prefs.getString("TICKETid", null)).execute();
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    class FetchTicketThreads extends AsyncTask<String, Void, String> {
+        Context context;
+        String ticketID;
+
+
+        FetchTicketThreads(Context context,String ticketID) {
+            this.context = context;
+            this.ticketID = ticketID;
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().getTicketThread(ticketID);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            Log.d("calledFromReply","true");
+            try {
+                progressDialog.dismiss();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            if (result == null) {
+                //Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+            try {
+                JSONObject jsonObject=new JSONObject(result);
+                Log.d("ticketThreadReply",jsonObject.toString());
+                Prefs.putString("ticketThread",jsonObject.toString());
+                editTextReplyMessage.getText().clear();
+                Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+    @SuppressLint("StaticFieldLeak")
     class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
         String ticketid;
 
@@ -722,4 +811,5 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         addCc.setVisibility(View.GONE);
         new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
     }
+
 }

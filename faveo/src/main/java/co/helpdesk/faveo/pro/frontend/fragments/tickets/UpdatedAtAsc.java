@@ -1299,7 +1299,13 @@ public class UpdatedAtAsc extends Fragment {
         @Override
         public void onBindViewHolder(final TicketOverviewAdapter.TicketViewHolder ticketViewHolder, final int i) {
             final TicketOverview ticketOverview = ticketOverviewList.get(i);
-            String letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+            String letter;
+            if (!ticketOverview.getClientName().equals("")){
+                letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+            }
+            else{
+                letter="N";
+            }
             int id=ticketOverviewList.get(i).getTicketID();
             TextDrawable.IBuilder mDrawableBuilder;
             if (selectedIds.contains(id)){
@@ -1314,7 +1320,8 @@ public class UpdatedAtAsc extends Fragment {
             if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
                 String first=subject.replace("=?UTF-8?Q?","");
                 String second=first.replace("_"," ");
-                String third=second.replace("=C2=A0","");
+                String second1=second.replace("=C3=BA","");
+                String third = second1.replace("=C2=A0", "");
                 String fourth=third.replace("?=","");
                 String fifth=fourth.replace("=E2=80=99","'");
                 ticketViewHolder.textViewSubject.setText(fifth);
@@ -1331,13 +1338,14 @@ public class UpdatedAtAsc extends Fragment {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
             }
             else {
-                if (ticketOverview.lastReply.equals("client")){
-                    int color=Color.parseColor("#ededed");
-                    ticketViewHolder.ticket.setBackgroundColor(color);
-                }
-                else{
-                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                }
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                if (ticketOverview.lastReply.equals("client")){
+//                    int color=Color.parseColor("#ededed");
+//                    ticketViewHolder.ticket.setBackgroundColor(color);
+//                }
+//                else{
+//                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                }
                 //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
 
@@ -1443,7 +1451,9 @@ public class UpdatedAtAsc extends Fragment {
             if (ticketOverview.ticketAttachments.equals("0")) {
                 ticketViewHolder.attachementView.setVisibility(View.GONE);
             } else {
+                int color = Color.parseColor("#808080");
                 ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+                ticketViewHolder.attachementView.setColorFilter(color);
             }
             if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
 //            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
@@ -1511,48 +1521,58 @@ public class UpdatedAtAsc extends Fragment {
                 ticketViewHolder.countThread.setVisibility(View.GONE);
             }
 
-            if (ticketOverview.sourceTicket.equals("chat")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.chat);
-                //ticketViewHolder.source.setColorFilter(color);
+            switch (ticketOverview.sourceTicket) {
+                case "chat": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.chat);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "web": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.web);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "agent": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "email": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "facebook": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.facebook);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "twitter": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.twitter);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                case "call": {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+                    ticketViewHolder.source.setColorFilter(color);
+                    break;
+                }
+                default:
+                    ticketViewHolder.source.setVisibility(View.GONE);
+                    break;
             }
-            else if (ticketOverview.sourceTicket.equals("web")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.web);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("agent")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("email")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("facebook")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.facebook);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("twitter")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.twitter);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else if (ticketOverview.sourceTicket.equals("call")){
-                int color=Color.parseColor("#3da6d7");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
-                //ticketViewHolder.source.setColorFilter(color);
-            }
-            else{
-                ticketViewHolder.source.setVisibility(View.GONE);
-            }
-
             if (!ticketOverview.countcollaborator.equals("0")){
 
+                int color = Color.parseColor("#808080");
                 ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
+                ticketViewHolder.countCollaborator.setColorFilter(color);
             }
             else if (ticketOverview.countcollaborator.equals("0")){
                 ticketViewHolder.countCollaborator.setVisibility(View.GONE);
@@ -1594,9 +1614,11 @@ public class UpdatedAtAsc extends Fragment {
 
             }
             else{
+                int color=Color.parseColor("#cdc5bf");
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(letter, generator.getRandomColor());
+                        .buildRound(letter,generator.getRandomColor());
+                ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
             }
 
@@ -1803,6 +1825,10 @@ public class UpdatedAtAsc extends Fragment {
             return ticketOverviewList.get(position);
         }
         @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+        @Override
         public TicketOverviewAdapter.TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
@@ -1938,10 +1964,10 @@ public class UpdatedAtAsc extends Fragment {
                                 android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
 
                                 // Setting Dialog Title
-                                alertDialog.setTitle("Changing status...");
+                                alertDialog.setTitle(getString(R.string.changingStatus));
 
                                 // Setting Dialog Message
-                                alertDialog.setMessage("Are you sure you want to change the status?");
+                                alertDialog.setMessage(getString(R.string.statusConfirmation));
 
                                 // Setting Icon to Dialog
                                 alertDialog.setIcon(R.mipmap.ic_launcher);

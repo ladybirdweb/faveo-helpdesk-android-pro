@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,11 +40,10 @@ public class MultiCollaboratorAdapter extends ArrayAdapter<MultiCollaborator> {
     public View getView(int position, View convertView, ViewGroup parent) {
         MultiCollaborator customer = getItem(position);
         IImageLoader imageLoader;
-        String letter= String.valueOf(customer.getFirst_name().charAt(0));
+        //String letter= String.valueOf(customer.getFirst_name().charAt(0));
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.collaborator_row, parent, false);
         }
-
         TextView txtCustomer = (TextView) convertView.findViewById(R.id.textView_collaborator_name);
         ImageView ivCustomerImage = (ImageView) convertView.findViewById(R.id.imageView_collaborator);
         TextView textViewEmail= (TextView) convertView.findViewById(R.id.textView_client_email);
@@ -72,4 +73,3 @@ public class MultiCollaboratorAdapter extends ArrayAdapter<MultiCollaborator> {
         return convertView;
     }
 }
-

@@ -3,12 +3,15 @@ package co.helpdesk.faveo.pro.frontend.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -64,6 +67,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
     ProgressDialog progressDialog;
     String result;
     ArrayList<String> getStaffItems;
+    ImageView refresh;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -78,6 +82,14 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_filter);
+        Window window = TicketFilter.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(TicketFilter.this,R.color.faveo));
         show=Prefs.getString("Show",null);
         Log.d("Show",show);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,6 +98,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         //autoStatus= (MultiAutoCompleteTextView) findViewById(R.id.autocompletestatus);
         autoCompleteAssigned = (AutoCompleteTextView) findViewById(R.id.autocompleteassigned);
         //autoCompleteShow = (Spinner) findViewById(R.id.autocompleteshow);
+        refresh= (ImageView) findViewById(R.id.buttonRefresh);
         autoDepartment = (MultiAutoCompleteTextView) findViewById(R.id.autocompletedepartment);
         autoPriority = (MultiAutoCompleteTextView) findViewById(R.id.autocompletetepriority);
         autoSource = (MultiAutoCompleteTextView) findViewById(R.id.autocompletetesource);
@@ -109,6 +122,48 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             new FetchDependency().execute();
         }
 
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketFilter.this);
+
+                // Setting Dialog Title
+                alertDialog.setTitle(getString(R.string.refreshingPage));
+
+                // Setting Dialog Message
+                alertDialog.setMessage(getString(R.string.refreshPage));
+
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke YES event
+                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                        if (InternetReceiver.isConnected()){
+                            progressDialog=new ProgressDialog(TicketFilter.this);
+                            progressDialog.setMessage(getString(R.string.refreshing));
+                            progressDialog.show();
+                            new FetchDependency().execute();
+                            setUpViews();
+                        }
+                    }
+                });
+
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+
+                // Showing Alert Message
+                alertDialog.show();
+            }
+        });
 
 
         try {
@@ -403,10 +458,10 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                 }
                 try {
                     if (!autoCompleteAssigned.getText().toString().equals("")) {
-                        if (autoCompleteAssigned.getText().toString().equals("yes")) {
-                            Prefs.putString("assigned", "yes");
-                        } else if (autoCompleteAssigned.getText().toString().equals("no")) {
-                            Prefs.putString("assigned", "no");
+                        if (autoCompleteAssigned.getText().toString().equals("Yes")) {
+                            Prefs.putString("assigned", "Yes");
+                        } else if (autoCompleteAssigned.getText().toString().equals("No")) {
+                            Prefs.putString("assigned", "No");
                         }
                     } else if (autoCompleteAssigned.getText().toString().equals("")) {
                         Prefs.putString("assigned", "null");
@@ -414,16 +469,9 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
-                //Toast.makeText(TicketFilter.this, "status:"+statusFinal, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(TicketFilter.this, "department:"+result, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(TicketFilter.this, "show:"+show, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(TicketFilter.this, "assignedto:"+getStaffItems.toString(), Toast.LENGTH_SHORT).show();
-//                Toast.makeText(TicketFilter.this, "priority:"+priorityfinal, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(TicketFilter.this, "source:"+sourcefinal, Toast.LENGTH_SHORT).show();
-//               Toast.makeText(TicketFilter.this, "type:"+typefinal, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(TicketFilter.this, "assigned:"+assigned, Toast.LENGTH_SHORT).show();
                 Prefs.putString("source","6");
                 Prefs.putString("came from filter", "true");
+
                 Intent intent = new Intent(TicketFilter.this, MainActivity.class);
                 startActivity(intent);
 
@@ -433,16 +481,12 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         clearAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //autoCompleteShow.requestFocus();
                 autoType.setText("");
-                //autoCompleteShow.setSelection(0);
                 autoDepartment.setText("");
                 autoPriority.setText("");
                 autoSource.setText("");
                 autoAssigned.setText("");
                 autoCompleteAssigned.setText("");
-                //autoStatus.setText("");
-                //Prefs.putString("departmentfinal", "null");
                 Prefs.putString("departmentfinal", "all");
                 Prefs.putString("show", "null");
                 Prefs.putString("assigned", "null");
@@ -454,24 +498,24 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         });
 
         Prefs.getString("keyStaff", null);
-
+        setUpViews();
+        }
+    public void setUpViews() {
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
         try {
             staffItems = new ArrayList<>();
             jsonObject = new JSONObject(json);
-            //staffItems.add(new Data(0, "--"));
             JSONArray jsonArrayStaffs = jsonObject.getJSONArray("staffs");
             for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-                //Data data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("first_name")+" "+jsonArrayStaffs.getJSONObject(i).getString("last_name"));
-                staffItems.add(jsonArrayStaffs.getJSONObject(i).getString("user_name"));
+                String agentName=jsonArrayStaffs.getJSONObject(i).getString("user_name");
+                String newAgentName=agentName.replace(agentName.charAt(0),agentName.toUpperCase().charAt(0));
+                staffItems.add(newAgentName);
             }
             departmentItems = new ArrayList<>();
-            //helptopicItems.add(new Data(0, "--"));
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayHelpTopics = jsonObject.getJSONArray("departments");
             for (int i = 0; i < jsonArrayHelpTopics.length(); i++) {
-                //Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
                 departmentItems.add(jsonArrayHelpTopics.getJSONObject(i).getString("name"));
 
             }
@@ -480,7 +524,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayStatus = jsonObject.getJSONArray("status");
             for (int i = 0; i < jsonArrayStatus.length(); i++) {
-                //Data data = new Data(Integer.parseInt(jsonArrayHelpTopics.getJSONObject(i).getString("id")), jsonArrayHelpTopics.getJSONObject(i).getString("topic"));
                 statusItems.add(jsonArrayStatus.getJSONObject(i).getString("name"));
 
             }
@@ -493,15 +536,14 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             showItems.add("Closed");
 
             unassignedItems = new ArrayList<>();
-            unassignedItems.add("yes");
-            unassignedItems.add("no");
+            unassignedItems.add("Yes");
+            unassignedItems.add("No");
 
             priorityItems = new ArrayList<>();
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
-            //priorityItems.add(new Data(0, "--"));
+
             for (int i = 0; i < jsonArrayPriorities.length(); i++) {
-                // Data data = new Data(Integer.parseInt(jsonArrayPriorities.getJSONObject(i).getString("priority_id")), jsonArrayPriorities.getJSONObject(i).getString("priority"));
                 priorityItems.add(jsonArrayPriorities.getJSONObject(i).getString("priority"));
             }
 
@@ -509,32 +551,21 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             typeItems = new ArrayList<>();
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayType = jsonObject.getJSONArray("type");
-            //typeItems.add(new Data(0, "--"));
             for (int i = 0; i < jsonArrayType.length(); i++) {
-                //Data data = new Data(Integer.parseInt(jsonArrayType.getJSONObject(i).getString("id")), jsonArrayType.getJSONObject(i).getString("name"));
                 typeItems.add(jsonArrayType.getJSONObject(i).getString("name"));
 
             }
-
-
             sourceItems = new ArrayList<>();
             jsonObject = new JSONObject(json);
             JSONArray jsonArraySources = jsonObject.getJSONArray("sources");
-            //sourceItems.add(new Data(0, "--"));
             for (int i = 0; i < jsonArraySources.length(); i++) {
-                //Data data = new Data(Integer.parseInt(jsonArraySources.getJSONObject(i).getString("id")), jsonArraySources.getJSONObject(i).getString("name"));
-                sourceItems.add(jsonArraySources.getJSONObject(i).getString("name"));
+                String sourceName=jsonArraySources.getJSONObject(i).getString("name");
+                String newSourceName=sourceName.replace(sourceName.charAt(0),sourceName.toUpperCase().charAt(0));
+                sourceItems.add(newSourceName);
             }
-
-
-        } catch (JSONException e) {
+            } catch (JSONException e) {
             e.printStackTrace();
         }
-        setUpViews();
-
-    }
-
-    public void setUpViews() {
 
 
 
@@ -701,6 +732,12 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         protected void onPostExecute(String result) {
             Log.d("Depen Response : ", result + "");
             Log.d("cameHere","True");
+
+            try{
+                progressDialog.dismiss();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
 
             if (result==null) {
 //                try {

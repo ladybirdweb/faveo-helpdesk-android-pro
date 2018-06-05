@@ -13,6 +13,7 @@ import android.os.StrictMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -117,6 +118,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        Window window = MainActivity.this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.faveo));
         ButterKnife.bind(this);
 //        try {
 //            String role = Prefs.getString("role", null);
@@ -249,6 +260,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
+
+
         //mToolbar.setVisibility(View.GONE);
 
         /*
@@ -297,12 +310,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //protected void attachBaseContext(Context base) {
 //    super.attachBaseContext(LocaleHelper.onAttach(base));
 //}
+
     @Override
     protected void onDestroy() {
         isShowing = false;
         super.onDestroy();
-
-    }
+        }
 
 //    @OnClick(R.id.sort_view)
 //    public void onClickSort() {
@@ -428,6 +441,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onResume() {
         Log.d("OnResumeMainActivity","TRUE");
         Prefs.putString("cameFromNotification","false");
+        Prefs.putString("ticketThread","");
+        Prefs.putString("TicketRelated","");
+        Prefs.putString("searchResult", "");
+        Prefs.putString("searchUser","");
         checkConnection();
         super.onResume();
         // register connection status listener
@@ -502,21 +519,53 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
      */
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
+        android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
 
-        this.doubleBackToExitPressedOnce = true;
-        Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
+        // Setting Dialog Title
+        alertDialog.setTitle(getString(R.string.confirmLogOut));
 
-        new Handler().postDelayed(new Runnable() {
+        // Setting Dialog Message
+        alertDialog.setMessage(getString(R.string.confirmMessage));
 
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
+        // Setting Icon to Dialog
+        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke YES event
+                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                finish();
+
             }
-        }, 2500);
+        });
+
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke NO event
+                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+//        if (doubleBackToExitPressedOnce) {
+//            super.onBackPressed();
+//            return;
+//        }
+//
+//        this.doubleBackToExitPressedOnce = true;
+//        Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
+//
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                doubleBackToExitPressedOnce = false;
+//            }
+//        }, 2500);
     }
 
     // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
