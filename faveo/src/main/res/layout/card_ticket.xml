@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/textView_client_name"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/textView_ticket_subject"
             android:layout_centerVertical="true"

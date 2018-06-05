@@ -134,15 +134,15 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 //        for (int j=0;j<1;j++){
 //            ticketViewHolder.webView.setVisibility(View.VISIBLE);
 //        }
-//        if (i==0){
-//            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-//        }
+        if (i==0){
+            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+        }
 //         if (i==1){
 //            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
 //        }
-//        if (i==ticketThreadList.size()-1){
-//            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-//        }
+        if (i==ticketThreadList.size()-1){
+            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+        }
 
 
 

@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     String urlGivenByUser;
     String error;
-
+    TextView findHelp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +164,14 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         url.setVisibility(View.GONE);
+        findHelp= (TextView) findViewById(R.id.helpUrl);
+        findHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(LoginActivity.this,HelpingActivity.class);
+                startActivity(intent);
+            }
+        });
         flipColor.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_200));
         buttonSignIn.setEnabled(true);
         editTextCompanyURL= (AutoCompleteTextView) findViewById(R.id.editText_company_url);
@@ -253,14 +261,16 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (companyURL.trim().length() == 0 || !Patterns.WEB_URL.matcher(companyURL).matches()) {
                     linearLayout.startAnimation(animation);
+                    findHelp.setVisibility(View.GONE);
                     urlError.setVisibility(View.VISIBLE);
-                    urlError.setText(getString(R.string.format_error));
+                    urlError.setText(getString(R.string.please_enter_a_valid_url));
                     urlError.setTextColor(Color.parseColor("#ff0000"));
                     urlError.postDelayed(new Runnable() {
                         public void run() {
-                            urlError.setVisibility(View.INVISIBLE);
+                            urlError.setVisibility(View.GONE);
+                            findHelp.setVisibility(View.VISIBLE);
                         }
-                    }, 9000);
+                    }, 5000);
 //                    linearLayout.startAnimation(animation);
 //                    urlError.setVisibility(View.VISIBLE);
 //

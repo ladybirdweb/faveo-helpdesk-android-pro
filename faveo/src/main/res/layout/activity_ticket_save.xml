@@ -70,7 +70,7 @@
                     android:background="@drawable/ic_action_done"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
             </RelativeLayout>
 

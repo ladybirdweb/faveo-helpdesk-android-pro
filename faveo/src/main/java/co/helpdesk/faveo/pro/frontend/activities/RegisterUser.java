@@ -72,9 +72,7 @@ public class RegisterUser extends AppCompatActivity {
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent  intent=new Intent(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,CreateTicketActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 

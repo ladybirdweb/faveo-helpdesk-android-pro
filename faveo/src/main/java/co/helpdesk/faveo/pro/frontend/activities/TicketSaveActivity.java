@@ -206,36 +206,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                 id1=0;
             }
         });
-        spinnerSource.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        spinnerHelpTopics.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        autoCompleteTextViewstaff.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-
-        edittextsubject.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                edittextsubject.setCursorVisible(true);
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
         buttonsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -229,8 +229,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
                 String option=Prefs.getString("cameFromNotification",null);
-
-
                 switch (option) {
                     case "true": {
                         Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
@@ -238,14 +236,13 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     case "none": {
-                        //finish();
                         Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
                         startActivity(intent1);
                         break;
                     }
                     case "false": {
                         Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-                   startActivity(intent1);
+                        startActivity(intent1);
                         break;
                     }
                     default: {
@@ -254,35 +251,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                 }
-//                if (Prefs.getString("cameFromNotification",null).equals("true")){
-//                    Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
-//                    startActivity(intent);
-//                }
-//               if (Prefs.getString("cameFromNotification",null).equals("false")){
-//                    Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-//                    startActivity(intent1);
-//                }if (Prefs.getString("cameFromnotification", null).equals("none")){
-//                    Intent intent = new Intent(TicketDetailActivity.this, SearchActivity.class);
-//                    startActivity(intent);
-//                }
-//
-//                else{
-//                    Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-//                    startActivity(intent1);
-//                }
-////                switch (Prefs.getString("cameFromNotification", null)) {
-////                    case "true":
-////                        Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
-////                        startActivity(intent);
-////                        break;
-////                    case "false":
-////                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-////                        startActivity(intent1);
-////                        break;
-////                    default:
-////                        finish();
-////                        break;
-////                }
+
               }
         });
 
@@ -291,7 +260,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         JSONObject jsonObject;
         String json = Prefs.getString("DEPENDENCY", "");
-
         try {
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayStaffs = jsonObject.getJSONArray("status");
@@ -952,17 +920,18 @@ public void fabOpen(){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
-//        else {
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//            Log.d("isShowing", "true");
-//        }
-
-        if (materialSheetFab.isSheetVisible()) {
-            materialSheetFab.hideSheet();
-        } else {
-            super.onBackPressed();
+        else {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            Log.d("isShowing", "true");
         }
+        super.onBackPressed();
+
+//        if (materialSheetFab.isSheetVisible()) {
+//            materialSheetFab.hideSheet();
+//        } else {
+//
+//        }
 //        if (fabExpanded)
 //            exitReveal();
 //        else super.onBackPressed();
