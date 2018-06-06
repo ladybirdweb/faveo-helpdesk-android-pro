@@ -153,8 +153,6 @@ public class InboxTickets extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
         try {
             show = Prefs.getString("show", null);
             assigned = Prefs.getString("assigned", null);
@@ -2349,13 +2347,14 @@ public class InboxTickets extends Fragment {
             if (checked_items.contains(id)) {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
             } else {
-                if (ticketOverview.lastReply.equals("client")) {
-                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                    int color = Color.parseColor("#ededed");
-//                    ticketViewHolder.ticket.setBackgroundColor(color);
-//                } else {
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                if (ticketOverview.lastReply.equals("client")) {
 //
-                }
+////                    int color = Color.parseColor("#ededed");
+////                    ticketViewHolder.ticket.setBackgroundColor(color);
+////                } else {
+////
+//                }
                 //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
 
