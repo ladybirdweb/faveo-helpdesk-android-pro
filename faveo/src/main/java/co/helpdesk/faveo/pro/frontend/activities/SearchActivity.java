@@ -94,11 +94,48 @@ public class SearchActivity extends AppCompatActivity implements
         tabLayout= (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(vpPager);
         setupViewPager(vpPager);
+        try {
+            if (Prefs.getString("cameFromClientList", null).equals("true")) {
+                vpPager.setCurrentItem(1);
+            } else {
+                vpPager.setCurrentItem(0);
+            }
+        }catch (NullPointerException e){
+
+        }
+
         isShowing = true;
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(this, R.color.grey_500),
                 ContextCompat.getColor(this, R.color.faveo)
         );
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch(tab.getPosition()) {
+                    case 0:
+                        Log.d("onSearchPage","true");
+                        Prefs.putString("cameFromClientList","false");
+                        break;
+                    case 1:
+                        Log.d("onSearchPage","false");
+                        Prefs.putString("cameFromClientList","true");
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        Prefs.putString("cameFromNotification","none");
         //adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         //vpPager.setAdapter(adapterViewPager);
         //handleIntent(getIntent());
@@ -177,73 +214,28 @@ public class SearchActivity extends AppCompatActivity implements
 
         //searchView.onActionViewExpanded();
 
-
-//        imageViewSearchIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String query=searchView.getText().toString();
-//                Log.d("CLICKED",query);
-////                Toast.makeText(SearchActivity.this, "came here", Toast.LENGTH_SHORT).show();
-////                Intent intent=new Intent(SearchActivity.this,MainActivity.class);
-////                    startActivity(intent);
-////                    colorList.add(query);
-//
-//                if (query.equals("")){
-//                    Toast.makeText(SearchActivity.this, "field is empty", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                else{
-//                    colorList.add(query);
-//                    suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
-//                    searchView.setAdapter(suggestionAdapter);
-//                    searchView.setDropDownWidth(1100);
-//                    searchView.setThreshold(1);
-//                    searchView.showDropDown();
-//                    //Prefs.putString("RecentSearh",colorList.toString());
-////                    Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
-////                    finish();
-////                    startActivity(intent);
-//                    Log.d("suggestion",colorList.toString());
-//
-//                }
-//            }
-//        });
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Prefs.putString("querry","null");
-                Prefs.putString("querry1","null");
-                onBackPressed();
+                String option=Prefs.getString("cameFromNotification",null);
+                switch (option) {
+                    case "false": {
+                        Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
+                        startActivity(intent1);
+                        finish();
+                        break;
+                    }
+
+                    default: {
+                        Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
+                        startActivity(intent1);
+                        finish();
+                        break;
+                    }
+                }
+                //onBackPressed();
             }
         });
-
-//        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String querry=searchView.getText().toString();
-//                Prefs.putString("querry",querry);
-//                try {
-//                    String querry1 = URLEncoder.encode(querry, "utf-8");
-//                    Prefs.putString("querry1",querry1);
-//                    //Log.d("Msg", replyMessage);
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                if (!colorList.contains(querry)){
-//                    colorList.add(searchView.getText().toString());
-//                }
-//
-//                Prefs.putString("RecentSearh",colorList.toString());
-//                Log.d("suggestionss",colorList.toString());
-//                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
-////                    Log.d("IME SEARCH",searchView.getText().toString());
-//                Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
-//                finish();
-//                startActivity(intent);
-//
-//            }
-//        });
 
 
         searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -280,17 +272,7 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
 
-//        searchView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
-//                searchView.setAdapter(suggestionAdapter);
-//                searchView.setDropDownWidth(1090);
-//                searchView.setThreshold(1);
-//                searchView.showDropDown();
-//                return false;
-//            }
-//        });
+
         searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus) {
@@ -315,10 +297,9 @@ public class SearchActivity extends AppCompatActivity implements
                 }
         });
         }
-
-    @Override
+        @Override
     protected void onResume() {
-        Prefs.putString("searchResult", "");
+        Prefs.putString("searchResult","");
         Log.d("calledOnResume","true");
         try {
             querry = Prefs.getString("querry", null);

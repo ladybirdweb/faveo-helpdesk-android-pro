@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,6 +88,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
                         Intent intent = new Intent(v.getContext(), ClientDetailActivity.class);
                         intent.putExtra("CLIENT_ID", clientOverview.clientID + "");
                         Prefs.putString("clientId",clientOverview.clientID+"");
+                        Log.d("clientId",""+clientOverview.clientID);
                         intent.putExtra("CLIENT_NAME", clientOverview.clientName);
                         intent.putExtra("CLIENT_EMAIL", clientOverview.clientEmail);
                         intent.putExtra("CLIENT_PHONE", clientOverview.clientPhone);

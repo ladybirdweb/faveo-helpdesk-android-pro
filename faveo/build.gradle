@@ -19,8 +19,8 @@ android {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 23
         targetSdkVersion 24
-        versionCode 57
-        versionName "4.8.3"
+        versionCode 58
+        versionName "4.8.4"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -54,7 +54,6 @@ android {
 repositories {
     maven {
         url "https://jitpack.io"
-
 
     }
     maven { url 'https://maven.fabric.io/public' }
@@ -107,13 +106,17 @@ dependencies {
 //    compile 'com.github.bumptech.glide:glide:3.7.0'
     testCompile 'org.mockito:mockito-core:1.10.19'
     compile 'com.github.ppamorim:dragger:1.2'
+    compile 'org.jsoup:jsoup:1.11.3'
+    implementation 'com.elyeproj.libraries:loaderviewlibrary:1.4.1'
     compile 'com.nbsp:library:1.8'
+    compile 'com.flipboard:bottomsheet-core:1.5.3'
+    compile 'com.flipboard:bottomsheet-commons:1.5.3'
     compile 'com.github.traex.rippleeffect:library:1.3'
     compile 'io.github.yavski:fab-speed-dial:1.0.6'
     compile 'com.vincent.filepicker:MultiTypeFilePicker:1.0.5'
     compile 'com.github.gotev.android-upload-service:uploadservice:d84ca6e2a6'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'commons-io:commons-io:2.5'
+    compile 'commons-io:commons-io:2.4'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'gr.escsoft.michaelprimez.searchablespinner:SearchableSpinner:1.0.9'
     compile 'com.kishan.askpermission:askpermission:1.0.3'
@@ -160,10 +163,12 @@ dependencies {
     releaseCompile 'com.google.firebase:firebase-crash:11.8.0'
     compile 'com.afollestad:material-cab:0.1.12'
     compile 'com.nbsp:library:1.09'
+    compile 'com.elyeproj.libraries:loaderviewlibrary:1.4.1'
     compile files('libs/PhotoUtil.jar')
     compile('com.crashlytics.sdk.android:crashlytics-ndk:2.0.2@aar') {
         transitive = true;
     }
+
     //compile 'com.google.firebase:firebase-core:11.8.0'
 }
 apply plugin: 'com.google.gms.google-services'
@@ -171,4 +176,14 @@ crashlytics {
     enableNdk true
     androidNdkOut 'src/main/obj'
     androidNdkLibsOut 'src/main/libs'
+}
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.0'
+            }
+        }
+    }
 }

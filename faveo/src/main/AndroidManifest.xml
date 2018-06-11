@@ -165,7 +165,8 @@
             android:label="@string/title_activity_search"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemes">
+            android:theme="@style/AppThemes"
+            android:parentActivityName=".frontend.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

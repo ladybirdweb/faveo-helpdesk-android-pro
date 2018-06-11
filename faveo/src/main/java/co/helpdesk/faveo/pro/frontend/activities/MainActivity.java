@@ -445,6 +445,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Prefs.putString("TicketRelated","");
         Prefs.putString("searchResult", "");
         Prefs.putString("searchUser","");
+        Prefs.putString("querry","null");
+        Prefs.putString("querry1","null");
         checkConnection();
         super.onResume();
         // register connection status listener
@@ -535,7 +537,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to invoke YES event
                 //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                finish();
+finishAffinity();
+                System.exit(0);
 
             }
         });

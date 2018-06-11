@@ -171,6 +171,8 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
 //    private void setupRecycler() {
@@ -348,7 +350,12 @@ public class NotificationActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //Write your logic here
-                finish();
+                String option=Prefs.getString("cameFromNotification",null);
+                Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
+                startActivity(intent);
+//                if (option)
+
+                //finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -471,7 +478,7 @@ public class NotificationActivity extends AppCompatActivity {
         // your code.
 //        progressDialog.setMessage("Please wait");
 //        progressDialog.show();
-        finish();
+//        Intent intent=new Intent()
 //        Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
 ////        progressDialog.dismiss();
 //        startActivity(intent);

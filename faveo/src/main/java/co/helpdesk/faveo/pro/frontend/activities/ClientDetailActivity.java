@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.elyeproj.loaderviewlibrary.LoaderTextView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.picasso.Picasso;
 
@@ -77,16 +78,16 @@ public class ClientDetailActivity extends AppCompatActivity implements
     ImageView imageViewClientPicture;
 
     @BindView(R.id.textView_client_name)
-    TextView textViewClientName;
+    LoaderTextView textViewClientName;
 
     @BindView(R.id.textView_client_email)
-    TextView textViewClientEmail;
+    LoaderTextView textViewClientEmail;
 
     @BindView(R.id.textView_client_phone)
-    TextView textViewClientPhone;
+    LoaderTextView textViewClientPhone;
 
     @BindView(R.id.textView_client_mobile)
-    TextView textViewClientMobile;
+    LoaderTextView textViewClientMobile;
 
     @BindView(R.id.textView_client_status)
     TextView textViewClientStatus;
@@ -139,7 +140,33 @@ public class ClientDetailActivity extends AppCompatActivity implements
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                String option=Prefs.getString("cameFromNotification",null);
+                switch (option) {
+                    case "true": {
+                        Intent intent = new Intent(ClientDetailActivity.this, NotificationActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    }
+                    case "none": {
+                        Intent intent1=new Intent(ClientDetailActivity.this,SearchActivity.class);
+                        startActivity(intent1);
+                        finish();
+                        break;
+                    }
+                    case "false": {
+                       finish();
+                        break;
+                    }
+
+                    default: {
+                       finish();
+                        break;
+                    }
+                }
+
+
+
             }
         });
         imageViewClientEdit= (ImageView) findViewById(R.id.clientedit);
@@ -159,7 +186,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
         textViewClientStatus= (TextView) findViewById(R.id.textView_client_status);
         final Intent intent = getIntent();
-        clientID = intent.getStringExtra("CLIENT_ID");
+        clientID = Prefs.getString("clientId",null);
 
         imageViewClientEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,9 +332,12 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     clientname = username;
                 else
                     clientname = firstname + " " + lastName;
+                    if (!clientname.equals("")){
+                        textViewClientEmail.setVisibility(View.VISIBLE);
+                        textViewClientName.setText(clientname);
+                        textViewClientEmail.setText(requester.getString("email"));
+                    }
 
-                textViewClientName.setText(clientname);
-                textViewClientEmail.setText(requester.getString("email"));
 
                 String phone = "";
                 String mobile="";
@@ -572,9 +602,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @Override
     public void onStart() {
         super.onStart();
-        if (InternetReceiver.isConnected()){
-            new FetchClientTickets(ClientDetailActivity.this).execute();
-        }
+//        if (InternetReceiver.isConnected()){
+//            new FetchClientTickets(ClientDetailActivity.this).execute();
+//        }
         EventBus.getDefault().register(this);
     }
 

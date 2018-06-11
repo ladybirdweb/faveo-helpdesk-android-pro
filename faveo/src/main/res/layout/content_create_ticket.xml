@@ -115,7 +115,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true">
 
-                    <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+                    <android.support.v7.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/collaborator"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
@@ -477,7 +477,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="17dp"
                     android:layout_marginStart="17dp"
-                    android:text="@string/subject"
+                    android:text="@string/subjectForCreate"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 

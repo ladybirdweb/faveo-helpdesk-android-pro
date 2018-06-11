@@ -104,7 +104,7 @@
             android:layout_alignStart="@+id/textView_client_name"
             android:layout_below="@+id/imageView_default_profile"
             android:fontFamily="sans-serif-smallcaps"
-            android:text="Sayar.samanta@ladybirdweb.com"
+            android:text="Sayar@ladybirdweb.com"
             android:maxLines="1"
             android:alpha=".88"
             android:textStyle="bold"
@@ -161,9 +161,12 @@
             android:layout_alignTop="@+id/agentassigned"
             android:background="@drawable/rectangle"
             android:gravity="center"
+            android:backgroundTint="#ff6666"
             android:paddingBottom="2dp"
-            android:text="@string/due_today"
+            android:textColor="@color/white"
+            android:text="@string/overdue"
             android:textSize="12sp"
+            android:alpha=".6"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -173,11 +176,14 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/textView_ticket_time"
             android:layout_alignTop="@+id/agentassigned"
-            android:background="@drawable/rectangle2"
+            android:background="@drawable/rectangle"
             android:gravity="center"
+            android:backgroundTint="#ff9933"
             android:paddingBottom="2dp"
             android:text="@string/due_today"
             android:textSize="12sp"
+            android:alpha=".6"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:visibility="gone" />
 

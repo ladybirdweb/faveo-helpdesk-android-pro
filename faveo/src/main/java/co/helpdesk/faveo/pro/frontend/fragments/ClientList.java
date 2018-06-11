@@ -407,6 +407,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
         if (id == R.id.action_search) {
+            Prefs.putString("cameFromClientList","true");
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
             return true;

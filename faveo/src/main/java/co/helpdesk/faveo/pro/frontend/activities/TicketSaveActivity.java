@@ -113,6 +113,9 @@ public class TicketSaveActivity extends AppCompatActivity {
             case "none":
                 Prefs.putString("cameFromNotification","none");
                 break;
+            case "client":
+                Prefs.putString("cameFromNotification","client");
+                break;
             default:
                 Prefs.putString("cameFromNotification","");
                 break;
@@ -500,7 +503,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
                 try {
                     if (jsonObject2.getString("helptopic_name") != null)
-                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject2.getString("helptopic_name")));
+                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics,jsonObject2.getString("helptopic_name")));
 
 
                 } catch (ArrayIndexOutOfBoundsException e) {

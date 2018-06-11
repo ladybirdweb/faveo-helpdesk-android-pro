@@ -581,7 +581,7 @@ public class ClosedTickets extends Fragment {
             return true;
         }
         if (id == R.id.actionsearch) {
-
+            Prefs.putString("cameFromClientList","false");
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
             return true;
@@ -1228,16 +1228,16 @@ public class ClosedTickets extends Fragment {
 
                 if (Helper.compareDates(ticketOverview.dueDate) == 2) {
                     ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
+//                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+//                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
+//                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
                     //ticketViewHolder.textViewOverdue.setBackgroundColor();
 
                 }
                 else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
                     ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+//                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
                     //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
 //                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
 //

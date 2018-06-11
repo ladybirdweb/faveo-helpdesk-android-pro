@@ -113,7 +113,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
@@ -144,12 +147,20 @@
         android:hint="@string/enteremail"
         android:singleLine="true"
         android:scrollHorizontally="true" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:background="#EEEEEE"
         android:id="@+id/recipients"
         android:visibility="gone">
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -175,5 +186,7 @@
         android:layout_gravity="end"
         android:visibility="gone"
         />
+    </LinearLayout>
+</LinearLayout>
 </LinearLayout>
 </ScrollView>

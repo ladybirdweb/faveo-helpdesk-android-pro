@@ -47,17 +47,27 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
-                android:text="@string/subject"
+                android:text="@string/Subject"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <EditText
             android:id="@+id/editTextsubject"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@drawable/edittext_modified_states"
-            android:cursorVisible="false"
+            android:background="@drawable/edittext_default"
+            android:cursorVisible="true"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:layout_marginLeft="16dp"
@@ -83,6 +93,16 @@
                 android:text="@string/assignedto"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <!--<android.support.v7.widget.AppCompatAutoCompleteTextView-->
@@ -211,6 +231,16 @@
                 android:text="@string/priority"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <Spinner
@@ -245,6 +275,16 @@
                 android:text="@string/ticket_type"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <Spinner
@@ -277,6 +317,16 @@
                 android:text="@string/helptopic"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <Spinner
@@ -340,6 +390,16 @@
                 android:text="@string/source"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/required"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <Spinner

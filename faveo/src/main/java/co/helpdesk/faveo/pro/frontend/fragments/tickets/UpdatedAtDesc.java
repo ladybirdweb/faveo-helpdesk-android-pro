@@ -509,179 +509,16 @@ public class UpdatedAtDesc extends Fragment {
             e.printStackTrace();
         }
         int id = item.getItemId();
-        StringBuffer stringBuffer = new StringBuffer();
-        if (id == R.id.action_statusClosed) {
 
-            try {
-                if (!Prefs.getString("tickets", null).isEmpty()) {
-                    String tickets = Prefs.getString("tickets", null);
-                    int pos = tickets.indexOf("[");
-                    int pos1 = tickets.lastIndexOf("]");
-                    String text1 = tickets.substring(pos + 1, pos1);
-                    String[] namesList = text1.split(",");
-                    for (String name : namesList) {
-                        stringBuffer.append(name + ",");
-                    }
-                    int pos2 = stringBuffer.toString().lastIndexOf(",");
-                    ticket = stringBuffer.toString().substring(0, pos2);
-
-                    Log.d("tickets", ticket);
-                    try {
-                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("closedid", null))).execute();
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-
-                    }
-                    return true;
-                } else {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-//            if (!Prefs.getString("tickets", null).equals("") || !Prefs.getString("tickets", null).equals("null") || !Prefs.getString("tickets", null).equals(null)) {
-//
-//
-//                Log.d("tickets", ticket);
-//                if (ticket.equals("") || ticket.equals(null)) {
-//                    Toasty.warning(getActivity(), getString(R.string.noticket), Toast.LENGTH_SHORT).show();
-//                    return false;
-//                } else {
-//
-//
-//
-//                }
-//
-//            }
-        } else if (id == R.id.action_statusResolved) {
-            try {
-                if (!Prefs.getString("tickets", null).isEmpty()) {
-                    String tickets = Prefs.getString("tickets", null);
-                    int pos = tickets.indexOf("[");
-                    int pos1 = tickets.lastIndexOf("]");
-                    String text1 = tickets.substring(pos + 1, pos1);
-                    String[] namesList = text1.split(",");
-                    for (String name : namesList) {
-                        stringBuffer.append(name + ",");
-                    }
-                    int pos2 = stringBuffer.toString().lastIndexOf(",");
-                    ticket = stringBuffer.toString().substring(0, pos2);
-
-                    Log.d("tickets", ticket);
-                    try {
-                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("resolvedid", null))).execute();
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-
-                    }
-                    return true;
-                } else {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        } else if (id == R.id.action_statusDeleted) {
-            try {
-                if (!Prefs.getString("tickets", null).isEmpty()) {
-                    String tickets = Prefs.getString("tickets", null);
-                    int pos = tickets.indexOf("[");
-                    int pos1 = tickets.lastIndexOf("]");
-                    String text1 = tickets.substring(pos + 1, pos1);
-                    String[] namesList = text1.split(",");
-                    for (String name : namesList) {
-                        stringBuffer.append(name + ",");
-                    }
-                    int pos2 = stringBuffer.toString().lastIndexOf(",");
-                    ticket = stringBuffer.toString().substring(0, pos2);
-
-                    Log.d("tickets", ticket);
-                    try {
-                        new StatusChange(ticket, Integer.parseInt(Prefs.getString("closedid", null))).execute();
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-
-                    }
-                    return true;
-                } else {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        } else if (id == R.id.action_noti) {
+          if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.actionsearch) {
-
+              Prefs.putString("cameFromClientList","false");
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
             return true;
-        }
-//        if (id == R.id.mergeticket) {
-//            try {
-//                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
-//                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                    return false;
-//                }
-//                String ticketId = Prefs.getString("tickets", null);
-//                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
-//                int itemCount = items.size();
-//                if (itemCount == 1) {
-//                    Toasty.info(getActivity(), getString(R.string.selectMultipleTicket), Toast.LENGTH_LONG).show();
-//                    return false;
-//                } else {
-//                    Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-//                    startActivity(intent);
-//                }
-//
-////            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-////            startActivity(intent);
-//
-//            } catch (NullPointerException e) {
-//                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//
-//        }
-        else if (id==R.id.assignticket){
-            try {
-                if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
-                    Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                String ticketId = Prefs.getString("tickets", null);
-                List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
-                int itemCount = items.size();
-                if (itemCount == 1) {
-                    Toasty.info(getActivity(), getString(R.string.multiAssign), Toast.LENGTH_LONG).show();
-                    return false;
-                } else {
-                    Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
-                    startActivity(intent);
-                }
-
-//            Intent intent = new Intent(getActivity(), TicketMergeActtivity.class);
-//            startActivity(intent);
-
-            } catch (NullPointerException e) {
-                Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1356,23 +1193,23 @@ public class UpdatedAtDesc extends Fragment {
 
                 if (Helper.compareDates(ticketOverview.dueDate) == 2) {
                     ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
+//                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+//                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
+//                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
                     //ticketViewHolder.textViewOverdue.setBackgroundColor();
 
                 }
                 else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
                     ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+                   // ticketViewHolder.textViewOverdue.setText(R.string.overdue);
                     //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
 //                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
 //
 ////set color
 //                 drawable.setColor(color);
-                    ((GradientDrawable)ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
+//                    ((GradientDrawable)ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
+//                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
                 }
                 else {
                     ticketViewHolder.textViewOverdue.setVisibility(View.GONE);

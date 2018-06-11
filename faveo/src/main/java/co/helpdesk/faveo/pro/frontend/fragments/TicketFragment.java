@@ -38,10 +38,12 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
+import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
+import co.helpdesk.faveo.pro.model.TicketThread;
 import es.dmoral.toasty.Toasty;
 
 /**
@@ -192,6 +194,19 @@ public class TicketFragment extends Fragment {
             //Toast.makeText(getActivity(), "ticket fragment", Toast.LENGTH_SHORT).show();
 
         return rootView;
+    }
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        if (visible) {
+            //Do your stuff here
+            Log.d("Ticketvisible","true");
+
+        }
+        else{
+            Log.d("Ticketvisible","false");
+        }
+
+        super.setMenuVisibility(visible);
     }
 
     private class FetchFirst extends AsyncTask<String, Void, String> {

@@ -29,6 +29,7 @@
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7"
                 >
+
                 <View
                     android:id="@+id/viewPriority1"
                     android:layout_width="7dp"
@@ -39,7 +40,7 @@
                     android:background="@color/faveo">
                 </View>
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/textViewagentName"
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
@@ -48,12 +49,13 @@
                     android:background="@drawable/rectangle1"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="Agent Name"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                    app:use_gradient="true"
                     />
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/status"
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
@@ -62,11 +64,12 @@
                     android:layout_marginEnd="108dp"
                     android:background="@drawable/rectangle1"
                     android:gravity="center"
-                    android:text="Status"
+                    android:text=""
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    app:use_gradient="true"/>
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/department"
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
@@ -74,22 +77,24 @@
                     android:layout_toStartOf="@+id/status"
                     android:background="@drawable/rectangle1"
                     android:gravity="center"
-                    android:text="@string/department"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    tools:ignore="RelativeOverlap" />
+                    tools:ignore="RelativeOverlap"
+                    app:use_gradient="true"/>
 
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="25dp"
                     android:layout_alignStart="@+id/textViewagentName"
                     android:layout_below="@+id/status"
                     android:layout_gravity="start"
                     android:layout_marginTop="13dp"
-                    android:text="@string/aaaa_0001_0000001"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="15sp"
+                    app:use_gradient="true"
                     />
 
                 <!--<ProgressBar-->
@@ -124,7 +129,6 @@
                     android:layout_alignParentTop="true"
                     android:background="@color/faveo">
                 </View>
-
                 <ImageView
                     android:id="@+id/imageViewBackTicketDetail"
                     android:layout_width="30dp"
@@ -133,18 +137,19 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="21dp"
                     android:src="@drawable/ic_arrow_back_black_24dp" />
-                <TextView
+                <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/subject"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="30dp"
                     android:layout_alignTop="@+id/imageViewBackTicketDetail"
                     android:layout_marginStart="22dp"
                     android:layout_toEndOf="@+id/imageViewBackTicketDetail"
-                    android:text="Test Ticket For Faveo"
+                    android:text=""
                     android:textColor="@color/dark_grey"
                     android:textSize="18sp"
                     android:maxLines="1"
-                    tools:ignore="RelativeOverlap"/>
+                    tools:ignore="RelativeOverlap"
+                    app:use_gradient="true"/>
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>

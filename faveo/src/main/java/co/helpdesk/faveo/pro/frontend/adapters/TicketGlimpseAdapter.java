@@ -49,8 +49,11 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("CLICKED","clicked");
+                Log.d("CLICKEDonglimpse","clicked");
                 Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+                Prefs.putString("cameFromNotification","client");
+                Prefs.putString("ticketThread","");
+                Prefs.putString("TICKETid",ticketViewHolder.textViewTicketID.getText().toString());
                 intent.putExtra("ticket_id", ticketViewHolder.textViewTicketID.getText().toString());
                 intent.putExtra("ticket_number", ticketViewHolder.textViewTicketNumber.getText().toString());
                 intent.putExtra("ticket_opened_by", clientName);

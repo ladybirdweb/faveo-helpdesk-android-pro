@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -88,7 +90,11 @@ public class collaboratorAdd extends AppCompatActivity {
         isShowing=true;
         progressBar= (ProgressBar) findViewById(R.id.collaboratorProgressBarReply);
         progressDialog=new ProgressDialog(collaboratorAdd.this);
-        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+        if (InternetReceiver.isConnected()){
+            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCollaborator);
         ImageView imageView = (ImageView) toolbar.findViewById(R.id.imageViewBack);
         autoCompleteTextViewUser = (AutoCompleteTextView) findViewById(R.id.appCompatAutoCompleteTextView);
@@ -100,8 +106,7 @@ public class collaboratorAdd extends AppCompatActivity {
         stringArrayList = new ArrayList<CollaboratorSuggestion>();
         arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
         //arrayAdapterCC = new ArrayAdapter<Data>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-        autoCompleteTextViewUser.setThreshold(2);
-        autoCompleteTextViewUser.setDropDownWidth(1500);
+
         autoCompleteTextViewUser.addTextChangedListener(passwordWatcheredittextSubject);
         email1 = autoCompleteTextViewUser.getText().toString();
         autoCompleteTextViewUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -317,7 +322,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             progressBar.setVisibility(View.GONE);
-            searchUer.setVisibility(View.VISIBLE);
+
             if (isCancelled()) return;
             stringArrayList.clear();
 //            if (progressDialog.isShowing())
@@ -327,13 +332,14 @@ public class collaboratorAdd extends AppCompatActivity {
 //                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
 //                return;
 //            }
-
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = jsonObject.getJSONArray("users");
                 if (jsonArray.length() == 0) {
+                    searchUer.setVisibility(View.GONE);
                     Prefs.putString("noUser", "null");
                 } else {
+                    searchUer.setVisibility(View.VISIBLE);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         String email = jsonObject1.getString("email");
@@ -347,7 +353,17 @@ public class collaboratorAdd extends AppCompatActivity {
                         stringArrayList.add(collaboratorSuggestion);
                         Prefs.putString("noUser", "1");
                     }
+
+                    autoCompleteTextViewUser.setThreshold(3);
+                    autoCompleteTextViewUser.setDropDownWidth(1500);
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
+                    autoCompleteTextViewUser.showDropDown();
+                    View view = collaboratorAdd.this.getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                    //autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
 
                 }
 
@@ -389,6 +405,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 if (role.contains("ccc")) {
                     autoCompleteTextViewUser.setText("");
                     id = 0;
+                    id1=0;
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
                     startActivity(intent);
@@ -475,6 +492,7 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+
             int noOfCollaborator=0;
             if (isCancelled()) return;
             //strings.clear();
@@ -493,17 +511,17 @@ public class collaboratorAdd extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
                 if (jsonArray.length()==0){
+                    progressBar.setVisibility(View.GONE);
                     recipients.setVisibility(View.GONE);
                     return;
                 }else {
+                    progressBar.setVisibility(View.GONE);
                     relativeLayout.setVisibility(View.VISIBLE);
                     recipients.setVisibility(View.VISIBLE);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         noOfCollaborator++;
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         String email = jsonObject1.getString("email");
-                        //String first_name = jsonObject1.getString("first_name");
-                        //String last_name = jsonObject1.getString("last_name");
                         //int id= Integer.parseInt(jsonObject1.getString("id"));
                         //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
 
@@ -587,7 +605,7 @@ public class collaboratorAdd extends AppCompatActivity {
             term = autoCompleteTextViewUser.getText().toString();
             searchUer.setVisibility(View.VISIBLE);
             if (InternetReceiver.isConnected()) {
-                if (!term.equals("")) {
+                if (!term.equals("")&&term.length()==3) {
                     searchUer.setVisibility(View.GONE);
                     //int pos = term.lastIndexOf(",");
                     //term = term.substring(pos + 1, term.length());
@@ -597,11 +615,11 @@ public class collaboratorAdd extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                     //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
-                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
+
                 }
 //            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
                 else {
-                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
                     //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     //new FetchCollaborator("s").execute();
                     //Data data = new Data(0, "No result found");

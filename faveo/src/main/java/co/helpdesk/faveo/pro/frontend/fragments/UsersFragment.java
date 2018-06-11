@@ -119,66 +119,105 @@ public class UsersFragment extends Fragment {
         progressDialog.setMessage("Please wait");
         querry= Prefs.getString("querry",null);
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
-        if (InternetReceiver.isConnected()) {
-            if (querry.equals("")||querry.equals("null")){
-                Log.d("QUERRY","No Querry");
-                recyclerView.setVisibility(View.GONE);
-                empty_view.setVisibility(View.VISIBLE);
-                empty_view.setText(getString(R.string.noUser));
+
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (InternetReceiver.isConnected()) {
+                    if (querry.equals("")||querry.equals("null")){
+                        Log.d("QUERRY","No Querry");
+                        recyclerView.setVisibility(View.GONE);
+                        empty_view.setVisibility(View.VISIBLE);
+                        empty_view.setText(getString(R.string.noUser));
+                        swipeRefresh.setRefreshing(false);
+                    }
+                    else{
+                        noInternet_view.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        //progressDialog.show();
+                        empty_view.setVisibility(View.GONE);
+                        getActivity().getWindow().setSoftInputMode(
+                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+                        );
+                        new FetchClients(getActivity(),querry).execute();
+                    }
+                } else {
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    swipeRefresh.setRefreshing(false);
+                    empty_view.setVisibility(View.GONE);
+                    noInternet_view.setVisibility(View.VISIBLE);
+                }
+
             }
-            else{
-                noInternet_view.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                empty_view.setVisibility(View.GONE);
-                progressDialog.show();
-                getActivity().getWindow().setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-                );
-                new FetchClients(getActivity(),querry).execute();
-            }
-//                noInternet_view.setVisibility(View.GONE);
-//                // swipeRefresh.setRefreshing(true);
-//                progressDialog.show();
-//                new FetchFirst(getActivity(),querry).execute();
-        } else {
-            noInternet_view.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-            empty_view.setVisibility(View.GONE);
-        }
-//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
+        });
+        return rootView;
+    }
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+//        try {
+//            if (visible) {
+//                //Do your stuff here
+//                //Log.d("visible","true");
 //                if (InternetReceiver.isConnected()) {
-//                    if (querry.equals("")||querry.equals("null")){
-//                        Log.d("QUERRY","No Querry");
+//                    if (querry.equals("") || querry.equals("null")) {
+//                        Log.d("QUERRY", "No Querry");
 //                        recyclerView.setVisibility(View.GONE);
 //                        empty_view.setVisibility(View.VISIBLE);
 //                        empty_view.setText(getString(R.string.noUser));
-//                        swipeRefresh.setRefreshing(false);
-//                    }
-//                    else{
+//                    } else {
 //                        noInternet_view.setVisibility(View.GONE);
 //                        recyclerView.setVisibility(View.VISIBLE);
-//                        //progressDialog.show();
 //                        empty_view.setVisibility(View.GONE);
+//                        //progressDialog.show();
 //                        getActivity().getWindow().setSoftInputMode(
 //                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
 //                        );
-//                        new FetchClients(getActivity(),querry).execute();
+//                        new FetchClients(getActivity(), querry).execute();
 //                    }
+////                noInternet_view.setVisibility(View.GONE);
+////                // swipeRefresh.setRefreshing(true);
+////                progressDialog.show();
+////                new FetchFirst(getActivity(),querry).execute();
 //                } else {
-//                    recyclerView.setVisibility(View.INVISIBLE);
-//                    swipeRefresh.setRefreshing(false);
-//                    empty_view.setVisibility(View.GONE);
 //                    noInternet_view.setVisibility(View.VISIBLE);
+//                    recyclerView.setVisibility(View.INVISIBLE);
+//                    empty_view.setVisibility(View.GONE);
 //                }
+//            } else {
 //
+//                if (InternetReceiver.isConnected()) {
+//                    if (querry.equals("") || querry.equals("null")) {
+//                        Log.d("QUERRY", "No Querry");
+//                        recyclerView.setVisibility(View.GONE);
+//                        empty_view.setVisibility(View.VISIBLE);
+//                        empty_view.setText(getString(R.string.noUser));
+//                    } else {
+//                        noInternet_view.setVisibility(View.GONE);
+//                        recyclerView.setVisibility(View.VISIBLE);
+//                        empty_view.setVisibility(View.GONE);
+//                        //progressDialog.show();
+//                        getActivity().getWindow().setSoftInputMode(
+//                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+//                        );
+//                        new FetchClients(getActivity(), querry).execute();
+//                    }
+////                noInternet_view.setVisibility(View.GONE);
+////                // swipeRefresh.setRefreshing(true);
+////                progressDialog.show();
+////                new FetchFirst(getActivity(),querry).execute();
+//                } else {
+//                    noInternet_view.setVisibility(View.VISIBLE);
+//                    recyclerView.setVisibility(View.INVISIBLE);
+//                    empty_view.setVisibility(View.GONE);
+//                }
+//                //Log.d("visible","false");
 //            }
-//        });
-        return rootView;
+//
+//            super.setMenuVisibility(visible);
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
     }
-
-
     private class FetchClients extends AsyncTask<String, Void, String> {
         Context context;
         String querry;
@@ -367,7 +406,7 @@ public class UsersFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        progressDialog.dismiss();
+                        //progressDialog.dismiss();
                         textView.setVisibility(View.VISIBLE);
                         textView.setText(total+" users");
                         //url="null";

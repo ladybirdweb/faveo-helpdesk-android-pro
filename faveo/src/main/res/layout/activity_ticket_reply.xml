@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<com.flipboard.bottomsheet.BottomSheetLayout android:id="@+id/bottomsheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -13,7 +20,7 @@
             android:layout_height="wrap_content"
             android:theme="@style/AppThemeOverlay.ActionBar">
 
-            <Toolbar
+            <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -79,26 +86,25 @@
                         android:textSize="12sp"
                         android:visibility="visible" />
                 </RelativeLayout>
-            </Toolbar>
+            </android.support.v7.widget.Toolbar>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/faveo">
 
             </View>
-            <android.support.design.widget.BottomNavigationView
-                android:id="@+id/navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="?android:attr/windowBackground"
-                app:itemBackground="@color/white"
-                android:foreground="?attr/selectableItemBackground"
-                app:itemIconTint="@color/faveo"
-                android:visibility="gone"
-                app:itemTextColor="@color/faveo"
-                app:menu="@menu/navigation" />
-
+            <!--<android.support.design.widget.BottomNavigationView-->
+                <!--android:id="@+id/navigation"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="bottom"-->
+                <!--android:background="?android:attr/windowBackground"-->
+                <!--app:itemBackground="@color/white"-->
+                <!--android:foreground="?attr/selectableItemBackground"-->
+                <!--app:itemIconTint="@color/faveo"-->
+                <!--android:visibility="gone"-->
+                <!--app:itemTextColor="@color/faveo"-->
+                <!--app:menu="@menu/navigation" />-->
 
         </android.support.design.widget.AppBarLayout>
         <View
@@ -131,55 +137,60 @@
         <LinearLayout
             android:id="@+id/section_reply"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="350dp"
+            android:padding="7dp"
             android:orientation="vertical">
             <EditText
                 android:id="@+id/editText_reply_message"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_modified_states"
+                android:layout_height="180dp"
+                android:background="@drawable/rectanglenew"
                 android:imeOptions="actionDone"
+                android:gravity="bottom"
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
                 android:maxLength="2000"
                 android:maxLines="10"
+                android:padding="9dp"
+                android:paddingLeft="5dp"
                 android:hint="@string/leaveYourMessage"
-                android:paddingBottom="20dp"
+                android:paddingBottom="10dp"
                 android:paddingTop="16dp"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="18sp" />
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:gravity="right"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
+
                 <com.andexert.library.RippleView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     rv_centered="true"
-                    android:layout_gravity="end"
-                    >
-                <TextView
-                    android:id="@+id/addcc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add CC"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/faveo"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    />
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    android:layout_marginLeft="20dp"
-                    android:visibility="visible"
-                    style="@android:style/Widget.ProgressBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/addcc"
-                    android:layout_centerVertical="true" />
+                    android:layout_gravity="end">
+
+                    <TextView
+                        android:id="@+id/addcc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Add CC"
+                        android:textColor="@color/faveo"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        style="@android:style/Widget.ProgressBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/addcc"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:visibility="visible" />
                 </com.andexert.library.RippleView>
             </RelativeLayout>
             <com.andexert.library.RippleView
@@ -199,7 +210,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_gravity="end"
                     android:background="@drawable/rectanglereachout"
-                    android:text="@string/send"
+                    android:text="@string/update"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
             </com.andexert.library.RippleView>
@@ -255,6 +266,26 @@
         </LinearLayout>
 
 
+
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--&gt;-->
+
+            <!--&lt;!&ndash;<io.codetail.widget.RevealFrameLayout&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:visibility="visible"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_gravity="bottom">&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<include layout="@layout/media_attach_menu" />&ndash;&gt;-->
+
+            <!--&lt;!&ndash;</io.codetail.widget.RevealFrameLayout>&ndash;&gt;-->
+        <!--</FrameLayout>-->
+
+
     </LinearLayout>
 
+
 </ScrollView>
+</com.flipboard.bottomsheet.BottomSheetLayout>

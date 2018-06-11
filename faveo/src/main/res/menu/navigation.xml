@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
     <item
-        android:id="@+id/navigation_shop"
+        android:id="@+id/imageGalley"
         android:icon="@drawable/ic_perm_media_black_24dp"
         android:title="@string/gallery" />
 
     <item
-        android:id="@+id/navigation_gifts"
-        android:icon="@drawable/ic_videocam_black_24dp"
-        android:title="Video" />
+        android:id="@+id/videoGallery"
+        android:icon="@drawable/ic_video_library_black_24dp"
+        android:title="@string/video"
+        />
 
     <item
-    android:id="@+id/navigation_music"
+    android:id="@+id/musicGallery"
         android:icon="@drawable/ic_library_music_black_24dp"
-        android:title="Music"/>
+        android:title="@string/music"/>
 
     <item
-        android:id="@+id/navigation_cart"
+        android:id="@+id/documentGallery"
         android:icon="@drawable/ic_picture_as_pdf_black_24dp"
-        android:title="Document" />
+        android:title="@string/document" />
 </menu>

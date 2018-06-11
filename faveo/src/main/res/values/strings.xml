@@ -53,6 +53,7 @@
     <string name="loading">Loading…</string>
     <string name="message">Message</string>
     <string name="create">Create</string>
+    <string name="update">Update</string>
     <string name="reply">Reply</string>
     <string name="cc" translatable="false">Cc</string>
     <string name="send">Send</string>
@@ -71,9 +72,11 @@
     <string name="helptopic">Helptopic</string>
     <string name="deparment">Department</string>
     <string name="priority">Priority</string>
-    <string name="subject">Subject</string>
+    <string name="subject">Reply Content</string>
+    <string name="Subject">Subject</string>
+    <string name="interNalNote">Internal Note</string>
     <string name="email_address" translatable="false">Email Address</string>
-    <string name="version_2_0" translatable="false">Version: 2.0</string>
+    <string name="version_2_0" translatable="false">Version 2.0</string>
     <string name="faveo_helpdesk" translatable="false">Faveo HELPDESK</string>
     <string name="faveo_content">Headquartered in Bangalore, Faveo Helpdesk provides Businesses with an automated Helpdesk system to manage customer support.  The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.</string>
     <string name="website">Website</string>
@@ -181,7 +184,7 @@
     <string name="select_some_helptopic">Please select some helptopic</string>
     <string name="select_code">Please select the code</string>
     <string name="select_source">Please select some Source</string>
-    <string name="due_today">DueToday</string>
+    <string name="due_today">Due Today</string>
     <string name="status_closed">Status changed to closed.</string>
     <string name="status_deleted">Moved to trash</string>
     <string name="status_opened">Status changed to open</string>
@@ -458,6 +461,10 @@
     <string name="this_is_the_url">This is the URL where your help desk is installed.You can reach out to your IT admin to know more.</string>
     <string name="for_more_information_please_drop_a_mail_to_support_ladybirdweb_com">For more information please drop a mail to support@ladybirdweb.com</string>
     <string name="please_enter_a_valid_url">Please enter a valid url</string>
+    <string name="video">Video</string>
+    <string name="music">Music</string>
+    <string name="document">Document</string>
+    <string name="subjectForCreate">Subject</string>
     <string-array name="CountryCodes" >
 
         <item>93,AF</item>
