@@ -50,38 +50,49 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:text=""
+                    android:drawableLeft="@drawable/agentprofile"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    android:drawableTint="@color/grey_500"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:use_gradient="true"
+                    android:fontFamily="sans-serif-smallcaps"
                     />
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/status"
                     android:layout_width="76dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="26dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="108dp"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
                     android:background="@drawable/rectangle1"
                     android:gravity="center"
                     android:text=""
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    app:use_gradient="true"/>
+                    app:use_gradient="true"
+                    android:fontFamily="sans-serif-smallcaps"/>
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/department"
                     android:layout_width="76dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="26dp"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/status"
                     android:background="@drawable/rectangle1"
                     android:gravity="center"
                     android:text=""
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     tools:ignore="RelativeOverlap"
-                    app:use_gradient="true"/>
+                    app:use_gradient="true"
+                    android:fontFamily="sans-serif-smallcaps"/>
 
                 <com.elyeproj.loaderviewlibrary.LoaderTextView
                     android:id="@+id/title"

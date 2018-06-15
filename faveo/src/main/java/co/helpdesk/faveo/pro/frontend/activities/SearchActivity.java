@@ -90,6 +90,11 @@ public class SearchActivity extends AppCompatActivity implements
 
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(SearchActivity.this,R.color.faveo));
+        View view = SearchActivity.this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout= (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(vpPager);
@@ -97,7 +102,7 @@ public class SearchActivity extends AppCompatActivity implements
         try {
             if (Prefs.getString("cameFromClientList", null).equals("true")) {
                 vpPager.setCurrentItem(1);
-            } else {
+            } else if (Prefs.getString("cameFromClientList", null).equals("false")){
                 vpPager.setCurrentItem(0);
             }
         }catch (NullPointerException e){
@@ -115,19 +120,21 @@ public class SearchActivity extends AppCompatActivity implements
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()) {
                     case 0:
-                        Log.d("onSearchPage","true");
+                        //Log.d("onSearchPage","true");
                         Prefs.putString("cameFromClientList","false");
+                        //vpPager.getAdapter().notifyDataSetChanged();
                         break;
                     case 1:
-                        Log.d("onSearchPage","false");
+                        //Log.d("onSearchPage","false");
                         Prefs.putString("cameFromClientList","true");
+                        //vpPager.getAdapter().notifyDataSetChanged();
                         break;
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                Log.d("onSearchPage","false");
             }
 
             @Override
@@ -135,21 +142,16 @@ public class SearchActivity extends AppCompatActivity implements
 
             }
         });
+
         Prefs.putString("cameFromNotification","none");
-        //adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
-        //vpPager.setAdapter(adapterViewPager);
-        //handleIntent(getIntent());
         toolbar= (Toolbar) findViewById(R.id.toolbar);
-        //ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
-        //myAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-        //vpPager.setAdapter(myAdapter);
         imageViewback= (ImageView) toolbar.findViewById(R.id.image_search_back);
         searchView= (AutoCompleteTextView) toolbar.findViewById(R.id.edit_text_search);
         imageViewClearText= (ImageView) toolbar.findViewById(R.id.cleartext);
         imageViewClearText.setVisibility(View.GONE);
-        //imageViewSearchIcon= (ImageView) toolbar.findViewById(R.id.searchIcon);
         colorList=new ArrayList<>();
         colorList.clear();
+        suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
         String querry=Prefs.getString("querry",null);
         Log.d("querry",querry);
         if (querry.equals("null")){
@@ -161,63 +163,33 @@ public class SearchActivity extends AppCompatActivity implements
         }
         String recentSuggestion=Prefs.getString("RecentSearh",null);
         try {
-            int pos = recentSuggestion.indexOf("[");
-            int pos2 = recentSuggestion.lastIndexOf("]");
-            String strin1 = recentSuggestion.substring(pos + 1, pos2);
-            String[] namesList = strin1.split(",");
-            for (String name : namesList) {
-                if (!colorList.contains(name)) {
-                    colorList.add(name.trim());
-                    Set set = new HashSet(colorList);
-                    colorList.clear();
-                    colorList.addAll(set);
+        if (!recentSuggestion.equals("")) {
+
+                int pos = recentSuggestion.indexOf("[");
+                int pos2 = recentSuggestion.lastIndexOf("]");
+                String strin1 = recentSuggestion.substring(pos + 1, pos2);
+                String[] namesList = strin1.split(",");
+                for (String name : namesList) {
+                    if (!colorList.contains(name)) {
+                        colorList.add(name.trim());
+                        Set set = new HashSet(colorList);
+                        colorList.clear();
+                        colorList.addAll(set);
+                    }
                 }
             }
-        }catch (NullPointerException e){
+            }catch (NullPointerException e) {
             e.printStackTrace();
         }
-//        suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
-//        searchView.setAdapter(suggestionAdapter);
-//        searchView.setDropDownWidth(1500);
-//        searchView.setThreshold(1);
-//        searchView.showDropDown();
 
-//        colorList.add("Cat");
-//        colorList.add("Dog");
-//        colorList.add("Owl");
-//        colorList.add("Rhyno");
-//        colorList.add("Crow");
-//        colorList.add("Cow");
-//        try {
-//            if (recentSuggestion.startsWith("[")) {
-//                suggestionAdapter = new ArrayAdapter<String>(this, R.layout.row, R.id.textView, colorList);
-//                //suggestionAdapter = new ArrayAdapter<>(SearchActivity.this, android.R.layout.simple_dropdown_item_1line, colorList);
-//                searchView.setAdapter(suggestionAdapter);
-//
-//                //searchView.showDropDown();
-//                searchView.setDropDownWidth(1100);
-//                searchView.setThreshold(1);
-//
-//            }
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
 
         searchView.addTextChangedListener(passwordWatcheredittextSubject);
-//        else {
-//            suggestionAdapter = new ArrayAdapter<String>(this, R.layout.row, R.id.textView, colorList);
-//            searchView.showDropDown();
-//            searchView.setDropDownWidth(1100);
-//            searchView.setAdapter(suggestionAdapter);
-//            searchView.setThreshold(1);
-//        }
-
-        //searchView.onActionViewExpanded();
 
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String option=Prefs.getString("cameFromNotification",null);
+                Log.d("cameFromNotification",option);
                 switch (option) {
                     case "false": {
                         Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
@@ -225,7 +197,10 @@ public class SearchActivity extends AppCompatActivity implements
                         finish();
                         break;
                     }
-
+                    case "none": {
+                        finish();
+                        break;
+                    }
                     default: {
                         Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
                         startActivity(intent1);
@@ -236,8 +211,6 @@ public class SearchActivity extends AppCompatActivity implements
                 //onBackPressed();
             }
         });
-
-
         searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -255,14 +228,39 @@ public class SearchActivity extends AppCompatActivity implements
                     if (!colorList.contains(querry)){
                         colorList.add(searchView.getText().toString());
                     }
-
+                    View view = SearchActivity.this.getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                     Prefs.putString("RecentSearh",colorList.toString());
                     Log.d("suggestionss",colorList.toString());
                     //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
 //                    Log.d("IME SEARCH",searchView.getText().toString());
-                    Intent intent=new Intent(SearchActivity.this,SearchActivity.class);
-                    finish();
-                    startActivity(intent);
+
+
+                    try {
+                        if (Prefs.getString("cameFromClientList", null).equals("true")) {
+
+                            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                            adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
+                            adapter.addFrag(new UsersFragment(), getString(R.string.users));
+                            adapter.notifyDataSetChanged();
+                            vpPager.setAdapter(adapter);
+                            vpPager.setCurrentItem(1);
+
+                        } else if (Prefs.getString("cameFromClientList", null).equals("false")){
+                            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                            adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
+                            adapter.addFrag(new UsersFragment(), getString(R.string.users));
+                            adapter.notifyDataSetChanged();
+                            vpPager.setAdapter(adapter);
+                            vpPager.setCurrentItem(0);
+                        }
+                    }catch (NullPointerException e){
+                            e.printStackTrace();
+                    }
+
                     //colorList.add(searchView.getText().toString());
 
                     //performSearch();
@@ -281,6 +279,56 @@ public class SearchActivity extends AppCompatActivity implements
                     searchView.setDropDownWidth(1090);
                     searchView.setThreshold(1);
 //                    searchView.showDropDown();
+                }
+            }
+        });
+
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view1, int i, long l) {
+                String querry=searchView.getText().toString();
+                Prefs.putString("querry",querry);
+                try {
+                    String querry1 = URLEncoder.encode(querry, "utf-8");
+                    Prefs.putString("querry1",querry1);
+                    //Log.d("Msg", replyMessage);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                if (!colorList.contains(querry)){
+                    colorList.add(searchView.getText().toString());
+                }
+                View view = SearchActivity.this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                Prefs.putString("RecentSearh",colorList.toString());
+                Log.d("suggestionss",colorList.toString());
+                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
+//                    Log.d("IME SEARCH",searchView.getText().toString());
+
+
+                try {
+                    if (Prefs.getString("cameFromClientList", null).equals("true")) {
+
+                        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                        adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
+                        adapter.addFrag(new UsersFragment(), getString(R.string.users));
+                        adapter.notifyDataSetChanged();
+                        vpPager.setAdapter(adapter);
+                        vpPager.setCurrentItem(1);
+
+                    } else if (Prefs.getString("cameFromClientList", null).equals("false")){
+                        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                        adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
+                        adapter.addFrag(new UsersFragment(), getString(R.string.users));
+                        adapter.notifyDataSetChanged();
+                        vpPager.setAdapter(adapter);
+                        vpPager.setCurrentItem(0);
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -316,11 +364,14 @@ public class SearchActivity extends AppCompatActivity implements
         super.onResume();
     }
 
+
     @Override
     protected void onDestroy() {
         isShowing = false;
         super.onDestroy();
         }
+
+
 
 
     @Override
@@ -331,10 +382,12 @@ public class SearchActivity extends AppCompatActivity implements
             Log.d("isShowing", "false");
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         } else{
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             Log.d("isShowing", "true");
+            finish();
         }
         super.onBackPressed();
     }
@@ -342,7 +395,9 @@ public class SearchActivity extends AppCompatActivity implements
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
         adapter.addFrag(new UsersFragment(), getString(R.string.users));
+        adapter.notifyDataSetChanged();
         viewPager.setAdapter(adapter);
+
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -372,6 +427,8 @@ public class SearchActivity extends AppCompatActivity implements
             return mFragmentTitleList.get(position);
         }
     }
+
+
 
 
     final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {

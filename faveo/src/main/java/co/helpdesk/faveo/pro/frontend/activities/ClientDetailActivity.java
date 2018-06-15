@@ -149,6 +149,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     case "none": {
+                        Prefs.putString("cameFromClientList","false");
                         Intent intent1=new Intent(ClientDetailActivity.this,SearchActivity.class);
                         startActivity(intent1);
                         finish();

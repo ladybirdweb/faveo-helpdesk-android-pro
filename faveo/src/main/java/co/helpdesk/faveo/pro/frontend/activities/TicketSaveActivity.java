@@ -64,13 +64,14 @@ public class TicketSaveActivity extends AppCompatActivity {
             spinnerPriority, spinnerHelpTopics;
     ProgressDialog progressDialog;
     AsyncTask<String, Void, String> task;
-    @BindView(R.id.spinner_staffs)
+//    @BindView(R.id.spinner_staffs)
     Spinner spinnerStaffs;
     EditText edittextsubject;
     Button buttonsave;
     ImageView imageView;
     Spinner autoCompleteTextViewstaff;
     ImageView refresh;
+    String subject="",type="--",source="--",priority="--",helptopic="--",staff="--";
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems, staffItems;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter, staffArrayAdapter;
     int id,id1;
@@ -99,6 +100,14 @@ public class TicketSaveActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(TicketSaveActivity.this,R.color.faveo));
         StrictMode.setThreadPolicy(policy);
+        if (InternetReceiver.isConnected()) {
+            progressDialog=new ProgressDialog(this);
+            progressDialog.setMessage(getString(R.string.pleasewait));
+            progressDialog.show();
+            Log.d("FromTicketSave","true");
+            task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
+            task.execute();
+        }
         if (InternetReceiver.isConnected()){
             new FetchDependency().execute();
         }
@@ -122,14 +131,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
         setUpViews();
 
-        if (InternetReceiver.isConnected()) {
-            progressDialog=new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.pleasewait));
-            progressDialog.show();
-            Log.d("FromTicketSave","true");
-            task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
-            task.execute();
-        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarsave);
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
         imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
@@ -185,8 +187,57 @@ public class TicketSaveActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                startActivity(intent);
+
+
+                    if (!subject.equalsIgnoreCase(edittextsubject.getText().toString())||!type.equalsIgnoreCase(spinnerType.getSelectedItem().toString())||
+                        !source.equalsIgnoreCase(spinnerSource.getSelectedItem().toString())||
+                        !priority.equalsIgnoreCase(spinnerPriority.getSelectedItem().toString())
+                        ||!helptopic.equalsIgnoreCase(spinnerHelpTopics.getSelectedItem().toString())||
+                        !staff.equalsIgnoreCase(autoCompleteTextViewstaff.getSelectedItem().toString())){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Discard changes?");
+
+                    // Setting Dialog Message
+                    //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else{
+                    Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+//                Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//                startActivity(intent);
+//                finish();
             }
         });
         setSupportActionBar(toolbar);
@@ -439,8 +490,10 @@ public class TicketSaveActivity extends AppCompatActivity {
                     String fifth = fourth.replace("=E2=80=99", "'");
                     String sixth=fifth.replace("=3F","?");
                     edittextsubject.setText(sixth);
+                    subject=sixth;
                 } else {
                     edittextsubject.setText(title);
+                    subject=title;
                 }
                 //edittextsubject.setText(title);
                 String assignee=jsonObject2.getString("assignee");
@@ -460,6 +513,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                                     Log.d("cameHere","True");
                                     Log.d("position",""+j);
                                     autoCompleteTextViewstaff.setSelection(j);
+                                    staff=autoCompleteTextViewstaff.getSelectedItem().toString();
                                 }
                             }
                             //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
@@ -478,7 +532,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                     if (jsonObject2.getString("priority_name") != null) {
 
                         spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject2.getString("priority_name")));
-
+                        priority=spinnerPriority.getSelectedItem().toString();
 
                     }
                 } catch (JSONException | NumberFormatException e) {
@@ -493,6 +547,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                         for (int j = 0; j < spinnerType.getCount(); j++) {
                             if (spinnerType.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject2.getString("type_name"))) {
                                 spinnerType.setSelection(j);
+                                type=spinnerType.getSelectedItem().toString();
                             }
                         }
                     }
@@ -504,7 +559,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                 try {
                     if (jsonObject2.getString("helptopic_name") != null)
                         spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics,jsonObject2.getString("helptopic_name")));
-
+                            helptopic=spinnerHelpTopics.getSelectedItem().toString();
 
                 } catch (ArrayIndexOutOfBoundsException e) {
                     e.printStackTrace();
@@ -520,6 +575,7 @@ public class TicketSaveActivity extends AppCompatActivity {
 
 
                         spinnerSource.setSelection(getIndex(spinnerSource, jsonObject2.getString("source_name")));
+                    source=spinnerSource.getSelectedItem().toString();
 
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();

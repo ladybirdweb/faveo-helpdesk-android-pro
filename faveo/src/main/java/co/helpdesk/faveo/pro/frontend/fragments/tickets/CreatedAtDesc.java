@@ -389,28 +389,28 @@ public class  CreatedAtDesc extends Fragment {
                 show = Prefs.getString("source", null);
                 if (show.equals("1")) {
                     dept = "mytickets";
-                    progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
                 } else if (show.equals("2")) {
                     dept = "inbox";
                     assigned = 0;
-                    progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     new FetchFirstAscending(getActivity(), dept + "&assigned=0", "created_at", "DESC", 1).execute();
                 } else if (show.equals("3")) {
                     dept = "closed";
-                    progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
                 } else if (show.equals("4")) {
                     dept = "trash";
-                    progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
                 } else if (show.equals("5")) {
                     dept = "inbox";
-                    progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     new FetchFirstAscending(getActivity(), dept, "created_at", "DESC", 1).execute();
                 } else if (show.equals("6") && !url.equals(null)) {
 
-                    progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     new FetchFirstFilter(getActivity(), url + "&sort-by=created_at&order=DESC", pageNo).execute();
                     //Toast.makeText(getActivity(), "came here", Toast.LENGTH_SHORT).show();
                 }
@@ -789,7 +789,7 @@ public class  CreatedAtDesc extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             textView.setText(""+total+" tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
@@ -1477,6 +1477,7 @@ public class  CreatedAtDesc extends Fragment {
                         Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                         intent.putExtra("ticket_id", ticketOverview.ticketID + "");
                         Prefs.putString("TICKETid",ticketOverview.ticketID+"");
+                        Prefs.putString("ticketId",ticketOverview.ticketID+"");
                         Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);

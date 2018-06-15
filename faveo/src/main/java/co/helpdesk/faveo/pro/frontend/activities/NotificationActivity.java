@@ -102,37 +102,6 @@ public class NotificationActivity extends AppCompatActivity {
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(NotificationActivity.this,R.color.faveo));
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                //
-//                // Do the stuff
-//                //
-//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-//                try {
-//                    JSONObject jsonObject = new JSONObject(result);
-//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-//                    String role1=jsonObject2.getString("role");
-//                    if (role1.equals("user")){
-//                        Prefs.clear();
-//                        //Prefs.putString("role",role);
-//                        Intent intent=new Intent(NotificationActivity.this,LoginActivity.class);
-//                        Toasty.warning(NotificationActivity.this,getString(R.string.permission), Toast.LENGTH_LONG).show();
-//                        startActivity(intent);
-//
-//
-//                    }
-//
-//
-//                } catch (JSONException | NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                handler.postDelayed(this, 30000);
-//            }
-//        };
-//        runnable.run();
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -350,12 +319,7 @@ public class NotificationActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //Write your logic here
-                String option=Prefs.getString("cameFromNotification",null);
-                Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
-                startActivity(intent);
-//                if (option)
-
-                //finish();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

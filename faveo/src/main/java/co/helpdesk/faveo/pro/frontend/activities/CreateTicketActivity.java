@@ -53,6 +53,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -256,7 +257,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     String countrycode = "";
     int i=0;
     int res=0;
-    AutoCompleteTextView multiAutoCompleteTextViewCC;
+    MultiAutoCompleteTextView multiAutoCompleteTextViewCC;
     CountryCodePicker countryCodePicker;
     String firstname,lastname,email;
     ImageButton imageViewGallery,imageViewCamera,imageViewDocument,imageViewAudio;
@@ -355,7 +356,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
         button= (Button) findViewById(R.id.attachment);
         refresh= (ImageView) findViewById(R.id.imageRefresh);
-
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -399,15 +399,14 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             }
         });
         buttonUserCreate= (ImageButton) findViewById(R.id.usercreate);
-        cc=new String[0];
-        cc1=new String[0];
+
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
-        multiAutoCompleteTextViewCC= (AutoCompleteTextView) findViewById(R.id.collaborator);
+        multiAutoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.collaborator);
 
         stringArraylist=new ArrayList<MultiCollaborator>();
         adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
         //multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-//        multiAutoCompleteTextViewCC.setAdapter(adapter1);
+        //multiAutoCompleteTextViewCC.setAdapter(adapter1);
         //arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
 
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
@@ -437,14 +436,61 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             public void onClick(View view) {
                 Prefs.putString("newuseremail","");
                 //onBackPressed();
-                Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-                startActivity(intent);
+                if (!editTextEmail.getText().toString().equals("")
+                        ||!subEdittext.getText().toString().equals("")||
+                !msgEdittext.getText().toString().equals("")){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Discard changes?");
+
+                    // Setting Dialog Message
+                    //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+
+                }
+                else {
+                    Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View view = CreateTicketActivity.this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
                 MenuSheetView menuSheetView =
                         new MenuSheetView(CreateTicketActivity.this, MenuSheetView.MenuType.LIST, "Choose...", new MenuSheetView.OnMenuItemClickListener() {
                             @Override
@@ -2260,24 +2306,77 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     @Override
     public void onBackPressed() {
 
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            Log.d("isShowing", "true");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        if (!editTextEmail.getText().toString().equals("")
+                ||!subEdittext.getText().toString().equals("")||
+                !msgEdittext.getText().toString().equals("")){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+            // Setting Dialog Title
+            alertDialog.setTitle("Discard changes?");
+
+            // Setting Dialog Message
+            //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+            // Setting Icon to Dialog
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+
+            // Setting Positive "Yes" Button
+
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke YES event
+                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                    if (!MainActivity.isShowing) {
+                        Log.d("isShowing", "false");
+                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Log.d("isShowing", "true");
+                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            });
+
+            // Setting Negative "NO" Button
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke NO event
+                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
+
         }
-    }
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //replaces the default 'Back' button action
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
+        else {
+            if (!MainActivity.isShowing) {
+                Log.d("isShowing", "false");
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Log.d("isShowing", "true");
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
-        return true;
+
+
+
     }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        //replaces the default 'Back' button action
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            finish();
+//        }
+//        return true;
+//    }
     private boolean isValidPhoneNumber(CharSequence phoneNumber) {
         if (!TextUtils.isEmpty(phoneNumber)) {
             return Patterns.PHONE.matcher(phoneNumber).matches();
@@ -2312,7 +2411,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     public void createButtonClick() {
         new SendPostRequest().execute();
         res=0;
-        int pos3 = 0,pos2=0;
+        cc=new String[2];
+        cc1=new String[2];
         String first_user = null,second_user = null,third_user=null;
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
@@ -2334,37 +2434,72 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             return;
         }
 
-        collaborator = multiAutoCompleteTextViewCC.getText().toString();
-        for (int i=0; i<collaborator.length(); i++)
-        {
-            // checking character in string
-            if (collaborator.charAt(i) == ',')
-                res++;
+        collaborator = multiAutoCompleteTextViewCC.getText().toString().replaceAll(" ","");
+        String newCollaList;
+
+
+        if (!(collaborator.charAt(collaborator.length()-1)==',')){
+            StringBuilder stringBuilder=new StringBuilder(collaborator);
+            newCollaList=stringBuilder.append(",").toString();
+            for (int i=0; i<stringBuilder.toString().length(); i++)
+            {
+                // checking character in string
+                if (stringBuilder.toString().charAt(i) == ',')
+                    res++;
+            }
+
         }
+        else{
+            newCollaList=collaborator;
+            for (int i=0; i<collaborator.length(); i++)
+            {
+                // checking character in string
+                if (collaborator.charAt(i) == ',')
+                    res++;
+            }
+
+        }
+
+        Log.d("newCollaList",newCollaList);
+
         if (res>3){
             Toasty.info(this,"you can add up to 3 collaborators",Toast.LENGTH_LONG).show();
             return;
         }
-        //Log.d("colla",collaborator);
 
-            if (!collaborator.equals("")) {
 
-            if (!(collaborator.charAt(collaborator.length() - 1) == ',')) {
-                    Log.d("colla",collaborator);
+//        String newColla=collaborator.replaceAll(" ","");
+//        Log.d("colla",newColla);
+//
+////        if (collaborator.charAt(newColla.length()-1)==','){
+////            Log.d("lastTerm","commaIncluded");
+////
+////
+////
+////        }
+////        else{
+////            Log.d("lastTerm","commaExcluded");
+////        }
+//
+            if (!newCollaList.equals("")) {
+                    Log.d("colla",newCollaList);
+                Log.d("lastTerm","commaExcluded");
                     //collaborator.replace("" + collaborator.charAt(collaborator.length() - 1), ",");
-                    cc = collaborator.split(",");
+//                StringBuilder stringBuilder=new StringBuilder(newColla);
+//                stringBuilder.append(",");
+                    cc = newCollaList.split(",");
                     sb = new StringBuilder();
-                    for (int i = 0; i < cc.length-1; i++) {
-                        String one = cc[i].toString().trim();
-                        if (one.contains(",")){
-                            Log.d("having","true");
-                        }
-                        else{
-                            Log.d("","false");
-                        }
-                        sb.append(one + ",");
-                        }
-
+                for (String aCc : cc) {
+                    String one = aCc.trim();
+                    Log.d("one", one);
+                    if (!Helper.isValidEmail(one)) {
+                        Toasty.error(CreateTicketActivity.this, getString(R.string.enter_valid_email), Toast.LENGTH_LONG).show();
+                        allCorrect = false;
+                        return;
+                    } else {
+                        sb.append(one).append(",");
+                    }
+                }
                         Log.d("sb", sb.toString());
                         cc1 = sb.toString().split(",");
                         sb1 = new StringBuilder();
@@ -2376,10 +2511,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                 }
                             Log.d("first_user", first_user);
                             collaborators = sb1.toString();
+                            Log.d("sb1",sb1.toString());
                         } else if (res == 2) {
                             for (String n : cc1) {
-                                sb1.append("&cc[]=");
-                                sb1.append(n);
+                                sb1.append("&cc[]=").append(n);
+                                //sb1.append(n);
                                 first_user = cc1[0];
                                 second_user = cc1[1];
 
@@ -2387,7 +2523,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                             Log.d("first_user", first_user);
                             Log.d("second_user", second_user);
                             collaborators = sb1.toString();
-                        } else if (res == 3) {
+                            Log.d("sb1",sb1.toString());
+                        }
+                        else if (res == 3) {
                             for (String n : cc1) {
                                 sb1.append("&cc[]=");
                                 sb1.append(n);
@@ -2399,116 +2537,21 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                             Log.d("second_user", second_user);
                             Log.d("third_user", third_user);
                             collaborators = sb1.toString();
+                            Log.d("sb1",sb1.toString());
                         }
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                        }
-                        collaborators = sb1.toString();
+//                        for (String n : cc1) {
+//                            sb1.append("&cc[]=");
+//                            sb1.append(n);
+//                        }
+//                        collaborators = sb1.toString();
+//                        Log.d("collaborators",collaborators);
                     }
 
-                else
-                    {
-                    sb = new StringBuilder();
-                    for (int i = 0; i < cc.length-1; i++) {
-                        String one = cc[i].toString().trim();
-                        Log.d("one", one);
-                        sb.append(one + ",");
-
-
-                    }
-
-                        cc = collaborator.split(",");
-                        sb = new StringBuilder();
-
-                        for (int i = 0; i < cc.length; i++) {
-                            String one = cc[i].toString();
-                            if (Helper.isValidEmail(one)) {
-                                Log.d("one", one);
-                                sb.append(one + ",");
-                            }
-//                        else{
-//                            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
-//                            allCorrect = false;
-//                        }
-//                        if (one.contains("<")) {
-//                             pos3 = one.indexOf("<");
-//                             pos2 = one.lastIndexOf(">");
-//                            try {
-//                                String two = one.substring(pos3 + 1, pos2);
-//                                sb.append(two + ",");
-//                                } catch (StringIndexOutOfBoundsException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                        else{
-//                            sb.append(one + ",");
-////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-////                            allCorrect = false;
-////                            return;
-//                        }
-
-//                        else {
-//                            if (Helper.isValidEmail(one.trim())){
-//                                Log.d("cameHere","validemail");
-//                                sb.append(one + ",");
-//                            }
-////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-////                            allCorrect = false;
-////                            return;
-//                        }
-
-                        }
-                        Log.d("sb", sb.toString());
-                        cc1 = sb.toString().split(",");
-                        sb1 = new StringBuilder();
-                        if (res == 1) {
-                            for (String n : cc1) {
-                                sb1.append("&cc[]=");
-                                sb1.append(n);
-                                first_user = cc1[0];
-
-                            }
-                            Log.d("first_user", first_user);
-                            collaborators = sb1.toString();
-                        } else if (res == 2) {
-                            for (String n : cc1) {
-                                sb1.append("&cc[]=");
-                                sb1.append(n);
-                                first_user = cc1[0];
-                                second_user = cc1[1];
-
-                            }
-                            Log.d("first_user", first_user);
-                            Log.d("second_user", second_user);
-                            collaborators = sb1.toString();
-                        } else if (res == 3) {
-                            for (String n : cc1) {
-                                sb1.append("&cc[]=");
-                                sb1.append(n);
-                                first_user = cc1[0];
-                                second_user = cc1[1];
-                                third_user = cc1[2];
-                            }
-                            Log.d("first_user", first_user);
-                            Log.d("second_user", second_user);
-                            Log.d("third_user", third_user);
-                            collaborators = sb1.toString();
-                        }
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                        }
-                        collaborators = sb1.toString();
-                    }
-                }
-
-
-                else {
-                    Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-                    allCorrect = false;
-                    return;
-                }
+                else{
+                Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+                allCorrect = false;
+                return;
+            }
 
 
         final Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
@@ -2545,10 +2588,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         } else if (fname.trim().length() == 0||fname.equals("null")||fname.equals(null)) {
             Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (fname.trim().length() < 3) {
+        } else if (fname.trim().length() < 2) {
             Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (fname.length() > 20) {
+        } else if (fname.length() > 30) {
             Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
@@ -2563,8 +2606,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         } else if (subject.matches("[" + splChrs + "]+")) {
             Toasty.warning(this, getString(R.string.only_special_characters_not_allowed_here), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (subject.trim().length() > 100) {
-            Toasty.warning(this, "Subject must not exceed 150 characters"
+        } else if (subject.trim().length() > 200) {
+            Toasty.warning(this, getString(R.string.subjectExceed)
                     , Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (priority.ID == 0) {
@@ -3647,15 +3690,15 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                         int pos = term.lastIndexOf(",");
                         term = term.substring(pos + 1, term.length());
-                        Log.d("newTerm", term);
-                        adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
-                        progressBar.setVisibility(View.VISIBLE);
-                        //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                        new FetchCollaboratorCC(term.trim()).execute();
-                        //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                        multiAutoCompleteTextViewCC.setAdapter(adapter1);
+                        if (term.length()==3){
+                            Log.d("newTerm", term);
+                            adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
+                            progressBar.setVisibility(View.VISIBLE);
+                            //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
+                            new FetchCollaboratorCC(term.trim()).execute();
+                        }
+
                     }
-//            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
                     else if (term.equals("")) {
                         adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
                         //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
@@ -3667,12 +3710,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
-                    } else {
+                    } else if (term.length()==3){
                         adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
                         progressBar.setVisibility(View.VISIBLE);
                         //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                         new FetchCollaboratorCC(term).execute();
-                        multiAutoCompleteTextViewCC.setAdapter(adapter1);
+                        //multiAutoCompleteTextViewCC.setAdapter(adapter1);
 
 
                         //stringArrayAdapterCC.notifyDataSetChanged();
@@ -3791,10 +3834,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                         // Prefs.putString("noUser","1");
                     }
+                    multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
                     multiAutoCompleteTextViewCC.setThreshold(3);
                     multiAutoCompleteTextViewCC.setDropDownWidth(1500);
                     multiAutoCompleteTextViewCC.setAdapter(adapter1);
-                    //multiAutoCompleteTextViewCC.showDropDown();
+                    multiAutoCompleteTextViewCC.showDropDown();
                     //multiAutoCompleteTextViewCC.setAdapter(adapter1);
 
 

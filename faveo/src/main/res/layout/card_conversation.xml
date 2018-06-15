@@ -39,12 +39,13 @@
 
             <TextView
                 android:id="@+id/textView_client_name"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:alpha="0.54"
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="70dp"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:fontFamily="sans-serif-bold"
                 android:text="@string/dummy_name"
                 android:textAllCaps="false"

@@ -340,10 +340,10 @@ public class ClientList extends Fragment implements View.OnClickListener {
                     if (condition.equals("true")) {
                         noInternet_view.setVisibility(View.GONE);
                         //swipeRefresh.setRefreshing(true);
-                        progressDialog.show();
+                        swipeRefresh.setRefreshing(true);
                         new FetchClients(getActivity()).execute();
                     } else if (condition.equals("false")){
-                        progressDialog.show();
+                        swipeRefresh.setRefreshing(true);
                         new FetchClientsFilter(getActivity(), url, page).execute();
 //                        Toast.makeText(getActivity(), "came from filter", Toast.LENGTH_SHORT).show();
 //                        Toast.makeText(getActivity(), "url" + url, Toast.LENGTH_SHORT).show();
@@ -408,9 +408,10 @@ public class ClientList extends Fragment implements View.OnClickListener {
         int id=item.getItemId();
         if (id == R.id.action_search) {
             Prefs.putString("cameFromClientList","true");
+            Prefs.putString("cameFromNotification","fromClient");
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
-            return true;
+            //getActivity().finish();
         }
         else if (id==R.id.action_noti){
             Intent intent=new Intent(getActivity(),NotificationActivity.class);
@@ -455,7 +456,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             url = "null";
             //Prefs.putString("customerfilter","null");
             textView.setText("" + total + " clients");
@@ -587,7 +588,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             textView.setText(""+total+" clients");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);

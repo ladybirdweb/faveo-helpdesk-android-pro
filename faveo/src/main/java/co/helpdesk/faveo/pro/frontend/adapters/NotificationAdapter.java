@@ -111,6 +111,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                     Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
                     intent.putExtra("CLIENT_ID", notiThread.getClient_id() + "");
+                    Prefs.putString("clientId",notiThread.getClient_id() + "");
                     view.getContext().startActivity(intent);
                 }
                 notiThread.setNoti_seen("1");

@@ -126,7 +126,7 @@ public class Conversation extends Fragment {
                     // swipeRefresh.setRefreshing(true);
                     progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setMessage(getString(R.string.pleasewait));
-                    progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     task = new FetchTicketThreads(getActivity(), Prefs.getString("TICKETid", null));
                     task.execute();
                 }
@@ -297,7 +297,7 @@ public class Conversation extends Fragment {
 
         protected void onPostExecute(String result) {
             try {
-                progressDialog.dismiss();
+                swipeRefresh.setRefreshing(false);
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -476,7 +476,7 @@ public class Conversation extends Fragment {
                 ticketThreadAdapter.notifyDataSetChanged();
                 progressDialog=new ProgressDialog(getActivity());
                 progressDialog.setMessage(getString(R.string.pleasewait));
-                progressDialog.show();
+                swipeRefresh.setRefreshing(true);
                 if (Prefs.getString("ticketThread", null).equals("")) {
                     noInternet_view.setVisibility(View.GONE);
                     task = new FetchTicketThreads(getActivity(), Prefs.getString("TICKETid", null));
@@ -484,7 +484,7 @@ public class Conversation extends Fragment {
                 }
                 else {
                     try {
-                        progressDialog.dismiss();
+                        swipeRefresh.setRefreshing(false);
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }

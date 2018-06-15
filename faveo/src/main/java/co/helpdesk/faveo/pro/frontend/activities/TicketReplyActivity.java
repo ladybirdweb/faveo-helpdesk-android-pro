@@ -33,6 +33,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -155,6 +156,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     private ImageButton photo_btn, video_btn,music_btn,document_btn;
     BottomSheetLayout bottomSheet;
     String option;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,6 +209,11 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View view = TicketReplyActivity.this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
                 MenuSheetView menuSheetView =
                         new MenuSheetView(TicketReplyActivity.this, MenuSheetView.MenuType.LIST, "Choose...", new MenuSheetView.OnMenuItemClickListener() {
                             @Override
@@ -249,7 +256,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 //                }
                }
         });
-        ticketID=Prefs.getString("TICKETid",null);
+        ticketID=Prefs.getString("ticketId",null);
         buttonSend = (Button) findViewById(R.id.button_send);
         imageView= (ImageView) findViewById(R.id.imageViewBackTicketReply);
         progressDialog = new ProgressDialog(this);
@@ -257,6 +264,20 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         addCc = (TextView) findViewById(R.id.addcc);
         editTextReplyMessage = (EditText) findViewById(R.id.editText_reply_message);
         editTextReplyMessage.setCursorVisible(true);
+        editTextReplyMessage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (v.getId() == R.id.editText_reply_message) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_UP:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -429,12 +450,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         super.onBackPressed();
     }
 
-    private void hideRevealView() {
-        if (mRevealView.getVisibility() == View.VISIBLE) {
-            mRevealView.setVisibility(View.GONE);
-            hidden = true;
-        }
-    }
 
 
     public class SendPostRequest extends AsyncTask<String, Void, String> {
@@ -999,7 +1014,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         super.onResume();
         progressBar.setVisibility(View.VISIBLE);
         addCc.setVisibility(View.GONE);
-        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
     }
 
 }

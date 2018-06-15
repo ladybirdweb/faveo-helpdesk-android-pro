@@ -38,7 +38,7 @@
                     android:layout_height="60dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginStart="24dp"
-                    android:text="@string/settingsAndInAppHelpSection"
+                    android:text="@string/help_section"
                     android:textColor="@color/theme"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -216,37 +216,37 @@
         android:padding="24dp"
         tools:context="com.android.faveo.SettingsActivity">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/crash_reports"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:text="@string/crash_reports"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="20sp" />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:gravity="center_vertical">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="72dp"-->
+            <!--android:gravity="center_vertical">-->
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:alpha="0.6"
-                android:text="@string/send_crash_reports"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:alpha="0.6"-->
+                <!--android:text="@string/send_crash_reports"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="14sp"-->
+                <!--android:textStyle="bold" />-->
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switch_crash_reports"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                app:theme="@style/SwitchStyle" />
+            <!--<android.support.v7.widget.SwitchCompat-->
+                <!--android:id="@+id/switch_crash_reports"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:checked="true"-->
+                <!--app:theme="@style/SwitchStyle" />-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
         <Button
             android:layout_marginTop="30dp"

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.pixplicity.easyprefs:library-1.8.1">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.8.1.aar/8d3acfcdeadc11bb7a19f78bd0851e5d/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.8.1.aar/8d3acfcdeadc11bb7a19f78bd0851e5d/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.8.1.aar/8f450d1a16130111fcc97d718b0a4805/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-1.8.1.aar/8f450d1a16130111fcc97d718b0a4805/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

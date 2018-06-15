@@ -431,7 +431,7 @@ public class UnassignedTickets extends Fragment {
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
-                progressDialog.show();
+                swipeRefresh.setRefreshing(true);
                 new FetchFirst(getActivity(),page).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -744,7 +744,7 @@ public class UnassignedTickets extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             textView.setText(""+total+" tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
@@ -1297,6 +1297,7 @@ public class UnassignedTickets extends Fragment {
                         Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                         intent.putExtra("ticket_id", ticketOverview.ticketID + "");
                         Prefs.putString("TICKETid",ticketOverview.ticketID+"");
+                        Prefs.putString("ticketId",ticketOverview.ticketID+"");
                         Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);
@@ -1860,8 +1861,6 @@ public class UnassignedTickets extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        progressDialog.setMessage(getString(R.string.pleasewait));
-        progressDialog.show();
         new FetchFirst(getActivity(), page).execute();
         try {
             mActionMode.finish();

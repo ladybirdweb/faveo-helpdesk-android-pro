@@ -212,23 +212,17 @@ public class RegisterUser extends AppCompatActivity {
                 Toasty.error(RegisterUser.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-//            String state=Prefs.getString("403",null);
-//                if (message1.contains("The ticket id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
-//                }
-//                else if (message1.contains("The status id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
-//                }
-//               else
-//            try {
-//                if (state.equals("403") && !state.equals(null)) {
-//                    Toasty.warning(RegisterUser.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("403", "null");
-//                    return;
-//                }
-//            }catch (NullPointerException e){
-//                e.printStackTrace();
-//            }
+            try {
+                String state = Prefs.getString("400", null);
+
+                if (state.equals("badRequest")) {
+                        Toasty.info(RegisterUser.this,"The user is already registered",Toast.LENGTH_LONG).show();
+                        return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
             try{
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("result");
@@ -244,6 +238,7 @@ public class RegisterUser extends AppCompatActivity {
             }catch (JSONException e){
                 e.printStackTrace();
             }
+
             try {
 
                 //JSONObject jsonObject=new JSONObject(result);

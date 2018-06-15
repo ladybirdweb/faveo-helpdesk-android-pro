@@ -592,6 +592,13 @@ public class Helpdesk {
             return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile + "&company=" +company,null);
         return result;
     }
+    public String postCreateUser(String email,String firstname,String lastname){
+        Log.d("RegisterUser", Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname +"&last_name="+ lastname);
+        String result=new HTTPConnection().HTTPResponsePost(Constants.URL +"helpdesk/register?token="+ token +"&email="+email+"&first_name=" +firstname + "&last_name="+ lastname,null);
+        if (result!=null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname,null);
+        return result;
+    }
     public String postCollaboratorAssociatedWithTicket(String ticketid){
         Log.d("CollaboratorFetch",Constants.URL + "helpdesk/collaborator/get-ticket?token=" +token +"&ticket_id="+ticketid);
         String result=new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/collaborator/get-ticket?token=" +token +"&ticket_id="+ticketid,null);

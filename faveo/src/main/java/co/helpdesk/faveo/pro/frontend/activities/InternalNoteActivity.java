@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,6 +40,7 @@ public class InternalNoteActivity extends AppCompatActivity {
     public static String ticketID;
     ProgressDialog progressDialog;
     String option;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,20 @@ public class InternalNoteActivity extends AppCompatActivity {
         }
         imageView= (ImageView) findViewById(R.id.imageViewBackTicketInternalNote);
         editTextInternalNote = (EditText) findViewById(R.id.editText_internal_note);
+        editTextInternalNote.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (v.getId() == R.id.editText_internal_note) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_UP:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         buttonCreate = (Button) findViewById(R.id.button_create);
         ticketID= Prefs.getString("TICKETid",null);
         progressDialog=new ProgressDialog(this);

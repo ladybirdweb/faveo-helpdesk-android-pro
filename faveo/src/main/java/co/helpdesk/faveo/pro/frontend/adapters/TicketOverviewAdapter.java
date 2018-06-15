@@ -418,6 +418,7 @@ else{
                 Prefs.putString("ticketThread","");
                 intent.putExtra("ticket_id", ticketOverview.ticketID + "");
                 Prefs.putString("TICKETid",ticketOverview.ticketID+"");
+                Prefs.putString("ticketId",ticketOverview.ticketID+"");
                 Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
                 intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                 intent.putExtra("ticket_opened_by", ticketOverview.clientName);

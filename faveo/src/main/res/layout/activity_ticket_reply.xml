@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.flipboard.bottomsheet.BottomSheetLayout android:id="@+id/bottomsheet"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -137,20 +137,20 @@
         <LinearLayout
             android:id="@+id/section_reply"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="390dp"
             android:padding="7dp"
             android:orientation="vertical">
             <EditText
                 android:id="@+id/editText_reply_message"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="280dp"
                 android:background="@drawable/rectanglenew"
                 android:imeOptions="actionDone"
-                android:gravity="bottom"
+                android:gravity="top"
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
-                android:maxLength="2000"
-                android:maxLines="10"
+                android:cursorVisible="true"
+                android:nestedScrollingEnabled="true"
                 android:padding="9dp"
                 android:paddingLeft="5dp"
                 android:hint="@string/leaveYourMessage"

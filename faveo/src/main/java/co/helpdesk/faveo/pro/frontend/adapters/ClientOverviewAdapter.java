@@ -88,6 +88,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
                         Intent intent = new Intent(v.getContext(), ClientDetailActivity.class);
                         intent.putExtra("CLIENT_ID", clientOverview.clientID + "");
                         Prefs.putString("clientId",clientOverview.clientID+"");
+                        Prefs.putString("cameFromNotification","fromClient");
                         Log.d("clientId",""+clientOverview.clientID);
                         intent.putExtra("CLIENT_NAME", clientOverview.clientName);
                         intent.putExtra("CLIENT_EMAIL", clientOverview.clientEmail);

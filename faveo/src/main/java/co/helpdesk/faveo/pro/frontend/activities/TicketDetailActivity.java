@@ -194,6 +194,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         imgaeviewBack= (ImageView) mToolbar.findViewById(R.id.imageViewBackTicketDetail);
         viewpriority=mToolbar.findViewById(R.id.viewPriority);
         viewCollapsePriority=mAppBarLayout.findViewById(R.id.viewPriority1);
+        textviewAgentName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.agentprofile), null, null, null);
         //viewCollapsePriority.setBackgroundColor(Color.parseColor("#FF0000"));
         mToolbar.inflateMenu(R.menu.menu_main_new);
         isShowing=true;
@@ -249,8 +250,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     case "false": {
-                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-                        startActivity(intent1);
+//                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+//                        startActivity(intent1);
                         finish();
                         break;
                     }
@@ -261,8 +262,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     default: {
-                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
-                        startActivity(intent1);
+//                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+//                        startActivity(intent1);
                         finish();
                         break;
                     }
@@ -930,17 +931,50 @@ public void fabOpen(){
      */
     @Override
     public void onBackPressed() {
-
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
+        String option=Prefs.getString("cameFromNotification",null);
+        switch (option) {
+            case "true": {
+                Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            }
+            case "none": {
+                Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
+            case "false": {
+//                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+//                        startActivity(intent1);
+                finish();
+                break;
+            }
+            case "client": {
+                Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
+            default: {
+//                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+//                        startActivity(intent1);
+                finish();
+                break;
+            }
         }
-        else {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            Log.d("isShowing", "true");
-        }
+//        if (!MainActivity.isShowing) {
+//            Log.d("isShowing", "false");
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//        }
+//        else {
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//            Log.d("isShowing", "true");
+//        }
         super.onBackPressed();
 
 //        if (materialSheetFab.isSheetVisible()) {

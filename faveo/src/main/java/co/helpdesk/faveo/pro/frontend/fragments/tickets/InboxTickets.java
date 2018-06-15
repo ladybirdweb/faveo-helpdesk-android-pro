@@ -478,195 +478,163 @@ public class InboxTickets extends Fragment {
                         Prefs.putString("source", "6");
                         if (department.equals("all")) {
                             if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all", pageno).execute();
                                 url = "show=" + show + "&departments=all";
                                 //Toast.makeText(getActivity(), "URL:" + url, Toast.LENGTH_SHORT).show();
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source, pageno).execute();
                                 url = "show=" + show + "&departments=all&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=all&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto, pageno).execute();
                                 url = "show=" + show + "&departments=all&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned=" + unassigned + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned=" + unassigned + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=all&source=" + source + "&priority=" + priority + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
                                 url = "show=" + show + "&departments=all&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&assigned-to=a-" + assignto, pageno).execute();
                                 url = "show=" + show + "&departments=all&assigned-to=a-" + assignto;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=all&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
@@ -675,188 +643,157 @@ public class InboxTickets extends Fragment {
 
                         } else if (!department.equals("all")) {
                             if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department, pageno).execute();
                                 url = "show=" + show + "&departments=" + department;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&priority=" + priority + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + " &assigned-to=" + assignto + "&types=" + tickettype + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned-to=" + assignto + "&types=" + tickettype + "&priority=" + priority + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && tickettype.equals("null") && assigned.equals("null") && assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&assigned=" + unassigned + "&priority=" + priority;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&source=" + source + "&types=" + tickettype + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype + "&assigned=" + unassigned + "&source=" + source;
                                 Prefs.putString("URLFiltration", url);
                             } else if (source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!source.equals("null") && !priority.equals("null") && !tickettype.equals("null") && !assigned.equals("null") && !assignto.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&source=" + source + "&priority=" + priority + "&assigned-to=" + assignto + "&assigned=" + unassigned + "&types=" + tickettype;
                                 Prefs.putString("URLFiltration", url);
                             } else if (!show.equals("null") && !department.equals("null") && !source.equals("null") && !priority.equals("null") && !assigned.equals("null")) {
-                                progressDialog.show();
-                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                swipeRefresh.setRefreshing(true);
                                 new FetchFirstFilter(getActivity(), "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned, pageno).execute();
                                 url = "show=" + show + "&departments=" + department + "&priority=" + priority + "&source=" + source + "&assigned=" + unassigned;
                                 Prefs.putString("URLFiltration", url);
@@ -875,7 +812,7 @@ public class InboxTickets extends Fragment {
                     } else if (check.equals("false")) {
                         noInternet_view.setVisibility(View.GONE);
                         // swipeRefresh.setRefreshing(true);
-                        progressDialog.show();
+                        swipeRefresh.setRefreshing(true);
                         new FetchFirst(getActivity(), page).execute();
                         ((MainActivity) getActivity()).setActionBarTitle("Inbox");
 
@@ -1705,7 +1642,7 @@ public class InboxTickets extends Fragment {
 //            ticketOverviewAdapter.notifyDataSetChanged();
             //progressBar.setVisibility(View.GONE);
             Prefs.putString("filterwithsorting", "false");
-            progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
 
             textView.setText("" + total + " tickets");
             if (swipeRefresh.isRefreshing())
@@ -1757,12 +1694,15 @@ public class InboxTickets extends Fragment {
 //                return;
 //            }
 
+                try {
+                    if (result.equals("all done")) {
 
-            if (result.equals("all done")) {
-
-                Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
-                //return;
-            }
+                        Toasty.info(context, getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
+                        //return;
+                    }
+                }catch (NullPointerException e){
+                e.printStackTrace();
+                }
             //  recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
             recyclerView.setHasFixedSize(false);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -2468,6 +2408,7 @@ public class InboxTickets extends Fragment {
                         Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                         intent.putExtra("ticket_id", ticketOverview.ticketID + "");
                         Prefs.putString("TICKETid", ticketOverview.ticketID + "");
+                        Prefs.putString("ticketId",ticketOverview.ticketID+"");
                         Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);

@@ -18,7 +18,7 @@
     <string name="unassigned_tickets">Unassigned tickets</string>
     <string name="closed_tickets">Closed tickets</string>
     <string name="client_list">Client list</string>
-    <string name="settings">Settings</string>
+    <!--<string name="setting">Settings</string>-->
     <string name="about">About</string>
     <string name="action_search">Search</string>
     <string name="action_settings" translatable="false">Settings</string>
@@ -115,8 +115,10 @@
     <string name="error_creating_ticket">ERROR! Failed to create ticket</string>
     <string name="fill_all_the_details">Please fill all the required fields</string>
     <string name="fill_firstname">Fill FirstName</string>
-    <string name="firstname_minimum_char">FirstName should be minimum 3 characters</string>
-    <string name="firstname_maximum_char">FirstName should not exceed 20 characters</string>
+    <string name="firstname_minimum_char">FirstName should be minimum 2 characters</string>
+    <string name="firstname_maximum_char">FirstName should not exceed 30 characters</string>
+    <string name="lastname_minimum_char">LastName should be minimum 2 characters</string>
+    <string name="lastname_maximum_char">LastName should not exceed 30 characters</string>
     <string name="fill_lastname">Fill LastName</string>
     <string name="invalid_email">Please enter valid email id</string>
     <string name="sub_must_not_be_empty">Subject must not be empty</string>
@@ -225,6 +227,7 @@
     <string name="title_activity_ticketsave">Ticketsave</string>
     <string name="ticketProperties">Ticket Properties</string>
     <string name="addUser">Add Requestor</string>
+    <string name="adduser">Add user</string>
     <string name="filtration">Ticket filtration</string>
     <string name="firstName">First name</string>
     <string name="lastName">Last name</string>
@@ -325,7 +328,7 @@
     <string name="other">Other features</string>
     <string name="someOtheroptions">How to use some other features</string>
     <string name="loggingIn">Logging in and logging out of the android app</string>
-    <string name="settingsAndInAppHelpSection">Settings and Help section</string>
+    <string name="settings">Settings</string>
     <string name="logginginandout">Logging in and logging out of the Android app</string>
     <string name="LoggingIn">1. Logging in and logging out</string>
     <string name="logincontent">The Android app for Faveo lest you support your customers anytime from your smartphone or tablet
@@ -465,7 +468,11 @@
     <string name="music">Music</string>
     <string name="document">Document</string>
     <string name="subjectForCreate">Subject</string>
-    <string-array name="CountryCodes" >
+    <string name="support">Support</string>
+    <string name="help_section">Help Section</string>
+    <string name="adding_collaborator">Adding collaborator</string>
+    <string name="subjectExceed">Subject must not exceed 200 characters</string>
+    <string-array name="CountryCodes">
 
         <item>93,AF</item>
         <item>355,AL</item>

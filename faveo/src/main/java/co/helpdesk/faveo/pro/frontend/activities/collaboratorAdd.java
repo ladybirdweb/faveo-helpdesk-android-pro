@@ -1,5 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +24,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -29,6 +34,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.viethoa.DialogUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +72,8 @@ public class collaboratorAdd extends AppCompatActivity {
     ProgressDialog progressDialog;
     public static boolean isShowing = false;
     ProgressBar progressBar;
+    ImageButton buttonAdd;
+    EditText editTextemail,editTextfirst,editTextlast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,12 +99,13 @@ public class collaboratorAdd extends AppCompatActivity {
         progressBar= (ProgressBar) findViewById(R.id.collaboratorProgressBarReply);
         progressDialog=new ProgressDialog(collaboratorAdd.this);
         if (InternetReceiver.isConnected()){
-            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("TICKETid", null)).execute();
+            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
             progressBar.setVisibility(View.VISIBLE);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCollaborator);
         ImageView imageView = (ImageView) toolbar.findViewById(R.id.imageViewBack);
+        buttonAdd= (ImageButton) findViewById(R.id.collaboratorAdd);
         autoCompleteTextViewUser = (AutoCompleteTextView) findViewById(R.id.appCompatAutoCompleteTextView);
         autoCompleteTextViewUser.setHorizontallyScrolling(true);
         autoCompleteTextViewUser.setMovementMethod(new ScrollingMovementMethod());
@@ -203,7 +212,7 @@ public class collaboratorAdd extends AppCompatActivity {
                             }
                             progressDialog.setMessage(getString(R.string.pleasewait));
                             progressDialog.show();
-                            new collaboratorAdduser(Prefs.getString("TICKETid", null), String.valueOf(id1)).execute();
+                            new collaboratorAdduser(Prefs.getString("ticketId", null), String.valueOf(id1)).execute();
 
                         }
                     });
@@ -247,6 +256,15 @@ public class collaboratorAdd extends AppCompatActivity {
 
             }
         });
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Intent intent=new Intent(collaboratorAdd.this,collaboratorcreate.class);
+                    startActivity(intent);
+                    finish();
+            }
+        });
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -279,7 +297,7 @@ public class collaboratorAdd extends AppCompatActivity {
                                 progressDialog=new ProgressDialog(collaboratorAdd.this);
                                 progressDialog.setMessage(getString(R.string.pleasewait));
                                 progressDialog.show();
-                                new collaboratorRemoveUser(Prefs.getString("TICKETid", null), email2).execute();
+                                new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
                             }
                         });
                         // Setting Negative "NO" Button
@@ -307,6 +325,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
 
     }
+
 
     private class FetchCollaborator extends AsyncTask<String, Void, String> {
         String term;
@@ -387,7 +406,7 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().createCollaborator(Prefs.getString("TICKETid", null), String.valueOf(userId));
+            return new Helpdesk().createCollaborator(Prefs.getString("ticketId", null), String.valueOf(userId));
         }
 
         protected void onPostExecute(String result) {
@@ -437,7 +456,7 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().removeCollaborator(Prefs.getString("TICKETid", null), email2);
+            return new Helpdesk().removeCollaborator(Prefs.getString("ticketId", null), email2);
         }
 
         protected void onPostExecute(String result) {
