@@ -194,7 +194,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         imgaeviewBack= (ImageView) mToolbar.findViewById(R.id.imageViewBackTicketDetail);
         viewpriority=mToolbar.findViewById(R.id.viewPriority);
         viewCollapsePriority=mAppBarLayout.findViewById(R.id.viewPriority1);
-        textviewAgentName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.agentprofile), null, null, null);
         //viewCollapsePriority.setBackgroundColor(Color.parseColor("#FF0000"));
         mToolbar.inflateMenu(R.menu.menu_main_new);
         isShowing=true;

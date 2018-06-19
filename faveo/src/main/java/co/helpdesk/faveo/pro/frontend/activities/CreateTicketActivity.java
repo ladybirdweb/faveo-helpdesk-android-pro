@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 //import android.graphics.Bitmap;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -53,6 +54,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -71,6 +75,7 @@ import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.flipboard.bottomsheet.commons.MenuSheetView;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -161,6 +166,7 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BottomNavigationBehavior;
@@ -265,7 +271,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     File file3;
     String result;
     Button button;
-    ImageView refresh;
+    ImageButton refresh;
     File file;
     Thread t;
     ProgressBar progressBar;
@@ -278,6 +284,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     String phone,mobile,message;
     BottomSheetLayout bottomSheet;
     String token;
+    Animation rotation;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
     public static String
             keyDepartment = "", valueDepartment = "",
@@ -326,16 +333,18 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.faveo));
         GetCountryZipCode();
+        refresh= (ImageButton) findViewById(R.id.imageRefresh);
         bottomSheet= (BottomSheetLayout) findViewById(R.id.bottomsheet);
         if (InternetReceiver.isConnected()){
             new FetchDependency().execute();
         }
-        progressBar= (ProgressBar) findViewById(R.id.createTicketProgressbar);
+        //progressBar= (ProgressBar) findViewById(R.id.createTicketProgressbar);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
+        rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        final ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
         //toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
@@ -355,7 +364,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        imageViewCamera= (ImageButton) toolbarAttachment.findViewById(R.id.photo_img_btn);
 //        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
         button= (Button) findViewById(R.id.attachment);
-        refresh= (ImageView) findViewById(R.id.imageRefresh);
+
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -376,9 +385,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         // Write your code here to invoke YES event
                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                         if (InternetReceiver.isConnected()){
-                            progressDialog=new ProgressDialog(CreateTicketActivity.this);
-                            progressDialog.setMessage(getString(R.string.refreshing));
-                            progressDialog.show();
+
+                        refresh.startAnimation(rotation);
+//                            progressDialog=new ProgressDialog(CreateTicketActivity.this);
+//                            progressDialog.setMessage(getString(R.string.refreshing));
+//                            progressDialog.show();
                             new FetchDependency().execute();
                             setUpViews();
                             }
@@ -2377,33 +2388,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        }
 //        return true;
 //    }
-    private boolean isValidPhoneNumber(CharSequence phoneNumber) {
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            return Patterns.PHONE.matcher(phoneNumber).matches();
-        }
-        return false;
-    }
-    private boolean validateUsing_libphonenumber(String countryCode, String phNumber) {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-        String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
-        Phonenumber.PhoneNumber phoneNumber = null;
-        try {
-            //phoneNumber = phoneNumberUtil.parse(phNumber, "IN");  //if you want to pass region code
-            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
-        } catch (NumberParseException e) {
-            System.err.println(e);
-        }
-
-        boolean isValid = phoneNumberUtil.isValidNumber(phoneNumber);
-        if (isValid) {
-            String internationalFormat = phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
-            //Toast.makeText(this, "Phone Number is Valid " + internationalFormat, Toast.LENGTH_LONG).show();
-            return true;
-        } else {
-            //Toast.makeText(this, "Phone Number is Invalid " + phoneNumber, Toast.LENGTH_LONG).show();
-            return false;
-        }
-    }
 
     /**
      * Handling the create button here.
@@ -3656,7 +3640,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             if (InternetReceiver.isConnected()) {
                 if (!term.equals("")&&term.length()==3){
 
-                    progressBar.setVisibility(View.VISIBLE);
+                    //progressBar.setVisibility(View.VISIBLE);
+//                    refresh.startAnimation();
+                    refresh.startAnimation(rotation);
                     String newTerm=term;
                     arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
                     //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
@@ -3693,7 +3679,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         if (term.length()==3){
                             Log.d("newTerm", term);
                             adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
-                            progressBar.setVisibility(View.VISIBLE);
+                            //progressBar.setVisibility(View.VISIBLE);
+                            //refresh.startAnimation();
+                            refresh.startAnimation(rotation);
                             //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                             new FetchCollaboratorCC(term.trim()).execute();
                         }
@@ -3712,7 +3700,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                     } else if (term.length()==3){
                         adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
-                        progressBar.setVisibility(View.VISIBLE);
+                        //progressBar.setVisibility(View.VISIBLE);
+//                        refresh.startAnimation();
+                        refresh.startAnimation(rotation);
+
                         //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                         new FetchCollaboratorCC(term).execute();
                         //multiAutoCompleteTextViewCC.setAdapter(adapter1);
@@ -3747,7 +3738,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
-            progressBar.setVisibility(View.GONE);
+            refresh.clearAnimation();
+//            refresh.stopAnimation();
+//            Bitmap icon = BitmapFactory.decodeResource(getResources(),
+//                    R.drawable.ic_refresh_black_24dp);
+//            refresh.doneLoadingAnimation(getResources().getColor(R.color.faveo),icon);
+            //progressBar.setVisibility(View.GONE);
             emailHint.clear();
 
             try {
@@ -3794,7 +3790,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
 
         protected void onPostExecute(String result) {
-            progressBar.setVisibility(View.GONE);
+            //progressBar.setVisibility(View.GONE);
+            refresh.clearAnimation();
             if (isCancelled()) return;
             stringArraylist.clear();
 
@@ -3868,6 +3865,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
 
         protected void onPostExecute(String result) {
+                refresh.clearAnimation();
             try {
                 progressDialog.dismiss();
             }catch (NullPointerException e){

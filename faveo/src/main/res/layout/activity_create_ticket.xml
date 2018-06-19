@@ -75,9 +75,9 @@
                     android:id="@+id/attachment"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignTop="@+id/titlesave"
-                    android:layout_marginEnd="11dp"
-                    android:layout_toStartOf="@+id/buttonSubmit"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="53dp"
                     android:background="@drawable/ic_action_attach_file"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
@@ -88,29 +88,33 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignTop="@id/titlesave"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/ic_action_done"
                     android:textColor="#ffffff"
                     android:textSize="12sp" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/imageRefresh"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="91dp"
-                    android:background="@drawable/ic_refresh_black_24dp" />
+                    android:background="@drawable/ic_refresh_black_24dp"
+                    android:visibility="visible"
+                    android:fillAfter="true"
+                    android:fillEnabled="true"/>
 
 
-                <ProgressBar
-                    android:id="@+id/createTicketProgressbar"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/imageRefresh"
-                    android:visibility="gone" />
+                <!--<ProgressBar-->
+                    <!--android:id="@+id/createTicketProgressbar"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginEnd="91dp"-->
+                    <!--android:visibility="visible" />-->
 
 
             </RelativeLayout>

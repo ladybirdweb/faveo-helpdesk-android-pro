@@ -377,17 +377,9 @@ public class collaboratorAdd extends AppCompatActivity {
                     autoCompleteTextViewUser.setDropDownWidth(1500);
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
                     autoCompleteTextViewUser.showDropDown();
-                    View view = collaboratorAdd.this.getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-                    //autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
 
                 }
-
-
-            } catch (JSONException e) {
+                } catch (JSONException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {
                 e.printStackTrace();

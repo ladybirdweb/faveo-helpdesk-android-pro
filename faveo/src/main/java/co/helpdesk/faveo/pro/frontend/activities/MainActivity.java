@@ -47,6 +47,7 @@ import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
 import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
+import co.helpdesk.faveo.pro.frontend.fragments.HelpSection;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Settings.OnFragmentInteractionListener,UpdatedAtDesc.OnFragmentInteractionListener,
         UpdatedAtAsc.OnFragmentInteractionListener,DueByAsc.OnFragmentInteractionListener,DueByDesc.OnFragmentInteractionListener,
         SortByTicketNumberAscending.OnFragmentInteractionListener,SortByTicketNumberDescending.OnFragmentInteractionListener,
-        SortByTicketPriorityAsc.OnFragmentInteractionListener,SortByTicketPriorityDesc.OnFragmentInteractionListener,CreatedAtAsc.OnFragmentInteractionListener,CreatedAtDesc.OnFragmentInteractionListener{
+        SortByTicketPriorityAsc.OnFragmentInteractionListener,SortByTicketPriorityDesc.OnFragmentInteractionListener,CreatedAtAsc.OnFragmentInteractionListener,CreatedAtDesc.OnFragmentInteractionListener,HelpSection.OnFragmentInteractionListener{
 
     // The BroadcastReceiver that tracks network connectivity changes.
 //    public InternetReceiver receiver = new InternetReceiver();

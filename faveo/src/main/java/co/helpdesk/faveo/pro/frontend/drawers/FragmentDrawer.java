@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.drawers;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -63,10 +65,10 @@ import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.SettingsActivity;
-import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
 import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
+import co.helpdesk.faveo.pro.frontend.fragments.HelpSection;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
@@ -121,10 +123,41 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     ListView listView;
     @BindView(R.id.ticket_list)
     LinearLayout ticketList;
+    @BindView(R.id.clientList)
+    TextView textViewClientList;
+    @BindView(R.id.clientImage)
+    ImageView clientImage;
+    @BindView(R.id.create_ticket)
+    LinearLayout linearLayoutCreate;
+    @BindView(R.id.client_list)
+    LinearLayout linearClientList;
+    @BindView(R.id.settingsoption)
+    LinearLayout linearSettings;
+    @BindView(R.id.helpSection)
+    LinearLayout linearHelp;
+    @BindView(R.id.about)
+    LinearLayout linearLayoutAbout;
+    @BindView(R.id.logout)
+    LinearLayout linearLog;
+    @BindView(R.id.settingimage)
+    ImageView imageViewsettimg;
+    @BindView(R.id.settingtext)
+    TextView textViewsetting;
+    @BindView(R.id.helpimage)
+    ImageView imageviewhelp;
+    @BindView(R.id.helptext)
+    TextView textviewhelp;
+    @BindView(R.id.aboutimage)
+    ImageView imageviewabout;
+    @BindView(R.id.abouttext)
+    TextView textviewabout;
+    @BindView(R.id.logoutimage)
+    ImageView imageViewlogout;
+    @BindView(R.id.logouttext)
+    TextView textviewlogout;
 
 
-
-
+    int option=5;
     public FragmentDrawer() {
 
     }
@@ -175,12 +208,14 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         progressDialog=new ProgressDialog(getActivity());
         drawerItemCustomAdapter.notifyDataSetChanged();
         UIUtils.setListViewHeightBasedOnItems(listView);
+        UIUtils.setListViewHeightBasedOnItems(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment=null;
                 //Toast.makeText(context, "Clicked at :"+position, Toast.LENGTH_SHORT).show();
                 if (position==0){
+                    option=0;
                     title = getString(R.string.inbox);
                     fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                     if (fragment == null)
@@ -195,6 +230,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                     }
                 }else if (position==1){
+                    option=1;
                     title = getString(R.string.my_tickets);
                     fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                     if (fragment == null)
@@ -210,6 +246,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                     }
                 }
                 else if (position==2){
+                    option=2;
                     title = getString(R.string.unassigned_tickets);
                     fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                     if (fragment == null)
@@ -224,6 +261,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                     }
                 }else if (position==3){
+                    option=3;
                     title = getString(R.string.closed_tickets);
                     fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                     if (fragment == null)
@@ -238,6 +276,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                     }
                 }else if (position==4){
+                    option=4;
                     title = getString(R.string.trash);
                     fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                     if (fragment == null)
@@ -280,6 +319,38 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         userRole.setText(Prefs.getString("ROLE", ""));
         domainAddress.setText(Prefs.getString("BASE_URL", ""));
         userName.setText(Prefs.getString("PROFILE_NAME", ""));
+        try {
+            String cameFromSetting = Prefs.getString("cameFromSetting", null);
+            if (cameFromSetting.equals("true")) {
+                option = 5;
+                textviewhelp.setTextColor(getResources().getColor(R.color.faveo));
+                imageviewhelp.setColorFilter(getResources().getColor(R.color.faveo));
+                linearHelp.setBackgroundColor(getResources().getColor(R.color.grey_200));
+
+                textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                textviewabout.setTextColor(getResources().getColor(R.color.black));
+                imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                Prefs.putString("cameFromSetting", "false");
+                drawerItemCustomAdapter.notifyDataSetChanged();
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
         ticketList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -319,6 +390,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 super.onDrawerOpened(drawerView);
                 new SendPostRequest().execute();
                 new FetchDependency().execute();
+                drawerItemCustomAdapter.notifyDataSetChanged();
                 getActivity().invalidateOptionsMenu();
             }
 
@@ -417,49 +489,63 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(String result) {
             Log.d("resultFromNewCall",result);
+                if (isAdded()) {
+                    if (responseCodeForShow == 400) {
+                        final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange), Toast.LENGTH_SHORT);
+                        toast.show();
+                        new CountDownTimer(10000, 1000) {
+                            public void onTick(long millisUntilFinished) {
+                                toast.show();
+                            }
 
-            if (responseCodeForShow==400){
-                final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange),Toast.LENGTH_SHORT);
-                toast.show();
-                new CountDownTimer(10000, 1000)
-                {
-                    public void onTick(long millisUntilFinished) {toast.show();}
-                    public void onFinish() {toast.cancel();}
-                }.start();
-                Prefs.clear();
-                Intent intent=new Intent(getActivity(),LoginActivity.class);
-                startActivity(intent);
-                return;
-            }
-
-            if (responseCodeForShow==405){
-                final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange),Toast.LENGTH_SHORT);
-                toast.show();
-                new CountDownTimer(10000, 1000)
-                {
-                    public void onTick(long millisUntilFinished) {toast.show();}
-                    public void onFinish() {toast.cancel();}
-                }.start();
-                Prefs.clear();
-                Intent intent=new Intent(getActivity(),LoginActivity.class);
-                startActivity(intent);
-                return;
-            }
+                            public void onFinish() {
+                                toast.cancel();
+                            }
+                        }.start();
+                        Prefs.clear();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        return;
+                    }
 
 
-            if (responseCodeForShow==302){
-                final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange),Toast.LENGTH_SHORT);
-                toast.show();
-                new CountDownTimer(10000, 1000)
-                {
-                    public void onTick(long millisUntilFinished) {toast.show();}
-                    public void onFinish() {toast.cancel();}
-                }.start();
-                Prefs.clear();
-                Intent intent=new Intent(getActivity(),LoginActivity.class);
-                startActivity(intent);
-                return;
-            }
+                    if (responseCodeForShow == 405) {
+                        final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange), Toast.LENGTH_SHORT);
+                        toast.show();
+                        new CountDownTimer(10000, 1000) {
+                            public void onTick(long millisUntilFinished) {
+                                toast.show();
+                            }
+
+                            public void onFinish() {
+                                toast.cancel();
+                            }
+                        }.start();
+                        Prefs.clear();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        return;
+                    }
+
+
+                    if (responseCodeForShow == 302) {
+                        final Toast toast = Toasty.info(getActivity(), getString(R.string.urlchange), Toast.LENGTH_SHORT);
+                        toast.show();
+                        new CountDownTimer(10000, 1000) {
+                            public void onTick(long millisUntilFinished) {
+                                toast.show();
+                            }
+
+                            public void onFinish() {
+                                toast.cancel();
+                            }
+                        }.start();
+                        Prefs.clear();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        return;
+                    }
+                }
 
             try {
                 JSONObject jsonObject=new JSONObject(result);
@@ -659,10 +745,8 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.create_ticket:
-//                title = getString(R.string.create_ticket);
-//                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-//                if (fragment == null)
-//                    fragment = new CreateTicket();
+                option=6;
+                linearLayoutCreate.setBackgroundColor(getResources().getColor(R.color.grey_200));
                 Prefs.putString("firstusername","null");
                 Prefs.putString("lastusername","null");
                 Prefs.putString("firstuseremail","null");
@@ -708,37 +792,139 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 //                    fragment = new TrashTickets();
 //                break;
             case R.id.client_list:
+                option=6;
+                linearClientList.setBackgroundColor(getResources().getColor(R.color.grey_200));
                 Prefs.putString("normalclientlist","true");
                 Prefs.putString("filtercustomer","true");
                 title = getString(R.string.client_list);
+                textViewClientList.setTextColor(getResources().getColor(R.color.faveo));
+                clientImage.setColorFilter(getResources().getColor(R.color.faveo));
+
+                linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+
+
+                textviewabout.setTextColor(getResources().getColor(R.color.black));
+                imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
+
+                textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 if (fragment == null)
                     fragment = new ClientList();
                 break;
             case R.id.settingsoption:
-//                Intent intentSettings=new Intent(getContext(), SettingsActivity.class);
-//                startActivity(intentSettings);
+                option=6;
+                textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textviewabout.setTextColor(getResources().getColor(R.color.black));
+                imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+                textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                linearSettings.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                textViewsetting.setTextColor(getResources().getColor(R.color.faveo));
+                imageViewsettimg.setColorFilter(getResources().getColor(R.color.faveo));
                 title = getString(R.string.settings);
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                 if (fragment == null)
                     fragment = new Settings();
                 break;
             case R.id.helpSection:
-                Intent intent=new Intent(getContext(),SettingsActivity.class);
+                option=6;
+                textviewhelp.setTextColor(getResources().getColor(R.color.faveo));
+                imageviewhelp.setColorFilter(getResources().getColor(R.color.faveo));
+                linearHelp.setBackgroundColor(getResources().getColor(R.color.grey_200));
+
+                linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                textviewabout.setTextColor(getResources().getColor(R.color.black));
+                imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                Intent intent=new Intent(getActivity(),SettingsActivity.class);
                 startActivity(intent);
+//                title = getString(R.string.helpSection);
+//                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
+//                if (fragment == null)
+//                    fragment = new HelpSection();
                 break;
             case R.id.about:
+                option=6;
+                textviewabout.setTextColor(getResources().getColor(R.color.faveo));
+                imageviewabout.setColorFilter(getResources().getColor(R.color.faveo));
+                linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.grey_200));
+
+
+                textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 title = getString(R.string.about);
                 fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
                 if (fragment == null)
                     fragment = new About();
                 break;
             case R.id.logout:
+                option=6;
+                textviewlogout.setTextColor(getResources().getColor(R.color.faveo));
+                imageViewlogout.setColorFilter(getResources().getColor(R.color.faveo));
+                linearLog.setBackgroundColor(getResources().getColor(R.color.grey_200));
+
+                textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
                 try {
                     MyFirebaseInstanceIDService.sendRegistrationToServer("0");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                mDrawerLayout.closeDrawers();
+                drawerItemCustomAdapter.notifyDataSetChanged();
                 confirmationDialog.show(getFragmentManager(),null);
 //                if (RealmController.with(this).hasTickets()) {
 //                    RealmController.with(this).clearAll();
@@ -765,6 +951,221 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             ((MainActivity) getActivity()).setActionBarTitle(title);
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+
+    public class DrawerItemCustomAdapter extends ArrayAdapter<DataModel> {
+        Context mContext;
+        int layoutResourceId;
+        DataModel data[] = null;
+        public DrawerItemCustomAdapter(Context mContext, int layoutResourceId, DataModel[] data) {
+
+            super(mContext, layoutResourceId, data);
+            this.layoutResourceId = layoutResourceId;
+            this.mContext = mContext;
+            this.data = data;
+        }
+
+        @Override
+        public View getView(final int position, final View convertView, ViewGroup parent) {
+
+            View listItem = convertView;
+
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            listItem = inflater.inflate(layoutResourceId, parent, false);
+            ImageView imageViewIcon = (ImageView) listItem.findViewById(R.id.imageView2);
+            final TextView textViewName = (TextView) listItem.findViewById(R.id.inboxtv);
+            TextView countNumber= (TextView) listItem.findViewById(R.id.inbox_count);
+
+            DataModel folder = data[position];
+            if (option==0){
+                if (position==0){
+                    listItem.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                    textViewName.setTextColor(getResources().getColor(R.color.faveo));
+                    imageViewIcon.setColorFilter(getResources().getColor(R.color.faveo));
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                    imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                    imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                    linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                    clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+                    textviewabout.setTextColor(getResources().getColor(R.color.black));
+                    imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+
+            }
+            else if (option==1){
+                if (position==1){
+                    listItem.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                    textViewName.setTextColor(getResources().getColor(R.color.faveo));
+                    imageViewIcon.setColorFilter(getResources().getColor(R.color.faveo));
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                    imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                    imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                    linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                    clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+                    textviewabout.setTextColor(getResources().getColor(R.color.black));
+                    imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+
+            }
+            else if (option==2){
+                if (position==2){
+                    listItem.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                    textViewName.setTextColor(getResources().getColor(R.color.faveo));
+                    imageViewIcon.setColorFilter(getResources().getColor(R.color.faveo));
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                    imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                    imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                    linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                    clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+                    textviewabout.setTextColor(getResources().getColor(R.color.black));
+                    imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+
+            }
+            else if (option==3){
+                if (position==3){
+                    listItem.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                    textViewName.setTextColor(getResources().getColor(R.color.faveo));
+                    imageViewIcon.setColorFilter(getResources().getColor(R.color.faveo));
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                    imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                    imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                    linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                    clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+                    textviewabout.setTextColor(getResources().getColor(R.color.black));
+                    imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+
+            }
+            else if (option==4){
+                if (position==4){
+                    listItem.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                    textViewName.setTextColor(getResources().getColor(R.color.faveo));
+                    imageViewIcon.setColorFilter(getResources().getColor(R.color.faveo));
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                    imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                    imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                    linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                    clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+                    textviewabout.setTextColor(getResources().getColor(R.color.black));
+                    imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+
+            }
+
+            else if (option==5) {
+                if (position == 0) {
+                    listItem.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                    textViewName.setTextColor(getResources().getColor(R.color.faveo));
+                    imageViewIcon.setColorFilter(getResources().getColor(R.color.faveo));
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    textviewlogout.setTextColor(getResources().getColor(R.color.black));
+                    imageViewlogout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLog.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textviewhelp.setTextColor(getResources().getColor(R.color.black));
+                    imageviewhelp.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearHelp.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                    linearSettings.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewsetting.setTextColor(getResources().getColor(R.color.black));
+                    imageViewsettimg.setColorFilter(getResources().getColor(R.color.grey_500));
+
+                    linearClientList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    textViewClientList.setTextColor(getResources().getColor(R.color.black));
+                    clientImage.setColorFilter(getResources().getColor(R.color.grey_500));
+                    textviewabout.setTextColor(getResources().getColor(R.color.black));
+                    imageviewabout.setColorFilter(getResources().getColor(R.color.grey_500));
+                    linearLayoutAbout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+            }
+            else{
+                listItem.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                textViewName.setTextColor(getResources().getColor(R.color.black));
+                imageViewIcon.setColorFilter(getResources().getColor(R.color.grey_500));
+            }
+            imageViewIcon.setImageResource(folder.getIcon());
+            textViewName.setText(folder.getName());
+            countNumber.setText(folder.getCount());
+            drawerItemCustomAdapter.notifyDataSetChanged();
+
+
+
+            return listItem;
+        }
+
     }
 
 

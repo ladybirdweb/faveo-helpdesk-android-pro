@@ -4,7 +4,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
+import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
+
+//import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 
 /**
  * Created by Lenovo on 6/29/2017.
@@ -13,7 +15,7 @@ import co.helpdesk.faveo.pro.frontend.adapters.DrawerItemCustomAdapter;
 public class UIUtils {
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 
-        DrawerItemCustomAdapter listAdapter = (DrawerItemCustomAdapter) listView.getAdapter();
+        FragmentDrawer.DrawerItemCustomAdapter listAdapter = (FragmentDrawer.DrawerItemCustomAdapter) listView.getAdapter();
         if (listAdapter != null) {
 
             int numberOfItems = listAdapter.getCount();

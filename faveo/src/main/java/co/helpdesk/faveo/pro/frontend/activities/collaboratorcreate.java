@@ -256,7 +256,7 @@ public class collaboratorcreate extends AppCompatActivity {
                 String role = jsonObject1.getString("role");
                 if (role.contains("ccc")) {
                     Toasty.success(collaboratorcreate.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorcreate.this,collaboratorcreate.class);
+                    Intent intent=new Intent(collaboratorcreate.this,collaboratorAdd.class);
                     startActivity(intent);
                     finish();
                 }

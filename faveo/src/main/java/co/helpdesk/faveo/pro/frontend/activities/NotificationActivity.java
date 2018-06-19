@@ -301,13 +301,6 @@ public class NotificationActivity extends AppCompatActivity {
             loading = true;
         }
     }
-//    public void setRealmAdapter(RealmResults<NotificationThread> tickets) {
-//
-//        RealmTicketAdapter realmAdapter = new RealmTicketAdapter(this.getApplicationContext(), tickets, true);
-//        // Set the data and tell the RecyclerView to draw
-//        adapter.setRealmAdapter(realmAdapter);
-//        adapter.notifyDataSetChanged();
-//    }
 
     /**
      * Handling the menu items here.
@@ -412,7 +405,7 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // mListener = null;
-        nextPageURL = "";
+        //nextPageURL = "";
     }
 
 //    @Override

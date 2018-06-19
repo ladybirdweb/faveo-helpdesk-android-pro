@@ -94,6 +94,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         //String letter = String.valueOf(ticketThread.clientName.charAt(0)).toUpperCase();
         ticketViewHolder.textViewClientName.setText(ticketThread.clientName);
         ticketViewHolder.textViewMessageTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
+        ticketViewHolder.textViewTicketCreatedTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
         String message=ticketThread.message.replaceAll("\n","");
         String message1=message.replaceAll("\t","");
         Log.d("without",message1);
@@ -145,6 +146,13 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             }
         });
 
+        if (i==ticketThreadList.size()-1){
+            ticketViewHolder.reportAndReply.setText("reported ");
+        }
+        else{
+            ticketViewHolder.reportAndReply.setText("updated ");
+        }
+
 //        IImageLoader imageLoader = new PicassoLoader();
 //        imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketThread.clientPicture, ticketThread.placeholder);
 
@@ -171,9 +179,15 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
                 if (ticketViewHolder.linearLayout.getVisibility() == View.VISIBLE) {
                     //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
                     ticketViewHolder.linearLayout.setVisibility(View.GONE);
+                    ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
                     ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
                 } else {
                     ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+                    ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
                     ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
                     //ticketViewHolder.webView.setVisibility(View.VISIBLE);
                 }
@@ -200,11 +214,13 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         ImageView roundedImageViewProfilePic;
         TextView textViewClientName;
         RelativeTimeTextView textViewMessageTime;
+        RelativeTimeTextView textViewTicketCreatedTime;
         TextView textViewMessageTitle;
         TextView textViewType;
         WebView webView;
         RelativeLayout relativeLayout;
         TextView textView;
+        TextView reportAndReply;
         LinearLayout linearLayout;
         View view;
         TicketViewHolder(View v) {
@@ -214,12 +230,14 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewMessageTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
+            textViewTicketCreatedTime= (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_related);
             //textViewMessageTitle = (TextView) v.findViewById(R.id.textView_client_message_title);
             textViewType = (TextView) v.findViewById(R.id.textView_type);
             webView = (WebView) v.findViewById(R.id.webView);
             textViewShowingSome= (TextView) v.findViewById(R.id.showingSome);
             relativeLayout= (RelativeLayout) v.findViewById(R.id.attachmentlayout);
             textView= (TextView) v.findViewById(R.id.textView7);
+            reportAndReply= (TextView) v.findViewById(R.id.reported);
             linearLayout= (LinearLayout) v.findViewById(R.id.linearWebView);
         }
 

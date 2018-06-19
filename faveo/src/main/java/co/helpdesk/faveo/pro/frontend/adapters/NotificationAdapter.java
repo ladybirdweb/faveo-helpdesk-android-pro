@@ -3,6 +3,7 @@ package co.helpdesk.faveo.pro.frontend.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
@@ -56,69 +57,93 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(CardViewHolder viewHolder, final int position) {
         final NotificationThread notiThread = notiThreadList.get(position);
-        String letter = String.valueOf(notiThread.getRequesterName().charAt(0)).toUpperCase();
-        TextDrawable.IBuilder mDrawableBuilder;
-        viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
-        viewHolder.textSub.setText(notiThread.getRequesterName().trim()+", "+notiThread.getTicket_subject());
-        if (notiThread.getProfiel_pic().equals("")){
-            viewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+        String letter = null;
+        try {
+            letter = String.valueOf(notiThread.getRequesterName().charAt(0)).toUpperCase();
 
-        }
-        else if (notiThread.getProfiel_pic().contains(".jpg")){
-            mDrawableBuilder = TextDrawable.builder()
-                    .round();
+
+            TextDrawable.IBuilder mDrawableBuilder;
+            viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
+            if (notiThread.getBy().equals("System")){
+                viewHolder.textSub.setText("System, "+notiThread.getTicket_subject());
+                int color= Color.parseColor("#ffffff");
+                //profilePic.setAlpha(0.2f);
+                viewHolder.roundedImageViewProfilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
+                viewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.default_pic);
+            }
+            else{
+                viewHolder.textSub.setText(notiThread.getRequesterName().trim() + ", " + notiThread.getTicket_subject());
+                if (notiThread.getProfiel_pic().equals("")) {
+                    viewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+
+                } else if (notiThread.getProfiel_pic().contains(".jpg") || notiThread.getProfiel_pic().contains(".png") || notiThread.getProfiel_pic().contains(".jpeg")) {
+                    mDrawableBuilder = TextDrawable.builder()
+                            .round();
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
-            Picasso.with(context).load(notiThread.getProfiel_pic()).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
+                    Picasso.with(context).load(notiThread.getProfiel_pic()).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
 //        Glide.with(context)
 //            .load(ticketOverview.getClientPicture())
 //            .into(ticketViewHolder.roundedImageViewProfilePic);
 
-            //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+                    //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
 
-        }
-        else{
-            int color=Color.parseColor("#cdc5bf");
-            ColorGenerator generator = ColorGenerator.MATERIAL;
-            TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter,generator.getRandomColor());
-            viewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
-            viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
-        }
-        if (notiThread.getNoti_seen().equals("1")) {
-            viewHolder.textSub.setTypeface(null, Typeface.NORMAL);
-            viewHolder.textSub.setTextColor(Color.parseColor("#7a7a7a"));
-        } else {
-            viewHolder.textSub.setTypeface(null, Typeface.BOLD);
-            viewHolder.textSub.setTextColor(Color.parseColor("#000000"));
-        }
-        viewHolder.card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //updateNotification(notiThread.getTicket_id() + "");
-                new UpdateNotificationSeen(notiThread.getNoti_id()).execute();
-
-
-                if (notiThread.getNoti_scenario().equals("tickets")) {
-
-                    Intent intent = new Intent(view.getContext(), TicketDetailActivity.class);
-                    Log.d("ticket_id", notiThread.getTicket_id() + "");
-                    Prefs.putString("TICKETid",notiThread.getTicket_id()+"");
-                    Prefs.putString("cameFromNotification","true");
-                    // intent.putExtra("ticket_id", notiThread.getTicket_id() + "");
-                    view.getContext().startActivity(intent);
                 } else {
-
-                    Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
-                    intent.putExtra("CLIENT_ID", notiThread.getClient_id() + "");
-                    Prefs.putString("clientId",notiThread.getClient_id() + "");
-                    view.getContext().startActivity(intent);
+                    int color = Color.parseColor("#cdc5bf");
+                    ColorGenerator generator = ColorGenerator.MATERIAL;
+                    TextDrawable drawable = TextDrawable.builder()
+                            .buildRound(letter, generator.getRandomColor());
+                    viewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                    viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
                 }
-                notiThread.setNoti_seen("1");
-                notifyDataSetChanged();
             }
-        });
+//            if (notiThread.getRequesterName().equals("null")){
+//                viewHolder.textSub.setText(notiThread.getTicket_subject());
+//            }
+//            else{
+//                viewHolder.textSub.setText(notiThread.getRequesterName().trim() + ", " + notiThread.getTicket_subject());
+//            }
 
+
+
+
+            if (notiThread.getNoti_seen().equals("1")) {
+                viewHolder.textSub.setTypeface(null, Typeface.NORMAL);
+                viewHolder.textSub.setTextColor(Color.parseColor("#7a7a7a"));
+            } else {
+                viewHolder.textSub.setTypeface(null, Typeface.BOLD);
+                viewHolder.textSub.setTextColor(Color.parseColor("#000000"));
+            }
+            viewHolder.card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //updateNotification(notiThread.getTicket_id() + "");
+                    new UpdateNotificationSeen(notiThread.getNoti_id()).execute();
+
+
+                    if (notiThread.getNoti_scenario().equals("tickets")) {
+
+                        Intent intent = new Intent(view.getContext(), TicketDetailActivity.class);
+                        Log.d("ticket_id", notiThread.getTicket_id() + "");
+                        Prefs.putString("TICKETid", notiThread.getTicket_id() + "");
+                        Prefs.putString("cameFromNotification", "true");
+                        // intent.putExtra("ticket_id", notiThread.getTicket_id() + "");
+                        view.getContext().startActivity(intent);
+                    } else {
+
+                        Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
+                        intent.putExtra("CLIENT_ID", notiThread.getClient_id() + "");
+                        Prefs.putString("clientId", notiThread.getClient_id() + "");
+                        view.getContext().startActivity(intent);
+                    }
+                    notiThread.setNoti_seen("1");
+                    notifyDataSetChanged();
+                }
+            });
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -154,6 +179,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public int getItemCount() {
         return notiThreadList.size();
+    }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     static class CardViewHolder extends RecyclerView.ViewHolder {

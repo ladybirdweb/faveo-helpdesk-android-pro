@@ -104,12 +104,15 @@
                 android:background="@color/colorAccent">
 
                 <ImageView
+                    android:id="@+id/createImage"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
-                    android:src="@drawable/create_ticket" />
+                    android:src="@drawable/create_ticket"
+                    android:tint="@color/grey_500"/>
 
                 <TextView
+                    android:id="@+id/createTicket"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
@@ -135,7 +138,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
-                    android:src="@drawable/ticket_list" />
+                    android:src="@drawable/ticket_list"
+                    android:tint="@color/grey_500"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -439,12 +443,15 @@
                 android:background="@color/colorAccent">
 
                 <ImageView
+                    android:id="@+id/clientImage"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
-                    android:src="@drawable/client_list" />
+                    android:src="@drawable/client_list"
+                    android:tint="@color/grey_500"/>
 
                 <TextView
+                    android:id="@+id/clientList"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
@@ -497,12 +504,15 @@
                 android:background="@color/colorAccent">
 
                 <ImageView
+                    android:id="@+id/settingimage"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
-                    android:src="@drawable/settings" />
+                    android:src="@drawable/settings"
+                    android:tint="@color/grey_500"/>
 
                 <TextView
+                    android:id="@+id/settingtext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
@@ -522,13 +532,16 @@
                 android:background="@color/colorAccent">
 
                 <ImageView
+                    android:id="@+id/helpimage"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
                     android:src="@drawable/supporticon"
-                    android:tint="@color/faveo"/>
+                    android:tint="@color/grey_500"
+                    />
 
                 <TextView
+                    android:id="@+id/helptext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
@@ -548,12 +561,15 @@
                 android:background="@color/colorAccent">
 
                 <ImageView
+                    android:id="@+id/aboutimage"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
-                    android:src="@drawable/about" />
+                    android:src="@drawable/about"
+                    android:tint="@color/grey_500"/>
 
                 <TextView
+                    android:id="@+id/abouttext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"
@@ -573,15 +589,20 @@
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:background="@color/colorAccent">
+                android:background="@color/colorAccent"
+                >
 
                 <ImageView
+                    android:id="@+id/logoutimage"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
-                    android:src="@drawable/organisation_list" />
+                    android:src="@drawable/organisation_list"
+                    android:tint="@color/grey_500"
+                    />
 
                 <TextView
+                    android:id="@+id/logouttext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"

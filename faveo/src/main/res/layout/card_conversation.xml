@@ -39,18 +39,18 @@
 
             <TextView
                 android:id="@+id/textView_client_name"
-                android:layout_width="120dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:alpha="0.54"
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="70dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:alpha=".6"
                 android:fontFamily="sans-serif-bold"
                 android:text="@string/dummy_name"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -60,11 +60,36 @@
                 android:layout_above="@+id/textView_type"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="70dp"
-                android:alpha=".86"
+                android:alpha=".7"
+                android:textSize="14sp"
                 android:visibility="visible"
                 android:maxLines="2"
+                android:fontFamily="sans-serif"
                 android:text="Hello i saw a vintage table lamp last night on your site"
                 android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/reported"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textView_client_name"
+                android:layout_centerVertical="true"
+                android:text="updated "
+                android:fontFamily="sans-thin"
+                android:alpha=".86"
+                android:visibility="gone"/>
+
+            <com.github.curioustechizen.ago.RelativeTimeTextView
+                android:id="@+id/textView_ticket_related"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/reported"
+                android:alpha=".86"
+                android:fontFamily="sans-thin"
+                android:text="@string/dummy_date"
+                android:textSize="12sp"
+                android:visibility="gone" />
 
             <com.github.curioustechizen.ago.RelativeTimeTextView
                 android:id="@+id/textView_ticket_time"
@@ -72,12 +97,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/textView_client_name"
-                android:layout_marginEnd="11dp"
+                android:layout_marginEnd="12dp"
                 android:alpha=".86"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/dummy_date"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
+
 
             <TextView
                 android:id="@+id/textView_type"

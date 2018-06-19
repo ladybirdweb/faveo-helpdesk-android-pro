@@ -94,7 +94,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="250dp"
                 android:layout_marginBottom="24dp"
                 android:orientation="vertical"
                 android:paddingLeft="16dp"
@@ -114,7 +114,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="70dp"
                     android:orientation="horizontal">
 
                     <!--<ImageView-->
@@ -138,22 +138,39 @@
                         android:inputType="textUri"
                         android:paddingBottom="12dp"
                         android:paddingTop="12dp"
-                        android:hint="eg: http://faveoservicedesk.com/public"
+                        android:hint="eg: http://faveohelpdesk.com/public"
                         android:textCursorDrawable="@drawable/color_cursor"
                         android:textSize="14sp" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/fab_verify_url"
+                    <com.github.jorgecastilloprz.FABProgressCircle
+                        android:id="@+id/fabProgressCircle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fadingEdgeLength="1dp"
-                        android:src="@mipmap/ic_arrow_forward_white_24dp"
-                        app:fabSize="mini" />
+                        app:arcColor="@color/faveo"
+                        app:arcWidth="2dp"
+                        app:reusable="true"
+                        android:clipToPadding="false"
+                        app:finalIcon="@drawable/ic_done_white_24dp"
+                        android:padding="2dp"
+                        >
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fab_verify_url"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/ic_arrow_forward_white_24dp"
+                            app:fabSize="mini"
+                            app:reusable="true"
+                            android:clipToPadding="false"/>
+
+                    </com.github.jorgecastilloprz.FABProgressCircle>
+
+
 
 
 
                 </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,13 +185,28 @@
                     android:layout_height="20dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignStart="@+id/staticView"
-                    android:layout_marginBottom="77dp"
+                    android:layout_marginBottom="97dp"
                     android:autoLink="web"
                     android:background="@drawable/layer_list"
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/need_help_with_your_servicedesk_url"
                     android:textColor="@color/faveo"
                     android:textSize="15sp" />
+                <ProgressBar
+                    android:layout_width="20dp"
+                    android:id="@+id/progress_bar"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center|top"
+                    android:visibility="gone"
+                    />
+                <TextView
+                    android:id="@+id/progresstext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/pleasewait"
+                    android:visibility="gone"/>
+
             </LinearLayout>
             <ScrollView
                 android:layout_width="match_parent"
@@ -233,16 +265,30 @@
                         android:textColor="#ff0000"/>
                 </android.support.design.widget.TextInputLayout>
 
-                <Button
-                    android:id="@+id/button_signin"
-                    android:layout_width="match_parent"
+                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                     android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    app:spinning_bar_width="4dp"
                     android:layout_margin="32dp"
-                    android:background="@drawable/button_background"
+                    android:layout_gravity="center"
                     android:text="@string/sign_in"
-                    android:visibility="visible"
+                    android:background="@drawable/button_background"
                     android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:id="@+id/button_signin"
+                    app:spinning_bar_color="@color/white"
+                    app:spinning_bar_padding="6dp" />
+
+                <!--<Button-->
+                    <!--android:id="@+id/button_signin"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="32dp"-->
+                    <!--android:background="@drawable/button_background"-->
+                    <!--android:text="@string/sign_in"-->
+                    <!--android:visibility="visible"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textStyle="bold" />-->
             </LinearLayout>
             </ScrollView>
 

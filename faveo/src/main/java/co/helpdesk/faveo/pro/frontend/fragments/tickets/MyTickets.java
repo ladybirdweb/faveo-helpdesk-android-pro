@@ -28,6 +28,8 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -776,6 +778,7 @@ public class MyTickets extends Fragment {
             });
 
             ticketOverviewAdapter = new TicketOverviewAdapter(getContext(), ticketOverviewList);
+
             recyclerView.setAdapter(ticketOverviewAdapter);
 
             if (ticketOverviewAdapter.getItemCount() == 0) {
@@ -783,6 +786,7 @@ public class MyTickets extends Fragment {
             } else empty_view.setVisibility(View.GONE);
         }
     }
+
 
     /**
      * Async task for next page details.

@@ -257,7 +257,6 @@ public class InboxTickets extends Fragment {
             toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
             toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
-
             toolbar1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -267,6 +266,8 @@ public class InboxTickets extends Fragment {
 
                 }
             });
+
+
 
 //            toolbar.setOverflowIcon(drawable);
 //        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);

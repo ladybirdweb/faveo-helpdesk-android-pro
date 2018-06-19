@@ -37,8 +37,9 @@ public class HelpSection extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(HelpSection.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent=new Intent(HelpSection.this, MainActivity.class);
+//                startActivity(intent);
+                finish();
             }
         });
         login.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +49,8 @@ public class HelpSection extends AppCompatActivity {
             startActivity(intent);
             }
         });
+
+
         tickets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

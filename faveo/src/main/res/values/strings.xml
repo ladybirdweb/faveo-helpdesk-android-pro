@@ -317,7 +317,7 @@
     <string name="multiAssign">Select two or more tickets to assign</string>
     <string name="successfullyAssigned">Successfully assigned those tickets</string>
     <string name="exit">Exit</string>
-    <string name="helpSection">Help Section</string>
+    <string name="helpSection">HelpSection</string>
     <string name="helpsection">Help section</string>
     <string name="login">Login</string>
     <string name="logginginto">Logging into the android app</string>
@@ -459,7 +459,7 @@
     <string name="enterLastName">Enter last name</string>
     <string name="enterPhoneNumber">Enter mobile number</string>
     <string name="enterMobileNumber">Enter phone number</string>
-    <string name="need_help_with_your_servicedesk_url">Need help with your servicedesk URL?</string>
+    <string name="need_help_with_your_servicedesk_url">Need help with your helpdesk URL?</string>
     <string name="wondering_what_will_be_your_helpdesk_url">Wondering what will be your helpdesk URL?</string>
     <string name="this_is_the_url">This is the URL where your help desk is installed.You can reach out to your IT admin to know more.</string>
     <string name="for_more_information_please_drop_a_mail_to_support_ladybirdweb_com">For more information please drop a mail to support@ladybirdweb.com</string>

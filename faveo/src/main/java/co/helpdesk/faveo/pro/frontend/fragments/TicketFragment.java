@@ -434,6 +434,7 @@ public class TicketFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
         if (getView() != null) {
             isViewShown = true;
             //fetchdata() contains logic to show data when page is selected mostly asynctask to fill the data

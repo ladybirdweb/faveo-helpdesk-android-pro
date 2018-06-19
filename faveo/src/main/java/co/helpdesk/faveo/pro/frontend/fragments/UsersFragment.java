@@ -185,7 +185,7 @@ public class UsersFragment extends Fragment {
                     if (querry.equals("")||querry.equals("null")){
                         Log.d("QUERRY","No Querry");
                         recyclerView.setVisibility(View.GONE);
-                        empty_view.setVisibility(View.GONE);
+                        empty_view.setVisibility(View.VISIBLE);
                         //empty_view.setText(getString(R.string.noUser));
                         swipeRefresh.setRefreshing(false);
                     }
