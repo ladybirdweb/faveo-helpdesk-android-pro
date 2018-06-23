@@ -68,30 +68,28 @@
 
                 <Button
                     android:id="@+id/buttonSearchUser"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignBottom="@+id/imageViewBack"
-                    android:layout_alignTop="@+id/titlesave"
-                    android:layout_toStartOf="@+id/buttonDeleteUser"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="52dp"
                     android:background="@drawable/ic_action_done"
-                    android:padding="10dp"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
-                    android:visibility="visible"/>
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/buttonDeleteUser"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignBaseline="@+id/buttonSearchUser"
-                    android:layout_alignBottom="@+id/buttonSearchUser"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="11dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/ic_delete_black_24dp"
                     android:padding="10dp"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
-                    android:visibility="visible"/>
+                    android:visibility="gone" />
 
                 <ProgressBar
                     android:id="@+id/collaboratorProgressBarReply"
@@ -183,26 +181,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="#EEEEEE"
-        android:id="@+id/recipients"
-        android:visibility="gone">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
-            android:text="@string/show"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-        />
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="36dp"-->
+        <!--android:background="#EEEEEE"-->
+        <!--android:id="@+id/recipients"-->
+        <!--android:visibility="visible">-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginLeft="17dp"-->
+            <!--android:layout_marginStart="17dp"-->
+            <!--android:text="@string/show"-->
+            <!--android:textSize="16sp"-->
+            <!--android:textStyle="bold" />-->
+        <!--/>-->
+    <!--</RelativeLayout>-->
 
     <Spinner
         android:id="@+id/spinnerRecipients"

@@ -92,9 +92,9 @@ public class collaboratorAdd extends AppCompatActivity {
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(collaboratorAdd.this,R.color.faveo));
         recipients= (Spinner) findViewById(R.id.spinnerRecipients);
-        relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
+        //relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
         strings = new ArrayList<>();
-        strings.add("Show Recipients");
+        strings.add("Show");
         isShowing=true;
         progressBar= (ProgressBar) findViewById(R.id.collaboratorProgressBarReply);
         progressDialog=new ProgressDialog(collaboratorAdd.this);
@@ -131,6 +131,7 @@ public class collaboratorAdd extends AppCompatActivity {
                         email1=data2.getEmail();
                         Log.d("email1",email1);
                         autoCompleteTextViewUser.setText(email1);
+                        searchUer.setVisibility(View.VISIBLE);
 //                        editTextEmail.setText(email1);
 //                        firstname=data2.getFirst_name();
 //                        lastname=data2.getLast_name();
@@ -158,8 +159,20 @@ public class collaboratorAdd extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
-                startActivity(intent);
+                try {
+                    if (Prefs.getString("cameFromTicket", null).equals("true")) {
+                        Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+                        Prefs.putString("cameFromTicket","false");
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -167,9 +180,11 @@ public class collaboratorAdd extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i==0){
+                    deleteUser.setVisibility(View.GONE);
                     email2=null;
                 }
                 else{
+                    deleteUser.setVisibility(View.VISIBLE);
                     email2=recipients.getSelectedItem().toString();
                     //Toast.makeText(collaboratorAdd.this, "email is:"+email2, Toast.LENGTH_SHORT).show();
                 }
@@ -186,8 +201,9 @@ public class collaboratorAdd extends AppCompatActivity {
 
                 String email=autoCompleteTextViewUser.getText().toString();
 
-                if (autoCompleteTextViewUser.getText().toString().equals("")) {
+                if (!email1.equals(email)&&autoCompleteTextViewUser.getText().toString().equals("")) {
                     Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorEmpty), Toast.LENGTH_SHORT).show();
+                    id1=0;
                 }
                 else if (id1==0){
                     Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
@@ -358,7 +374,6 @@ public class collaboratorAdd extends AppCompatActivity {
                     searchUer.setVisibility(View.GONE);
                     Prefs.putString("noUser", "null");
                 } else {
-                    searchUer.setVisibility(View.VISIBLE);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         String email = jsonObject1.getString("email");
@@ -418,8 +433,9 @@ public class collaboratorAdd extends AppCompatActivity {
                     id = 0;
                     id1=0;
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
+                    Intent intent=new Intent(collaboratorAdd.this,TicketReplyActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
             } catch (JSONException e) {
@@ -527,7 +543,7 @@ public class collaboratorAdd extends AppCompatActivity {
                     return;
                 }else {
                     progressBar.setVisibility(View.GONE);
-                    relativeLayout.setVisibility(View.VISIBLE);
+                    //relativeLayout.setVisibility(View.VISIBLE);
                     recipients.setVisibility(View.VISIBLE);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         noOfCollaborator++;
@@ -541,6 +557,7 @@ public class collaboratorAdd extends AppCompatActivity {
                         strings.add(email);
 
                     }
+                    recipients.performClick();
                     //Toast.makeText(collaboratorAdd.this, "noofcollaborators:"+noOfCollaborator, Toast.LENGTH_SHORT).show();
                 }
 
@@ -614,10 +631,9 @@ public class collaboratorAdd extends AppCompatActivity {
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             term = autoCompleteTextViewUser.getText().toString();
-            searchUer.setVisibility(View.VISIBLE);
             if (InternetReceiver.isConnected()) {
                 if (!term.equals("")&&term.length()==3) {
-                    searchUer.setVisibility(View.GONE);
+                    //searchUer.setVisibility(View.GONE);
                     //int pos = term.lastIndexOf(",");
                     //term = term.substring(pos + 1, term.length());
                     String newTerm=term;
@@ -648,22 +664,37 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         public void afterTextChanged(Editable s) {
-//            if (term.equals("")){
-//                searchUer.setVisibility(View.GONE);
-//            }
-//            else{
-//                searchUer.setVisibility(View.VISIBLE);
-//            }
+
+            if (term.equalsIgnoreCase(email1)){
+                searchUer.setVisibility(View.VISIBLE);
+            }
+            else{
+                searchUer.setVisibility(View.GONE);
+            }
         }
     };
     @Override
     public void onBackPressed() {
-        if (!TicketDetailActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, TicketDetailActivity.class);
-            startActivity(intent);
-        } else Log.d("isShowing", "true");
-        super.onBackPressed();
+        try {
+            if (Prefs.getString("cameFromTicket", null).equals("true")) {
+                Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+                Prefs.putString("cameFromTicket","false");
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+//        if (!TicketDetailActivity.isShowing) {
+//            Log.d("isShowing", "false");
+//            Intent intent = new Intent(this, TicketDetailActivity.class);
+//            startActivity(intent);
+//        } else Log.d("isShowing", "true");
+//        super.onBackPressed();
 
 //        if (fabExpanded)
 //            exitReveal();

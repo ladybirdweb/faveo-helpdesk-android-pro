@@ -50,8 +50,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -2088,6 +2091,7 @@ public class InboxTickets extends Fragment {
                     }
                     else{
                         letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+
                     }
 
                 }
@@ -2120,13 +2124,13 @@ public class InboxTickets extends Fragment {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
             } else {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                if (ticketOverview.lastReply.equals("client")) {
-//
-////                    int color = Color.parseColor("#ededed");
-////                    ticketViewHolder.ticket.setBackgroundColor(color);
-////                } else {
-////
-//                }
+                if (ticketOverview.lastReply.equals("client")) {
+
+                    int color = Color.parseColor("#ededed");
+                    ticketViewHolder.ticket.setBackgroundColor(color);
+                } else {
+
+                }
                 //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
 
@@ -2238,10 +2242,33 @@ public class InboxTickets extends Fragment {
 
             }
             if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
-
+                Log.d("dueDate",ticketOverview.getDueDate());
                 if (Helper.compareDates(ticketOverview.dueDate) == 2) {
                 Log.d("duetoday","yes");
-                    ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    Date EndTime = null;
+                    try {
+                        EndTime = dateFormat.parse(ticketOverview.getDueDate());
+                        Date CurrentTime = dateFormat.parse(dateFormat.format(new Date()));
+                        if (CurrentTime.after(EndTime))
+                        {
+                            ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+                            Log.d("dueFromInbox","overdue");
+                        }
+                        else{
+                            Log.d("dueFromInbox","duetoday");
+                            ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+
 //                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
 //                    ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
 //                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
@@ -2260,6 +2287,7 @@ public class InboxTickets extends Fragment {
                 ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
 
             ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
+            String clientFinalName="";
             if (ticketOverview.getClientName().startsWith("=?")) {
                 String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
                 String newClientName = clientName.replaceAll("=E2=84=A2", "");
@@ -2267,9 +2295,23 @@ public class InboxTickets extends Fragment {
                 String name = finalName.replace("?=", "");
                 String newName = name.replace("_", " ");
                 Log.d("new name", newName);
-                ticketViewHolder.textViewClientName.setText(newName);
+                if (!Character.isUpperCase(newName.charAt(0))){
+                    clientFinalName=newName.replace(newName.charAt(0),newName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(newName);
+                }
+
             } else {
-                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+                if (!Character.isUpperCase(ticketOverview.clientName.charAt(0))){
+                    clientFinalName=ticketOverview.clientName.replace(ticketOverview.clientName.charAt(0),ticketOverview.clientName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+                }
+                //ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 
             }
             if (ticketOverview.ticketPriorityColor.equals("null")) {

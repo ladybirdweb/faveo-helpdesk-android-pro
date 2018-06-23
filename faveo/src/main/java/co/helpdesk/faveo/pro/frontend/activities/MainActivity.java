@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -111,10 +112,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
 
-        //FirebaseCrash.setCrashCollectionEnabled(false);
-
-        //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
         isShowing = true;
+        Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -298,19 +297,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
-
-
-    //    private void logUser() {
-//        // TODO: Use the current user's information
-//        // You can call any combination of these three methods
-//        Crashlytics.setUserIdentifier(Preference.getUserID());
-//        Crashlytics.setUserEmail(Constants.URL);
-//        Crashlytics.setUserName(Preference.getUsername());
-//    }
-//@Override
-//protected void attachBaseContext(Context base) {
-//    super.attachBaseContext(LocaleHelper.onAttach(base));
-//}
 
     @Override
     protected void onDestroy() {

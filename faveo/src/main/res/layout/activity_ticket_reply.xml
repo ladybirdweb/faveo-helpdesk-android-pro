@@ -79,12 +79,28 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignTop="@+id/titlesave"
+                        android:layout_centerVertical="true"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/ic_action_attach_file"
                         android:textColor="#ffffff"
-                        android:textSize="12sp"
                         android:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/button_send"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="55dp"
+                        android:backgroundTint="@color/faveo"
+                        android:background="@drawable/ic_done_white_24dp"
+                        android:text="@string/update"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white" />
+
+
+
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
             <View
@@ -143,10 +159,11 @@
             <EditText
                 android:id="@+id/editText_reply_message"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="200dp"
                 android:background="@drawable/rectanglenew"
                 android:imeOptions="actionDone"
                 android:gravity="top"
+                android:overScrollMode="always"
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
                 android:cursorVisible="true"
@@ -161,8 +178,9 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:gravity="right"
+                android:paddingTop="2dp"
                 android:orientation="horizontal">
 
                 <com.andexert.library.RippleView
@@ -177,10 +195,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="Add CC"
+                        android:paddingTop="6dp"
                         android:textColor="@color/faveo"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                     <ProgressBar
                         android:id="@+id/progress_bar"
@@ -190,30 +209,10 @@
                         android:layout_alignStart="@+id/addcc"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
+                        android:paddingTop="6dp"
                         android:visibility="visible" />
                 </com.andexert.library.RippleView>
             </RelativeLayout>
-            <com.andexert.library.RippleView
-                android:id="@+id/more"
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                rv_centered="true"
-                android:layout_gravity="end"
-                >
-
-                <Button
-                    android:id="@+id/button_send"
-                    android:layout_width="120dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="end"
-                    android:background="@drawable/rectanglereachout"
-                    android:text="@string/update"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
-            </com.andexert.library.RippleView>
 
             <RelativeLayout
                 android:id="@+id/attachment_layout"

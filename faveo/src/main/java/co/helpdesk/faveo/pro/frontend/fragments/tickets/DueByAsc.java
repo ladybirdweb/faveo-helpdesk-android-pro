@@ -1353,17 +1353,31 @@ public class DueByAsc extends Fragment {
             ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
 
             ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
-            if (ticketOverview.getClientName().startsWith("=?")){
-                String clientName=ticketOverview.getClientName().replaceAll("=?UTF-8?Q?","");
-                String newClientName=clientName.replaceAll("=E2=84=A2","");
-                String finalName=newClientName.replace("=??Q?","");
-                String name=finalName.replace("?=","");
-                String newName=name.replace("_"," ");
-                Log.d("new name",newName);
-                ticketViewHolder.textViewClientName.setText(newName);
-            }
-            else{
-                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+            String clientFinalName="";
+            if (ticketOverview.getClientName().startsWith("=?")) {
+                String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
+                String newClientName = clientName.replaceAll("=E2=84=A2", "");
+                String finalName = newClientName.replace("=??Q?", "");
+                String name = finalName.replace("?=", "");
+                String newName = name.replace("_", " ");
+                Log.d("new name", newName);
+                if (!Character.isUpperCase(newName.charAt(0))){
+                    clientFinalName=newName.replace(newName.charAt(0),newName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(newName);
+                }
+
+            } else {
+                if (!Character.isUpperCase(ticketOverview.clientName.charAt(0))){
+                    clientFinalName=ticketOverview.clientName.replace(ticketOverview.clientName.charAt(0),ticketOverview.clientName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+                }
+                //ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 
             }
             if (ticketOverview.ticketPriorityColor.equals("null")){

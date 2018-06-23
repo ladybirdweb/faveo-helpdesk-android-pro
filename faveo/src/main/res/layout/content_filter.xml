@@ -279,7 +279,7 @@
                     android:layout_height="50dp"
                     android:id="@+id/autocompleteassigned"
                     android:inputType="text"
-                    android:hint="@string/showsuggestions"
+                    android:hint="@string/please_enter_yes_or_no"
 
                     />
             </LinearLayout>

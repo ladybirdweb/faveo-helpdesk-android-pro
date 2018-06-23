@@ -926,6 +926,7 @@ public class MyTickets extends Fragment {
         public void onBindViewHolder(final TicketOverviewAdapter.TicketViewHolder ticketViewHolder, final int i) {
             final TicketOverview ticketOverview = ticketOverviewList.get(i);
             String letter;
+            String clientFinalName="";
             if (!ticketOverview.getClientName().equals("")){
                 letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
             }
@@ -961,12 +962,12 @@ public class MyTickets extends Fragment {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
             } else {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                if (ticketOverview.lastReply.equals("client")) {
-//                    int color = Color.parseColor("#ededed");
-//                    ticketViewHolder.ticket.setBackgroundColor(color);
-//                } else {
-//                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                }
+                if (ticketOverview.lastReply.equals("client")) {
+                    int color = Color.parseColor("#ededed");
+                    ticketViewHolder.ticket.setBackgroundColor(color);
+                } else {
+                    //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
                 //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
 
@@ -1114,9 +1115,23 @@ public class MyTickets extends Fragment {
                 String name = finalName.replace("?=", "");
                 String newName = name.replace("_", " ");
                 Log.d("new name", newName);
-                ticketViewHolder.textViewClientName.setText(newName);
+                if (!Character.isUpperCase(newName.charAt(0))){
+                    clientFinalName=newName.replace(newName.charAt(0),newName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(newName);
+                }
+
             } else {
-                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+                if (!Character.isUpperCase(ticketOverview.clientName.charAt(0))){
+                    clientFinalName=ticketOverview.clientName.replace(ticketOverview.clientName.charAt(0),ticketOverview.clientName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+                }
+                //ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 
             }
             if (ticketOverview.ticketPriorityColor.equals("null")) {

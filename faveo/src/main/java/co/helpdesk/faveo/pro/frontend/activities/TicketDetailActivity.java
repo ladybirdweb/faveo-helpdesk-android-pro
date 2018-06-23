@@ -44,6 +44,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elyeproj.loaderviewlibrary.LoaderImageView;
 import com.elyeproj.loaderviewlibrary.LoaderTextView;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
@@ -119,6 +120,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     CoordinatorLayout coordinatorLayout;
     private boolean isFabOpen;
     private Menu menu;
+    ImageView loaderImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +139,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         window.setStatusBarColor(ContextCompat.getColor(TicketDetailActivity.this,R.color.faveo));
         view=findViewById(R.id.overlay);
         fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
-
+        loaderImageView= (ImageView) findViewById(R.id.collaboratorview);
 //       fabSpeedDial.setOnClickListener(this);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
@@ -154,6 +156,16 @@ public class TicketDetailActivity extends AppCompatActivity implements
                }
                 //TODO: Start some activity
                 return false;
+            }
+        });
+
+        loaderImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Prefs.putString("cameFromTicket","true");
+                Intent intent=new Intent(TicketDetailActivity.this,collaboratorAdd.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -223,6 +235,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //            progressDialog=new ProgressDialog(this);
 //            progressDialog.setMessage(getString(R.string.pleasewait));
 //            progressDialog.show();
+            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
             new Thread(new Runnable() {
                 public void run(){
                     Log.d("threadisrunning","true");
@@ -773,6 +786,7 @@ public void fabOpen(){
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             viewPager.setCurrentItem(tab.getPosition(), true);
+
         }
 
         @Override
@@ -851,83 +865,51 @@ public void fabOpen(){
             return mFragmentTitleList.get(position);
         }
     }
+    private class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
+        String ticketid;
 
-    /**
-     * Here we are controlling the FAB reply and internal note option.
-     *
-     * @param type
-     */
-//    void enterReveal(String type) {
-//        fab.setVisibility(View.GONE);
-//        final View myView = findViewById(R.id.reveal);
-//        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-//        SupportAnimator anim =
-//                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-//        if (type.equals("Reply")) {
-//            myView.setVisibility(View.VISIBLE);
-//            myView.findViewById(R.id.section_reply).setVisibility(View.VISIBLE);
-//            myView.findViewById(R.id.section_internal_note).setVisibility(View.GONE);
-//            overlay.setVisibility(View.VISIBLE);
-//        } else {
-//            myView.setVisibility(View.VISIBLE);
-//            myView.findViewById(R.id.section_reply).setVisibility(View.GONE);
-//            myView.findViewById(R.id.section_internal_note).setVisibility(View.VISIBLE);
-//            overlay.setVisibility(View.VISIBLE);
-//        }
-//
-//        anim.start();
-//    }
+        FetchCollaboratorAssociatedWithTicket(String ticketid) {
 
-//    void exitReveal() {
-//
-//        View myView = findViewById(R.id.reveal);
-//        fab.show();
-//        fabExpanded = false;
-//        myView.setVisibility(View.GONE);
-//        overlay.setVisibility(View.GONE);
-//        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-//        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-//        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-//        animator.setDuration(300);
-//        animator = animator.reverse();
-//        animator.addListener(new SupportAnimator.AnimatorListener() {
-//
-//            @Override
-//            public void onAnimationStart() {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd() {
-//                fab.show();
-//                fabExpanded = false;
-//                myView.setVisibility(View.GONE);
-//               // overlay.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onAnimationCancel() {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat() {
-//
-//            }
-//
-//        });
-//        animator.start();
+            this.ticketid = ticketid;
+        }
 
-    //}
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
+        }
 
-//    public int dpToPx(int dp) {
-//        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-//        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-//    }
+        protected void onPostExecute(String result) {
 
-    /**
-     * Handling the back button here.
-     */
+            int noOfCollaborator=0;
+            if (isCancelled()) return;
+            //strings.clear();
+
+//            if (progressDialog.isShowing())
+//                progressDialog.dismiss();
+
+            if (result == null) {
+                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                Data data=new Data(0,"No recipients");
+//                stringArrayList.add(data);
+                return;
+            }
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
+                if (jsonArray.length()==0){
+                    loaderImageView.setVisibility(View.GONE);
+                    return;
+                }
+                else{
+                    loaderImageView.setVisibility(View.VISIBLE);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            }
+
+    }
     @Override
     public void onBackPressed() {
         Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
@@ -1002,6 +984,7 @@ public void fabOpen(){
 //                    progressDialog.setMessage(getString(R.string.pleasewait));
 //                    progressDialog.show();
 //            progressBar.setVisibility(View.VISIBLE);
+            //new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
             new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
         }
 //        else{
@@ -1248,7 +1231,7 @@ public void fabOpen(){
                 Log.d("TITLE",subject);
                 Log.d("TICKETNUMBER",ticketNumber);
                 //String priority=jsonObject1.getString("priority_id");
-
+                new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
 
 
 

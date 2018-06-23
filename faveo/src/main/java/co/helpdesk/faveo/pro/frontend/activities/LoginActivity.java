@@ -500,7 +500,6 @@ public class LoginActivity extends AppCompatActivity {
                 count++;
                 //progressBar.setVisibility(View.GONE);
                 textViewProgress.setVisibility(View.GONE);
-                textViewProgress.setVisibility(View.GONE);
                 fabProgressCircle.hide();
                 buttonVerifyURL.setEnabled(true);
                 Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
@@ -520,8 +519,7 @@ public class LoginActivity extends AppCompatActivity {
                 //progressBar.setVisibility(View.VISIBLE);
                 textViewProgress.setText(getString(R.string.access_checking));
                 textViewProgress.setVisibility(View.VISIBLE);
-                buttonVerifyURL.setEnabled(false);
-                fabProgressCircle.beginFinalAnimation();
+                //fabProgressCircle.beginFinalAnimation();
                 new VerifyBilling(LoginActivity.this, baseURL).execute();
                 Prefs.putString("companyurl",urlGivenByUser);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
@@ -546,7 +544,9 @@ public class LoginActivity extends AppCompatActivity {
                 linearLayout.startAnimation(animation);
                 urlError.setVisibility(View.VISIBLE);
                 textViewProgress.setVisibility(View.GONE);
-                fabProgressCircle.setVisibility(View.GONE);
+                fabProgressCircle.hide();
+                buttonVerifyURL.setEnabled(true);
+                buttonVerifyURL.setVisibility(View.VISIBLE);
                 urlError.setText(getString(R.string.error_verifying_url));
                 urlError.setTextColor(Color.parseColor("#ff0000"));
                 urlError.postDelayed(new Runnable() {
@@ -567,93 +567,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-//    private class VerifyURLSecure extends AsyncTask<String, Void, String> {
-//        Context context;
-//        String companyURL;
-//        String baseURL;
-//
-//        VerifyURLSecure(Context context, String companyURL) {
-//            this.context = context;
-//            this.companyURL = companyURL;
-//            baseURL = companyURL;
-//        }
-//
-//        protected String doInBackground(String... urls) {
-//            if (!companyURL.endsWith("/"))
-//                companyURL = companyURL.concat("/");
-//            return new Helpdesk().getBaseURL(companyURL);
-//        }
-//
-//        protected void onPostExecute(String result) {
-//            progressDialogVerifyURL.dismiss();
-//            if (result == null) {
-//                linearLayout.startAnimation(animation);
-//                urlError.setVisibility(View.VISIBLE);
-//                urlError.setText(getString(R.string.error_verifying_url));
-//                urlError.setTextColor(Color.parseColor("#ff0000"));
-//                urlError.postDelayed(new Runnable() {
-//                    public void run() {
-//                        urlError.setVisibility(View.INVISIBLE);
-//                    }
-//                }, 9000);
-//                //Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
-//                return;
-//
-//            }
-//
-//            else if (result.contains("success")) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-//                    dynamicShortcut();
-//                }
-////                urlSuggestions.add(baseURL);
-////                Set<String> set = new HashSet<>(urlSuggestions);
-////                Prefs.putStringSet("URL_SUG", set);
-//
-//                Prefs.putString("BASE_URL", baseURL);
-//                Prefs.putString("companyurl",urlGivenByUser);
-//                Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
-//                Constants.URL = Prefs.getString("COMPANY_URL", "");
-//                Constants.URL1=Prefs.getString("companyurl",null);
-//                Prefs.putString("domain","http://");
-//                Log.d("companyurl",Constants.URL1);
-//                Prefs.putString("companyUrl",Constants.URL1);
-//                if (BuildConfig.DEBUG) {
-//                    viewflipper.showNext();
-//                    imageBackButton.setVisibility(View.VISIBLE);
-//                    url.setText(baseURL);
-//                    url.setVisibility(View.VISIBLE);
-//                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
-//                } else {
-//                    progressDialogBilling.show();
-//                    new VerifyBilling(LoginActivity.this, baseURL).execute();
-//                }
-//
-//            } else {
-//                linearLayout.startAnimation(animation);
-//                urlError.setVisibility(View.VISIBLE);
-//                urlError.setText(getString(R.string.error_verifying_url));
-//                urlError.setTextColor(Color.parseColor("#ff0000"));
-//                urlError.postDelayed(new Runnable() {
-//                    public void run() {
-//                        urlError.setVisibility(View.INVISIBLE);
-//                    }
-//                }, 5000);
-////                urlError.setVisibility(View.VISIBLE);
-////                urlError.setText(getString(R.string.error_verifying_url));
-////                urlError.setTextColor(Color.parseColor("#ff0000"));
-////                urlError.postDelayed(new Runnable() {
-////                    public void run() {
-////                        urlError.setVisibility(View.INVISIBLE);
-////                    }
-////                }, 5000);
-//
-//                //Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
-
-    //N 7.0-> shortcuts
-
     /**
      * This method is for getting the short cut if we are
      * holding the icon for long time.
@@ -696,13 +609,13 @@ public class LoginActivity extends AppCompatActivity {
             //progressBar.setVisibility(View.GONE);
             textViewProgress.setText(getString(R.string.done));
             textViewProgress.setVisibility(View.VISIBLE);
-            buttonVerifyURL.setEnabled(false);
             //fabProgressCircle.hide();
             Log.d("Response BillingVerfy", result + "");
             if (result == null) {
                 //progressBar.setVisibility(View.GONE);
                 buttonVerifyURL.setEnabled(true);
                 textViewProgress.setVisibility(View.GONE);
+                fabProgressCircle.hide();
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -733,8 +646,12 @@ public class LoginActivity extends AppCompatActivity {
                 builder.create();
                 builder.show();
 
-            } else
+            } else {
+                buttonVerifyURL.setEnabled(true);
+                textViewProgress.setVisibility(View.GONE);
+                fabProgressCircle.hide();
                 Toasty.error(context, getString(R.string.error_checking_pro), Toast.LENGTH_LONG).show();
+            }
         }
     }
 

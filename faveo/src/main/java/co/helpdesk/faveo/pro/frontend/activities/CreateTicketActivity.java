@@ -2421,35 +2421,32 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         collaborator = multiAutoCompleteTextViewCC.getText().toString().replaceAll(" ","");
         String newCollaList;
 
+                if (!collaborator.equals("")) {
+                    if (!(collaborator.charAt(collaborator.length() - 1) == ',')) {
+                        StringBuilder stringBuilder = new StringBuilder(collaborator);
+                        newCollaList = stringBuilder.append(",").toString();
+                        for (int i = 0; i < stringBuilder.toString().length(); i++) {
+                            // checking character in string
+                            if (stringBuilder.toString().charAt(i) == ',')
+                                res++;
+                        }
 
-        if (!(collaborator.charAt(collaborator.length()-1)==',')){
-            StringBuilder stringBuilder=new StringBuilder(collaborator);
-            newCollaList=stringBuilder.append(",").toString();
-            for (int i=0; i<stringBuilder.toString().length(); i++)
-            {
-                // checking character in string
-                if (stringBuilder.toString().charAt(i) == ',')
-                    res++;
-            }
+                    } else {
+                        newCollaList = collaborator;
+                        for (int i = 0; i < collaborator.length(); i++) {
+                            // checking character in string
+                            if (collaborator.charAt(i) == ',')
+                                res++;
+                        }
 
-        }
-        else{
-            newCollaList=collaborator;
-            for (int i=0; i<collaborator.length(); i++)
-            {
-                // checking character in string
-                if (collaborator.charAt(i) == ',')
-                    res++;
-            }
+                    }
 
-        }
+                    Log.d("newCollaList", newCollaList);
 
-        Log.d("newCollaList",newCollaList);
-
-        if (res>3){
-            Toasty.info(this,"you can add up to 3 collaborators",Toast.LENGTH_LONG).show();
-            return;
-        }
+                    if (res > 3) {
+                        Toasty.info(this, "you can add up to 3 collaborators", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
 
 //        String newColla=collaborator.replaceAll(" ","");
@@ -2465,25 +2462,25 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 ////            Log.d("lastTerm","commaExcluded");
 ////        }
 //
-            if (!newCollaList.equals("")) {
-                    Log.d("colla",newCollaList);
-                Log.d("lastTerm","commaExcluded");
-                    //collaborator.replace("" + collaborator.charAt(collaborator.length() - 1), ",");
+                    if (!newCollaList.equals("")) {
+                        Log.d("colla", newCollaList);
+                        Log.d("lastTerm", "commaExcluded");
+                        //collaborator.replace("" + collaborator.charAt(collaborator.length() - 1), ",");
 //                StringBuilder stringBuilder=new StringBuilder(newColla);
 //                stringBuilder.append(",");
-                    cc = newCollaList.split(",");
-                    sb = new StringBuilder();
-                for (String aCc : cc) {
-                    String one = aCc.trim();
-                    Log.d("one", one);
-                    if (!Helper.isValidEmail(one)) {
-                        Toasty.error(CreateTicketActivity.this, getString(R.string.enter_valid_email), Toast.LENGTH_LONG).show();
-                        allCorrect = false;
-                        return;
-                    } else {
-                        sb.append(one).append(",");
-                    }
-                }
+                        cc = newCollaList.split(",");
+                        sb = new StringBuilder();
+                        for (String aCc : cc) {
+                            String one = aCc.trim();
+                            Log.d("one", one);
+                            if (!Helper.isValidEmail(one)) {
+                                Toasty.error(CreateTicketActivity.this, getString(R.string.enter_valid_email), Toast.LENGTH_LONG).show();
+                                allCorrect = false;
+                                return;
+                            } else {
+                                sb.append(one).append(",");
+                            }
+                        }
                         Log.d("sb", sb.toString());
                         cc1 = sb.toString().split(",");
                         sb1 = new StringBuilder();
@@ -2492,10 +2489,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                 sb1.append("&cc[]=");
                                 sb1.append(n);
                                 first_user = cc1[0];
-                                }
+                            }
                             Log.d("first_user", first_user);
                             collaborators = sb1.toString();
-                            Log.d("sb1",sb1.toString());
+                            Log.d("sb1", sb1.toString());
                         } else if (res == 2) {
                             for (String n : cc1) {
                                 sb1.append("&cc[]=").append(n);
@@ -2507,9 +2504,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                             Log.d("first_user", first_user);
                             Log.d("second_user", second_user);
                             collaborators = sb1.toString();
-                            Log.d("sb1",sb1.toString());
-                        }
-                        else if (res == 3) {
+                            Log.d("sb1", sb1.toString());
+                        } else if (res == 3) {
                             for (String n : cc1) {
                                 sb1.append("&cc[]=");
                                 sb1.append(n);
@@ -2521,7 +2517,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                             Log.d("second_user", second_user);
                             Log.d("third_user", third_user);
                             collaborators = sb1.toString();
-                            Log.d("sb1",sb1.toString());
+                            Log.d("sb1", sb1.toString());
                         }
 //                        for (String n : cc1) {
 //                            sb1.append("&cc[]=");
@@ -2529,13 +2525,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //                        }
 //                        collaborators = sb1.toString();
 //                        Log.d("collaborators",collaborators);
+                    } else {
+                        Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+                        allCorrect = false;
+                        return;
                     }
-
-                else{
-                Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-                allCorrect = false;
-                return;
-            }
+                }
 
 
         final Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();

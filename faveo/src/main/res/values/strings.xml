@@ -242,7 +242,7 @@
     <string name="SelectPriority">Select Priority</string>
     <string name="fullName">Please enter your first name</string>
     <string name="collaborator">cc</string>
-    <string name="enteremail">Search for user</string>
+    <string name="enteremail">Search for existing user</string>
     <string name="searchuser">Show recipients</string>
     <string name="addcollaborator">Add</string>
     <string name="deleteuser">Delete collaborator</string>
@@ -432,6 +432,7 @@
     <string name="editUser">Editing user</string>
     <string name="editConfirmation">Are you sure you want to edit the user?</string>
     <string name="creatingTicket">Creating ticket</string>
+    <string name="creatinguser">Creating user</string>
     <string name="createConfirmation">Are you sure you want to create the ticket?</string>
     <string name="changingStatus">Changing status</string>
     <string name="statusConfirmation">Are you sure you want to change the status?</string>
@@ -472,6 +473,8 @@
     <string name="help_section">Help Section</string>
     <string name="adding_collaborator">Adding collaborator</string>
     <string name="subjectExceed">Subject must not exceed 200 characters</string>
+    <string name="discard">Discard changes?</string>
+    <string name="please_enter_yes_or_no">Please enter yes or no</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>
