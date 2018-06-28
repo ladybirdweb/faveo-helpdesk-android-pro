@@ -408,37 +408,11 @@ public class NotificationActivity extends AppCompatActivity {
         //nextPageURL = "";
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (doubleBackToExitPressedOnce) {
-//            super.onBackPressed();
-//            return;
-//        }
-//
-//        this.doubleBackToExitPressedOnce = true;
-//        //Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
-//        MainActivity mainActivity=new MainActivity();
-//        mainActivity.finish();
-//
-//        new Handler().postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                doubleBackToExitPressedOnce = false;
-//            }
-//        }, 2500);
-//    }
 
 
     @Override
     public void onBackPressed() {
-        // your code.
-//        progressDialog.setMessage("Please wait");
-//        progressDialog.show();
-//        Intent intent=new Intent()
-//        Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
-////        progressDialog.dismiss();
-//        startActivity(intent);
+         finish();
 
     }
 

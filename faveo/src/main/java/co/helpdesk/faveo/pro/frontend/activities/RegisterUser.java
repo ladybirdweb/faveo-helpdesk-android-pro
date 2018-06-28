@@ -38,7 +38,7 @@ import es.dmoral.toasty.Toasty;
 
 public class RegisterUser extends AppCompatActivity {
 
-    ImageView imageViewBack;
+    ImageView imageViewBackFromRegister;
     Button submit;
     EditText editTextEmail,editTextFirstName,editTextPhone,editTextCompany,editTextLastName;
     boolean allCorect;
@@ -68,8 +68,8 @@ public class RegisterUser extends AppCompatActivity {
         editTextLastName= (EditText) findViewById(R.id.lastname_edittext);
         editTextPhone= (EditText) findViewById(R.id.phone_edittextUser);
         editTextCompany= (EditText) findViewById(R.id.company_edittextUser);
-        imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
-        imageViewBack.setOnClickListener(new View.OnClickListener() {
+        imageViewBackFromRegister= (ImageView) findViewById(R.id.imageViewBack);
+        imageViewBackFromRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -212,17 +212,23 @@ public class RegisterUser extends AppCompatActivity {
                 Toasty.error(RegisterUser.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            try {
-                String state = Prefs.getString("400", null);
-
-                if (state.equals("badRequest")) {
-                        Toasty.info(RegisterUser.this,"The user is already registered",Toast.LENGTH_LONG).show();
-                        return;
-                }
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
-
+//            String state=Prefs.getString("403",null);
+//                if (message1.contains("The ticket id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
+//                }
+//                else if (message1.contains("The status id field is required.")){
+//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
+//                }
+//               else
+//            try {
+//                if (state.equals("403") && !state.equals(null)) {
+//                    Toasty.warning(RegisterUser.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+//                    Prefs.putString("403", "null");
+//                    return;
+//                }
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
+//            }
             try{
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("result");
@@ -238,7 +244,6 @@ public class RegisterUser extends AppCompatActivity {
             }catch (JSONException e){
                 e.printStackTrace();
             }
-
             try {
 
                 //JSONObject jsonObject=new JSONObject(result);
@@ -271,7 +276,7 @@ public class RegisterUser extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            }
+        }
 
 
     }
@@ -280,7 +285,6 @@ public class RegisterUser extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent  intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

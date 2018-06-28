@@ -378,18 +378,26 @@ public class SearchActivity extends AppCompatActivity implements
     public void onBackPressed() {
         Prefs.putString("querry","null");
         Prefs.putString("querry1","null");
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } else{
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            Log.d("isShowing", "true");
-            finish();
+        String option=Prefs.getString("cameFromNotification",null);
+        Log.d("cameFromNotification",option);
+        switch (option) {
+            case "false": {
+                Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
+            case "none": {
+                finish();
+                break;
+            }
+            default: {
+                Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
         }
-        super.onBackPressed();
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());

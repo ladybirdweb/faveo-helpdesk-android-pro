@@ -109,9 +109,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 //            builder.append(link.text()).append("");
 //        }
         ticketViewHolder.textViewShowingSome.setText(Jsoup.parse(message1).text());
-
-
-
         //ticketViewHolder.textViewShowingSome.setText(message1);
         ticketViewHolder.webView.loadDataWithBaseURL(null,message2.replaceAll("\\n", "<br/>"), "text/html", "UTF-8", null);
         if (ticketThread.getClientPicture().contains("jpg")||ticketThread.getClientPicture().contains("png")||ticketThread.getClientPicture().contains("jpeg")){
@@ -129,7 +126,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         else{
             ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
         }
-
 
         if (ticketThread.getName().equals("")){
             ticketViewHolder.relativeLayout.setVisibility(View.GONE);

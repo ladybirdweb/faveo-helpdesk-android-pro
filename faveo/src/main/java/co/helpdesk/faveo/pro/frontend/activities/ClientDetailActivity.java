@@ -223,12 +223,31 @@ public class ClientDetailActivity extends AppCompatActivity implements
      */
     @Override
     public void onBackPressed() {
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(ClientDetailActivity.this, MainActivity.class);
-            startActivity(intent);
-        } else Log.d("isShowing", "true");
-        super.onBackPressed();
+        String option=Prefs.getString("cameFromNotification",null);
+        switch (option) {
+            case "true": {
+                Intent intent = new Intent(ClientDetailActivity.this, NotificationActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            }
+            case "none": {
+                Prefs.putString("cameFromClientList","false");
+                Intent intent1=new Intent(ClientDetailActivity.this,SearchActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
+            case "false": {
+                finish();
+                break;
+            }
+
+            default: {
+                finish();
+                break;
+            }
+        }
     }
 
     /**

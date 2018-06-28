@@ -233,12 +233,14 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
 
 //        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 //        touchImageView.setImageBitmap(decodedByte);
-        textView.setText("ATTACHMENT");
+        textView.setText(getString(R.string.attachment));
         imageView.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View view) {
+                Intent intent=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -289,5 +291,12 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
     public void onPermissionsDenied(int requestCode) {
         Toasty.warning(ShowingAttachment.this,getString(R.string.permission_camera_denied),Toast.LENGTH_SHORT).show();
         return;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

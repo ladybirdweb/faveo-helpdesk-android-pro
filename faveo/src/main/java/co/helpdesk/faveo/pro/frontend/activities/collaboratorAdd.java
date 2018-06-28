@@ -1,7 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,44 +9,53 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.pixplicity.easyprefs.library.Prefs;
-import com.viethoa.DialogUtils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import co.helpdesk.faveo.pro.Helper;
+import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.adapters.CollaboratorAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.AttachedCollaborator;
 import co.helpdesk.faveo.pro.model.CollaboratorSuggestion;
-import co.helpdesk.faveo.pro.model.Data;
 import es.dmoral.toasty.Toasty;
 
 public class collaboratorAdd extends AppCompatActivity {
@@ -67,13 +74,16 @@ public class collaboratorAdd extends AppCompatActivity {
     String email1;
     String term;
     ArrayList<String> strings;
-    Spinner recipients;
+    //Spinner recipients;
     String email2;
     ProgressDialog progressDialog;
     public static boolean isShowing = false;
     ProgressBar progressBar;
     ImageButton buttonAdd;
-    EditText editTextemail,editTextfirst,editTextlast;
+    List<AttachedCollaborator> movieList = new ArrayList<>();
+    RecyclerView recyclerView;
+    Collaboratoradapter mAdapter;
+    RecyclerView list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,10 +101,12 @@ public class collaboratorAdd extends AppCompatActivity {
 
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(collaboratorAdd.this,R.color.faveo));
-        recipients= (Spinner) findViewById(R.id.spinnerRecipients);
+        //recipients= (Spinner) findViewById(R.id.spinnerRecipients);
         //relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
         strings = new ArrayList<>();
+        recyclerView= (RecyclerView) findViewById(R.id.list);
         strings.add("Show");
+
         isShowing=true;
         progressBar= (ProgressBar) findViewById(R.id.collaboratorProgressBarReply);
         progressDialog=new ProgressDialog(collaboratorAdd.this);
@@ -155,7 +167,7 @@ public class collaboratorAdd extends AppCompatActivity {
         });
         spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strings); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        recipients.setAdapter(spinnerPriArrayAdapter);
+        //recipients.setAdapter(spinnerPriArrayAdapter);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,25 +188,25 @@ public class collaboratorAdd extends AppCompatActivity {
             }
         });
 
-        recipients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i==0){
-                    deleteUser.setVisibility(View.GONE);
-                    email2=null;
-                }
-                else{
-                    deleteUser.setVisibility(View.VISIBLE);
-                    email2=recipients.getSelectedItem().toString();
-                    //Toast.makeText(collaboratorAdd.this, "email is:"+email2, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                email2=null;
-            }
-        });
+//        recipients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                if (i==0){
+//                    deleteUser.setVisibility(View.GONE);
+//                    email2=null;
+//                }
+//                else{
+//                    deleteUser.setVisibility(View.VISIBLE);
+//                    email2=recipients.getSelectedItem().toString();
+//                    //Toast.makeText(collaboratorAdd.this, "email is:"+email2, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//                email2=null;
+//            }
+//        });
         searchUer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -290,43 +302,37 @@ public class collaboratorAdd extends AppCompatActivity {
 //                    Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
 //                }
                 //Toast.makeText(collaboratorAdd.this, "clicked on delete", Toast.LENGTH_SHORT).show();
-                int pos=recipients.getSelectedItemPosition();
+                //int pos=recipients.getSelectedItemPosition();
                 try {
 
-                    if (pos==0){
+                    if (email2.equals("")){
                         Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
 
                     }
                     else {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
-                        // Setting Dialog Title
-                        alertDialog.setTitle("Removing collaborator...");
-                        // Setting Dialog Message
-                        alertDialog.setMessage("Are you sure you want to remove this user as collaborator?");
-                        // Setting Icon to Dialog
-                        alertDialog.setIcon(R.mipmap.ic_launcher);
-                        // Setting Positive "Yes" Button
-                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        alertDialog.setMessage(R.string.user_collaborator);
+                        alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to invoke YES event
-                                email2 = recipients.getSelectedItem().toString();
-                                progressDialog=new ProgressDialog(collaboratorAdd.this);
-                                progressDialog.setMessage(getString(R.string.pleasewait));
-                                progressDialog.show();
-                                new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
-                            }
-                        });
-                        // Setting Negative "NO" Button
-                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to invoke NO event
-                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                                 dialog.cancel();
                             }
                         });
+                        alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                progressDialog=new ProgressDialog(collaboratorAdd.this);
+                                progressDialog.setMessage(getString(R.string.pleasewait));
+                                progressDialog.show();
+                                Log.d("email3",email2);
+                                new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
+                                // DO SOMETHING HERE
 
-                        // Showing Alert Message
-                        alertDialog.show();
+                            }
+                        });
+
+                        AlertDialog dialog = alertDialog.create();
+                        dialog.show();
 
 
                     }
@@ -338,7 +344,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 //Toast.makeText(collaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
             }
         });
-
+////
 
     }
 
@@ -371,7 +377,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = jsonObject.getJSONArray("users");
                 if (jsonArray.length() == 0) {
-                    searchUer.setVisibility(View.GONE);
+                    //searchUer.setVisibility(View.GONE);
                     Prefs.putString("noUser", "null");
                 } else {
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -464,19 +470,21 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().removeCollaborator(Prefs.getString("ticketId", null), email2);
+            return new Helpdesk().removeCollaborator(Prefs.getString("ticketId", null),email2);
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
             if (isCancelled()) return;
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 String collaborator=jsonObject.getString("collaborator");
                 if (collaborator.equals("deleted successfully")){
+                    email2="";
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
+                    Intent intent=new Intent(collaboratorAdd.this,TicketReplyActivity.class);
                     startActivity(intent);
+                    //finish();
                 }
 //                JSONArray jsonArray=jsonObject.getJSONArray("users");
 //                if (jsonArray.length()==0){
@@ -519,7 +527,12 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-
+            try{
+                progressDialog.dismiss();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+                movieList.clear();
             int noOfCollaborator=0;
             if (isCancelled()) return;
             //strings.clear();
@@ -539,26 +552,51 @@ public class collaboratorAdd extends AppCompatActivity {
                 JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
                 if (jsonArray.length()==0){
                     progressBar.setVisibility(View.GONE);
-                    recipients.setVisibility(View.GONE);
+                    //recipients.setVisibility(View.GONE);
                     return;
                 }else {
                     progressBar.setVisibility(View.GONE);
                     //relativeLayout.setVisibility(View.VISIBLE);
-                    recipients.setVisibility(View.VISIBLE);
+                    //recipients.setVisibility(View.VISIBLE);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         noOfCollaborator++;
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         String email = jsonObject1.getString("email");
+                        String image=jsonObject1.getString("avatar");
+                        String name=jsonObject1.getString("first_name");
+                        String last=jsonObject1.getString("last_name");
+                        String fullName;
+                        if (name.equals("")&&last.equals("")){
+                            fullName="";
+                        }
+                        else if (name.equals("")&&!last.equals("")){
+                            fullName=last;
+                        }
+                        else if (last.equals("")&&!name.equals("")){
+                            fullName=name;
+                        }
+                        else{
+                            fullName=name+" "+last;
+                        }
+                            AttachedCollaborator attachedCollaborator=new AttachedCollaborator(email,image,fullName);
+                            movieList.add(attachedCollaborator);
+
                         //int id= Integer.parseInt(jsonObject1.getString("id"));
                         //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
 
                         //stringArrayList.add(data);
 
-                        strings.add(email);
+                        //strings.add(email);
 
                     }
-                    recipients.performClick();
-                    //Toast.makeText(collaboratorAdd.this, "noofcollaborators:"+noOfCollaborator, Toast.LENGTH_SHORT).show();
+
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    mAdapter = new Collaboratoradapter(collaboratorAdd.this,movieList);
+                    runLayoutAnimation(recyclerView);
+                    recyclerView.setAdapter(mAdapter);
+                    //recyclerView.getAdapter().notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
                 }
 
             } catch (JSONException e) {
@@ -573,55 +611,15 @@ public class collaboratorAdd extends AppCompatActivity {
 
 
         }
+    }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
 
-
-//     class collaboratorRemoveuser extends AsyncTask<String, Void, String> {
-//        String ticketId,userId;
-//
-//        public collaboratorRemoveuser(String ticketId, String userId) {
-//            this.ticketId = ticketId;
-//            this.userId = userId;
-//        }
-//
-//        protected String doInBackground(String... urls) {
-//            return new Helpdesk().removeCollaborator(Prefs.getString("ticketID",null),finalEmail);
-//        }
-//
-//        protected void onPostExecute(String result) {
-//            if (isCancelled()) return;
-//
-//            try {
-//                JSONObject jsonObject=new JSONObject(result);
-//                String collaboratorNotFound=jsonObject.getString("collaborator");
-//                if (collaboratorNotFound.equals("not found")) {
-//                    Toasty.warning(collaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                else if (collaboratorNotFound.equals("deleted successfully")){
-//                    .setText("");
-//                    Toasty.success(collaboratorAdd.this,getString(R.string.collaboratorRemove),Toast.LENGTH_SHORT).show();
-//                }
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-////            if (progressDialog.isShowing())
-////                progressDialog.dismiss();
-//
-////            if (result == null) {
-////                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-////                return;
-////            }
-//
-//
-//
-//        }
-
-
-
-
+        recyclerView.setLayoutAnimation(controller);
+        mAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
     final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -664,12 +662,15 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         public void afterTextChanged(Editable s) {
-
-            if (term.equalsIgnoreCase(email1)){
-                searchUer.setVisibility(View.VISIBLE);
-            }
-            else{
+            if (term.equals("")){
                 searchUer.setVisibility(View.GONE);
+            }
+            else {
+                if (term.equalsIgnoreCase(email1)) {
+                    searchUer.setVisibility(View.VISIBLE);
+                } else {
+                    searchUer.setVisibility(View.GONE);
+                }
             }
         }
     };
@@ -700,5 +701,123 @@ public class collaboratorAdd extends AppCompatActivity {
 //            exitReveal();
 //        else super.onBackPressed();
     }
+    public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
+
+        private List<co.helpdesk.faveo.pro.model.AttachedCollaborator> moviesList;
+        Context context;
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView email;
+            public TextView textViewName;
+            public ImageView imageViewCollaborator;
+            public CheckBox deletecolla;
+            public RelativeLayout relativeLayout;
+
+            public MyViewHolder(View view) {
+                super(view);
+                email = (TextView) view.findViewById(R.id.textView_client_email);
+                imageViewCollaborator= (ImageView) view.findViewById(R.id.imageView_collaborator);
+                relativeLayout= (RelativeLayout) view.findViewById(R.id.attachedCollaborator);
+                textViewName= (TextView) view.findViewById(R.id.collaboratorname);
+                deletecolla= (CheckBox) view.findViewById(R.id.deleteCollaborator);
+
+            }
+        }
+        public Collaboratoradapter(Context context,List<co.helpdesk.faveo.pro.model.AttachedCollaborator> moviesList) {
+            this.moviesList = moviesList;
+            this.context=context;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.listview_item_row, parent, false);
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
+            final co.helpdesk.faveo.pro.model.AttachedCollaborator movie = moviesList.get(position);
+
+
+                holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        email2=movie.getEmail();
+                        holder.deletecolla.setVisibility(View.VISIBLE);
+                        holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                        holder.deletecolla.setChecked(true);
+                        deleteUser.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                });
+
+                holder.deletecolla.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        Log.d("checked",""+b);
+                        if (b){
+                            holder.deletecolla.setVisibility(View.VISIBLE);
+                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                            holder.deletecolla.setChecked(true);
+                            deleteUser.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            holder.deletecolla.setChecked(false);
+                            holder.deletecolla.setVisibility(View.GONE);
+                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.collaborator));
+                            deleteUser.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+
+//                holder.deletecolla.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                        if (b){
+//                           holder.deletecolla.setChecked(false);
+//                           holder.deletecolla.setVisibility(View.GONE);
+//                           deleteUser.setVisibility(View.GONE);
+//                        }
+//                        else{
+//                            holder.deletecolla.setChecked(true);
+//                            deleteUser.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                });
+
+            if (!movie.getEmail().equals("")) {
+                holder.email.setText(movie.getEmail());
+            }
+
+            if (movie.getName().equals("")){
+                holder.textViewName.setVisibility(View.GONE);
+            }
+            else{
+                holder.textViewName.setVisibility(View.VISIBLE);
+                holder.textViewName.setText(movie.getName());
+            }
+
+            if (!movie.getPicture().equals("")){
+                if (movie.getPicture().contains(".jpg")||movie.getPicture().contains(".jpeg")||movie.getPicture().contains(".png")) {
+                    Log.d("picture",movie.getPicture()) ;
+                    Picasso.with(collaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                }
+                else{
+                    Log.d("cameInThisBlock","true");
+                    Picasso.with(collaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                }
+
+            }
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return moviesList.size();
+        }
+    }
+
+
 
 }

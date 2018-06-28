@@ -449,7 +449,7 @@ public class Conversation extends Fragment {
                 AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
 
         recyclerView.setLayoutAnimation(controller);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        ticketThreadAdapter.notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
 

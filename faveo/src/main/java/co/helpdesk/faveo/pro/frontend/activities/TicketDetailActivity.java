@@ -91,15 +91,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public ViewPagerAdapter adapter;
     Conversation fragmentConversation;
     Detail fragmentDetail;
-    Boolean fabExpanded = false;
-    int cx, cy;
-    Fab fab;
-    private MaterialSheetFab materialSheetFab;
-    View overlay;
     EditText editTextInternalNote, editTextCC, editTextReplyMessage;
     Button buttonCreate, buttonSend,buttonExit,buttonCancel;
     ProgressDialog progressDialog;
-    private int statusBarColor;
     public static String ticketID, ticketNumber;
     TextView textView;
     String status;
@@ -169,7 +163,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
 
-
+        Prefs.putString("cameFromTicket","false");
         //setupFab();
         //Prefs.putString("querry","null");
         statusItems=new ArrayList<>();
@@ -191,6 +185,19 @@ public class TicketDetailActivity extends AppCompatActivity implements
         Log.d("ticketDetailOnCreate","True");
         Prefs.putString("TicketRelated","");
         ticketID=Prefs.getString("TICKETid",null);
+        if (InternetReceiver.isConnected()){
+//            progressDialog=new ProgressDialog(this);
+//            progressDialog.setMessage(getString(R.string.pleasewait));
+//            progressDialog.show();
+
+            new Thread(new Runnable() {
+                public void run(){
+                    Log.d("threadisrunning","true");
+                    new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+                }
+            }).start();
+            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+        }
         AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbarTicketDetail);
         setSupportActionBar(mToolbar);
@@ -231,18 +238,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
         addCc = (TextView) findViewById(R.id.addcc);
-        if (InternetReceiver.isConnected()){
-//            progressDialog=new ProgressDialog(this);
-//            progressDialog.setMessage(getString(R.string.pleasewait));
-//            progressDialog.show();
-            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-            new Thread(new Runnable() {
-                public void run(){
-                    Log.d("threadisrunning","true");
-                    new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
-                }
-            }).start();
-            }
+
         imgaeviewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -262,9 +258,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     case "false": {
-//                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-//                        startActivity(intent1);
+                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                        startActivity(intent1);
                         finish();
+                        //finish();
                         break;
                     }
                     case "client": {
@@ -928,8 +925,8 @@ public void fabOpen(){
                 break;
             }
             case "false": {
-//                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-//                        startActivity(intent1);
+                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                        startActivity(intent1);
                 finish();
                 break;
             }
@@ -940,23 +937,14 @@ public void fabOpen(){
                 break;
             }
             default: {
-//                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
-//                        startActivity(intent1);
+             Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+                startActivity(intent1);
                 finish();
                 break;
             }
         }
-//        if (!MainActivity.isShowing) {
-//            Log.d("isShowing", "false");
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//        }
-//        else {
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//            Log.d("isShowing", "true");
-//        }
-        super.onBackPressed();
+
+        //super.onBackPressed();
 
 //        if (materialSheetFab.isSheetVisible()) {
 //            materialSheetFab.hideSheet();
@@ -986,6 +974,7 @@ public void fabOpen(){
 //            progressBar.setVisibility(View.VISIBLE);
             //new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
             new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
         }
 //        else{
 //
@@ -1231,7 +1220,7 @@ public void fabOpen(){
                 Log.d("TITLE",subject);
                 Log.d("TICKETNUMBER",ticketNumber);
                 //String priority=jsonObject1.getString("priority_id");
-                new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+
 
 
 

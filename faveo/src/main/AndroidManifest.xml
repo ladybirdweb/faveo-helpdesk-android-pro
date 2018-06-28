@@ -106,6 +106,7 @@
             android:label="@string/title_activity_ticket_detail"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:noHistory="true"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -129,12 +130,12 @@
             </intent-filter>
         </receiver>
 
-        <!-- <meta-data -->
-        <!-- android:name="firebase_crash_collection_enabled" -->
-        <!-- android:value="false" /> -->
-        <!--<meta-data-->
-        <!--android:name="io.fabric.ApiKey"-->
-        <!--android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />-->
+         <meta-data
+         android:name="firebase_crash_collection_enabled"
+         android:value="false" />
+        <meta-data
+        android:name="io.fabric.ApiKey"
+        android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />
 
         <service android:name=".frontend.services.MyFirebaseInstanceIDService">
             <intent-filter>

@@ -264,20 +264,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         addCc = (TextView) findViewById(R.id.addcc);
         editTextReplyMessage = (EditText) findViewById(R.id.editText_reply_message);
         editTextReplyMessage.setCursorVisible(true);
-        editTextReplyMessage.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (v.getId() == R.id.editText_reply_message) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                        case MotionEvent.ACTION_UP:
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-                }
-                return false;
-            }
-        });
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -231,7 +231,7 @@
     <string name="filtration">Ticket filtration</string>
     <string name="firstName">First name</string>
     <string name="lastName">Last name</string>
-    <string name="companyName">Company name</string>
+    <string name="companyName">Organization</string>
     <string name="additionalDetails">Additional details can be filled on the web app.</string>
     <string name="title_activity_register_user">RegisterUser</string>
     <string name="fill_Firstname">Please provide first name</string>
@@ -331,7 +331,7 @@
     <string name="settings">Settings</string>
     <string name="logginginandout">Logging in and logging out of the Android app</string>
     <string name="LoggingIn">1. Logging in and logging out</string>
-    <string name="logincontent">The Android app for Faveo lest you support your customers anytime from your smartphone or tablet
+    <string name="logincontent">The Android app for Faveo lets you support your customer anytime from your smartphone or tablet
         device.This solution will be a step-by-step walkthrough explaining to you everything you can do with the app. </string>
     <string name="toLogIn">To log in into your app you need to use your helpdesk domain name,your agent email address and password.
         Your domain name would be just the vanity URL where your helpdesk is present just an example support.yourcompany.com.</string>
@@ -355,8 +355,7 @@
         helptopic etc.</string>
     <string name="ticketSave">Ticket edit</string>
     <string name="howToEdit">To edit a ticket just click on the edit icon in the ticket detail page.Then you will get the
-        above screen where you will be able to change
-    the subject,assignee agent,priority,type,helptopic and source of the ticket.After selecting the value you have to press on
+        above screen where you will be able to change the subject,assignee agent,priority,type,helptopic and source of the ticket.After selecting the value you have to press on
         the save button and all the details will be changed of that ticket.</string>
     <string name="ViewCustomersAndAgents">How to view and edit customers</string>
     <string name="customerFilterWithEdit">How to filter customer</string>
@@ -402,8 +401,7 @@
     <string name="selectSubject">Please select the subject</string>
     <string name="selectMessage">Please select the message</string>
     <string name="howToGiveFeedback">You can also give feedback or reach out to us at anytime.We do have option for providing feedback about the mobile app.For that
-    first you have to click on the hamburger icon on the top left corner of the main screen then you have to click on the settings
-        and help section link,once you open you will get one option as "Reach Out To Us".If you click then the above page
+    first you have to click on the hamburger icon on the top left corner of the main screen then you have to click on the support option,once you open you will get one option as "Reach Out To Us".If you click then the above page
         will open where you can provide the feedback or you can ask about any query regarding the app.</string>
     <string name="chooseATopic">Choose a topic</string>
     <string name="pleaseChooseATopic">Please select one topic</string>
@@ -475,6 +473,10 @@
     <string name="subjectExceed">Subject must not exceed 200 characters</string>
     <string name="discard">Discard changes?</string>
     <string name="please_enter_yes_or_no">Please enter yes or no</string>
+    <string name="ticket_typeCreate">Ticket type</string>
+    <string name="user_collaborator">Are you sure you want to remove this user as collaborator?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>

@@ -195,5 +195,10 @@ public class InternalNoteActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

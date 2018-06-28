@@ -211,10 +211,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     boolean allCorrect;
     String term;
     String collaborators=null;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter,autocompletetextview,stringArrayAdapterHint;
-    ArrayAdapter<CollaboratorAdapter> arrayAdapterCollaborator;
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,typeArrayAdapter,autocompletetextview,stringArrayAdapterHint;
     ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
-    CollaboratorAdapter adapter=null;
     MultiCollaboratorAdapter adapter1=null;
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
@@ -237,6 +235,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     EditText editTextMobile;
     Spinner autoCompletePriority;
     Spinner autoCompleteHelpTopic;
+    Spinner spinnerType;
     @BindView(R.id.buttonSubmit)
     Button buttonSubmit;
     ImageButton buttonUserCreate;
@@ -247,18 +246,15 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     StringBuilder sb,sb1;
     String emailfromsuggestion;
     String email2;
-    //    @BindView(R.id.attachment)
-//    Button button;
     @BindView(R.id.attachment_close)
     ImageButton imageButtonAttachmentClose;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,staffItemsHint;
+    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,typeItems;
     ArrayList<CollaboratorSuggestion> emailHint;
     int id=0;
     int id1=0;
     String email1,collaborator;
     ArrayList<MultiCollaborator> stringArraylist;
-    //String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
     int i=0;
@@ -266,26 +262,17 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     MultiAutoCompleteTextView multiAutoCompleteTextViewCC;
     CountryCodePicker countryCodePicker;
     String firstname,lastname,email;
-    ImageButton imageViewGallery,imageViewCamera,imageViewDocument,imageViewAudio;
-    Toolbar toolbarAttachment;
-    File file3;
     String result;
     Button button;
     ImageButton refresh;
-    File file;
-    Thread t;
-    ProgressBar progressBar;
     int gallery,document,camera,audio=0;
     BottomNavigationView bottomNavigationView;
-    private static final int CAMERA_REQUEST = 1888;
     private static final int PICKFILE_REQUEST_CODE = 1234;
-    private static final int PICKVIDEO_REQUEST_CODE = 1235;
     String path="";
     String phone,mobile,message;
     BottomSheetLayout bottomSheet;
     String token;
     Animation rotation;
-    public static final int FILE_PICKER_REQUEST_CODE = 1;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -633,6 +620,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         autoCompleteTextView= (Spinner) findViewById(R.id.autocompletetext);
         autoCompleteHelpTopic= (Spinner) findViewById(R.id.spinner_help);
         autoCompletePriority= (Spinner) findViewById(R.id.spinner_pri);
+        //spinnerType= (Spinner) findViewById(R.id.spinner_type);
         setUpViews();
         try {
             firstname = Prefs.getString("firstusername", null);
@@ -2127,6 +2115,22 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             }
 
 
+//            typeItems=new ArrayList<>();
+//            typeItems.add(new Data(0,"--"));
+//            jsonObject=new JSONObject(json);
+//            JSONArray jsonArrayType=jsonObject.getJSONArray("type");
+//            for (int i=0;i<jsonArrayType.length();i++){
+//                Data data1 = new Data(Integer.parseInt(jsonArrayType.getJSONObject(i).getString("id")), jsonArrayType.getJSONObject(i).getString("name"));
+//
+//                typeItems.add(data1);
+//                Collections.sort(typeItems, new Comparator<Data>() {
+//                    @Override
+//                    public int compare(Data lhs, Data rhs) {
+//                        return lhs.getName().compareTo(rhs.getName());
+//                    }
+//                });
+//            }
+
             JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
             priorityItems = new ArrayList<>();
             priorityItems.add(new Data(0, "--"));
@@ -2143,123 +2147,18 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         } catch (JSONException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-        // selectValue(phCode, getCountryZipCode());
-        // phCode.setSelection(getCountryZipCode());
-//        final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
-//                android.R.layout.simple_list_item_1,
-//                null,
-//                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1},
-//                new int[]{android.R.id.text1},
-//                0);
-//        final List<String> suggestions = new ArrayList<>();
 
-//        requesterSearchview.setSuggestionsAdapter(suggestionAdapter);
-//        requesterSearchview.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-//            @Override
-//            public boolean onSuggestionSelect(int position) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onSuggestionClick(int position) {
-//                requesterSearchview.setQuery(suggestions.get(position), false);
-//                requesterSearchview.clearFocus();
-//                //doSearch(suggestions.get(position));
-//                return true;
-//            }
-//        });
-//
-//        requesterSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (newText.length() > 2) {
-//                    //loadData(s);
-//                    Toast.makeText(getBaseContext(), newText, Toast.LENGTH_SHORT).show();
-//                }
-//
-//                //                MyApp.autocompleteService.search(newText, new Callback<Autocomplete>() {
-////                    @Override
-////                    public void success(Autocomplete autocomplete, Response response) {
-////                        suggestions.clear();
-////                        suggestions.addAll(autocomplete.suggestions);
-////
-////                        String[] columns = {
-////                                BaseColumns._ID,
-////                                SearchManager.SUGGEST_COLUMN_TEXT_1,
-////                                SearchManager.SUGGEST_COLUMN_INTENT_DATA
-////                        };
-////
-////                        MatrixCursor cursor = new MatrixCursor(columns);
-////
-////                        for (int i = 0; i < autocomplete.suggestions.size(); i++) {
-////                            String[] tmp = {Integer.toString(i), autocomplete.suggestions.get(i), autocomplete.suggestions.get(i)};
-////                            cursor.addRow(tmp);
-////                        }
-////                        suggestionAdapter.swapCursor(cursor);
-////                    }
-////
-////                    @Override
-////                    public void failure(RetrofitError error) {
-////                        Toast.makeText(SearchFoodActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-////                        Log.w("autocompleteService", error.getMessage());
-////                    }
-////                });
-//                return true;
-//            }
-//        });
-//        ccSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                //Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                return true;
-//            }
-//        });
-
-//        ImageButton attchmentClose = (ImageButton) findViewById(R.id.attachment_close);
-//        ImageButton addButton = (ImageButton) findViewById(R.id.addrequester_button);
-//        addButton.setOnClickListener(new View.OnClickListener()
-//                                     {
-//                                         @Override
-//                                         public void onClick(View v) {
-//
-//                                             CustomBottomSheetDialog bottomSheetDialog = new CustomBottomSheetDialog();
-//                                             bottomSheetDialog.show(getSupportFragmentManager(), "Custom Bottom Sheet");
-//
-//                                         }
-//                                     }
-//
-//        );
-//        attchmentClose.setOnClickListener(new View.OnClickListener()
-//
-//                                          {
-//                                              @Override
-//                                              public void onClick(View v) {
-//                                                  attachment_layout.setVisibility(View.GONE);
-//                                              }
-//                                          }
-//
-//        );
 
 
         spinnerHelpArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, helptopicItems); //selected item will look like a spinner set from XML
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         autoCompleteHelpTopic.setAdapter(spinnerHelpArrayAdapter);
 
+//        typeArrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item, typeItems);
+//        typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerType.setAdapter(typeArrayAdapter);
 
-//        spinnerStaffArrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,staffItems);
-//        spinnerStaffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerAssignto.setAdapter(spinnerStaffArrayAdapter);
+
         autocompletetextview = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,staffitemsauto);
         autoCompleteTextView.setAdapter(autocompletetextview);
         //autoCompleteTextView.setThreshold(0);
@@ -2536,6 +2435,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         final Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
         final Data priority = (Data) autoCompletePriority.getSelectedItem();
         final Data staff = (Data) autoCompleteTextView.getSelectedItem();
+        //final Data type= (Data) spinnerType.getSelectedItem();
         String fname = editTextFirstName.getText().toString();
         String lname = editTextLastName.getText().toString();
         String phone = editTextPhone.getText().toString();
