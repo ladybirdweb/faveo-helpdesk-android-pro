@@ -18,7 +18,7 @@
     <string name="unassigned_tickets">Unassigned tickets</string>
     <string name="closed_tickets">Closed tickets</string>
     <string name="client_list">Client list</string>
-    <string name="settings">Settings</string>
+    <!--<string name="setting">Settings</string>-->
     <string name="about">About</string>
     <string name="action_search">Search</string>
     <string name="action_settings" translatable="false">Settings</string>
@@ -53,6 +53,7 @@
     <string name="loading">Loading…</string>
     <string name="message">Message</string>
     <string name="create">Create</string>
+    <string name="update">Update</string>
     <string name="reply">Reply</string>
     <string name="cc" translatable="false">Cc</string>
     <string name="send">Send</string>
@@ -71,9 +72,11 @@
     <string name="helptopic">Helptopic</string>
     <string name="deparment">Department</string>
     <string name="priority">Priority</string>
-    <string name="subject">Subject</string>
+    <string name="subject">Reply Content</string>
+    <string name="Subject">Subject</string>
+    <string name="interNalNote">Internal Note</string>
     <string name="email_address" translatable="false">Email Address</string>
-    <string name="version_2_0" translatable="false">Version: 2.0</string>
+    <string name="version_2_0" translatable="false">Version 2.0</string>
     <string name="faveo_helpdesk" translatable="false">Faveo HELPDESK</string>
     <string name="faveo_content">Headquartered in Bangalore, Faveo Helpdesk provides Businesses with an automated Helpdesk system to manage customer support.  The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.</string>
     <string name="website">Website</string>
@@ -112,8 +115,10 @@
     <string name="error_creating_ticket">ERROR! Failed to create ticket</string>
     <string name="fill_all_the_details">Please fill all the required fields</string>
     <string name="fill_firstname">Fill FirstName</string>
-    <string name="firstname_minimum_char">FirstName should be minimum 3 characters</string>
-    <string name="firstname_maximum_char">FirstName should not exceed 20 characters</string>
+    <string name="firstname_minimum_char">FirstName should be minimum 2 characters</string>
+    <string name="firstname_maximum_char">FirstName should not exceed 30 characters</string>
+    <string name="lastname_minimum_char">LastName should be minimum 2 characters</string>
+    <string name="lastname_maximum_char">LastName should not exceed 30 characters</string>
     <string name="fill_lastname">Fill LastName</string>
     <string name="invalid_email">Please enter valid email id</string>
     <string name="sub_must_not_be_empty">Subject must not be empty</string>
@@ -181,7 +186,7 @@
     <string name="select_some_helptopic">Please select some helptopic</string>
     <string name="select_code">Please select the code</string>
     <string name="select_source">Please select some Source</string>
-    <string name="due_today">DueToday</string>
+    <string name="due_today">Due Today</string>
     <string name="status_closed">Status changed to closed.</string>
     <string name="status_deleted">Moved to trash</string>
     <string name="status_opened">Status changed to open</string>
@@ -221,11 +226,12 @@
     <string name="title_activity_ticket_save">TicketSaveActivity</string>
     <string name="title_activity_ticketsave">Ticketsave</string>
     <string name="ticketProperties">Ticket Properties</string>
-    <string name="addUser">Add Requestor</string>
+    <string name="addUser">ADD REQUESTOR</string>
+    <string name="adduser">Add user</string>
     <string name="filtration">Ticket filtration</string>
     <string name="firstName">First name</string>
     <string name="lastName">Last name</string>
-    <string name="companyName">Company name</string>
+    <string name="companyName">Organization</string>
     <string name="additionalDetails">Additional details can be filled on the web app.</string>
     <string name="title_activity_register_user">RegisterUser</string>
     <string name="fill_Firstname">Please provide first name</string>
@@ -236,7 +242,7 @@
     <string name="SelectPriority">Select Priority</string>
     <string name="fullName">Please enter your first name</string>
     <string name="collaborator">cc</string>
-    <string name="enteremail">Search for user</string>
+    <string name="enteremail">Search for existing user</string>
     <string name="searchuser">Show recipients</string>
     <string name="addcollaborator">Add</string>
     <string name="deleteuser">Delete collaborator</string>
@@ -311,7 +317,7 @@
     <string name="multiAssign">Select two or more tickets to assign</string>
     <string name="successfullyAssigned">Successfully assigned those tickets</string>
     <string name="exit">Exit</string>
-    <string name="helpSection">Help Section</string>
+    <string name="helpSection">HelpSection</string>
     <string name="helpsection">Help section</string>
     <string name="login">Login</string>
     <string name="logginginto">Logging into the android app</string>
@@ -322,10 +328,10 @@
     <string name="other">Other features</string>
     <string name="someOtheroptions">How to use some other features</string>
     <string name="loggingIn">Logging in and logging out of the android app</string>
-    <string name="settingsAndInAppHelpSection">Settings and Help section</string>
+    <string name="settings">Settings</string>
     <string name="logginginandout">Logging in and logging out of the Android app</string>
     <string name="LoggingIn">1. Logging in and logging out</string>
-    <string name="logincontent">The Android app for Faveo lest you support your customers anytime from your smartphone or tablet
+    <string name="logincontent">The Android app for Faveo lets you support your customer anytime from your smartphone or tablet
         device.This solution will be a step-by-step walkthrough explaining to you everything you can do with the app. </string>
     <string name="toLogIn">To log in into your app you need to use your helpdesk domain name,your agent email address and password.
         Your domain name would be just the vanity URL where your helpdesk is present just an example support.yourcompany.com.</string>
@@ -349,8 +355,7 @@
         helptopic etc.</string>
     <string name="ticketSave">Ticket edit</string>
     <string name="howToEdit">To edit a ticket just click on the edit icon in the ticket detail page.Then you will get the
-        above screen where you will be able to change
-    the subject,assignee agent,priority,type,helptopic and source of the ticket.After selecting the value you have to press on
+        above screen where you will be able to change the subject,assignee agent,priority,type,helptopic and source of the ticket.After selecting the value you have to press on
         the save button and all the details will be changed of that ticket.</string>
     <string name="ViewCustomersAndAgents">How to view and edit customers</string>
     <string name="customerFilterWithEdit">How to filter customer</string>
@@ -396,8 +401,7 @@
     <string name="selectSubject">Please select the subject</string>
     <string name="selectMessage">Please select the message</string>
     <string name="howToGiveFeedback">You can also give feedback or reach out to us at anytime.We do have option for providing feedback about the mobile app.For that
-    first you have to click on the hamburger icon on the top left corner of the main screen then you have to click on the settings
-        and help section link,once you open you will get one option as "Reach Out To Us".If you click then the above page
+    first you have to click on the hamburger icon on the top left corner of the main screen then you have to click on the support option,once you open you will get one option as "Reach Out To Us".If you click then the above page
         will open where you can provide the feedback or you can ask about any query regarding the app.</string>
     <string name="chooseATopic">Choose a topic</string>
     <string name="pleaseChooseATopic">Please select one topic</string>
@@ -426,6 +430,7 @@
     <string name="editUser">Editing user</string>
     <string name="editConfirmation">Are you sure you want to edit the user?</string>
     <string name="creatingTicket">Creating ticket</string>
+    <string name="creatinguser">Creating user</string>
     <string name="createConfirmation">Are you sure you want to create the ticket?</string>
     <string name="changingStatus">Changing status</string>
     <string name="statusConfirmation">Are you sure you want to change the status?</string>
@@ -453,12 +458,26 @@
     <string name="enterLastName">Enter last name</string>
     <string name="enterPhoneNumber">Enter mobile number</string>
     <string name="enterMobileNumber">Enter phone number</string>
-    <string name="need_help_with_your_servicedesk_url">Need help with your servicedesk URL?</string>
+    <string name="need_help_with_your_servicedesk_url">Need help with your helpdesk URL?</string>
     <string name="wondering_what_will_be_your_helpdesk_url">Wondering what will be your helpdesk URL?</string>
     <string name="this_is_the_url">This is the URL where your help desk is installed.You can reach out to your IT admin to know more.</string>
     <string name="for_more_information_please_drop_a_mail_to_support_ladybirdweb_com">For more information please drop a mail to support@ladybirdweb.com</string>
     <string name="please_enter_a_valid_url">Please enter a valid url</string>
-    <string-array name="CountryCodes" >
+    <string name="video">Video</string>
+    <string name="music">Music</string>
+    <string name="document">Document</string>
+    <string name="subjectForCreate">Subject</string>
+    <string name="support">Support</string>
+    <string name="help_section">Help Section</string>
+    <string name="adding_collaborator">Adding collaborator</string>
+    <string name="subjectExceed">Subject must not exceed 200 characters</string>
+    <string name="discard">Discard changes?</string>
+    <string name="please_enter_yes_or_no">Please enter yes or no</string>
+    <string name="ticket_typeCreate">Ticket type</string>
+    <string name="user_collaborator">Are you sure you want to remove this user as collaborator?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string-array name="CountryCodes">
 
         <item>93,AF</item>
         <item>355,AL</item>

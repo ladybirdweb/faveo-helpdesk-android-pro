@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 //import android.content.DialogInterface;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,6 +43,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.elyeproj.loaderviewlibrary.LoaderImageView;
+import com.elyeproj.loaderviewlibrary.LoaderTextView;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -87,15 +91,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public ViewPagerAdapter adapter;
     Conversation fragmentConversation;
     Detail fragmentDetail;
-    Boolean fabExpanded = false;
-    int cx, cy;
-    Fab fab;
-    private MaterialSheetFab materialSheetFab;
-    View overlay;
     EditText editTextInternalNote, editTextCC, editTextReplyMessage;
     Button buttonCreate, buttonSend,buttonExit,buttonCancel;
     ProgressDialog progressDialog;
-    private int statusBarColor;
     public static String ticketID, ticketNumber;
     TextView textView;
     String status;
@@ -106,7 +104,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
     ImageView imgaeviewBack;
     String cameFromNotification;
     public static boolean isShowing = false;
-    TextView textViewStatus, textviewAgentName, textViewTitle, textViewSubject,textViewDepartment;
+    LoaderTextView textViewStatus, textviewAgentName,textViewTitle,textViewDepartment;
+    LoaderTextView textViewSubject;
     ArrayList<Data> statusItems;
     int id = 0;
     ProgressBar progressBar;
@@ -115,6 +114,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
     CoordinatorLayout coordinatorLayout;
     private boolean isFabOpen;
     private Menu menu;
+    ImageView loaderImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +133,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         window.setStatusBarColor(ContextCompat.getColor(TicketDetailActivity.this,R.color.faveo));
         view=findViewById(R.id.overlay);
         fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
-
+        loaderImageView= (ImageView) findViewById(R.id.collaboratorview);
 //       fabSpeedDial.setOnClickListener(this);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
@@ -152,9 +153,19 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
 
+        loaderImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Prefs.putString("cameFromTicket","true");
+                Intent intent=new Intent(TicketDetailActivity.this,collaboratorAdd.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
+        Prefs.putString("cameFromTicket","false");
         //setupFab();
-        Prefs.putString("querry","null");
+        //Prefs.putString("querry","null");
         statusItems=new ArrayList<>();
         JSONObject jsonObject1;
         //progressBar= (ProgressBar) findViewById(R.id.TicketDetailProgressbar);
@@ -172,7 +183,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
         Log.d("ticketDetailOnCreate","True");
+        Prefs.putString("TicketRelated","");
         ticketID=Prefs.getString("TICKETid",null);
+        if (InternetReceiver.isConnected()){
+//            progressDialog=new ProgressDialog(this);
+//            progressDialog.setMessage(getString(R.string.pleasewait));
+//            progressDialog.show();
+
+            new Thread(new Runnable() {
+                public void run(){
+                    Log.d("threadisrunning","true");
+                    new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+                }
+            }).start();
+            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+        }
         AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbarTicketDetail);
         setSupportActionBar(mToolbar);
@@ -180,11 +205,11 @@ public class TicketDetailActivity extends AppCompatActivity implements
         ticketNumber = getIntent().getStringExtra("ticket_number");
         //linearLayout= (LinearLayout) findViewById(R.id.section_internal_note);
         //mToolbar = (Toolbar) findViewById(R.id.toolbarTicketDetail);
-        textViewStatus = (TextView) mAppBarLayout.findViewById(R.id.status);
-        textviewAgentName = (TextView) mAppBarLayout.findViewById(R.id.textViewagentName);
-        textViewTitle = (TextView) mAppBarLayout.findViewById(R.id.title);
-        textViewDepartment= (TextView) mAppBarLayout.findViewById(R.id.department);
-        textViewSubject = (TextView) mToolbar.findViewById(R.id.subject);
+        textViewStatus = (LoaderTextView) mAppBarLayout.findViewById(R.id.status);
+        textviewAgentName = (LoaderTextView) mAppBarLayout.findViewById(R.id.textViewagentName);
+        textViewTitle = (LoaderTextView) mAppBarLayout.findViewById(R.id.title);
+        textViewDepartment= (LoaderTextView) mAppBarLayout.findViewById(R.id.department);
+        textViewSubject = (LoaderTextView) mToolbar.findViewById(R.id.subject);
         imgaeviewBack= (ImageView) mToolbar.findViewById(R.id.imageViewBackTicketDetail);
         viewpriority=mToolbar.findViewById(R.id.viewPriority);
         viewCollapsePriority=mAppBarLayout.findViewById(R.id.viewPriority1);
@@ -213,17 +238,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         });
         addCc = (TextView) findViewById(R.id.addcc);
-        if (InternetReceiver.isConnected()){
-//            progressDialog=new ProgressDialog(this);
-//            progressDialog.setMessage(getString(R.string.pleasewait));
-//            progressDialog.show();
-            new Thread(new Runnable() {
-                public void run(){
-                    Log.d("threadisrunning","true");
-                    new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
-                }
-            }).start();
-            }
+
         imgaeviewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,21 +248,32 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     case "true": {
                         Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
                     }
                     case "none": {
                         Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
                         startActivity(intent1);
+                        finish();
                         break;
                     }
                     case "false": {
                         Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
                         startActivity(intent1);
+                        finish();
+                        //finish();
+                        break;
+                    }
+                    case "client": {
+                        Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+                        startActivity(intent1);
+                        finish();
                         break;
                     }
                     default: {
                         Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
                         startActivity(intent1);
+                        finish();
                         break;
                     }
                 }
@@ -757,6 +783,7 @@ public void fabOpen(){
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             viewPager.setCurrentItem(tab.getPosition(), true);
+
         }
 
         @Override
@@ -835,97 +862,89 @@ public void fabOpen(){
             return mFragmentTitleList.get(position);
         }
     }
+    private class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
+        String ticketid;
 
-    /**
-     * Here we are controlling the FAB reply and internal note option.
-     *
-     * @param type
-     */
-//    void enterReveal(String type) {
-//        fab.setVisibility(View.GONE);
-//        final View myView = findViewById(R.id.reveal);
-//        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-//        SupportAnimator anim =
-//                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-//        if (type.equals("Reply")) {
-//            myView.setVisibility(View.VISIBLE);
-//            myView.findViewById(R.id.section_reply).setVisibility(View.VISIBLE);
-//            myView.findViewById(R.id.section_internal_note).setVisibility(View.GONE);
-//            overlay.setVisibility(View.VISIBLE);
-//        } else {
-//            myView.setVisibility(View.VISIBLE);
-//            myView.findViewById(R.id.section_reply).setVisibility(View.GONE);
-//            myView.findViewById(R.id.section_internal_note).setVisibility(View.VISIBLE);
-//            overlay.setVisibility(View.VISIBLE);
-//        }
-//
-//        anim.start();
-//    }
+        FetchCollaboratorAssociatedWithTicket(String ticketid) {
 
-//    void exitReveal() {
-//
-//        View myView = findViewById(R.id.reveal);
-//        fab.show();
-//        fabExpanded = false;
-//        myView.setVisibility(View.GONE);
-//        overlay.setVisibility(View.GONE);
-//        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-//        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-//        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-//        animator.setDuration(300);
-//        animator = animator.reverse();
-//        animator.addListener(new SupportAnimator.AnimatorListener() {
-//
-//            @Override
-//            public void onAnimationStart() {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd() {
-//                fab.show();
-//                fabExpanded = false;
-//                myView.setVisibility(View.GONE);
-//               // overlay.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onAnimationCancel() {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat() {
-//
-//            }
-//
-//        });
-//        animator.start();
+            this.ticketid = ticketid;
+        }
 
-    //}
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
+        }
 
-//    public int dpToPx(int dp) {
-//        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-//        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-//    }
+        protected void onPostExecute(String result) {
 
-    /**
-     * Handling the back button here.
-     */
+            int noOfCollaborator=0;
+            if (isCancelled()) return;
+            //strings.clear();
+
+//            if (progressDialog.isShowing())
+//                progressDialog.dismiss();
+
+            if (result == null) {
+                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                Data data=new Data(0,"No recipients");
+//                stringArrayList.add(data);
+                return;
+            }
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
+                if (jsonArray.length()==0){
+                    loaderImageView.setVisibility(View.GONE);
+                    return;
+                }
+                else{
+                    loaderImageView.setVisibility(View.VISIBLE);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            }
+
+    }
     @Override
     public void onBackPressed() {
+        Log.d("cameFromnotification",Prefs.getString("cameFromNotification",null));
+        String option=Prefs.getString("cameFromNotification",null);
+        switch (option) {
+            case "true": {
+                Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            }
+            case "none": {
+                Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
+            case "false": {
+                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                        startActivity(intent1);
+                finish();
+                break;
+            }
+            case "client": {
+                Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
+            default: {
+             Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            }
+        }
 
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
-        else {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            Log.d("isShowing", "true");
-        }
-        super.onBackPressed();
+        //super.onBackPressed();
 
 //        if (materialSheetFab.isSheetVisible()) {
 //            materialSheetFab.hideSheet();
@@ -948,14 +967,19 @@ public void fabOpen(){
 //        progressDialog.show();
         //new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
         Log.d("onResume","CALLED");
-        if (Prefs.getString("TicketRelated",null).equals("")){
-//                    progressDialog.setMessage(getString(R.string.pleasewait));
-//                    progressDialog.show();
-//            progressBar.setVisibility(View.VISIBLE);
-            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
-        }
-        else{
-            String ticketInformation=Prefs.getString("TicketRelated",null);
+        Prefs.putString("TicketRelated","");
+        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//        if (Prefs.getString("TicketRelated",null).equals("")){
+////                    progressDialog.setMessage(getString(R.string.pleasewait));
+////                    progressDialog.show();
+////            progressBar.setVisibility(View.VISIBLE);
+//            //new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//        }
+
+            String ticketInformation=Prefs.getString("ticketSpecific",null);
+//            Log.d("TicketRelated",ticketInformation);
             try {
                 jsonObject = new JSONObject(ticketInformation);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
@@ -1018,14 +1042,10 @@ public void fabOpen(){
                 Log.d("TICKETNUMBER",ticketNumber);
                 //String priority=jsonObject1.getString("priority_id");
 
-
-
-
-
-            } catch (JSONException e) {
+            } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
             }
-        }
+
         Prefs.putString("filePath","");
         checkConnection();
         //setupFab();
@@ -1139,6 +1159,7 @@ public void fabOpen(){
                 jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                 JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                Prefs.putString("ticketSpecific",jsonObject2.toString());
                 String ticketNumber=jsonObject2.getString("ticket_number");
                 String statusName=jsonObject2.getString("status_name");
                 String subject=jsonObject2.getString("title");

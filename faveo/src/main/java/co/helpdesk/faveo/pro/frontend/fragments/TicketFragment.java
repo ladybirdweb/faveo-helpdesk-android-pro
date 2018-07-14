@@ -32,14 +32,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
-import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
-import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 import es.dmoral.toasty.Toasty;
@@ -74,6 +70,7 @@ public class TicketFragment extends Fragment {
     String querry;
     TicketOverview ticketOverview;
     int pageno=1;
+    private boolean isViewShown = false;
     private OnFragmentInteractionListener mListener;
 
     public static TicketFragment newInstance(int page, String title) {
@@ -124,22 +121,22 @@ public class TicketFragment extends Fragment {
             querry=Prefs.getString("querry1",null);
 
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
+        if (!isViewShown) {
             if (InternetReceiver.isConnected()) {
-                if (querry.equals("")||querry.equals("null")){
-                    Log.d("QUERRY","No Querry");
+                if (querry.equals("") || querry.equals("null")) {
+                    Log.d("QUERRY", "No Querry");
                     recyclerView.setVisibility(View.GONE);
-                    empty_view.setVisibility(View.VISIBLE);
-                    empty_view.setText(getString(R.string.noTicket));
-                }
-                else{
+                    empty_view.setVisibility(View.GONE);
+                    //empty_view.setText(getString(R.string.noTicket));
+                } else {
                     noInternet_view.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                     empty_view.setVisibility(View.GONE);
-                    //progressDialog.show();
+                    swipeRefresh.setRefreshing(true);
                     getActivity().getWindow().setSoftInputMode(
                             WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
                     );
-                    new FetchFirst(getActivity(),querry).execute();
+                    new FetchFirst(getActivity(), querry).execute();
                 }
 //                noInternet_view.setVisibility(View.GONE);
 //                // swipeRefresh.setRefreshing(true);
@@ -150,6 +147,7 @@ public class TicketFragment extends Fragment {
                 recyclerView.setVisibility(View.INVISIBLE);
                 empty_view.setVisibility(View.GONE);
             }
+        }
             swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -193,6 +191,19 @@ public class TicketFragment extends Fragment {
 
         return rootView;
     }
+//    @Override
+//    public void setMenuVisibility(final boolean visible) {
+//        if (visible) {
+//            //Do your stuff here
+//            Log.d("Ticketvisible","true");
+//
+//        }
+//        else{
+//            Log.d("Ticketvisible","false");
+//        }
+//
+//        super.setMenuVisibility(visible);
+//    }
 
     private class FetchFirst extends AsyncTask<String, Void, String> {
         Context context;
@@ -289,7 +300,8 @@ public class TicketFragment extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             //Toast.makeText(context, "Total is:"+total, Toast.LENGTH_SHORT).show();
             //Log.d("total",""+total);
             Prefs.putString("cameFromSearch","true");
@@ -414,122 +426,160 @@ public class TicketFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
     @Override
-    public void onResume() {
-        super.onResume();
-        try {
-            lastQuerry = Prefs.getString("searchResult", null);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (getView() != null) {
+            isViewShown = true;
+            //fetchdata() contains logic to show data when page is selected mostly asynctask to fill the data
             if (InternetReceiver.isConnected()) {
-                if (querry.equals("") || querry.equals("null")) {
-                    Log.d("QUERRY", "No Querry");
+                if (querry.equals("")||querry.equals("null")){
+                    Log.d("QUERRY","No Querry");
                     recyclerView.setVisibility(View.GONE);
-                    empty_view.setVisibility(View.VISIBLE);
-                    empty_view.setText(getString(R.string.noTicket));
-                } else {
-                    if (lastQuerry.equals(null) || lastQuerry.equals("")) {
-                        noInternet_view.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
-                        empty_view.setVisibility(View.GONE);
-                        progressDialog.show();
-                        getActivity().getWindow().setSoftInputMode(
-                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-                        );
-                        new FetchFirst(getActivity(), querry).execute();
-                    }
-                    else{
-                        String result=Prefs.getString("searchResult",null);
-                        String data;
-                        ticketOverviewList.clear();
-                        try {
-                            JSONObject jsonObject = new JSONObject(result);
-                            Prefs.putString("searchResult",jsonObject.toString());
-                            JSONObject jsonObject1=jsonObject.getJSONObject("result");
-                            total= jsonObject1.getInt("total");
-                            try {
-                                data = jsonObject1.getString("data");
-                                nextPageURL = jsonObject1.getString("next_page_url");
-                            } catch (JSONException e) {
-                                data = jsonObject1.getString("result");
-                            }
-                            JSONArray jsonArray = new JSONArray(data);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                ticketOverview = Helper.parseTicketSearchOverview(jsonArray, i);
-                                if (ticketOverview != null)
-                                    ticketOverviewList.add(ticketOverview);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        progressDialog.dismiss();
-                        //Toast.makeText(context, "Total is:"+total, Toast.LENGTH_SHORT).show();
-                        //Log.d("total",""+total);
-                        Prefs.putString("cameFromSearch","true");
-                        textView.setVisibility(View.VISIBLE);
-                        textView.setText(""+total+" tickets");
-                        if (swipeRefresh.isRefreshing())
-                            swipeRefresh.setRefreshing(false);
-                        if (result == null) {
-                            Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        if (result.equals("all done")) {
-
-                            Toasty.info(getActivity(), getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        //recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
-                        recyclerView.setHasFixedSize(false);
-                        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                                if (dy > 0) {
-                                    visibleItemCount = linearLayoutManager.getChildCount();
-                                    totalItemCount = linearLayoutManager.getItemCount();
-                                    pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-                                    if (loading) {
-                                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-                                            loading = false;
-                                            pageno++;
-                                            new FetchNextPage(getActivity(),nextPageURL,querry).execute();
-                                            StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
-                                            st.setBackgroundColor(Color.parseColor("#3da6d7"));
-                                            st.setTextColor(Color.WHITE);
-                                            st.setIcon(R.drawable.ic_autorenew_black_24dp);
-                                            st.spinIcon();
-                                            st.setMaxAlpha();
-                                            st.show();
-                                            //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            }
-                        });
-//
-                        ticketOverviewAdapter = new TicketOverviewAdapter(getContext(),ticketOverviewList);
-                        recyclerView.setAdapter(ticketOverviewAdapter);
-
-                        if (ticketOverviewAdapter.getItemCount() == 0) {
-                            empty_view.setVisibility(View.VISIBLE);
-                            textView.setVisibility(View.GONE);
-                        } else empty_view.setVisibility(View.GONE);
-                    }
+                    empty_view.setVisibility(View.GONE);
+                    //empty_view.setText(getString(R.string.noUser));
                 }
-
+                else{
+                    noInternet_view.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    empty_view.setVisibility(View.GONE);
+                    //progressDialog.show();
+                    getActivity().getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+                    );
+                    new FetchFirst(getActivity(), querry).execute();
+                }
 //                noInternet_view.setVisibility(View.GONE);
 //                // swipeRefresh.setRefreshing(true);
 //                progressDialog.show();
 //                new FetchFirst(getActivity(),querry).execute();
-            }
-            else {
+            } else {
                 noInternet_view.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
                 empty_view.setVisibility(View.GONE);
             }
-        }catch (NullPointerException e){
-            e.printStackTrace();
+
+        } else {
+            isViewShown = false;
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+//        try {
+//            lastQuerry = Prefs.getString("searchResult", null);
+//            if (InternetReceiver.isConnected()) {
+//                if (querry.equals("") || querry.equals("null")) {
+//                    Log.d("QUERRY", "No Querry");
+//                    recyclerView.setVisibility(View.GONE);
+//                    empty_view.setVisibility(View.VISIBLE);
+//                    empty_view.setText(getString(R.string.noTicket));
+//                } else {
+//                    if (lastQuerry.equals(null) || lastQuerry.equals("")) {
+//                        noInternet_view.setVisibility(View.GONE);
+//                        recyclerView.setVisibility(View.VISIBLE);
+//                        empty_view.setVisibility(View.GONE);
+//                        swipeRefresh.setRefreshing(true);
+//                        getActivity().getWindow().setSoftInputMode(
+//                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+//                        );
+//                        new FetchFirst(getActivity(), querry).execute();
+//                    }
+//                    else{
+//                        String result=Prefs.getString("searchResult",null);
+//                        String data;
+//                        ticketOverviewList.clear();
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(result);
+//                            Prefs.putString("searchResult",jsonObject.toString());
+//                            JSONObject jsonObject1=jsonObject.getJSONObject("result");
+//                            total= jsonObject1.getInt("total");
+//                            try {
+//                                data = jsonObject1.getString("data");
+//                                nextPageURL = jsonObject1.getString("next_page_url");
+//                            } catch (JSONException e) {
+//                                data = jsonObject1.getString("result");
+//                            }
+//                            JSONArray jsonArray = new JSONArray(data);
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                ticketOverview = Helper.parseTicketSearchOverview(jsonArray, i);
+//                                if (ticketOverview != null)
+//                                    ticketOverviewList.add(ticketOverview);
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                       // progressDialog.dismiss();
+//                        //Toast.makeText(context, "Total is:"+total, Toast.LENGTH_SHORT).show();
+//                        //Log.d("total",""+total);
+//                        Prefs.putString("cameFromSearch","true");
+//                        textView.setVisibility(View.VISIBLE);
+//                        textView.setText(""+total+" tickets");
+//                        if (swipeRefresh.isRefreshing())
+//                            swipeRefresh.setRefreshing(false);
+//                        if (result == null) {
+//                            Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                            return;
+//                        }
+//                        if (result.equals("all done")) {
+//
+//                            Toasty.info(getActivity(), getString(R.string.all_caught_up), Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                        //recyclerView = (ShimmerRecyclerView) rootView.findViewById(R.id.cardList);
+//                        recyclerView.setHasFixedSize(false);
+//                        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//                        recyclerView.setLayoutManager(linearLayoutManager);
+//                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                            @Override
+//                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                                if (dy > 0) {
+//                                    visibleItemCount = linearLayoutManager.getChildCount();
+//                                    totalItemCount = linearLayoutManager.getItemCount();
+//                                    pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
+//                                    if (loading) {
+//                                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+//                                            loading = false;
+//                                            pageno++;
+//                                            new FetchNextPage(getActivity(),nextPageURL,querry).execute();
+//                                            StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
+//                                            st.setBackgroundColor(Color.parseColor("#3da6d7"));
+//                                            st.setTextColor(Color.WHITE);
+//                                            st.setIcon(R.drawable.ic_autorenew_black_24dp);
+//                                            st.spinIcon();
+//                                            st.setMaxAlpha();
+//                                            st.show();
+//                                            //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        });
+////
+//                        ticketOverviewAdapter = new TicketOverviewAdapter(getContext(),ticketOverviewList);
+//                        recyclerView.setAdapter(ticketOverviewAdapter);
+//
+//                        if (ticketOverviewAdapter.getItemCount() == 0) {
+//                            empty_view.setVisibility(View.VISIBLE);
+//                            textView.setVisibility(View.GONE);
+//                        } else empty_view.setVisibility(View.GONE);
+//                    }
+//                }
+//
+////                noInternet_view.setVisibility(View.GONE);
+////                // swipeRefresh.setRefreshing(true);
+////                progressDialog.show();
+////                new FetchFirst(getActivity(),querry).execute();
+//            }
+//            else {
+//                noInternet_view.setVisibility(View.VISIBLE);
+//                recyclerView.setVisibility(View.INVISIBLE);
+//                empty_view.setVisibility(View.GONE);
+//            }
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
 
     }
 

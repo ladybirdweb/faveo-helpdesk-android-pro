@@ -217,7 +217,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
-                android:text="@string/subject"
+                android:text="@string/Subject"
                 android:textSize="16sp"
                 android:textStyle="bold" />
             <TextView

@@ -21,35 +21,35 @@
     <application
         android:name=".FaveoApplication"
         android:allowBackup="false"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme"
-        tools:replace="allowBackup, label"
-        android:hardwareAccelerated="false"
         android:supportsRtl="true"
-        android:largeHeap="true">
+        android:theme="@style/MyMaterialTheme"
+        tools:replace="allowBackup, label">
 
+        <!--android:hardwareAccelerated="false"-->
+        <!--android:largeHeap="true"-->
 
-
-
-        <!--<provider-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:authorities="${applicationId}.provider"-->
-            <!--android:exported="false"-->
-            <!--android:grantUriPermissions="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/nnf_provider_paths" />-->
-        <!--</provider>-->
-        <!--<provider-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:authorities="@string/file_provider_authority"-->
-            <!--android:exported="false"-->
-            <!--android:grantUriPermissions="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/file_provider_paths" />-->
-        <!--</provider> -->
+        <!-- <provider -->
+        <!-- android:name="android.support.v4.content.FileProvider" -->
+        <!-- android:authorities="${applicationId}.provider" -->
+        <!-- android:exported="false" -->
+        <!-- android:grantUriPermissions="true"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+        <!-- android:resource="@xml/nnf_provider_paths" /> -->
+        <!-- </provider> -->
+        <!-- <provider -->
+        <!-- android:name="android.support.v4.content.FileProvider" -->
+        <!-- android:authorities="@string/file_provider_authority" -->
+        <!-- android:exported="false" -->
+        <!-- android:grantUriPermissions="true"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+        <!-- android:resource="@xml/file_provider_paths" /> -->
+        <!-- </provider> -->
         <!-- <activity -->
         <!-- android:name=".SplashScreen" -->
         <!-- android:label="@string/app_name" > -->
@@ -67,7 +67,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -82,6 +81,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="OPEN_ACTIVITY_2" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -105,11 +105,12 @@
             android:label="@string/title_activity_ticket_detail"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
+            android:noHistory="true"
             android:theme="@style/MyMaterialTheme"
-            >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="OPEN_ACTIVITY_1" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -118,6 +119,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" />
+
         <receiver
             android:name=".frontend.receivers.InternetReceiver"
             android:enabled="true">
@@ -127,12 +129,13 @@
             </intent-filter>
         </receiver>
 
-        <!-- <meta-data -->
-        <!-- android:name="firebase_crash_collection_enabled" -->
-        <!-- android:value="false" /> -->
+         <meta-data
+         android:name="firebase_crash_collection_enabled"
+         android:value="false" />
         <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />
+        android:name="io.fabric.ApiKey"
+        android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />
+
         <service android:name=".frontend.services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -158,12 +161,13 @@
         <activity
             android:name=".frontend.activities.CreateTicketActivity"
             android:label="@string/title_activity_create_ticket"
-            android:theme="@style/MyMaterialTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".frontend.activities.SearchActivity"
             android:label="@string/title_activity_search"
             android:launchMode="singleTop"
+            android:parentActivityName=".frontend.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemes">
             <intent-filter>
@@ -192,10 +196,10 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".frontend.activities.TicketFilter" />
         <activity android:name=".frontend.activities.EditCustomer" />
-        <!--<activity-->
-            <!--android:name=".frontend.activities.TicketMergeActtivity"-->
-            <!--android:label="@string/title_activity_ticket_merge_acttivity"-->
-            <!--android:theme="@style/MyMaterialTheme" />-->
+        <!-- <activity -->
+        <!-- android:name=".frontend.activities.TicketMergeActtivity" -->
+        <!-- android:label="@string/title_activity_ticket_merge_acttivity" -->
+        <!-- android:theme="@style/MyMaterialTheme" /> -->
         <activity
             android:name=".frontend.activities.MultiAssigningActivity"
             android:label="@string/title_activity_main2"
@@ -216,23 +220,30 @@
         <activity android:name=".frontend.activities.ChangingStatus" />
         <activity android:name=".frontend.activities.MultipleTicketAssign" />
         <activity android:name=".frontend.activities.MultipleTicketMerge" />
-        <activity android:name=".frontend.activities.FeedBackActivity"
+        <activity
+            android:name=".frontend.activities.FeedBackActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name=".frontend.activities.GivingFeedback"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".frontend.activities.GivingFeedback"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name=".frontend.activities.TicketReplyActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".frontend.activities.TicketReplyActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity android:name=".frontend.activities.InternalNoteActivity" />
-        <activity android:name=".frontend.activities.ShowingAttachment"></activity>
-        <activity android:name=".frontend.activities.HelpingActivity"/>
+        <activity android:name=".frontend.activities.ShowingAttachment" />
+        <activity android:name=".frontend.activities.HelpingActivity" />
+        <activity android:name=".frontend.activities.collaboratorcreate"></activity>
+
+           <!--<meta-data-->
+            <!--android:name="io.fabric.ApiKey"-->
+            <!--android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />-->
+
     </application>
+
 </manifest>

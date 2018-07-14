@@ -37,12 +37,21 @@ public class AttachmnetAdapter extends ArrayAdapter<AttachmentModel> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.listview_item_row,parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.listview_attachment_row,parent,false);
 
         AttachmentModel currentMovie = moviesList.get(position);
 
         TextView name = (TextView) listItem.findViewById(R.id.label);
-        name.setText(currentMovie.getName());
+
+        try {
+            name.setText(currentMovie.getName());
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+//        if (!currentMovie.getName().equals("")){
+//
+//        }
+
         return listItem;
     }
 }

@@ -405,7 +405,7 @@ public class ClosedTickets extends Fragment {
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);
                 // swipeRefresh.setRefreshing(true);
-                progressDialog.show();
+                swipeRefresh.setRefreshing(true);
                 new FetchFirst(getActivity(), page).execute();
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
@@ -581,7 +581,7 @@ public class ClosedTickets extends Fragment {
             return true;
         }
         if (id == R.id.actionsearch) {
-
+            Prefs.putString("cameFromClientList","false");
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
             return true;
@@ -884,7 +884,8 @@ public class ClosedTickets extends Fragment {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             textView.setText(""+total+" tickets");
 
             if (swipeRefresh.isRefreshing())
@@ -1228,16 +1229,16 @@ public class ClosedTickets extends Fragment {
 
                 if (Helper.compareDates(ticketOverview.dueDate) == 2) {
                     ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
+//                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+//                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
+//                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
                     //ticketViewHolder.textViewOverdue.setBackgroundColor();
 
                 }
                 else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
                     ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+//                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
                     //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
 //                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
 //
@@ -1254,17 +1255,31 @@ public class ClosedTickets extends Fragment {
             ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
 
             ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
-            if (ticketOverview.getClientName().startsWith("=?")){
-                String clientName=ticketOverview.getClientName().replaceAll("=?UTF-8?Q?","");
-                String newClientName=clientName.replaceAll("=E2=84=A2","");
-                String finalName=newClientName.replace("=??Q?","");
-                String name=finalName.replace("?=","");
-                String newName=name.replace("_"," ");
-                Log.d("new name",newName);
-                ticketViewHolder.textViewClientName.setText(newName);
-            }
-            else{
-                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+            String clientFinalName="";
+            if (ticketOverview.getClientName().startsWith("=?")) {
+                String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
+                String newClientName = clientName.replaceAll("=E2=84=A2", "");
+                String finalName = newClientName.replace("=??Q?", "");
+                String name = finalName.replace("?=", "");
+                String newName = name.replace("_", " ");
+                Log.d("new name", newName);
+                if (!Character.isUpperCase(newName.charAt(0))){
+                    clientFinalName=newName.replace(newName.charAt(0),newName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(newName);
+                }
+
+            } else {
+                if (!Character.isUpperCase(ticketOverview.clientName.charAt(0))){
+                    clientFinalName=ticketOverview.clientName.replace(ticketOverview.clientName.charAt(0),ticketOverview.clientName.toUpperCase().charAt(0));
+                    ticketViewHolder.textViewClientName.setText(clientFinalName);
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+                }
+                //ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 
             }
             if (ticketOverview.ticketPriorityColor.equals("null")){
@@ -1415,6 +1430,7 @@ public class ClosedTickets extends Fragment {
                         Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                         intent.putExtra("ticket_id", ticketOverview.ticketID + "");
                         Prefs.putString("TICKETid",ticketOverview.ticketID+"");
+                        Prefs.putString("ticketId",ticketOverview.ticketID+"");
                         Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);

@@ -56,8 +56,12 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
         ImageView ivCustomerImage = (ImageView) convertView.findViewById(R.id.imageView_collaborator);
         TextView textViewEmail= (TextView) convertView.findViewById(R.id.textView_client_email);
 
-        if (txtCustomer != null&&customer.getFirst_name()!=null)
+        if (txtCustomer != null&&customer.getFirst_name()!=null) {
             txtCustomer.setText(customer.getFirst_name() + " " + customer.getLast_name());
+        }
+        else{
+            txtCustomer.setVisibility(View.GONE);
+        }
 
 //        if (customer.getProfile_pic().equals("")) {
 //            ivCustomerImage.setVisibility(View.GONE);

@@ -9,11 +9,14 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,7 @@ import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketThread;
 import es.dmoral.toasty.Toasty;
+import io.github.yavski.fabspeeddial.FabSpeedDial;
 
 /**
  *This is the Fragment for showing the conversation details.
@@ -64,7 +68,6 @@ public class Conversation extends Fragment {
     ProgressDialog progressDialog;
     TicketThreadAdapter ticketThreadAdapter;
     List<TicketThread> ticketThreadList = new ArrayList<>();
-    String ticketId;
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
     String file;
@@ -73,6 +76,8 @@ public class Conversation extends Fragment {
     StringBuilder stringBuilderName;
     StringBuilder stringBuilderFile;
     String name;
+    FabSpeedDial fab;
+    Toolbar toolbarTicket;
     private String mParam1;
     private String mParam2;
 
@@ -106,6 +111,9 @@ public class Conversation extends Fragment {
         if (rootView == null) {
             Log.d("calledOnCreate", "true");
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
+             fab = (FabSpeedDial) ((TicketDetailActivity) getActivity()).findViewById(R.id.fab_speed_dial);
+            //fab.setVisibility(View.GONE);
+            toolbarTicket= (Toolbar) ((TicketDetailActivity)getActivity()).findViewById(R.id.toolbarTicketDetail);
             ButterKnife.bind(this, rootView);
             linearLayout = (LinearLayout) rootView.findViewById(R.id.toolbarview);
             linearLayout.setVisibility(View.GONE);
@@ -126,7 +134,9 @@ public class Conversation extends Fragment {
                     // swipeRefresh.setRefreshing(true);
                     progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setMessage(getString(R.string.pleasewait));
-                    progressDialog.show();
+                    //swipeRefresh.setRefreshing(true);
+                    textView.setVisibility(View.GONE);
+                    swipeRefresh.setRefreshing(true);
                     task = new FetchTicketThreads(getActivity(), Prefs.getString("TICKETid", null));
                     task.execute();
                 }
@@ -235,21 +245,25 @@ public class Conversation extends Fragment {
                                 ticketThreadList.add(ticketThread);
                         }
                     }
-                    recyclerView.setHasFixedSize(false);
+                    //recyclerView.setHasFixedSize(false);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setItemViewCacheSize(40);
+                    recyclerView.setDrawingCacheEnabled(true);
+                    recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
                     final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                     linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                     recyclerView.setLayoutManager(linearLayoutManager);
-
                     //Collections.reverse(ticketThreadList);
                     ticketThreadAdapter = new TicketThreadAdapter(getContext(), ticketThreadList);
                     recyclerView.setAdapter(ticketThreadAdapter);
+                    ticketThreadAdapter.notifyDataSetChanged();
                 }
             } else {
                 noInternet_view.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
                 empty_view.setVisibility(View.GONE);
             }
-
+//
 //            swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //                @Override
 //                public void onRefresh() {
@@ -257,6 +271,7 @@ public class Conversation extends Fragment {
 ////                        loading = true;
 //                        recyclerView.setVisibility(View.VISIBLE);
 //                        noInternet_view.setVisibility(View.GONE);
+//
 //                        if (ticketThreadList.size() != 0) {
 //                            ticketThreadList.clear();
 //                            ticketThreadAdapter.notifyDataSetChanged();
@@ -277,6 +292,19 @@ public class Conversation extends Fragment {
 //            });
         }
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
+                    fab.setVisibility(View.GONE);
+                } else if (dy < 0 && fab.getVisibility()==View.GONE) {
+                    fab.setVisibility(View.VISIBLE);
+                    //fab.show();
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -296,8 +324,10 @@ public class Conversation extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+            swipeRefresh.setRefreshing(false);
+            textView.setVisibility(View.VISIBLE);
             try {
-                progressDialog.dismiss();
+                swipeRefresh.setRefreshing(false);
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -406,8 +436,20 @@ public class Conversation extends Fragment {
             recyclerView.setLayoutManager(linearLayoutManager);
             //Collections.reverse(ticketThreadList);
             ticketThreadAdapter = new TicketThreadAdapter(getContext(), ticketThreadList);
+            swipeRefresh.setVisibility(View.VISIBLE);
+            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(ticketThreadAdapter);
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
+    }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
+
+        recyclerView.setLayoutAnimation(controller);
+        ticketThreadAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 
     public void onButtonPressed(Uri uri) {
@@ -476,7 +518,7 @@ public class Conversation extends Fragment {
                 ticketThreadAdapter.notifyDataSetChanged();
                 progressDialog=new ProgressDialog(getActivity());
                 progressDialog.setMessage(getString(R.string.pleasewait));
-                progressDialog.show();
+                swipeRefresh.setRefreshing(true);
                 if (Prefs.getString("ticketThread", null).equals("")) {
                     noInternet_view.setVisibility(View.GONE);
                     task = new FetchTicketThreads(getActivity(), Prefs.getString("TICKETid", null));
@@ -484,7 +526,7 @@ public class Conversation extends Fragment {
                 }
                 else {
                     try {
-                        progressDialog.dismiss();
+                        swipeRefresh.setRefreshing(false);
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }

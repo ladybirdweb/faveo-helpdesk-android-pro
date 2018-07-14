@@ -38,7 +38,7 @@ import es.dmoral.toasty.Toasty;
 
 public class RegisterUser extends AppCompatActivity {
 
-    ImageView imageViewBack;
+    ImageView imageViewBackFromRegister;
     Button submit;
     EditText editTextEmail,editTextFirstName,editTextPhone,editTextCompany,editTextLastName;
     boolean allCorect;
@@ -68,8 +68,8 @@ public class RegisterUser extends AppCompatActivity {
         editTextLastName= (EditText) findViewById(R.id.lastname_edittext);
         editTextPhone= (EditText) findViewById(R.id.phone_edittextUser);
         editTextCompany= (EditText) findViewById(R.id.company_edittextUser);
-        imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
-        imageViewBack.setOnClickListener(new View.OnClickListener() {
+        imageViewBackFromRegister= (ImageView) findViewById(R.id.imageViewBack);
+        imageViewBackFromRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -276,7 +276,7 @@ public class RegisterUser extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            }
+        }
 
 
     }
@@ -285,7 +285,6 @@ public class RegisterUser extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent  intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

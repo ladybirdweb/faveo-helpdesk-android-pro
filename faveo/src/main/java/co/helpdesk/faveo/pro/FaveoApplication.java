@@ -25,13 +25,13 @@ import io.fabric.sdk.android.Fabric;
 public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
     InternetReceiver internetReceiver;
-//    @Override
+    //    @Override
 //    protected void attachBaseContext(Context base) {
 //        super.attachBaseContext(LocaleHelper.onAttach(base, "de"));
 //    }
     @Override
     public void onCreate() {
-
+        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk(), new CrashlyticsNdk());
         Thread.setDefaultUncaughtExceptionHandler(new LocalFileUncaughtExceptionHandler(this,
                 Thread.getDefaultUncaughtExceptionHandler()));
         internetReceiver = new InternetReceiver();
@@ -86,7 +86,7 @@ public class FaveoApplication extends MultiDexApplication {
           Fabric.io.
           Crash reporting tool.
          */
-        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+        //aFabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         instance = this;
 
 

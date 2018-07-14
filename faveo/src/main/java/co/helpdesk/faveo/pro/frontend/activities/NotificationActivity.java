@@ -102,37 +102,6 @@ public class NotificationActivity extends AppCompatActivity {
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(NotificationActivity.this,R.color.faveo));
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                //
-//                // Do the stuff
-//                //
-//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-//                try {
-//                    JSONObject jsonObject = new JSONObject(result);
-//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-//                    String role1=jsonObject2.getString("role");
-//                    if (role1.equals("user")){
-//                        Prefs.clear();
-//                        //Prefs.putString("role",role);
-//                        Intent intent=new Intent(NotificationActivity.this,LoginActivity.class);
-//                        Toasty.warning(NotificationActivity.this,getString(R.string.permission), Toast.LENGTH_LONG).show();
-//                        startActivity(intent);
-//
-//
-//                    }
-//
-//
-//                } catch (JSONException | NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                handler.postDelayed(this, 30000);
-//            }
-//        };
-//        runnable.run();
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -142,8 +111,8 @@ public class NotificationActivity extends AppCompatActivity {
         progressDialog.setMessage("Please wait");
         if (InternetReceiver.isConnected()) {
             noInternet_view.setVisibility(View.GONE);
-            // swipeRefresh.setRefreshing(true);
-            progressDialog.show();
+            swipeRefresh.setRefreshing(true);
+            //progressDialog.show();
             new FetchFirst(this).execute();
         } else {
             noInternet_view.setVisibility(View.VISIBLE);
@@ -170,6 +139,8 @@ public class NotificationActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
     }
 
@@ -230,11 +201,10 @@ public class NotificationActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             textView.setText(""+total+" notifications");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
-
             if (result == null) {
                 Toasty.error(NotificationActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
@@ -330,13 +300,6 @@ public class NotificationActivity extends AppCompatActivity {
             loading = true;
         }
     }
-//    public void setRealmAdapter(RealmResults<NotificationThread> tickets) {
-//
-//        RealmTicketAdapter realmAdapter = new RealmTicketAdapter(this.getApplicationContext(), tickets, true);
-//        // Set the data and tell the RecyclerView to draw
-//        adapter.setRealmAdapter(realmAdapter);
-//        adapter.notifyDataSetChanged();
-//    }
 
     /**
      * Handling the menu items here.
@@ -441,40 +404,14 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // mListener = null;
-        nextPageURL = "";
+        //nextPageURL = "";
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (doubleBackToExitPressedOnce) {
-//            super.onBackPressed();
-//            return;
-//        }
-//
-//        this.doubleBackToExitPressedOnce = true;
-//        //Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
-//        MainActivity mainActivity=new MainActivity();
-//        mainActivity.finish();
-//
-//        new Handler().postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                doubleBackToExitPressedOnce = false;
-//            }
-//        }, 2500);
-//    }
 
 
     @Override
     public void onBackPressed() {
-        // your code.
-//        progressDialog.setMessage("Please wait");
-//        progressDialog.show();
-        finish();
-//        Intent intent=new Intent(NotificationActivity.this,MainActivity.class);
-////        progressDialog.dismiss();
-//        startActivity(intent);
+         finish();
 
     }
 

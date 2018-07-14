@@ -16,8 +16,9 @@ public class NotificationThread {
     public int client_id;
     public int noti_id;
     public String requesterName;
+    public String by;
 
-    public NotificationThread(String profiel_pic, String noti_time, int ticket_id, String ticket_subject, String placeHolder, String noti_scenario, int client_id, int noti_id, String noti_seen, String requesterName) {
+    public NotificationThread(String profiel_pic, String noti_time, int ticket_id, String ticket_subject, String placeHolder, String noti_scenario, int client_id, int noti_id, String noti_seen, String requesterName,String by) {
         this.profiel_pic = profiel_pic;
         this.noti_time = noti_time;
         this.ticket_id = ticket_id;
@@ -28,6 +29,15 @@ public class NotificationThread {
         this.noti_id = noti_id;
         this.noti_seen = noti_seen;
         this.requesterName = requesterName;
+        this.by=by;
+    }
+
+    public String getBy() {
+        return by;
+    }
+
+    public void setBy(String by) {
+        this.by = by;
     }
 
     public String getRequesterName() {

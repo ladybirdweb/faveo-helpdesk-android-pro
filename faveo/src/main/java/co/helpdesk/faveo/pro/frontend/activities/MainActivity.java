@@ -1,14 +1,11 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
@@ -17,36 +14,30 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.LocaleHelper;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
-import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
-import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
+import co.helpdesk.faveo.pro.frontend.fragments.HelpSection;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 
@@ -66,7 +57,6 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtAsc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
-import es.dmoral.toasty.Toasty;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -85,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Settings.OnFragmentInteractionListener,UpdatedAtDesc.OnFragmentInteractionListener,
         UpdatedAtAsc.OnFragmentInteractionListener,DueByAsc.OnFragmentInteractionListener,DueByDesc.OnFragmentInteractionListener,
         SortByTicketNumberAscending.OnFragmentInteractionListener,SortByTicketNumberDescending.OnFragmentInteractionListener,
-        SortByTicketPriorityAsc.OnFragmentInteractionListener,SortByTicketPriorityDesc.OnFragmentInteractionListener,CreatedAtAsc.OnFragmentInteractionListener,CreatedAtDesc.OnFragmentInteractionListener{
+        SortByTicketPriorityAsc.OnFragmentInteractionListener,SortByTicketPriorityDesc.OnFragmentInteractionListener,CreatedAtAsc.OnFragmentInteractionListener,CreatedAtDesc.OnFragmentInteractionListener,HelpSection.OnFragmentInteractionListener{
 
     // The BroadcastReceiver that tracks network connectivity changes.
 //    public InternetReceiver receiver = new InternetReceiver();
@@ -104,16 +94,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //    @BindView(R.id.arrow_imgView)
 //    ImageView arrowDown;
     BottomNavigationView bottomNavigationView;
-
+    TelephonyManager mTelephony = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
 
-        //FirebaseCrash.setCrashCollectionEnabled(false);
-
-        //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
         isShowing = true;
+        Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -298,19 +286,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
 
-
-    //    private void logUser() {
-//        // TODO: Use the current user's information
-//        // You can call any combination of these three methods
-//        Crashlytics.setUserIdentifier(Preference.getUserID());
-//        Crashlytics.setUserEmail(Constants.URL);
-//        Crashlytics.setUserName(Preference.getUsername());
-//    }
-//@Override
-//protected void attachBaseContext(Context base) {
-//    super.attachBaseContext(LocaleHelper.onAttach(base));
-//}
-
     @Override
     protected void onDestroy() {
         isShowing = false;
@@ -445,6 +420,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Prefs.putString("TicketRelated","");
         Prefs.putString("searchResult", "");
         Prefs.putString("searchUser","");
+        Prefs.putString("querry","null");
+        Prefs.putString("querry1","null");
         checkConnection();
         super.onResume();
         // register connection status listener
@@ -535,7 +512,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to invoke YES event
                 //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                finish();
+finishAffinity();
+                System.exit(0);
 
             }
         });

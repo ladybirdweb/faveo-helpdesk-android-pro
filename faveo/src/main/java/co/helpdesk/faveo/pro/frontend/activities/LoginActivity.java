@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
@@ -41,10 +43,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.github.jorgecastilloprz.FABProgressCircle;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -60,6 +64,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BuildConfig;
@@ -88,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialogVerifyURL;
     public ProgressDialog progressDialogSignIn;
     ProgressDialog progressDialogBilling;
+    ProgressBar progressBarlogin;
     List<String> urlSuggestions;
     Animation animation;
     StringBuilder companyURLUser;
@@ -95,8 +102,7 @@ public class LoginActivity extends AppCompatActivity {
     String companyURL;
     String companyURL1;
     int count=0;
-    @BindView(R.id.button_signin)
-    Button buttonSignIn;
+    CircularProgressButton buttonSignIn;
     @BindView(R.id.fab_verify_url)
     FloatingActionButton buttonVerifyURL;
     @BindView(R.id.input_password)
@@ -127,6 +133,10 @@ public class LoginActivity extends AppCompatActivity {
     String urlGivenByUser;
     String error;
     TextView findHelp;
+    Bitmap icon;
+    ProgressBar progressBar;
+    TextView textViewProgress;
+    FABProgressCircle fabProgressCircle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,8 +154,11 @@ public class LoginActivity extends AppCompatActivity {
 
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(LoginActivity.this,R.color.faveo));
-
+        buttonSignIn= (CircularProgressButton) findViewById(R.id.button_signin);
+        textViewProgress= (TextView) findViewById(R.id.progresstext);
         ButterKnife.bind(this);
+        progressBar= (ProgressBar) findViewById(R.id.progress_bar);
+        fabProgressCircle= (FABProgressCircle) findViewById(R.id.fabProgressCircle);
         try {
             error = Prefs.getString("NoToken", null);
 //            Log.d("NoToken",error);
@@ -224,6 +237,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewflipper.setDisplayedChild(0);
+                fabProgressCircle.hide();
+                buttonVerifyURL.setEnabled(true);
+                textViewProgress.setVisibility(View.GONE);
                 imageBackButton.setVisibility(View.GONE);
 //                editTextCompanyURL.setText("http://");
                 editTextCompanyURL.setSelection(editTextCompanyURL.getText().toString().length());
@@ -286,7 +302,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 if (InternetReceiver.isConnected()) {
                     urlSuggestions.add(companyURL);
-                    progressDialogVerifyURL.show();
+                    //progressDialogVerifyURL.show();
+                    textViewProgress.setVisibility(View.VISIBLE);
+                    fabProgressCircle.setVisibility(View.VISIBLE);
+                    textViewProgress.setText(getString(R.string.verifying_url));
+                    //progressBar.setVisibility(View.VISIBLE);
+                    buttonVerifyURL.setEnabled(false);
+                    fabProgressCircle.show();
+                    //buttonVerifyURL.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.rotate));
                     new VerifyURL(LoginActivity.this, companyURL).execute();
                     } else
                     Toasty.warning(v.getContext(), getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
@@ -359,8 +382,10 @@ public class LoginActivity extends AppCompatActivity {
                     if (InternetReceiver.isConnected()){
                         textInputLayoutUsername.setEnabled(false);
                         textInputLayoutPass.setEnabled(false);
-                        buttonSignIn.setText(R.string.signing_in);
-
+                        //buttonSignIn.setText(R.string.signing_in);
+                            buttonSignIn.startAnimation();
+                            icon = BitmapFactory.decodeResource(getResources(),
+                                R.drawable.ic_done_white_24dp);
                         new SignIn(LoginActivity.this, username, password).execute();
                     }
                     else{
@@ -456,12 +481,15 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            progressDialogVerifyURL.dismiss();
+            //progressDialogVerifyURL.dismiss();
             //Log.d("result",result);
             try {
                 apiDisabled = Prefs.getString("400", null);
                 if (apiDisabled.equals("badRequest")) {
+                    textViewProgress.setVisibility(View.GONE);
                     Prefs.putString("400", "null");
+                    //progressBar.setVisibility(View.GONE);
+                    buttonVerifyURL.setEnabled(true);
                     Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -470,19 +498,12 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (result == null) {
                 count++;
+                //progressBar.setVisibility(View.GONE);
+                textViewProgress.setVisibility(View.GONE);
+                fabProgressCircle.hide();
+                buttonVerifyURL.setEnabled(true);
                 Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
                 return;
-//                if (count==0){
-//                    Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
-//                    count--;
-//                    return;
-//                }
-
-                //new VerifyURLSecure(LoginActivity.this,companyURL1).execute();
-
-
-
-
             }
 
             else if (result.contains("success")) {
@@ -495,7 +516,10 @@ public class LoginActivity extends AppCompatActivity {
 //                Prefs.putStringSet("URL_SUG", set);
 
                 Prefs.putString("BASE_URL", baseURL);
-                progressDialogBilling.show();
+                //progressBar.setVisibility(View.VISIBLE);
+                textViewProgress.setText(getString(R.string.access_checking));
+                textViewProgress.setVisibility(View.VISIBLE);
+                //fabProgressCircle.beginFinalAnimation();
                 new VerifyBilling(LoginActivity.this, baseURL).execute();
                 Prefs.putString("companyurl",urlGivenByUser);
                 Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
@@ -519,11 +543,15 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 linearLayout.startAnimation(animation);
                 urlError.setVisibility(View.VISIBLE);
+                textViewProgress.setVisibility(View.GONE);
+                fabProgressCircle.hide();
+                buttonVerifyURL.setEnabled(true);
+                buttonVerifyURL.setVisibility(View.VISIBLE);
                 urlError.setText(getString(R.string.error_verifying_url));
                 urlError.setTextColor(Color.parseColor("#ff0000"));
                 urlError.postDelayed(new Runnable() {
                     public void run() {
-                        urlError.setVisibility(View.INVISIBLE);
+                        urlError.setVisibility(View.GONE);
                     }
                 }, 5000);
 //                urlError.setVisibility(View.VISIBLE);
@@ -539,93 +567,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-//    private class VerifyURLSecure extends AsyncTask<String, Void, String> {
-//        Context context;
-//        String companyURL;
-//        String baseURL;
-//
-//        VerifyURLSecure(Context context, String companyURL) {
-//            this.context = context;
-//            this.companyURL = companyURL;
-//            baseURL = companyURL;
-//        }
-//
-//        protected String doInBackground(String... urls) {
-//            if (!companyURL.endsWith("/"))
-//                companyURL = companyURL.concat("/");
-//            return new Helpdesk().getBaseURL(companyURL);
-//        }
-//
-//        protected void onPostExecute(String result) {
-//            progressDialogVerifyURL.dismiss();
-//            if (result == null) {
-//                linearLayout.startAnimation(animation);
-//                urlError.setVisibility(View.VISIBLE);
-//                urlError.setText(getString(R.string.error_verifying_url));
-//                urlError.setTextColor(Color.parseColor("#ff0000"));
-//                urlError.postDelayed(new Runnable() {
-//                    public void run() {
-//                        urlError.setVisibility(View.INVISIBLE);
-//                    }
-//                }, 9000);
-//                //Toasty.warning(context, getString(R.string.invalid_url), Toast.LENGTH_LONG).show();
-//                return;
-//
-//            }
-//
-//            else if (result.contains("success")) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-//                    dynamicShortcut();
-//                }
-////                urlSuggestions.add(baseURL);
-////                Set<String> set = new HashSet<>(urlSuggestions);
-////                Prefs.putStringSet("URL_SUG", set);
-//
-//                Prefs.putString("BASE_URL", baseURL);
-//                Prefs.putString("companyurl",urlGivenByUser);
-//                Prefs.putString("COMPANY_URL", companyURL + "api/v1/");
-//                Constants.URL = Prefs.getString("COMPANY_URL", "");
-//                Constants.URL1=Prefs.getString("companyurl",null);
-//                Prefs.putString("domain","http://");
-//                Log.d("companyurl",Constants.URL1);
-//                Prefs.putString("companyUrl",Constants.URL1);
-//                if (BuildConfig.DEBUG) {
-//                    viewflipper.showNext();
-//                    imageBackButton.setVisibility(View.VISIBLE);
-//                    url.setText(baseURL);
-//                    url.setVisibility(View.VISIBLE);
-//                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
-//                } else {
-//                    progressDialogBilling.show();
-//                    new VerifyBilling(LoginActivity.this, baseURL).execute();
-//                }
-//
-//            } else {
-//                linearLayout.startAnimation(animation);
-//                urlError.setVisibility(View.VISIBLE);
-//                urlError.setText(getString(R.string.error_verifying_url));
-//                urlError.setTextColor(Color.parseColor("#ff0000"));
-//                urlError.postDelayed(new Runnable() {
-//                    public void run() {
-//                        urlError.setVisibility(View.INVISIBLE);
-//                    }
-//                }, 5000);
-////                urlError.setVisibility(View.VISIBLE);
-////                urlError.setText(getString(R.string.error_verifying_url));
-////                urlError.setTextColor(Color.parseColor("#ff0000"));
-////                urlError.postDelayed(new Runnable() {
-////                    public void run() {
-////                        urlError.setVisibility(View.INVISIBLE);
-////                    }
-////                }, 5000);
-//
-//                //Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
-
-    //N 7.0-> shortcuts
-
     /**
      * This method is for getting the short cut if we are
      * holding the icon for long time.
@@ -665,14 +606,24 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialogBilling.dismiss();
+            //progressBar.setVisibility(View.GONE);
+            textViewProgress.setText(getString(R.string.done));
+            textViewProgress.setVisibility(View.VISIBLE);
+            //fabProgressCircle.hide();
             Log.d("Response BillingVerfy", result + "");
             if (result == null) {
+                //progressBar.setVisibility(View.GONE);
+                buttonVerifyURL.setEnabled(true);
+                textViewProgress.setVisibility(View.GONE);
+                fabProgressCircle.hide();
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (result.contains("success")) {
                 Prefs.putString("BillingUrl",baseURL);
+                buttonVerifyURL.setVisibility(View.VISIBLE);
+                textViewProgress.setVisibility(View.GONE);
+               // progressBar.setVisibility(View.GONE);
                 urlSuggestions.add(baseURL);
                 viewflipper.showNext();
                 imageBackButton.setVisibility(View.VISIBLE);
@@ -695,8 +646,12 @@ public class LoginActivity extends AppCompatActivity {
                 builder.create();
                 builder.show();
 
-            } else
+            } else {
+                buttonVerifyURL.setEnabled(true);
+                textViewProgress.setVisibility(View.GONE);
+                fabProgressCircle.hide();
                 Toasty.error(context, getString(R.string.error_checking_pro), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -741,13 +696,14 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-
+            //buttonSignIn.stopAnimation();
+            buttonSignIn.doneLoadingAnimation(getResources().getColor(R.color.faveo), icon);
+            //buttonSignIn.revertAnimation();
             Log.d("Response login", result + "");
             //progressDialogSignIn.dismiss();
             if (result == null) {
 //                Intent intent=new Intent(LoginActivity.this,LoginActivity.class);
 //                startActivity(intent);
-
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -805,6 +761,7 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 
             try {
+
                 JSONObject jsonObject = new JSONObject(result);
                 Log.d("camehere","true");
                 JSONObject jsonObject1=jsonObject.getJSONObject("data");
@@ -818,7 +775,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (role.equals("user")){
                     textInputLayoutUsername.setEnabled(true);
                     textInputLayoutPass.setEnabled(true);
-                    buttonSignIn.setText(getString(R.string.sign_in));
+                    buttonSignIn.revertAnimation();
+                    //buttonSignIn.setText(getString(R.string.sign_in));
                     Toasty.warning(getApplicationContext(), getString(R.string.userLogIn), Toast.LENGTH_SHORT).show();
                     return;
 
@@ -847,26 +805,22 @@ public class LoginActivity extends AppCompatActivity {
                     authenticationEditor.putString("PROFILE_NAME", clientname);
                     //authenticationEditor.putString("AGENT_SIGN", jsonObject1.getString("agent_sign"));
                     authenticationEditor.apply();
-
-
-
                     Prefs.putString("FCMtoken", FirebaseInstanceId.getInstance().getToken());
-
                     new SendingFCM(LoginActivity.this, FirebaseInstanceId.getInstance().getToken()).execute();
 
                     Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
-
-
-
-
-            } catch (JSONException e) {
+                } catch (JSONException e) {
                 textInputLayoutUsername.setEnabled(true);
                 textInputLayoutPass.setEnabled(true);
-                buttonSignIn.setText(getString(R.string.sign_in));
-                buttonSignIn.setText(getString(R.string.sign_in));
+                buttonSignIn.stopAnimation();
+                buttonSignIn.revertAnimation();
+                buttonSignIn.setText(getString(R.string.sign_in)
+                );
+                //buttonSignIn.setText(getString(R.string.sign_in));
+                //buttonSignIn.setText(getString(R.string.sign_in));
                 //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
                 userNameError.setVisibility(View.VISIBLE);
                 userNameError.setText("Please check your password and email");
@@ -985,6 +939,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
         // register connection status listener
         //FaveoApplication.getInstance().setInternetListener(this);
+        buttonVerifyURL.setEnabled(true);
         checkConnection();
     }
 

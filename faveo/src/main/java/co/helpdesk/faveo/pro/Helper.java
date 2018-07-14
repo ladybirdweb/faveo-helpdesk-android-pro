@@ -1,11 +1,14 @@
 package co.helpdesk.faveo.pro;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -367,6 +370,13 @@ public class Helper {
      * @return object for notification thread.
      */
     public static NotificationThread parseNotifications(JSONArray jsonArray, int i) {
+        String firstName;
+        String clientPicture=null;
+        String lastName;
+        String userName ;
+        String clientname = null;
+        int clientID = 0;
+        JSONObject requester=null;
         try {
             String message = jsonArray.getJSONObject(i).getString("message");
             int ticketID = jsonArray.getJSONObject(i).getInt("row_id");
@@ -374,18 +384,53 @@ public class Helper {
             String created_at = jsonArray.getJSONObject(i).getString("created_utc");
             String senario = jsonArray.getJSONObject(i).getString("senario");
             String seen = jsonArray.getJSONObject(i).getString("seen");
-            JSONObject requester = jsonArray.getJSONObject(i).getJSONObject("requester");
-            int clientID = requester.getInt("id");
-            String firstName = requester.getString("changed_by_first_name");
-            String clientPicture = requester.getString("profile_pic");
-            String lastName = requester.getString("changed_by_last_name");
-            String userName = requester.getString("changed_by_user_name");
-            String clientname;
-            if (firstName == null || firstName.equals(""))
-                clientname = userName;
-            else
-                clientname = firstName + " " + lastName;
-            return new NotificationThread(clientPicture, created_at, ticketID, message, clientname, senario, clientID, notiID, seen, clientname);
+            String by=jsonArray.getJSONObject(i).getString("by");
+            if(jsonArray.getJSONObject(i).get("requester")!=JSONObject.NULL) {
+                JSONObject requester1 = jsonArray.getJSONObject(i).getJSONObject("requester");
+
+                clientID = requester1.getInt("id");
+                firstName = requester1.optString("changed_by_first_name");
+                clientPicture = requester1.optString("profile_pic");
+                lastName = requester1.optString("changed_by_last_name");
+                userName = requester1.optString("changed_by_user_name");
+                clientname = null;
+                if (firstName == null || firstName.equals(""))
+                    clientname = userName;
+                else clientname = firstName + " " + lastName;
+
+                Log.i("clientID", Integer.toString(clientID));
+                Log.i("firstName", firstName);
+                Log.i("clientPicture", clientPicture);
+                Log.i("lastName", lastName);
+                Log.i("userName", userName);
+                Log.i("clientname", clientname);
+            }
+            else{
+                clientname="System";
+
+            }
+            String requestor=jsonArray.getJSONObject(i).getString("requester");
+//            if (!requestor.equals(null)||!requestor.equals("null")){
+//
+//
+//                    Log.d("requestor",requestor);
+//                    requester = jsonArray.getJSONObject(i).getJSONObject("requester");
+//                    clientID = requester.getInt("id");
+//                    firstName = requester.optString("changed_by_first_name");
+//                    clientPicture = requester.optString("profile_pic");
+//                    lastName = requester.optString("changed_by_last_name");
+//                    userName = requester.optString("changed_by_user_name");
+//                    if (firstName == null || firstName.equals(""))
+//                        clientname = userName;
+//                    else
+//                        clientname = firstName + " " + lastName;
+//
+//                }
+
+
+
+
+            return new NotificationThread(clientPicture, created_at, ticketID, message, clientname, senario, clientID, notiID, seen, clientname,by);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -494,6 +539,10 @@ public class Helper {
     public static int compareDates(String duedate1) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar1 = Calendar.getInstance();
+        SimpleDateFormat formatter1 = new SimpleDateFormat("dd/M/yyyy h:mm");
+        String currentTime = formatter1.format(calendar1.getTime());
+        Log.d("currentTime",currentTime);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         sdf1.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = null;
@@ -529,6 +578,7 @@ public class Helper {
         int i = 0;
 
         if (dueDate1.equals(currDate1)) {
+
             i = 2;
         }
 

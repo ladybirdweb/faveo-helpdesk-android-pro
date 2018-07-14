@@ -3,8 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/reveal_items"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="90dp"
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <!--row 1 -->
 
@@ -32,7 +33,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Gallery" />
+                android:text="Image"
+                android:textStyle="bold"
+                android:textColor="@color/faveo"/>
         </LinearLayout>
 
         <LinearLayout
@@ -43,16 +46,18 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/photo_img_btn"
+                android:id="@+id/video_img_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/ic_photo_camera_black_24dp" />
+                android:background="@drawable/ic_video_library_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Photo" />
+                android:text="Video"
+                android:textStyle="bold"
+                android:textColor="@color/faveo"/>
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +68,28 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/document"
+                android:id="@+id/music_img_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_library_music_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Music"
+                android:textStyle="bold"
+                android:textColor="@color/faveo"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/documet_img_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/ic_picture_as_pdf_black_24dp" />
@@ -72,26 +98,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Document" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/audio_img_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ic_audiotrack_black_24dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Audio" />
+                android:text="Document"
+                android:textStyle="bold"
+                android:textColor="@color/faveo"/>
         </LinearLayout>
 
     </LinearLayout>

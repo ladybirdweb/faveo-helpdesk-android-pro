@@ -24,6 +24,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -64,16 +66,18 @@ public class TicketSaveActivity extends AppCompatActivity {
             spinnerPriority, spinnerHelpTopics;
     ProgressDialog progressDialog;
     AsyncTask<String, Void, String> task;
-    @BindView(R.id.spinner_staffs)
+//    @BindView(R.id.spinner_staffs)
     Spinner spinnerStaffs;
     EditText edittextsubject;
     Button buttonsave;
     ImageView imageView;
     Spinner autoCompleteTextViewstaff;
     ImageView refresh;
+    String subject="",type="--",source="--",priority="--",helptopic="--",staff="--";
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems, staffItems;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter, staffArrayAdapter;
     int id,id1;
+    Animation rotation;
     String option;
     public static String
             keyDepartment = "", valueDepartment = "",
@@ -99,6 +103,17 @@ public class TicketSaveActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(TicketSaveActivity.this,R.color.faveo));
         StrictMode.setThreadPolicy(policy);
+        refresh= (ImageView) findViewById(R.id.imageViewRefresh);
+        rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        if (InternetReceiver.isConnected()) {
+//            progressDialog=new ProgressDialog(this);
+//            progressDialog.setMessage(getString(R.string.pleasewait));
+//            progressDialog.show();
+            refresh.startAnimation(rotation);
+            Log.d("FromTicketSave","true");
+            task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
+            task.execute();
+        }
         if (InternetReceiver.isConnected()){
             new FetchDependency().execute();
         }
@@ -113,25 +128,110 @@ public class TicketSaveActivity extends AppCompatActivity {
             case "none":
                 Prefs.putString("cameFromNotification","none");
                 break;
+            case "client":
+                Prefs.putString("cameFromNotification","client");
+                break;
             default:
                 Prefs.putString("cameFromNotification","");
                 break;
         }
         setUpViews();
 
-        if (InternetReceiver.isConnected()) {
-            progressDialog=new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.pleasewait));
-            progressDialog.show();
-            Log.d("FromTicketSave","true");
-            task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
-            task.execute();
-        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarsave);
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
         imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
-        refresh= (ImageView) findViewById(R.id.imageViewRefresh);
         textView.setText(getString(R.string.ticketProperties));
+
+
+        spinnerHelpTopics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (helptopic.equals(spinnerHelpTopics.getSelectedItem().toString())){
+                    buttonsave.setVisibility(View.GONE);
+                }
+                else{
+                    buttonsave.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (priority.equals(spinnerPriority.getSelectedItem().toString())){
+                    buttonsave.setVisibility(View.GONE);
+                }
+                else{
+                    buttonsave.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerSource.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (source.equals(spinnerSource.getSelectedItem().toString())){
+                    buttonsave.setVisibility(View.GONE);
+                }
+                else{
+                    buttonsave.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        autoCompleteTextViewstaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (staff.equals(autoCompleteTextViewstaff.getSelectedItem().toString())){
+                    buttonsave.setVisibility(View.GONE);
+                }
+                else{
+                    buttonsave.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (type.equals(spinnerType.getSelectedItem().toString())){
+                    buttonsave.setVisibility(View.GONE);
+                }
+                else{
+                    buttonsave.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        edittextsubject.addTextChangedListener(textWatcher);
+
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,9 +253,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                         // Write your code here to invoke YES event
                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                         if (InternetReceiver.isConnected()){
-                            progressDialog=new ProgressDialog(TicketSaveActivity.this);
-                            progressDialog.setMessage(getString(R.string.refreshing));
-                            progressDialog.show();
+                            refresh.startAnimation(rotation);
 
                             new FetchDependency().execute();
                             setUpViews();
@@ -182,30 +280,79 @@ public class TicketSaveActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                startActivity(intent);
+
+
+                    if (!subject.equalsIgnoreCase(edittextsubject.getText().toString())||!type.equalsIgnoreCase(spinnerType.getSelectedItem().toString())||
+                        !source.equalsIgnoreCase(spinnerSource.getSelectedItem().toString())||
+                        !priority.equalsIgnoreCase(spinnerPriority.getSelectedItem().toString())
+                        ||!helptopic.equalsIgnoreCase(spinnerHelpTopics.getSelectedItem().toString())||
+                        !staff.equalsIgnoreCase(autoCompleteTextViewstaff.getSelectedItem().toString())){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Discard changes?");
+
+                    // Setting Dialog Message
+                    //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else{
+                    Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+//                Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//                startActivity(intent);
+//                finish();
             }
         });
         setSupportActionBar(toolbar);
-        spinnerPriority.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                buttonsave.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        autoCompleteTextViewstaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Data data=staffItems.get(position);
-                id1=data.getID();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                id1=0;
-            }
-        });
+//        spinnerPriority.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                buttonsave.setVisibility(View.VISIBLE);
+//                return false;
+//            }
+//        });
+//        autoCompleteTextViewstaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Data data=staffItems.get(position);
+//                id1=data.getID();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                id1=0;
+//            }
+//        });
         buttonsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -413,7 +560,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            refresh.clearAnimation();
             if (isCancelled()) return;
 
 
@@ -436,8 +583,10 @@ public class TicketSaveActivity extends AppCompatActivity {
                     String fifth = fourth.replace("=E2=80=99", "'");
                     String sixth=fifth.replace("=3F","?");
                     edittextsubject.setText(sixth);
+                    subject=sixth;
                 } else {
                     edittextsubject.setText(title);
+                    subject=title;
                 }
                 //edittextsubject.setText(title);
                 String assignee=jsonObject2.getString("assignee");
@@ -457,6 +606,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                                     Log.d("cameHere","True");
                                     Log.d("position",""+j);
                                     autoCompleteTextViewstaff.setSelection(j);
+                                    staff=autoCompleteTextViewstaff.getSelectedItem().toString();
                                 }
                             }
                             //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
@@ -475,7 +625,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                     if (jsonObject2.getString("priority_name") != null) {
 
                         spinnerPriority.setSelection(getIndex(spinnerPriority, jsonObject2.getString("priority_name")));
-
+                        priority=spinnerPriority.getSelectedItem().toString();
 
                     }
                 } catch (JSONException | NumberFormatException e) {
@@ -490,6 +640,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                         for (int j = 0; j < spinnerType.getCount(); j++) {
                             if (spinnerType.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject2.getString("type_name"))) {
                                 spinnerType.setSelection(j);
+                                type=spinnerType.getSelectedItem().toString();
                             }
                         }
                     }
@@ -500,8 +651,8 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
                 try {
                     if (jsonObject2.getString("helptopic_name") != null)
-                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics, jsonObject2.getString("helptopic_name")));
-
+                        spinnerHelpTopics.setSelection(getIndex(spinnerHelpTopics,jsonObject2.getString("helptopic_name")));
+                            helptopic=spinnerHelpTopics.getSelectedItem().toString();
 
                 } catch (ArrayIndexOutOfBoundsException e) {
                     e.printStackTrace();
@@ -517,6 +668,7 @@ public class TicketSaveActivity extends AppCompatActivity {
 
 
                         spinnerSource.setSelection(getIndex(spinnerSource, jsonObject2.getString("source_name")));
+                    source=spinnerSource.getSelectedItem().toString();
 
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
@@ -671,16 +823,58 @@ public class TicketSaveActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        if (!TicketDetailActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, TicketDetailActivity.class);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(this, TicketDetailActivity.class);
-            startActivity(intent);
-            Log.d("isShowing", "true");
+
+        if (!subject.equalsIgnoreCase(edittextsubject.getText().toString())||!type.equalsIgnoreCase(spinnerType.getSelectedItem().toString())||
+                !source.equalsIgnoreCase(spinnerSource.getSelectedItem().toString())||
+                !priority.equalsIgnoreCase(spinnerPriority.getSelectedItem().toString())
+                ||!helptopic.equalsIgnoreCase(spinnerHelpTopics.getSelectedItem().toString())||
+                !staff.equalsIgnoreCase(autoCompleteTextViewstaff.getSelectedItem().toString())){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+            // Setting Dialog Title
+            alertDialog.setTitle("Discard changes?");
+
+            // Setting Dialog Message
+            //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+            // Setting Icon to Dialog
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+
+            // Setting Positive "Yes" Button
+
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke YES event
+                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            // Setting Negative "NO" Button
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke NO event
+                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
         }
-        super.onBackPressed();
+        else{
+            if (!TicketDetailActivity.isShowing) {
+                Log.d("isShowing", "false");
+                Intent intent = new Intent(this, TicketDetailActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, TicketDetailActivity.class);
+                startActivity(intent);
+                Log.d("isShowing", "true");
+            }
+        }
 
     }
     private class FetchDependency extends AsyncTask<String, Void, String> {
@@ -693,6 +887,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            refresh.clearAnimation();
             Log.d("Depen Response : ", result + "");
             Log.d("cameHere","True");
 
@@ -912,4 +1107,24 @@ public class TicketSaveActivity extends AppCompatActivity {
 //            }, 3000);
         }
     }
+    private TextWatcher textWatcher = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            if(subject.equals(String.valueOf(s))) {
+                //do something
+                buttonsave.setVisibility(View.GONE);
+            }else{
+                buttonsave.setVisibility(View.VISIBLE);
+                //do something
+            }
+
+        }
+    };
 }

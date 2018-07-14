@@ -32,6 +32,7 @@
     <color name="black">#000000</color>
     <color name="dark_grey">#333333</color>
     <color name="grey_200">#eeeeee</color>
+    <color name="collaborator">#f6f6f6</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="translucent">#33FFFFFF</color>
     <color name="dark_translucent">#55000000</color>

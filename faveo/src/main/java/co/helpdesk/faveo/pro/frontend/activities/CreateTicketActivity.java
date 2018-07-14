@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 //import android.graphics.Bitmap;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -53,6 +54,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -68,6 +73,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.commons.MenuSheetView;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -158,6 +166,7 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.BottomNavigationBehavior;
@@ -202,10 +211,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     boolean allCorrect;
     String term;
     String collaborators=null;
-    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,spinnerStaffArrayAdapter,autocompletetextview,stringArrayAdapterHint;
-    ArrayAdapter<CollaboratorAdapter> arrayAdapterCollaborator;
+    ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,typeArrayAdapter,autocompletetextview,stringArrayAdapterHint;
     ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
-    CollaboratorAdapter adapter=null;
     MultiCollaboratorAdapter adapter1=null;
     @BindView(R.id.fname_edittext)
     EditText editTextFirstName;
@@ -228,6 +235,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     EditText editTextMobile;
     Spinner autoCompletePriority;
     Spinner autoCompleteHelpTopic;
+    Spinner spinnerType;
     @BindView(R.id.buttonSubmit)
     Button buttonSubmit;
     ImageButton buttonUserCreate;
@@ -238,18 +246,15 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     StringBuilder sb,sb1;
     String emailfromsuggestion;
     String email2;
-    //    @BindView(R.id.attachment)
-//    Button button;
     @BindView(R.id.attachment_close)
     ImageButton imageButtonAttachmentClose;
     ProgressDialog progressDialog;
-    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,staffItemsHint;
+    ArrayList<Data> helptopicItems, priorityItems,staffItems,staffitemsauto,typeItems;
     ArrayList<CollaboratorSuggestion> emailHint;
     int id=0;
     int id1=0;
     String email1,collaborator;
     ArrayList<MultiCollaborator> stringArraylist;
-    //String mobile="";
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
     int i=0;
@@ -257,26 +262,17 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     MultiAutoCompleteTextView multiAutoCompleteTextViewCC;
     CountryCodePicker countryCodePicker;
     String firstname,lastname,email;
-    ImageButton imageViewGallery,imageViewCamera,imageViewDocument,imageViewAudio;
-    Toolbar toolbarAttachment;
-    File file3;
     String result;
     Button button;
-    ImageView refresh;
-    File file;
-    Thread t;
-    ProgressBar progressBar;
+    ImageButton refresh;
     int gallery,document,camera,audio=0;
     BottomNavigationView bottomNavigationView;
-    private static final int CAMERA_REQUEST = 1888;
     private static final int PICKFILE_REQUEST_CODE = 1234;
-    private static final int PICKVIDEO_REQUEST_CODE = 1235;
     String path="";
-    String fname,lname,phone,mobile,subject,message;
-    private Uri fileUri = null;//Uri to capture image
-    private String getImageUrl = "";
+    String phone,mobile,message;
+    BottomSheetLayout bottomSheet;
     String token;
-    public static final int FILE_PICKER_REQUEST_CODE = 1;
+    Animation rotation;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -324,16 +320,20 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.faveo));
         GetCountryZipCode();
+        refresh= (ImageButton) findViewById(R.id.imageRefresh);
+        bottomSheet= (BottomSheetLayout) findViewById(R.id.bottomsheet);
         if (InternetReceiver.isConnected()){
             new FetchDependency().execute();
         }
-        progressBar= (ProgressBar) findViewById(R.id.createTicketProgressbar);
+        //progressBar= (ProgressBar) findViewById(R.id.createTicketProgressbar);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
+        rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        final ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
         //toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
 //        getSupportActionBar().setHomeButtonEnabled(true);
@@ -342,17 +342,16 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //        toolbarBottom= (Toolbar) findViewById(R.id.bottom_navigation);
 //        toolbarBottom.setVisibility(View.GONE);
         //imageViewAudio= (ImageButton) toolbarAttachment.findViewById(R.id.audio_img_btn);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // attaching bottom sheet behaviour - hide / show on scroll
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
-        layoutParams.setBehavior(new BottomNavigationBehavior());
+//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+//        layoutParams.setBehavior(new BottomNavigationBehavior());
 //        imageViewGallery= (ImageButton) toolbarAttachment.findViewById(R.id.gallery_img_btn);
 //        imageViewCamera= (ImageButton) toolbarAttachment.findViewById(R.id.photo_img_btn);
 //        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
         button= (Button) findViewById(R.id.attachment);
-        refresh= (ImageView) findViewById(R.id.imageRefresh);
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -374,9 +373,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         // Write your code here to invoke YES event
                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                         if (InternetReceiver.isConnected()){
-                            progressDialog=new ProgressDialog(CreateTicketActivity.this);
-                            progressDialog.setMessage(getString(R.string.refreshing));
-                            progressDialog.show();
+                            refresh.startAnimation(rotation);
+//                            progressDialog=new ProgressDialog(CreateTicketActivity.this);
+//                            progressDialog.setMessage(getString(R.string.refreshing));
+//                            progressDialog.show();
                             new FetchDependency().execute();
                             setUpViews();
                             }
@@ -397,17 +397,16 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             }
         });
         buttonUserCreate= (ImageButton) findViewById(R.id.usercreate);
-        cc=new String[0];
-        cc1=new String[0];
+
         imageViewBack= (ImageView) findViewById(R.id.imageViewBack);
         multiAutoCompleteTextViewCC= (MultiAutoCompleteTextView) findViewById(R.id.collaborator);
+
         stringArraylist=new ArrayList<MultiCollaborator>();
         adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
+        //multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        //multiAutoCompleteTextViewCC.setAdapter(adapter1);
         //arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
-        multiAutoCompleteTextViewCC.setDropDownWidth(1500);
-        multiAutoCompleteTextViewCC.setThreshold(2);
-        multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        multiAutoCompleteTextViewCC.setAdapter(adapter1);
+
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -435,21 +434,101 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             public void onClick(View view) {
                 Prefs.putString("newuseremail","");
                 //onBackPressed();
-                Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-                startActivity(intent);
+                if (!editTextEmail.getText().toString().equals("")
+                        ||!subEdittext.getText().toString().equals("")||
+                !msgEdittext.getText().toString().equals("")){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Discard changes?");
+
+                    // Setting Dialog Message
+                    //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+
+                }
+                else {
+//                    Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+//                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View view = CreateTicketActivity.this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                MenuSheetView menuSheetView =
+                        new MenuSheetView(CreateTicketActivity.this, MenuSheetView.MenuType.LIST, "Choose...", new MenuSheetView.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                if (bottomSheet.isSheetShowing()) {
+                                    bottomSheet.dismissSheet();
+                                }
+                                if (item.getItemId()==R.id.imageGalley){
+                                    gallery=2;
+                                    reqPermissionCamera();
+                                    return true;
+                                }
+                                else if (item.getItemId()==R.id.videoGallery){
+                                    camera=3;
+                                    reqPermissionCamera();
+                                    return true;
+                                }
+                                else if (item.getItemId()==R.id.musicGallery){
+                                    audio=4;
+                                    reqPermissionCamera();
+                                    return true;
+                                }
+                                else if (item.getItemId()==R.id.documentGallery){
+                                    document=1;
+                                    reqPermissionCamera();
+                                    return true;
+                                }
 
-                if (bottomNavigationView.getVisibility()==View.GONE){
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                }
-                else if (bottomNavigationView.getVisibility()==View.VISIBLE){
-                    bottomNavigationView.setVisibility(View.GONE);
-                }
+                                return true;
+                            }
+                        });
+                menuSheetView.inflateMenu(R.menu.navigation);
+                bottomSheet.showWithSheetView(menuSheetView);
+
+//                if (bottomNavigationView.getVisibility()==View.GONE){
+//                    bottomNavigationView.setVisibility(View.VISIBLE);
+//                }
+//                else if (bottomNavigationView.getVisibility()==View.VISIBLE){
+//                    bottomNavigationView.setVisibility(View.GONE);
+//                }
 
 
             }
@@ -470,8 +549,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         emailHint=new ArrayList<>();
         arrayAdapterCC=new CollaboratorAdapter(this,emailHint);
         //arrayAdapterCC=new ArrayAdapter<Data>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,emailHint);
-        editTextEmail.setThreshold(2);
-        editTextEmail.setDropDownWidth(1500);
+
         editTextEmail.addTextChangedListener(passwordWatcheredittextSubject);
         editTextEmail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -542,6 +620,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         autoCompleteTextView= (Spinner) findViewById(R.id.autocompletetext);
         autoCompleteHelpTopic= (Spinner) findViewById(R.id.spinner_help);
         autoCompletePriority= (Spinner) findViewById(R.id.spinner_pri);
+        //spinnerType= (Spinner) findViewById(R.id.spinner_type);
         setUpViews();
         try {
             firstname = Prefs.getString("firstusername", null);
@@ -606,34 +685,35 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         countrycode=CountryZipCode;
         return CountryZipCode;
     }
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_shop:
-                    gallery=2;
-                    reqPermissionCamera();
-                    return true;
-                case R.id.navigation_gifts:
-                    camera=3;
-                    reqPermissionCamera();
-                    return true;
-                case R.id.navigation_cart:
-                    document=1;
-                    reqPermissionCamera();
-                    return true;
-                case R.id.navigation_music:
-                    audio=4;
-                    reqPermissionCamera();
-                    return true;
-
-            }
-
-            return false;
-        }
-    };
+//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+//
+//        @Override
+//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.imageGalley:
+//                    gallery=2;
+//                    reqPermissionCamera();
+//                    return true;
+//                case R.id.videoGallery:
+//                    camera=3;
+//                    reqPermissionCamera();
+//                    return true;
+//                case R.id.musicGallery:
+//                    document=1;
+//                    reqPermissionCamera();
+//                    return true;
+//                case R.id.documentGallery:
+//                    audio=4;
+//                    reqPermissionCamera();
+//                    return true;
+//
+//            }
+//
+//            return false;
+//        }
+//    };
 
 
 //    @Override
@@ -2036,6 +2116,22 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             }
 
 
+//            typeItems=new ArrayList<>();
+//            typeItems.add(new Data(0,"--"));
+//            jsonObject=new JSONObject(json);
+//            JSONArray jsonArrayType=jsonObject.getJSONArray("type");
+//            for (int i=0;i<jsonArrayType.length();i++){
+//                Data data1 = new Data(Integer.parseInt(jsonArrayType.getJSONObject(i).getString("id")), jsonArrayType.getJSONObject(i).getString("name"));
+//
+//                typeItems.add(data1);
+//                Collections.sort(typeItems, new Comparator<Data>() {
+//                    @Override
+//                    public int compare(Data lhs, Data rhs) {
+//                        return lhs.getName().compareTo(rhs.getName());
+//                    }
+//                });
+//            }
+
             JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
             priorityItems = new ArrayList<>();
             priorityItems.add(new Data(0, "--"));
@@ -2052,123 +2148,18 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         } catch (JSONException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-        // selectValue(phCode, getCountryZipCode());
-        // phCode.setSelection(getCountryZipCode());
-//        final CursorAdapter suggestionAdapter = new SimpleCursorAdapter(this,
-//                android.R.layout.simple_list_item_1,
-//                null,
-//                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1},
-//                new int[]{android.R.id.text1},
-//                0);
-//        final List<String> suggestions = new ArrayList<>();
 
-//        requesterSearchview.setSuggestionsAdapter(suggestionAdapter);
-//        requesterSearchview.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-//            @Override
-//            public boolean onSuggestionSelect(int position) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onSuggestionClick(int position) {
-//                requesterSearchview.setQuery(suggestions.get(position), false);
-//                requesterSearchview.clearFocus();
-//                //doSearch(suggestions.get(position));
-//                return true;
-//            }
-//        });
-//
-//        requesterSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (newText.length() > 2) {
-//                    //loadData(s);
-//                    Toast.makeText(getBaseContext(), newText, Toast.LENGTH_SHORT).show();
-//                }
-//
-//                //                MyApp.autocompleteService.search(newText, new Callback<Autocomplete>() {
-////                    @Override
-////                    public void success(Autocomplete autocomplete, Response response) {
-////                        suggestions.clear();
-////                        suggestions.addAll(autocomplete.suggestions);
-////
-////                        String[] columns = {
-////                                BaseColumns._ID,
-////                                SearchManager.SUGGEST_COLUMN_TEXT_1,
-////                                SearchManager.SUGGEST_COLUMN_INTENT_DATA
-////                        };
-////
-////                        MatrixCursor cursor = new MatrixCursor(columns);
-////
-////                        for (int i = 0; i < autocomplete.suggestions.size(); i++) {
-////                            String[] tmp = {Integer.toString(i), autocomplete.suggestions.get(i), autocomplete.suggestions.get(i)};
-////                            cursor.addRow(tmp);
-////                        }
-////                        suggestionAdapter.swapCursor(cursor);
-////                    }
-////
-////                    @Override
-////                    public void failure(RetrofitError error) {
-////                        Toast.makeText(SearchFoodActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-////                        Log.w("autocompleteService", error.getMessage());
-////                    }
-////                });
-//                return true;
-//            }
-//        });
-//        ccSearchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                //Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                return true;
-//            }
-//        });
-
-//        ImageButton attchmentClose = (ImageButton) findViewById(R.id.attachment_close);
-//        ImageButton addButton = (ImageButton) findViewById(R.id.addrequester_button);
-//        addButton.setOnClickListener(new View.OnClickListener()
-//                                     {
-//                                         @Override
-//                                         public void onClick(View v) {
-//
-//                                             CustomBottomSheetDialog bottomSheetDialog = new CustomBottomSheetDialog();
-//                                             bottomSheetDialog.show(getSupportFragmentManager(), "Custom Bottom Sheet");
-//
-//                                         }
-//                                     }
-//
-//        );
-//        attchmentClose.setOnClickListener(new View.OnClickListener()
-//
-//                                          {
-//                                              @Override
-//                                              public void onClick(View v) {
-//                                                  attachment_layout.setVisibility(View.GONE);
-//                                              }
-//                                          }
-//
-//        );
 
 
         spinnerHelpArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, helptopicItems); //selected item will look like a spinner set from XML
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         autoCompleteHelpTopic.setAdapter(spinnerHelpArrayAdapter);
 
+//        typeArrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item, typeItems);
+//        typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerType.setAdapter(typeArrayAdapter);
 
-//        spinnerStaffArrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,staffItems);
-//        spinnerStaffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerAssignto.setAdapter(spinnerStaffArrayAdapter);
+
         autocompletetextview = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,staffitemsauto);
         autoCompleteTextView.setAdapter(autocompletetextview);
         //autoCompleteTextView.setThreshold(0);
@@ -2226,51 +2217,77 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     @Override
     public void onBackPressed() {
 
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            Log.d("isShowing", "true");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        if (!editTextEmail.getText().toString().equals("")
+                ||!subEdittext.getText().toString().equals("")||
+                !msgEdittext.getText().toString().equals("")){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+            // Setting Dialog Title
+            alertDialog.setTitle("Discard changes?");
+
+            // Setting Dialog Message
+            //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+            // Setting Icon to Dialog
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+
+            // Setting Positive "Yes" Button
+
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke YES event
+                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                    if (!MainActivity.isShowing) {
+                        Log.d("isShowing", "false");
+                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Log.d("isShowing", "true");
+                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            });
+
+            // Setting Negative "NO" Button
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke NO event
+                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
+
         }
-    }
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //replaces the default 'Back' button action
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
-        }
-        return true;
-    }
-    private boolean isValidPhoneNumber(CharSequence phoneNumber) {
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            return Patterns.PHONE.matcher(phoneNumber).matches();
-        }
-        return false;
-    }
-    private boolean validateUsing_libphonenumber(String countryCode, String phNumber) {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-        String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
-        Phonenumber.PhoneNumber phoneNumber = null;
-        try {
-            //phoneNumber = phoneNumberUtil.parse(phNumber, "IN");  //if you want to pass region code
-            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
-        } catch (NumberParseException e) {
-            System.err.println(e);
+        else {
+            if (!MainActivity.isShowing) {
+                Log.d("isShowing", "false");
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
+                finish();
+            } else {
+                Log.d("isShowing", "true");
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
+                finish();
+            }
         }
 
-        boolean isValid = phoneNumberUtil.isValidNumber(phoneNumber);
-        if (isValid) {
-            String internationalFormat = phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
-            //Toast.makeText(this, "Phone Number is Valid " + internationalFormat, Toast.LENGTH_LONG).show();
-            return true;
-        } else {
-            //Toast.makeText(this, "Phone Number is Invalid " + phoneNumber, Toast.LENGTH_LONG).show();
-            return false;
-        }
+
+
     }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        //replaces the default 'Back' button action
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            finish();
+//        }
+//        return true;
+//    }
 
     /**
      * Handling the create button here.
@@ -2278,7 +2295,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     public void createButtonClick() {
         new SendPostRequest().execute();
         res=0;
-        int pos3 = 0,pos2=0;
+        cc=new String[2];
+        cc1=new String[2];
         String first_user = null,second_user = null,third_user=null;
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
@@ -2300,206 +2318,125 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             return;
         }
 
-        collaborator = multiAutoCompleteTextViewCC.getText().toString();
-        for (int i=0; i<collaborator.length(); i++)
-        {
-            // checking character in string
-            if (collaborator.charAt(i) == ',')
-                res++;
-        }
-        if (res>3){
-            Toasty.info(this,"you can add up to 3 collaborators",Toast.LENGTH_LONG).show();
-            return;
-        }
-        else {
-            if (!collaborator.equals("")) {
-                if (!(collaborator.charAt(collaborator.length()-1) ==',')){
-                    collaborator.replace(""+collaborator.charAt(collaborator.length()-1),",");
-                    cc = collaborator.split(",");
-                    sb = new StringBuilder();
-                    for (int i = 0; i < cc.length; i++) {
-                        String one = cc[i].toString();
-                        if (Helper.isValidEmail(one)){
+        collaborator = multiAutoCompleteTextViewCC.getText().toString().replaceAll(" ","");
+        String newCollaList;
+
+                if (!collaborator.equals("")) {
+                    if (!(collaborator.charAt(collaborator.length() - 1) == ',')) {
+                        StringBuilder stringBuilder = new StringBuilder(collaborator);
+                        newCollaList = stringBuilder.append(",").toString();
+                        for (int i = 0; i < stringBuilder.toString().length(); i++) {
+                            // checking character in string
+                            if (stringBuilder.toString().charAt(i) == ',')
+                                res++;
+                        }
+
+                    } else {
+                        newCollaList = collaborator;
+                        for (int i = 0; i < collaborator.length(); i++) {
+                            // checking character in string
+                            if (collaborator.charAt(i) == ',')
+                                res++;
+                        }
+
+                    }
+
+                    Log.d("newCollaList", newCollaList);
+
+                    if (res > 3) {
+                        Toasty.info(this, "you can add up to 3 collaborators", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+
+//        String newColla=collaborator.replaceAll(" ","");
+//        Log.d("colla",newColla);
+//
+////        if (collaborator.charAt(newColla.length()-1)==','){
+////            Log.d("lastTerm","commaIncluded");
+////
+////
+////
+////        }
+////        else{
+////            Log.d("lastTerm","commaExcluded");
+////        }
+//
+                    if (!newCollaList.equals("")) {
+                        Log.d("colla", newCollaList);
+                        Log.d("lastTerm", "commaExcluded");
+                        //collaborator.replace("" + collaborator.charAt(collaborator.length() - 1), ",");
+//                StringBuilder stringBuilder=new StringBuilder(newColla);
+//                stringBuilder.append(",");
+                        cc = newCollaList.split(",");
+                        sb = new StringBuilder();
+                        for (String aCc : cc) {
+                            String one = aCc.trim();
                             Log.d("one", one);
-                            sb.append(one + ",");
+                            if (!Helper.isValidEmail(one)) {
+                                Toasty.error(CreateTicketActivity.this, getString(R.string.enter_valid_email), Toast.LENGTH_LONG).show();
+                                allCorrect = false;
+                                return;
+                            } else {
+                                sb.append(one).append(",");
+                            }
                         }
-//                        else{
-//                            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
-//                            allCorrect = false;
-//                        }
+                        Log.d("sb", sb.toString());
+                        cc1 = sb.toString().split(",");
+                        sb1 = new StringBuilder();
+                        if (res == 1) {
+                            for (String n : cc1) {
+                                sb1.append("&cc[]=");
+                                sb1.append(n);
+                                first_user = cc1[0];
+                            }
+                            Log.d("first_user", first_user);
+                            collaborators = sb1.toString();
+                            Log.d("sb1", sb1.toString());
+                        } else if (res == 2) {
+                            for (String n : cc1) {
+                                sb1.append("&cc[]=").append(n);
+                                //sb1.append(n);
+                                first_user = cc1[0];
+                                second_user = cc1[1];
 
-//                        if (one.contains("<")) {
-//                             pos3 = one.indexOf("<");
-//                             pos2 = one.lastIndexOf(">");
-//                            try {
-//                                String two = one.substring(pos3 + 1, pos2);
-//                                sb.append(two + ",");
-//                                } catch (StringIndexOutOfBoundsException e) {
-//                                e.printStackTrace();
-//                            }
+                            }
+                            Log.d("first_user", first_user);
+                            Log.d("second_user", second_user);
+                            collaborators = sb1.toString();
+                            Log.d("sb1", sb1.toString());
+                        } else if (res == 3) {
+                            for (String n : cc1) {
+                                sb1.append("&cc[]=");
+                                sb1.append(n);
+                                first_user = cc1[0];
+                                second_user = cc1[1];
+                                third_user = cc1[2];
+                            }
+                            Log.d("first_user", first_user);
+                            Log.d("second_user", second_user);
+                            Log.d("third_user", third_user);
+                            collaborators = sb1.toString();
+                            Log.d("sb1", sb1.toString());
+                        }
+//                        for (String n : cc1) {
+//                            sb1.append("&cc[]=");
+//                            sb1.append(n);
 //                        }
-//                        else{
-//                            sb.append(one + ",");
-////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-////                            allCorrect = false;
-////                            return;
-//                        }
-
-//                        else {
-//                            if (Helper.isValidEmail(one.trim())){
-//                                Log.d("cameHere","validemail");
-//                                sb.append(one + ",");
-//                            }
-////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-////                            allCorrect = false;
-////                            return;
-//                        }
-
+//                        collaborators = sb1.toString();
+//                        Log.d("collaborators",collaborators);
+                    } else {
+                        Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
+                        allCorrect = false;
+                        return;
                     }
-                    Log.d("sb", sb.toString());
-                    cc1 = sb.toString().split(",");
-                    sb1 = new StringBuilder();
-                    if (res == 1) {
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                            first_user = cc1[0];
-
-                        }
-                        Log.d("first_user", first_user);
-                        collaborators = sb1.toString();
-                    } else if (res == 2) {
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                            first_user = cc1[0];
-                            second_user = cc1[1];
-
-                        }
-                        Log.d("first_user", first_user);
-                        Log.d("second_user", second_user);
-                        collaborators = sb1.toString();
-                    } else if (res == 3) {
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                            first_user = cc1[0];
-                            second_user = cc1[1];
-                            third_user = cc1[2];
-                        }
-                        Log.d("first_user", first_user);
-                        Log.d("second_user", second_user);
-                        Log.d("third_user", third_user);
-                        collaborators = sb1.toString();
-                    }
-                    for (String n : cc1) {
-                        sb1.append("&cc[]=");
-                        sb1.append(n);
-                    }
-                    collaborators = sb1.toString();
                 }
-                else {
-                    //if (collaborator.contains("<")) {
 
-                    //collaboratorFinal = collaborator.replaceAll("\\s+,$", "");
-                    //collaboratorFinal = collaborator.replaceAll(" ", "");
-                    //Toast.makeText(this, "emails are :" + collaboratorFinal, Toast.LENGTH_LONG).show();
-                    //Log.d("emails", collaboratorFinal);
 
-                    cc = collaborator.split(",");
-                    sb = new StringBuilder();
-
-                    for (int i = 0; i < cc.length; i++) {
-                        String one = cc[i].toString();
-                        if (Helper.isValidEmail(one)){
-                            Log.d("one", one);
-                            sb.append(one + ",");
-                        }
-//                        else{
-//                            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
-//                            allCorrect = false;
-//                        }
-//                        if (one.contains("<")) {
-//                             pos3 = one.indexOf("<");
-//                             pos2 = one.lastIndexOf(">");
-//                            try {
-//                                String two = one.substring(pos3 + 1, pos2);
-//                                sb.append(two + ",");
-//                                } catch (StringIndexOutOfBoundsException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                        else{
-//                            sb.append(one + ",");
-////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-////                            allCorrect = false;
-////                            return;
-//                        }
-
-//                        else {
-//                            if (Helper.isValidEmail(one.trim())){
-//                                Log.d("cameHere","validemail");
-//                                sb.append(one + ",");
-//                            }
-////                            Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-////                            allCorrect = false;
-////                            return;
-//                        }
-
-                    }
-                    Log.d("sb", sb.toString());
-                    cc1 = sb.toString().split(",");
-                    sb1 = new StringBuilder();
-                    if (res == 1) {
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                            first_user = cc1[0];
-
-                        }
-                        Log.d("first_user", first_user);
-                        collaborators = sb1.toString();
-                    } else if (res == 2) {
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                            first_user = cc1[0];
-                            second_user = cc1[1];
-
-                        }
-                        Log.d("first_user", first_user);
-                        Log.d("second_user", second_user);
-                        collaborators = sb1.toString();
-                    } else if (res == 3) {
-                        for (String n : cc1) {
-                            sb1.append("&cc[]=");
-                            sb1.append(n);
-                            first_user = cc1[0];
-                            second_user = cc1[1];
-                            third_user = cc1[2];
-                        }
-                        Log.d("first_user", first_user);
-                        Log.d("second_user", second_user);
-                        Log.d("third_user", third_user);
-                        collaborators = sb1.toString();
-                    }
-                    for (String n : cc1) {
-                        sb1.append("&cc[]=");
-                        sb1.append(n);
-                    }
-                    collaborators = sb1.toString();
-                }
-                }
-//                else {
-//                    Toasty.info(this, getString(R.string.collaboratorExisting), Toast.LENGTH_SHORT).show();
-//                    allCorrect = false;
-//                    return;
-//                }
-
-        }
         final Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
         final Data priority = (Data) autoCompletePriority.getSelectedItem();
         final Data staff = (Data) autoCompleteTextView.getSelectedItem();
+        //final Data type= (Data) spinnerType.getSelectedItem();
         String fname = editTextFirstName.getText().toString();
         String lname = editTextLastName.getText().toString();
         String phone = editTextPhone.getText().toString();
@@ -2531,10 +2468,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         } else if (fname.trim().length() == 0||fname.equals("null")||fname.equals(null)) {
             Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (fname.trim().length() < 3) {
+        } else if (fname.trim().length() < 2) {
             Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (fname.length() > 20) {
+        } else if (fname.length() > 30) {
             Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
@@ -2549,8 +2486,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         } else if (subject.matches("[" + splChrs + "]+")) {
             Toasty.warning(this, getString(R.string.only_special_characters_not_allowed_here), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (subject.trim().length() > 100) {
-            Toasty.warning(this, "Subject must not exceed 150 characters"
+        } else if (subject.trim().length() > 200) {
+            Toasty.warning(this, getString(R.string.subjectExceed)
                     , Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (priority.ID == 0) {
@@ -3597,24 +3534,16 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String term = editTextEmail.getText().toString();
             if (InternetReceiver.isConnected()) {
-                if (term.equals("")) {
-                    //arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
-                    //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
-                    //new FetchCollaborator("s").execute();
-                    //Data data = new Data(0, "No result found");
-                    //emailHint.add(data);
-//                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
-//                stringArrayAdapterCC.notifyDataSetChanged();
-//                autoCompleteTextViewCC.setThreshold(0);
-//                autoCompleteTextViewCC.setDropDownWidth(1000);
+                if (!term.equals("")&&term.length()==3){
 
-                } else {
-
-                    progressBar.setVisibility(View.VISIBLE);
-                    //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
-                    new FetchCollaborator(term).execute();
+                    //progressBar.setVisibility(View.VISIBLE);
+//                    refresh.startAnimation();
+                    refresh.startAnimation(rotation);
+                    String newTerm=term;
                     arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
-                    editTextEmail.setAdapter(arrayAdapterCC);
+                    //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
+                    new FetchCollaborator(newTerm.trim()).execute();
+
                     //stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
@@ -3639,46 +3568,53 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             term = multiAutoCompleteTextViewCC.getText().toString();
             if (InternetReceiver.isConnected()) {
-                if (term.contains(",")) {
-                    int pos = term.lastIndexOf(",");
-                    term = term.substring(pos + 1, term.length());
-                    Log.d("newTerm", term);
-                    adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
-                    progressBar.setVisibility(View.VISIBLE);
-                    //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                    new FetchCollaboratorCC(term.trim()).execute();
-                    //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                    multiAutoCompleteTextViewCC.setAdapter(adapter1);
-                }
-//            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
-                else if (term.equals("")) {
-                    adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
-                    //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                    //new FetchCollaborator("s").execute();
-                    //Data data=new Data(0,"No result found");
+                    if (term.contains(",")) {
+
+                        int pos = term.lastIndexOf(",");
+                        term = term.substring(pos + 1, term.length());
+                        if (term.length()==3){
+                            Log.d("newTerm", term);
+                            adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
+                            //progressBar.setVisibility(View.VISIBLE);
+                            //refresh.startAnimation();
+                            refresh.startAnimation(rotation);
+                            //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
+                            new FetchCollaboratorCC(term.trim()).execute();
+                        }
+
+                    }
+                    else if (term.equals("")) {
+                        adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
+                        //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
+                        //new FetchCollaborator("s").execute();
+                        //Data data=new Data(0,"No result found");
 
 //                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
 //                stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
-                } else {
-                    adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
-                    progressBar.setVisibility(View.VISIBLE);
-                    //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                    new FetchCollaboratorCC(term).execute();
-                    multiAutoCompleteTextViewCC.setAdapter(adapter1);
+                    } else if (term.length()==3){
+                        adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
+                        //progressBar.setVisibility(View.VISIBLE);
+//                        refresh.startAnimation();
+                        refresh.startAnimation(rotation);
+
+                        //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
+                        new FetchCollaboratorCC(term).execute();
+                        //multiAutoCompleteTextViewCC.setAdapter(adapter1);
 
 
-                    //stringArrayAdapterCC.notifyDataSetChanged();
+                        //stringArrayAdapterCC.notifyDataSetChanged();
 //                autoCompleteTextViewCC.setThreshold(0);
 //                autoCompleteTextViewCC.setDropDownWidth(1000);
 
+                    }
+
+
+                    //buttonsave.setEnabled(true);
                 }
 
-
-                //buttonsave.setEnabled(true);
-            }
         }
         //String[] cc=[sayarsamanta@gmail.com,demoadmin@gmail.com,demopass@gmail.com]
         public void afterTextChanged(Editable s) {
@@ -3698,15 +3634,13 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
-            progressBar.setVisibility(View.GONE);
+            refresh.clearAnimation();
+//            refresh.stopAnimation();
+//            Bitmap icon = BitmapFactory.decodeResource(getResources(),
+//                    R.drawable.ic_refresh_black_24dp);
+//            refresh.doneLoadingAnimation(getResources().getColor(R.color.faveo),icon);
+            //progressBar.setVisibility(View.GONE);
             emailHint.clear();
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-
-//            if (result == null) {
-//                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                return;
-//            }
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -3724,7 +3658,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     emailHint.add(collaboratorSuggestion);
 
                 }
+                editTextEmail.setThreshold(3);
+                editTextEmail.setDropDownWidth(1500);
                 editTextEmail.setAdapter(arrayAdapterCC);
+                editTextEmail.showDropDown();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -3749,7 +3686,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
 
         protected void onPostExecute(String result) {
-            progressBar.setVisibility(View.GONE);
+            //progressBar.setVisibility(View.GONE);
+            refresh.clearAnimation();
             if (isCancelled()) return;
             stringArraylist.clear();
 
@@ -3789,7 +3727,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                         // Prefs.putString("noUser","1");
                     }
+                    multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+                    multiAutoCompleteTextViewCC.setThreshold(3);
+                    multiAutoCompleteTextViewCC.setDropDownWidth(1500);
                     multiAutoCompleteTextViewCC.setAdapter(adapter1);
+                    multiAutoCompleteTextViewCC.showDropDown();
+                    //multiAutoCompleteTextViewCC.setAdapter(adapter1);
 
 
 
@@ -3818,6 +3761,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
 
         protected void onPostExecute(String result) {
+                refresh.clearAnimation();
             try {
                 progressDialog.dismiss();
             }catch (NullPointerException e){
@@ -4007,23 +3951,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             } finally {
 
             }
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-//            builder.setTitle("Welcome to FAVEO");
-//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
-//            builder.setCancelable(true);
-//
-//            final AlertDialog dlg = builder.create();
-//
-//            dlg.show();
-//
-//            final Timer t = new Timer();
-//            t.schedule(new TimerTask() {
-//                public void run() {
-//                    dlg.dismiss(); // when the task active then close the dialog
-//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
-//                }
-//            }, 3000);
         }
     }
 

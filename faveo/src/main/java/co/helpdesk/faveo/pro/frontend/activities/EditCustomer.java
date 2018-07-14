@@ -20,8 +20,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
@@ -85,6 +87,7 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
     String countrycode = "";
     CountryCodePicker countryCodePicker;
     String userName, firstName, lastName, emailtext, phoneText, mobileText;
+    String usernameGet="",firstnameGet="",lastnameGet="",emailGet="",phoneGet="",mobileGet="";
     TextView textViewUserStatus;
     int statusId;
     String phone1,mobile1;
@@ -154,54 +157,14 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
         //aSwitch= (Switch) findViewById(R.id.default_switch);
         //textViewActiveOrDeactivated= (TextView) findViewById(R.id.activateordeactivate);
         progressDialog=new ProgressDialog(EditCustomer.this);
-
-
-        username.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                submit.setVisibility(View.VISIBLE);
-                return false; }
-        });
-        firstname.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                submit.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        lastname.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                submit.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-        email.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                submit.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-
-        phoneEditText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                submit.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-
-        mobile.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                submit.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
+        username.addTextChangedListener(textWatcherUser);
+        firstname.addTextChangedListener(textWatcherFirst);
+        lastname.addTextChangedListener(textWatcherLast);
+        email.addTextChangedListener(textWatcherEmail);
+        phoneEditText.addTextChangedListener(textWatcherPhone);
+        mobile.addTextChangedListener(textWatcherMobile);
         submit= (Button) findViewById(R.id.buttonSubmit);
         imageviewback= (ImageView) findViewById(R.id.imageViewBack);
-
 
         if (InternetReceiver.isConnected()){
             progressDialog.setMessage(getString(R.string.pleasewait));
@@ -212,8 +175,57 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
         imageviewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(EditCustomer.this,ClientDetailActivity.class);
-                startActivity(intent);
+                Log.d("username",usernameGet);
+                Log.d("firstnameGet",firstnameGet);
+                Log.d("lastnameGet",lastnameGet);
+                Log.d("emailGet",emailGet);
+                Log.d("phoneGet",phoneGet);
+                Log.d("mobileGet",mobileGet);
+
+                if (!usernameGet.equalsIgnoreCase(username.getText().toString())||!firstnameGet.equalsIgnoreCase(firstname.getText().toString())||
+                        !lastnameGet.equalsIgnoreCase(lastname.getText().toString())||!emailGet.equalsIgnoreCase(email.getText().toString())||!phoneGet.equalsIgnoreCase(phoneEditText.getText().toString())
+                        ||!mobileGet.equalsIgnoreCase(mobile.getText().toString())){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditCustomer.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle(R.string.discard);
+
+                    // Setting Dialog Message
+                    //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(EditCustomer.this,ClientDetailActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else{
+                    Intent intent=new Intent(EditCustomer.this,ClientDetailActivity.class);
+                    startActivity(intent);
+                }
+
+
             }
         });
 
@@ -481,6 +493,53 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
         return CountryZipCode;
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (!usernameGet.equalsIgnoreCase(username.getText().toString())||!firstnameGet.equalsIgnoreCase(firstname.getText().toString())||
+                !lastnameGet.equalsIgnoreCase(lastname.getText().toString())||!emailGet.equalsIgnoreCase(email.getText().toString())||!phoneGet.equalsIgnoreCase(phoneEditText.getText().toString())
+                ||!mobileGet.equalsIgnoreCase(mobile.getText().toString())){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditCustomer.this);
+
+            // Setting Dialog Title
+            alertDialog.setTitle(R.string.discard);
+
+            // Setting Dialog Message
+            //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+            // Setting Icon to Dialog
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+
+            // Setting Positive "Yes" Button
+
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke YES event
+                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(EditCustomer.this,ClientDetailActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+            // Setting Negative "NO" Button
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke NO event
+                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
+        }
+        else{
+            Intent intent=new Intent(EditCustomer.this,ClientDetailActivity.class);
+            startActivity(intent);
+        }
+    }
+
     @Override
     public void onShowRationalDialog(final PermissionInterface permissionInterface, int requestCode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -573,7 +632,6 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
                 String username1 = requester.getString("user_name");
                 phone1 = requester.getString("phone_number");
                 mobile1=requester.getString("mobile");
-                int active=requester.getInt("active");
                 String clientname1;
 
                 if (firstname1 == null || firstname1.equals(""))
@@ -582,22 +640,28 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
                     clientname1 = firstname1 + " " + lastName1;
 
                 username.setText(clientname1);
+                usernameGet=clientname1;
                 email.setText(requester.getString("email"));
+                emailGet=requester.getString("email");
                 if (firstname1.equals("null")||firstname1.equals("")){
                     firstname.setText("");
                 }else {
                     firstname.setText(firstname1);
+                    firstnameGet=firstname1;
                 }
                 if (lastName1.equals("null")||lastName1.equals("")){
                     lastname.setText("");
+
                 }else {
                     lastname.setText(lastName1);
+                    lastnameGet=lastName1;
                 }
                 if (phone1.equals("null")||phone1.equals("")||phone1.equals("Not available")){
                     phoneEditText.setText("");
                     imageViewCallPhone.setVisibility(View.GONE);
                 }else {
                     phoneEditText.setText(phone1);
+                    phoneGet=phone1;
                 }
                 if (mobile1.equals("null")||mobile1.equals("")||mobile1.equals("Not available")){
                     mobile.setText("");
@@ -606,6 +670,7 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
                 }
                 else {
                     mobile.setText(mobile1);
+                    mobileGet=mobile1;
                 }
 
                 status= Integer.parseInt(requester.getString("is_delete"));
@@ -740,5 +805,126 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
         super.onResume();
 
     }
+
+    private TextWatcher textWatcherUser = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            if(usernameGet.equals(String.valueOf(s))) {
+                //do something
+                submit.setVisibility(View.GONE);
+            }else{
+                submit.setVisibility(View.VISIBLE);
+                //do something
+            }
+
+        }
+    };
+    private TextWatcher textWatcherFirst = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            if(firstnameGet.equals(String.valueOf(s))) {
+                //do something
+                submit.setVisibility(View.GONE);
+            }else{
+                submit.setVisibility(View.VISIBLE);
+                //do something
+            }
+
+        }
+    };
+    private TextWatcher textWatcherLast = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            if(lastnameGet.equals(String.valueOf(s))) {
+                //do something
+                submit.setVisibility(View.GONE);
+            }else{
+                submit.setVisibility(View.VISIBLE);
+                //do something
+            }
+
+        }
+    };
+    private TextWatcher textWatcherEmail = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            if(emailGet.equals(String.valueOf(s))) {
+                //do something
+                submit.setVisibility(View.GONE);
+            }else{
+                submit.setVisibility(View.VISIBLE);
+                //do something
+            }
+
+        }
+    };
+    private TextWatcher textWatcherMobile = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            if(mobileGet.equals(String.valueOf(s))) {
+                //do something
+                submit.setVisibility(View.GONE);
+            }else{
+                submit.setVisibility(View.VISIBLE);
+                //do something
+            }
+
+        }
+    };
+    private TextWatcher textWatcherPhone = new TextWatcher() {
+
+        public void afterTextChanged(Editable s) {
+        }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            if(phoneGet.equals(String.valueOf(s))) {
+                //do something
+                submit.setVisibility(View.GONE);
+            }else{
+                submit.setVisibility(View.VISIBLE);
+                //do something
+            }
+
+        }
+    };
 
 }

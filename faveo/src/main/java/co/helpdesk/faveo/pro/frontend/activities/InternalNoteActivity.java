@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -37,6 +39,8 @@ public class InternalNoteActivity extends AppCompatActivity {
     Button buttonCreate;
     public static String ticketID;
     ProgressDialog progressDialog;
+    String option;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,39 +58,40 @@ public class InternalNoteActivity extends AppCompatActivity {
 
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(InternalNoteActivity.this,R.color.faveo));
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                //
-//                // Do the stuff
-//                //
-//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-//                try {
-//                    JSONObject jsonObject = new JSONObject(result);
-//                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
-//                    JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-//                    String role1=jsonObject2.getString("role");
-//                    if (role1.equals("user")){
-//                        Prefs.clear();
-//                        //Prefs.putString("role",role);
-//                        Intent intent=new Intent(InternalNoteActivity.this,LoginActivity.class);
-//                        Toasty.info(InternalNoteActivity.this,getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                        startActivity(intent);
-//
-//
-//                    }
-//
-//
-//                } catch (JSONException | NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                handler.postDelayed(this, 30000);
-//            }
-//        };
-//        runnable.run();
+        option=Prefs.getString("cameFromNotification", null);
+        switch (option) {
+            case "true":
+                Prefs.putString("cameFromNotification","true");
+                break;
+            case "false":
+                Prefs.putString("cameFromNotification","false");
+                break;
+            case "none":
+                Prefs.putString("cameFromNotification","none");
+                break;
+            case "client":
+                Prefs.putString("cameFromNotification","client");
+                break;
+            default:
+                Prefs.putString("cameFromNotification","");
+                break;
+        }
         imageView= (ImageView) findViewById(R.id.imageViewBackTicketInternalNote);
         editTextInternalNote = (EditText) findViewById(R.id.editText_internal_note);
+        editTextInternalNote.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (v.getId() == R.id.editText_internal_note) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_UP:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         buttonCreate = (Button) findViewById(R.id.button_create);
         ticketID= Prefs.getString("TICKETid",null);
         progressDialog=new ProgressDialog(this);
@@ -180,9 +185,9 @@ public class InternalNoteActivity extends AppCompatActivity {
                 Log.d("ticketThreadReply",jsonObject.toString());
                 Prefs.putString("ticketThread",jsonObject.toString());
                 Toasty.success(InternalNoteActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+                Intent intent=new Intent(InternalNoteActivity.this,MainActivity.class);
                 startActivity(intent);
-                editTextInternalNote.getText().clear();
+                //editTextInternalNote.getText().clear();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -190,5 +195,10 @@ public class InternalNoteActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

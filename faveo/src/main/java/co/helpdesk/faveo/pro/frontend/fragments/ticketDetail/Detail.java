@@ -69,7 +69,7 @@ public class Detail extends Fragment {
     TextView textViewTicketNumber, textViewErrorSubject;
     int paddingTop, paddingBottom;
     EditText editTextSubject, editTextFirstName, editTextEmail,
-            editTextLastMessage, editTextDueDate, editTextCreatedDate, editTextLastResponseDate;
+            editTextLastMessage, editTextDueDate, editTextCreatedDate;
 
     Spinner spinnerSLAPlans, spinnerType, spinnerStatus, spinnerSource,
             spinnerPriority, spinnerHelpTopics;
@@ -411,11 +411,11 @@ public class Detail extends Fragment {
                     editTextCreatedDate.setText(Helper.parseDate(jsonObject2.getString("created_at")));
                 }
 
-                if (jsonObject2.getString("updated_at").equals("") || jsonObject2.getString("updated_at") == null) {
-                    editTextLastResponseDate.setText(getString(R.string.not_available));
-                } else {
-                    editTextLastResponseDate.setText(Helper.parseDate(jsonObject2.getString("updated_at")));
-                }
+//                if (jsonObject2.getString("updated_at").equals("") || jsonObject2.getString("updated_at") == null) {
+//                    editTextLastResponseDate.setText(getString(R.string.not_available));
+//                } else {
+//                    editTextLastResponseDate.setText(Helper.parseDate(jsonObject2.getString("updated_at")));
+//                }
                 if (jsonObject4.getString("email").equals("") || jsonObject4.getString("email") == null) {
                     editTextEmail.setText(getString(R.string.not_available));
                 } else
@@ -560,7 +560,7 @@ public class Detail extends Fragment {
         //editTextLastMessage = (EditText) rootView.findViewById(R.id.editText_last_message);
         editTextDueDate = (EditText) rootView.findViewById(R.id.editText_due_date);
         editTextCreatedDate = (EditText) rootView.findViewById(R.id.editText_created_date);
-        editTextLastResponseDate = (EditText) rootView.findViewById(R.id.editText_last_response_date);
+        //editTextLastResponseDate = (EditText) rootView.findViewById(R.id.editText_last_response_date);
         //spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_staffs);
 
 //        buttonSave = (Button) rootView.findViewById(R.id.button_save);

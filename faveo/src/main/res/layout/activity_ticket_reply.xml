@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<com.flipboard.bottomsheet.BottomSheetLayout android:id="@+id/bottomsheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -13,7 +20,7 @@
             android:layout_height="wrap_content"
             android:theme="@style/AppThemeOverlay.ActionBar">
 
-            <Toolbar
+            <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -72,33 +79,45 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignTop="@+id/titlesave"
+                        android:layout_centerVertical="true"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/ic_action_attach_file"
                         android:textColor="#ffffff"
-                        android:textSize="12sp"
                         android:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/button_send"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="55dp"
+                        android:backgroundTint="@color/faveo"
+                        android:background="@drawable/ic_done_white_24dp"
+                        android:textColor="@color/white" />
+
+
+
                 </RelativeLayout>
-            </Toolbar>
+            </android.support.v7.widget.Toolbar>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/faveo">
 
             </View>
-            <android.support.design.widget.BottomNavigationView
-                android:id="@+id/navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="?android:attr/windowBackground"
-                app:itemBackground="@color/white"
-                android:foreground="?attr/selectableItemBackground"
-                app:itemIconTint="@color/faveo"
-                android:visibility="gone"
-                app:itemTextColor="@color/faveo"
-                app:menu="@menu/navigation" />
-
+            <!--<android.support.design.widget.BottomNavigationView-->
+                <!--android:id="@+id/navigation"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="bottom"-->
+                <!--android:background="?android:attr/windowBackground"-->
+                <!--app:itemBackground="@color/white"-->
+                <!--android:foreground="?attr/selectableItemBackground"-->
+                <!--app:itemIconTint="@color/faveo"-->
+                <!--android:visibility="gone"-->
+                <!--app:itemTextColor="@color/faveo"-->
+                <!--app:menu="@menu/navigation" />-->
 
         </android.support.design.widget.AppBarLayout>
         <View
@@ -131,78 +150,66 @@
         <LinearLayout
             android:id="@+id/section_reply"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="590dp"
+            android:padding="7dp"
             android:orientation="vertical">
             <EditText
                 android:id="@+id/editText_reply_message"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_modified_states"
+                android:layout_height="200dp"
+                android:background="@drawable/rectanglenew"
                 android:imeOptions="actionDone"
+                android:gravity="top"
+                android:overScrollMode="always"
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
-                android:maxLength="2000"
-                android:maxLines="10"
+                android:cursorVisible="true"
+                android:nestedScrollingEnabled="true"
+                android:padding="9dp"
+                android:paddingLeft="5dp"
                 android:hint="@string/leaveYourMessage"
-                android:paddingBottom="20dp"
+                android:paddingBottom="10dp"
                 android:paddingTop="16dp"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="18sp" />
+
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:gravity="right"
-                android:orientation="horizontal"
-                >
+                android:paddingTop="2dp"
+                android:orientation="horizontal">
+
                 <com.andexert.library.RippleView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     rv_centered="true"
-                    android:layout_gravity="end"
-                    >
-                <TextView
-                    android:id="@+id/addcc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add CC"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/faveo"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    />
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    android:layout_marginLeft="20dp"
-                    android:visibility="visible"
-                    style="@android:style/Widget.ProgressBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/addcc"
-                    android:layout_centerVertical="true" />
+                    android:layout_gravity="end">
+
+                    <TextView
+                        android:id="@+id/addcc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Add CC"
+                        android:paddingTop="6dp"
+                        android:textColor="@color/faveo"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        style="@android:style/Widget.ProgressBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/addcc"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:paddingTop="6dp"
+                        android:visibility="visible" />
                 </com.andexert.library.RippleView>
             </RelativeLayout>
-            <com.andexert.library.RippleView
-                android:id="@+id/more"
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                rv_centered="true"
-                android:layout_gravity="end"
-                >
-
-                <Button
-                    android:id="@+id/button_send"
-                    android:layout_width="120dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="end"
-                    android:background="@drawable/rectanglereachout"
-                    android:text="@string/send"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
-            </com.andexert.library.RippleView>
 
             <RelativeLayout
                 android:id="@+id/attachment_layout"
@@ -255,6 +262,26 @@
         </LinearLayout>
 
 
+
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--&gt;-->
+
+            <!--&lt;!&ndash;<io.codetail.widget.RevealFrameLayout&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:visibility="visible"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_gravity="bottom">&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<include layout="@layout/media_attach_menu" />&ndash;&gt;-->
+
+            <!--&lt;!&ndash;</io.codetail.widget.RevealFrameLayout>&ndash;&gt;-->
+        <!--</FrameLayout>-->
+
+
     </LinearLayout>
 
+
 </ScrollView>
+</com.flipboard.bottomsheet.BottomSheetLayout>
