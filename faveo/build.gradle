@@ -18,10 +18,10 @@ android {
 
     defaultConfig {
         applicationId "co.helpdesk.faveo.pro"
-        minSdkVersion 23
-        targetSdkVersion 24
-        versionCode 58
-        versionName "4.8.4"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 59
+        versionName "4.8.5"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -105,7 +105,7 @@ dependencies {
     //    compile 'net.danlew:android.joda:2.9.7'
 
 //    compile 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.github.jorgecastilloprz:fabprogresscircle:1.01@aar'
+        implementation 'com.github.jorgecastilloprz:fabprogresscircle:1.01@aar'
     testImplementation 'org.mockito:mockito-core:1.10.19'
     implementation 'com.github.ppamorim:dragger:1.2'
     implementation 'br.com.simplepass:loading-button-android:1.14.0'
@@ -186,13 +186,13 @@ crashlytics {
      cleanedAnnotations
      compile.exclude group: 'org.jetbrains' , module:'annotations'
  }
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '25.3.0'
-            }
-        }
-    }
-}
+ configurations.all {
+     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+         def requested = details.requested
+         if (requested.group == 'com.android.support') {
+             if (!requested.name.startsWith("multidex")) {
+                 details.useVersion '25.4.0'
+             }
+         }
+     }
+ }

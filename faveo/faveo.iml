@@ -100,12 +100,13 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-runtime-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-verifier" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-apk" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-resources" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-main-apk-res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifest-checker" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/resources" />
@@ -116,6 +117,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 25 Platform" jdkType="Android SDK" />
@@ -129,7 +131,8 @@
     <orderEntry type="library" name="Gradle: com.squareup.haha:haha:2.0.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.futuremind.recyclerfastscroll:fastscroll-0.2.5" level="project" />
     <orderEntry type="library" name="Gradle: com.github.viethoa:customdialogs-3.0.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-annotations:25.3.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-25.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-compat-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:imagepipeline-0.14.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:rules-0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.0@jar" level="project" />
@@ -139,24 +142,20 @@
     <orderEntry type="library" name="Gradle: com.android.databinding:adapters-3.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-basement-license-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-11.8.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-25.3.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:cardview-v7-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.rebound:rebound:0.3.8@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.greenrobot:eventbus:3.0.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:beta-1.2.8" level="project" />
     <orderEntry type="library" name="Gradle: io.fabric.sdk.android:fabric-1.4.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-11.8.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.databinding:library-3.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: br.com.simplepass:loading-button-android-1.14.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-fragment-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.jakewharton.timber:timber-4.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-license-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:1.10.19@jar" level="project" />
     <orderEntry type="library" name="Gradle: pub.devrel:easypermissions-0.3.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-25.4.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: javax.annotation:javax.annotation-api:1.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.flipboard:bottomsheet-core-1.5.3" level="project" />
     <orderEntry type="library" name="Gradle: com.github.ppamorim:dragger-1.2" level="project" />
@@ -167,26 +166,31 @@
     <orderEntry type="library" name="Gradle: com.googlecode.libphonenumber:libphonenumber:8.5.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.traex.rippleeffect:library-1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.github.asyl.animation:arcanimator-1.0.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-license-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: gr.escsoft.michaelprimez.searchablespinner:SearchableSpinner-1.0.9" level="project" />
     <orderEntry type="library" name="Gradle: com.android.databinding:baseLibrary:3.1.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-basement-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.stetho:stetho-1.4.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:2.0.1@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-v13-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.nineoldandroids:library:2.4.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:D.\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\FileCacher.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-v4-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:crashlytics-ndk-2.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-25.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-annotations:25.4.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:cardview-v7-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-io:commons-io:2.4@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:crashlytics-2.9.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.3.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.0.3@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.GrenderG:Toasty-1.1.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-fragment-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.leakcanary:leakcanary-analyzer:1.5@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.kishan.askpermission:askpermission-1.0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.jakewharton:butterknife-8.5.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.gotev.android-upload-service:uploadservice-d84ca6e2a6" level="project" />
@@ -201,25 +205,23 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-license-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.jorgecastilloprz:fabprogresscircle-1.01" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:D.\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\apache-mime4j-0.6.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:transition-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-messaging-license-11.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-v13-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:D.\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\httpmime-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations-java5:15.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:fbcore-0.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.curioustechizen.android-ago:library-1.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:imagepipeline-base-0.14.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-v4-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.bm.photoview:library-1.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:runner-0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-messaging-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:exposed-instrumentation-api-publish-0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-license-11.8.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:design-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.droidninja:filepicker-1.0.8" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:drawee-0.14.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.leakcanary:leakcanary-android-no-op-1.5" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.3@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:converter-gson:2.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.jakewharton:butterknife-annotations:8.5.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-license-11.8.0" level="project" />
@@ -230,12 +232,10 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.amulyakhare:com.amulyakhare.textdrawable-1.0.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.0.0@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-compat-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:D.\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\httpclient-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.gordonwong:material-sheet-fab-1.2.1" level="project" />
     <orderEntry type="library" name="Gradle: com.amitshekhar.android:debug-db-1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.mancj:MaterialSearchBar-0.7.5" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:transition-25.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.muddzdev:styleabletoast-1.0.6" level="project" />
     <orderEntry type="library" name="Gradle: agency.tango.android:avatar-view-picasso-0.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.pixplicity.easyprefs:library-1.8.1" level="project" />
@@ -251,6 +251,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-integration:1.3@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-library:1.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.hbb20:ccp-2.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-25.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:design-25.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.leakcanary:leakcanary-watcher:1.5@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:answers-1.4.2" level="project" />
     <orderEntry type="library" name="Gradle: com.cocosw:bottomsheet-0.9" level="project" />

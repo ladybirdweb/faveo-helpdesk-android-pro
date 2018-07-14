@@ -13,7 +13,6 @@ import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -59,7 +58,6 @@ import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.UIUtils;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
 import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
@@ -68,7 +66,6 @@ import co.helpdesk.faveo.pro.frontend.activities.SettingsActivity;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
 import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
-import co.helpdesk.faveo.pro.frontend.fragments.HelpSection;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
@@ -229,7 +226,8 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                         ((MainActivity) getActivity()).setActionBarTitle(title);
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                     }
-                }else if (position==1){
+                }
+                else if (position==1){
                     option=1;
                     title = getString(R.string.my_tickets);
                     fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);

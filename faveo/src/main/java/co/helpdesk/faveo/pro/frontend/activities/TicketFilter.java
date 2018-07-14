@@ -25,6 +25,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -68,6 +70,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
     String result;
     ArrayList<String> getStaffItems;
     ImageView refresh;
+    Animation rotation;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -90,6 +93,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(TicketFilter.this,R.color.faveo));
+        rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         show=Prefs.getString("Show",null);
         Log.d("Show",show);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -142,9 +146,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                         // Write your code here to invoke YES event
                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                         if (InternetReceiver.isConnected()){
-                            progressDialog=new ProgressDialog(TicketFilter.this);
-                            progressDialog.setMessage(getString(R.string.refreshing));
-                            progressDialog.show();
+                            refresh.startAnimation(rotation);
                             new FetchDependency().execute();
                             setUpViews();
                         }
@@ -730,6 +732,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         }
 
         protected void onPostExecute(String result) {
+            refresh.clearAnimation();
             Log.d("Depen Response : ", result + "");
             Log.d("cameHere","True");
 

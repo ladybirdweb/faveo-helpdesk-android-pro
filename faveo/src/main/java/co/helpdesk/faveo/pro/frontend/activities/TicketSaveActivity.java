@@ -24,6 +24,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -75,6 +77,7 @@ public class TicketSaveActivity extends AppCompatActivity {
     ArrayList<Data> helptopicItems, priorityItems, typeItems, sourceItems, staffItems;
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter, spinnerTypeArrayAdapter, spinnerSourceArrayAdapter, staffArrayAdapter;
     int id,id1;
+    Animation rotation;
     String option;
     public static String
             keyDepartment = "", valueDepartment = "",
@@ -100,10 +103,13 @@ public class TicketSaveActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(TicketSaveActivity.this,R.color.faveo));
         StrictMode.setThreadPolicy(policy);
+        refresh= (ImageView) findViewById(R.id.imageViewRefresh);
+        rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         if (InternetReceiver.isConnected()) {
-            progressDialog=new ProgressDialog(this);
-            progressDialog.setMessage(getString(R.string.pleasewait));
-            progressDialog.show();
+//            progressDialog=new ProgressDialog(this);
+//            progressDialog.setMessage(getString(R.string.pleasewait));
+//            progressDialog.show();
+            refresh.startAnimation(rotation);
             Log.d("FromTicketSave","true");
             task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
             task.execute();
@@ -135,7 +141,6 @@ public class TicketSaveActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarsave);
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
         imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
-        refresh= (ImageView) findViewById(R.id.imageViewRefresh);
         textView.setText(getString(R.string.ticketProperties));
 
 
@@ -248,9 +253,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                         // Write your code here to invoke YES event
                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                         if (InternetReceiver.isConnected()){
-                            progressDialog=new ProgressDialog(TicketSaveActivity.this);
-                            progressDialog.setMessage(getString(R.string.refreshing));
-                            progressDialog.show();
+                            refresh.startAnimation(rotation);
 
                             new FetchDependency().execute();
                             setUpViews();
@@ -557,7 +560,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            refresh.clearAnimation();
             if (isCancelled()) return;
 
 
@@ -884,6 +887,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            refresh.clearAnimation();
             Log.d("Depen Response : ", result + "");
             Log.d("cameHere","True");
 

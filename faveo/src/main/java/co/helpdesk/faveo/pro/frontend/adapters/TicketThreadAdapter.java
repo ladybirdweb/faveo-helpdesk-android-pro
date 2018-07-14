@@ -179,18 +179,28 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 ////         if (i==1){
 ////            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
 ////        }
-        if (i==ticketThreadList.size()-1){
-            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-            ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-            ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
-            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-            ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+
+        if (i==0){
+            ticketViewHolder.linearLayout.setVisibility(View.GONE);
+            ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+            ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
+            ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
         }
-
-
-
-
-
+        else if (i==ticketThreadList.size()-1){
+            ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+            ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+            ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
+            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            ticketViewHolder.linearLayout.setVisibility(View.GONE);
+            ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+            ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
+            ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
+        }
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,6 +268,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             textView= (TextView) v.findViewById(R.id.textView7);
             reportAndReply= (TextView) v.findViewById(R.id.reported);
             linearLayout= (LinearLayout) v.findViewById(R.id.linearWebView);
+
         }
 
     }

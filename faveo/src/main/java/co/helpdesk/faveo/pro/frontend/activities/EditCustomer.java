@@ -632,7 +632,6 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
                 String username1 = requester.getString("user_name");
                 phone1 = requester.getString("phone_number");
                 mobile1=requester.getString("mobile");
-                int active=requester.getInt("active");
                 String clientname1;
 
                 if (firstname1 == null || firstname1.equals(""))

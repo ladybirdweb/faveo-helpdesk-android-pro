@@ -1,17 +1,11 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,9 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.CellInfo;
-import android.telephony.CellInfoGsm;
-import android.telephony.CellSignalStrengthGsm;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,7 +21,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -39,23 +29,14 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
-import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.LocaleHelper;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
-import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
-import co.helpdesk.faveo.pro.frontend.fragments.ConfirmationDialog;
 import co.helpdesk.faveo.pro.frontend.fragments.HelpSection;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
@@ -76,7 +57,6 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtAsc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
-import es.dmoral.toasty.Toasty;
 import io.fabric.sdk.android.Fabric;
 
 /**

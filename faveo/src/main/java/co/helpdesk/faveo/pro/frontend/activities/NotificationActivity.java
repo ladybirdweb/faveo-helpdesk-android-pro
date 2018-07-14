@@ -111,8 +111,8 @@ public class NotificationActivity extends AppCompatActivity {
         progressDialog.setMessage("Please wait");
         if (InternetReceiver.isConnected()) {
             noInternet_view.setVisibility(View.GONE);
-            // swipeRefresh.setRefreshing(true);
-            progressDialog.show();
+            swipeRefresh.setRefreshing(true);
+            //progressDialog.show();
             new FetchFirst(this).execute();
         } else {
             noInternet_view.setVisibility(View.VISIBLE);
@@ -201,11 +201,10 @@ public class NotificationActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            swipeRefresh.setRefreshing(false);
             textView.setText(""+total+" notifications");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
-
             if (result == null) {
                 Toasty.error(NotificationActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;

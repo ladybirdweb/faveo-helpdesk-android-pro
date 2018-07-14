@@ -1652,9 +1652,10 @@ public class TrashTickets extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Write your code here to invoke YES event
                                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                        new StatusChange(ticket, id).execute();
                                         progressDialog.show();
                                         progressDialog.setMessage(getString(R.string.pleasewait));
+                                        new StatusChange(ticket, id).execute();
+
                                     }
                                 });
 

@@ -68,7 +68,6 @@ public class Conversation extends Fragment {
     ProgressDialog progressDialog;
     TicketThreadAdapter ticketThreadAdapter;
     List<TicketThread> ticketThreadList = new ArrayList<>();
-    String ticketId;
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
     String file;

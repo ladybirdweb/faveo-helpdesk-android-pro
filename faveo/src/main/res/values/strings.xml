@@ -226,7 +226,7 @@
     <string name="title_activity_ticket_save">TicketSaveActivity</string>
     <string name="title_activity_ticketsave">Ticketsave</string>
     <string name="ticketProperties">Ticket Properties</string>
-    <string name="addUser">Add Requestor</string>
+    <string name="addUser">ADD REQUESTOR</string>
     <string name="adduser">Add user</string>
     <string name="filtration">Ticket filtration</string>
     <string name="firstName">First name</string>

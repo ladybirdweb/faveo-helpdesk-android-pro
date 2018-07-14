@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;

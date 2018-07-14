@@ -2245,10 +2245,8 @@ public class InboxTickets extends Fragment {
                 Log.d("dueDate",ticketOverview.getDueDate());
                 if (Helper.compareDates(ticketOverview.dueDate) == 2) {
                 Log.d("duetoday","yes");
-
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                    Date EndTime = null;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date EndTime = null;
                     try {
                         EndTime = dateFormat.parse(ticketOverview.getDueDate());
                         Date CurrentTime = dateFormat.parse(dateFormat.format(new Date()));
@@ -2782,9 +2780,10 @@ public class InboxTickets extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Write your code here to invoke YES event
                                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                        new StatusChange(ticket, id).execute();
                                         progressDialog.show();
                                         progressDialog.setMessage(getString(R.string.pleasewait));
+                                        new StatusChange(ticket, id).execute();
+
                                     }
                                 });
 

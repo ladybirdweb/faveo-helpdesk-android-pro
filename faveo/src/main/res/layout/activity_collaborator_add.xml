@@ -3,6 +3,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/colorAccent"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -153,9 +154,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="14dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/rounded_button"
             android:src="@drawable/ic_add_black_24dp"
             android:tint="@color/faveo"

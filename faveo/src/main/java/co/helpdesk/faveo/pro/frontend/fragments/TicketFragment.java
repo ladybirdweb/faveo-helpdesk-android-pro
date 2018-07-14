@@ -32,18 +32,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
-import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
-import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
-import co.helpdesk.faveo.pro.frontend.fragments.tickets.MyTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketOverview;
-import co.helpdesk.faveo.pro.model.TicketThread;
 import es.dmoral.toasty.Toasty;
 
 /**

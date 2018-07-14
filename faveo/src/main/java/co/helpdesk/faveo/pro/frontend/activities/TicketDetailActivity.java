@@ -271,8 +271,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     default: {
-//                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
-//                        startActivity(intent1);
+                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+                        startActivity(intent1);
                         finish();
                         break;
                     }
@@ -968,88 +968,84 @@ public void fabOpen(){
         //new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
         Log.d("onResume","CALLED");
         Prefs.putString("TicketRelated","");
-        if (Prefs.getString("TicketRelated",null).equals("")){
-//                    progressDialog.setMessage(getString(R.string.pleasewait));
-//                    progressDialog.show();
-//            progressBar.setVisibility(View.VISIBLE);
-            //new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
-            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-        }
-//        else{
-//
-//            String ticketInformation=Prefs.getString("TicketRelated",null);
+        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//        if (Prefs.getString("TicketRelated",null).equals("")){
+////                    progressDialog.setMessage(getString(R.string.pleasewait));
+////                    progressDialog.show();
+////            progressBar.setVisibility(View.VISIBLE);
+//            //new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//        }
+
+            String ticketInformation=Prefs.getString("ticketSpecific",null);
 //            Log.d("TicketRelated",ticketInformation);
-//            try {
-//                jsonObject = new JSONObject(ticketInformation);
-//                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-//                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
-//                String ticketNumber=jsonObject2.getString("ticket_number");
-//                String statusName=jsonObject2.getString("status_name");
-//                String subject=jsonObject2.getString("title");
-//                String department=jsonObject2.getString("dept_name");
-//                String priorityColor=jsonObject2.getString("priority_color");
-//                if (!priorityColor.equals("")||!priorityColor.equals("null")){
-//                    viewpriority.setBackgroundColor(Color.parseColor(priorityColor));
-//                    viewCollapsePriority.setBackgroundColor(Color.parseColor(priorityColor));
-//                }
-//                else{
-//                    viewpriority.setVisibility(View.GONE);
-//                    viewCollapsePriority.setVisibility(View.GONE);
-//                }
-//                JSONObject jsonObject3=jsonObject2.getJSONObject("from");
-//                String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
-//                if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
-//                    userName=jsonObject3.getString("user_name");
-//                    textviewAgentName.setText(userName);
-//                }
-//                else{
-//                    userName=jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
-//                    textviewAgentName.setText(userName);
-//                }
-//                if (!statusName.equals("null")||!statusName.equals("")){
-//                    textViewStatus.setText(statusName);
-//                }
-//                else{
-//                    textViewStatus.setVisibility(View.GONE);
-//                }
-//                textViewTitle.setText(ticketNumber);
-//                if (subject.startsWith("=?")){
-//                    title=subject.replaceAll("=?UTF-8?Q?","");
-//                    String newTitle=title.replaceAll("=E2=80=99","");
-//                    String second1=newTitle.replace("=C3=BA","");
-//                    String third = second1.replace("=C2=A0", "");
-//                    String finalTitle=third.replace("=??Q?","");
-//                    String newTitle1=finalTitle.replace("?=","");
-//                    String newTitle2=newTitle1.replace("_"," ");
-//                    Log.d("new name",newTitle2);
-//                    textViewSubject.setText(newTitle2);
-//                }
-//                else if (!subject.equals("null")){
-//                    textViewSubject.setText(subject);
-//                }
-//                else if (subject.equals("null")){
-//                    textViewSubject.setText("");
-//                }
-//                if (!department.equals("")||!department.equals("null")){
-//                    textViewDepartment.setText(department);
-//                }
-//                else{
-//                    textViewDepartment.setVisibility(View.GONE);
-//                }
-//
-//                Log.d("TITLE",subject);
-//                Log.d("TICKETNUMBER",ticketNumber);
-//                //String priority=jsonObject1.getString("priority_id");
-//
-//
-//
-//
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-        //}
+            try {
+                jsonObject = new JSONObject(ticketInformation);
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                String ticketNumber=jsonObject2.getString("ticket_number");
+                String statusName=jsonObject2.getString("status_name");
+                String subject=jsonObject2.getString("title");
+                String department=jsonObject2.getString("dept_name");
+                String priorityColor=jsonObject2.getString("priority_color");
+                if (!priorityColor.equals("")||!priorityColor.equals("null")){
+                    viewpriority.setBackgroundColor(Color.parseColor(priorityColor));
+                    viewCollapsePriority.setBackgroundColor(Color.parseColor(priorityColor));
+                }
+                else{
+                    viewpriority.setVisibility(View.GONE);
+                    viewCollapsePriority.setVisibility(View.GONE);
+                }
+                JSONObject jsonObject3=jsonObject2.getJSONObject("from");
+                String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
+                    userName=jsonObject3.getString("user_name");
+                    textviewAgentName.setText(userName);
+                }
+                else{
+                    userName=jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                    textviewAgentName.setText(userName);
+                }
+                if (!statusName.equals("null")||!statusName.equals("")){
+                    textViewStatus.setText(statusName);
+                }
+                else{
+                    textViewStatus.setVisibility(View.GONE);
+                }
+                textViewTitle.setText(ticketNumber);
+                if (subject.startsWith("=?")){
+                    title=subject.replaceAll("=?UTF-8?Q?","");
+                    String newTitle=title.replaceAll("=E2=80=99","");
+                    String second1=newTitle.replace("=C3=BA","");
+                    String third = second1.replace("=C2=A0", "");
+                    String finalTitle=third.replace("=??Q?","");
+                    String newTitle1=finalTitle.replace("?=","");
+                    String newTitle2=newTitle1.replace("_"," ");
+                    Log.d("new name",newTitle2);
+                    textViewSubject.setText(newTitle2);
+                }
+                else if (!subject.equals("null")){
+                    textViewSubject.setText(subject);
+                }
+                else if (subject.equals("null")){
+                    textViewSubject.setText("");
+                }
+                if (!department.equals("")||!department.equals("null")){
+                    textViewDepartment.setText(department);
+                }
+                else{
+                    textViewDepartment.setVisibility(View.GONE);
+                }
+
+                Log.d("TITLE",subject);
+                Log.d("TICKETNUMBER",ticketNumber);
+                //String priority=jsonObject1.getString("priority_id");
+
+            } catch (JSONException | NullPointerException e) {
+                e.printStackTrace();
+            }
+
         Prefs.putString("filePath","");
         checkConnection();
         //setupFab();
@@ -1163,6 +1159,7 @@ public void fabOpen(){
                 jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                 JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+                Prefs.putString("ticketSpecific",jsonObject2.toString());
                 String ticketNumber=jsonObject2.getString("ticket_number");
                 String statusName=jsonObject2.getString("status_name");
                 String subject=jsonObject2.getString("title");

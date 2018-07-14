@@ -333,6 +333,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         final ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
         //toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
 //        getSupportActionBar().setHomeButtonEnabled(true);
@@ -372,8 +373,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         // Write your code here to invoke YES event
                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                         if (InternetReceiver.isConnected()){
-
-                        refresh.startAnimation(rotation);
+                            refresh.startAnimation(rotation);
 //                            progressDialog=new ProgressDialog(CreateTicketActivity.this);
 //                            progressDialog.setMessage(getString(R.string.refreshing));
 //                            progressDialog.show();
@@ -474,8 +474,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                 }
                 else {
-                    Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+//                    startActivity(intent);
                     finish();
                 }
             }
@@ -685,6 +685,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         countrycode=CountryZipCode;
         return CountryZipCode;
     }
+
 //    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
 //            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 //
@@ -2265,13 +2266,13 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         else {
             if (!MainActivity.isShowing) {
                 Log.d("isShowing", "false");
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
                 finish();
             } else {
                 Log.d("isShowing", "true");
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
                 finish();
             }
         }

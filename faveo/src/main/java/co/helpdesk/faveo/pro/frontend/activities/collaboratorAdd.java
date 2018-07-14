@@ -486,29 +486,15 @@ public class collaboratorAdd extends AppCompatActivity {
                     startActivity(intent);
                     //finish();
                 }
-//                JSONArray jsonArray=jsonObject.getJSONArray("users");
-//                if (jsonArray.length()==0){
-//                    Toast.makeText(collaboratorAdd.this, "user not found", Toast.LENGTH_SHORT).show();
-//                }
-//                String role=jsonObject1.getString("role");
-//                if (role.contains("ccc")){
-//                    autoCompleteTextViewUser.setText("");
-//                    id=0;
-//                    Toasty.success(collaboratorAdd.this,getString(R.string.collaboratoraddedsuccesfully),Toast.LENGTH_SHORT).show();
-//                }
 
             } catch (JSONException |NullPointerException e) {
                 e.printStackTrace();
             }
 
-
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-
-//            if (result == null) {
-//                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                return;
-//            }
+            if (result == null) {
+                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
 
 
         }
@@ -709,7 +695,7 @@ public class collaboratorAdd extends AppCompatActivity {
             public TextView email;
             public TextView textViewName;
             public ImageView imageViewCollaborator;
-            public CheckBox deletecolla;
+            public ImageView deletecolla;
             public RelativeLayout relativeLayout;
 
             public MyViewHolder(View view) {
@@ -718,7 +704,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 imageViewCollaborator= (ImageView) view.findViewById(R.id.imageView_collaborator);
                 relativeLayout= (RelativeLayout) view.findViewById(R.id.attachedCollaborator);
                 textViewName= (TextView) view.findViewById(R.id.collaboratorname);
-                deletecolla= (CheckBox) view.findViewById(R.id.deleteCollaborator);
+                deletecolla= (ImageView) view.findViewById(R.id.deleteCollaborator);
 
             }
         }
@@ -737,38 +723,76 @@ public class collaboratorAdd extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
             final co.helpdesk.faveo.pro.model.AttachedCollaborator movie = moviesList.get(position);
-
-
-                holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
                         email2=movie.getEmail();
-                        holder.deletecolla.setVisibility(View.VISIBLE);
-                        holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.grey_200));
-                        holder.deletecolla.setChecked(true);
-                        deleteUser.setVisibility(View.VISIBLE);
                         return false;
                     }
                 });
 
-                holder.deletecolla.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        Log.d("checked",""+b);
-                        if (b){
-                            holder.deletecolla.setVisibility(View.VISIBLE);
-                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.grey_200));
-                            holder.deletecolla.setChecked(true);
-                            deleteUser.setVisibility(View.VISIBLE);
+            holder.deletecolla.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    email2=movie.getEmail();
+                    try {
+
+                        if (email2.equals("")){
+                            Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
+
                         }
-                        else{
-                            holder.deletecolla.setChecked(false);
-                            holder.deletecolla.setVisibility(View.GONE);
-                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.collaborator));
-                            deleteUser.setVisibility(View.GONE);
+                        else {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
+                            alertDialog.setMessage(R.string.user_collaborator);
+                            alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    progressDialog=new ProgressDialog(collaboratorAdd.this);
+                                    progressDialog.setMessage(getString(R.string.pleasewait));
+                                    progressDialog.show();
+                                    Log.d("email3",email2);
+                                    new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
+                                    // DO SOMETHING HERE
+
+                                }
+                            });
+
+                            AlertDialog dialog = alertDialog.create();
+                            dialog.show();
+
+
                         }
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
                     }
-                });
+                }
+            });
+
+//                holder.deletecolla.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                        Log.d("checked",""+b);
+//                        if (b){
+//                            holder.deletecolla.setVisibility(View.VISIBLE);
+//                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.grey_200));
+//                            holder.deletecolla.setChecked(true);
+//                            deleteUser.setVisibility(View.VISIBLE);
+//                        }
+//                        else{
+//                            holder.deletecolla.setChecked(false);
+//                            holder.deletecolla.setVisibility(View.GONE);
+//                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.collaborator));
+//                            deleteUser.setVisibility(View.GONE);
+//                        }
+//                    }
+//                });
+
 
 
 //                holder.deletecolla.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
