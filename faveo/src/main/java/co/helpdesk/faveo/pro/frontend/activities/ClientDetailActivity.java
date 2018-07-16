@@ -174,11 +174,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
         Constants.URL = Prefs.getString("COMPANY_URL", "");
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setDisplayShowHomeEnabled(true);
-//            getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        }
         TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
         mTitle.setText(R.string.profile);
 
@@ -280,35 +275,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
         }
 
         protected String doInBackground(String... urls) {
-//            listTicketGlimpse = new ArrayList<>();
-//            String result = new Helpdesk().getTicketsByUser(clientID);
-//            if (result == null)
-//                return null;
-//            try {
-//                JSONObject jsonObject = new JSONObject(result);
-//
-//                JSONArray jsonArray = jsonObject.getJSONArray("tickets");
-//                for (int i = 0; i < jsonArray.length(); i++) {
-//                    int ticketID = Integer.parseInt(jsonArray.getJSONObject(i).getString("id"));
-//                    boolean isOpen = true;
-//                    String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
-//                    String ticketSubject = jsonArray.getJSONObject(i).getString("title");
-//                    try {
-//                        isOpen = jsonArray.getJSONObject(i).getString("ticket_status_name").equals("Open");
-//                        if (isOpen)
-//                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
-//                        else
-//                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false));
-//                    } catch (Exception e) {
-//                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true));
-//                    }
-//                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen));
-//                }
-//            } catch (JSONException e) {
-//                Toast.makeText(ClientDetailActivity.this, R.string.unexpected_error, Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-            // return "success";
             return new Helpdesk().getTicketsByUser(clientID);
         }
 
@@ -392,18 +358,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     imageViewClientPicture.setVisibility(View.GONE);
 
                 }
-//                else if (clientOverview.clientPicture.contains(".jpg")){
-//                    //mDrawableBuilder = TextDrawable.builder()
-//                    //.round();
-////    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
-//                    Picasso.with(context).load(clientOverview.getClientPicture()).transform(new CircleTransform()).into(clientViewHolder.roundedImageViewProfilePic);
-////        Glide.with(context)
-////            .load(ticketOverview.getClientPicture())
-////            .into(ticketViewHolder.roundedImageViewProfilePic);
-//
-//                    //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
-//
-//                }
                 else{
                     int color=Color.parseColor("#ffffff");
                     ColorGenerator generator = ColorGenerator.MATERIAL;
@@ -531,13 +485,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
     private void setUpViews() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.fetching_tickets));
-        //imageViewClientPicture = (ImageView) findViewById(R.id.imageView_default_profile);
-        //textViewClientName = (TextView) findViewById(R.id.textView_client_name);
-        // textViewClientEmail = (TextView) findViewById(R.id.textView_client_email);
-        // textViewClientPhone = (TextView) findViewById(R.id.textView_client_phone);
-        //textViewClientCompany = (TextView) findViewById(R.id.textView_client_company);
-        //textViewClientStatus = (TextView) findViewById(R.id.textView_client_status);
-        // viewPager = (ViewPager) findViewById(R.id.viewpager);
 
     }
 
@@ -633,17 +580,5 @@ public class ClientDetailActivity extends AppCompatActivity implements
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
-
-
-
-
-//    /**
-//     * Callback will be triggered when there is change in
-//     * network connection
-//     */
-//    @Override
-//    public void onNetworkConnectionChanged(boolean isConnected) {
-//        showSnack(isConnected);
-//    }
 
 }

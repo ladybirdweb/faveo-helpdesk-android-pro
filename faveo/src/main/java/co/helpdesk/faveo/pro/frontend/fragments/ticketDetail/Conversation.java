@@ -307,8 +307,6 @@ public class Conversation extends Fragment {
 
         return rootView;
     }
-
-
     class FetchTicketThreads extends AsyncTask<String, Void, String> {
         Context context;
         String ticketID;

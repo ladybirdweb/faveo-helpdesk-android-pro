@@ -91,27 +91,23 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public ViewPagerAdapter adapter;
     Conversation fragmentConversation;
     Detail fragmentDetail;
-    EditText editTextInternalNote, editTextCC, editTextReplyMessage;
-    Button buttonCreate, buttonSend,buttonExit,buttonCancel;
+    EditText editTextInternalNote, editTextReplyMessage;
+    Button buttonCreate, buttonSend;
     ProgressDialog progressDialog;
     public static String ticketID, ticketNumber;
     TextView textView;
     String status;
     String title;
-    LinearLayout linearLayout;
     TextView addCc;
     View viewpriority,viewCollapsePriority;
     ImageView imgaeviewBack;
-    String cameFromNotification;
     public static boolean isShowing = false;
     LoaderTextView textViewStatus, textviewAgentName,textViewTitle,textViewDepartment;
     LoaderTextView textViewSubject;
     ArrayList<Data> statusItems;
     int id = 0;
-    ProgressBar progressBar;
     FabSpeedDial fabSpeedDial;
     View view;
-    CoordinatorLayout coordinatorLayout;
     private boolean isFabOpen;
     private Menu menu;
     ImageView loaderImageView;
@@ -139,7 +135,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                int id=menuItem.getItemId();
-
                if (id==R.id.fab_reply){
                    Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
                    startActivity(intent);
@@ -164,11 +159,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
         });
 
         Prefs.putString("cameFromTicket","false");
-        //setupFab();
-        //Prefs.putString("querry","null");
         statusItems=new ArrayList<>();
         JSONObject jsonObject1;
-        //progressBar= (ProgressBar) findViewById(R.id.TicketDetailProgressbar);
         Data data;
         String json1 = Prefs.getString("DEPENDENCY", "");
         //statusItems.add(new Data(0, "Please select help topic"));
@@ -280,7 +272,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
               }
         });
-
         setSupportActionBar(mToolbar);
         Constants.URL = Prefs.getString("COMPANY_URL", "");
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -289,7 +280,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         try {
             jsonObject = new JSONObject(json);
             JSONArray jsonArrayStaffs = jsonObject.getJSONArray("status");
-
             for (int i = 0; i < jsonArrayStaffs.length(); i++) {
                 switch (jsonArrayStaffs.getJSONObject(i).getString("name")) {
                     case "Open":
@@ -325,14 +315,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         editTextReplyMessage = (EditText) findViewById(R.id.editText_reply_message);
         buttonCreate = (Button) findViewById(R.id.button_create);
         buttonSend = (Button) findViewById(R.id.button_send);
-
-        //overlay = findViewById(R.id.overlay);
-//        overlay.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //exitReveal();
-//            }
-//        });
     }
 
     @Override
@@ -344,9 +326,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
             Data data=statusItems.get(i);
             menu.add(data.getName());
         }
-
-
-//        mToolbar.getMenu();
 
 
         return true;
@@ -367,31 +346,12 @@ public class TicketDetailActivity extends AppCompatActivity implements
             Intent intent = new Intent(TicketDetailActivity.this, TicketSaveActivity.class);
             startActivity(intent);
             finish();
-//            title = getString(R.string.title_activity_ticketsave);
-//            fragment = getSupportFragmentManager().findFragmentByTag(title);
-//            if (fragment == null)
-//                fragment = new TicketSaveFragment();
-//            if (fragment != null) {
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.container_body, fragment);
-//                // fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
 
         }
         else if (item.getItemId() == android.R.id.home) {
             Log.d("camehere","true");
             onBackPressed(); // close this activity and return to preview activity (if there is any)
         }
-//
-//        try {
-//            if (item != null) {
-//                item.getSubMenu().clearHeader();
-//            }
-//        } catch (NullPointerException e) {
-//            e.printStackTrace();
-//        }
 
         else{
 
@@ -445,115 +405,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
         }
         Log.d("item", String.valueOf(item));
-
-//        Fragment fragment = null;
-//        title = getString(R.string.app_name);
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-
-
         return super.onOptionsItemSelected(item);
-    }
-    private void hideOption(int id) {
-        MenuItem item = menu.findItem(id);
-        item.setVisible(false);
-    }
-
-    private void showOption(int id) {
-        MenuItem item = menu.findItem(id);
-        item.setVisible(true);
-    }
-
-    /**
-     * Sets up the Floating action button.
-     */
-//    private void setupFab() {
-//
-//        fab = (Fab) findViewById(R.id.fab);
-//        fab.setVisibility(View.VISIBLE);
-//        fab.show();
-//        View sheetView = findViewById(R.id.fab_sheet);
-//        View overlay1 = findViewById(R.id.overlay1);
-//        int sheetColor = getResources().getColor(R.color.background_card);
-//        int fabColor = getResources().getColor(R.color.theme_accent);
-//
-//        /**
-//         * Create material sheet FAB.
-//         */
-//        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay1, sheetColor, fabColor);
-//
-//        /**
-//         * Set material sheet event listener.
-//         */
-//        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
-//            @Override
-//            public void onShowSheet() {
-//                // Save current status bar color
-//                statusBarColor = getStatusBarColor();
-//                // Set darker status bar color to match the dim overlay
-//                setStatusBarColor(getResources().getColor(R.color.theme_primary_dark2));
-//            }
-//
-//            @Override
-//            public void onHideSheet() {
-//                // Restore status bar color
-//                setStatusBarColor(statusBarColor);
-//            }
-//        });
-
-        /**
-         * Set material sheet item click listeners.
-         */
-//        findViewById(R.id.fab_sheet_item_reply).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                materialSheetFab.hideSheetThenFab();
-//                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
-//                startActivity(intent);
-//                exitReveal();
-//                //enterReveal("Reply");
-//            }
-//        });
-//        findViewById(R.id.fab_sheet_item_note).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                materialSheetFab.hideSheetThenFab();
-//                Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
-//                startActivity(intent);
-//                exitReveal();
-//                //enterReveal("Internal notes");
-//            }
-//        });
-//
-//        findViewById(R.id.fab_sheet_exit).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                materialSheetFab.hideSheet();
-//            }
-//        });
-
-//        findViewById(R.id.closeFab).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                materialSheetFab.hideSheet();
-//            }
-//        });
-//        findViewById(R.id.fab_sheet_item_photo).setOnClickListener(this);
-//        findViewById(R.id.fab_sheet_item_note).setOnClickListener(this);
-    //}
-
-    private int getStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return getWindow().getStatusBarColor();
-        }
-        return 0;
-    }
-
-    private void setStatusBarColor(int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(color);
-        }
     }
 
     @Override
@@ -590,47 +442,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
     }
 
-//    /**
-//     * Handling the back button.
-//     *
-//     * @param item refers to the menu item .
-//     * @return
-//     */
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // handle arrow click here
-//        if (item.getItemId() == android.R.id.home) {
-//            onBackPressed(); // close this activity and return to preview activity (if there is any)
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-//    private void getCreateRequest() {
-//        final CharSequence[] items = {"Reply", "Internal notes"};
-//        AlertDialog.Builder builder = new AlertDialog.Builder(TicketDetailActivity.this);
-//        builder.setItems(items, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int item) {
-//                dialog.dismiss();
-//                if (items[item].equals("Reply")) {
-//                    cx = (int) fabAdd.getX() + dpToPx(40);
-//                    cy = (int) fabAdd.getY();
-//                    fabExpanded = true;
-//                    fabAdd.hide();
-//                    enterReveal("Reply");
-//                } else {
-//                    cx = (int) fabAdd.getX() + dpToPx(40);
-//                    cy = (int) fabAdd.getY();
-//                    fabExpanded = true;
-//                    fabAdd.hide();
-//                    enterReveal("Internal notes");
-//                }
-//            }
-//        });
-//        builder.show();
-//    }
-
     /**
      * Async task for changing the status of the ticket.
      */
@@ -646,15 +457,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         protected String doInBackground(String... urls) {
             return new Helpdesk().postStatusChanged(ticketId, statusId);
-            //return new Helpdesk().postStatusChanged(ticketId,statusId);
         }
 
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
-            //progressDialog.dismiss();
-//            if (result == null) {
-//                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                return;
             try {
                 String state = Prefs.getString("403", null);
                 if (state.equals("403") && !state.equals("null")) {
@@ -680,71 +486,17 @@ public class TicketDetailActivity extends AppCompatActivity implements
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-//                if (message1.contains("The ticket id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
-//                }
-//                else if (message1.contains("The status id field is required.")){
-//                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
-//                }
-//               else
-//            try {
-//                JSONObject jsonObject = new JSONObject(result);
-//                JSONObject jsonObject1 = jsonObject.getJSONObject("response");
-//                JSONArray jsonArray = jsonObject1.getJSONArray("message");
-//                for (int i = 0; i < jsonArray.length(); i++) {
-//                    String message = jsonArray.getString(i);
-//                    if (message.equals("Permission denied, you do not have permission to access the requested page.")) {
-//                        Toasty.warning(TicketDetailActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-//                        Prefs.putString("403", "null");
-//                        return;
-//                    }
-//                }
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-
-//            }
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
-                //JSONObject jsonObject1 = jsonObject.getJSONObject("response");
-                //JSONObject jsonObject2=jsonObject.getJSONObject("error");
-                //String message1=jsonObject2.getString("ticket_id");
                 String message2 = jsonObject.getString("message");
 
-
-//                if (message2.contains("permission denied")&&Prefs.getString("403",null).equals("403")){
-//
-//                }
                 if (!message2.equals("null")){
                     Toasty.success(TicketDetailActivity.this, getString(R.string.successfullyChanged), Toast.LENGTH_LONG).show();
                     Prefs.putString("ticketstatus", "Deleted");
                     finish();
                     startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
                 }
-
-//                if (message2.contains("Status changed to Deleted")) {
-//                    Toasty.success(TicketDetailActivity.this, getString(R.string.status_deleted), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("ticketstatus", "Deleted");
-//                    finish();
-//                    startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
-//                } else if (message2.contains("Status changed to Open")) {
-//                    Toasty.success(TicketDetailActivity.this, getString(R.string.status_opened), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("ticketstatus", "Open");
-//                    finish();
-//                    startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
-//                } else if (message2.contains("Status changed to Closed")) {
-//                    Toasty.success(TicketDetailActivity.this, getString(R.string.status_closed), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("ticketstatus", "Closed");
-//                    finish();
-//                    startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
-//                } else if (message2.contains("Status changed to Resolved")) {
-//                    Toasty.success(TicketDetailActivity.this, getString(R.string.status_resolved), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("ticketstatus", "Resolved");
-//                    finish();
-//                    startActivity(new Intent(TicketDetailActivity.this, MainActivity.class));
-//                }
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
 
@@ -755,15 +507,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
 
     }
-
-public void fabOpen(){
-        if (fabSpeedDial.isMenuOpen()){
-            viewPager.setVisibility(View.GONE);
-        }
-        else{
-            viewPager.setVisibility(View.VISIBLE);
-        }
-}
     /**
      * Here we are initializing the view pager
      * for the conversation and detail fragment.
@@ -943,17 +686,6 @@ public void fabOpen(){
                 break;
             }
         }
-
-        //super.onBackPressed();
-
-//        if (materialSheetFab.isSheetVisible()) {
-//            materialSheetFab.hideSheet();
-//        } else {
-//
-//        }
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
     }
 
     /**
@@ -963,23 +695,11 @@ public void fabOpen(){
     @Override
     protected void onResume() {
         JSONObject jsonObject = null;
-//        progressDialog.setMessage(getString(R.string.pleasewait));
-//        progressDialog.show();
-        //new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
         Log.d("onResume","CALLED");
         Prefs.putString("TicketRelated","");
         new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-//        if (Prefs.getString("TicketRelated",null).equals("")){
-////                    progressDialog.setMessage(getString(R.string.pleasewait));
-////                    progressDialog.show();
-////            progressBar.setVisibility(View.VISIBLE);
-//            //new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-//            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
-//            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-//        }
 
             String ticketInformation=Prefs.getString("ticketSpecific",null);
-//            Log.d("TicketRelated",ticketInformation);
             try {
                 jsonObject = new JSONObject(ticketInformation);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
@@ -1040,7 +760,6 @@ public void fabOpen(){
 
                 Log.d("TITLE",subject);
                 Log.d("TICKETNUMBER",ticketNumber);
-                //String priority=jsonObject1.getString("priority_id");
 
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
@@ -1048,8 +767,6 @@ public void fabOpen(){
 
         Prefs.putString("filePath","");
         checkConnection();
-        //setupFab();
-//        fab.bringToFront();
         super.onResume();
     }
 
@@ -1227,22 +944,10 @@ public void fabOpen(){
             }
         }
     }
-
-
     @Override
     protected void onRestart() {
         super.onRestart();
 
     }
-
-
-    //    /**
-//     * Callback will be triggered when there is change in
-//     * network connection
-//     */
-//    @Override
-//    public void onNetworkConnectionChanged(boolean isConnected) {
-//        showSnack(isConnected);
-//    }
 
 }

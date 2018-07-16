@@ -441,9 +441,6 @@ public class SearchActivity extends AppCompatActivity implements
 
     final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            //searchView.showDropDown();
-
-            //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -456,47 +453,6 @@ public class SearchActivity extends AppCompatActivity implements
             else{
                 imageViewClearText.setVisibility(View.VISIBLE);
             }
-//            if (colorList.contains(term)){
-//                searchView.showDropDown();
-//            }
-//            else {
-//                searchView.dismissDropDown();
-//            }
-//            if (InternetReceiver.isConnected()) {
-//                if (term.contains(",")) {
-//                    int pos = term.lastIndexOf(",");
-//                    term = term.substring(pos + 1, term.length());
-//                    Log.d("newTerm", term);
-//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-//                    new collaboratorAdd.FetchCollaborator(term.trim()).execute();
-//                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
-//                }
-////            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
-//                else if (term.equals("")) {
-//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-//                    //new FetchCollaborator("s").execute();
-//                    Data data = new Data(0, "No result found");
-//                    stringArrayList.add(data);
-////                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
-////                stringArrayAdapterCC.notifyDataSetChanged();
-////                autoCompleteTextViewCC.setThreshold(0);
-////                autoCompleteTextViewCC.setDropDownWidth(1000);
-//
-//                } else {
-//                    arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-//                    new collaboratorAdd.FetchCollaborator(term).execute();
-//                    autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
-//
-//
-//                    //stringArrayAdapterCC.notifyDataSetChanged();
-////                autoCompleteTextViewCC.setThreshold(0);
-////                autoCompleteTextViewCC.setDropDownWidth(1000);
-//
-//                }
-//
-//
-//                //buttonsave.setEnabled(true);
-//            }
         }
 
         public void afterTextChanged(Editable s) {

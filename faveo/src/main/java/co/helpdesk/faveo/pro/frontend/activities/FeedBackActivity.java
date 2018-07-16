@@ -184,22 +184,6 @@ LinearLayout textViewSuggestion,textViewIssue;
                 Toasty.error(FeedBackActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-//
-//            if (result.startsWith("Message Sent!")){
-//                Toasty.success(FeedBackActivity.this,getString(R.string.feedbackPosted),Toast.LENGTH_LONG).show();
-//                Intent intent=new Intent(FeedBackActivity.this,SettingsActivity.class);
-//                startActivity(intent);
-//            }
-//            String state= Prefs.getString("403",null);
-//            try {
-//                if (state.equals("403") && !state.equals("null")) {
-//                    Toasty.warning(FeedBackActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("403", "null");
-//                    return;
-//                }
-//            }catch (NullPointerException e){
-//                e.printStackTrace();
-//            }
 
             try{
                 JSONObject jsonObject=new JSONObject(result);
@@ -215,15 +199,6 @@ LinearLayout textViewSuggestion,textViewIssue;
                 e.printStackTrace();
             }
 
-
-//            try {
-//
-//                JSONObject jsonObject=new JSONObject(result);
-//                JSONObject jsonObject1=jsonObject.getJSONObject("response");
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
 
 
         }

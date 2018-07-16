@@ -220,32 +220,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         }catch(NullPointerException e){
             e.printStackTrace();
         }
-
-//        autoCompleteShow.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                showArrayAdapter=new ArrayAdapter<>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,showItems);
-//                //staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                autoCompleteShow.setAdapter(showArrayAdapter);
-//                autoCompleteShow.showDropDown();
-//                autoCompleteShow.setThreshold(1);
-//                autoCompleteShow.setDropDownWidth(1000);
-//                return false;
-//            }
-//        });
-//        autoCompleteShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                show = showArrayAdapter.getItem(i).toString();
-//            }
-//        });
-
-//        autoCompleteShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                show=autoCompleteShow.getSelectedItem().toString();
-//            }
-//        });
         autoDepartment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -296,17 +270,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                 }
             }
         });
-//autoCompleteAssigned.setOnTouchListener(new View.OnTouchListener() {
-//    @Override
-//    public boolean onTouch(View view, MotionEvent motionEvent) {
-//        unassignedArrayAdapter=new ArrayAdapter<String>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,unassignedItems);
-//        autoCompleteAssigned.setAdapter(unassignedArrayAdapter);
-//        autoCompleteAssigned.showDropDown();
-//        autoCompleteAssigned.setThreshold(1);
-//        autoCompleteAssigned.setDropDownWidth(1000);
-//        return false;
-//    }
-//});
 
 
         imageViewback.setOnClickListener(new View.OnClickListener() {
@@ -319,41 +282,12 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         buttonFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (autoDepartment.getText().toString().equals("")&&autoPriority.getText().toString().equals("")&&autoAssigned.getText().toString().equals("")&&autoCompleteShow.getSelectedItemPosition()==0&&autoType.getText().toString().equals("")){
-//                    Toasty.info(TicketFilter.this,getString(R.string.emptyField), Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
-//                    if (autoCompleteShow.getSelectedItemPosition() == 0) {
-//                        Toasty.info(TicketFilter.this, getString(R.string.rquiredfields), Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
                 try {
                     if (!autoDepartment.getText().toString().equals("")) {
                         departmment = autoDepartment.getText().toString();
-                        //departmment.replaceAll(" ","");
-//                        if (departmment.endsWith(",")) {
-//                            Toast.makeText(TicketFilter.this, "comma removed by customer", Toast.LENGTH_SHORT).show();
-//                            //departmentfinal = departmment;
-//                        }else{
-//                            departmment = autoDepartment.getText().toString();
-//                            int pos = departmment.lastIndexOf(",");
-//                            departmentfinal = departmment.substring(0, pos);
-//                            Toast.makeText(TicketFilter.this, "comma removed by programer", Toast.LENGTH_SHORT).show();
-//                        }
-                        //departmentfinal = departmment.replaceAll(",$", "");
                         result = departmment.replaceAll("\\s+,$", "");
                         result = result.replaceAll(" ", "");
                         Prefs.putString("departmentfinal", result);
-//                        if (lastChar.equals(",")){
-//                            int pos1 = departmentfinal.lastIndexOf(",");
-//                            departmentfinal = departmentfinal.substring(0, pos1);
-//                            Prefs.putString("departmentfinal",departmentfinal);
-//                        }
-//                        else{
-//                            Prefs.putString("departmentfinal",departmentfinal);
-//                        }
-                        //Prefs.putString("departmentfinal",departmentfinal);
 
                     } else if (autoDepartment.getText().toString().equals("")) {
                         Prefs.putString("departmentfinal", "all");
@@ -365,29 +299,8 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                     e.printStackTrace();
                 }
 
-
-//                    try{
-//                        if (!autoStatus.getText().toString().equals("")){
-//                            status = autoStatus.getText().toString();
-//                            statusFinal = status.replaceAll("\\s+,$", "");
-//                            statusFinal = status.replaceAll(" ", "");
-//                            Prefs.putString("statusfinal", statusFinal);
-//                        }
-//                    }catch (StringIndexOutOfBoundsException e){
-//                        e.printStackTrace();
-//                    }
-
                 try {
                     Prefs.putString("show", show);
-//                        if (autoCompleteShow.getSelectedItemPosition() > 0) {
-//                            show = autoCompleteShow.getSelectedItem().toString();
-//                            index=autoCompleteShow.getSelectedItemPosition();
-//                            String show1=show.replace(show.charAt(0),show.toLowerCase().charAt(0));
-//
-//
-//                        } else if (autoCompleteShow.getSelectedItemPosition() == 0) {
-//                            Prefs.putString("show", "null");
-//                        }
                 } catch (StringIndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
@@ -568,31 +481,10 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-
-//           statusArrayAdapter=new ArrayAdapter<>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,statusItems);
-//           //staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//           autoStatus.setAdapter(statusArrayAdapter);
-//           autoStatus.setThreshold(1);
-//           autoStatus.setDropDownWidth(1000);
-//           autoStatus.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-
-//
-        //autoAssigned= (MultiAutoCompleteTextView) findViewById(R.id.spinner_staffs);
         unassignedArrayAdapter=new ArrayAdapter<String>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,unassignedItems);
         autoCompleteAssigned.setAdapter(unassignedArrayAdapter);
         autoCompleteAssigned.setThreshold(1);
         autoCompleteAssigned.setDropDownWidth(1000);
-
-//           showArrayAdapter=new ArrayAdapter<>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,showItems);
-//           //staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//           autoCompleteShow.setAdapter(showArrayAdapter);
-//           autoCompleteShow.setThreshold(1);
-//           autoCompleteShow.setDropDownWidth(1000);
-//           showArrayAdapter = new ArrayAdapter<>(TicketFilter.this, android.R.layout.simple_spinner_dropdown_item, showItems); //selected item will look like a spinner set from XML
-//           showArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//           autoCompleteShow.setAdapter(showArrayAdapter);
 
         staffArrayAdapter=new ArrayAdapter<>(TicketFilter.this,android.R.layout.simple_dropdown_item_1line,staffItems);
         //staffArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -631,70 +523,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
         autoPriority.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
     }
-    //    public class SpaceTokenizer implements MultiAutoCompleteTextView.Tokenizer {
-//
-//        public int findTokenStart(CharSequence text, int cursor) {
-//            int i = cursor;
-//
-//            while (i > 0 && text.charAt(i - 1) != ' ') {
-//                i--;
-//            }
-//            while (i < cursor && text.charAt(i) == ' ') {
-//                i++;
-//            }
-//
-//            return i;
-//        }
-//
-//        public int findTokenEnd(CharSequence text, int cursor) {
-//            int i = cursor;
-//            int len = text.length();
-//
-//            while (i < len) {
-//                if (text.charAt(i) == ' ') {
-//                    return i;
-//                } else {
-//                    i++;
-//                }
-//            }
-//
-//            return len;
-//        }
-//
-//        public CharSequence terminateToken(CharSequence text) {
-//            int i = text.length();
-//
-//            while (i > 0 && text.charAt(i - 1) == ' ') {
-//                i--;
-//            }
-//
-//            if (i > 0 && text.charAt(i - 1) == ' ') {
-//                return text;
-//            } else {
-//                if (text instanceof Spanned) {
-//                    SpannableString sp = new SpannableString(text + ",");
-//                    TextUtils.copySpansFrom((Spanned) text, 0, text.length(),
-//                            Object.class, sp, 0);
-//                    return sp;
-//                } else {
-//                    return text + ",";
-//                }
-//            }
-//        }
-//    }
-    private int getIndex(Spinner spinner, String myString) {
-
-        int index = 0;
-
-        for (int i = 0; i < spinner.getCount(); i++) {
-            Log.d("item ", spinner.getItemAtPosition(i).toString());
-            if (spinner.getItemAtPosition(i).toString().equals(myString.trim())) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
 //    @Override
 //    public void onBackPressed() {
 //        super.onBackPressed();
@@ -716,10 +544,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
 
 
         super.onBackPressed();
-
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
     }
 
     private class FetchDependency extends AsyncTask<String, Void, String> {
@@ -743,42 +567,8 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             }
 
             if (result==null) {
-//                try {
-//                    unauthorized = Prefs.getString("unauthorized", null);
-//                    if (unauthorized.equals("true")) {
-//                        loading.setText("Oops! Something went wrong.");
-//                        progressDialog.setVisibility(View.INVISIBLE);
-//                        textViewtryAgain.setVisibility(View.VISIBLE);
-//                        textViewrefresh.setVisibility(View.VISIBLE);
-//                        Prefs.putString("unauthorized", "false");
-//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        });
-//
-//                    }
-//
-//                } catch (NullPointerException e) {
-//                    e.printStackTrace();
-//                }
+
             }
-//            String state=Prefs.getString("403",null);
-//
-//            try {
-//                if (state.equals("403") && !state.equals(null)) {
-//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                    Prefs.clear();
-//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-//                    Prefs.putString("403", "null");
-//                    startActivity(intent);
-//                    return;
-//                }
-//            }catch (NullPointerException e){
-//                e.printStackTrace();
-//            }
 
 
             try {
@@ -820,22 +610,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                 }
                 Prefs.putString("keyType", keyType);
                 Prefs.putString("valueType", valueType);
-
-//                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
-//                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-//                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
-//                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
-//                }
-
-
-//                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
-//                for (int i = 0; i < jsonArrayTeams.length(); i++) {
-//                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
-//                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
-//                }
-
-                //Set<String> keyPri = new LinkedHashSet<>();
-                // Set<String> valuePri = new LinkedHashSet<>();
                 JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
                 for (int i = 0; i < jsonArrayPriorities.length(); i++) {
                     // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));
@@ -941,23 +715,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
             } finally {
 
             }
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-//            builder.setTitle("Welcome to FAVEO");
-//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
-//            builder.setCancelable(true);
-//
-//            final AlertDialog dlg = builder.create();
-//
-//            dlg.show();
-//
-//            final Timer t = new Timer();
-//            t.schedule(new TimerTask() {
-//                public void run() {
-//                    dlg.dismiss(); // when the task active then close the dialog
-//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
-//                }
-//            }, 3000);
         }
     }
 }

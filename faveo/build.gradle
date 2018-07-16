@@ -20,8 +20,8 @@ android {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 59
-        versionName "4.8.5"
+        versionCode 60
+        versionName "4.8.6"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

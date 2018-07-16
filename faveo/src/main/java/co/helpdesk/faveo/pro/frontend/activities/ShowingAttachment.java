@@ -129,11 +129,6 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
             e.printStackTrace();
         }
 
-
-        //attachmentModels.add(new AttachmentModel(title,base64String));
-
-        //attachmentModels.add(new AttachmentModel("second.jpg","secondfile_base64"));
-
         attachmnetAdapter = new AttachmnetAdapter(this,attachmentModels);
         listView.setAdapter(attachmnetAdapter);
 
@@ -193,46 +188,6 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
         imageView = (ImageView) toolbar.findViewById(R.id.imageViewBackAttachment);
 //        touchImageView = (TouchImageView) findViewById(R.id.attachment_view);
         textView = (TextView) toolbar.findViewById(R.id.attachmenttitle);
-//        pdfView = (PDFView) findViewById(R.id.pdfView);
-//        textViewFileShow = (WebView) findViewById(R.id.textFile);
-//        Uri uri = Uri.parse(text);
-//        videoView = (VideoView) findViewById(R.id.videoView);
-//        textViewFileShow.loadData(URLEncoder.encode(text).replaceAll("\\+", " "), "text/html", Xml.Encoding.UTF_8.toString());
-//        try {
-//            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-//            File myFile = new File(path+"/"+title);
-//            File file = new File(path+"/"+title);
-//            Uri uri1 = Uri.fromFile(file);
-//            Log.d("URI",uri1.toString());
-//            myFile.createNewFile();
-//            FileOutputStream fOut = new FileOutputStream(myFile);
-//            fOut.write(decodedString);
-//            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-//            myOutWriter.append(title + "came from storage");
-//            myOutWriter.close();
-//            fOut.close();
-//            Intent myIntent = new Intent(Intent.ACTION_VIEW);
-//            myIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            String mime= URLConnection.guessContentTypeFromStream(new FileInputStream(myFile));
-//            if(mime==null) mime=URLConnection.guessContentTypeFromName(myFile.getName());
-//            myIntent.setDataAndType(Uri.fromFile(myFile), mime);
-//            startActivity(myIntent);
-//
-//            //Toast.makeText(ShowingAttachment.this, "Done writing SD 'mysdfile.txt'", Toast.LENGTH_SHORT).show();
-//            //txtData.setText("");
-//        } catch (Exception e) {
-//            Toast.makeText(ShowingAttachment.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//        textViewFileShow.setMovementMethod(new ScrollingMovementMethod());
-//        textViewFileShow.setText(text);
-//        pdfView.fromBytes(decodedString).load();
-////        String byteArray=new String(decodedString);
-//        pdfView.fromBytes(decodedString).load();
-        //df = new DecimalFormat("#.##");
-
-
-//        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//        touchImageView.setImageBitmap(decodedByte);
         textView.setText(getString(R.string.attachment));
         imageView.setOnClickListener(new View.OnClickListener()
 
