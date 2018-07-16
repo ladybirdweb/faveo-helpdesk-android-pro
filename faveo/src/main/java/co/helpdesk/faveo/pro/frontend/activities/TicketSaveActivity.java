@@ -327,32 +327,10 @@ public class TicketSaveActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-
-//                Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-//                startActivity(intent);
-//                finish();
             }
         });
         setSupportActionBar(toolbar);
-//        spinnerPriority.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                buttonsave.setVisibility(View.VISIBLE);
-//                return false;
-//            }
-//        });
-//        autoCompleteTextViewstaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Data data=staffItems.get(position);
-//                id1=data.getID();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                id1=0;
-//            }
-//        });
+
         buttonsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -362,7 +340,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                 final Data source = (Data) spinnerSource.getSelectedItem();
                 final Data priority = (Data) spinnerPriority.getSelectedItem();
                 final Data type = (Data) spinnerType.getSelectedItem();
-
+                final Data staffId= (Data) autoCompleteTextViewstaff.getSelectedItem();
 
                 if (subject.trim().length() == 0) {
                     Toasty.warning(TicketSaveActivity.this, getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
@@ -410,7 +388,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                                                 URLEncoder.encode(subject.trim(), "utf-8"),
                                                 helpTopic.ID,
                                                 source.ID,
-                                                priority.ID, type.ID,id1)
+                                                priority.ID, type.ID,staffId.ID)
                                                 .execute();
                                     } catch (UnsupportedEncodingException e) {
                                         e.printStackTrace();
@@ -892,42 +870,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             Log.d("cameHere","True");
 
             if (result==null) {
-//                try {
-//                    unauthorized = Prefs.getString("unauthorized", null);
-//                    if (unauthorized.equals("true")) {
-//                        loading.setText("Oops! Something went wrong.");
-//                        progressDialog.setVisibility(View.INVISIBLE);
-//                        textViewtryAgain.setVisibility(View.VISIBLE);
-//                        textViewrefresh.setVisibility(View.VISIBLE);
-//                        Prefs.putString("unauthorized", "false");
-//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        });
-//
-//                    }
-//
-//                } catch (NullPointerException e) {
-//                    e.printStackTrace();
-//                }
             }
-//            String state=Prefs.getString("403",null);
-//
-//            try {
-//                if (state.equals("403") && !state.equals(null)) {
-//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                    Prefs.clear();
-//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-//                    Prefs.putString("403", "null");
-//                    startActivity(intent);
-//                    return;
-//                }
-//            }catch (NullPointerException e){
-//                e.printStackTrace();
-//            }
 
 
             try {
@@ -969,22 +912,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
                 Prefs.putString("keyType", keyType);
                 Prefs.putString("valueType", valueType);
-
-//                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
-//                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-//                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
-//                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
-//                }
-
-
-//                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
-//                for (int i = 0; i < jsonArrayTeams.length(); i++) {
-//                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
-//                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
-//                }
-
-                //Set<String> keyPri = new LinkedHashSet<>();
-                // Set<String> valuePri = new LinkedHashSet<>();
                 JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
                 for (int i = 0; i < jsonArrayPriorities.length(); i++) {
                     // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));
@@ -1088,23 +1015,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                 Prefs.putString("401","false");
                 e.printStackTrace();
             }
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-//            builder.setTitle("Welcome to FAVEO");
-//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
-//            builder.setCancelable(true);
-//
-//            final AlertDialog dlg = builder.create();
-//
-//            dlg.show();
-//
-//            final Timer t = new Timer();
-//            t.schedule(new TimerTask() {
-//                public void run() {
-//                    dlg.dismiss(); // when the task active then close the dialog
-//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
-//                }
-//            }, 3000);
         }
     }
     private TextWatcher textWatcher = new TextWatcher() {

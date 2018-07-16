@@ -144,20 +144,6 @@ public class NotificationActivity extends AppCompatActivity {
 
     }
 
-//    private void setupRecycler() {
-//        // use this setting to improve performance if you know that changes
-//        // in content do not change the layout size of the RecyclerView
-//        recycler.setHasFixedSize(true);
-//
-//        // use a linear layout manager since the cards are vertically scrollable
-//        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        recycler.setLayoutManager(layoutManager);
-//
-//        // create an empty adapter and add it to the recycler view
-//        adapter = new NotificationAdapter(this);
-//        recycler.setAdapter(adapter);
-//    }
 
     /**
      * This async task is for getting the notification details .

@@ -127,76 +127,8 @@ public class Detail extends Fragment {
             task = new FetchTicketDetail(Prefs.getString("TICKETid", null));
             task.execute();
         }
-
-
-//        buttonSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                resetViews();
-//                //int helpTopic=1;
-//                boolean allCorrect = true;
-//                String subject = editTextSubject.getText().toString();
-//                // int SLAPlans = spinnerSLAPlans.getSelectedItemPosition();
-//                Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
-//                Data source = (Data) spinnerSource.getSelectedItem();
-//                Data priority = (Data) spinnerPriority.getSelectedItem();
-//                Data type = (Data) spinnerType.getSelectedItem();
-//                Data  staff= (Data) spinnerStaffs.getSelectedItem();
-//
-//                //int status = Integer.parseInt(Utils.removeDuplicates(SplashActivity.keyStatus.split(","))[spinnerStatus.getSelectedItemPosition()]);
-//
-////                if (SLAPlans == 0) {
-////                    allCorrect = false;
-////                    Toasty.warning(getContext(), "Please select some SLA plan", Toast.LENGTH_SHORT).show();
-////                } else
-//
-//                if (subject.trim().length() == 0) {
-//                    Toasty.warning(getActivity(), getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
-//                    allCorrect = false;
-//                } else if (subject.trim().length() < 5) {
-//                    Toasty.warning(getActivity(), getString(R.string.sub_minimum_char), Toast.LENGTH_SHORT).show();
-//                    allCorrect = false;
-//                } else if (helpTopic.ID == 0) {
-//                    allCorrect = false;
-//                    Toasty.warning(getActivity(), getString(R.string.select_some_helptopic), Toast.LENGTH_SHORT).show();
-//                } else if (priority.ID == 0) {
-//                    allCorrect = false;
-//                    Toasty.warning(getActivity(), getString(R.string.please_select_some_priority), Toast.LENGTH_SHORT).show();
-//                } else if (source.ID == 0) {
-//                    allCorrect = false;
-//                    Toasty.warning(getContext(), getString(R.string.select_source), Toast.LENGTH_SHORT).show();
-//                }
-//
-//
-//
-//
-//                if (allCorrect) {
-//                    if (InternetReceiver.isConnected()) {
-//                        progressDialog.setMessage(getString(R.string.updating_ticket));
-//                        progressDialog.show();
-//                        try {
-//                            new SaveTicket(getActivity(),
-//                                    Integer.parseInt(TicketDetailActivity.ticketID),
-//                                    URLEncoder.encode(subject.trim(), "utf-8"),
-//                                    helpTopic.ID,
-//                                    source.ID,
-//                                    priority.ID, type.ID,staff.ID)
-//                                    .execute();
-//                        } catch (UnsupportedEncodingException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-//        });
         return rootView;
     }
-
-//    private void setErrorState(EditText editText, TextView textViewError, String error) {
-//        editText.setBackgroundResource(R.drawable.edittext_error_state);
-//        editText.setPadding(0, paddingTop, 0, paddingBottom);
-//        textViewError.setText(error);
-//    }
 
     private class FetchTicketDetail extends AsyncTask<String, Void, String> {
         String ticketID;
@@ -213,8 +145,6 @@ public class Detail extends Fragment {
         @SuppressLint("SetTextI18n")
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
             if (result == null) {
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
@@ -518,16 +448,6 @@ public class Detail extends Fragment {
         //editTextSubject.setText(TicketDetailActivity.ticketSubject);
         textViewErrorSubject = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_subject);
 
-//        spinnerSLAPlans = (Spinner) rootView.findViewById(R.id.spinner_sla_plans);
-//        spinnerSlaArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(Prefs.getString("valueSLA", "").split(","))); //selected item will look like a spinner set from XML
-//        spinnerSlaArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerSLAPlans.setAdapter(spinnerSlaArrayAdapter);
-
-//        spinnerStatus = (Spinner) rootView.findViewById(R.id.spinner_status);
-//        spinnerStatusArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueStatus.split(","))); //selected item will look like a spinner set from XML
-//        spinnerStatusArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerStatus.setAdapter(spinnerStatusArrayAdapter);
-
         spinnerPriority = (Spinner) rootView.findViewById(R.id.spinner_priority);
         spinnerPriArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, priorityItems); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -560,11 +480,6 @@ public class Detail extends Fragment {
         //editTextLastMessage = (EditText) rootView.findViewById(R.id.editText_last_message);
         editTextDueDate = (EditText) rootView.findViewById(R.id.editText_due_date);
         editTextCreatedDate = (EditText) rootView.findViewById(R.id.editText_created_date);
-        //editTextLastResponseDate = (EditText) rootView.findViewById(R.id.editText_last_response_date);
-        //spinnerAssignTo = (Spinner) rootView.findViewById(R.id.spinner_staffs);
-
-//        buttonSave = (Button) rootView.findViewById(R.id.button_save);
-        //tv_dept = (TextView) rootView.findViewById(R.id.tv_dept);
         tv_helpTopic = (TextView) rootView.findViewById(R.id.tv_helpTopic);
 
         paddingTop = editTextEmail.getPaddingTop();
@@ -583,12 +498,6 @@ public class Detail extends Fragment {
                     }
                 }
         });
-    }
-
-    private void resetViews() {
-        editTextSubject.setBackgroundResource(R.drawable.edittext_theme_states);
-        editTextSubject.setPadding(0, paddingTop, 0, paddingBottom);
-        textViewErrorSubject.setText("");
     }
 
     public void onButtonPressed(Uri uri) {

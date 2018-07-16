@@ -86,13 +86,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     ArrayList<String> strings1;
     Toolbar toolbar;
     Context context;
-    //    private ArrayList<String> mList = new ArrayList<>();
-//    @BindView(R.id.sort_view)
-//    RelativeLayout sortView;
-//    @BindView(R.id.sorting_type_textview)
-//    TextView sortTextview;
-//    @BindView(R.id.arrow_imgView)
-//    ImageView arrowDown;
     BottomNavigationView bottomNavigationView;
     TelephonyManager mTelephony = null;
     @Override
@@ -117,90 +110,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.faveo));
         ButterKnife.bind(this);
-//        try {
-//            String role = Prefs.getString("role", null);
-//            if (role.equals("user")){
-//                finish();
-//                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-//                startActivity(intent);
-//            }
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
-
-        // TODO: Move this to where you establish a user session
-        //logUser();
-//        if (BuildConfig.DEBUG) {
-//            DebugDB.getAddressLog();
-//            Log.d("Refreshed token: ", "" + FirebaseInstanceId.getInstance().getToken());
-//        }
-
-//        String nextPageURL = getIntent().getStringExtra("nextPageURL");
-//        Bundle bundle = new Bundle();
-//        bundle.putString("nextPageURL", nextPageURL);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                //
-//                // Do the stuff
-//                //
-//                String result= new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
-////                try {
-////                    String state = Prefs.getString("405", null);
-////                    if (state.equals("True")) {
-////                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
-////
-////                    }
-////                }catch (NullPointerException e){
-////                    e.printStackTrace();
-////                }
-////
-////                String credential=Prefs.getString("unauthorized",null);
-////
-////                try{
-////                    if (credential.equals("true")){
-////
-////                        Toasty.info(MainActivity.this, getString(R.string.urlchange), Toast.LENGTH_LONG).show();
-////                    }
-////                }catch (NullPointerException e){
-////                    e.printStackTrace();
-////                }
-////
-////                String state=Prefs.getString("400",null);
-////
-////                try {
-////                    if (state.equals("badRequest")) {
-////                        Toasty.info(MainActivity.this, getString(R.string.apiDisabled), 5000).show();
-////                    }
-////                }catch (NullPointerException e){
-////                    e.printStackTrace();
-////                }
-//                try {
-//                        JSONObject jsonObject = new JSONObject(result);
-//                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-//                        String token = jsonObject1.getString("token");
-//                        Prefs.putString("TOKEN", token);
-//                        JSONObject jsonObject2 = jsonObject1.getJSONObject("user");
-//                        String role1 = jsonObject2.getString("role");
-//                        if (role1.equals("user")) {
-//                            Prefs.clear();
-//                            //Prefs.putString("role",role);
-//                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                            Toasty.info(MainActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                            startActivity(intent);
-//                        }
-//                        } catch (JSONException | NullPointerException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//
-//                handler.postDelayed(this, 90000);
-//            }
-//        };
-//        runnable.run();
         Prefs.putString("querry1","null");
         strings=new ArrayList<>();
         strings.add(0,"Sort by");
@@ -210,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         strings.add(4,"Updated at");
         strings.add(5,"Ticket title");
         strings.add(6,"Status");
-//        Prefs.putString("came from filter","false");
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -218,31 +128,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Prefs.putString("querry1","null");
 
-
-//Initializing the bottomNavigationView
-//        bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
-//        bottomNavigationView.setBackgroundColor(Color.parseColor("#cee0ef"));
-//        bottomNavigationView.setOnNavigationItemSelectedListener(
-//                new BottomNavigationView.OnNavigationItemSelectedListener() {
-//                    @Override
-//                    public boolean onNavigationItemSelected(MenuItem item) {
-//                        switch (item.getItemId()) {
-//                            case R.id.action_call:
-//                                Toast.makeText(MainActivity.this, "call clicked", Toast.LENGTH_SHORT).show();
-//                                break;
-//                            case R.id.action_chat:
-//                                Toast.makeText(MainActivity.this, "chat clicked", Toast.LENGTH_SHORT).show();
-//                                break;
-//                            case R.id.action_contact:
-//                                Toast.makeText(MainActivity.this, "contact clicked", Toast.LENGTH_SHORT).show();
-//                                break;
-//                        }
-//                        return false;
-//                    }
-//                });
-
-
-//        getSupportActionBar().setTitle("Inbox");
 
         FragmentDrawer drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -263,26 +148,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.commit();
         setActionBarTitle(getResources().getString(R.string.inbox));
 
-
-
-//        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-//        builder1.setTitle("Faveo Pro");
-//        builder1.setMessage("Welcome to FAVEO!");
-//        builder1.setIcon(R.mipmap.ic_launcher);
-//        builder1.setCancelable(true);
-//
-//        final AlertDialog dlg = builder1.create();
-//
-//        dlg.show();
-//
-//        final Timer t = new Timer();
-//        t.schedule(new TimerTask() {
-//            public void run() {
-//                dlg.dismiss(); // when the task active then close the dialog
-//                t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
-//            }
-//        }, 2000);
-
     }
 
 
@@ -292,36 +157,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onDestroy();
         }
 
-//    @OnClick(R.id.sort_view)
-//    public void onClickSort() {
-//        arrowDown.animate().rotation(180).start();
-//
-//        new BottomSheet.Builder(this).title("Sort by").sheet(R.menu.sort_menu).listener(new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                switch (which) {
-//                    case R.id.action_date:
-//                        sortTextview.setText("Due by date");
-//                        break;
-//                    case R.id.action_time:
-//                        sortTextview.setText("Due by time");
-//                        break;
-//                    case R.id.action_status:
-//                        sortTextview.setText("Status");
-//                        break;
-//                    case R.id.action_priority:
-//                        sortTextview.setText("Priority");
-//                        break;
-//                }
-//            }
-//        }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-//            @Override
-//            public void onDismiss(DialogInterface dialog) {
-//                arrowDown.animate().rotation(0).start();
-//            }
-//        }).show();
-//
-//    }
 
     /**
      * This will handle the drawer item.
@@ -344,41 +179,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        MenuItem item = menu.findItem(R.id.spinner);
-//        final Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
-//
-//        ArrayAdapter<String> spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,strings); //selected item will look like a spinner set from XML
-//        spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner.setAdapter(spinnerPriArrayAdapter);
-//
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                int pos = spinner.getSelectedItemPosition();
-//
-//                if (pos == 0) {
-//                    ((TextView) adapterView.getChildAt(0)).setTextColor(Color.parseColor("#3da6d7"));
-//                    return;
-//                } else {
-//                    ((TextView) adapterView.getChildAt(0)).setTextColor(Color.parseColor("#3da6d7"));
-////                    ((TextView) adapterView.getChildAt(0)).setTextSize(5);
-//                    Toast.makeText(MainActivity.this, "Position" + pos, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//
-//
-//        return true;
-//    }
 
     /**
      * Handle action bar item clicks here. The action bar will
@@ -479,15 +279,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
-//    /**
-//     * Callback will be triggered when there is change in
-//     * network connection
-//     */
-//    @Override
-//    public void onNetworkConnectionChanged(boolean isConnected) {
-//        showSnack(isConnected);
-//    }
-
     /**
      * Handling the back button here.
      * As if we clicking twice then it will
@@ -529,21 +320,7 @@ finishAffinity();
 
         // Showing Alert Message
         alertDialog.show();
-//        if (doubleBackToExitPressedOnce) {
-//            super.onBackPressed();
-//            return;
-//        }
-//
-//        this.doubleBackToExitPressedOnce = true;
-//        Snackbar.make(findViewById(android.R.id.content), R.string.press_again_exit, Snackbar.LENGTH_SHORT).show();
-//
-//        new Handler().postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                doubleBackToExitPressedOnce = false;
-//            }
-//        }, 2500);
+
     }
 
     // This method will be called when a MessageEvent is posted (in the UI thread for Toast)

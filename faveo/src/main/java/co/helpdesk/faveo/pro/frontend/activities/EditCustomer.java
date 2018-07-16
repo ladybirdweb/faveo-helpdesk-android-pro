@@ -443,33 +443,7 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
                 .setErrorCallback(this)
                 .request(PICKFILE_REQUEST_CODE);
     }
-    private boolean isValidPhoneNumber(CharSequence phoneNumber) {
-        if (!TextUtils.isEmpty(phoneNumber)) {
-            return Patterns.PHONE.matcher(phoneNumber).matches();
-        }
-        return false;
-    }
-    private boolean validateUsing_libphonenumber(String countryCode, String phNumber) {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-        String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
-        Phonenumber.PhoneNumber phoneNumber = null;
-        try {
-            //phoneNumber = phoneNumberUtil.parse(phNumber, "IN");  //if you want to pass region code
-            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
-        } catch (NumberParseException e) {
-            System.err.println(e);
-        }
 
-        boolean isValid = phoneNumberUtil.isValidNumber(phoneNumber);
-        if (isValid) {
-            String internationalFormat = phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
-            //Toast.makeText(this, "Phone Number is Valid " + internationalFormat, Toast.LENGTH_LONG).show();
-            return true;
-        } else {
-            //Toast.makeText(this, "Phone Number is Invalid " + phoneNumber, Toast.LENGTH_LONG).show();
-            return false;
-        }
-    }
 
     public String GetCountryZipCode(){
         String CountryID="";

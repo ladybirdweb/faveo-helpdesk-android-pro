@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.afollestad:material-cab-0.1.12">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/material-cab-0.1.12.aar/386aa9637f4c5a12da7d682e1e105bb6/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/material-cab-0.1.12.aar/386aa9637f4c5a12da7d682e1e105bb6/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/material-cab-0.1.12.aar/ebf42d4fef1e8207b5ccce5dc3ac10f7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/material-cab-0.1.12.aar/ebf42d4fef1e8207b5ccce5dc3ac10f7/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

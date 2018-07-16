@@ -287,17 +287,6 @@ public class LoginActivity extends AppCompatActivity {
                             findHelp.setVisibility(View.VISIBLE);
                         }
                     }, 5000);
-//                    linearLayout.startAnimation(animation);
-//                    urlError.setVisibility(View.VISIBLE);
-//
-//                    urlError.postDelayed(new Runnable() {
-//                        public void run() {
-//                            urlError.setVisibility(View.INVISIBLE);
-//                        }
-//                    }, 5000);
-//                    urlError.setText(getString(R.string.please_enter_valid_url));
-//                    urlError.setTextColor(Color.parseColor("#ff0000"));
-                    //Toasty.warning(v.getContext(), getString(R.string.please_enter_valid_url), Toast.LENGTH_LONG).show();
                     return;
                     }
                 if (InternetReceiver.isConnected()) {
@@ -325,18 +314,6 @@ public class LoginActivity extends AppCompatActivity {
                 String username=usernameEdittext.getText().toString();
                 String password=passwordEdittext.getText().toString();
 
-
-//                if (username.equals("")&&password.equals("")){
-//                    userNameError.setVisibility(View.VISIBLE);
-//                    userNameError.setTextColor(Color.parseColor("#ff0000"));
-//                    userNameError.setText("Username is required");
-//                    passwordError.setVisibility(View.VISIBLE);
-//                    passwordError.setTextColor(Color.parseColor("#ff0000"));
-//                    passwordError.setText("Password is required");
-//                    return;
-//                }
-//
-//             else
                 if (username.equals("")&&password!=null){
                     passwordError.setVisibility(View.GONE);
                     usernameEdittext.requestFocus();
@@ -369,15 +346,6 @@ public class LoginActivity extends AppCompatActivity {
                     //Toasty.warning(LoginActivity.this, "Please provide password", Toast.LENGTH_LONG).show();
                 }
 
-//                else if (passwordEdittext.getText().toString().equals("")){
-//                    //passwordEdittext.setError("Password is required");
-//                    passwordEdittext.startAnimation(animation);
-//                    passwordError.setVisibility(View.VISIBLE);
-//                    passwordError.setTextColor(Color.parseColor("#ff0000"));
-//                    passwordError.setText("This field is required");
-//                    Toasty.warning(LoginActivity.this, "Please provide password", Toast.LENGTH_LONG).show();
-//
-//                }
                 else{
                     if (InternetReceiver.isConnected()){
                         textInputLayoutUsername.setEnabled(false);
@@ -392,73 +360,11 @@ public class LoginActivity extends AppCompatActivity {
                         Toasty.warning(LoginActivity.this, getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
                     }
                 }
-//                 if (usernameEdittext.getText().toString()!=null&&passwordEdittext.getText().toString()!=null){
-//
-//                }
-
-//                if (InternetReceiver.isConnected()) {
-//                    if (username != null && password != null) {
-//                        //progressDialogSignIn.show();
-//                        textInputLayoutUsername.setEnabled(false);
-//                        textInputLayoutPass.setEnabled(false);
-//                        buttonSignIn.setText(R.string.signing_in);
-//                        new SignIn(LoginActivity.this, username, password).execute();
-//                    }
-//                }else
-//                    Toasty.warning(LoginActivity.this, getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
             }
 
         });
 
-//        buttonSignIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setNormalStates();
-//
-//                String username = editTextUsername.getText().toString();
-//                String password = editTextPassword.getText().toString();
-//                if (username.trim().length() == 0 || password.trim().length() == 0) {
-//                    if (username.trim().length() == 0)
-//                        setUsernameErrorStates();
-//                    else
-//                        setPasswordErrorStates();
-//                    return;
-//                }
-//                if (InternetReceiver.isConnected()) {
-//                    progressDialogSignIn.show();
-//                    new SignIn(LoginActivity.this, username, password).execute();
-//                } else
-//                    Toast.makeText(v.getContext(), "Oops! No internet", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
-        //Forgot password
-//        textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
     }
-//    private class NewTask extends AsyncTask<String,Void,String>{
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//        }
-//    }
     /**
      *Async task is for verifying the url.
      */
@@ -529,16 +435,6 @@ public class LoginActivity extends AppCompatActivity {
                 Prefs.putString("companyUrl",companyURL);
                 Log.d("companyurl",companyURL);
 
-//                if (BuildConfig.DEBUG) {
-//                    viewflipper.showNext();
-//                    imageBackButton.setVisibility(View.VISIBLE);
-//                    url.setText(baseURL);
-//                    url.setVisibility(View.VISIBLE);
-//                    flipColor.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.faveo));
-//                } else {
-//                    progressDialogBilling.show();
-//                    new VerifyBilling(LoginActivity.this, baseURL).execute();
-//                }
 
             } else {
                 linearLayout.startAnimation(animation);
@@ -554,16 +450,6 @@ public class LoginActivity extends AppCompatActivity {
                         urlError.setVisibility(View.GONE);
                     }
                 }, 5000);
-//                urlError.setVisibility(View.VISIBLE);
-//                urlError.setText(getString(R.string.error_verifying_url));
-//                urlError.setTextColor(Color.parseColor("#ff0000"));
-//                urlError.postDelayed(new Runnable() {
-//                    public void run() {
-//                        urlError.setVisibility(View.INVISIBLE);
-//                    }
-//                }, 5000);
-
-                //Toasty.error(context, getString(R.string.error_verifying_url), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -656,27 +542,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * This button will work after the url is been verified
-     * it will take the user name and password and it will check
-     * it is valid or not.
-     */
-
-
-//    @OnClick(R.id.button_signin)
-//    public void signIn() {
-//        String username = usernameEdittext.getText().toString();
-//        String password = passwordEdittext.getText().toString();
-//        if (InternetReceiver.isConnected()) {
-//            //progressDialogSignIn.show();
-//            textInputLayoutUsername.setEnabled(false);
-//            textInputLayoutPass.setEnabled(false);
-//            buttonSignIn.setText(R.string.signing_in);
-//            new SignIn(LoginActivity.this, username, password).execute();
-//        } else
-//            Toasty.warning(this, getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
-//    }
-
-    /**
      * Post the user credentials to server. This will execute after the
      * verify url is being verified.
      */
@@ -707,58 +572,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
-// else {
-//                try {
-//                    String unauthorized=Prefs.getString("unauthorized",null);
-//                    if (unauthorized.equals("true")){
-//                        Prefs.putString("unauthorized","false");
-//                        textInputLayoutUsername.setEnabled(true);
-//                        textInputLayoutPass.setEnabled(true);
-//                        buttonSignIn.setText(getString(R.string.sign_in));
-//                        //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
-//                        userNameError.setVisibility(View.VISIBLE);
-//                        userNameError.setText("Please check your password and email");
-//                        userNameError.setTextColor(Color.parseColor("#ff0000"));
-//                        userNameError.postDelayed(new Runnable() {
-//                            public void run() {
-//                                userNameError.setVisibility(View.INVISIBLE);
-//                            }
-//                        }, 5000);
-//                        //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
-//                        passwordEdittext.startAnimation(animation);
-//                        usernameEdittext.startAnimation(animation);
-//                    }
-//                    return;
-////                    JSONObject jsonObject = new JSONObject(result);
-////                    String error = jsonObject.getString("status_code");
-////                    String statusCode=jsonObject.getString("status_code");
-////                    if (error.equals("invalid_credentials")||statusCode.equals("401")) {
-////                        textInputLayoutUsername.setEnabled(true);
-////                        textInputLayoutPass.setEnabled(true);
-////                        buttonSignIn.setText(getString(R.string.sign_in));
-////                        //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
-////                        userNameError.setVisibility(View.VISIBLE);
-////                        userNameError.setText("Please check your password and email");
-////                        userNameError.setTextColor(Color.parseColor("#ff0000"));
-////                        userNameError.postDelayed(new Runnable() {
-////                            public void run() {
-////                                userNameError.setVisibility(View.INVISIBLE);
-////                            }
-////                        }, 5000);
-////                        //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
-////                        passwordEdittext.startAnimation(animation);
-////                        usernameEdittext.startAnimation(animation);
-////                        st.setBackgroundColor(Color.parseColor("#3da6d7"));
-////                        st.setBoldText();
-////                        st.setTextColor(Color.WHITE);
-////                        st.setCornerRadius(7);
-////                        st.show();
-////                        return;
-////                    }
-//                } catch (NullPointerException e) {
-//                    e.printStackTrace();
-//                }
-//            }
 
             try {
 
@@ -840,29 +653,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-//    private void setNormalStates() {
-//        textViewFieldError.setVisibility(View.INVISIBLE);
-//        editTextUsername.setBackgroundResource(R.drawable.edittext_modified_states);
-//        editTextPassword.setBackgroundResource(R.drawable.edittext_modified_states);
-//        editTextAPIkey.setBackgroundResource(R.drawable.edittext_modified_states);
-//        editTextAPIkey.setPadding(0, paddingTop, 0, paddingBottom);
-//        editTextUsername.setPadding(0, paddingTop, 0, paddingBottom);
-//        editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
-//    }
-//
-//    private void setUsernameErrorStates() {
-//        textViewFieldError.setText("Please insert username");
-//        textViewFieldError.setVisibility(View.VISIBLE);
-//        editTextUsername.setBackgroundResource(R.drawable.edittext_error_state);
-//        editTextUsername.setPadding(0, paddingTop, 0, paddingBottom);
-//    }
-//
-//    private void setPasswordErrorStates() {
-//        textViewFieldError.setText("Please insert password");
-//        textViewFieldError.setVisibility(View.VISIBLE);
-//        editTextPassword.setBackgroundResource(R.drawable.edittext_error_state);
-//        editTextPassword.setPadding(0, paddingTop, 0, paddingBottom);
-//    }
 
     /**
      * To initialize the views.Here we are initializing all
@@ -882,43 +672,6 @@ public class LoginActivity extends AppCompatActivity {
         progressDialogBilling.setMessage(getString(R.string.access_checking));
         progressDialogBilling.setCancelable(false);
 
-
-//        InputFilter filter = new InputFilter() {
-//            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-//                String filtered = "";
-//                for (int i = start; i < end; i++) {
-//                    char character = source.charAt(i);
-//                    if (!Character.isWhitespace(character)) {
-//                        filtered += character;
-//                    }
-//                }
-//
-//                return filtered;
-//            }
-//
-//        };
-
-        // editTextCompanyURL = (EditText) findViewById(R.id.editText_company_url);
-        // editTextCompanyURL.setFilters(new InputFilter[]{filter});
-
-//
-//            if (editTextCompanyURL != null) {
-//                editTextCompanyURL.setText("");
-//                editTextCompanyURL.append("http://");
-//            }
-
-//        String url=Prefs.getString("URL","");
-//        editTextCompanyURL.setText(url);
-//        editTextCompanyURL.requestFocus(url.length());
-
-//        Set<String> set = Prefs.getStringSet("URL_SUG", new HashSet<String>());
-//        urlSuggestions = new ArrayList<>(set);
-//
-
-
-
-        //viewflipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-        // buttonVerifyURL = (FloatingActionButton) findViewById(R.id.fab_verify_url);
         textViewFieldError = (TextView) findViewById(R.id.textView_field_error);
         textViewForgotPassword = (TextView) findViewById(R.id.forgot_password);
         editTextUsername = (EditText) findViewById(R.id.editText_username);

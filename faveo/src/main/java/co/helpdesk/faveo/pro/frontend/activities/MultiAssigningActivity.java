@@ -242,42 +242,7 @@ public class MultiAssigningActivity extends AppCompatActivity {
             Log.d("cameHere","True");
 
             if (result==null) {
-//                try {
-//                    unauthorized = Prefs.getString("unauthorized", null);
-//                    if (unauthorized.equals("true")) {
-//                        loading.setText("Oops! Something went wrong.");
-//                        progressDialog.setVisibility(View.INVISIBLE);
-//                        textViewtryAgain.setVisibility(View.VISIBLE);
-//                        textViewrefresh.setVisibility(View.VISIBLE);
-//                        Prefs.putString("unauthorized", "false");
-//                        textViewrefresh.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        });
-//
-//                    }
-//
-//                } catch (NullPointerException e) {
-//                    e.printStackTrace();
-//                }
             }
-//            String state=Prefs.getString("403",null);
-//
-//            try {
-//                if (state.equals("403") && !state.equals(null)) {
-//                    Toasty.info(SplashActivity.this, getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
-//                    Prefs.clear();
-//                    Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-//                    Prefs.putString("403", "null");
-//                    startActivity(intent);
-//                    return;
-//                }
-//            }catch (NullPointerException e){
-//                e.printStackTrace();
-//            }
 
 
             try {
@@ -319,22 +284,6 @@ public class MultiAssigningActivity extends AppCompatActivity {
                 }
                 Prefs.putString("keyType", keyType);
                 Prefs.putString("valueType", valueType);
-
-//                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
-//                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-//                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
-//                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
-//                }
-
-
-//                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
-//                for (int i = 0; i < jsonArrayTeams.length(); i++) {
-//                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
-//                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
-//                }
-
-                //Set<String> keyPri = new LinkedHashSet<>();
-                // Set<String> valuePri = new LinkedHashSet<>();
                 JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
                 for (int i = 0; i < jsonArrayPriorities.length(); i++) {
                     // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));
@@ -439,22 +388,6 @@ public class MultiAssigningActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-//            AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-//            builder.setTitle("Welcome to FAVEO");
-//            //builder.setMessage("After 2 second, this dialog will be closed automatically!");
-//            builder.setCancelable(true);
-//
-//            final AlertDialog dlg = builder.create();
-//
-//            dlg.show();
-//
-//            final Timer t = new Timer();
-//            t.schedule(new TimerTask() {
-//                public void run() {
-//                    dlg.dismiss(); // when the task active then close the dialog
-//                    t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
-//                }
-//            }, 3000);
         }
     }
     private class MultipleAssign extends AsyncTask<String, Void, String> {
@@ -503,11 +436,6 @@ public class MultiAssigningActivity extends AppCompatActivity {
                 Toasty.error(MultiAssigningActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-//            finally {
-//                Toasty.success(MultiAssigningActivity.this, getString(R.string.successfullyAssigned), Toast.LENGTH_LONG).show();
-//                Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
-//                startActivity(intent);
-//            }
         }
     }
     TextWatcher passwordWatcheredittextSubject = new TextWatcher() {

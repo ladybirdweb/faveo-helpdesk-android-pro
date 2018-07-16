@@ -335,22 +335,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
-        //toolbarAttachment= (Toolbar) findViewById(R.id.bottom_navigation);
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        toolbarBottom= (Toolbar) findViewById(R.id.bottom_navigation);
-//        toolbarBottom.setVisibility(View.GONE);
-        //imageViewAudio= (ImageButton) toolbarAttachment.findViewById(R.id.audio_img_btn);
-//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        // attaching bottom sheet behaviour - hide / show on scroll
-//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
-//        layoutParams.setBehavior(new BottomNavigationBehavior());
-//        imageViewGallery= (ImageButton) toolbarAttachment.findViewById(R.id.gallery_img_btn);
-//        imageViewCamera= (ImageButton) toolbarAttachment.findViewById(R.id.photo_img_btn);
-//        imageViewDocument= (ImageButton) toolbarAttachment.findViewById(R.id.document);
         button= (Button) findViewById(R.id.attachment);
 
         refresh.setOnClickListener(new View.OnClickListener() {
@@ -523,13 +507,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 menuSheetView.inflateMenu(R.menu.navigation);
                 bottomSheet.showWithSheetView(menuSheetView);
 
-//                if (bottomNavigationView.getVisibility()==View.GONE){
-//                    bottomNavigationView.setVisibility(View.VISIBLE);
-//                }
-//                else if (bottomNavigationView.getVisibility()==View.VISIBLE){
-//                    bottomNavigationView.setVisibility(View.GONE);
-//                }
-
 
             }
         });
@@ -571,27 +548,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     editTextLastName.setText(lastname);
                     }
                 }
-//                CollaboratorSuggestion data = emailHint.get(i);
-//                id=data.getId();
-//                Log.d("id",id+"");
-//                email1=data.getEmail();
-//                Log.d("email1",email1);
-                //editTextEmail.setText(email1);
-//              for (int j=0;j<emailHint.size();j++){
-//                    CollaboratorSuggestion data = emailHint.get(j);
-//                    id = data.getId();
-//                    Log.d("id",id+"");
-//                    email1=data.getEmail();
-//                    Log.d("email1",email1);
-//                    String profilePic=data.getProfile_pic();
-//                    firstname=data.getFirst_name();
-//                    lastname=data.getLast_name();
-//                    editTextEmail.setText(email1);
-//                    editTextFirstName.setText(firstname);
-//                    editTextLastName.setText(lastname);
-//                    Log.d("profilePic",profilePic);
-//
-//                }
 
             }
         });
@@ -685,65 +641,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         countrycode=CountryZipCode;
         return CountryZipCode;
     }
-
-//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-//
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.imageGalley:
-//                    gallery=2;
-//                    reqPermissionCamera();
-//                    return true;
-//                case R.id.videoGallery:
-//                    camera=3;
-//                    reqPermissionCamera();
-//                    return true;
-//                case R.id.musicGallery:
-//                    document=1;
-//                    reqPermissionCamera();
-//                    return true;
-//                case R.id.documentGallery:
-//                    audio=4;
-//                    reqPermissionCamera();
-//                    return true;
-//
-//            }
-//
-//            return false;
-//        }
-//    };
-
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//
-//        if (requestCode == CAMERA_REQUEST) {
-//            // BEGIN_INCLUDE(permission_result)
-//            // Received permission result for camera permission.
-//            //Log.i(TAG, "Received response for Camera permission request.");
-//
-//            // Check if the only required permission has been granted
-//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                // Camera permission has been granted, preview can be displayed
-//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-//
-//
-//            } else {
-//                //Log.i(TAG, "CAMERA permission was NOT granted.");
-//                Snackbar.make(findViewById(android.R.id.content), R.string.permissions_not_granted,
-//                        Snackbar.LENGTH_SHORT).show();
-//
-//            }
-//            // END_INCLUDE(permission_result)
-//
-//        } else {
-//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        }
-//    }
 
 
     @Override
@@ -881,95 +778,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-
-
-
-
-//        if (requestCode == 1 && resultCode == RESULT_OK) {
-//            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-//            //getMimeType(data.getData());
-//            File file = new File(filePath);
-//            long size = file.length() / 1024;
-//            if (size > 6000) {
-//                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
-//                return;
-//            } else {
-//                path = filePath;
-//                int pos=path.lastIndexOf("/");
-//                fileName=path.substring(pos+1,path.length());
-//                attachmentFileName.setText(fileName+"("+size+"KB)");
-//                Log.d("fileName",fileName);
-//            }
-//            Log.d("fileSize", "" + size);
-//            Log.d("Path", filePath);
-//            // Do anything with file
-//        } else if (requestCode == PICKVIDEO_REQUEST_CODE && resultCode == RESULT_OK) {
-//            //Uri uri1 = data.getData();
-//            Log.d("BuildVersionSDK",""+Build.VERSION.SDK_INT);
-//            uri = data.getData();
-//            String filePath=getRealPathFromUri(CreateTicketActivity.this,uri);
-//            Log.d("PATH",filePath);
-//            File file = new File(filePath);
-//            long size = file.length()/1024;
-//            if (size > 6000) {
-//                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
-//                return;
-//            } else {
-//                path = filePath;
-//                int pos=path.lastIndexOf("/");
-//                fileName=path.substring(pos+1,path.length());
-//                attachmentFileName.setText(fileName);
-//                Log.d("fileName",fileName);
-//            }
-//        }
-
-//        else if (requestCode==PICKFILE_REQUEST_CODE&&resultCode==RESULT_OK){
-//            uri = data.getData();
-//            String filePath=getRealPathFromUri(CreateTicketActivity.this,uri);
-//            Log.d("PATH",filePath);
-//            File file = new File(filePath);
-//            long size = file.length()/1024;
-//            if (size > 6000) {
-//                Toasty.info(CreateTicketActivity.this, getString(R.string.fileSize), Toast.LENGTH_SHORT).show();
-//                return;
-//            } else {
-//                path = filePath;
-//                int pos=path.lastIndexOf("/");
-//                fileName=path.substring(pos+1,path.length());
-//                attachmentFileName.setText(fileName);
-//                Log.d("fileName",fileName);
-//            }
-////            Log.d("fileSize", "" + size);
-////            Log.d("Path", filePath);
-//        }
-    }
-
-    public Uri getImageUriForCamera(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-    public String getRealPathFromURIForImage(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
-    }
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
     }
     public class SendPostRequest extends AsyncTask<String, Void, String> {
 
@@ -1082,690 +890,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         return result.toString();
     }
 
-//    @Nullable
-//    private static String multipost(String urlString, MultipartEntity reqEntity) {
-//
-//        try {
-//            URL url = new URL(urlString);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setReadTimeout(60*1000);
-//            conn.setConnectTimeout(60*1000);
-//            conn.setRequestMethod("POST");
-//            conn.setUseCaches(false);
-//            conn.setDoInput(true);
-//            conn.setDoOutput(true);
-//
-//            conn.setRequestProperty("Connection", "Keep-Alive");
-//            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-//            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-//            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "*****");
-//
-//            conn.addRequestProperty("Content-length", reqEntity.getContentLength()+"");
-//            conn.addRequestProperty(reqEntity.getContentType().getName(), reqEntity.getContentType().getValue());
-//
-//            OutputStream os = conn.getOutputStream();
-//            reqEntity.writeTo(conn.getOutputStream());
-//            os.close();
-//            conn.connect();
-//
-//            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-//                return readStream(conn.getInputStream());
-//            }
-//
-//        } catch (Exception e) {
-//            Log.e("MainActivity", "multipart post error " + e + "(" + urlString + ")");
-//        }
-//        return null;
-//    }
-//
-//    private static String readStream(InputStream in) {
-//        BufferedReader reader = null;
-//        StringBuilder builder = new StringBuilder();
-//        try {
-//            reader = new BufferedReader(new InputStreamReader(in));
-//            String line = "";
-//            while ((line = reader.readLine()) != null) {
-//                builder.append(line);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (reader != null) {
-//                try {
-//                    reader.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        return builder.toString();
-//    }
-
-    private void uploadMultipartData() throws UnsupportedEncodingException {
-
-//        MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-//
-//        //FileBody fileBody = new FileBody();
-//        // FormBodyPart fileBodyPart = new FormBodyPart(fileName, new FileBody(file));
-//        reqEntity.addPart("media_attachment[]", new FileBody(file));
-//        //api_key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token="+token1+"&ip=null&user_id=1&subject=gggggggggg&body=hhzbbbsbbbsbbdhjanbsbdb&help_topic=1&priority=1&first_name=Adnan&last_name=Prasad&email=adnan@gmail.com&assigned=1&phone=null&code=91&mobile=5884889466"
-//        reqEntity.addPart("username", new StringBody("demoadmin"));
-//        reqEntity.addPart("password",new StringBody("demopass"));
-
-//        try {
-//
-//            fname = URLEncoder.encode(fname.trim(), "utf-8");
-//            lname = URLEncoder.encode(lname.trim(), "utf-8");
-//            subject = URLEncoder.encode(subject.trim(), "utf-8");
-//            message = URLEncoder.encode(message.trim(), "utf-8");
-//            email1 = URLEncoder.encode(email1.trim(), "utf-8");
-//            phone = URLEncoder.encode(phone.trim(), "utf-8");
-//            mobile = URLEncoder.encode(mobile.trim(), "utf-8");
-
-
-    }
-//        catch (Exception exc) {
-//            //Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
-//            Log.d("exception",exc.getMessage());
-//        }
-
-//        reqEntity.addPart("token",new StringBody(token1));
-//        reqEntity.addPart("user_id",new StringBody(""+1));
-//        reqEntity.addPart("subject",new StringBody("ggggggggggggg"));
-//        reqEntity.addPart("body",new StringBody("hhhhhhhhhhhhhh"));
-//        reqEntity.addPart("help_topic",new StringBody(""+1));
-//        reqEntity.addPart("priority",new StringBody(""+1));
-//        reqEntity.addPart("first_name",new StringBody("sayar"));
-//        reqEntity.addPart("last_name",new StringBody("samanta"));
-
-    //reqEntity.addPart("password", new StringBody("demopass"));
-    //String response = multipost("http://www.jamboreebliss.com/sayar/public/api/v1/authenticate?", reqEntity);
-    //Log.d("MainActivity", "Response :"+response);
-
-
-
-
-
-//        try {
-//             buf=getBytesFromFile(file);
-//             base64 = Base64.encodeToString(buf,Base64.DEFAULT);
-//             Log.d("base64",base64);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-    //encodeImage(path);
-
-
-
-
-//        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-//            i++;
-//            attachment_layout.setVisibility(View.VISIBLE);
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//            Uri tempUri = getImageUri(getApplicationContext(), photo);
-//            File finalFile = new File(getRealPathFromURI(tempUri));
-//            long fileSizeInBytes = finalFile.length();
-//            long fileSizeInKB = fileSizeInBytes / 1024;
-//            String path=finalFile.getPath();
-//            Log.d("fileSize", String.valueOf(finalFile.length()/1024));
-//            Log.d("FinalPath",path);
-//            Log.d("DATA",data.toString());
-////            int bitmapHeight=photo.getHeight();
-////            int bitmapWidth=photo.getWidth();
-////            Log.d("bitmapheight",""+bitmapHeight);
-////            Log.d("bitmapwidth",""+bitmapWidth);
-////            int size=bitmapHeight*bitmapWidth;
-////            Log.d("photoSize",""+size);
-//            //Uri uri=data.getData();
-//            Picasso.with(this).load(String.valueOf(photo)).into(imageView);
-//            //getMimeType(uri);
-//           // Log.d("URI",uri.toString());
-//            String picName=tempUri.toString();
-//            if (!picName.equals("")){
-//                int pos=picName.lastIndexOf("/");
-//                String newName=picName.substring(pos+1,picName.length());
-//                StringBuilder stringBuilder=new StringBuilder();
-//                stringBuilder.append("Faveo"+i+".jpeg");
-//                Log.d("newName",stringBuilder.toString());
-//                attachmentFileName.setText(newName+".jpg");
-//            }
-//
-//            //int bitmapByteCount= BitmapCompat.getAllocationByteCount(photo)/ (1024 * 1024);
-////            int size= 0;
-////            //int finalSize=0;
-////            if (photo != null) {
-////                size = photo.getRowBytes()*photo.getHeight();
-////                //finalSize=size/ (1024 * 1024);
-////            }
-//
-//
-//            //int size=BitmapCompat.getAllocationByteCount(photo)/(1024*1024);
-//
-//            //Log.d("bitmapsize",""+size);
-////            long l = 9999999990L;
-////            long MEGABYTE = 1024L * 1024L;
-////            long b = l / MEGABYTE;
-//
-//            imageView.setImageBitmap(photo);
-//            //Log.d("BitMapSize",finalSize+"");
-//            attachmentFileSize.setText(""+fileSizeInKB+"KB");
-//        }
-//        else if (requestCode==PICKFILE_REQUEST_CODE&&resultCode == RESULT_OK&&null != data){
-//            i++;
-//            attachment_layout.setVisibility(View.VISIBLE);
-//
-////            //Bitmap photo = (Bitmap) data.getExtras().get("data");
-//            Uri selectedImage = data.getData();
-//            File file = new File(selectedImage.toString());
-//            File file1=new File(selectedImage.getPath());
-//            String strFileName = file.getName();
-//            Log.d("FilePath", String.valueOf(file.length()));
-//            Log.d("FileSize", String.valueOf(file.length()));
-//            Log.d("ImageName",strFileName);
-//            getMimeType(selectedImage);
-//            if (mimeType.contains("image/jpeg")||mimeType.contains("image/png")||mimeType.contains("jpg")){
-//                Bitmap bmp = null;
-//                try {
-//                    bmp = getBitmapFromUri(selectedImage);
-//                    //bmp=ShrinkBitmap(String.valueOf(file),100,100);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                Uri tempUri = getImageUri(getApplicationContext(), bmp);
-//                File finalFile = new File(getRealPathFromURI(tempUri));
-//                long fileSizeInBytes = finalFile.length();
-//                String path = tempUri.getPath();
-//                File file3 = new File(path);  //file Path
-//                byte[] b = new byte[(int) file.length()];
-//                try {
-//                    FileInputStream fileInputStream = new FileInputStream(file);
-//                    fileInputStream.read(b);
-//                    for (int j = 0; j < b.length; j++) {
-//                        System.out.print((char) b[j]);
-//                    }
-//                } catch (FileNotFoundException e) {
-//                    System.out.println("File Not Found.");
-//                    e.printStackTrace();
-//                } catch (IOException e1) {
-//                    System.out.println("Error Reading The File.");
-//                    e1.printStackTrace();
-//                }
-//
-//                byte[] byteFileArray = new byte[0];
-//                try {
-//                    byteFileArray = FileUtils.readFileToByteArray(file);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                String base64String = "";
-//                if (byteFileArray.length > 0) {
-//                    base64String = android.util.Base64.encodeToString(byteFileArray, android.util.Base64.NO_WRAP);
-//                    Log.i("File Base64 string", "IMAGE PARSE ==>" + base64String);
-//                }
-//                long fileSizeInKB = fileSizeInBytes / 1024;
-//// Convert the KB to MegaBytes (1 MB = 1024 KBytes)
-//                long fileSizeInMB = fileSizeInKB / 1024;
-//                Log.d("fileSizeInMB",""+fileSizeInKB);
-//                //Bitmap converetdImage = getResizedBitmap(bmp, 100);
-//                //Log.d("convertedImage",converetdImage.toString());
-//               //int size=BitmapCompat.getAllocationByteCount(bmp)/(1024*1024);
-//                //Log.d("File Size",""+size);
-//                String picName=selectedImage.toString();
-//            if (!picName.equals("")){
-//                int pos=strFileName.indexOf("A");
-//                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
-//                //String newName=picName.substring(pos+1,picName.length());
-//                //StringBuilder stringBuilder=new StringBuilder(finalName);
-//                //stringBuilder.append("Faveo"+ finalName+".jpeg");
-//                Log.d("newName",finalName);
-//                if (finalName.contains(".jpg")){
-//                    attachmentFileName.setText(finalName);
-//                }
-//                else{
-//                    attachmentFileName.setText(finalName+".jpg");
-//                }
-//
-//            }
-//
-////                int height=imageView.getDrawable().getIntrinsicWidth();;
-////                int width=imageView.getDrawable().getIntrinsicHeight();
-////                int bitmapHeight=bmp.getHeight();
-////                int bitmapWidth=bmp.getWidth();
-////                Log.d("imageviewheight",""+height);
-////                Log.d("imageviewweight",""+width);
-////                Log.d("bitmapheight",""+bitmapHeight);
-////                Log.d("bitmapwidth",""+bitmapWidth);
-//
-//
-////            int bitmapByteCount= BitmapCompat.getAllocationByteCount(bmp)/ (1024*1024);
-////            Log.d("ImageSize",""+bitmapByteCount);
-//////                float aspectRatio = bmp.getWidth() /
-//////                        (float) bmp.getHeight();
-//////                int width = 480;
-//////                int height = Math.round(width / aspectRatio);
-//////
-//////                bmp = Bitmap.createScaledBitmap(
-//////                        bmp, width, height, false);
-//            attachmentFileSize.setText(""+fileSizeInKB+"KB");
-//            Picasso.with(this).load(selectedImage).into(imageView);
-//            }
-//            else if (mimeType.contains("application/pdf")){
-//                Uri uri=data.getData();
-//                Log.d("URI for PDF",uri.toString());
-//                getMimeType(uri);
-//                File file3 = new File(uri.toString());
-//                long length = file3.length();
-//                //length = length/1024;
-//                //attachmentFileSize.setText(""+length+"kb");
-//                //Log.d("fileLength", String.valueOf(file3.length()));
-//                int pos=strFileName.indexOf("A");
-//                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
-//                attachmentFileName.setText(finalName);
-//                Log.d("Pdf file name",file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1));
-//                String data1=file3.getAbsolutePath().substring(file3.getAbsolutePath().lastIndexOf("\\")+1);
-//                //attachmentFileSize.setText(""+length+"mb");
-//                imageView.setImageResource(R.drawable.ic_picture_as_pdf_black_24dp);
-//
-//            }
-//            else if (mimeType.contains("text/plain")){
-//                int pos=strFileName.indexOf("A");
-//                Uri uriData=data.getData();
-//                getMimeType(uriData);
-//                String finalName=strFileName.substring(pos+1,strFileName.length()).replaceAll("%20"," ");
-//                String path = uriData.getPath();
-//                File file3 = new File(path);  //file Path
-//                byte[] b = new byte[(int) file.length()];
-//                try {
-//                    FileInputStream fileInputStream = new FileInputStream(file);
-//                    fileInputStream.read(b);
-//                    for (int j = 0; j < b.length; j++) {
-//                        System.out.print((char) b[j]);
-//                    }
-//                } catch (FileNotFoundException e) {
-//                    System.out.println("File Not Found.");
-//                    e.printStackTrace();
-//                } catch (IOException e1) {
-//                    System.out.println("Error Reading The File.");
-//                    e1.printStackTrace();
-//                }
-//
-//                byte[] byteFileArray = new byte[0];
-//                try {
-//                    byteFileArray = FileUtils.readFileToByteArray(file);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                String base64String = "";
-//                if (byteFileArray.length > 0) {
-//                    base64String = android.util.Base64.encodeToString(byteFileArray, android.util.Base64.NO_WRAP);
-//                    Log.i("File Base64 string", "IMAGE PARSE ==>" + base64String);
-//                }
-//                long length = file1.length();
-//                length = length/1024;
-//                //int file_size = Integer.parseInt(String.valueOf(file1.length()/1024));
-//                //attachmentFileName.setText("Faveo"+i+".pdf");
-//                attachmentFileName.setText(finalName);
-//                Log.d("Pdf file name",file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1));
-//                String data1=file1.getAbsolutePath().substring(file1.getAbsolutePath().lastIndexOf("\\")+1);
-//
-//                String base64 = Base64.encodeToString(data1.getBytes(), Base64.DEFAULT);
-//                Log.d("Base64",base64);
-//                attachmentFileSize.setText(""+length+"kb");
-//                Log.d("MimeType","Plain Text");
-//                //file3 = new File(uri.toString());
-//                //openFile(file3);
-//            }
-////            else if (mimeType.contains("audio/mpeg")){
-////                Uri audioFileUri = data.getData();
-////                getRealPathFromURI(audioFileUri);
-////                Log.d("URI",audioFileUri.toString());
-////
-////            }
-//
-//            else{
-//                Toasty.warning(this, getString(R.string.unsupportedFileType),
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        }
-
-
-
-    public static String getPath(final Context context, final Uri uri) {
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
-        // DocumentProvider
-
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            System.out.println("getPath() uri: " + uri.toString());
-            System.out.println("getPath() uri authority: " + uri.getAuthority());
-            System.out.println("getPath() uri path: " + uri.getPath());
-
-
-            // ExternalStorageProvider
-            if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-                System.out.println("getPath() docId: " + docId + ", split: " + split.length + ", type: " + type);
-
-                // This is for checking Main Memory
-                if ("primary".equalsIgnoreCase(type)) {
-                    if (split.length > 1) {
-                        return Environment.getExternalStorageDirectory() + "/" + split[1] + "/";
-                    } else {
-                        return Environment.getExternalStorageDirectory() + "/";
-                    }
-                    // This is for checking SD Card
-                } else {
-                    return "storage" + "/" + docId.replace(":", "/");
-                }
-
-            }
-        }
-        return null;
-    }
-//    public static byte[] getBytesFromFile(File file) throws IOException {
-//        // Get the size of the file
-//        long length = file.length();
-//
-//        // You cannot create an array using a long type.
-//        // It needs to be an int type.
-//        // Before converting to an int type, check
-//        // to ensure that file is not larger than Integer.MAX_VALUE.
-//        if (length > Integer.MAX_VALUE) {
-//            // File is too large
-//            throw new IOException("File is too large!");
-//        }
-//
-//        // Create the byte array to hold the data
-//        byte[] bytes = new byte[(int)length];
-//
-//        // Read in the bytes
-//        int offset = 0;
-//        int numRead = 0;
-//
-//        InputStream is = new FileInputStream(file);
-//        try {
-//            while (offset < bytes.length
-//                    && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
-//                offset += numRead;
-//            }
-//        } finally {
-//            is.close();
-//        }
-//
-//        // Ensure all the bytes have been read in
-//        if (offset < bytes.length) {
-//            throw new IOException("Could not completely read file "+file.getName());
-//        }
-//        return bytes;
-//    }
-//    private void uploadFile(Uri fileUri) {
-//        File file = null;
-//
-//        RequestBody requestBody=RequestBody.create(MultipartBody.FORM, "subject");
-//
-//        File originalFile=FileUtils.getFile(fileName);
-//       try {
-//           file = new File(getPathFromUri(this,fileUri));
-//       }catch (NullPointerException e){
-//           e.printStackTrace();
-//       }
-//        RequestBody filePart=RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)),file);
-////        Gson gson = new GsonBuilder()
-////                .setLenient()
-////                .create();
-//        final Gson gson =
-//                new GsonBuilder()
-//                        .registerTypeAdapter(MyResponse.class, new MyDeserializer())
-//                        .create();
-//        MultipartBody.Part part=MultipartBody.Part.createFormData("media_attachment",originalFile.getName(),filePart);
-//        Retrofit.Builder builder=new Retrofit.Builder().baseUrl("http://jamboreebliss.com/")
-//                .addConverterFactory(GsonConverterFactory.create(gson));
-//
-//        Retrofit retrofit=builder.build();
-//        UserClient client=retrofit.create(UserClient.class);
-//
-//
-//        Call<ResponseBody> responseBodyCall=client.createTicket(requestBody,part);
-//        responseBodyCall.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
-//                Log.d("status",""+response.code());
-//                Log.d("URL",""+call.request().url());
-//                Log.d("Call request header", call.request().headers().toString());
-//                Log.d("Response raw header", response.headers().toString());
-//                Log.d("Response raw", String.valueOf(response.raw().body()));
-//                Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
-//                //MyResponse c = gson.fromJson(myJson, MyResponse.class);
-////                if(response.isSuccessful()) {
-////                    //showResponse(response.body().toString());
-////                    Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
-////                }
-////                else{
-////                    try {
-////                        Log.i("ddddd", "post submitted to API." +new Gson().toJson(response.body()));
-////                    }catch (NullPointerException e){
-////                        e.printStackTrace();
-////                    }
-////                    Log.i("responseFailure","true");
-////                }
-//                //Log.d("jsonObject",response.body().getMessage());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                Log.d("URL",""+call.request().url());
-//                Log.d("Error",t.toString());
-//
-//            }
-//        });
-//        responseBodyCall.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
-//
-//
-//                Toast.makeText(CreateTicketActivity.this, ""+response.body(), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-//                Log.d("callingUrl", "call failed against the url: " + call.request().url());
-//
-//            }
-//        });
-
-    //}
-
-
-
-//    private String encodeImage(String path)
-//    {
-//        File imagefile = new File(path);
-//        FileInputStream fis = null;
-//        try{
-//            fis = new FileInputStream(imagefile);
-//        }catch(FileNotFoundException e){
-//            e.printStackTrace();
-//        }
-//        Bitmap bm = BitmapFactory.decodeStream(fis);
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
-//        byte[] b = baos.toByteArray();
-//        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-//        Log.d("base64",encImage);
-//        return encImage;
-//
-//    }
-
-
-
-
-//    private void requestCameraPermission() {
-//        Log.i("RequestingPermission", "CAMERA permission has NOT been granted. Requesting permission.");
-//
-//        // BEGIN_INCLUDE(camera_permission_request)
-//        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                Manifest.permission.CAMERA)) {
-//            // Provide an additional rationale to the user if the permission was not granted
-//            // and the user would benefit from additional context for the use of the permission.
-//            // For example if the user has previously denied the permission.
-//            Log.i("DisplayingPermission",
-//                    "Displaying camera permission rationale to provide additional context.");
-//            Snackbar.make(findViewById(android.R.id.content), R.string.permission_camera_rationale,
-//                    Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            ActivityCompat.requestPermissions(CreateTicketActivity.this,
-//                                    new String[]{Manifest.permission.CAMERA},
-//                                    CAMERA_REQUEST);
-//                        }
-//                    })
-//                    .show();
-//        } else {
-//
-//            // Camera permission has not been granted yet. Request it directly.
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
-//                    CAMERA_REQUEST);
-//        }
-//        // END_INCLUDE(camera_permission_request)
-//    }
-//    public void showCamera(View view) {
-//        Log.i("PressingCameraButton", "Show camera button pressed. Checking permission.");
-//        // BEGIN_INCLUDE(camera_permission)
-//        // Check if the Camera permission is already available.
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            // Camera permission has not been granted.
-//
-//            requestCameraPermission();
-//
-//        } else {
-//
-//            // Camera permissions is already available, show the camera preview.
-//            Log.i("AlreadyPermission",
-//                    "CAMERA permission has already been granted. Displaying camera preview.");
-//            //showCameraPreview();
-//
-//        }
-//        // END_INCLUDE(camera_permission)
-//
-//    }
-
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                    Log.d("result",result);
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-
-    public String getRealPathFromURIMethod (Uri contentUri) {
-        String path = null;
-        String[] proj = { MediaStore.MediaColumns.DATA };
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-            path = cursor.getString(column_index);
-        }
-        cursor.close();
-        return path;
-    }
-    public static String getPathFromUri(final Context context, final Uri uri) {
-
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
-                        split[1]
-                };
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
-
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-
     /**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
@@ -1853,43 +977,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         return result;
     }
 
-    //this method compresses the image and saves into a location in sdcard
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-
-    //    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-//        ParcelFileDescriptor parcelFileDescriptor =
-//                getContentResolver().openFileDescriptor(uri, "r");
-//        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-//        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-//        parcelFileDescriptor.close();
-//        return image;
-//    }
     private void reqPermissionCamera() {
         new AskPermission.Builder(this).setPermissions(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .setCallback(this)
                 .setErrorCallback(this)
                 .request(PICKFILE_REQUEST_CODE);
     }
-
-//    private void reqPermissionStorage(){
-//        new AskPermission.Builder(this).setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-//                .setCallback(this)
-//                .setErrorCallback(this)
-//                .request(PICKFILE_REQUEST_CODE);
-//    }
 
 
 
@@ -1924,149 +1017,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 //Write your logic here
                 this.finish();
                 return true;
-
-//            case R.id.action_attach: {
-//                new BottomSheet.Builder(this).title("Attach files from").sheet(R.menu.bottom_menu).listener(new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which) {
-//                            case R.id.action_gallery:
-//
-//                                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                                startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-//                                break;
-////                            case R.id.action_docx:
-////
-//////                                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-//////                                //intent.setType("text/*");
-//////                                intent.setType("*/*");
-//////                                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//////                                startActivityForResult(Intent.createChooser(intent, "Select a doc"), RESULT_LOAD_FILE);
-////
-////                                break;
-//                            default:
-//                                break;
-//                        }
-//                    }
-//                }).show();
-//                return true;
 //            }
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    public String getPath(Uri uri) {
-//        String[] projection = {MediaStore.Images.Media.DATA};
-//        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//        cursor.moveToFirst();
-//        String ss = cursor.getString(column_index);
-//        cursor.close();
-//        return ss;
-//    }
-
-//    /**
-//     * Here we are handling the activity result.
-//     *
-//     * @param requestCode
-//     * @param resultCode
-//     * @param data
-//     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        try {
-//            if (requestCode == RESULT_LOAD_FILE && resultCode == RESULT_OK
-//                    && null != data) {
-//                Uri selectedFile = data.getData();
-    //String uriString = getPath(selectedFile);
-//                File myFile = new File(uriString);
-//                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_txt));
-//                attachmentFileSize.setText(getFileSize(myFile.length()));
-//                attachmentFileName.setText(myFile.getName());
-//            } else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
-//                    && null != data) {
-//                // Get the Image from data
-//                Uri selectedImage = data.getData();
-//                Log.d("selectedIMG  ", selectedImage + "");
-//                Log.d("getPath()  ", getPath(selectedImage) + "");
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-//                String uriString = getPath(selectedImage);
-//                File myFile = new File(uriString);
-////                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-////
-////                // Get the cursor
-////                Cursor cursor = getContentResolver().query(selectedImage,
-////                        filePathColumn, null, null, null);
-////                // Move to first row
-////                cursor.moveToFirst();
-////
-////                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-////                imgDecodableString = cursor.getString(columnIndex);
-////                cursor.close();
-//                attachment_layout.setVisibility(View.VISIBLE);
-//                // Set the Image in ImageView after decoding the String
-//                imageView.setImageBitmap(bitmap);
-//                Log.d("size", myFile.length() + "");
-//                //attachmentFileSize.setText("(" + myFile.length() / 1024 + "kb)");
-//                attachmentFileSize.setText(getFileSize(myFile.length()));
-//                attachmentFileName.setText(myFile.getName());
-//
-//            } else {
-//                Toasty.info(this, getString(R.string.you_hvent_picked_anything),
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Toasty.error(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
-//                    .show();
-//        }
-//    }
-
-//    public static String getFileSize(long size) {
-//        if (size <= 0)
-//            return "0";
-//        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-//        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-//        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-//    }
-//
-//    public int getCountryZipCode() {
-//        String CountryID = "";
-//        String CountryZipCode = "";
-//        int code = 0;
-//
-//        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-//        //getNetworkCountryIso
-//        CountryID = manager.getSimCountryIso().toUpperCase();
-//        String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
-//        for (String aRl : rl) {
-//            String[] g = aRl.split(",");
-//            if (g[1].trim().equals(CountryID.trim())) {
-//                CountryZipCode = g[0];
-//                //code = i;
-//                break;
-//            }
-//        }
-//        return Integer.parseInt(CountryZipCode);
-//    }
-//
-//    private void selectValue(Spinner spinner, Object value) {
-//        for (int i = 0; i < spinner.getCount(); i++) {
-//            spinner.getItemAtPosition(i);
-//            String[] split = spinner.getItemAtPosition(i).toString().split(",");
-//            String s = split[1];
-//            if (s.equals(value)) {
-//                Log.d("dsegffg", i + "");
-//                spinner.setSelection(i);
-//                break;
-//            }
-//        }
-//    }
 
     /**
      * Setting up the views here.
@@ -2115,23 +1070,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 });
             }
 
-
-//            typeItems=new ArrayList<>();
-//            typeItems.add(new Data(0,"--"));
-//            jsonObject=new JSONObject(json);
-//            JSONArray jsonArrayType=jsonObject.getJSONArray("type");
-//            for (int i=0;i<jsonArrayType.length();i++){
-//                Data data1 = new Data(Integer.parseInt(jsonArrayType.getJSONObject(i).getString("id")), jsonArrayType.getJSONObject(i).getString("name"));
-//
-//                typeItems.add(data1);
-//                Collections.sort(typeItems, new Comparator<Data>() {
-//                    @Override
-//                    public int compare(Data lhs, Data rhs) {
-//                        return lhs.getName().compareTo(rhs.getName());
-//                    }
-//                });
-//            }
-
             JSONArray jsonArrayPriorities = jsonObject.getJSONArray("priorities");
             priorityItems = new ArrayList<>();
             priorityItems.add(new Data(0, "--"));
@@ -2155,35 +1093,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         spinnerHelpArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         autoCompleteHelpTopic.setAdapter(spinnerHelpArrayAdapter);
 
-//        typeArrayAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item, typeItems);
-//        typeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerType.setAdapter(typeArrayAdapter);
-
 
         autocompletetextview = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,staffitemsauto);
         autoCompleteTextView.setAdapter(autocompletetextview);
         //autoCompleteTextView.setThreshold(0);
-        //autoCompleteTextView.setDropDownWidth(1000);
 
-//if (autoCompleteTextView.getThreshold()==0){
-//    stringArrayAdapterHint = new ArrayAdapter<>
-//            (this, android.R.layout.simple_dropdown_item_1line,staffItemsHint);
-//    autoCompleteTextView.setAdapter(autocompletetextview);
-//    autoCompleteTextView.setThreshold(1);
-//    autoCompleteTextView.setDropDownWidth(1000);
-//}
-
-
-        //Define the AutoComplete DropDown width
-
-
-//        spinnerSlaArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueSLA.split(","))); //selected item will look like a spinner set from XML
-//        spinnerSlaArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerSLA.setAdapter(spinnerSlaArrayAdapter);
-//
-//        spinnerAssignToArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Utils.removeDuplicates(SplashActivity.valueDepartment.split(","))); //selected item will look like a spinner set from XML
-//        spinnerAssignToArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerDept.setAdapter(spinnerAssignToArrayAdapter);
 
         spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, priorityItems); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -2197,20 +1111,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         editTextLastName.setFilters(new InputFilter[]{filter});
         editTextFirstName.setFilters(new InputFilter[]{filter});
         subEdittext.setFilters(new InputFilter[]{filter});
-//        subEdittext.setFilters(new InputFilter[]{
-//                new InputFilter() {
-//                    public CharSequence filter(CharSequence src, int start,
-//                                               int end, Spanned dst, int dstart, int dend) {
-//                        if (src.equals("")) { // for backspace
-//                            return src;
-//                        }
-//                        if (src.toString().matches("[\\x00-\\x7F]+")) {
-//                            return src;
-//                        }
-//                        return "";
-//                    }
-//                }
-//        });
 
     }
 
@@ -2280,14 +1180,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
 
     }
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        //replaces the default 'Back' button action
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            finish();
-//        }
-//        return true;
-//    }
 
     /**
      * Handling the create button here.
@@ -2347,20 +1239,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         Toasty.info(this, "you can add up to 3 collaborators", Toast.LENGTH_LONG).show();
                         return;
                     }
-
-
-//        String newColla=collaborator.replaceAll(" ","");
-//        Log.d("colla",newColla);
-//
-////        if (collaborator.charAt(newColla.length()-1)==','){
-////            Log.d("lastTerm","commaIncluded");
-////
-////
-////
-////        }
-////        else{
-////            Log.d("lastTerm","commaExcluded");
-////        }
 //
                     if (!newCollaList.equals("")) {
                         Log.d("colla", newCollaList);
@@ -3185,26 +2063,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
             }
         }
-//                progressDialog = new ProgressDialog(CreateTicketActivity.this);
-//                progressDialog.setMessage(getString(R.string.creating_ticket));
-//
-//
-//
-//                try {
-//                    fname = URLEncoder.encode(fname.trim(), "utf-8");
-//                    lname = URLEncoder.encode(lname.trim(), "utf-8");
-//                    subject = URLEncoder.encode(subject.trim(), "utf-8");
-//                    message = URLEncoder.encode(message.trim(), "utf-8");
-//                    email1 = URLEncoder.encode(email1.trim(), "utf-8");
-//                    phone = URLEncoder.encode(phone.trim(), "utf-8");
-//                    mobile = URLEncoder.encode(mobile.trim(), "utf-8");
-//
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//                    progressDialog.show();
-        //new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), subject, message, helpTopic.ID, priority.ID, phone, fname, lname, email2, countrycode, staff.ID, mobile ).execute();
-//            }
     }
     @Override
     public void onShowRationalDialog(final PermissionInterface permissionInterface, int requestCode) {
@@ -3282,16 +2140,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             audio=0;
 
         }
-//        if (audio==4){
-//            Intent intent;
-//            intent = new Intent();
-//            intent.setType("audio/mp3");
-//            startActivityForResult(intent,PICKFILE_REQUEST_CODE);
-//            audio=0;
-//
-//        }
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(intent, CAMERA_REQUEST);
     }
 
     @Override
@@ -3357,29 +2205,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 Toasty.error(CreateTicketActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-
-
-//            try{
-//                JSONObject jsonObject=new JSONObject(result);
-//                JSONObject jsonObject1=jsonObject.getJSONObject("response");
-//                String message=jsonObject1.getString("message");
-//                if (message.equals("Permission denied, you do not have permission to access the requested page.")){
-//                    Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-//                    Prefs.putString("403", "null");
-//                    return;
-//                }
-//
-//            }catch (JSONException e){
-//                e.printStackTrace();
-//            }
             String state=Prefs.getString("403",null);
-////                if (message1.contains("The ticket id field is required.")){
-////                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_ticket), Toast.LENGTH_LONG).show();
-////                }
-////                else if (message1.contains("The status id field is required.")){
-////                    Toasty.warning(TicketDetailActivity.this, getString(R.string.please_select_status), Toast.LENGTH_LONG).show();
-////                }
-////               else
             try {
                 if (state.equals("403") && !state.equals("null")) {
                     Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
@@ -3504,27 +2330,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
 
     }
-
-    //    private TextWatcher mTextWatcher = new TextWatcher() {
-//        @Override
-//        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//        }
-//
-//        @Override
-//        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//
-//            if ((subEdittext.getText().toString()).matches("\\[a-zA-Z]+")) {
-//
-//
-//            }
-//        }
-//
-//        @Override
-//        public void afterTextChanged(Editable editable) {
-//            // check Fields For Empty Values
-//            //checkFieldsForEmptyValues();
-//        }
-//    };
     TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -3811,22 +2616,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 }
                 Prefs.putString("keyType", keyType);
                 Prefs.putString("valueType", valueType);
-
-//                JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
-//                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-//                    keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
-//                    valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
-//                }
-
-
-//                JSONArray jsonArrayTeams = jsonObject1.getJSONArray("teams");
-//                for (int i = 0; i < jsonArrayTeams.length(); i++) {
-//                    keyTeam += jsonArrayTeams.getJSONObject(i).getString("id") + ",";
-//                    valueTeam += jsonArrayTeams.getJSONObject(i).getString("name") + ",";
-//                }
-
-                //Set<String> keyPri = new LinkedHashSet<>();
-                // Set<String> valuePri = new LinkedHashSet<>();
                 JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
                 for (int i = 0; i < jsonArrayPriorities.length(); i++) {
                     // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));

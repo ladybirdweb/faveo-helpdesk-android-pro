@@ -314,20 +314,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        mRevealView = (LinearLayout) findViewById(R.id.reveal_items);
-//        mRevealView.setVisibility(View.GONE);
-//
-//        photo_btn = (ImageButton) findViewById(R.id.gallery_img_btn);
-//        video_btn = (ImageButton) findViewById(R.id.video_img_btn);
-//        music_btn = (ImageButton) findViewById(R.id.music_img_btn);
-//        document_btn = (ImageButton) findViewById(R.id.documet_img_button);
-//
-//
-//        photo_btn.setOnClickListener(this);
-//        video_btn.setOnClickListener(this);
-//        music_btn.setOnClickListener(this);
-//        document_btn.setOnClickListener(this);
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -347,73 +333,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                         });
                 menuSheetView.inflateMenu(R.menu.navigation);
                 bottomSheet.showWithSheetView(menuSheetView);
-//                int cx = (mRevealView.getLeft() + mRevealView.getRight());
-//                int cy = mRevealView.getTop();
-//                int radius = Math.max(mRevealView.getWidth(), mRevealView.getHeight());
-//
-//                //Below Android LOLIPOP Version
-//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//                    SupportAnimator animator =
-//                            ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, 0, radius);
-//                    animator.setInterpolator(new AccelerateDecelerateInterpolator());
-//                    animator.setDuration(700);
-//
-//                    SupportAnimator animator_reverse = animator.reverse();
-//
-//                    if (hidden) {
-//                        mRevealView.setVisibility(View.VISIBLE);
-//                        animator.start();
-//                        hidden = false;
-//                    } else {
-//                        animator_reverse.addListener(new SupportAnimator.AnimatorListener() {
-//                            @Override
-//                            public void onAnimationStart() {
-//
-//                            }
-//
-//                            @Override
-//                            public void onAnimationEnd() {
-//                                mRevealView.setVisibility(View.INVISIBLE);
-//                                hidden = true;
-//
-//                            }
-//
-//                            @Override
-//                            public void onAnimationCancel() {
-//
-//                            }
-//
-//                            @Override
-//                            public void onAnimationRepeat() {
-//
-//                            }
-//                        });
-//                        animator_reverse.start();
-//                    }
-//                }
-//                // Android LOLIPOP And ABOVE Version
-//                else {
-//                    if (hidden) {
-//                        Animator anim = android.view.ViewAnimationUtils.
-//                                createCircularReveal(mRevealView, cx, cy, 0, radius);
-//                        mRevealView.setVisibility(View.VISIBLE);
-//                        anim.start();
-//                        hidden = false;
-//                    } else {
-//                        Animator anim = android.view.ViewAnimationUtils.
-//                                createCircularReveal(mRevealView, cx, cy, radius, 0);
-//                        anim.addListener(new AnimatorListenerAdapter() {
-//                            @Override
-//                            public void onAnimationEnd(Animator animation) {
-//                                super.onAnimationEnd(animation);
-//                                mRevealView.setVisibility(View.GONE);
-//                                hidden = true;
-//                            }
-//                        });
-//                        anim.start();
-//                    }
-//                }
-//                return true;
 
             case android.R.id.home:
                 supportFinishAfterTransition();
@@ -618,34 +537,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         return result.toString();
     }
 
-
-//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-//
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.navigation_shop:
-//                    gallery=2;
-//                    reqPermissionCamera();
-//                    return true;
-//                case R.id.navigation_gifts:
-//                    camera=3;
-//                    reqPermissionCamera();
-//                    return true;
-//                case R.id.navigation_music:
-//                    audio=4;
-//                    reqPermissionCamera();
-//                    return true;
-//                case R.id.navigation_cart:
-//                    document=1;
-//                    reqPermissionCamera();
-//                    return true;
-//            }
-//
-//            return false;
-//        }
-//    };
 
     @Override
     public void onPermissionsGranted(int requestCode) {
@@ -865,47 +756,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    class FetchTicketThreads extends AsyncTask<String, Void, String> {
-        Context context;
-        String ticketID;
-
-
-        FetchTicketThreads(Context context,String ticketID) {
-            this.context = context;
-            this.ticketID = ticketID;
-        }
-
-        protected String doInBackground(String... urls) {
-            return new Helpdesk().getTicketThread(ticketID);
-        }
-
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
-            Log.d("calledFromReply","true");
-            try {
-                progressDialog.dismiss();
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
-            if (result == null) {
-                //Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-            try {
-                JSONObject jsonObject=new JSONObject(result);
-                Log.d("ticketThreadReply",jsonObject.toString());
-                Prefs.putString("ticketThread",jsonObject.toString());
-                editTextReplyMessage.getText().clear();
-                Toasty.success(TicketReplyActivity.this, getString(R.string.posted_reply), Toast.LENGTH_LONG).show();
-                Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
-                startActivity(intent);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
         }
     }
     @SuppressLint("StaticFieldLeak")

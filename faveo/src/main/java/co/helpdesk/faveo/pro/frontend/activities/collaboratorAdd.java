@@ -144,23 +144,9 @@ public class collaboratorAdd extends AppCompatActivity {
                         Log.d("email1",email1);
                         autoCompleteTextViewUser.setText(email1);
                         searchUer.setVisibility(View.VISIBLE);
-//                        editTextEmail.setText(email1);
-//                        firstname=data2.getFirst_name();
-//                        lastname=data2.getLast_name();
-//                        editTextEmail.setText(email1);
-//                        editTextFirstName.setText(firstname);
-//                        editTextLastName.setText(lastname);
                     }
                 }
-//                try{
-//                    Data data = stringArrayList.get(i);
-//                    id1 = data.getID();
-//                    email = data.getName();
-//                    Log.d("idoftheuser",id1+"");
-//                    Log.d("ccobject",stringArrayList.get(i).toString());
-//                }catch (IndexOutOfBoundsException e){
-//                    e.printStackTrace();
-//                }
+
             }
 
 
@@ -188,25 +174,7 @@ public class collaboratorAdd extends AppCompatActivity {
             }
         });
 
-//        recipients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                if (i==0){
-//                    deleteUser.setVisibility(View.GONE);
-//                    email2=null;
-//                }
-//                else{
-//                    deleteUser.setVisibility(View.VISIBLE);
-//                    email2=recipients.getSelectedItem().toString();
-//                    //Toast.makeText(collaboratorAdd.this, "email is:"+email2, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//                email2=null;
-//            }
-//        });
+
         searchUer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,31 +224,6 @@ public class collaboratorAdd extends AppCompatActivity {
                     // Showing Alert Message
                     alertDialog.show();
                 }
-//                if (email.contains("<")) {
-////                    int pos = email.indexOf("<");
-////                    int pos1 = email.lastIndexOf(">");
-////                    finalEmail2=email.substring(pos+1,pos1);
-//
-//
-//                }else{
-//                    Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
-//                    //Toast.makeText(collaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
-
-//                else if (!finalEmail2.equalsIgnoreCase(finalEmail)){
-//
-//                }
-
-
-//                else if (id==0){
-//                    Toast.makeText(collaboratorAdd.this, "user not found", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
-
-                //Toast.makeText(collaboratorAdd.this, "added", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -296,13 +239,6 @@ public class collaboratorAdd extends AppCompatActivity {
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String email = autoCompleteTextViewUser.getText().toString();
-
-//                if (Prefs.getString("noUser",null).equals("null")){
-//                    Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
-//                }
-                //Toast.makeText(collaboratorAdd.this, "clicked on delete", Toast.LENGTH_SHORT).show();
-                //int pos=recipients.getSelectedItemPosition();
                 try {
 
                     if (email2.equals("")){
@@ -366,13 +302,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
             if (isCancelled()) return;
             stringArrayList.clear();
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
 
-//            if (result == null) {
-//                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                return;
-//            }
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = jsonObject.getJSONArray("users");
@@ -448,14 +378,6 @@ public class collaboratorAdd extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-
-//            if (result == null) {
-//                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                return;
-//            }
 
 
         }
@@ -567,12 +489,6 @@ public class collaboratorAdd extends AppCompatActivity {
                             AttachedCollaborator attachedCollaborator=new AttachedCollaborator(email,image,fullName);
                             movieList.add(attachedCollaborator);
 
-                        //int id= Integer.parseInt(jsonObject1.getString("id"));
-                        //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
-
-                        //stringArrayList.add(data);
-
-                        //strings.add(email);
 
                     }
 
@@ -588,12 +504,6 @@ public class collaboratorAdd extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-//                if (jsonObject1.getString("last_message").equals("null")) {
-//                    editTextLastMessage.setText("Not available");
-//                } else
-//                    editTextLastMessage.setText(jsonObject1.getString("last_message"));
 
 
         }
@@ -676,16 +586,6 @@ public class collaboratorAdd extends AppCompatActivity {
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-//        if (!TicketDetailActivity.isShowing) {
-//            Log.d("isShowing", "false");
-//            Intent intent = new Intent(this, TicketDetailActivity.class);
-//            startActivity(intent);
-//        } else Log.d("isShowing", "true");
-//        super.onBackPressed();
-
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
     }
     public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
 
@@ -774,41 +674,6 @@ public class collaboratorAdd extends AppCompatActivity {
                 }
             });
 
-//                holder.deletecolla.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                        Log.d("checked",""+b);
-//                        if (b){
-//                            holder.deletecolla.setVisibility(View.VISIBLE);
-//                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.grey_200));
-//                            holder.deletecolla.setChecked(true);
-//                            deleteUser.setVisibility(View.VISIBLE);
-//                        }
-//                        else{
-//                            holder.deletecolla.setChecked(false);
-//                            holder.deletecolla.setVisibility(View.GONE);
-//                            holder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.collaborator));
-//                            deleteUser.setVisibility(View.GONE);
-//                        }
-//                    }
-//                });
-
-
-
-//                holder.deletecolla.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                        if (b){
-//                           holder.deletecolla.setChecked(false);
-//                           holder.deletecolla.setVisibility(View.GONE);
-//                           deleteUser.setVisibility(View.GONE);
-//                        }
-//                        else{
-//                            holder.deletecolla.setChecked(true);
-//                            deleteUser.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                });
 
             if (!movie.getEmail().equals("")) {
                 holder.email.setText(movie.getEmail());
