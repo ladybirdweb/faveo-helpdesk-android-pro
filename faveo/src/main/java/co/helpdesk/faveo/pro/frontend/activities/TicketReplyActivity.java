@@ -176,6 +176,10 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         attachmentFileName= (TextView) findViewById(R.id.attachment_name);
         imageButton= (ImageButton) findViewById(R.id.attachment_close);
         bottomSheet= (BottomSheetLayout) findViewById(R.id.bottomsheet);
+        final Intent intent = getIntent();
+        ticketID=intent.getStringExtra("ticket_id");
+        Prefs.putString("TICKETid",ticketID);
+        Prefs.putString("ticketId",ticketID);
         //bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
         //bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         option=Prefs.getString("cameFromNotification", null);
@@ -256,7 +260,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 //                }
                }
         });
-        ticketID=Prefs.getString("ticketId",null);
+        //ticketID=Prefs.getString("ticketId",null);
         buttonSend = (Button) findViewById(R.id.button_send);
         imageView= (ImageView) findViewById(R.id.imageViewBackTicketReply);
         progressDialog = new ProgressDialog(this);
@@ -268,14 +272,18 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
-                startActivity(intent);
+                finishAffinity();
+                Intent intent1=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent1.putExtra("ticket_id", ticketID);
+                startActivity(intent1);
             }
         });
         addCc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(TicketReplyActivity.this,collaboratorAdd.class);
+                intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
             }
         });
@@ -343,17 +351,24 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 
     @Override
     public void onBackPressed() {
-        if (!TicketDetailActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, TicketDetailActivity.class);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(this, TicketDetailActivity.class);
-            startActivity(intent);
-            Log.d("isShowing", "true");
-        }
-
-        super.onBackPressed();
+        finishAffinity();
+        Intent intent1=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent1.putExtra("ticket_id", ticketID);
+        startActivity(intent1);
+//        if (!TicketDetailActivity.isShowing) {
+//            Log.d("isShowing", "false");
+//            Intent intent = new Intent(this, TicketDetailActivity.class);
+//            intent.putExtra("ticket_id", ticketID);
+//            startActivity(intent);
+//        } else {
+//            Intent intent = new Intent(this, TicketDetailActivity.class);
+//            intent.putExtra("ticket_id", ticketID);
+//            startActivity(intent);
+//            Log.d("isShowing", "true");
+//        }
+//
+//        super.onBackPressed();
     }
 
 

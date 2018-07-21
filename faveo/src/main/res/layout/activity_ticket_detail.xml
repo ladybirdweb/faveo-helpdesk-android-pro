@@ -32,7 +32,7 @@
 
                 <View
                     android:id="@+id/viewPriority1"
-                    android:layout_width="7dp"
+                    android:layout_width="5dp"
                     android:layout_height="match_parent"
                     android:visibility="visible"
                     android:layout_alignParentStart="true"
@@ -66,6 +66,7 @@
                     android:background="@drawable/rectangle1"
                     android:gravity="center"
                     android:text=""
+                    android:maxLines="1"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     app:use_gradient="true"
@@ -80,6 +81,7 @@
                     android:background="@drawable/rectangle1"
                     android:gravity="center"
                     android:text=""
+                    android:maxLines="1"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:ignore="RelativeOverlap"
@@ -139,7 +141,7 @@
                 android:layout_height="?attr/actionBarSize">
                 <View
                     android:id="@+id/viewPriority"
-                    android:layout_width="7dp"
+                    android:layout_width="5dp"
                     android:layout_height="match_parent"
                     android:visibility="visible"
                     android:layout_alignParentStart="true"

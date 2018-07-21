@@ -536,14 +536,15 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
     }
     @Override
     public void onBackPressed() {
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else Log.d("isShowing", "true");
-
-
-        super.onBackPressed();
+        finish();
+//        if (!MainActivity.isShowing) {
+//            Log.d("isShowing", "false");
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//        } else Log.d("isShowing", "true");
+//
+//
+//        super.onBackPressed();
     }
 
     private class FetchDependency extends AsyncTask<String, Void, String> {

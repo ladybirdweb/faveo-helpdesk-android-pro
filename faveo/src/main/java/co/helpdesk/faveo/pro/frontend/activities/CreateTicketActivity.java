@@ -1137,16 +1137,17 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    if (!MainActivity.isShowing) {
-                        Log.d("isShowing", "false");
-                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Log.d("isShowing", "true");
-                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
+                    finish();
+//                    if (!MainActivity.isShowing) {
+//                        Log.d("isShowing", "false");
+//                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                    } else {
+//                        Log.d("isShowing", "true");
+//                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    }
                 }
             });
 
@@ -1164,17 +1165,18 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         }
         else {
-            if (!MainActivity.isShowing) {
-                Log.d("isShowing", "false");
-//                Intent intent = new Intent(this, MainActivity.class);
-//                startActivity(intent);
-                finish();
-            } else {
-                Log.d("isShowing", "true");
-//                Intent intent = new Intent(this, MainActivity.class);
-//                startActivity(intent);
-                finish();
-            }
+            finish();
+//            if (!MainActivity.isShowing) {
+//                Log.d("isShowing", "false");
+////                Intent intent = new Intent(this, MainActivity.class);
+////                startActivity(intent);
+//                finish();
+//            } else {
+//                Log.d("isShowing", "true");
+////                Intent intent = new Intent(this, MainActivity.class);
+////                startActivity(intent);
+//                finish();
+//            }
         }
 
 

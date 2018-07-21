@@ -23,8 +23,13 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.vorlonsoft.android.rate.AppRate;
+import com.vorlonsoft.android.rate.OnClickButtonListener;
+import com.vorlonsoft.android.rate.StoreType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,7 +45,6 @@ import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
 import co.helpdesk.faveo.pro.frontend.fragments.HelpSection;
 import co.helpdesk.faveo.pro.frontend.fragments.Settings;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.ClosedTickets;
-
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.CreatedAtAsc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.CreatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.DueByAsc;
@@ -58,6 +62,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import io.fabric.sdk.android.Fabric;
+
 
 /**
  * This is the main activity where we are loading the inbox fragment
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //    public InternetReceiver receiver = new InternetReceiver();
 
     protected boolean doubleBackToExitPressedOnce = false;
-    public static boolean isShowing = false;
+    //public static boolean isShowing = false;
     ArrayList<String> strings;
     ArrayList<String> strings1;
     Toolbar toolbar;
@@ -93,11 +98,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
 
-        isShowing = true;
+        //isShowing = true;
         Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        overridePendingTransition(0, 0);
         setContentView(R.layout.activity_main);
         Window window = MainActivity.this.getWindow();
 
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         ButterKnife.bind(this);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
         Prefs.putString("querry1","null");
         strings=new ArrayList<>();
         strings.add(0,"Sort by");
@@ -153,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     protected void onDestroy() {
-        isShowing = false;
+        //isShowing = false;
         super.onDestroy();
         }
 

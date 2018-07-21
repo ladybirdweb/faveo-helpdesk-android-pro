@@ -2241,22 +2241,21 @@ public class InboxTickets extends Fragment {
                 ticketViewHolder.attachementView.setColorFilter(color);
 
             }
-            if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
-                Log.d("dueDate",ticketOverview.getDueDate());
+            try {
+                if (!ticketOverview.dueDate.equals(null) || !ticketOverview.dueDate.equals("null"))
+                    Log.d("dueDate", ticketOverview.getDueDate());
                 if (Helper.compareDates(ticketOverview.dueDate) == 2) {
-                Log.d("duetoday","yes");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date EndTime = null;
+                    Log.d("duetoday", "yes");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date EndTime = null;
                     try {
                         EndTime = dateFormat.parse(ticketOverview.getDueDate());
                         Date CurrentTime = dateFormat.parse(dateFormat.format(new Date()));
-                        if (CurrentTime.after(EndTime))
-                        {
+                        if (CurrentTime.after(EndTime)) {
                             ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-                            Log.d("dueFromInbox","overdue");
-                        }
-                        else{
-                            Log.d("dueFromInbox","duetoday");
+                            Log.d("dueFromInbox", "overdue");
+                        } else {
+                            Log.d("dueFromInbox", "duetoday");
                             ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
                         }
                     } catch (ParseException e) {
@@ -2264,24 +2263,24 @@ public class InboxTickets extends Fragment {
                     }
 
 
-
-
-
 //                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
 //                    ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
 //                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
 
                 } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
-                    Log.d("duetoday","no");
+                    Log.d("duetoday", "no");
                     ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
 //                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
 //                    ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
 //                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
                 } else {
-                    Log.d("duetoday","novalue");
+                    Log.d("duetoday", "novalue");
                     ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
                     ticketViewHolder.textViewduetoday.setVisibility(View.GONE);
                 }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
                 ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
 
             ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);

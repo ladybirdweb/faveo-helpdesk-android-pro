@@ -632,10 +632,8 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             }
 
             try {
-
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-
                 int open = 0, closed = 0, trash = 0, unasigned = 0, my_tickets = 0;
                 JSONArray jsonArrayTicketsCount = jsonObject1.getJSONArray("tickets_count");
                 for (int i = 0; i < jsonArrayTicketsCount.length(); i++) {
