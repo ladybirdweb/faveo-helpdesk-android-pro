@@ -82,7 +82,7 @@ public class Detail extends Fragment {
     String ticketId;
     public String mParam1;
     public String mParam2;
-
+    String ticketID;
     private OnFragmentInteractionListener mListener;
 
     public static Detail newInstance(String param1, String param2) {
@@ -120,6 +120,16 @@ public class Detail extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         setUpViews(rootView);
+        spinnerStaffs.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+        final Intent intent = getActivity().getIntent();
+        ticketID=intent.getStringExtra("ticket_id");
+        Prefs.putString("TICKETid",ticketID);
+        Prefs.putString("ticketId",ticketID);
         ticketId=Prefs.getString("TICKETid",null);
         animation= AnimationUtils.loadAnimation(getActivity(),R.anim.shake_error);
         // progressDialog.show();
@@ -146,6 +156,7 @@ public class Detail extends Fragment {
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
             if (result == null) {
+                Log.d("thisSomething","true");
                 Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
@@ -157,6 +168,7 @@ public class Detail extends Fragment {
 
 //                Prefs.putString("ticketsubject",jsonObject1.getString("title"));
                 String title=jsonObject2.getString("title");
+                Log.d("Title",title);
                 if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
                     String first = title.replace("=?UTF-8?Q?", "");
                     String second = first.replace("_", " ");
@@ -187,12 +199,7 @@ public class Detail extends Fragment {
                                 if (spinnerStaffs.getItemAtPosition(j).toString().equalsIgnoreCase(jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name"))) {
                                     spinnerStaffs.setSelection(j);
                                 }
-                                spinnerStaffs.setOnTouchListener(new View.OnTouchListener() {
-                                    @Override
-                                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                                        return true;
-                                    }
-                                });
+
                             }
                             //spinnerStaffs.setSelection(staffItems.indexOf("assignee_email"));
                         }
@@ -230,22 +237,6 @@ public class Detail extends Fragment {
                 }catch (NullPointerException e){
                     e.printStackTrace();
                 }
-//                try {
-//                    if (jsonObject1.getString("sla_name") != null) {
-//                        //spinnerSLAPlans.setSelection(Integer.parseInt(jsonObject1.getString("sla")) - 1);
-//                        spinnerSLAPlans.setSelection(spinnerSlaArrayAdapter.getPosition(jsonObject1.getString("sla_name")));
-//                    }
-//                } catch (JSONException | NumberFormatException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    if (jsonObject1.getString("status") != null) {
-//                        // spinnerStatus.setSelection(Integer.parseInt(jsonObject1.getString("status")) - 1);
-//
-//                    }
-//                } catch (JSONException | NumberFormatException e) {
-//                    e.printStackTrace();
-//                }
                 try {
                     if (jsonObject2.getString("priority_name") != null) {
                         // spinnerPriority.setSelection(Integer.parseInt(jsonObject1.getString("priority_id")) - 1);
@@ -308,10 +299,6 @@ public class Detail extends Fragment {
 
                     e.printStackTrace();
                 }
-
-
-
-
                 try {
                     if (jsonObject2.getString("source_name") != null)
                         //spinnerSource.setSelection(Integer.parseInt(jsonObject1.getString("source")) - 1);
@@ -329,7 +316,7 @@ public class Detail extends Fragment {
                 catch (ArrayIndexOutOfBoundsException e){
                     e.printStackTrace();
                 }
-                if (jsonObject2.getString("duedate").equals("") || jsonObject2.getString("duedate") == null) {
+                if (jsonObject2.getString("duedate").equals("") || jsonObject2.getString("duedate") == null || jsonObject2.getString("duedate").equals("null")) {
                     editTextDueDate.setText(getString(R.string.not_available));
                 } else {
                     editTextDueDate.setText(Helper.parseDate(jsonObject2.getString("duedate")));

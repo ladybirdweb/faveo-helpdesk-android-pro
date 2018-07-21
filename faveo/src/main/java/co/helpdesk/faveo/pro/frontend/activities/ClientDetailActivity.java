@@ -176,14 +176,11 @@ public class ClientDetailActivity extends AppCompatActivity implements
         setSupportActionBar(mToolbar);
         TextView mTitle = (TextView) mToolbar.findViewById(R.id.title);
         mTitle.setText(R.string.profile);
-
         setUpViews();
-
-
         textViewClientStatus= (TextView) findViewById(R.id.textView_client_status);
         final Intent intent = getIntent();
-        clientID = Prefs.getString("clientId",null);
-
+        clientID = intent.getStringExtra("CLIENT_ID");
+        Prefs.putString("clientId",clientID);
         imageViewClientEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -20,8 +20,8 @@ android {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 60
-        versionName "4.8.6"
+        versionCode 61
+        versionName "4.8.7"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -108,6 +108,8 @@ dependencies {
         implementation 'com.github.jorgecastilloprz:fabprogresscircle:1.01@aar'
     testImplementation 'org.mockito:mockito-core:1.10.19'
     implementation 'com.github.ppamorim:dragger:1.2'
+    implementation 'com.vorlonsoft:androidrate:1.0.8'
+    implementation 'com.google.android.gms:play-services-base:11.8.0'
     implementation 'br.com.simplepass:loading-button-android:1.14.0'
     implementation 'com.github.viethoa:customdialogs:3.0.0'
     implementation 'org.jsoup:jsoup:1.11.3'

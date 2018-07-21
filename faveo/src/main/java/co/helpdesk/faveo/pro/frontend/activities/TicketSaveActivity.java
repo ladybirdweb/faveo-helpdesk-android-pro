@@ -89,6 +89,8 @@ public class TicketSaveActivity extends AppCompatActivity {
             keyTopic = "", valueTopic = "",
             keySource = "", valueSource = "",
             keyType = "", valueType = "";
+    private String ticketID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,12 +113,16 @@ public class TicketSaveActivity extends AppCompatActivity {
 //            progressDialog.show();
             refresh.startAnimation(rotation);
             Log.d("FromTicketSave","true");
+            final Intent intent = getIntent();
+            ticketID=intent.getStringExtra("ticket_id");
+            Prefs.putString("TICKETid",ticketID);
+            Prefs.putString("ticketId",ticketID);
             task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
             task.execute();
         }
-        if (InternetReceiver.isConnected()){
-            new FetchDependency().execute();
-        }
+//        if (InternetReceiver.isConnected()){
+//            new FetchDependency().execute();
+//        }
         option=Prefs.getString("cameFromNotification", null);
         switch (option) {
             case "true":
@@ -142,7 +148,6 @@ public class TicketSaveActivity extends AppCompatActivity {
         TextView textView = (TextView) toolbar.findViewById(R.id.titlesave);
         imageView= (ImageView) toolbar.findViewById(R.id.imageViewBackTicketSave);
         textView.setText(getString(R.string.ticketProperties));
-
 
         spinnerHelpTopics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -198,12 +203,13 @@ public class TicketSaveActivity extends AppCompatActivity {
         autoCompleteTextViewstaff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (staff.equals(autoCompleteTextViewstaff.getSelectedItem().toString())){
-                    buttonsave.setVisibility(View.GONE);
-                }
-                else{
-                    buttonsave.setVisibility(View.VISIBLE);
-                }
+                buttonsave.setVisibility(View.VISIBLE);
+//                if (staff.equals(autoCompleteTextViewstaff.getSelectedItem().toString())){
+//                    buttonsave.setVisibility(View.GONE);
+//                }
+//                else{
+//                    buttonsave.setVisibility(View.VISIBLE);
+//                }
             }
 
             @Override
@@ -290,7 +296,7 @@ public class TicketSaveActivity extends AppCompatActivity {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
 
                     // Setting Dialog Title
-                    alertDialog.setTitle("Discard changes?");
+                    alertDialog.setTitle(R.string.discard);
 
                     // Setting Dialog Message
                     //alertDialog.setMessage(getString(R.string.createConfirmation));
@@ -304,9 +310,11 @@ public class TicketSaveActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke YES event
                             //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                            startActivity(intent);
-                            finish();
+                            finishAffinity();
+                            Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent1.putExtra("ticket_id", ticketID);
+                            startActivity(intent1);
                         }
                     });
 
@@ -323,9 +331,11 @@ public class TicketSaveActivity extends AppCompatActivity {
                     alertDialog.show();
                 }
                 else{
-                    Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                    startActivity(intent);
-                    finish();
+                        finishAffinity();
+                        Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent1.putExtra("ticket_id", ticketID);
+                        startActivity(intent1);
                 }
             }
         });
@@ -418,9 +428,9 @@ public class TicketSaveActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (InternetReceiver.isConnected()){
-            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
-        }
+//        if (InternetReceiver.isConnected()){
+//            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
+//        }
     }
     private class FetchTicketDetail1 extends AsyncTask<String, Void, String> {
         String ticketID;
@@ -551,7 +561,6 @@ public class TicketSaveActivity extends AppCompatActivity {
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                 JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
                 String title=jsonObject2.getString("title");
-
                 if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
                     String first = title.replace("=?UTF-8?Q?", "");
                     String second = first.replace("_", " ");
@@ -764,6 +773,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
         edittextsubject= (EditText) findViewById(R.id.editTextsubject);
         buttonsave= (Button) findViewById(R.id.buttonsave);
+        buttonsave.setVisibility(View.GONE);
         spinnerPriority= (Spinner) findViewById(R.id.spinner_priority);
         spinnerPriArrayAdapter = new ArrayAdapter<>(TicketSaveActivity.this, android.R.layout.simple_spinner_dropdown_item, priorityItems);
         //selected item will look like a spinner set from XML
@@ -824,9 +834,11 @@ public class TicketSaveActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                    startActivity(intent);
-                    finish();
+                    finishAffinity();
+                    Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+                    intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent1.putExtra("ticket_id", ticketID);
+                    startActivity(intent1);
                 }
             });
 
@@ -843,15 +855,24 @@ public class TicketSaveActivity extends AppCompatActivity {
             alertDialog.show();
         }
         else{
-            if (!TicketDetailActivity.isShowing) {
-                Log.d("isShowing", "false");
-                Intent intent = new Intent(this, TicketDetailActivity.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(this, TicketDetailActivity.class);
-                startActivity(intent);
-                Log.d("isShowing", "true");
-            }
+            finishAffinity();
+            Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent1.putExtra("ticket_id", ticketID);
+            startActivity(intent1);
+//            if (!TicketDetailActivity.isShowing) {
+//                Log.d("isShowing", "false");
+//                Intent intent = new Intent(this, TicketDetailActivity.class);
+//                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                intent.putExtra("ticket_id", ticketID);
+//                startActivity(intent);
+//            } else {
+//                Intent intent = new Intent(this, TicketDetailActivity.class);
+//                intent.putExtra("ticket_id", ticketID);
+//                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                startActivity(intent);
+//                Log.d("isShowing", "true");
+//            }
         }
 
     }

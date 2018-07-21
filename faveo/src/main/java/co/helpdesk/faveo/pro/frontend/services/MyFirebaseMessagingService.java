@@ -173,13 +173,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param profilePic
      */
     private void sendNotificationTicket(String messageBody, String ID, String noti_tittle, String profilePic) {
-        //Prefs.putString("TICKETid", ID);
-        //Prefs.putString("cameFromNotification","true");
         Intent intent = new Intent(this, TicketDetailActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 //                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("ticket_id", ID);
-
         Log.d("intents from FCM", "ID :" + ID);
 
         int id = (int) System.currentTimeMillis();

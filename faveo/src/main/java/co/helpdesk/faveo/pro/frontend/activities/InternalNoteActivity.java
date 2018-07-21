@@ -93,13 +93,19 @@ public class InternalNoteActivity extends AppCompatActivity {
             }
         });
         buttonCreate = (Button) findViewById(R.id.button_create);
-        ticketID= Prefs.getString("TICKETid",null);
+        final Intent intent = getIntent();
+        ticketID=intent.getStringExtra("ticket_id");
+        Prefs.putString("TICKETid",ticketID);
+        Prefs.putString("ticketId",ticketID);
         progressDialog=new ProgressDialog(this);
-        imageView.setOnClickListener(new View.OnClickListener() {
+            imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
-                startActivity(intent);
+                finishAffinity();
+                Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent1.putExtra("ticket_id", ticketID);
+                startActivity(intent1);
             }
         });
         buttonCreate.setOnClickListener(new View.OnClickListener() {
@@ -197,8 +203,10 @@ public class InternalNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
-        startActivity(intent);
-        finish();
+        finishAffinity();
+        Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent1.putExtra("ticket_id", ticketID);
+        startActivity(intent1);
     }
 }

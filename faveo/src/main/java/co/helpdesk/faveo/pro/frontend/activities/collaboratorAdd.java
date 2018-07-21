@@ -84,6 +84,8 @@ public class collaboratorAdd extends AppCompatActivity {
     RecyclerView recyclerView;
     Collaboratoradapter mAdapter;
     RecyclerView list;
+    private String ticketID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,11 +112,14 @@ public class collaboratorAdd extends AppCompatActivity {
         isShowing=true;
         progressBar= (ProgressBar) findViewById(R.id.collaboratorProgressBarReply);
         progressDialog=new ProgressDialog(collaboratorAdd.this);
+        final Intent intent = getIntent();
+        ticketID=intent.getStringExtra("ticket_id");
+        Prefs.putString("TICKETid",ticketID);
+        Prefs.putString("ticketId",ticketID);
         if (InternetReceiver.isConnected()){
             new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
             progressBar.setVisibility(View.VISIBLE);
         }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCollaborator);
         ImageView imageView = (ImageView) toolbar.findViewById(R.id.imageViewBack);
         buttonAdd= (ImageButton) findViewById(R.id.collaboratorAdd);
@@ -160,11 +165,13 @@ public class collaboratorAdd extends AppCompatActivity {
                 try {
                     if (Prefs.getString("cameFromTicket", null).equals("true")) {
                         Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+                        intent.putExtra("ticket_id", ticketID);
                         Prefs.putString("cameFromTicket","false");
                         startActivity(intent);
                         finish();
                     } else {
                         Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+                        intent.putExtra("ticket_id", ticketID);
                         startActivity(intent);
                         finish();
                     }
@@ -232,8 +239,9 @@ public class collaboratorAdd extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                     Intent intent=new Intent(collaboratorAdd.this,collaboratorcreate.class);
+                    intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
-                    finish();
+                    //finish();
             }
         });
         deleteUser.setOnClickListener(new View.OnClickListener() {
@@ -369,7 +377,10 @@ public class collaboratorAdd extends AppCompatActivity {
                     id = 0;
                     id1=0;
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
+
                     Intent intent=new Intent(collaboratorAdd.this,TicketReplyActivity.class);
+
+                    intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     finish();
                 }
@@ -405,6 +416,7 @@ public class collaboratorAdd extends AppCompatActivity {
                     email2="";
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(collaboratorAdd.this,TicketReplyActivity.class);
+                    intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     //finish();
                 }
@@ -576,10 +588,12 @@ public class collaboratorAdd extends AppCompatActivity {
             if (Prefs.getString("cameFromTicket", null).equals("true")) {
                 Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
                 Prefs.putString("cameFromTicket","false");
+                intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
                 finish();
             } else {
                 Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+                intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
                 finish();
             }

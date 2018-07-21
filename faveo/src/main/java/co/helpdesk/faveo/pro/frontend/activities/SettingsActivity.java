@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,7 +18,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.vorlonsoft.android.rate.AppRate;
+import com.vorlonsoft.android.rate.OnClickButtonListener;
+import com.vorlonsoft.android.rate.StoreType;
 
 import co.helpdesk.faveo.pro.R;
 import es.dmoral.toasty.Toasty;
@@ -29,7 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
     //public static boolean isCheckedCrashReports = true;
     ImageView imageView;
     RelativeLayout login, ticket, users, others;
-    Button buttonFeedback, buttonFeedBack;
+    Button buttonFeedback,buttonRating;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +54,49 @@ public class SettingsActivity extends AppCompatActivity {
         //switchCompatCrashReports = (SwitchCompat) findViewById(R.id.switch_crash_reports);
         buttonFeedback = (Button) findViewById(R.id.feedback);
         login = (RelativeLayout) findViewById(R.id.login);
+        buttonRating= (Button) findViewById(R.id.rateus);
         ticket = (RelativeLayout) findViewById(R.id.tickets);
         users = (RelativeLayout) findViewById(R.id.userandagent);
         others = (RelativeLayout) findViewById(R.id.other);
         buttonFeedback = (Button) findViewById(R.id.feedback);
         Prefs.putString("cameFromSetting", "true");
+
+        buttonRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppRate.with(SettingsActivity.this)
+                        .setStoreType(StoreType.GOOGLEPLAY) //default is GOOGLEPLAY (Google Play), other options are
+                        //           AMAZON (Amazon Appstore) and
+                        //           SAMSUNG (Samsung Galaxy Apps)
+                        //.setInstallDays((byte) 0) // default 10, 0 means install day
+                        .setLaunchTimes((byte) 3) // default 10
+                        .setRemindInterval((byte) 2) // default 1
+                        .setRemindLaunchTimes((byte) 2) // default 1 (each launch)
+                        .setShowLaterButton(true) // default true
+                        .setDebug(false) // default false
+                        //Java 8+: .setOnClickButtonListener(which -> Log.d(MainActivity.class.getName(), Byte.toString(which)))
+                        .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
+                            @Override
+                            public void onClickButton(byte which) {
+                                Log.d(MainActivity.class.getName(), Byte.toString(which));
+                            }
+                        })
+                        .monitor();
+
+                if (AppRate.with(SettingsActivity.this).getStoreType() == StoreType.GOOGLEPLAY) {
+                    //Check that Google Play is available
+                    if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(SettingsActivity.this) != ConnectionResult.SERVICE_MISSING) {
+                        // Show a dialog if meets conditions
+                        AppRate.showRateDialogIfMeetsConditions(SettingsActivity.this);
+                    }
+                } else {
+                    // Show a dialog if meets conditions
+                    AppRate.showRateDialogIfMeetsConditions(SettingsActivity.this);
+                }
+
+                AppRate.with(SettingsActivity.this).showRateDialog(SettingsActivity.this);
+            }
+        });
         buttonFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,8 +109,7 @@ public class SettingsActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
 
             }
         });
@@ -103,7 +147,6 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

@@ -127,7 +127,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         Log.d("ticket_id", notiThread.getTicket_id() + "");
                         Prefs.putString("TICKETid", notiThread.getTicket_id() + "");
                         Prefs.putString("cameFromNotification", "true");
-                        // intent.putExtra("ticket_id", notiThread.getTicket_id() + "");
+                        intent.putExtra("ticket_id", notiThread.getTicket_id() + "");
                         view.getContext().startActivity(intent);
                     } else {
 

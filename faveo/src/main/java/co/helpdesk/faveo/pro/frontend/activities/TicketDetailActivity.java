@@ -101,7 +101,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     TextView addCc;
     View viewpriority,viewCollapsePriority;
     ImageView imgaeviewBack;
-    public static boolean isShowing = false;
+    //public static boolean isShowing = false;
     LoaderTextView textViewStatus, textviewAgentName,textViewTitle,textViewDepartment;
     LoaderTextView textViewSubject;
     ArrayList<Data> statusItems;
@@ -137,10 +137,12 @@ public class TicketDetailActivity extends AppCompatActivity implements
                int id=menuItem.getItemId();
                if (id==R.id.fab_reply){
                    Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                   intent.putExtra("ticket_id", ticketID);
                    startActivity(intent);
                }
                else if (id==R.id.fab_internalnote){
                    Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+                   intent.putExtra("ticket_id", ticketID);
                    startActivity(intent);
                }
                 //TODO: Start some activity
@@ -153,6 +155,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 Prefs.putString("cameFromTicket","true");
                 Intent intent=new Intent(TicketDetailActivity.this,collaboratorAdd.class);
+                intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
                 finish();
             }
@@ -176,7 +179,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
         Log.d("ticketDetailOnCreate","True");
         Prefs.putString("TicketRelated","");
-        ticketID=Prefs.getString("TICKETid",null);
+        final Intent intent = getIntent();
+        ticketID=intent.getStringExtra("ticket_id");
+        Prefs.putString("TICKETid",ticketID);
+        Prefs.putString("ticketId",ticketID);
         if (InternetReceiver.isConnected()){
 //            progressDialog=new ProgressDialog(this);
 //            progressDialog.setMessage(getString(R.string.pleasewait));
@@ -207,7 +213,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         viewCollapsePriority=mAppBarLayout.findViewById(R.id.viewPriority1);
         //viewCollapsePriority.setBackgroundColor(Color.parseColor("#FF0000"));
         mToolbar.inflateMenu(R.menu.menu_main_new);
-        isShowing=true;
+        //isShowing=true;
         //Log.d("came into ticket detail","true");
         mToolbar.getMenu().getItem(0).setEnabled(false);
 
@@ -238,21 +244,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 String option=Prefs.getString("cameFromNotification",null);
                 switch (option) {
                     case "true": {
-                        Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
+//                        startActivity(intent);
                         finish();
                         break;
                     }
                     case "none": {
-                        Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
-                        startActivity(intent1);
+//                        Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
+//                        startActivity(intent1);
                         finish();
                         break;
                     }
                     case "false": {
                         Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent1);
-                        finish();
                         //finish();
                         break;
                     }
@@ -263,9 +269,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     default: {
-                        Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent1);
-                        finish();
                         break;
                     }
                 }
@@ -344,14 +350,15 @@ public class TicketDetailActivity extends AppCompatActivity implements
         int id1 = item.getItemId();
         if (id1 == R.id.buttonsave) {
             Intent intent = new Intent(TicketDetailActivity.this, TicketSaveActivity.class);
+            intent.putExtra("ticket_id",ticketID);
             startActivity(intent);
             finish();
 
         }
-        else if (item.getItemId() == android.R.id.home) {
-            Log.d("camehere","true");
-            onBackPressed(); // close this activity and return to preview activity (if there is any)
-        }
+//        else if (item.getItemId() == android.R.id.home) {
+//            Log.d("camehere","true");
+//            onBackPressed(); // close this activity and return to preview activity (if there is any)
+//        }
 
         else{
 
@@ -416,10 +423,12 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
                 animateFAB();
                 Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
                 break;
             case R.id.fab_internalnote:
                 Intent intent1=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+                intent1.putExtra("ticket_id", ticketID);
                 startActivity(intent1);
                 Log.d("Raj", "Fab 1");
                 break;
@@ -627,9 +636,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //                progressDialog.dismiss();
 
             if (result == null) {
-                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                Data data=new Data(0,"No recipients");
-//                stringArrayList.add(data);
+//                Log.d("thisSomething","true");
+//                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+////                Data data=new Data(0,"No recipients");
+////                stringArrayList.add(data);
                 return;
             }
 
@@ -656,21 +666,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
         String option=Prefs.getString("cameFromNotification",null);
         switch (option) {
             case "true": {
-                Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(TicketDetailActivity.this, NotificationActivity.class);
+//                startActivity(intent);
                 finish();
                 break;
             }
             case "none": {
-                Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
-                startActivity(intent1);
+//                Intent intent1=new Intent(TicketDetailActivity.this,SearchActivity.class);
+//                startActivity(intent1);
                 finish();
                 break;
             }
             case "false": {
-                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-                        startActivity(intent1);
-                finish();
+                Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent1);
                 break;
             }
             case "client": {
@@ -680,9 +690,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 break;
             }
             default: {
-             Intent intent1 = new Intent(TicketDetailActivity.this, MainActivity.class);
+                Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent1);
-                finish();
                 break;
             }
         }
@@ -697,73 +707,73 @@ public class TicketDetailActivity extends AppCompatActivity implements
         JSONObject jsonObject = null;
         Log.d("onResume","CALLED");
         Prefs.putString("TicketRelated","");
-        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-
-            String ticketInformation=Prefs.getString("ticketSpecific",null);
-            try {
-                jsonObject = new JSONObject(ticketInformation);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
-                String ticketNumber=jsonObject2.getString("ticket_number");
-                String statusName=jsonObject2.getString("status_name");
-                String subject=jsonObject2.getString("title");
-                String department=jsonObject2.getString("dept_name");
-                String priorityColor=jsonObject2.getString("priority_color");
-                if (!priorityColor.equals("")||!priorityColor.equals("null")){
-                    viewpriority.setBackgroundColor(Color.parseColor(priorityColor));
-                    viewCollapsePriority.setBackgroundColor(Color.parseColor(priorityColor));
-                }
-                else{
-                    viewpriority.setVisibility(View.GONE);
-                    viewCollapsePriority.setVisibility(View.GONE);
-                }
-                JSONObject jsonObject3=jsonObject2.getJSONObject("from");
-                String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
-                if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
-                    userName=jsonObject3.getString("user_name");
-                    textviewAgentName.setText(userName);
-                }
-                else{
-                    userName=jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
-                    textviewAgentName.setText(userName);
-                }
-                if (!statusName.equals("null")||!statusName.equals("")){
-                    textViewStatus.setText(statusName);
-                }
-                else{
-                    textViewStatus.setVisibility(View.GONE);
-                }
-                textViewTitle.setText(ticketNumber);
-                if (subject.startsWith("=?")){
-                    title=subject.replaceAll("=?UTF-8?Q?","");
-                    String newTitle=title.replaceAll("=E2=80=99","");
-                    String second1=newTitle.replace("=C3=BA","");
-                    String third = second1.replace("=C2=A0", "");
-                    String finalTitle=third.replace("=??Q?","");
-                    String newTitle1=finalTitle.replace("?=","");
-                    String newTitle2=newTitle1.replace("_"," ");
-                    Log.d("new name",newTitle2);
-                    textViewSubject.setText(newTitle2);
-                }
-                else if (!subject.equals("null")){
-                    textViewSubject.setText(subject);
-                }
-                else if (subject.equals("null")){
-                    textViewSubject.setText("");
-                }
-                if (!department.equals("")||!department.equals("null")){
-                    textViewDepartment.setText(department);
-                }
-                else{
-                    textViewDepartment.setVisibility(View.GONE);
-                }
-
-                Log.d("TITLE",subject);
-                Log.d("TICKETNUMBER",ticketNumber);
-
-            } catch (JSONException | NullPointerException e) {
-                e.printStackTrace();
-            }
+//        new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//        new FetchTicketDetail(ticketID).execute();
+//            String ticketInformation=Prefs.getString("ticketSpecific",null);
+//            try {
+//                jsonObject = new JSONObject(ticketInformation);
+//                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+//                JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
+//                String ticketNumber=jsonObject2.getString("ticket_number");
+//                String statusName=jsonObject2.getString("status_name");
+//                String subject=jsonObject2.getString("title");
+//                String department=jsonObject2.getString("dept_name");
+//                String priorityColor=jsonObject2.getString("priority_color");
+//                if (!priorityColor.equals("")||!priorityColor.equals("null")){
+//                    viewpriority.setBackgroundColor(Color.parseColor(priorityColor));
+//                    viewCollapsePriority.setBackgroundColor(Color.parseColor(priorityColor));
+//                }
+//                else{
+//                    viewpriority.setVisibility(View.GONE);
+//                    viewCollapsePriority.setVisibility(View.GONE);
+//                }
+//                JSONObject jsonObject3=jsonObject2.getJSONObject("from");
+//                String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+//                if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
+//                    userName=jsonObject3.getString("user_name");
+//                    textviewAgentName.setText(userName);
+//                }
+//                else{
+//                    userName=jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+//                    textviewAgentName.setText(userName);
+//                }
+//                if (!statusName.equals("null")||!statusName.equals("")){
+//                    textViewStatus.setText(statusName);
+//                }
+//                else{
+//                    textViewStatus.setVisibility(View.GONE);
+//                }
+//                textViewTitle.setText(ticketNumber);
+//                if (subject.startsWith("=?")){
+//                    title=subject.replaceAll("=?UTF-8?Q?","");
+//                    String newTitle=title.replaceAll("=E2=80=99","");
+//                    String second1=newTitle.replace("=C3=BA","");
+//                    String third = second1.replace("=C2=A0", "");
+//                    String finalTitle=third.replace("=??Q?","");
+//                    String newTitle1=finalTitle.replace("?=","");
+//                    String newTitle2=newTitle1.replace("_"," ");
+//                    Log.d("new name",newTitle2);
+//                    textViewSubject.setText(newTitle2);
+//                }
+//                else if (!subject.equals("null")){
+//                    textViewSubject.setText(subject);
+//                }
+//                else if (subject.equals("null")){
+//                    textViewSubject.setText("");
+//                }
+//                if (!department.equals("")||!department.equals("null")){
+//                    textViewDepartment.setText(department);
+//                }
+//                else{
+//                    textViewDepartment.setVisibility(View.GONE);
+//                }
+//
+//                Log.d("TITLE",subject);
+//                Log.d("TICKETNUMBER",ticketNumber);
+//
+//            } catch (JSONException | NullPointerException e) {
+//                e.printStackTrace();
+//            }
 
         Prefs.putString("filePath","");
         checkConnection();
@@ -772,7 +782,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        isShowing = false;
+        //isShowing = false;
         super.onDestroy();
         }
     private void checkConnection() {

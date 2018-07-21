@@ -39,6 +39,7 @@ public class collaboratorcreate extends AppCompatActivity {
     String email="";
     String firstName="";
     String lastName="";
+    private String ticketID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,11 @@ public class collaboratorcreate extends AppCompatActivity {
         button = (Button) findViewById(R.id.buttonAddUser);
         progressDialog = new ProgressDialog(collaboratorcreate.this);
         progressDialog.setMessage(getString(R.string.pleasewait));
-        ticketId = Prefs.getString("ticketId", null);
-        Log.d("ticketId", ticketId);
+        final Intent intent = getIntent();
+        ticketID=intent.getStringExtra("ticket_id");
+        Prefs.putString("TICKETid",ticketID);
+        Prefs.putString("ticketId",ticketID);
+        Log.d("ticketId", ticketID);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +80,7 @@ public class collaboratorcreate extends AppCompatActivity {
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+                            intent.putExtra("ticket_id", ticketID);
                             startActivity(intent);
                             finish();
                         }
@@ -89,6 +94,7 @@ public class collaboratorcreate extends AppCompatActivity {
                 }
                 else{
                     Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+                    intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     finish();
                 }
@@ -224,8 +230,7 @@ public class collaboratorcreate extends AppCompatActivity {
                     Log.d("idNew", id + "");
 
                     if (message.contains("Activate your account! Click on the link that we've sent to your mail")) {
-
-                        new collaboratorAdduser(ticketId, String.valueOf(id)).execute();
+                        new collaboratorAdduser(ticketID, String.valueOf(id)).execute();
                     }
 //                    else{
 //                        Toasty.success(collaboratorcreate.this,getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();
@@ -271,6 +276,7 @@ public class collaboratorcreate extends AppCompatActivity {
                 if (role.contains("ccc")) {
                     Toasty.success(collaboratorcreate.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(collaboratorcreate.this, TicketReplyActivity.class);
+                    intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     finish();
                 }
@@ -308,6 +314,7 @@ public class collaboratorcreate extends AppCompatActivity {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+                    intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     finish();
                 }
@@ -327,6 +334,7 @@ public class collaboratorcreate extends AppCompatActivity {
         }
         else{
             Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+            intent.putExtra("ticket_id", ticketID);
             startActivity(intent);
             finish();
         }

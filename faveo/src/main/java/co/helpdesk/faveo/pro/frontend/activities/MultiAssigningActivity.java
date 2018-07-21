@@ -206,14 +206,15 @@ public class MultiAssigningActivity extends AppCompatActivity {
         }
     @Override
     public void onBackPressed() {
-        if (!MainActivity.isShowing) {
-            Log.d("isShowing", "false");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else Log.d("isShowing", "true");
-
-
-        super.onBackPressed();
+        finish();
+//        if (!MainActivity.isShowing) {
+//            Log.d("isShowing", "false");
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//        } else Log.d("isShowing", "true");
+//
+//
+//        super.onBackPressed();
 
 //        if (fabExpanded)
 //            exitReveal();
