@@ -86,6 +86,7 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
   ArrayList<AttachmentModel> attachmentModels;
   String multipleName,multipleFile;
   String removeComma,removeCommaFile;
+  String ticketID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,7 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
         window.setStatusBarColor(ContextCompat.getColor(ShowingAttachment.this,R.color.faveo));
         ListView listView = (ListView) findViewById(R.id.attachment_list);
         reqPermissionCamera();
+        ticketID=Prefs.getString("ticketId",null);
 //        if (shouldAskPermissions()) {
 //            askPermissions();
 //        }
@@ -194,9 +196,11 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
         {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
-                startActivity(intent);
-                finish();
+                finishAffinity();
+                Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent1.putExtra("ticket_id", ticketID);
+                startActivity(intent1);
             }
         });
     }
@@ -250,8 +254,10 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
 
     @Override
     public void onBackPressed() {
-        Intent intent=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
-        startActivity(intent);
-        finish();
+        finishAffinity();
+        Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent1.putExtra("ticket_id", ticketID);
+        startActivity(intent1);
     }
 }

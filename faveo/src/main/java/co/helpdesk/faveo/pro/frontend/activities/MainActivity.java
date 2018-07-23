@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Fabric.with(this, new Crashlytics());
 
         //isShowing = true;
-        Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
+        //Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setContentView(R.layout.activity_main);
         Window window = MainActivity.this.getWindow();
 
-// clear FLAG_TRANSLUCENT_STATUS flag:
+        // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
