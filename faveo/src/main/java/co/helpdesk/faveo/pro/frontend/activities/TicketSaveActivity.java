@@ -331,11 +331,12 @@ public class TicketSaveActivity extends AppCompatActivity {
                     alertDialog.show();
                 }
                 else{
-                        finishAffinity();
+
                         Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent1.putExtra("ticket_id", ticketID);
                         startActivity(intent1);
+                        finish();
                 }
             }
         });
@@ -834,11 +835,12 @@ public class TicketSaveActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    finishAffinity();
+                    //finishAffinity();
                     Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                    intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent1.putExtra("ticket_id", ticketID);
                     startActivity(intent1);
+                    finish();
                 }
             });
 
@@ -855,11 +857,12 @@ public class TicketSaveActivity extends AppCompatActivity {
             alertDialog.show();
         }
         else{
-            finishAffinity();
+            //finishAffinity();
             Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            //intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             intent1.putExtra("ticket_id", ticketID);
             startActivity(intent1);
+            finish();
 //            if (!TicketDetailActivity.isShowing) {
 //                Log.d("isShowing", "false");
 //                Intent intent = new Intent(this, TicketDetailActivity.class);

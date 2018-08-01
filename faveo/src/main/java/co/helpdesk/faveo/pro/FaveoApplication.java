@@ -8,7 +8,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.ndk.CrashlyticsNdk;
+//import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.File;
@@ -25,13 +25,10 @@ import io.fabric.sdk.android.Fabric;
 public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
     InternetReceiver internetReceiver;
-    //    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(LocaleHelper.onAttach(base, "de"));
-//    }
+
     @Override
     public void onCreate() {
-        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk(), new CrashlyticsNdk());
+        Fabric.with(this, new Crashlytics());
         Thread.setDefaultUncaughtExceptionHandler(new LocalFileUncaughtExceptionHandler(this,
                 Thread.getDefaultUncaughtExceptionHandler()));
         internetReceiver = new InternetReceiver();
@@ -121,15 +118,6 @@ public class FaveoApplication extends MultiDexApplication {
             }
         }
     }
-
-//    public static boolean deleteDir(File dir) {
-//        if (dir != null && dir.isDirectory()) {
-//            String[] children = dir.list();
-//            for (String aChildren : children)
-//                return deleteDir(new File(dir, aChildren));
-//        }
-//        return dir.delete();
-//    }
 
 
     private void deleteRecursive(File fileOrDirectory) {

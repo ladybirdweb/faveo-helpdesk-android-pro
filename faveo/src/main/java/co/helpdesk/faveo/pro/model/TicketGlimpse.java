@@ -11,13 +11,23 @@ public class TicketGlimpse {
     public String ticketSubject;
     public boolean isTicketOpen;
     public String status;
+    public String clientId;
 
-    public TicketGlimpse(int ticketID, String ticketNumber, String ticketSubject, boolean isTicketOpen,String status) {
+    public TicketGlimpse(int ticketID, String ticketNumber, String ticketSubject, boolean isTicketOpen,String status,String clientId) {
         this.ticketID = ticketID;
         this.ticketNumber = ticketNumber;
         this.ticketSubject = ticketSubject;
         this.isTicketOpen = isTicketOpen;
         this.status=status;
+        this.clientId=clientId;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getStatus() {

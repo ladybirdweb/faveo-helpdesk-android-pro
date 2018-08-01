@@ -3,52 +3,30 @@ package co.helpdesk.faveo.pro.frontend.activities;
 import android.Manifest;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
-//import android.app.SearchManager;
-//import android.content.Context;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-//import android.graphics.Bitmap;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.os.StrictMode;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-//import android.support.v4.content.ContextCompat;
-//import android.support.v4.widget.CursorAdapter;
-//import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-//import android.telephony.TelephonyManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,9 +34,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -67,27 +43,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.flipboard.bottomsheet.commons.MenuSheetView;
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 import com.hbb20.CountryCodePicker;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
-import com.nbsp.materialfilepicker.MaterialFilePicker;
-import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.AudioPickActivity;
@@ -98,89 +64,42 @@ import com.vincent.filepicker.filter.entity.AudioFile;
 import com.vincent.filepicker.filter.entity.ImageFile;
 import com.vincent.filepicker.filter.entity.NormalFile;
 import com.vincent.filepicker.filter.entity.VideoFile;
-//import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
-
 import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
-import net.gotev.uploadservice.UploadNotificationConfig;
-import net.gotev.uploadservice.UploadServiceBroadcastReceiver;
 import net.gotev.uploadservice.UploadStatusDelegate;
-
-//import org.apache.commons.io.FileUtils;
-//import org.apache.http.HttpEntity;
-//import org.apache.http.HttpResponse;
-//import org.apache.http.client.ClientProtocolException;
-//import org.apache.http.client.HttpClient;
-//import org.apache.http.client.HttpResponseException;
-//import org.apache.http.client.methods.HttpPost;
-//import org.apache.http.entity.StringEntity;
-//import org.apache.http.entity.mime.FormBodyPart;
-//import org.apache.http.entity.mime.HttpMultipartMode;
-//import org.apache.http.entity.mime.MultipartEntity;
-//import org.apache.http.entity.mime.content.ContentBody;
-//import org.apache.http.entity.mime.content.FileBody;
-//import org.apache.http.entity.mime.content.StringBody;
-//import org.apache.http.impl.client.BasicResponseHandler;
-//import org.apache.http.impl.client.DefaultHttpClient;
-//import org.apache.http.util.EntityUtils;
-//import org.apache.james.mime4j.message.Multipart;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-//import java.io.File;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
-//import java.text.DecimalFormat;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.regex.Pattern;
-//import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.helpdesk.faveo.pro.BottomNavigationBehavior;
-import co.helpdesk.faveo.pro.CameraUtils;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Helper;
-import co.helpdesk.faveo.pro.ImagePath_MarshMallow;
-import co.helpdesk.faveo.pro.MyDeserializer;
-import co.helpdesk.faveo.pro.MyResponse;
-import co.helpdesk.faveo.pro.PathUtil;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.UserClient;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.adapters.CollaboratorAdapter;
 import co.helpdesk.faveo.pro.frontend.adapters.MultiCollaboratorAdapter;
@@ -190,14 +109,6 @@ import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import co.helpdesk.faveo.pro.model.MultiCollaborator;
 import es.dmoral.toasty.Toasty;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
 import static com.vincent.filepicker.activity.ImagePickActivity.IS_NEED_CAMERA;
@@ -302,22 +213,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //FirebaseCrash.report(new Exception("App Name : My first Android non-fatal error"));
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         setContentView(R.layout.activity_create_ticket);
         Window window = CreateTicketActivity.this.getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
         window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.faveo));
         GetCountryZipCode();
         refresh= (ImageButton) findViewById(R.id.imageRefresh);
@@ -325,7 +226,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         if (InternetReceiver.isConnected()){
             new FetchDependency().execute();
         }
-        //progressBar= (ProgressBar) findViewById(R.id.createTicketProgressbar);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ButterKnife.bind(this);
@@ -358,9 +258,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                         if (InternetReceiver.isConnected()){
                             refresh.startAnimation(rotation);
-//                            progressDialog=new ProgressDialog(CreateTicketActivity.this);
-//                            progressDialog.setMessage(getString(R.string.refreshing));
-//                            progressDialog.show();
                             new FetchDependency().execute();
                             setUpViews();
                             }
@@ -371,12 +268,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to invoke NO event
-                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 });
 
-                // Showing Alert Message
                 alertDialog.show();
             }
         });
@@ -387,9 +282,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         stringArraylist=new ArrayList<MultiCollaborator>();
         adapter1=new MultiCollaboratorAdapter(CreateTicketActivity.this,stringArraylist);
-        //multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        //multiAutoCompleteTextViewCC.setAdapter(adapter1);
-        //arrayAdapterCollaborator=new ArrayAdapter<>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,stringArraylist);
 
         multiAutoCompleteTextViewCC.addTextChangedListener(ccedittextwatcher);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -397,9 +289,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             public void onClick(View v) {
                 attachment_layout.setVisibility(View.GONE);
                 attachmentFileName.setText("");
-                //attachmentFileSize.setText("");
                 path="";
-                //toolbarAttachment.setVisibility(View.GONE);
             }
         });
 
@@ -417,7 +307,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             @Override
             public void onClick(View view) {
                 Prefs.putString("newuseremail","");
-                //onBackPressed();
                 if (!editTextEmail.getText().toString().equals("")
                         ||!subEdittext.getText().toString().equals("")||
                 !msgEdittext.getText().toString().equals("")){
@@ -437,7 +326,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke YES event
-                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -448,7 +336,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke NO event
-                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
                     });
@@ -458,8 +345,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                 }
                 else {
-//                    Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
-//                    startActivity(intent);
+//
                     finish();
                 }
             }
@@ -510,14 +396,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
             }
         });
-
-        //getSupportActionBar().setTitle(R.string.create_ticket);
-        //ccp = (CountryCodePicker) findViewById(R.id.ccp);
         countryCodePicker= (CountryCodePicker) findViewById(R.id.countrycoode);
         countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected() {
-                //Toast.makeText(MainActivity.this, "code :"+countryCodePicker.getSelectedCountryCode(), Toast.LENGTH_SHORT).show();
 
                 countrycode=countryCodePicker.getSelectedCountryCode();
             }
@@ -525,7 +407,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         editTextEmail= (AutoCompleteTextView) findViewById(R.id.email_edittext);
         emailHint=new ArrayList<>();
         arrayAdapterCC=new CollaboratorAdapter(this,emailHint);
-        //arrayAdapterCC=new ArrayAdapter<Data>(CreateTicketActivity.this,android.R.layout.simple_dropdown_item_1line,emailHint);
 
         editTextEmail.addTextChangedListener(passwordWatcheredittextSubject);
         editTextEmail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -576,7 +457,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         autoCompleteTextView= (Spinner) findViewById(R.id.autocompletetext);
         autoCompleteHelpTopic= (Spinner) findViewById(R.id.spinner_help);
         autoCompletePriority= (Spinner) findViewById(R.id.spinner_pri);
-        //spinnerType= (Spinner) findViewById(R.id.spinner_type);
         setUpViews();
         try {
             firstname = Prefs.getString("firstusername", null);
@@ -614,13 +494,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         if (phone.equals("null")){
             editTextPhone.setText("");
         }
-        else{
+        else {
             editTextPhone.setText(phone);
         }
-
-
-        //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        // AndroidNetworking.enableLogging();
     }
 
     public String GetCountryZipCode(){
@@ -1323,21 +1199,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         mobile = editTextMobile.getText().toString();
 
 
-//        if (!phCode.getSelectedItem().toString().equals("Code")) {
-//            countrycode = phCode.getSelectedItem().toString();
-//            String[] cc = countrycode.split(",");
-//            countrycode = cc[1];
-//        }
-
         countrycode = countryCodePicker.getSelectedCountryCode();
 
 
         allCorrect = true;
 
-
-//    if (phCode.equals("")){
-//        Toast.makeText(this, "Select the code", Toast.LENGTH_SHORT).show();
-//    }
         if (fname.length()==0&&firstname.length()==0){
             Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
             allCorrect = false;
@@ -1484,9 +1350,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                         String uploadId = UUID.randomUUID().toString();
                                         new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token=" + token)
                                                 .addFileToUpload(path, "media_attachment[]")
-                                                //Adding file
-                                                //.addParameter("token", token1)
-                                                //.addParameter("token",token)
                                                 .addParameter("user_id", Prefs.getString("ID", null))
                                                 .addParameter("subject", finalSubject1)
                                                 .addParameter("body", finalMessage1)
@@ -1500,9 +1363,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addParameter("mobile", mobile)
                                                 .addArrayParameter("cc[]", finalFirst_user)
                                                 .addParameter("email", email2)
-                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
-                                                //Adding text parameter to the request
-                                                //.setNotificationConfig(new UploadNotificationConfig())
                                                 .setMaxRetries(1)
                                                 .setMethod("POST").setDelegate(new UploadStatusDelegate() {
                                             @Override
@@ -1524,15 +1384,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                         uploadInfo.getUploadId(), uploadInfo.getElapsedTime() / 1000,
                                                         uploadInfo.getUploadRate(), serverResponse.getHttpCode(),
                                                         serverResponse.getBodyAsString()));
-//                                    if (serverResponse.getBodyAsString().contains("Ticket created successfully!")) {
-//                                        Toasty.success(CreateTicketActivity.this, getString(R.string.ticket_created_success), Toast.LENGTH_LONG).show();
-//                                        finish();
-//                                        editTextEmail.setText("");
-//                                        id = 0;
-//                                        Prefs.putString("newuseremail", null);
-//                                        startActivity(new Intent(CreateTicketActivity.this, MainActivity.class));
-//
-//                                    }
 
                                                 if (serverResponse.getBodyAsString().contains("Permission denied")){
                                                     Toasty.warning(CreateTicketActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
@@ -1640,9 +1491,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                         String uploadId = UUID.randomUUID().toString();
                                         new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token=" + token)
                                                 .addFileToUpload(path, "media_attachment[]")
-                                                //Adding file
-                                                //.addParameter("token", token1)
-                                                //.addParameter("token",token)
                                                 .addParameter("user_id", Prefs.getString("ID", null))
                                                 .addParameter("subject", finalSubject1)
                                                 .addParameter("body", finalMessage1)
@@ -1657,9 +1505,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addArrayParameter("cc[]", finalFirst_user)
                                                 .addArrayParameter("cc[]", finalSecond_user)
                                                 .addParameter("email", email2)
-                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
-                                                //Adding text parameter to the request
-                                                //.setNotificationConfig(new UploadNotificationConfig())
                                                 .setMaxRetries(1)
                                                 .setMethod("POST").setDelegate(new UploadStatusDelegate() {
                                             @Override
@@ -1788,9 +1633,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                         String uploadId = UUID.randomUUID().toString();
                                         new MultipartUploadRequest(CreateTicketActivity.this, uploadId, Constants.URL + "helpdesk/create?token=" + token)
                                                 .addFileToUpload(path, "media_attachment[]")
-                                                //Adding file
-                                                //.addParameter("token", token1)
-                                                //.addParameter("token",token)
                                                 .addParameter("user_id", Prefs.getString("ID", null))
                                                 .addParameter("subject", finalSubject1)
                                                 .addParameter("body", finalMessage1)
@@ -1806,9 +1648,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addArrayParameter("cc[]", finalSecond_user)
                                                 .addArrayParameter("cc[]", finalThird_user)
                                                 .addParameter("email", email2)
-                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
-                                                //Adding text parameter to the request
-                                                //.setNotificationConfig(new UploadNotificationConfig())
                                                 .setMaxRetries(1)
                                                 .setMethod("POST").setDelegate(new UploadStatusDelegate() {
                                             @Override
@@ -1864,7 +1703,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                                                     JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
                                                     JSONObject jsonObject1 = jsonObject.getJSONObject("error");
-                                                    // JSONArray jsonArray=jsonObject1.getJSONArray("code");
                                                     String message = jsonObject1.getString("code");
                                                     if (message.contains("The code feild is required.")) {
                                                         Toasty.warning(CreateTicketActivity.this, getString(R.string.select_code), Toast.LENGTH_SHORT).show();
@@ -1873,10 +1711,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
-
-
-//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-//                            startActivity(intent);
 
                                             }
 
@@ -1951,9 +1785,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addParameter("code", countrycode)
                                                 .addParameter("mobile", mobile)
                                                 .addParameter("email", email2)
-                                                //.addParameter("cc[]", String.valueOf(Arrays.asList("sayar@gmail.com","demoadmin@gmail.com")))
-                                                //Adding text parameter to the request
-                                                //.setNotificationConfig(new UploadNotificationConfig())
                                                 .setMaxRetries(1)
                                                 .setMethod("POST").setDelegate(new UploadStatusDelegate() {
                                             @Override
@@ -2008,7 +1839,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                                                     JSONObject jsonObject = new JSONObject(serverResponse.getBodyAsString());
                                                     JSONObject jsonObject1 = jsonObject.getJSONObject("error");
-                                                    // JSONArray jsonArray=jsonObject1.getJSONArray("code");
                                                     String message = jsonObject1.getString("code");
                                                     if (message.contains("The code feild is required.")) {
                                                         Toasty.warning(CreateTicketActivity.this, getString(R.string.select_code), Toast.LENGTH_SHORT).show();
@@ -2017,10 +1847,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
-
-
-//                            Intent intent=new Intent(CreateTicketActivity.this,MainActivity.class);
-//                            startActivity(intent);
 
                                             }
 
@@ -2051,16 +1877,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                     }
                 }
-
-
-                //Creating a multi part request
-
-
-//                try {
-//                    uploadMultipartData();
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
             } else {
                 Toasty.info(this, getString(R.string.oops_no_internet), Toast.LENGTH_SHORT, true).show();
             }
@@ -2096,21 +1912,14 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
     @Override
     public void onPermissionsGranted(int requestCode) {
-        //Toast.makeText(CreateTicketActivity.this, "Permission Received", Toast.LENGTH_SHORT).show();
         Log.d("requestCode",""+requestCode);
 
         if (document==1){
             Intent intent4 = new Intent(this, NormalFilePickActivity.class);
             intent4.putExtra(Constant.MAX_NUMBER, 1);
-            //intent4.putExtra(IS_NEED_FOLDER_LIST, true);
             intent4.putExtra(NormalFilePickActivity.SUFFIX,
                     new String[] {"xlsx", "xls", "doc", "dOcX", "ppt", ".pptx", "pdf"});
             startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
-//            new MaterialFilePicker()
-//                    .withActivity(TicketReplyActivity.this)
-//                    .withRequestCode(FILE_PICKER_REQUEST_CODE)
-//                    .withHiddenFiles(true)
-//                    .start();
             document=0;
         }
         if (gallery==2){
@@ -2118,9 +1927,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             intent1.putExtra(IS_NEED_CAMERA, true);
             intent1.putExtra(Constant.MAX_NUMBER, 1);
             startActivityForResult(intent1, Constant.REQUEST_CODE_PICK_IMAGE);
-//            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            intent.setType("image/*");
-//            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
             gallery=0;
         }
 
@@ -2129,9 +1935,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             intent2.putExtra(IS_NEED_CAMERA, true);
             intent2.putExtra(Constant.MAX_NUMBER, 1);
             startActivityForResult(intent2, Constant.REQUEST_CODE_PICK_VIDEO);
-//            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//            startActivityForResult(intent, CAMERA_REQUEST);
             camera=0;
         }
         if (audio==4){
@@ -2186,11 +1989,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         }
 
-//        protected String doInBackground(String... urls) {
-//
-        //return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators, new File[]{new File(result)});
-//        }
-
         @Override
         protected String doInBackground(File... files) {
 
@@ -2199,7 +1997,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
 
         protected void onPostExecute(String result) {
-            //Toast.makeText(CreateTicketActivity.this, "api called", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
             id=0;
             collaborators=null;
@@ -2223,7 +2020,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("error");
-                // JSONArray jsonArray=jsonObject1.getJSONArray("code");
                 String message=jsonObject1.getString("code");
                 if (message.contains("The code feild is required.")){
                     Toasty.warning(CreateTicketActivity.this,getString(R.string.select_code),Toast.LENGTH_SHORT).show();
@@ -2283,8 +2079,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
     @Override
     protected void onDestroy() {
-//        progressDialog.dismiss();
-//        progressDialog=null;
         super.onDestroy();
     }
 
@@ -2334,31 +2128,18 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     }
     TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String term = editTextEmail.getText().toString();
             if (InternetReceiver.isConnected()) {
                 if (!term.equals("")&&term.length()==3){
-
-                    //progressBar.setVisibility(View.VISIBLE);
-//                    refresh.startAnimation();
                     refresh.startAnimation(rotation);
                     String newTerm=term;
                     arrayAdapterCC=new CollaboratorAdapter(CreateTicketActivity.this,emailHint);
-                    //arrayAdapterCC = new ArrayAdapter<Data>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, emailHint);
                     new FetchCollaborator(newTerm.trim()).execute();
 
-                    //stringArrayAdapterCC.notifyDataSetChanged();
-//                autoCompleteTextViewCC.setThreshold(0);
-//                autoCompleteTextViewCC.setDropDownWidth(1000);
-
                 }
-
-
-                //buttonsave.setEnabled(true);
             }
         }
 
@@ -2369,7 +2150,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     TextWatcher ccedittextwatcher = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -2382,48 +2162,25 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         if (term.length()==3){
                             Log.d("newTerm", term);
                             adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
-                            //progressBar.setVisibility(View.VISIBLE);
-                            //refresh.startAnimation();
                             refresh.startAnimation(rotation);
-                            //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                             new FetchCollaboratorCC(term.trim()).execute();
                         }
 
                     }
                     else if (term.equals("")) {
                         adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
-                        //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
-                        //new FetchCollaborator("s").execute();
-                        //Data data=new Data(0,"No result found");
-
-//                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
-//                stringArrayAdapterCC.notifyDataSetChanged();
-//                autoCompleteTextViewCC.setThreshold(0);
-//                autoCompleteTextViewCC.setDropDownWidth(1000);
 
                     } else if (term.length()==3){
                         adapter1 = new MultiCollaboratorAdapter(CreateTicketActivity.this, stringArraylist);
-                        //progressBar.setVisibility(View.VISIBLE);
-//                        refresh.startAnimation();
                         refresh.startAnimation(rotation);
 
-                        //arrayAdapterCollaborator = new ArrayAdapter<>(CreateTicketActivity.this, android.R.layout.simple_dropdown_item_1line, stringArraylist);
                         new FetchCollaboratorCC(term).execute();
-                        //multiAutoCompleteTextViewCC.setAdapter(adapter1);
 
-
-                        //stringArrayAdapterCC.notifyDataSetChanged();
-//                autoCompleteTextViewCC.setThreshold(0);
-//                autoCompleteTextViewCC.setDropDownWidth(1000);
 
                     }
-
-
-                    //buttonsave.setEnabled(true);
                 }
 
         }
-        //String[] cc=[sayarsamanta@gmail.com,demoadmin@gmail.com,demopass@gmail.com]
         public void afterTextChanged(Editable s) {
         }
     };
@@ -2442,11 +2199,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
             refresh.clearAnimation();
-//            refresh.stopAnimation();
-//            Bitmap icon = BitmapFactory.decodeResource(getResources(),
-//                    R.drawable.ic_refresh_black_24dp);
-//            refresh.doneLoadingAnimation(getResources().getColor(R.color.faveo),icon);
-            //progressBar.setVisibility(View.GONE);
             emailHint.clear();
 
             try {
@@ -2459,9 +2211,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     String first_name=jsonObject1.getString("first_name");
                     String last_name=jsonObject1.getString("last_name");
                     String profilePic=jsonObject1.getString("profile_pic");
-                    //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
                     CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id1,first_name,last_name,email,profilePic);
-                    //Data data = new Data(id1,first_name + " " + last_name + " <" + email + ">");
                     emailHint.add(collaboratorSuggestion);
 
                 }
@@ -2498,14 +2248,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             if (isCancelled()) return;
             stringArraylist.clear();
 
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-
-//            if (result == null) {
-//                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                return;
-//            }
-
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = jsonObject.getJSONArray("users");
@@ -2526,28 +2268,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         //Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
                         stringArraylist.add(collaboratorSuggestion);
                         Log.d("array",stringArraylist.toString());
-
-//                        Set<String> stringSet=new HashSet<>(stringArraylist);
-//                        stringArraylist.clear();
-//                        stringArraylist.addAll(stringSet);
-
-
-                        // Prefs.putString("noUser","1");
                     }
                     multiAutoCompleteTextViewCC.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
                     multiAutoCompleteTextViewCC.setThreshold(3);
                     multiAutoCompleteTextViewCC.setDropDownWidth(1500);
                     multiAutoCompleteTextViewCC.setAdapter(adapter1);
                     multiAutoCompleteTextViewCC.showDropDown();
-                    //multiAutoCompleteTextViewCC.setAdapter(adapter1);
-
-
-
-//                    for (int i=0;i<stringArraylist.size();i++){
-//                        if (stringArraylist.contains(emailfromsuggestion)){
-//                            stringArraylist.remove(emailfromsuggestion);
-//                        }
-//                    }
 
                 }
 
@@ -2559,8 +2285,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
     }
     private class FetchDependency extends AsyncTask<String, Void, String> {
-        String unauthorized;
-
         protected String doInBackground(String... urls) {
 
             return new Helpdesk().getDependency();
@@ -2583,7 +2307,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                 Prefs.putString("DEPENDENCY", jsonObject1.toString());
-                // Preference.setDependencyObject(jsonObject1, "dependency");
                 JSONArray jsonArrayDepartments = jsonObject1.getJSONArray("departments");
                 for (int i = 0; i < jsonArrayDepartments.length(); i++) {
                     keyDepartment += jsonArrayDepartments.getJSONObject(i).getString("id") + ",";
@@ -2620,16 +2343,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 Prefs.putString("valueType", valueType);
                 JSONArray jsonArrayPriorities = jsonObject1.getJSONArray("priorities");
                 for (int i = 0; i < jsonArrayPriorities.length(); i++) {
-                    // keyPri.add(jsonArrayPriorities.getJSONObject(i).getString("priority_id"));
-                    //valuePri.add(jsonArrayPriorities.getJSONObject(i).getString("priority"));
                     keyPriority += jsonArrayPriorities.getJSONObject(i).getString("priority_id") + ",";
                     valuePriority += jsonArrayPriorities.getJSONObject(i).getString("priority") + ",";
                 }
                 Prefs.putString("keyPri", keyPriority);
                 Prefs.putString("valuePri", valuePriority);
-                //Prefs.putOrderedStringSet("keyPri", keyPri);
-                // Prefs.putOrderedStringSet("valuePri", valuePri);
-                //Log.d("Testtttttt", Prefs.getOrderedStringSet("keyPri", keyPri) + "   " + Prefs.getOrderedStringSet("valuePri", valuePri));
 
 
                 JSONArray jsonArrayHelpTopics = jsonObject1.getJSONArray("helptopics");

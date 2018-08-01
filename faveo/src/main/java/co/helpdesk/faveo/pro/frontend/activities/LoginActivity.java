@@ -140,9 +140,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         Window window = LoginActivity.this.getWindow();
 
@@ -690,8 +687,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // register connection status listener
-        //FaveoApplication.getInstance().setInternetListener(this);
         buttonVerifyURL.setEnabled(true);
         checkConnection();
     }
@@ -750,15 +745,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-//    /**
-//     * Callback will be triggered when there is change in
-//     * network connection
-//     */
-//    @Override
-//    public void onNetworkConnectionChanged(boolean isConnected) {
-//        showSnack(isConnected);
-//    }
-
     /**
      * To send the FCM token to server.This is required
      * for getting push notification from the server.
@@ -802,17 +788,6 @@ public class LoginActivity extends AppCompatActivity {
 
         String username = usernameEdittext.getText().toString();
         String password = passwordEdittext.getText().toString();
-//        if (username.trim().length()==0){
-//            textInputLayoutUsername.setError("Enter your full name");
-//        }
-//        else if (password.trim().length()==0){
-//            tex
-//        }
-//        if (username.trim().length() == 0 || password.trim().length() == 0) {
-//            buttonSignIn.setEnabled(false);
-//        } else {
-//            buttonSignIn.setEnabled(true);
-//        }
 
         if (username.trim().length() == 0 && password.trim().length() == 0) {
             buttonSignIn.setEnabled(true);
@@ -821,12 +796,7 @@ public class LoginActivity extends AppCompatActivity {
         else{
             buttonSignIn.setEnabled(true);
         }
-// else if (username.trim().length() <= 2) {
-//            textInputLayoutUsername.setError("Username must be at least 3 characters");
-//        } else {
-//            textInputLayoutUsername.setError(null);
-//            buttonSignIn.setEnabled(true);
-//        }
+
     }
 
     private TextWatcher mTextWatcher = new TextWatcher() {

@@ -201,43 +201,17 @@ public class UpdatedAtAsc extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-//            Toolbar toolbar2= (Toolbar) rootView.findViewById(R.id.toolbar3);
-//            toolbar2.setVisibility(View.VISIBLE);
-//            toolbar2.setOverflowIcon(getResources().getDrawable(R.drawable.ic_filter_list_black_24dp));
-//            toolbar2.setTitle("Filter By :");
-//            toolbar2.setTitleTextColor(Color.parseColor("#3da6d7"));
-//
-//            toolbar2.inflateMenu(R.menu.menu_for_filtering);
-//            toolbar2.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//
-//                    return false;
-//                }
-//            });
             Toolbar toolbar= (Toolbar) rootView.findViewById(R.id.toolbar2);
-//        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
             TextView textView= (TextView) toolbar.findViewById(R.id.toolbartextview);
-//        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+
             textView.setText(getString(R.string.lastupdated));
             Toolbar toolbar1= (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
             toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
-            //toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
-
-//            toolbar1.inflateMenu(R.menu.menu_for_filtering);
-//            toolbar1.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//
-//                    return false;
-//                }
-//            });
 
             toolbar1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(getActivity(), "clicked on toolbar", Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(getActivity(), TicketFilter.class);
                     startActivity(intent);
 
@@ -247,7 +221,6 @@ public class UpdatedAtAsc extends Fragment {
             toolbar.setVisibility(View.VISIBLE);
             toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_sort_black_24dp));
             toolbar.setTitleTextColor(Color.parseColor("#3da6d7"));
-//        mTitle.setText("Sort By");
             toolbar.inflateMenu(R.menu.menu_for_sorting);
             toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
@@ -265,116 +238,44 @@ public class UpdatedAtAsc extends Fragment {
                         Prefs.putString("dueasc", "1");
                         //Toast.makeText(getActivity(), "due in ascending", Toast.LENGTH_SHORT).show();
                         title = getString(R.string.duebyasc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new DueByAsc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.due_descending) {
                         Prefs.putString("dueasc","2");
                         title = getString(R.string.duebydesc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new DueByDesc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId()==R.id.created_ascending){
                         title = getString(R.string.createdat);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new CreatedAtAsc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId()==R.id.created_descending){
                         title = getString(R.string.createdat);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new CreatedAtDesc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId()==R.id.ticketnumber_ascending){
                         //Toast.makeText(getActivity(), "due in ascending", Toast.LENGTH_SHORT).show();
                         title = getString(R.string.sortbyticketnoasc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketNumberAscending();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId()==R.id.ticketnumber_descending){
                         title = getString(R.string.sortbyticketnodesc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketNumberAscending();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId()==R.id.priorityasc){
                         title = getString(R.string.sortbypriorityasc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketPriorityAsc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId()==R.id.prioritydesc){
                         title = getString(R.string.sortbyprioritydesc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketPriorityDesc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId()==R.id.updatedatasc){
@@ -383,16 +284,7 @@ public class UpdatedAtAsc extends Fragment {
                     }
                     if (item.getItemId()==R.id.updatedatdesc){
                         title = getString(R.string.updatedat);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new UpdatedAtDesc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
 
@@ -514,6 +406,19 @@ public class UpdatedAtAsc extends Fragment {
         }
 //        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox));
         return rootView;
+    }
+
+    public void fragmentController(String title){
+        Fragment fragment;
+        fragment =getActivity().getSupportFragmentManager().findFragmentByTag(title);
+        if (fragment == null)
+            fragment = new UpdatedAtAsc();
+        if (fragment != null) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
+        }
     }
 
     public void setNullToActionMode() {

@@ -131,9 +131,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
-        Bitmap bitmap=getBitmapFromURL(profilePic);
-        Bitmap bitmap1=getCircleBitmap(bitmap);
-        notificationBuilder.setLargeIcon(bitmap1);
+        if (!profilePic.equals("")&&!profilePic.equals("null")&&!profilePic.equals(null))
+        {
+            Bitmap bitmap=getBitmapFromURL(profilePic);
+            Bitmap bitmap1=getCircleBitmap(bitmap);
+            notificationBuilder.setLargeIcon(bitmap1);
+        }
+
         //notificationBuilder.setLargeIcon(getBitmapFromURL(profilePic));
         notificationBuilder.setContentTitle(noti_tittle);
         notificationBuilder.setContentText(messageBody);

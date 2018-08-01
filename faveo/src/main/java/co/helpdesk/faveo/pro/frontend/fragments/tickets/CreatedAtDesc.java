@@ -256,16 +256,7 @@ public class  CreatedAtDesc extends Fragment {
                     title = getString(R.string.app_name);
                     if (item.getItemId() == R.id.due_ascending) {
                         title = getString(R.string.duebyasc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new DueByAsc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.due_descending) {
@@ -274,16 +265,7 @@ public class  CreatedAtDesc extends Fragment {
                     }
                     if (item.getItemId() == R.id.created_ascending) {
                         title = getString(R.string.createdat);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new CreatedAtDesc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.created_descending) {
@@ -293,86 +275,32 @@ public class  CreatedAtDesc extends Fragment {
                     if (item.getItemId() == R.id.ticketnumber_ascending) {
                         //Toast.makeText(getActivity(), "due in ascending", Toast.LENGTH_SHORT).show();
                         title = getString(R.string.sortbyticketnoasc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketNumberAscending();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.ticketnumber_descending) {
                         title = getString(R.string.sortbyticketnodesc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketNumberAscending();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.priorityasc) {
                         title = getString(R.string.sortbypriorityasc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketPriorityAsc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.prioritydesc) {
                         title = getString(R.string.sortbyprioritydesc);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new SortByTicketPriorityDesc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.updatedatasc) {
                         title = getString(R.string.updatedat);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new UpdatedAtAsc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.updatedatdesc) {
                         title = getString(R.string.updatedat);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new UpdatedAtDesc();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
 
@@ -477,6 +405,19 @@ public class  CreatedAtDesc extends Fragment {
         }
 //        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.inbox));
         return rootView;
+    }
+
+    public void fragmentController(String title){
+        Fragment fragment;
+        fragment =getActivity().getSupportFragmentManager().findFragmentByTag(title);
+        if (fragment == null)
+            fragment = new CreatedAtDesc();
+        if (fragment != null) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
+        }
     }
     public void setNullToActionMode() {
         Log.d("Inbox Ticket","Came from toolbar action mode");

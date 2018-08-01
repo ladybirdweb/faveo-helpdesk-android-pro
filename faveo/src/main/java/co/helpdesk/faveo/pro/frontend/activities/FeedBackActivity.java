@@ -46,9 +46,6 @@ LinearLayout textViewSuggestion,textViewIssue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_feed_back);
         Window window = FeedBackActivity.this.getWindow();
 
@@ -74,14 +71,11 @@ LinearLayout textViewSuggestion,textViewIssue;
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
-                    //Toast.makeText(FeedBackActivity.this, "checked"+smoothCheckBoxSuggestion.getTag(), Toast.LENGTH_SHORT).show();
-                    //smoothCheckBoxIssue.setVisibility(View.GONE);
                     textViewIssue.setVisibility(View.GONE);
                     issueOrSuggestion="Suggestion";
                 }
                 else{
                     textViewIssue.setVisibility(View.VISIBLE);
-                    //smoothCheckBoxIssue.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -89,12 +83,11 @@ LinearLayout textViewSuggestion,textViewIssue;
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
-                        //smoothCheckBoxSuggestion.setVisibility(View.GONE);
+
                     issueOrSuggestion="Issue";
                         textViewSuggestion.setVisibility(View.GONE);
                 }else{
                     textViewSuggestion.setVisibility(View.VISIBLE);
-                    //smoothCheckBoxSuggestion.setVisibility(View.VISIBLE);
 
                 }
             }

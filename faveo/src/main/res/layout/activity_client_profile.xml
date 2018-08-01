@@ -188,6 +188,7 @@
                         android:text="@string/status"
                         android:textColor="@color/white"
                         android:textSize="14sp"
+                        android:layout_marginBottom="3dp"
                         android:textStyle="bold" />
 
 
@@ -204,6 +205,9 @@
             app:tabGravity="fill"
             app:tabTextColor="#808080"
             app:tabMode="fixed"
+            android:background="@color/faveo"
+            app:tabIndicatorColor="@color/grey_500"
+            app:tabIndicatorHeight="4dp"
             app:tabSelectedTextColor="@color/white"/>
         <!--app:tabIndicatorColor="@color/faveo"-->
 

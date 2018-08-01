@@ -15,7 +15,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,9 +47,6 @@ import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
 import co.helpdesk.faveo.pro.frontend.activities.RegisterUser;
 import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.adapters.ClientOverviewAdapter;
-import co.helpdesk.faveo.pro.frontend.fragments.search.SearchCustomerFragment;
-import co.helpdesk.faveo.pro.frontend.fragments.tickets.DueByAsc;
-import co.helpdesk.faveo.pro.frontend.fragments.tickets.UpdatedAtDesc;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.ClientOverview;
 import es.dmoral.toasty.Toasty;
@@ -196,24 +192,11 @@ public class ClientList extends Fragment implements View.OnClickListener {
                         Prefs.putString("filtercustomer","active");
                         Prefs.putString("normalclientlist","false");
                         url="active=1";
-                        //Toast.makeText(getActivity(), "URL:"+url, Toast.LENGTH_SHORT).show();
                         Prefs.putString("customerfilter",url);
                         title = getString(R.string.client_list);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new ClientList();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
-
-                        //Toast.makeText(getActivity(), "clicked on active", Toast.LENGTH_SHORT).show();
+                        fragmentController(title);
                         return true;
                     }
-
 
                     if (item.getItemId() == R.id.banned) {
                         Prefs.putString("filtercustomer","banned");
@@ -221,16 +204,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                         url="ban=1";
                         Prefs.putString("customerfilter",url);
                         title = getString(R.string.client_list);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new ClientList();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
 
@@ -240,16 +214,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                         url="deleted=1";
                         Prefs.putString("customerfilter",url);
                         title = getString(R.string.client_list);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new ClientList();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.inactive) {
@@ -258,16 +223,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                         url="active=0";
                         Prefs.putString("customerfilter",url);
                         title = getString(R.string.client_list);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new ClientList();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
 
@@ -278,16 +234,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                         url="role=admin";
                         Prefs.putString("customerfilter",url);
                         title = getString(R.string.client_list);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new ClientList();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.agent) {
@@ -296,16 +243,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                         url="role=agent";
                         Prefs.putString("customerfilter",url);
                         title = getString(R.string.client_list);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new ClientList();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
                     if (item.getItemId() == R.id.user) {
@@ -314,16 +252,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                         url="role=user";
                         Prefs.putString("customerfilter",url);
                         title = getString(R.string.client_list);
-                        fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
-                        if (fragment == null)
-                            fragment = new ClientList();
-                        if (fragment != null) {
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            // fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentController(title);
                         return true;
                     }
 
@@ -345,8 +274,6 @@ public class ClientList extends Fragment implements View.OnClickListener {
                     } else if (condition.equals("false")){
                         swipeRefresh.setRefreshing(true);
                         new FetchClientsFilter(getActivity(), url, page).execute();
-//                        Toast.makeText(getActivity(), "came from filter", Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getActivity(), "url" + url, Toast.LENGTH_SHORT).show();
                     }
 
                 }catch (NullPointerException e){
@@ -368,14 +295,9 @@ public class ClientList extends Fragment implements View.OnClickListener {
                             url=Prefs.getString("customerfilter",null);
                             if (condition.equals("true")) {
                                 noInternet_view.setVisibility(View.GONE);
-                                //swipeRefresh.setRefreshing(true);
-                                //progressDialog.show();
                                 new FetchClients(getActivity()).execute();
                             } else if (condition.equals("false")){
-                                //progressDialog.show();
                                 new FetchClientsFilter(getActivity(), url, page).execute();
-//                        Toast.makeText(getActivity(), "came from filter", Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getActivity(), "url" + url, Toast.LENGTH_SHORT).show();
                             }
 
                         }catch (NullPointerException e){
@@ -390,12 +312,43 @@ public class ClientList extends Fragment implements View.OnClickListener {
                 }
             });
 
+             RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+                boolean hideToolBar = false;
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                }
+            };
+
+             recyclerView.addOnScrollListener(onScrollListener);
+
             empty_view.setText(R.string.no_clients);
         }
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.client_list));
 
         return rootView;
     }
+
+    public void fragmentController(String title){
+        Fragment fragment;
+        fragment =getActivity().getSupportFragmentManager().findFragmentByTag(title);
+        if (fragment == null)
+            fragment = new ClientList();
+        if (fragment != null) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
+        }
+    }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

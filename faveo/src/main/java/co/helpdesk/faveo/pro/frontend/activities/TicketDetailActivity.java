@@ -46,8 +46,6 @@ import android.widget.Toast;
 
 import com.elyeproj.loaderviewlibrary.LoaderImageView;
 import com.elyeproj.loaderviewlibrary.LoaderTextView;
-import com.gordonwong.materialsheetfab.MaterialSheetFab;
-import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,14 +66,11 @@ import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
-import co.helpdesk.faveo.pro.frontend.views.Fab;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 //import co.helpdesk.faveo.pro.model.TicketDetail;
 import co.helpdesk.faveo.pro.model.TicketDetail;
 import es.dmoral.toasty.Toasty;
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
@@ -111,13 +106,11 @@ public class TicketDetailActivity extends AppCompatActivity implements
     private boolean isFabOpen;
     private Menu menu;
     ImageView loaderImageView;
+    String clientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ticket_detail);
         Window window = TicketDetailActivity.this.getWindow();
 
@@ -181,12 +174,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         Prefs.putString("TicketRelated","");
         final Intent intent = getIntent();
         ticketID=intent.getStringExtra("ticket_id");
+        clientId=Prefs.getString("clientId",null);
         Prefs.putString("TICKETid",ticketID);
         Prefs.putString("ticketId",ticketID);
         if (InternetReceiver.isConnected()){
-//            progressDialog=new ProgressDialog(this);
-//            progressDialog.setMessage(getString(R.string.pleasewait));
-//            progressDialog.show();
 
             new Thread(new Runnable() {
                 public void run(){
@@ -256,22 +247,22 @@ public class TicketDetailActivity extends AppCompatActivity implements
                         break;
                     }
                     case "false": {
-                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent1);
                         //finish();
+                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
+                        startActivity(intent1);
+                        finish();
                         break;
                     }
                     case "client": {
                         Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+                        intent.putExtra("CLIENT_ID", clientId);
+                        Log.d("clientId",clientId);
                         startActivity(intent1);
                         finish();
                         break;
                     }
                     default: {
-                        Intent intent1=new Intent(TicketDetailActivity.this,MainActivity.class);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent1);
+                        finish();
                         break;
                     }
                 }
@@ -350,15 +341,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         int id1 = item.getItemId();
         if (id1 == R.id.buttonsave) {
             Intent intent = new Intent(TicketDetailActivity.this, TicketSaveActivity.class);
-            intent.putExtra("ticket_id",ticketID);
+            intent.putExtra("ticket_id", ticketID);
             startActivity(intent);
             finish();
-
-        }
-//        else if (item.getItemId() == android.R.id.home) {
-//            Log.d("camehere","true");
-//            onBackPressed(); // close this activity and return to preview activity (if there is any)
-//        }
+            }
 
         else{
 
@@ -630,16 +616,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
             int noOfCollaborator=0;
             if (isCancelled()) return;
-            //strings.clear();
 
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
 
             if (result == null) {
-//                Log.d("thisSomething","true");
-//                Toasty.error(TicketDetailActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-////                Data data=new Data(0,"No recipients");
-////                stringArrayList.add(data);
                 return;
             }
 
@@ -685,6 +664,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }
             case "client": {
                 Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+                intent1.putExtra("CLIENT_ID", clientId);
                 startActivity(intent1);
                 finish();
                 break;

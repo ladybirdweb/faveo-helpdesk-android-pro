@@ -101,9 +101,8 @@ public class InternalNoteActivity extends AppCompatActivity {
             imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishAffinity();
+                finish();
                 Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent1.putExtra("ticket_id", ticketID);
                 startActivity(intent1);
             }
@@ -203,9 +202,8 @@ public class InternalNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finishAffinity();
+        finish();
         Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
-        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         intent1.putExtra("ticket_id", ticketID);
         startActivity(intent1);
     }
