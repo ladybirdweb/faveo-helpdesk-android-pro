@@ -79,9 +79,9 @@ public class collaboratorcreate extends AppCompatActivity {
 
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-                            intent.putExtra("ticket_id", ticketID);
-                            startActivity(intent);
+//                            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                            intent.putExtra("ticket_id", ticketID);
+//                            startActivity(intent);
                             finish();
                         }
                     });
@@ -93,9 +93,9 @@ public class collaboratorcreate extends AppCompatActivity {
                     alertDialog.show();
                 }
                 else{
-                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-                    intent.putExtra("ticket_id", ticketID);
-                    startActivity(intent);
+//                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                    intent.putExtra("ticket_id", ticketID);
+//                    startActivity(intent);
                     finish();
                 }
             }
@@ -298,9 +298,9 @@ public class collaboratorcreate extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-                    intent.putExtra("ticket_id", ticketID);
-                    startActivity(intent);
+//                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                    intent.putExtra("ticket_id", ticketID);
+//                    startActivity(intent);
                     finish();
                 }
             });
@@ -312,9 +312,9 @@ public class collaboratorcreate extends AppCompatActivity {
             alertDialog.show();
         }
         else{
-            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-            intent.putExtra("ticket_id", ticketID);
-            startActivity(intent);
+//            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//            intent.putExtra("ticket_id", ticketID);
+//            startActivity(intent);
             finish();
         }
     }
