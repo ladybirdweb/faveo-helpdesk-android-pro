@@ -45,18 +45,14 @@ import co.helpdesk.faveo.pro.model.AttachmentModel;
 import es.dmoral.toasty.Toasty;
 
 public class ShowingAttachment extends AppCompatActivity implements PermissionCallback, ErrorCallback {
-
     ImageView imageView;
     Toolbar toolbar;
-    DecimalFormat df;
     TextView textView;
     String title;
     Context context;
     String type;
     private static final int PICKFILE_REQUEST_CODE = 1234;
   String file;
-    static final Integer WRITE_EXST = 0x3;
-    static final Integer READ_EXST = 0x4;
   AttachmnetAdapter attachmnetAdapter;
   ArrayList<AttachmentModel> attachmentModels;
   String multipleName,multipleFile;
@@ -171,11 +167,10 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
         {
             @Override
             public void onClick(View view) {
-                finishAffinity();
                 Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent1.putExtra("ticket_id", ticketID);
                 startActivity(intent1);
+                finish();
             }
         });
     }
@@ -229,9 +224,7 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
 
     @Override
     public void onBackPressed() {
-        finishAffinity();
         Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
-        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         intent1.putExtra("ticket_id", ticketID);
         startActivity(intent1);
     }
