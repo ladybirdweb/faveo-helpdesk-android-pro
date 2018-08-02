@@ -100,8 +100,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.UUID;
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
 import javax.net.ssl.HttpsURLConnection;
 
 import co.helpdesk.faveo.pro.Constants;
@@ -113,8 +111,7 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.TicketThread;
 import es.dmoral.toasty.Toasty;
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
+
 
 import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
 import static com.vincent.filepicker.activity.ImagePickActivity.IS_NEED_CAMERA;
@@ -272,11 +269,10 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishAffinity();
                 Intent intent1=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent1.putExtra("ticket_id", ticketID);
                 startActivity(intent1);
+                finish();
             }
         });
         addCc.setOnClickListener(new View.OnClickListener() {
@@ -351,11 +347,10 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 
     @Override
     public void onBackPressed() {
-        finishAffinity();
         Intent intent1=new Intent(TicketReplyActivity.this,TicketDetailActivity.class);
-        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         intent1.putExtra("ticket_id", ticketID);
         startActivity(intent1);
+        finish();
 //        if (!TicketDetailActivity.isShowing) {
 //            Log.d("isShowing", "false");
 //            Intent intent = new Intent(this, TicketDetailActivity.class);
@@ -370,9 +365,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 //
 //        super.onBackPressed();
     }
-
-
-
     public class SendPostRequest extends AsyncTask<String, Void, String> {
 
         protected void onPreExecute(){}

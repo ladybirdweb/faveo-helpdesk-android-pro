@@ -79,9 +79,9 @@ public class collaboratorcreate extends AppCompatActivity {
 
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-                            intent.putExtra("ticket_id", ticketID);
-                            startActivity(intent);
+//                            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                            intent.putExtra("ticket_id", ticketID);
+//                            startActivity(intent);
                             finish();
                         }
                     });
@@ -93,9 +93,9 @@ public class collaboratorcreate extends AppCompatActivity {
                     alertDialog.show();
                 }
                 else{
-                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-                    intent.putExtra("ticket_id", ticketID);
-                    startActivity(intent);
+//                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                    intent.putExtra("ticket_id", ticketID);
+//                    startActivity(intent);
                     finish();
                 }
             }
@@ -148,13 +148,10 @@ public class collaboratorcreate extends AppCompatActivity {
                     // Setting Negative "NO" Button
                     alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to invoke NO event
-                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
                     });
 
-                    // Showing Alert Message
                     alertDialog.show();
 
 
@@ -217,10 +214,7 @@ public class collaboratorcreate extends AppCompatActivity {
             }
 
             try {
-
-                //JSONObject jsonObject=new JSONObject(result);
                 JSONArray jsonArray = new JSONArray(result);
-                //JSONObject jsonObject1=jsonObject.getJSONObject("result");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String message = jsonObject.getString("message");
@@ -232,11 +226,6 @@ public class collaboratorcreate extends AppCompatActivity {
                     if (message.contains("Activate your account! Click on the link that we've sent to your mail")) {
                         new collaboratorAdduser(ticketID, String.valueOf(id)).execute();
                     }
-//                    else{
-//                        Toasty.success(collaboratorcreate.this,getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();
-//                        Intent intent=new Intent(collaboratorcreate.this,collaboratorcreate.class);
-//                        startActivity(intent);
-//                    }
 
                 }
 
@@ -268,10 +257,6 @@ public class collaboratorcreate extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("collaborator");
-//                JSONArray jsonArray=jsonObject.getJSONArray("users");
-//                if (jsonArray.length()==0){
-//                    Toast.makeText(collaboratorAdd.this, "user not found", Toast.LENGTH_SHORT).show();
-//                }
                 String role = jsonObject1.getString("role");
                 if (role.contains("ccc")) {
                     Toasty.success(collaboratorcreate.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
@@ -313,29 +298,23 @@ public class collaboratorcreate extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-                    intent.putExtra("ticket_id", ticketID);
-                    startActivity(intent);
+//                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                    intent.putExtra("ticket_id", ticketID);
+//                    startActivity(intent);
                     finish();
                 }
             });
-
-            // Setting Negative "NO" Button
             alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    // Write your code here to invoke NO event
-                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                     dialog.cancel();
                 }
             });
-
-            // Showing Alert Message
             alertDialog.show();
         }
         else{
-            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
-            intent.putExtra("ticket_id", ticketID);
-            startActivity(intent);
+//            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//            intent.putExtra("ticket_id", ticketID);
+//            startActivity(intent);
             finish();
         }
     }

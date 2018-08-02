@@ -135,7 +135,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp"
-            android:background="@color/background_dim_overlay" />
+            />
 
         <com.github.curioustechizen.ago.RelativeTimeTextView
             android:id="@+id/textView_ticket_time"

@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorAccent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <!--<ProgressBar-->
     <!--android:id="@+id/progress_bar"-->
@@ -21,7 +22,6 @@
         android:orientation="horizontal"
         android:id="@+id/toolbarview"
         >
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbarfilteration"
             android:layout_width="match_parent"
@@ -57,17 +57,6 @@
                     android:background="@drawable/ic_if_filter_383135"
                     android:foregroundGravity="clip_vertical" />
             </RelativeLayout>
-
-            //android:minHeight="?attr/actionBarSize"
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Toolbar Title"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:id="@+id/toolbar_title"-->
-            <!--android:textColor="@color/faveo"/>-->
-
         </android.support.v7.widget.Toolbar>
         <View
             android:id="@+id/separationView"

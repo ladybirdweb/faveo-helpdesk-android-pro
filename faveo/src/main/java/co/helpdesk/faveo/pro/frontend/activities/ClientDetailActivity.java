@@ -117,9 +117,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_client_profile);
         Window window = ClientDetailActivity.this.getWindow();
 
@@ -274,7 +271,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
         protected String doInBackground(String... urls) {
             return new Helpdesk().getTicketsByUser(clientID);
         }
-
         protected void onPostExecute(String result) {
             if (isCancelled()) return;
             progressDialog.dismiss();
@@ -284,13 +280,13 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 JSONObject jsonObject = new JSONObject(result);
                 String error=jsonObject.getString("error");
                 if (error.equals("This is not a client")){
+                    imageViewClientEdit.setVisibility(View.GONE);
                     Toasty.info(ClientDetailActivity.this, "This is not a client", Toast.LENGTH_LONG).show();
                     return;
                 }
             }catch(JSONException e){
                 e.printStackTrace();
             }
-
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject requester = jsonObject.getJSONObject("requester");
@@ -306,11 +302,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     letter= String.valueOf(firstname.toUpperCase().charAt(0));
                 }
 
-//                try {
-//                    letter = String.valueOf(firstname.charAt(0)).toUpperCase();
-//                }catch (StringIndexOutOfBoundsException e){
-//                    e.printStackTrace();
-//                }
                 if (firstname == null || firstname.equals(""))
                     clientname = username;
                 else
@@ -324,12 +315,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
                 String phone = "";
                 String mobile="";
-//                if (requester.getString("mobile") == null || requester.getString("mobile").equals(""))
-//                    textViewClientPhone.setVisibility(View.INVISIBLE);
-//
-//                else
                     phone = requester.getString("phone_number");
                 mobile=requester.getString("mobile");
+                String clientId=requester.getString("id");
                 if (phone.equals("null")||phone.equals(" ")||phone.equals("Not available")||phone.equals("")){
                     textViewClientPhone.setVisibility(View.GONE);
                 }else {
@@ -364,8 +352,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     imageViewClientPicture.setImageDrawable(drawable);
                     //imageViewClientPicture.setImageResource(R.drawable.default_pic);
                 }
-//                IImageLoader imageLoader = new PicassoLoader();
-//                imageLoader.loadImage(imageViewClientPicture, clientPictureUrl, clientname);
 
                 JSONArray jsonArray = jsonObject.getJSONArray("tickets");
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -374,16 +360,17 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
                     String ticketSubject = jsonArray.getJSONObject(i).getString("title");
                     String status=jsonArray.getJSONObject(i).getString("ticket_status_name");
+
                     try {
                         isOpen = jsonArray.getJSONObject(i).getString("ticket_status_name").equals("Open");
                         if (isOpen)
-                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status));
+                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId));
                         else
-                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status));
+                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status,clientId));
                     } catch (Exception e) {
-                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status));
+                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId));
                     }
-                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status));
+                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status,clientId));
                 }
             } catch (JSONException e) {
                 Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();
@@ -492,12 +479,10 @@ public class ClientDetailActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        // register connection status listener
-        //FaveoApplication.getInstance().setInternetListener(this);
         checkConnection();
-        if (InternetReceiver.isConnected()){
-            new FetchClientTickets(ClientDetailActivity.this).execute();
-        }
+//        if (InternetReceiver.isConnected()){
+//            new FetchClientTickets(ClientDetailActivity.this).execute();
+//        }
     }
 
 

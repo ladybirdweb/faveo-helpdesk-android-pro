@@ -51,6 +51,9 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
             public void onClick(View v) {
                 Log.d("CLICKEDonglimpse","clicked");
                 Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+                intent.putExtra("ticket_id", ticketGlimpse.ticketID);
+                intent.putExtra("CLIENT_ID", ticketGlimpse.clientId);
+                Prefs.putString("clientId",ticketGlimpse.clientId);
                 Prefs.putString("cameFromNotification","client");
                 Prefs.putString("ticketThread","");
                 Prefs.putString("TICKETid",ticketViewHolder.textViewTicketID.getText().toString());

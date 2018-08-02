@@ -89,9 +89,6 @@ public class collaboratorAdd extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_collaborator_add);
         Window window = collaboratorAdd.this.getWindow();
 
@@ -158,7 +155,6 @@ public class collaboratorAdd extends AppCompatActivity {
         });
         spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strings); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //recipients.setAdapter(spinnerPriArrayAdapter);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -367,10 +363,6 @@ public class collaboratorAdd extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("collaborator");
-//                JSONArray jsonArray=jsonObject.getJSONArray("users");
-//                if (jsonArray.length()==0){
-//                    Toast.makeText(collaboratorAdd.this, "user not found", Toast.LENGTH_SHORT).show();
-//                }
                 String role = jsonObject1.getString("role");
                 if (role.contains("ccc")) {
                     autoCompleteTextViewUser.setText("");
@@ -407,7 +399,6 @@ public class collaboratorAdd extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            //progressDialog.dismiss();
             if (isCancelled()) return;
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -455,15 +446,9 @@ public class collaboratorAdd extends AppCompatActivity {
                 movieList.clear();
             int noOfCollaborator=0;
             if (isCancelled()) return;
-            //strings.clear();
-
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
 
             if (result == null) {
                 Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-//                Data data=new Data(0,"No recipients");
-//                stringArrayList.add(data);
                 return;
             }
 
@@ -472,12 +457,9 @@ public class collaboratorAdd extends AppCompatActivity {
                 JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
                 if (jsonArray.length()==0){
                     progressBar.setVisibility(View.GONE);
-                    //recipients.setVisibility(View.GONE);
                     return;
                 }else {
                     progressBar.setVisibility(View.GONE);
-                    //relativeLayout.setVisibility(View.VISIBLE);
-                    //recipients.setVisibility(View.VISIBLE);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         noOfCollaborator++;
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -509,7 +491,6 @@ public class collaboratorAdd extends AppCompatActivity {
                     mAdapter = new Collaboratoradapter(collaboratorAdd.this,movieList);
                     runLayoutAnimation(recyclerView);
                     recyclerView.setAdapter(mAdapter);
-                    //recyclerView.getAdapter().notifyDataSetChanged();
                     mAdapter.notifyDataSetChanged();
                 }
 
@@ -531,17 +512,12 @@ public class collaboratorAdd extends AppCompatActivity {
     }
     final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            //Toast.makeText(TicketSaveActivity.this, "API called", Toast.LENGTH_SHORT).show();
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             term = autoCompleteTextViewUser.getText().toString();
             if (InternetReceiver.isConnected()) {
                 if (!term.equals("")&&term.length()==3) {
-                    //searchUer.setVisibility(View.GONE);
-                    //int pos = term.lastIndexOf(",");
-                    //term = term.substring(pos + 1, term.length());
                     String newTerm=term;
                     Log.d("newTerm", newTerm);
                     arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
@@ -550,22 +526,10 @@ public class collaboratorAdd extends AppCompatActivity {
                     new FetchCollaborator(newTerm.trim()).execute();
 
                 }
-//            Toast.makeText(collaboratorAdd.this, "term:"+term, Toast.LENGTH_SHORT).show();
                 else {
-                    //arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
-                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
-                    //new FetchCollaborator("s").execute();
-                    //Data data = new Data(0, "No result found");
-                    //stringArrayList.add(data);
-//                autoCompleteTextViewCC.setAdapter(stringArrayAdapterCC);
-//                stringArrayAdapterCC.notifyDataSetChanged();
-//                autoCompleteTextViewCC.setThreshold(0);
-//                autoCompleteTextViewCC.setDropDownWidth(1000);
 
                 }
 
-
-                //buttonsave.setEnabled(true);
             }
         }
 

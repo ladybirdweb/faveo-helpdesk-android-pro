@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +74,7 @@ public class SearchActivity extends AppCompatActivity implements
     Context context;
     TabLayout tabLayout;
     String querry;
+    RelativeLayout relativeLayout;
     public static boolean isShowing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,7 @@ public class SearchActivity extends AppCompatActivity implements
         }
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout= (TabLayout) findViewById(R.id.tabs);
+        relativeLayout= (RelativeLayout) findViewById(R.id.relativeSearch);
         tabLayout.setupWithViewPager(vpPager);
         setupViewPager(vpPager);
         try {
@@ -151,6 +155,7 @@ public class SearchActivity extends AppCompatActivity implements
         imageViewClearText.setVisibility(View.GONE);
         colorList=new ArrayList<>();
         colorList.clear();
+
         suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
         String querry=Prefs.getString("querry",null);
         Log.d("querry",querry);
@@ -159,7 +164,6 @@ public class SearchActivity extends AppCompatActivity implements
         }
         else{
             searchView.setText(querry);
-            //searchView.setCursorVisible(false);
         }
         String recentSuggestion=Prefs.getString("RecentSearh",null);
         try {
@@ -175,14 +179,14 @@ public class SearchActivity extends AppCompatActivity implements
                         Set set = new HashSet(colorList);
                         colorList.clear();
                         colorList.addAll(set);
-                    }
+                        }
+
+
                 }
             }
             }catch (NullPointerException e) {
             e.printStackTrace();
         }
-
-
         searchView.addTextChangedListener(passwordWatcheredittextSubject);
 
         imageViewback.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +212,6 @@ public class SearchActivity extends AppCompatActivity implements
                         break;
                     }
                 }
-                //onBackPressed();
             }
         });
         searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -235,8 +238,6 @@ public class SearchActivity extends AppCompatActivity implements
                     }
                     Prefs.putString("RecentSearh",colorList.toString());
                     Log.d("suggestionss",colorList.toString());
-                    //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
-//                    Log.d("IME SEARCH",searchView.getText().toString());
 
 
                     try {
@@ -270,16 +271,33 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
 
-
         searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus) {
+                    Display display = getWindowManager().getDefaultDisplay();
+
+                    int width = display.getWidth();  // deprecated
+                    Log.d("searchviewinfocus","true");
                     suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
                     searchView.setAdapter(suggestionAdapter);
-                    searchView.setDropDownWidth(1090);
+                    searchView.setDropDownWidth(width);
                     searchView.setThreshold(1);
-//                    searchView.showDropDown();
+                    //searchView.showDropDown();
                 }
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Display display = getWindowManager().getDefaultDisplay();
+                int width = display.getWidth();
+                Log.d("searchviewinfocus","true");
+                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+                searchView.setAdapter(suggestionAdapter);
+                searchView.setDropDownWidth(width);
+                searchView.setThreshold(1);
+                searchView.showDropDown();
             }
         });
 
@@ -291,7 +309,6 @@ public class SearchActivity extends AppCompatActivity implements
                 try {
                     String querry1 = URLEncoder.encode(querry, "utf-8");
                     Prefs.putString("querry1",querry1);
-                    //Log.d("Msg", replyMessage);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -305,8 +322,6 @@ public class SearchActivity extends AppCompatActivity implements
                 }
                 Prefs.putString("RecentSearh",colorList.toString());
                 Log.d("suggestionss",colorList.toString());
-                //Toast.makeText(SearchActivity.this, "Text is :"+searchView.getText().toString(), Toast.LENGTH_SHORT).show();
-//                    Log.d("IME SEARCH",searchView.getText().toString());
 
 
                 try {

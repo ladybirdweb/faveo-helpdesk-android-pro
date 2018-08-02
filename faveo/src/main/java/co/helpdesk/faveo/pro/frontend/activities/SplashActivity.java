@@ -113,11 +113,6 @@ public class SplashActivity extends AppCompatActivity {
 
 
         if (InternetReceiver.isConnected()) {
-//            if (error.equals("True")){
-//                Intent intent=new Intent(SplashActivity.this,LoginActivity.class);
-//                startActivity(intent);
-//                return;
-//            }
             progressDialog.setVisibility(View.VISIBLE);
             new FetchDependency().execute();
             Prefs.putString("came from filter", "false");
