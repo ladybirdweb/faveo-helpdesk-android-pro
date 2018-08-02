@@ -378,7 +378,7 @@
         Once you select the tickets then you have option to assign those tickets or changing the status of the tickets and you can also merge tickets if the tickets belong to the same user.
 
     </string>
-    <string name="multipleStatus">To change status of a ticket you can click on that ticket,on the ticket detail page just click on the three dots on the top right corner of the page
+    <string name="multipleStatus">To change status of a ticket you can go to the ticket detail page,just click on the three dots on the top right corner of the page
     then you will get the option to change the status like open,closed,resolved,move to trash.In case if you want to change the status of multiple tickets then you need to first select those tickets then you can select the three dots on the
     main page and you will get the option to change the status.Just click on the status and the status will be change for the ticket or those tickets.</string>
     <string name="selectingAgent">Select the agent</string>

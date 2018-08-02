@@ -38,6 +38,7 @@ ImageView imageView;
             public void onClick(View view) {
                 Intent intent=new Intent(Dashboard.this,TicketsRelated.class);
                 startActivity(intent);
+                finish();
             }
         });
         content="<b>Requestor/email id</b>: You can enter the mail id if the account already exists in Faveo. If you are a new user then click on the “+” button to create a new account. \n" +
@@ -52,5 +53,12 @@ ImageView imageView;
                 "You can assign this ticket to a particular agent on Faveo Helpdesk." +
                 "After filling out the details click on the check mark at the top right to create a ticket.\n";
         textView.setText(Html.fromHtml(content));
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(Dashboard.this,TicketsRelated.class);
+        startActivity(intent);
+        finish();
     }
 }

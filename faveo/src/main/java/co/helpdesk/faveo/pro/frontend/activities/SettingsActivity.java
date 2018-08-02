@@ -102,6 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, FeedBackActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         //switchCompatCrashReports.setChecked(Prefs.getBoolean("CRASH_REPORT", false));
@@ -109,6 +110,8 @@ public class SettingsActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent=new Intent(SettingsActivity.this,MainActivity.class);
+                startActivity(intent);
                 finish();
 
             }
@@ -118,6 +121,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, LogIn.class);
                 startActivity(intent);
+                finish();
             }
         });
         ticket.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +129,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, TicketsRelated.class);
                 startActivity(intent);
+                finish();
             }
         });
         users.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, CustomersRelated.class);
                 startActivity(intent);
+                finish();
             }
         });
         others.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, OtherFeatures.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -146,7 +153,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
+        Intent intent=new Intent(SettingsActivity.this,MainActivity.class);
+        startActivity(intent);
         finish();
     }
 }

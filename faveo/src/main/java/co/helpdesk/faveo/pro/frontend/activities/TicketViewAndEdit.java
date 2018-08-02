@@ -31,8 +31,16 @@ public class TicketViewAndEdit extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(TicketViewAndEdit.this,TicketsRelated.class);
                 startActivity(intent);
+                finish();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(TicketViewAndEdit.this,TicketsRelated.class);
+        startActivity(intent);
+        finish();
     }
 }

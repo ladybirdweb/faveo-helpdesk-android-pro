@@ -33,7 +33,15 @@ public class SelectingMultipleTickets extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(SelectingMultipleTickets.this,OtherFeatures.class);
                 startActivity(intent);
+                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(SelectingMultipleTickets.this,OtherFeatures.class);
+        startActivity(intent);
+        finish();
     }
 }

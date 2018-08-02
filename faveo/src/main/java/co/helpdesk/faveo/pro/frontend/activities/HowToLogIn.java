@@ -32,8 +32,17 @@ ImageView imageView;
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent=new Intent(HowToLogIn.this,LogIn.class);
+                startActivity(intent);
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(HowToLogIn.this,LogIn.class);
+        startActivity(intent);
+        finish();
     }
 }

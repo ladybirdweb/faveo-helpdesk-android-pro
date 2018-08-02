@@ -36,6 +36,7 @@ ImageView imageView;
             public void onClick(View view) {
                 Intent intent=new Intent(TicketsRelated.this,SettingsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         textViewDashboard.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +44,7 @@ ImageView imageView;
             public void onClick(View view) {
                 Intent intent=new Intent(TicketsRelated.this,Dashboard.class);
                 startActivity(intent);
+                finish();
             }
         });
         textViewGuide.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +52,7 @@ ImageView imageView;
             public void onClick(View view) {
             Intent intent=new Intent(TicketsRelated.this,TicketList.class);
             startActivity(intent);
+            finish();
             }
         });
         textViewEdit.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +60,15 @@ ImageView imageView;
             public void onClick(View view) {
             Intent intent=new Intent(TicketsRelated.this,TicketViewAndEdit.class);
             startActivity(intent);
+            finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(TicketsRelated.this,SettingsActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

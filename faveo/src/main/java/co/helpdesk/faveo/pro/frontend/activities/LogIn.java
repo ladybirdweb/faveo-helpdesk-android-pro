@@ -36,6 +36,7 @@ TextView textView;
             public void onClick(View view) {
             Intent intent=new Intent(LogIn.this,HowToLogIn.class);
             startActivity(intent);
+            finish();
             }
         });
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +44,15 @@ TextView textView;
             public void onClick(View view) {
                 Intent intent=new Intent(LogIn.this,SettingsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(LogIn.this,SettingsActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
