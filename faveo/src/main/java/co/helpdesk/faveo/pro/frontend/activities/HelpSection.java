@@ -47,6 +47,7 @@ public class HelpSection extends AppCompatActivity {
             public void onClick(View view) {
             Intent intent=new Intent(HelpSection.this,LogIn.class);
             startActivity(intent);
+            finish();
             }
         });
 

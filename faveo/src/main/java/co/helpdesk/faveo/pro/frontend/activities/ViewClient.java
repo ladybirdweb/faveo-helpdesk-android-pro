@@ -39,8 +39,16 @@ String text;
             public void onClick(View view) {
                 Intent intent=new Intent(ViewClient.this,CustomersRelated.class);
                 startActivity(intent);
+                finish();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(ViewClient.this,CustomersRelated.class);
+        startActivity(intent);
+        finish();
     }
 }

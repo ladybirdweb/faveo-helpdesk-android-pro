@@ -50,8 +50,16 @@ String ticketlist,ticketsearch;
             public void onClick(View view) {
                 Intent intent=new Intent(TicketList.this,TicketsRelated.class);
                 startActivity(intent);
+                finish();
             }
         });
 
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(TicketList.this,TicketsRelated.class);
+        startActivity(intent);
+        finish();
+}
 }

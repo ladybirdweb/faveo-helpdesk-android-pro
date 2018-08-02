@@ -38,6 +38,7 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
             public void onClick(View view) {
                 Intent intent=new Intent(OtherFeatures.this,SettingsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         textViewMultipleTicket.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +46,7 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
             public void onClick(View view) {
                 Intent intent=new Intent(OtherFeatures.this,SelectingMultipleTickets.class);
                 startActivity(intent);
+                finish();
             }
         });
         textViewChangeStatus.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +54,7 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
             public void onClick(View view) {
             Intent intent=new Intent(OtherFeatures.this,ChangingStatus.class);;
             startActivity(intent);
+                finish();
             }
         });
         textViewAssign.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +62,7 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
             public void onClick(View view) {
         Intent intent=new Intent(OtherFeatures.this,MultipleTicketAssign.class);
         startActivity(intent);
+                finish();
             }
         });
         textViewMerging.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +70,7 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
             public void onClick(View view) {
         Intent intent=new Intent(OtherFeatures.this,MultipleTicketMerge.class);
         startActivity(intent);
+                finish();
             }
         });
         textViewGivingFeedback.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +78,15 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
             public void onClick(View view) {
                 Intent intent=new Intent(OtherFeatures.this,GivingFeedback.class);
                 startActivity(intent);
+                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(OtherFeatures.this,SettingsActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

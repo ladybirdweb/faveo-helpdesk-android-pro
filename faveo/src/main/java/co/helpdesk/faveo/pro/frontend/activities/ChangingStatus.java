@@ -33,7 +33,15 @@ ImageView imageView;
             public void onClick(View view) {
                 Intent intent=new Intent(ChangingStatus.this,OtherFeatures.class);
                 startActivity(intent);
+                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(ChangingStatus.this,OtherFeatures.class);
+        startActivity(intent);
+        finish();
     }
 }
