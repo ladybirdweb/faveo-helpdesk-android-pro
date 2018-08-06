@@ -7,16 +7,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,13 +21,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.vorlonsoft.android.rate.AppRate;
-import com.vorlonsoft.android.rate.OnClickButtonListener;
-import com.vorlonsoft.android.rate.StoreType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,11 +80,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected boolean doubleBackToExitPressedOnce = false;
     //public static boolean isShowing = false;
     ArrayList<String> strings;
-    ArrayList<String> strings1;
     Toolbar toolbar;
     Context context;
-    BottomNavigationView bottomNavigationView;
-    TelephonyManager mTelephony = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -63,31 +63,6 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
-    <style name="Theme.MyCompatTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:windowBackground">@color/winBackground</item>
-        <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="actionBarStyle">@style/ActionBar</item>
-    </style>
-
-    <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/background</item>
-        <item name="background">@color/background</item>
-    </style>
-
-    <color name="winBackground">#98cb4a</color>
-    <color name="background">#f76d3c</color>
-
-    <style name="TextAppearance.MaterialSheetFab.Sheet.Item" parent="">
-        <item name="android:layout_width">@dimen/sheet_width</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/sheet_item_spacing</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:clickable">true</item>
-        <item name="android:textSize">@dimen/sheet_item_textsize</item>
-        <item name="android:textColor">@color/text_black_87</item>
-        <item name="android:drawablePadding">@dimen/sheet_item_image_spacing</item>
-    </style>
-
     <!--<style name="StyledToast">-->
 
     <!--<item name="android:textColor"></item>-->

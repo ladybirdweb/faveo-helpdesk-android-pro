@@ -111,7 +111,6 @@
         <!--/>-->
 
         <TextView
-            android:id="@+id/multipleTicketSelection"
             android:padding="9dp"
             android:lineSpacingExtra="9.2dp"
             android:layout_marginTop="25dp"

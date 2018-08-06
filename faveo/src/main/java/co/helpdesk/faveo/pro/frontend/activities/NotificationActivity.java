@@ -2,13 +2,9 @@ package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-//import android.content.Intent;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-//import android.os.Handler;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -26,7 +22,6 @@ import android.widget.Toast;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
-import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,13 +37,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.adapters.NotificationAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import co.helpdesk.faveo.pro.model.NotificationThread;
 import es.dmoral.toasty.Toasty;
+
+//import android.content.Intent;
+//import android.os.Handler;
 
 /**
  * This activity is for getting the notification.We have used recycler view for showing the

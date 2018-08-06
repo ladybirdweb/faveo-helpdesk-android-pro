@@ -1,15 +1,11 @@
 package co.helpdesk.faveo.pro.backend.api.v1;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,10 +23,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import co.helpdesk.faveo.pro.FaveoApplication;
-import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
-import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
-import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Sumit

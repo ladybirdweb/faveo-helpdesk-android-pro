@@ -1,14 +1,9 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -26,9 +20,6 @@ import com.vorlonsoft.android.rate.OnClickButtonListener;
 import com.vorlonsoft.android.rate.StoreType;
 
 import co.helpdesk.faveo.pro.R;
-import es.dmoral.toasty.Toasty;
-
-import static co.helpdesk.faveo.pro.FaveoApplication.getContext;
 
 public class SettingsActivity extends AppCompatActivity {
     //SwitchCompat switchCompatCrashReports;
@@ -102,7 +93,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, FeedBackActivity.class);
                 startActivity(intent);
-                finish();
+
             }
         });
         //switchCompatCrashReports.setChecked(Prefs.getBoolean("CRASH_REPORT", false));
@@ -110,8 +101,6 @@ public class SettingsActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(SettingsActivity.this,MainActivity.class);
-                startActivity(intent);
                 finish();
 
             }
@@ -121,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, LogIn.class);
                 startActivity(intent);
-                finish();
+
             }
         });
         ticket.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +118,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, TicketsRelated.class);
                 startActivity(intent);
-                finish();
+
             }
         });
         users.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +126,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, CustomersRelated.class);
                 startActivity(intent);
-                finish();
+
             }
         });
         others.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, OtherFeatures.class);
                 startActivity(intent);
-                finish();
+
             }
         });
 
@@ -154,8 +143,6 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Intent intent=new Intent(SettingsActivity.this,MainActivity.class);
-        startActivity(intent);
         finish();
     }
 }

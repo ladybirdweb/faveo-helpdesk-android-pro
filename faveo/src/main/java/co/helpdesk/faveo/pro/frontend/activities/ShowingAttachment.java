@@ -4,27 +4,25 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
-import android.widget.VideoView;
+
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
@@ -36,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLConnection;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import co.helpdesk.faveo.pro.R;
@@ -167,9 +164,9 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
         {
             @Override
             public void onClick(View view) {
-                Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
-                intent1.putExtra("ticket_id", ticketID);
-                startActivity(intent1);
+//                Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
+//                intent1.putExtra("ticket_id", ticketID);
+//                startActivity(intent1);
                 finish();
             }
         });
@@ -224,8 +221,10 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
 
     @Override
     public void onBackPressed() {
-        Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
-        intent1.putExtra("ticket_id", ticketID);
-        startActivity(intent1);
+        finish();
+//        Intent intent1=new Intent(ShowingAttachment.this,TicketDetailActivity.class);
+//        intent1.putExtra("ticket_id", ticketID);
+//        startActivity(intent1);
+
     }
 }

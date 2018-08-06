@@ -1,15 +1,15 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -27,10 +27,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CheckedTextView;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -85,7 +81,7 @@ public class collaboratorAdd extends AppCompatActivity {
     Collaboratoradapter mAdapter;
     RecyclerView list;
     private String ticketID;
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,22 +154,23 @@ public class collaboratorAdd extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    if (Prefs.getString("cameFromTicket", null).equals("true")) {
-                        Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
-                        intent.putExtra("ticket_id", ticketID);
-                        Prefs.putString("cameFromTicket","false");
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
-                        intent.putExtra("ticket_id", ticketID);
-                        startActivity(intent);
-                        finish();
-                    }
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                }
+                collaboratorAdd.super.onBackPressed();
+//                try {
+//                    if (Prefs.getString("cameFromTicket", null).equals("true")) {
+//                        Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+//                        intent.putExtra("ticket_id", ticketID);
+//                        Prefs.putString("cameFromTicket","false");
+//                        startActivity(intent);
+//                        finish();
+//                    } else {
+//                        Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+//                        intent.putExtra("ticket_id", ticketID);
+//                        startActivity(intent);
+//                        finish();
+//                    }
+//                }catch (NullPointerException e){
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -548,22 +545,27 @@ public class collaboratorAdd extends AppCompatActivity {
     };
     @Override
     public void onBackPressed() {
-        try {
-            if (Prefs.getString("cameFromTicket", null).equals("true")) {
-                Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
-                Prefs.putString("cameFromTicket","false");
-                intent.putExtra("ticket_id", ticketID);
-                startActivity(intent);
-                finish();
-            } else {
-                Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
-                intent.putExtra("ticket_id", ticketID);
-                startActivity(intent);
-                finish();
-            }
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+//        Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+//        startActivity(intent);
+        finish();
+
+
+//        try {
+//            if (Prefs.getString("cameFromTicket", null).equals("true")) {
+//                Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+//                Prefs.putString("cameFromTicket","false");
+//                intent.putExtra("ticket_id", ticketID);
+//                startActivity(intent);
+//                finish();
+//            } else {
+//                Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+//                intent.putExtra("ticket_id", ticketID);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
     }
     public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
 

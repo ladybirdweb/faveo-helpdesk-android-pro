@@ -1,51 +1,33 @@
 <resources>
 
 
-    <string name="search_result">Zoekresultaat!</string>
     <string name="search_hint">Zoeken…</string>
-    <string name="menu_search">Zoeken</string>
     <string name="just_now">Net nu</string>
-    <string name="reset_password">Reset wachtwoord</string>
     <string name="empty_username">lege gebruikersnaam</string>
-    <string name="create">creëren</string>
-    <string name="send">sturen</string>
     <string name="add">TOEVOEGEN</string>
     <string name="overdue">Achterstallig</string>
     <string name="required">nodig</string>
     <string name="no_internet_connection">Geen internet verbinding!</string>
     <string name="firstname_maximum_char">FirstName mag niet langer zijn dan 20 karakters</string>
-    <string name="descending">Aflopend</string>
-    <string name="ascending">oplopend</string>
     <string name="sort_by">Sorteer op</string>
-    <string name="due_by_time">Verschuldigd door de tijd</string>
-    <string name="due_by_date">Due op datum</string>
     <string name="gallery">Galerij</string>
     <string name="fill_all_the_details">Vul al de vereiste velden in</string>
     <string name="search">Zoeken</string>
     <string name="unexpected_error">Onverwachte fout</string>
-    <string name="error_creating_ticket">FOUT! Mislukt ticket creëren</string>
     <string name="sub_must_not_be_empty">Onderwerp mag niet leeg zijn</string>
     <string name="msg_must_not_be_empty">Bericht mag niet leeg zijn</string>
-    <string name="you_hvent_picked_anything">Je hebt niet geplukt om het even wat!</string>
-    <string name="client_name">Klantnaam</string>
-    <string name="sorting_type">sortering soort</string>
-    <string name="sort">Soort</string>
     <string name="enter_valid_email">Voer een geldig mail-ID</string>
     <string name="tickets">Kaartjes</string>
-    <string name="customers">Klanten</string>
     <string name="restart_app">Om de veranderingen in de instellingen toe te passen, moet u de app opnieuw te starten!</string>
     <string name="restarting">Het opnieuw beginnen…</string>
     <string name="no_clients">Geen klanten!</string>
-    <string name="no_results_found">Geen resultaten gevonden!</string>
     <string name="access_denied">Toegang geweigerd!</string>
     <string name="please_purchase_faveo">Schaf Faveo PRO editie om deze app te gebruiken.</string>
     <string name="ok">OK</string>
     <string name="error_checking_pro">Fout, terwijl het controleren van toegang tot de Pro Edition!</string>
-    <string name="error">Fout</string>
     <string name="restart_app_tittle">Herstart App?</string>
     <string name="creating_note">Het maken van nota</string>
     <string name="wrong_user_id">verkeerde userID</string>
-    <string name="invalid_cc">ongeldige Cc</string>
     <string name="sending_msg">bericht wordt verzonden</string>
     <string name="internal_notes_posted">Interne nota\'s geplaatst</string>
     <string name="posted_reply">Geplaatst uw antwoord</string>
@@ -81,7 +63,6 @@ Selecteer de code alstublieft</string>
     <string name="user_name">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
     <string name="signing_in">Ondertekening in…</string>
-    <string name="welcome">Welkom!</string>
     <string name="fetching_tickets">ophalen Tickets</string>
     <string name="inbox">Inbox</string>
     <string name="create_ticket">Maak Ticket</string>
@@ -100,26 +81,20 @@ Selecteer de code alstublieft</string>
     <string name="last_name">Achternaam</string>
     <string name="phone">Telefoon</string>
     <string name="helptopic">Help-onderwerpen</string>
-    <string name="sla_plans">SLA plannen</string>
-    <string name="deparment">Afdelingen</string>
     <string name="subject">Subject</string>
     <string name="message">Message</string>
     <string name="priority">Prioriteit</string>
-    <string name="submit">Verzend</string>
 
     <string name="conversation">Conversation</string>
     <string name="detail">Detail</string>
-    <string name="reply">Antwoord</string>
     <string name="internal_note">Interne nota</string>
     <string name="source">Bron</string>
     <string name="created_date">Gemaakt date</string>
-    <string name="last_response_date">Laatste reactie datum</string>
     <string name="due_date">Vervaldatum</string>
     <string name="status">Status</string>
     <string name="save">Save</string>
     <string name="loading">Laden…</string>
     <string name="all_caught_up">Alle tickets geladen</string>
-    <string name="fetching_detail">ophalen detail</string>
     <string name="crash_reports">crashrapporten</string>
     <string name="send_crash_reports">Send crashrapporten</string>
     <string name="website">Website</string>
@@ -136,39 +111,28 @@ Selecteer de code alstublieft</string>
     <string name="forgot_password">Wachtwoord vergeten?</string>
     <string name="sign_in">Aanmelden</string>
     <string name="done_loading">Done loading!</string>
-    <string name="press_again_exit">Druk nogmaals op om af te sluiten!</string>
     <string name="something_went_wrong">Er is iets misgegaan</string>
     <string name="invalid_url">Ongeldige URL</string>
     <string name="oops_no_internet">Oeps! Geen internet</string>
     <string name="error_verifying_url">
 Controleer alstublieft uw Helpdesk-URL</string>
-    <string name="wrong_credentials">Verkeerde referenties</string>
     <string name="connected_to_internet">Aangesloten op internet</string>
     <string name="sry_not_connected_to_internet">Sorry! Niet aangesloten op internet</string>
 
 
-    <string name="please_enter_valid_url">Geef een geldige URL</string>
-
     <string name="update_success">update met succes</string>
     <string name="failed_to_update_ticket">mislukt ticket bij te werken</string>
     <string name="sub_minimum_char">Betreft moet minimaal 5 karakters</string>
-    <string name="please_fill_field">Vul het veld</string>
     <string name="updating_ticket">Bijwerking ticket</string>
     <string name="invalid_email">Ongeldige e-mail</string>
     <string name="firstname_minimum_char">Voornaam moet minimaal 3 karakters</string>
     <string name="fill_firstname">Fill voornaam</string>
-    <string name="fill_lastname">Fill achternaam</string>
     <string name="msg_minimum_char">bericht moet minimaal 10 tekens</string>
 
 
     <string name="creating_ticket">Het creëren van ticket</string>
     <string name="ticket_created_success">Ticket aangemaakt!</string>
     <string name="title_activity_notification">Meldingen</string>
-    <string name="action_search">Zoek</string>
-
-
-
-
 
 
     <string name="not_available">Niet beschikbaar</string>

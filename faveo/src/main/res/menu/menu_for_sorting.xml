@@ -18,7 +18,6 @@
         <!--android:checkable="false"-->
         <!--/>-->
     <item
-        android:id="@+id/action_due"
         android:orderInCategory="100"
         android:title="Due date"
         app:showAsAction="never">
@@ -34,7 +33,6 @@
         </menu>
     </item>
     <item
-        android:id="@+id/action_createdat"
         android:orderInCategory="100"
         android:title="Created at"
         app:showAsAction="never">
@@ -51,7 +49,6 @@
     </item>
 
     <item
-        android:id="@+id/action_ticketnumber"
         android:orderInCategory="100"
         android:title="Ticket number"
         app:showAsAction="never">
@@ -85,7 +82,6 @@
     <!--</item>-->
 
     <item
-        android:id="@+id/action_priority"
         android:orderInCategory="100"
         android:title="Priority"
         app:showAsAction="never">
@@ -101,7 +97,6 @@
         </menu>
     </item>
     <item
-        android:id="@+id/action_updatedat"
         android:orderInCategory="100"
         android:title="Updated at"
         app:showAsAction="never">

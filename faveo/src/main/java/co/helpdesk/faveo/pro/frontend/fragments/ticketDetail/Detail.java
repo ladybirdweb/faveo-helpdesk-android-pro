@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,15 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -50,26 +46,13 @@ import es.dmoral.toasty.Toasty;
  */
 public class Detail extends Fragment {
 
-    //    private InputFilter filter = new InputFilter() {
-//
-//        @Override
-//        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-//
-//            String blockCharacterSet = "~!@#$%^&*()_-;:<>,.[]{}|/+";
-//            if (source != null && blockCharacterSet.contains(("" + source))) {
-//                return "";
-//            }
-//            return null;
-//        }
-//    };
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     TextView tv_helpTopic, tv_dept;
     AsyncTask<String, Void, String> task;
-    TextView textViewTicketNumber, textViewErrorSubject;
     int paddingTop, paddingBottom;
     EditText editTextSubject, editTextFirstName, editTextEmail,
-            editTextLastMessage, editTextDueDate, editTextCreatedDate;
+            editTextDueDate, editTextCreatedDate;
 
     Spinner spinnerSLAPlans, spinnerType, spinnerStatus, spinnerSource,
             spinnerPriority, spinnerHelpTopics;
@@ -164,9 +147,6 @@ public class Detail extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                 JSONObject jsonObject2=jsonObject1.getJSONObject("ticket");
-                //JSONObject jsonObject1 = jsonObject.getJSONObject("result");
-
-//                Prefs.putString("ticketsubject",jsonObject1.getString("title"));
                 String title=jsonObject2.getString("title");
                 Log.d("Title",title);
                 if (title.startsWith("=?UTF-8?Q?") && title.endsWith("?=")) {
@@ -260,7 +240,6 @@ public class Detail extends Fragment {
 
                 try {
                     if (jsonObject2.getString("type_name") != null) {
-                        // spinnerDepartment.setSelection(Integer.parseInt(jsonObject1.getString("dept_id")) - 1);
                         spinnerType.setSelection(getIndex(spinnerType, jsonObject2.getString("type_name")));
                         spinnerType.setOnTouchListener(new View.OnTouchListener() {
                             @Override
@@ -268,7 +247,6 @@ public class Detail extends Fragment {
                                 return true;
                             }
                         });
-                        //spinnerType.setSelection(Integer.parseInt(jsonObject1.getString("type")));
                     }
                 } catch (JSONException | NumberFormatException e) {
                     e.printStackTrace();
@@ -433,7 +411,7 @@ public class Detail extends Fragment {
 
         editTextSubject = (EditText) rootView.findViewById(R.id.editText_subject);
         //editTextSubject.setText(TicketDetailActivity.ticketSubject);
-        textViewErrorSubject = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_subject);
+        //textViewErrorSubject = (TextView) rootView.findViewById(co.helpdesk.faveo.pro.R.id.textView_error_subject);
 
         spinnerPriority = (Spinner) rootView.findViewById(R.id.spinner_priority);
         spinnerPriArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, priorityItems); //selected item will look like a spinner set from XML
@@ -467,7 +445,7 @@ public class Detail extends Fragment {
         //editTextLastMessage = (EditText) rootView.findViewById(R.id.editText_last_message);
         editTextDueDate = (EditText) rootView.findViewById(R.id.editText_due_date);
         editTextCreatedDate = (EditText) rootView.findViewById(R.id.editText_created_date);
-        tv_helpTopic = (TextView) rootView.findViewById(R.id.tv_helpTopic);
+        //tv_helpTopic = (TextView) rootView.findViewById(R.id.tv_helpTopic);
 
         paddingTop = editTextEmail.getPaddingTop();
         paddingBottom = editTextEmail.getPaddingBottom();

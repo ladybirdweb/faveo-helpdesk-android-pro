@@ -12,14 +12,24 @@ public class TicketGlimpse {
     public boolean isTicketOpen;
     public String status;
     public String clientId;
+    public String clinetName;
 
-    public TicketGlimpse(int ticketID, String ticketNumber, String ticketSubject, boolean isTicketOpen,String status,String clientId) {
+    public TicketGlimpse(int ticketID, String ticketNumber, String ticketSubject, boolean isTicketOpen,String status,String clientId,String clinetName) {
         this.ticketID = ticketID;
         this.ticketNumber = ticketNumber;
         this.ticketSubject = ticketSubject;
         this.isTicketOpen = isTicketOpen;
         this.status=status;
+        this.clinetName=clinetName;
         this.clientId=clientId;
+    }
+
+    public String getClinetName() {
+        return clinetName;
+    }
+
+    public void setClinetName(String clinetName) {
+        this.clinetName = clinetName;
     }
 
     public String getClientId() {

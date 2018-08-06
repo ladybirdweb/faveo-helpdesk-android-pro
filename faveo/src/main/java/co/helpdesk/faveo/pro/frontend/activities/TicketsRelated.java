@@ -1,9 +1,9 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,7 +36,7 @@ ImageView imageView;
             public void onClick(View view) {
                 Intent intent=new Intent(TicketsRelated.this,SettingsActivity.class);
                 startActivity(intent);
-                finish();
+
             }
         });
         textViewDashboard.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +44,7 @@ ImageView imageView;
             public void onClick(View view) {
                 Intent intent=new Intent(TicketsRelated.this,Dashboard.class);
                 startActivity(intent);
-                finish();
+
             }
         });
         textViewGuide.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +52,7 @@ ImageView imageView;
             public void onClick(View view) {
             Intent intent=new Intent(TicketsRelated.this,TicketList.class);
             startActivity(intent);
-            finish();
+
             }
         });
         textViewEdit.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +60,7 @@ ImageView imageView;
             public void onClick(View view) {
             Intent intent=new Intent(TicketsRelated.this,TicketViewAndEdit.class);
             startActivity(intent);
-            finish();
+
             }
         });
     }
@@ -69,6 +69,6 @@ ImageView imageView;
     public void onBackPressed() {
         Intent intent=new Intent(TicketsRelated.this,SettingsActivity.class);
         startActivity(intent);
-        finish();
+
     }
 }

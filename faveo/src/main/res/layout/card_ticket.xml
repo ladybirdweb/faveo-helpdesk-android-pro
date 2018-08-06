@@ -248,8 +248,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:layout_toRightOf="@+id/textView_ticket_id"
-            android:background="@color/grey_500"
-            android:id="@+id/view4" />
+            android:background="@color/grey_500" />
 
         <ImageView
             android:id="@+id/agentAssigned"

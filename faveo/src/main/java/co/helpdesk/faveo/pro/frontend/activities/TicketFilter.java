@@ -2,26 +2,16 @@ package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,11 +21,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.Spinner;
-import android.widget.Toast;
+
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
@@ -44,14 +32,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.fragments.tickets.DueByAsc;
 import co.helpdesk.faveo.pro.frontend.fragments.tickets.InboxTickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
-import es.dmoral.toasty.Toasty;
 
 public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFragmentInteractionListener{
     MultiAutoCompleteTextView autoDepartment,autoSource,autoPriority,autoType;

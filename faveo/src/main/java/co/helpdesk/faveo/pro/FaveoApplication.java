@@ -8,13 +8,14 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
-//import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.File;
 
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import io.fabric.sdk.android.Fabric;
+
+//import com.crashlytics.android.ndk.CrashlyticsNdk;
 
 /**
  * In this class we are adding fabric to our application.

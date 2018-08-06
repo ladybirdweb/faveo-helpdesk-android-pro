@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -24,9 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,15 +43,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import agency.tango.android.avatarview.IImageLoader;
-import agency.tango.android.avatarview.loader.PicassoLoader;
-import agency.tango.android.avatarview.views.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.fragments.client.ClosedTickets;
 import co.helpdesk.faveo.pro.frontend.fragments.client.OpenTickets;
@@ -318,6 +311,39 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     phone = requester.getString("phone_number");
                 mobile=requester.getString("mobile");
                 String clientId=requester.getString("id");
+
+                if (requester.getString("first_name").equals("")&& requester.getString("last_name").equals("")){
+                    clientName= requester.getString("user_name");
+                }
+                else if ((requester.getString("first_name").equals("null")||
+                        requester.getString("first_name").equals(""))&&
+                        (requester.getString("last_name").equals("null")||requester.
+                                getString("last_name").equals(""))){
+                    clientName=requester.getString("user_name");
+                }
+
+
+
+                else if (!requester.getString("first_name").equals("")&&
+                        requester.getString("last_name").equals("")){
+                    clientName=requester.getString("first_name");
+                }
+
+
+
+                else if (requester.getString("first_name").equals("")&&
+                        !requester.getString("last_name").equals("")){
+                    clientName=requester.getString("last_name");
+                }
+
+
+
+                else {
+                    clientName = requester.getString("first_name") + " " + requester.getString("last_name");
+                }
+
+
+
                 if (phone.equals("null")||phone.equals(" ")||phone.equals("Not available")||phone.equals("")){
                     textViewClientPhone.setVisibility(View.GONE);
                 }else {
@@ -356,6 +382,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 JSONArray jsonArray = jsonObject.getJSONArray("tickets");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     int ticketID = Integer.parseInt(jsonArray.getJSONObject(i).getString("id"));
+
                     boolean isOpen = true;
                     String ticketNumber = jsonArray.getJSONObject(i).getString("ticket_number");
                     String ticketSubject = jsonArray.getJSONObject(i).getString("title");
@@ -364,13 +391,13 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     try {
                         isOpen = jsonArray.getJSONObject(i).getString("ticket_status_name").equals("Open");
                         if (isOpen)
-                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId));
+                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId,clientName));
                         else
-                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status,clientId));
+                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status,clientId,clientName));
                     } catch (Exception e) {
-                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId));
+                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId,clientName));
                     }
-                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status,clientId));
+                    listTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, isOpen,status,clientId,clientName));
                 }
             } catch (JSONException e) {
                 Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();

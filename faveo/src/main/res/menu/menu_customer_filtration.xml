@@ -47,7 +47,6 @@
     </item>
 
     <item
-        android:id="@+id/role"
         android:orderInCategory="100"
         android:title="Role"
         app:showAsAction="never">
