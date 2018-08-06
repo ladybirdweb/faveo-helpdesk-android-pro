@@ -33,22 +33,6 @@ public class TicketOverview {
         isChecked = checked;
     }
 
-//    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketBubble, String ticketStatus, String ticketPriorityColor, String ticketAttachments, String dueDate, String placeholder, boolean isChecked) {
-//        this.ticketID = ticketID;
-//        this.clientPicture = clientPicture;
-//        this.ticketNumber = ticketNumber;
-//        this.clientName = clientName;
-//        this.ticketSubject = ticketSubject;
-//        this.ticketTime = ticketTime;
-//        this.ticketBubble = ticketBubble;
-//        this.ticketStatus = ticketStatus;
-//        this.ticketPriorityColor = ticketPriorityColor;
-//        this.ticketAttachments = ticketAttachments;
-//        this.dueDate = dueDate;
-//        this.placeholder = placeholder;
-//        this.isChecked = isChecked;
-//    }
-
     public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName) {
         this.ticketID = ticketID;
         this.clientPicture = clientPicture;

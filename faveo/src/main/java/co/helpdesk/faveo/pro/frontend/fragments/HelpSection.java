@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import co.helpdesk.faveo.pro.R;
@@ -19,7 +18,6 @@ import co.helpdesk.faveo.pro.frontend.activities.FeedBackActivity;
 import co.helpdesk.faveo.pro.frontend.activities.LogIn;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.OtherFeatures;
-import co.helpdesk.faveo.pro.frontend.activities.SettingsActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketsRelated;
 
 /**

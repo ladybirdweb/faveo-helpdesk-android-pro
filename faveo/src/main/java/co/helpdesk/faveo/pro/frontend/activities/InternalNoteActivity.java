@@ -1,15 +1,13 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,7 +27,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import es.dmoral.toasty.Toasty;
 
@@ -40,7 +37,6 @@ public class InternalNoteActivity extends AppCompatActivity {
     public static String ticketID;
     ProgressDialog progressDialog;
     String option;
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,9 +98,9 @@ public class InternalNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
-                intent1.putExtra("ticket_id", ticketID);
-                startActivity(intent1);
+//                Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+//                intent1.putExtra("ticket_id", ticketID);
+//                startActivity(intent1);
             }
         });
         buttonCreate.setOnClickListener(new View.OnClickListener() {
@@ -203,8 +199,8 @@ public class InternalNoteActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-        Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
-        intent1.putExtra("ticket_id", ticketID);
-        startActivity(intent1);
+//        Intent intent1=new Intent(InternalNoteActivity.this,TicketDetailActivity.class);
+//        intent1.putExtra("ticket_id", ticketID);
+//        startActivity(intent1);
     }
 }

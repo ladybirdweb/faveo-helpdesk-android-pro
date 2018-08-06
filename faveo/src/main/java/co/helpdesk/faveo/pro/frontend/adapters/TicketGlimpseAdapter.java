@@ -58,10 +58,11 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
                 Prefs.putString("ticketThread","");
                 Prefs.putString("TICKETid",ticketViewHolder.textViewTicketID.getText().toString());
                 intent.putExtra("ticket_id", ticketViewHolder.textViewTicketID.getText().toString());
-                intent.putExtra("ticket_number", ticketViewHolder.textViewTicketNumber.getText().toString());
+                intent.putExtra("ticket_status",ticketGlimpse.status);
+                intent.putExtra("ticket_number", ticketGlimpse.ticketNumber);
                 intent.putExtra("ticket_opened_by", clientName);
                 Prefs.putString("ticketstatus",ticketGlimpse.getStatus());
-                intent.putExtra("ticket_subject", ticketViewHolder.textViewSubject.getText().toString());
+                intent.putExtra("ticket_subject", ticketGlimpse.ticketSubject);
                 v.getContext().startActivity(intent);
             }
         });

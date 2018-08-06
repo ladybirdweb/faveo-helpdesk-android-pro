@@ -61,11 +61,12 @@ import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
 import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
-//import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 import es.dmoral.toasty.Toasty;
+
+//import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 
 public class MyTickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -1097,7 +1098,10 @@ public class MyTickets extends Fragment {
                         Prefs.putString("TICKETid", ticketOverview.ticketID + "");
                         Prefs.putString("ticketId",ticketOverview.ticketID+"");
                         Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
+
+                        intent.putExtra("priority_color",ticketOverview.ticketPriorityColor);
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+                        intent.putExtra("ticket_status",ticketOverview.ticketStatus);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);
                         intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
                         Log.d("clicked", "onRecyclerView");

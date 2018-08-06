@@ -1,26 +1,18 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,11 +20,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,14 +38,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 
-import butterknife.BindView;
-import co.helpdesk.faveo.pro.Constants;
-import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -310,10 +294,11 @@ public class TicketSaveActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke YES event
                             //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+
+//                            Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//                            intent1.putExtra("ticket_id", ticketID);
+//                            startActivity(intent1);
                             finish();
-                            Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                            intent1.putExtra("ticket_id", ticketID);
-                            startActivity(intent1);
                         }
                     });
 
@@ -331,9 +316,9 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
                 else{
 
-                        Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                        intent1.putExtra("ticket_id", ticketID);
-                        startActivity(intent1);
+//                        Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//                        intent1.putExtra("ticket_id", ticketID);
+//                        startActivity(intent1);
                         finish();
                 }
             }
@@ -834,9 +819,9 @@ public class TicketSaveActivity extends AppCompatActivity {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                     //finishAffinity();
-                    Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-                    intent1.putExtra("ticket_id", ticketID);
-                    startActivity(intent1);
+//                    Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//                    intent1.putExtra("ticket_id", ticketID);
+//                    startActivity(intent1);
                     finish();
                 }
             });
@@ -855,9 +840,9 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
         else{
             //finishAffinity();
-            Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
-            intent1.putExtra("ticket_id", ticketID);
-            startActivity(intent1);
+//            Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//            intent1.putExtra("ticket_id", ticketID);
+//            startActivity(intent1);
             finish();
         }
 

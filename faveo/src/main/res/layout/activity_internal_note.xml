@@ -108,7 +108,6 @@
             />
         </RelativeLayout>
     <LinearLayout
-        android:id="@+id/section_reply"
         android:layout_width="match_parent"
         android:layout_height="490dp"
         android:padding="7dp"

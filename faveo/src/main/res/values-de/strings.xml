@@ -1,51 +1,33 @@
 <resources>
 
-    <string name="search_result">Suchergebnis!</string>
     <string name="search_hint">Suche…</string>
-    <string name="menu_search">Suche</string>
     <string name="just_now">Gerade jetzt</string>
-    <string name="reset_password">Passwort zurücksetzen</string>
     <string name="empty_username">Benutzernamen leeren</string>
-    <string name="create">Erstellen</string>
-    <string name="send">Senden</string>
     <string name="add">HINZUFÜGEN</string>
     <string name="firstname_maximum_char">
 FirstName darf 20 Zeichen nicht überschreiten</string>
     <string name="overdue">Überfällig</string>
     <string name="required">Erforderlich</string>
     <string name="no_internet_connection">Keine Internetverbindung!</string>
-    <string name="descending">Absteigend</string>
-    <string name="ascending">Aufsteigend</string>
     <string name="sort_by">Sortiere nach</string>
-    <string name="due_by_time">Nach zeit</string>
     <string name="fill_all_the_details">Bitte füllen Sie alle Pflichtfelder aus</string>
-    <string name="due_by_date">Fälligkeit nach Datum</string>
     <string name="gallery">Galerie</string>
     <string name="search">Suche</string>
     <string name="unexpected_error">Unerwarteter Fehler</string>
-    <string name="error_creating_ticket">FEHLER! Fehler beim Erstellen von Ticket</string>
     <string name="sub_must_not_be_empty">Betreff darf nicht leer sein</string>
     <string name="msg_must_not_be_empty">Nachricht darf nicht leer sein</string>
-    <string name="you_hvent_picked_anything">Du hast nichts ausgewählt!</string>
-    <string name="client_name">Kundenname</string>
-    <string name="sorting_type">Sortierart</string>
-    <string name="sort">Sortieren</string>
     <string name="enter_valid_email">Geben Sie eine gültige E-Mail-ID ein</string>
     <string name="tickets">Tickets</string>
-    <string name="customers">Kunden</string>
     <string name="restart_app">Um die Änderungen in den Einstellungen zu übernehmen, müssen Sie die App neu starten!</string>
     <string name="restarting">Neu starten…</string>
     <string name="no_clients">Keine Kunden!</string>
-    <string name="no_results_found">Keine Ergebnisse gefunden!</string>
     <string name="access_denied">Zugriff abgelehnt!</string>
     <string name="please_purchase_faveo">Bitte kaufen Sie die Faveo PRO Edition, um diese App zu nutzen.</string>
     <string name="ok">OK</string>
     <string name="error_checking_pro">Fehler beim Überprüfen des Zugriffs auf Pro Edition!</string>
-    <string name="error">Fehler</string>
     <string name="restart_app_tittle">App starten?</string>
     <string name="creating_note">Notiz erstellen</string>
     <string name="wrong_user_id">Falsche UserID</string>
-    <string name="invalid_cc">Ungültiger Cc</string>
     <string name="sending_msg">Schicke Nachricht</string>
     <string name="internal_notes_posted">Interne Notizen veröffentlicht</string>
     <string name="posted_reply">Veröffentlicht Ihre Antwort</string>
@@ -78,7 +60,6 @@ Bitte wählen Sie eine Priorität aus</string>
     <string name="user_name">Benutzername</string>
     <string name="password">Kennwort</string>
     <string name="signing_in">Anmeldung…</string>
-    <string name="welcome">Willkommen!</string>
     <string name="fetching_tickets">Tickets abholen</string>
     <string name="inbox">Posteingang</string>
     <string name="create_ticket">Ticket erstellen</string>
@@ -97,26 +78,20 @@ Bitte wählen Sie eine Priorität aus</string>
     <string name="last_name">Nachname</string>
     <string name="phone">Telefon</string>
     <string name="helptopic">Hilfethemen</string>
-    <string name="sla_plans">SLA-Pläne</string>
-    <string name="deparment">Abteilungen</string>
     <string name="subject">Gegenstand</string>
     <string name="message">Nachricht</string>
     <string name="priority">Priorität</string>
-    <string name="submit">Abschicken</string>
 
     <string name="conversation">Gespräch</string>
     <string name="detail">Ausschnitt</string>
-    <string name="reply">Antwort</string>
     <string name="internal_note">Interner Hinweis</string>
     <string name="source">Quelle</string>
     <string name="created_date">Erstellungsdatum</string>
-    <string name="last_response_date">Letztes Ansprechdatum</string>
     <string name="due_date">Fälligkeit</string>
     <string name="status">Status</string>
     <string name="save">Speichern</string>
     <string name="loading">Laden…</string>
     <string name="all_caught_up">Alle geladenen Karten</string>
-    <string name="fetching_detail">Detail abrufen</string>
     <string name="crash_reports">Absturzberichte</string>
     <string name="send_crash_reports">Absturzberichte senden</string>
     <string name="website">Website</string>
@@ -132,34 +107,27 @@ Bitte wählen Sie eine Priorität aus</string>
     <string name="forgot_password">Passwort vergessen?</string>
     <string name="sign_in">Melden Sie sich an</string>
     <string name="done_loading">Fertig geladen!</string>
-    <string name="press_again_exit">Drücken Sie zum Beenden erneut!</string>
     <string name="something_went_wrong">Etwas ist schief gelaufen</string>
     <string name="invalid_url">Ungültige URL</string>
     <string name="oops_no_internet">Hoppla! Kein Internet</string>
     <string name="error_verifying_url">
 Bitte überprüfen Sie Ihre Helpdesk-URL</string>
-    <string name="wrong_credentials">Falsche Anmeldeinformationen</string>
     <string name="connected_to_internet">Verbindung zum Internet</string>
     <string name="sry_not_connected_to_internet">Entschuldigung! Nicht mit Internet verbunden</string>
 
 
-    <string name="please_enter_valid_url">Geben Sie eine gültige URL ein</string>
-
     <string name="update_success">Update erfolgreich</string>
     <string name="failed_to_update_ticket">Ticket konnte nicht aktualisiert werden</string>
     <string name="sub_minimum_char">Das Thema sollte mindestens 5 Zeichen lang sein</string>
-    <string name="please_fill_field">Bitte füllen Sie das Feld aus</string>
     <string name="updating_ticket">Ticket aktualisieren</string>
     <string name="invalid_email">Ungültige E-Mail-Adresse</string>
     <string name="firstname_minimum_char">Der Vorname sollte mindestens 3 Zeichen lang sein</string>
     <string name="fill_firstname">Vorname ausfüllen</string>
-    <string name="fill_lastname">Nachname ausfüllen</string>
     <string name="msg_minimum_char">Die Meldung sollte mindestens 10 Zeichen lang sein</string>
 
     <string name="creating_ticket">Ticket erstellen</string>
     <string name="ticket_created_success">Ticket erfolgreich erstellt!</string>
     <string name="title_activity_notification">Benachrichtigungen</string>
-    <string name="action_search">Suche</string>
     <string name="select_source">Please select some Source</string>
 
 

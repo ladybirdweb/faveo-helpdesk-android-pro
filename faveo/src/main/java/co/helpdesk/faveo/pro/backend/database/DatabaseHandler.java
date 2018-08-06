@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import co.helpdesk.faveo.pro.model.TicketDetail;
-import co.helpdesk.faveo.pro.model.TicketOverview;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import co.helpdesk.faveo.pro.model.TicketDetail;
+import co.helpdesk.faveo.pro.model.TicketOverview;
 
 /**
  * Created by Sumit

@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -84,16 +85,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!-- <activity -->
-        <!-- android:name=".frontend.activities.ForgotPasswordActivity" -->
-        <!-- android:label="@string/title_activity_forgot_password" -->
-        <!-- android:launchMode="singleTask" -->
-        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".frontend.activities.TicketSaveActivity"
             android:label="@string/title_activity_save"
-            android:launchMode="singleTask"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            />
         <activity
             android:name=".frontend.activities.SplashActivity"
             android:launchMode="singleTask"
@@ -102,9 +98,7 @@
         <activity
             android:name=".frontend.activities.TicketDetailActivity"
             android:label="@string/title_activity_ticket_detail"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:noHistory="true"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -181,18 +175,14 @@
         <provider
             android:name=".frontend.MySuggestionProvider"
             android:authorities="co.helpdesk.faveo.pro.frontend.MySuggestionProvider" />
-
-        <!-- <activity -->
-        <!-- android:name=".frontend.activities.TicketSaveActivity" -->
-        <!-- android:label="@string/title_activity_ticket_save" -->
-        <!-- android:theme="@style/MyMaterialTheme"></activity> -->
         <activity
             android:name=".frontend.activities.RegisterUser"
             android:label="@string/title_activity_register_user"
             android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".frontend.activities.collaboratorAdd"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
         <activity android:name=".frontend.activities.TicketFilter" />
         <activity android:name=".frontend.activities.EditCustomer" />
         <activity
@@ -201,20 +191,60 @@
             android:theme="@style/MyMaterialTheme" />
         <activity android:name=".frontend.activities.HelpSection" />
         <activity android:name=".frontend.activities.LogIn" />
-        <activity android:name=".frontend.activities.SettingsActivity" />
-        <activity android:name=".frontend.activities.HowToLogIn" />
-        <activity android:name=".frontend.activities.TicketsRelated" />
-        <activity android:name=".frontend.activities.Dashboard" />
-        <activity android:name=".frontend.activities.TicketList" />
-        <activity android:name=".frontend.activities.TicketViewAndEdit" />
-        <activity android:name=".frontend.activities.CustomersRelated" />
-        <activity android:name=".frontend.activities.OtherFeatures" />
-        <activity android:name=".frontend.activities.ViewClient" />
-        <activity android:name=".frontend.activities.CustomerFiltration" />
-        <activity android:name=".frontend.activities.SelectingMultipleTickets" />
-        <activity android:name=".frontend.activities.ChangingStatus" />
-        <activity android:name=".frontend.activities.MultipleTicketAssign" />
-        <activity android:name=".frontend.activities.MultipleTicketMerge" />
+        <activity android:name=".frontend.activities.SettingsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name=".frontend.activities.HowToLogIn"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".frontend.activities.TicketsRelated"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.Dashboard"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".frontend.activities.TicketList"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.TicketViewAndEdit"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.CustomersRelated"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.OtherFeatures"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.ViewClient"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.CustomerFiltration"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".frontend.activities.SelectingMultipleTickets"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".frontend.activities.ChangingStatus"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.MultipleTicketAssign"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.MultipleTicketMerge"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".frontend.activities.FeedBackActivity"
             android:launchMode="singleTask"
@@ -227,7 +257,6 @@
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".frontend.activities.TicketReplyActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity android:name=".frontend.activities.InternalNoteActivity" />

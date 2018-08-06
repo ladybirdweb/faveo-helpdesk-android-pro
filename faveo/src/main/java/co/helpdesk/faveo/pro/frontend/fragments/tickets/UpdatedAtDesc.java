@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,12 +60,12 @@ import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
 import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
-//import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
-import co.helpdesk.faveo.pro.frontend.adapters.TicketOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.TicketOverview;
 import es.dmoral.toasty.Toasty;
+
+//import co.helpdesk.faveo.pro.frontend.activities.TicketMergeActtivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -1317,7 +1315,9 @@ public class UpdatedAtDesc extends Fragment {
                         Prefs.putString("TICKETid",ticketOverview.ticketID+"");
                         Prefs.putString("ticketId",ticketOverview.ticketID+"");
                         Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
+                        intent.putExtra("priority_color",ticketOverview.ticketPriorityColor);
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+                        intent.putExtra("ticket_status",ticketOverview.ticketStatus);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);
                         intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
                         Log.d("clicked","onRecyclerView");

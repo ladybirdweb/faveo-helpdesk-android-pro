@@ -7,9 +7,6 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.util.Arrays;
-
 import co.helpdesk.faveo.pro.Constants;
 
 /**

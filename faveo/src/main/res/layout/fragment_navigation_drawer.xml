@@ -104,7 +104,6 @@
                 android:background="@color/colorAccent">
 
                 <ImageView
-                    android:id="@+id/createImage"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="22dp"
@@ -112,7 +111,6 @@
                     android:tint="@color/grey_500"/>
 
                 <TextView
-                    android:id="@+id/createTicket"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="sans-serif-bold"

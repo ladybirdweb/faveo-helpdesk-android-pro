@@ -1,14 +1,11 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,7 +45,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,15 +58,12 @@ import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
-import co.helpdesk.faveo.pro.frontend.activities.LoginActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MultiAssigningActivity;
 import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
 import co.helpdesk.faveo.pro.frontend.activities.SearchActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketFilter;
-import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.TicketOverview;
@@ -168,7 +160,6 @@ public class InboxTickets extends Fragment {
             } else if (assigned.equals("No")) {
                 unassigned = 0;
                 Log.d("unassigned",""+unassigned);
-                //Toast.makeText(getActivity(), "unassigned", Toast.LENGTH_SHORT).show();
 
             } else if (assigned.equals("null")) {
                 unassigned = 2;
@@ -1858,7 +1849,9 @@ public class InboxTickets extends Fragment {
                         Prefs.putString("TICKETid", ticketOverview.ticketID + "");
                         Prefs.putString("ticketId",ticketOverview.ticketID+"");
                         Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
+                        intent.putExtra("priority_color",ticketOverview.ticketPriorityColor);
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+                        intent.putExtra("ticket_status",ticketOverview.ticketStatus);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);
                         intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
                         Log.d("clicked", "onRecyclerView");

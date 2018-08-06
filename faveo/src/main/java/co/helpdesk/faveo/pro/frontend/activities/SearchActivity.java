@@ -1,6 +1,5 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,16 +13,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,13 +28,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
-
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -48,16 +40,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.frontend.adapters.MyPagerAdapter;
-import co.helpdesk.faveo.pro.frontend.adapters.TabsPagerAdapter;
 import co.helpdesk.faveo.pro.frontend.fragments.TicketFragment;
 import co.helpdesk.faveo.pro.frontend.fragments.UsersFragment;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
-import co.helpdesk.faveo.pro.model.Data;
 
 
 public class SearchActivity extends AppCompatActivity implements
@@ -196,8 +184,8 @@ public class SearchActivity extends AppCompatActivity implements
                 Log.d("cameFromNotification",option);
                 switch (option) {
                     case "false": {
-                        Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
-                        startActivity(intent1);
+//                        Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
+//                        startActivity(intent1);
                         finish();
                         break;
                     }
@@ -206,8 +194,8 @@ public class SearchActivity extends AppCompatActivity implements
                         break;
                     }
                     default: {
-                        Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
-                        startActivity(intent1);
+//                        Intent intent1=new Intent(SearchActivity.this,MainActivity.class);
+//                        startActivity(intent1);
                         finish();
                         break;
                     }
