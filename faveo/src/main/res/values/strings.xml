@@ -355,6 +355,11 @@
     <string name="user_collaborator">Are you sure you want to remove this user as collaborator?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="version">Version</string>
+    <string name="fullControl">This is the hamburger icon,from here you can control the app.You will get option to create ticket,access the settings and support page and also you will get option to log out from the app.</string>
+    <string name="searchIcon">This is a search icon</string>
+    <string name="searchcriteria">From here you will be able to search ticket and user in your helpdesk.</string>
+    <string name="educated">Educated enough,let\'s explore the app</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>

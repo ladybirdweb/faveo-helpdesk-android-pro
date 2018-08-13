@@ -1369,9 +1369,7 @@ public class InboxTickets extends Fragment {
         }
 
         protected String doInBackground(String... urls) {
-//            if (nextPageURL.equals("null")) {
-//                return "all done";
-//            }
+
 
             String result = new Helpdesk().ticketFiltration(url, page);
 
@@ -1552,6 +1550,11 @@ public class InboxTickets extends Fragment {
             checked_items.clear();
             ticketOverviewAdapter.notifyDataSetChanged();
             mActionMode.finish();
+            if (checked_items.isEmpty()){
+                Log.d("arrayIsEmpty","true");
+                recyclerView.setAdapter(ticketOverviewAdapter);
+                ticketOverviewAdapter.notifyDataSetChanged();
+            }
             //ticketOverviewAdapter.notifyDataSetChanged();
         }catch (NullPointerException e){
             e.printStackTrace();

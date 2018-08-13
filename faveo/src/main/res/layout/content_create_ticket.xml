@@ -119,6 +119,7 @@
                         android:layout_height="50dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
+                        android:maxLines="3"
                         android:background="@android:color/transparent"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName"

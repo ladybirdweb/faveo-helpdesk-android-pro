@@ -331,8 +331,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke YES event
-                            Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
-                            startActivity(intent);
                             finish();
                         }
                     });

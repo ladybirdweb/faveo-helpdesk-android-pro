@@ -263,7 +263,6 @@
         <activity android:name=".frontend.activities.ShowingAttachment" />
         <activity android:name=".frontend.activities.HelpingActivity" />
         <activity android:name=".frontend.activities.collaboratorcreate"></activity>
-
         <!--<meta-data-->
         <!--android:name="io.fabric.ApiKey"-->
         <!--android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />-->

@@ -42,6 +42,7 @@
             android:layout_toEndOf="@+id/dthumbnail"
             android:layout_toRightOf="@+id/dthumbnail"
             android:ellipsize="end"
+            android:textColor="@color/grey_500"
             android:maxLines="2"
             android:text="@string/dummy_sub"
             android:textSize="14sp" />

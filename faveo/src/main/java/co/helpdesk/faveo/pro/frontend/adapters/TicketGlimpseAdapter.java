@@ -61,7 +61,7 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
                 intent.putExtra("ticket_status",ticketGlimpse.status);
                 intent.putExtra("ticket_number", ticketGlimpse.ticketNumber);
                 intent.putExtra("ticket_opened_by", clientName);
-                Prefs.putString("ticketstatus",ticketGlimpse.getStatus());
+                Prefs.putString("ticketstatus",ticketGlimpse.status);
                 intent.putExtra("ticket_subject", ticketGlimpse.ticketSubject);
                 v.getContext().startActivity(intent);
             }

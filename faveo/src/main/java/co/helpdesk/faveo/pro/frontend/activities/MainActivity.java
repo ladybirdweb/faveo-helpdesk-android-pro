@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -13,7 +16,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +27,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,6 +40,7 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.SharedPreference;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
@@ -82,9 +92,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     ArrayList<String> strings;
     Toolbar toolbar;
     Context context;
+    private SharedPreference sharedPreferenceObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceObj = new SharedPreference(MainActivity.this);
         Fabric.with(this, new Crashlytics());
         overridePendingTransition(0, 0);
         setContentView(R.layout.activity_main);
@@ -97,26 +109,28 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.faveo));
         ButterKnife.bind(this);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        Prefs.putString("querry1","null");
-        strings=new ArrayList<>();
-        strings.add(0,"Sort by");
-        strings.add(1,"Due by time");
-        strings.add(2,"Priority");
-        strings.add(3,"Created at");
-        strings.add(4,"Updated at");
-        strings.add(5,"Ticket title");
-        strings.add(6,"Status");
+        Prefs.putString("querry1", "null");
+        strings = new ArrayList<>();
+        strings.add(0, "Sort by");
+        strings.add(1, "Due by time");
+        strings.add(2, "Priority");
+        strings.add(3, "Created at");
+        strings.add(4, "Updated at");
+        strings.add(5, "Ticket title");
+        strings.add(6, "Status");
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.inflateMenu(R.menu.menu_inbox);
+        mToolbar.setNavigationIcon(R.drawable.ic_action_attach_file);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Prefs.putString("querry1","null");
+        Prefs.putString("querry1", "null");
 
 
         FragmentDrawer drawerFragment = (FragmentDrawer)
@@ -138,8 +152,102 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.commit();
         setActionBarTitle(getResources().getString(R.string.inbox));
 
+        final Display display = getWindowManager().getDefaultDisplay();
+        // Load our little droid guy
+        final Drawable droid = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+        // Tell our droid buddy where we want him to appear
+        final Rect droidTarget = new Rect(0, 0, droid.getIntrinsicWidth() * 2, droid.getIntrinsicHeight() * 2);
+        // Using deprecated methods makes you look way cool
+        droidTarget.offset(display.getWidth() / 2, display.getHeight() / 2);
+
+        // We have a sequence of targets, so lets build it!
+        final TapTargetSequence sequence = new TapTargetSequence(this)
+                .targets(
+
+                        // This tap target will target the back button, we just need to pass its containing toolbar
+                        TapTarget.forToolbarNavigationIcon(mToolbar, getString(R.string.fullControl)).id(1)
+                                .dimColor(android.R.color.black)
+                                .outerCircleColor(R.color.faveo)
+                                .targetCircleColor(android.R.color.white)
+                                .transparentTarget(true)
+                                .textColor(android.R.color.white).cancelable(false),
+                        // Likewise, this tap target will target the search button
+                        TapTarget.forToolbarMenuItem(mToolbar, R.id.actionsearch, getString(R.string.searchIcon), getString(R.string.searchcriteria))
+                                .dimColor(android.R.color.black)
+                                .outerCircleColor(R.color.faveo)
+                                .targetCircleColor(android.R.color.white)
+                                .transparentTarget(true)
+                                .textColor(android.R.color.white)
+                                .id(2).cancelable(false)
+//                        TapTarget.forToolbarMenuItem(mToolbar, R.id.action_noti, "This is a notification icon", "You will get all the notification in your helpdesk from here.")
+//                                .dimColor(android.R.color.black)
+//                                .outerCircleColor(R.color.faveo)
+//                                .targetCircleColor(android.R.color.white)
+//                                .transparentTarget(true)
+//                                .textColor(android.R.color.white)
+//                                .id(3).cancelable(false)
+                )
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        //((TextView) findViewById(R.id.educated)).setText("Congratulations! You're educated now!");
+                        android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage(R.string.educated);
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+                    }
+                });
+        if (sharedPreferenceObj.getApp_runFirst().equals("FIRST")) {
+            // That's mean First Time Launch
+            // After your Work , SET Status NO
+            TapTargetView.showFor(this,                 // `this` is an Activity
+                    TapTarget.forToolbarMenuItem(mToolbar,R.id.action_noti, "This is a notification icon", "You will get all the notification in your helpdesk from here.e")
+                            // All options below are optional
+                            .dimColor(android.R.color.black)
+                            .outerCircleColor(R.color.faveo)
+                            .targetCircleColor(android.R.color.white)
+                            .textColor(android.R.color.white).cancelable(false),                  // Specify the target radius (in dp)
+                    new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);      // This call is optional
+                            sequence.start();
+                        }
+                    });
+
+            sharedPreferenceObj.setApp_runFirst("NO");
+        } else {
+
+            // App is not First Time Launch
 
 
+        }
     }
 
 
