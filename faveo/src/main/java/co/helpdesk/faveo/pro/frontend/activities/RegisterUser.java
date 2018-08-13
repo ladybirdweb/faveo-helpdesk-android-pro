@@ -81,8 +81,6 @@ public class RegisterUser extends AppCompatActivity {
                 String company=editTextCompany.getText().toString();
 
 
-                //countrycode=countryCodePicker.getSelectedCountryCode();
-
                 if (email.length()==0&&firstname.length()==0&&lastname.length()==0){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();

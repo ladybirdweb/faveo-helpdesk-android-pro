@@ -41,7 +41,6 @@ public class MultiAssigningActivity extends AppCompatActivity {
     AutoCompleteTextView autoCompleteTextViewselectAssignee;
     ImageView imageViewback,buttonAssign;
     ArrayList<Data> staffItems;
-    ArrayList<Data> staffitemsauto;
     ArrayAdapter<Data> autoAssignAdapyter;
     int agentId;
     ProgressDialog progressDialog;
@@ -107,7 +106,8 @@ public class MultiAssigningActivity extends AppCompatActivity {
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
+                startActivity(intent);
             }
         });
         buttonAssign.setOnClickListener(new View.OnClickListener() {
@@ -201,19 +201,8 @@ public class MultiAssigningActivity extends AppCompatActivity {
         }
     @Override
     public void onBackPressed() {
-        finish();
-//        if (!MainActivity.isShowing) {
-//            Log.d("isShowing", "false");
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//        } else Log.d("isShowing", "true");
-//
-//
-//        super.onBackPressed();
-
-//        if (fabExpanded)
-//            exitReveal();
-//        else super.onBackPressed();
+        Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

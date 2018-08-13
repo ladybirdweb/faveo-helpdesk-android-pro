@@ -2,6 +2,7 @@ package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -88,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialogVerifyURL;
     public ProgressDialog progressDialogSignIn;
     ProgressDialog progressDialogBilling;
-    ProgressBar progressBarlogin;
     List<String> urlSuggestions;
     Animation animation;
     StringBuilder companyURLUser;
@@ -208,9 +208,15 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Intent intent = new Intent();
-                            intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
-                            startActivity(intent);
+                            try {
+                                Intent intent = new Intent();
+                                intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+                                startActivity(intent);
+                            }catch (ActivityNotFoundException e){
+                                e.printStackTrace();
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                     });
             builder.create();
