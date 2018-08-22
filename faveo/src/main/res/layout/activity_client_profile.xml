@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             app:tabGravity="fill"
             app:tabTextColor="#808080"
-            app:tabMode="fixed"
+            app:tabMode=    "fixed"
             android:background="@color/faveo"
             app:tabIndicatorColor="@color/grey_500"
             app:tabIndicatorHeight="4dp"

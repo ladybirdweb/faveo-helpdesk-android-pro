@@ -611,6 +611,13 @@ public class collaboratorAdd extends AppCompatActivity {
                     }
                 });
 
+            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
             holder.deletecolla.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

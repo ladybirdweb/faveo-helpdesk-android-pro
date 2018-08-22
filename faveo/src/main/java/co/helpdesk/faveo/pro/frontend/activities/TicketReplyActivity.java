@@ -124,7 +124,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     String email;
     private LinearLayout mRevealView;
     private boolean hidden = true;
-    private ImageButton photo_btn, video_btn,music_btn,document_btn;
+    public ImageButton photo_btn, video_btn,music_btn,document_btn;
     BottomSheetLayout bottomSheet;
     String option;
     @SuppressLint("ClickableViewAccessibility")
