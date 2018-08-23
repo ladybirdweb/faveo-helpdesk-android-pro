@@ -366,9 +366,7 @@ public class collaboratorAdd extends AppCompatActivity {
                     id = 0;
                     id1=0;
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-
-                    Intent intent=new Intent(collaboratorAdd.this,TicketReplyActivity.class);
-
+                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     finish();
@@ -403,10 +401,11 @@ public class collaboratorAdd extends AppCompatActivity {
                 if (collaborator.equals("deleted successfully")){
                     email2="";
                     Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorAdd.this,TicketReplyActivity.class);
+                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
-                    //finish();
+                    finish();
+
                 }
 
             } catch (JSONException |NullPointerException e) {
@@ -610,6 +609,13 @@ public class collaboratorAdd extends AppCompatActivity {
                         return false;
                     }
                 });
+
+            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
 
             holder.deletecolla.setOnClickListener(new View.OnClickListener() {
                 @Override

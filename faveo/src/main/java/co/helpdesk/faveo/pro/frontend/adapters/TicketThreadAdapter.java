@@ -140,28 +140,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             ticketViewHolder.reportAndReply.setText("updated ");
         }
 
-//        IImageLoader imageLoader = new PicassoLoader();
-//        imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketThread.clientPicture, ticketThread.placeholder);
-
-//        for (int j=0;j<1;j++){
-//            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-//            ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-//            ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
-//            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-//            ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
-//            //ticketViewHolder.webView.setVisibility(View.VISIBLE);
-//        }
-//        if (i==0){
-//            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-//            ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-//            ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
-//            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-//            ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
-//        }
-////         if (i==1){
-////            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-////        }
-
         if (i==0){
             ticketViewHolder.linearLayout.setVisibility(View.GONE);
             ticketViewHolder.reportAndReply.setVisibility(View.GONE);
