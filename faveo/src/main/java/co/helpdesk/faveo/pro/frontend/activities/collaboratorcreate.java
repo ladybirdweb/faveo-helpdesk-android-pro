@@ -161,6 +161,8 @@ public class collaboratorcreate extends AppCompatActivity {
         });
 
 
+
+
     }
 
     private class RegisterUserNew extends AsyncTask<String, Void, String> {
@@ -263,7 +265,6 @@ public class collaboratorcreate extends AppCompatActivity {
                     Intent intent = new Intent(collaboratorcreate.this, TicketReplyActivity.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
-                    finish();
                 }
 
             } catch (JSONException e) {
