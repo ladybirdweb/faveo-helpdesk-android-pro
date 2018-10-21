@@ -110,7 +110,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 //    @BindView(R.id.closed_tickets_count)
 //    TextView closed_tickets_count;
     @BindView(R.id.usernametv)
-    TextView userName;
+    TextView textViewuserName;
     @BindView(R.id.domaintv)
     TextView domainAddress;
     @BindView(R.id.roleTv)
@@ -317,7 +317,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         }
         userRole.setText(Prefs.getString("ROLE", ""));
         domainAddress.setText(Prefs.getString("BASE_URL", ""));
-        userName.setText(Prefs.getString("PROFILE_NAME", ""));
+        textViewuserName.setText(Prefs.getString("PROFILE_NAME", ""));
         try {
             String cameFromSetting = Prefs.getString("cameFromSetting", null);
             if (cameFromSetting.equals("true")) {
@@ -362,6 +362,8 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
     }
 
 
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -387,6 +389,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 new SendPostRequest().execute();
                 new FetchDependency().execute();
                 drawerItemCustomAdapter.notifyDataSetChanged();
@@ -550,8 +553,11 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("data");
                 token = jsonObject1.getString("token");
+                Prefs.putString("TOKEN", token);
                 JSONObject jsonObject2=jsonObject1.getJSONObject("user");
                 String role=jsonObject2.getString("role");
+                String profile_pic = jsonObject2.getString("profile_pic");
+                Prefs.putString("profilePicture",profile_pic);
                 if (role.equals("user")){
                     final Toast toast = Toasty.info(getActivity(), getString(R.string.roleChanged),Toast.LENGTH_SHORT);
                     toast.show();
@@ -566,7 +572,44 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                     //Toasty.info(getActivity(), getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
                     startActivity(intent);
                 }
-                Prefs.putString("TOKEN", token);
+                String firstName = jsonObject2.getString("first_name");
+                String lastName = jsonObject2.getString("last_name");
+                String userName = jsonObject2.getString("user_name");
+                String email=jsonObject2.getString("email");
+                String clientname;
+                if (firstName == null || firstName.equals(""))
+                    clientname = userName;
+                else
+                    clientname = firstName + " " + lastName;
+                Prefs.putString("clientNameForFeedback",clientname);
+                Prefs.putString("emailForFeedback",email);
+                Prefs.putString("PROFILE_NAME",clientname);
+
+                try {
+                    String letter = Prefs.getString("profilePicture", null);
+                    Log.d("profilePicture", letter);
+                    if (letter.contains("jpg") || letter.contains("png") || letter.contains("jpeg")) {
+                        //profilePic.setColorFilter(getContext().getResources().getColor(R.color.white));
+                        //profilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
+                        Picasso.with(context).load(letter).transform(new CircleTransform()).into(profilePic);
+                    }
+                    else {
+                        int color= Color.parseColor("#ffffff");
+                        String letter1 = String.valueOf(Prefs.getString("PROFILE_NAME", "").charAt(0));
+                        ColorGenerator generator = ColorGenerator.MATERIAL;
+                        TextDrawable drawable = TextDrawable.builder()
+                                .buildRound(letter1,color);
+                        //profilePic.setAlpha(0.2f);
+                        profilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
+                        profilePic.setImageDrawable(drawable);
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                userRole.setText(Prefs.getString("ROLE", ""));
+                domainAddress.setText(Prefs.getString("BASE_URL", ""));
+                textViewuserName.setText(Prefs.getString("PROFILE_NAME", ""));
+
                 Log.d("TOKEN",token);
             } catch (JSONException e) {
                 e.printStackTrace();

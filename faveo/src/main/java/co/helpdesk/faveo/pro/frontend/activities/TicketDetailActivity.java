@@ -356,46 +356,48 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     Log.d("ID",""+id);
                 }
             }
-            status = Prefs.getString("ticketstatus", null);
+            try {
+                status = Prefs.getString("ticketstatus", null);
+                if (status.equalsIgnoreCase(item.toString())) {
+                    Toasty.warning(TicketDetailActivity.this, "Ticket is already in " + item.toString() + " state", Toast.LENGTH_SHORT).show();
+                } else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketDetailActivity.this);
 
-            if (status.equalsIgnoreCase(item.toString())){
-                Toasty.warning(TicketDetailActivity.this, "Ticket is already in "+item.toString()+" state", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketDetailActivity.this);
+                    // Setting Dialog Title
+                    alertDialog.setTitle(getString(R.string.changingStatus));
 
-                // Setting Dialog Title
-                alertDialog.setTitle(getString(R.string.changingStatus));
+                    // Setting Dialog Message
+                    alertDialog.setMessage(getString(R.string.statusConfirmation));
 
-                // Setting Dialog Message
-                alertDialog.setMessage(getString(R.string.statusConfirmation));
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
 
-                // Setting Icon to Dialog
-                alertDialog.setIcon(R.mipmap.ic_launcher);
+                    // Setting Positive "Yes" Button
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                            new StatusChange(Integer.parseInt(ticketID), id).execute();
+                            progressDialog.show();
+                            progressDialog.setMessage(getString(R.string.pleasewait));
 
-                // Setting Positive "Yes" Button
-                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to invoke YES event
-                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                        new StatusChange(Integer.parseInt(ticketID), id).execute();
-                        progressDialog.show();
-                        progressDialog.setMessage(getString(R.string.pleasewait));
+                        }
+                    });
 
-                    }
-                });
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
 
-                // Setting Negative "NO" Button
-                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to invoke NO event
-                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
-                    }
-                });
-
-                // Showing Alert Message
-                alertDialog.show();
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
             }
         }
         Log.d("item", String.valueOf(item));
@@ -698,6 +700,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         //isShowing = false;
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
         super.onDestroy();
         }
     private void checkConnection() {
@@ -785,7 +790,10 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
 
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
             //progressBar.setVisibility(View.GONE);
             if (isCancelled()) return;
 //            if (progressDialog.isShowing())

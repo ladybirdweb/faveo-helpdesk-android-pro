@@ -503,7 +503,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             editTextFirstName.setText(firstname);
         }
 
-
         if (lastname.equals("null")){
             editTextLastName.setText("");
         }
