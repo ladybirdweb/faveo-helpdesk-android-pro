@@ -319,7 +319,6 @@ public class MyTickets extends Fragment {
             });
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("Please wait");
-
             swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
             if (InternetReceiver.isConnected()) {
                 noInternet_view.setVisibility(View.GONE);

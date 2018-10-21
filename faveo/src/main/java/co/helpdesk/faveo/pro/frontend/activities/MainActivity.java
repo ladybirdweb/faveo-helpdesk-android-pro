@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -16,10 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -37,7 +31,6 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import co.helpdesk.faveo.pro.R;
-import co.helpdesk.faveo.pro.SharedPreference;
 import co.helpdesk.faveo.pro.frontend.drawers.FragmentDrawer;
 import co.helpdesk.faveo.pro.frontend.fragments.About;
 import co.helpdesk.faveo.pro.frontend.fragments.ClientList;
@@ -80,20 +73,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         UpdatedAtAsc.OnFragmentInteractionListener,DueByAsc.OnFragmentInteractionListener,DueByDesc.OnFragmentInteractionListener,
         SortByTicketNumberAscending.OnFragmentInteractionListener,SortByTicketNumberDescending.OnFragmentInteractionListener,
         SortByTicketPriorityAsc.OnFragmentInteractionListener,SortByTicketPriorityDesc.OnFragmentInteractionListener,CreatedAtAsc.OnFragmentInteractionListener,CreatedAtDesc.OnFragmentInteractionListener,HelpSection.OnFragmentInteractionListener{
-
-    // The BroadcastReceiver that tracks network connectivity changes.
-//    public InternetReceiver receiver = new InternetReceiver();
-
-    protected boolean doubleBackToExitPressedOnce = false;
-    //public static boolean isShowing = false;
     ArrayList<String> strings;
     Toolbar toolbar;
     Context context;
-    private SharedPreference sharedPreferenceObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferenceObj = new SharedPreference(MainActivity.this);
         Fabric.with(this, new Crashlytics());
         overridePendingTransition(0, 0);
         setContentView(R.layout.activity_main);
@@ -166,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onDrawerItemSelected(View view, int position) {
     }
-
     public void setActionBarTitle(final String title) {
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbar);
         TextView mTitle = (TextView) toolbarTop.findViewById(R.id.title);

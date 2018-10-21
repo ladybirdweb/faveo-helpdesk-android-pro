@@ -392,6 +392,7 @@ public class LoginActivity extends AppCompatActivity {
                     textViewProgress.setVisibility(View.GONE);
                     Prefs.putString("400", "null");
                     //progressBar.setVisibility(View.GONE);
+                    fabProgressCircle.hide();
                     buttonVerifyURL.setEnabled(true);
                     Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
                     return;
@@ -546,7 +547,7 @@ public class LoginActivity extends AppCompatActivity {
         Context context;
         String username;
         String password;
-
+        String apiDisabled;
         SignIn(Context context, String username, String password) {
             this.context = context;
             this.username = username;
@@ -566,10 +567,27 @@ public class LoginActivity extends AppCompatActivity {
             if (result == null) {
 //                Intent intent=new Intent(LoginActivity.this,LoginActivity.class);
 //                startActivity(intent);
+                textInputLayoutUsername.setEnabled(true);
+                textInputLayoutPass.setEnabled(true);
+                buttonSignIn.revertAnimation();
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            try {
+                apiDisabled = Prefs.getString("400", null);
+                if (apiDisabled.equals("badRequest")) {
+                    textViewProgress.setVisibility(View.GONE);
+                    Prefs.putString("400", "null");
+                    textInputLayoutUsername.setEnabled(true);
+                    textInputLayoutPass.setEnabled(true);
+                    buttonSignIn.revertAnimation();
+                    //progressBar.setVisibility(View.GONE);
+                    Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
             try {
 
                 JSONObject jsonObject = new JSONObject(result);

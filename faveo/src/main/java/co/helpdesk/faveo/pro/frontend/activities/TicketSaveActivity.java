@@ -107,6 +107,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
             task.execute();
         }
+
 //        if (InternetReceiver.isConnected()){
 //            new FetchDependency().execute();
 //        }
