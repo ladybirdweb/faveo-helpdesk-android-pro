@@ -72,6 +72,7 @@ import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
 import net.gotev.uploadservice.UploadStatusDelegate;
 
+import org.apache.http.protocol.HTTP;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -246,6 +247,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
                 // Setting Dialog Title

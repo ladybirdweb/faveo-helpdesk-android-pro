@@ -209,7 +209,7 @@ public class Helpdesk {
 
 
     public String postEditTicket(int ticketID, String subject, int helpTopic,
-                                 int ticketSource, int ticketPriority, int ticketType,int staff) {
+                                 int ticketSource, int ticketPriority,int ticketType,int staff) {
         Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
@@ -218,10 +218,11 @@ public class Helpdesk {
                 "&subject=" + subject +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
-                "&ticket_priority=" + ticketPriority +
-                "&ticket_type=" + ticketType + "&assigned="
+                "&ticket_priority=" + ticketPriority +"&ticket_type="+ticketType+ "&assigned="
                 + staff
         );
+
+
         String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
@@ -230,8 +231,7 @@ public class Helpdesk {
                 "&subject=" + subject +
                 "&help_topic=" + helpTopic +
                 "&ticket_source=" + ticketSource +
-                "&ticket_priority=" + ticketPriority +
-                "&ticket_type=" + ticketType + "&assigned="
+                "&ticket_priority=" + ticketPriority +"&ticket_type="+ticketType+ "&assigned="
                 + staff, null);
 
         if (result != null && result.equals("tokenRefreshed"))
@@ -243,12 +243,51 @@ public class Helpdesk {
                     "&subject=" + subject +
                     "&help_topic=" + helpTopic +
                     "&ticket_source=" + ticketSource +
-                    "&ticket_priority=" + ticketPriority +
-                    "&ticket_type=" + ticketType + "&assigned="
+                    "&ticket_priority=" + ticketPriority +"&ticket_type="+ticketType+ "&assigned="
                     + staff, null);
         return result;
     }
 
+
+    public String postEditTicketWithoutType(int ticketID, String subject, int helpTopic,
+                                 int ticketSource, int ticketPriority,int staff) {
+        Log.d("EditTicketAPI", Constants.URL + "helpdesk/edit?" +
+                "api_key=" + apiKey +
+                "&ip=" + IP +
+                "&token=" + token +
+                "&ticket_id=" + ticketID +
+                "&subject=" + subject +
+                "&help_topic=" + helpTopic +
+                "&ticket_source=" + ticketSource +
+                "&ticket_priority=" + ticketPriority +"&assigned="
+                + staff
+        );
+
+
+        String result = new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
+                "api_key=" + apiKey +
+                "&ip=" + IP +
+                "&token=" + token +
+                "&ticket_id=" + ticketID +
+                "&subject=" + subject +
+                "&help_topic=" + helpTopic +
+                "&ticket_source=" + ticketSource +
+                "&ticket_priority=" + ticketPriority + "&assigned="
+                + staff, null);
+
+        if (result != null && result.equals("tokenRefreshed"))
+            return new HTTPConnection().HTTPResponsePost(Constants.URL + "helpdesk/edit?" +
+                    "api_key=" + apiKey +
+                    "&ip=" + IP +
+                    "&token=" + token +
+                    "&ticket_id=" + ticketID +
+                    "&subject=" + subject +
+                    "&help_topic=" + helpTopic +
+                    "&ticket_source=" + ticketSource +
+                    "&ticket_priority=" + ticketPriority + "&assigned="
+                    + staff, null);
+        return result;
+    }
     public String postFCMToken(String token, String ID) {
         Log.d("FCM token beforesending", token + "");
         String parameters = null;

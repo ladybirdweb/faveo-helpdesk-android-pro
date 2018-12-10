@@ -309,7 +309,7 @@
     <string name="noTicket">No tickets found</string>
     <string name="roleChanged">Role has been changed!user can not use the app.</string>
     <string name="fileSize">File size should not exceed 6 MB</string>
-    <string name="apiDisabled">Please enable the API from the web application.</string>
+    <string name="apiDisabled">Either your API is disabled or your system is in offline.Please contact the administrator.</string>
     <string name="successfullyChanged">Successfully changed the status</string>
     <string name="urlchange">Please check your helpdesk url,username and password!Some credentials may have changed.try to log in again with the new credentials.</string>
     <string name="firstNameCharacter">First name can not contain only numbers</string>
@@ -356,6 +356,8 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="version">Version</string>
+    <string name="bannedOrdeactivated">Sorry!This account is either banned or deactivated,please contact the admistrator</string>
+    <string name="inactiveagent">This account is currently inactive!</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>

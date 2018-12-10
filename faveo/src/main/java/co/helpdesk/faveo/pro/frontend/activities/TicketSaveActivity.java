@@ -49,12 +49,10 @@ import co.helpdesk.faveo.pro.model.Data;
 import es.dmoral.toasty.Toasty;
 
 public class TicketSaveActivity extends AppCompatActivity {
-    Spinner  spinnerType, spinnerStatus, spinnerSource,
+    Spinner  spinnerType,spinnerSource,
             spinnerPriority, spinnerHelpTopics;
     ProgressDialog progressDialog;
     AsyncTask<String, Void, String> task;
-//    @BindView(R.id.spinner_staffs)
-    Spinner spinnerStaffs;
     EditText edittextsubject;
     Button buttonsave;
     ImageView imageView;
@@ -404,54 +402,108 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
                 if (allCorrect) {
                     if (InternetReceiver.isConnected()) {
+                        Log.d("priorityId",priority.ID+"");
 
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+                        if (type.ID==0){
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
 
-                        // Setting Dialog Title
-                        alertDialog.setTitle(getString(R.string.editingticket));
+                            // Setting Dialog Title
+                            alertDialog.setTitle(getString(R.string.editingticket));
 
-                        // Setting Dialog Message
-                        alertDialog.setMessage(getString(R.string.editingConfirmation));
+                            // Setting Dialog Message
+                            alertDialog.setMessage(getString(R.string.editingConfirmation));
 
-                        // Setting Icon to Dialog
-                        alertDialog.setIcon(R.mipmap.ic_launcher);
+                            // Setting Icon to Dialog
+                            alertDialog.setIcon(R.mipmap.ic_launcher);
 
-                        // Setting Positive "Yes" Button
-                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to invoke YES event
-                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                if (InternetReceiver.isConnected()){
-                                    progressDialog=new ProgressDialog(TicketSaveActivity.this);
-                                    progressDialog.setMessage(getString(R.string.updating_ticket));
-                                    progressDialog.show();
-                                    try {
-                                        new SaveTicket(
-                                                Integer.parseInt(Prefs.getString("TICKETid",null)),
-                                                URLEncoder.encode(subject.trim(), "utf-8"),
-                                                helpTopic.ID,
-                                                source.ID,
-                                                priority.ID, type.ID,staffId.ID)
-                                                .execute();
-                                    } catch (UnsupportedEncodingException e) {
-                                        e.printStackTrace();
+                            // Setting Positive "Yes" Button
+                            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to invoke YES event
+                                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                    if (InternetReceiver.isConnected()){
+                                        progressDialog=new ProgressDialog(TicketSaveActivity.this);
+                                        progressDialog.setMessage(getString(R.string.updating_ticket));
+                                        progressDialog.show();
+                                        try {
+                                            new SaveTicketWithoutType(
+                                                    Integer.parseInt(Prefs.getString("TICKETid",null)),
+                                                    URLEncoder.encode(subject.trim(), "utf-8"),
+                                                    helpTopic.ID,
+                                                    source.ID,
+                                                    priority.ID,staffId.ID)
+                                                    .execute();
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
-
                                 }
-                            }
-                        });
+                            });
 
-                        // Setting Negative "NO" Button
-                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to invoke NO event
-                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                                dialog.cancel();
-                            }
-                        });
+                            // Setting Negative "NO" Button
+                            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to invoke NO event
+                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                    dialog.cancel();
+                                }
+                            });
 
-                        // Showing Alert Message
-                        alertDialog.show();
+                            // Showing Alert Message
+                            alertDialog.show();
+                        }
+                        else{
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                            // Setting Dialog Title
+                            alertDialog.setTitle(getString(R.string.editingticket));
+
+                            // Setting Dialog Message
+                            alertDialog.setMessage(getString(R.string.editingConfirmation));
+
+                            // Setting Icon to Dialog
+                            alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                            // Setting Positive "Yes" Button
+                            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to invoke YES event
+                                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                    if (InternetReceiver.isConnected()){
+                                        progressDialog=new ProgressDialog(TicketSaveActivity.this);
+                                        progressDialog.setMessage(getString(R.string.updating_ticket));
+                                        progressDialog.show();
+                                        try {
+                                            new SaveTicket(
+                                                    Integer.parseInt(Prefs.getString("TICKETid",null)),
+                                                    URLEncoder.encode(subject.trim(), "utf-8"),
+                                                    helpTopic.ID,
+                                                    source.ID,
+                                                    priority.ID,type.ID,staffId.ID)
+                                                    .execute();
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }
+                            });
+
+                            // Setting Negative "NO" Button
+                            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Write your code here to invoke NO event
+                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                    dialog.cancel();
+                                }
+                            });
+
+                            // Showing Alert Message
+                            alertDialog.show();
+                        }
+
+
                     }
                 }
             }
@@ -510,9 +562,10 @@ public class TicketSaveActivity extends AppCompatActivity {
         int ticketPriority;
         int ticketStatus;
         int ticketType;
+
         int staff;
 
-        SaveTicket(int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority, int ticketType,int staff) {
+        SaveTicket(int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority,int ticketType,int staff) {
             this.ticketNumber = ticketNumber;
             this.subject = subject;
             // this.slaPlan = slaPlan;
@@ -528,7 +581,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             if (subject.equals("Not available"))
                 subject = "";
             return new Helpdesk().postEditTicket(ticketNumber, subject,
-                    helpTopic, ticketSource, ticketPriority, ticketType,staff);
+                    helpTopic, ticketSource, ticketPriority,ticketType,staff);
         }
 
         protected void onPostExecute(String result) {
@@ -569,6 +622,77 @@ public class TicketSaveActivity extends AppCompatActivity {
                 Toasty.error(TicketSaveActivity.this, getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
         }
     }
+
+    private class SaveTicketWithoutType extends AsyncTask<String, Void, String> {
+        int ticketNumber;
+        String subject;
+        //int slaPlan;
+        int helpTopic;
+        int ticketSource;
+        int ticketPriority;
+        int ticketStatus;
+
+        int staff;
+
+        SaveTicketWithoutType(int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority,int staff) {
+            this.ticketNumber = ticketNumber;
+            this.subject = subject;
+            // this.slaPlan = slaPlan;
+            this.helpTopic = helpTopic;
+            this.ticketSource = ticketSource;
+            this.ticketPriority = ticketPriority;
+            // this.ticketStatus = ticketStatus;
+
+            this.staff=staff;
+        }
+
+        protected String doInBackground(String... urls) {
+            if (subject.equals("Not available"))
+                subject = "";
+            return new Helpdesk().postEditTicketWithoutType(ticketNumber, subject,
+                    helpTopic, ticketSource, ticketPriority,staff);
+        }
+
+        protected void onPostExecute(String result) {
+//            if (progressDialog.isShowing())
+            progressDialog.dismiss();
+            Prefs.putString("ticketThread","");
+            Log.d("Depen Response : ", result + "");
+            if (result == null) {
+                Toasty.error(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+            String state=Prefs.getString("403",null);
+
+            try {
+                if (state.equals("403") && !state.equals(null)) {
+                    Toasty.warning(TicketSaveActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String message = jsonObject.getString("message");
+                if (message.equals("Permission denied, you do not have permission to access the requested page.")) {
+                    Toasty.warning(TicketSaveActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                    Prefs.putString("403", "null");
+                    return;
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            if (result.contains("Edited successfully")) {
+                new FetchTicketDetail1(Prefs.getString("TICKETid",null)).execute();
+
+            } else
+                Toasty.error(TicketSaveActivity.this, getString(R.string.failed_to_update_ticket), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     private class FetchTicketDetail extends AsyncTask<String, Void, String> {
         String ticketID;
 

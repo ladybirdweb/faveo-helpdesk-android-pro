@@ -1,8 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.emanzanoaxa:RippleEffect-52ea2a0ab6">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/RippleEffect-52ea2a0ab6.aar/f8aee8d8331e3f2bf78ea9b24f4e6dab/annotations.zip!/" />
+    </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/RippleEffect-52ea2a0ab6.aar/5a88c454714b0f6b2918ae07ea8f3e96/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/RippleEffect-52ea2a0ab6.aar/5a88c454714b0f6b2918ae07ea8f3e96/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/RippleEffect-52ea2a0ab6.aar/f8aee8d8331e3f2bf78ea9b24f4e6dab/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/RippleEffect-52ea2a0ab6.aar/f8aee8d8331e3f2bf78ea9b24f4e6dab/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

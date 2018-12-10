@@ -117,6 +117,11 @@ class HTTPConnection{
                         Prefs.putString("403","403");
 
                         break;
+                    case HttpURLConnection.HTTP_CONFLICT:
+                        Log.e("Response code","Conflict");
+                        ret="Conflict";
+                        Prefs.putString("409","409");
+                        break;
                     default:
 
                         break; // abort
@@ -127,6 +132,8 @@ class HTTPConnection{
             Prefs.putString("405","False");
             Prefs.putString("unauthorized","false");
             Prefs.putString("400","false");
+            Prefs.putString("403","false");
+            Prefs.putString("409","true");
             is = connection.getInputStream();
             Log.e("Response Code", connection.getResponseCode() + "");
         } catch (IOException e) {

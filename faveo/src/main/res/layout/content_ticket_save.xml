@@ -274,16 +274,6 @@
                 android:text="@string/ticket_type"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="@string/required"
-                android:textSize="12sp" />
         </RelativeLayout>
 
         <Spinner

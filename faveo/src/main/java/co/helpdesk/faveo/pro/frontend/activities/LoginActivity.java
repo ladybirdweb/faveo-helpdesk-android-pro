@@ -573,6 +573,39 @@ public class LoginActivity extends AppCompatActivity {
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            try{
+                apiDisabled = Prefs.getString("403", null);
+                if (apiDisabled.equals("403")){
+                    textViewProgress.setVisibility(View.GONE);
+                    Prefs.putString("400", "true");
+                    textInputLayoutUsername.setEnabled(true);
+                    textInputLayoutPass.setEnabled(true);
+                    buttonSignIn.revertAnimation();
+                    //progressBar.setVisibility(View.GONE);
+                    Toasty.info(context, getString(R.string.bannedOrdeactivated), Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch (NullPointerException e){
+
+            }
+
+            try{
+                apiDisabled = Prefs.getString("409", null);
+                if (apiDisabled.equals("409")){
+                    textViewProgress.setVisibility(View.GONE);
+                    Prefs.putString("409", "true");
+                    textInputLayoutUsername.setEnabled(true);
+                    textInputLayoutPass.setEnabled(true);
+                    buttonSignIn.revertAnimation();
+                    //progressBar.setVisibility(View.GONE);
+                    Toasty.info(context, getString(R.string.inactiveagent), Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
             try {
                 apiDisabled = Prefs.getString("400", null);
                 if (apiDisabled.equals("badRequest")) {
@@ -588,6 +621,8 @@ public class LoginActivity extends AppCompatActivity {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
+
+
             try {
 
                 JSONObject jsonObject = new JSONObject(result);
