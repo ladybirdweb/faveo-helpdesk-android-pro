@@ -51,13 +51,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/debug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/assets" type="java-test-resource" />
@@ -65,6 +58,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testDebug/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" type="java-resource" />
@@ -96,7 +96,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
@@ -120,6 +119,7 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:imagepipeline-0.14.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:rules-0.5" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\sayarSamanta\Documents\GitHub\faveo-helpdesk-android-pro\faveo\libs\httpclient-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.databinding:adapters-3.1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: javax.inject:javax.inject:1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:fresco-0.14.1" level="project" />
@@ -136,7 +136,6 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.databinding:library-3.1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Sayar\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\httpcore-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:transition-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: br.com.simplepass:loading-button-android-1.14.0" level="project" />
@@ -146,7 +145,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:cardview-v7-27.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:1.10.19@jar" level="project" />
     <orderEntry type="library" name="Gradle: pub.devrel:easypermissions-0.3.0" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Sayar\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\apache-mime4j-0.6.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-compat-27.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: javax.annotation:javax.annotation-api:1.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.flipboard:bottomsheet-core-1.5.3" level="project" />
@@ -156,7 +154,6 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-core-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.googlecode.libphonenumber:libphonenumber:8.5.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-27.1.1" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Sayar\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\httpmime-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-license-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-basement-11.8.0" level="project" />
@@ -165,12 +162,12 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-base-license-11.8.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-io:commons-io:2.4@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:crashlytics-2.9.3" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\sayarSamanta\Documents\GitHub\faveo-helpdesk-android-pro\faveo\libs\PhotoUtil.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\sayarSamanta\Documents\GitHub\faveo-helpdesk-android-pro\faveo\libs\FileCacher.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.3.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.GrenderG:Toasty-1.1.3" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Sayar\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\FileCacher.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.leakcanary:leakcanary-analyzer:1.5@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Sayar\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\PhotoUtil.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.kishan.askpermission:askpermission-1.0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.7@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.jakewharton:butterknife-8.5.1" level="project" />
@@ -191,17 +188,20 @@
     <orderEntry type="library" name="Gradle: com.github.emanzanoaxa:RippleEffect-52ea2a0ab6" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:fbcore-0.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.curioustechizen.android-ago:library-1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\sayarSamanta\Documents\GitHub\faveo-helpdesk-android-pro\faveo\libs\apache-mime4j-0.6.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:imagepipeline-base-0.14.1" level="project" />
     <orderEntry type="library" name="Gradle: com.bm.photoview:library-1.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:runner-0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-messaging-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:exposed-instrumentation-api-publish-0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-license-11.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\sayarSamanta\Documents\GitHub\faveo-helpdesk-android-pro\faveo\libs\httpcore-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.droidninja:filepicker-1.0.8" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:drawee-0.14.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.leakcanary:leakcanary-android-no-op-1.5" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:converter-gson:2.1.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\sayarSamanta\Documents\GitHub\faveo-helpdesk-android-pro\faveo\libs\httpmime-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.jakewharton:butterknife-annotations:8.5.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-annotations:27.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-27.1.1" level="project" />
@@ -227,7 +227,6 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-11.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-integration:1.3@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-library:1.3@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Sayar\Sayar\Faveo-Helpdesk-Pro-ReleaseCode\faveo\libs\httpclient-4.2.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.hbb20:ccp-2.0.2" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.leakcanary:leakcanary-watcher:1.5@jar" level="project" />

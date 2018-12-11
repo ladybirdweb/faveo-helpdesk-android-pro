@@ -359,6 +359,16 @@
     <string name="version">Version</string>
     <string name="bannedOrdeactivated">Sorry!This account is either banned or deactivated,please contact the admistrator</string>
     <string name="inactiveagent">This account is currently inactive!</string>
+    <string name="sort">sort</string>
+    <string name="sorting_type">Sorting type</string>
+    <string name="due_by_time">Due by time</string>
+    <string name="due_by_date">Due by date</string>
+    <string name="descending">Descending</string>
+    <string name="ascending">Ascending</string>
+    <string name="fullName">Full name</string>
+    <string name="additionalDetails">Additional details can be filled from web</string>
+    <string name="company">Company</string>
+    <string name="no_results_found">No records found</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>
