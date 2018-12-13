@@ -55,14 +55,6 @@ import es.dmoral.toasty.Toasty;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
-//import android.content.DialogInterface;
-//import android.support.v7.app.AlertDialog;
-//import android.text.SpannableString;
-//import android.text.style.ForegroundColorSpan;
-//import android.util.DisplayMetrics;
-//import co.helpdesk.faveo.pro.Helper;
-//import co.helpdesk.faveo.pro.model.TicketDetail;
-
 /**
  * This splash activity is responsible for
  * getting the metadata of our faveo application from the dependency API.
@@ -174,15 +166,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         Prefs.putString("TicketRelated","");
         final Intent intent = getIntent();
         ticketID=intent.getStringExtra("ticket_id");
-//        ticketNumberMain=intent.getStringExtra("ticket_number");
-//        ticketPriorityColor=intent.getStringExtra("priority_color");
-//        ticketSubject=intent.getStringExtra("ticket_subject");
-//        ticketStatus=intent.getStringExtra("ticket_status");
-//        userName=intent.getStringExtra("ticket_opened_by");
-
-
-//        viewpriority.setBackgroundColor(Color.parseColor(ticketPriorityColor));
-//        viewCollapsePriority.setBackgroundColor(Color.parseColor(ticketPriorityColor));
         textviewAgentName.setText(userName);
         textViewStatus.setText(ticketStatus);
         textViewTitle.setText(ticketNumberMain);
@@ -566,6 +549,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         @Override
         public void onPageScrollStateChanged(int state) {
+           Log.d("scrolled","true");
 
         }
     };
@@ -689,7 +673,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
      */
     @Override
     protected void onResume() {
-        JSONObject jsonObject = null;
         Log.d("onResume","CALLED");
         Prefs.putString("TicketRelated","");
         Prefs.putString("filePath","");

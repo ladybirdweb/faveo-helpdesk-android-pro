@@ -36,7 +36,6 @@ public class MultiCollaboratorAdapter extends ArrayAdapter<MultiCollaborator> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         MultiCollaborator customer = getItem(position);
-        IImageLoader imageLoader;
         //String letter= String.valueOf(customer.getFirst_name().charAt(0));
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.collaborator_row, parent, false);

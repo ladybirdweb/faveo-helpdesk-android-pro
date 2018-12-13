@@ -64,7 +64,7 @@ public class UsersFragment extends Fragment {
     String querry;
     LinearLayout toolbarView;
     int pastVisibleItems, visibleItemCount, totalItemCount;
-    private boolean loading = true;
+    boolean loading = true;
     private String lastQuerry;
     private boolean isViewShown = false;
 

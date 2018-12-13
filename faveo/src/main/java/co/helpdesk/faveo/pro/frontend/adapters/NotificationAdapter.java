@@ -58,12 +58,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         try {
             letter = String.valueOf(notiThread.getRequesterName().charAt(0)).toUpperCase();
 
-
-            TextDrawable.IBuilder mDrawableBuilder;
             viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
             if (notiThread.getBy().equals("System")){
                 viewHolder.textSub.setText("System, "+notiThread.getTicket_subject());
-                int color= Color.parseColor("#ffffff");
                 //profilePic.setAlpha(0.2f);
                 viewHolder.roundedImageViewProfilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
                 viewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.default_pic);
@@ -74,9 +71,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     viewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
                 } else if (notiThread.getProfiel_pic().contains(".jpg") || notiThread.getProfiel_pic().contains(".png") || notiThread.getProfiel_pic().contains(".jpeg")) {
-                    mDrawableBuilder = TextDrawable.builder()
-                            .round();
-//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
                     Picasso.with(context).load(notiThread.getProfiel_pic()).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
 //        Glide.with(context)
 //            .load(ticketOverview.getClientPicture())

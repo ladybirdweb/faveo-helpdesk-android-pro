@@ -60,7 +60,6 @@ public class collaboratorAdd extends AppCompatActivity {
     Button searchUer, deleteUser;
     ArrayList<CollaboratorSuggestion> stringArrayList;
     CollaboratorAdapter arrayAdapterCC;
-    RelativeLayout relativeLayout;
     ArrayAdapter<String> spinnerPriArrayAdapter;
     int id = 0;
     int id1 = 0;
@@ -87,17 +86,9 @@ public class collaboratorAdd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collaborator_add);
         Window window = collaboratorAdd.this.getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
         window.setStatusBarColor(ContextCompat.getColor(collaboratorAdd.this,R.color.faveo));
-        //recipients= (Spinner) findViewById(R.id.spinnerRecipients);
-        //relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
         strings = new ArrayList<>();
         recyclerView= (RecyclerView) findViewById(R.id.list);
         strings.add("Show");
@@ -568,7 +559,7 @@ public class collaboratorAdd extends AppCompatActivity {
     }
     public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
 
-        private List<co.helpdesk.faveo.pro.model.AttachedCollaborator> moviesList;
+        private List<AttachedCollaborator> moviesList;
         Context context;
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView email;

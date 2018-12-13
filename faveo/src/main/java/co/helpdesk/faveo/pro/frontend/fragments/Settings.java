@@ -98,10 +98,6 @@ public class Settings extends Fragment implements CompoundButton.OnClickListener
             mListener.onFragmentInteraction(uri);
         }
     }
-    private void updateViews(String languageCode) {
-        Context context = LocaleHelper.setLocale(getActivity(), languageCode);
-        Resources resources = context.getResources();
-    }
     /**
      * When the fragment is going to be attached
      * this life cycle method is going to be called.

@@ -64,8 +64,8 @@ public class TicketFragment extends Fragment {
     private boolean loading = true;
     TextView noInternet_view;
     TicketOverviewAdapter ticketOverviewAdapter;
-    private String mParam1;
-    private String mParam2;
+    String mParam1;
+    String mParam2;
     LinearLayout toolbarView;
     String querry;
     TicketOverview ticketOverview;

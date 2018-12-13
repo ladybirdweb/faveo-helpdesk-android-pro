@@ -554,25 +554,21 @@ public class TicketSaveActivity extends AppCompatActivity {
         }
     }
     private class SaveTicket extends AsyncTask<String, Void, String> {
-        int ticketNumber;
-        String subject;
-        //int slaPlan;
-        int helpTopic;
-        int ticketSource;
-        int ticketPriority;
-        int ticketStatus;
-        int ticketType;
+        private int ticketNumber;
+        private  String subject;
+        private int helpTopic;
+        private int ticketSource;
+        private int ticketPriority;
+        private int ticketType;
 
         int staff;
 
         SaveTicket(int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority,int ticketType,int staff) {
             this.ticketNumber = ticketNumber;
             this.subject = subject;
-            // this.slaPlan = slaPlan;
             this.helpTopic = helpTopic;
             this.ticketSource = ticketSource;
             this.ticketPriority = ticketPriority;
-            // this.ticketStatus = ticketStatus;
             this.ticketType = ticketType;
             this.staff=staff;
         }

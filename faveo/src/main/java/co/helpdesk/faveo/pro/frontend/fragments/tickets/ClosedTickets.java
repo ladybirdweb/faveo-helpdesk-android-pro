@@ -371,7 +371,6 @@ public class ClosedTickets extends Fragment {
             e.printStackTrace();
         }
         int id = item.getItemId();
-        StringBuffer stringBuffer = new StringBuffer();
 //        if (id == R.id.action_statusOpen) {
 //
 //            try {

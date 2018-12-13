@@ -473,11 +473,6 @@ public class SearchActivity extends AppCompatActivity implements
         }
     };
 
-    private void checkConnection() {
-        boolean isConnected = InternetReceiver.isConnected();
-        showSnackIfNoInternet(isConnected);
-    }
-
     /**
      * Display the snackbar if network connection is not there.
      *

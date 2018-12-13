@@ -88,7 +88,6 @@ public class InboxTickets extends Fragment {
     @BindView(R.id.totalcount)
     TextView textView;
     private android.support.v7.view.ActionMode mActionMode;
-    private boolean isMultiSelect = false;
     ArrayList<Integer> checked_items = new ArrayList<>();
     private ActionMode actionMode;
     static String nextPageURL = "";
@@ -112,7 +111,6 @@ public class InboxTickets extends Fragment {
     String filterwithsorting;
     int pastVisibleItems, visibleItemCount, totalItemCount;
     Activity context;
-    private List<Integer> selectedIds = new ArrayList<>();
     public String mParam1;
     public String mParam2;
     ArrayList<Data> statusItems;

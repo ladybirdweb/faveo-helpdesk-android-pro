@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -375,8 +376,9 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
         }
     }
+    @SuppressLint("StaticFieldLeak")
     private class MultipleAssign extends AsyncTask<String, Void, String> {
-        String ticketid,assignid;
+         private String ticketid,assignid;
 
         MultipleAssign(String ticketid, String assignid) {
             this.ticketid = ticketid;
