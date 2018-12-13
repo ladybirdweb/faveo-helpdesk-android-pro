@@ -4,8 +4,13 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/eeb4ae2485d96f3214befde46e7052fa/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
+<<<<<<< HEAD
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/eeb4ae2485d96f3214befde46e7052fa/res" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/eeb4ae2485d96f3214befde46e7052fa/jars/classes.jar!/" />
+=======
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/e973f5968bde1a6b039cb7d17a26d8cb/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/e973f5968bde1a6b039cb7d17a26d8cb/res" />
+>>>>>>> master
     </CLASSES>
     <JAVADOC />
     <SOURCES>

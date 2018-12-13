@@ -1,8 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: br.com.simplepass:loading-button-android-1.14.0">
     <CLASSES>
+<<<<<<< HEAD
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loading-button-android-1.14.0.aar/94d8373cb78e9934e113b63cdc085e91/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loading-button-android-1.14.0.aar/94d8373cb78e9934e113b63cdc085e91/res" />
+=======
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loading-button-android-1.14.0.aar/148c30060e85f92516c03c68bd372ea8/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loading-button-android-1.14.0.aar/148c30060e85f92516c03c68bd372ea8/res" />
+>>>>>>> master
     </CLASSES>
     <JAVADOC />
     <SOURCES>

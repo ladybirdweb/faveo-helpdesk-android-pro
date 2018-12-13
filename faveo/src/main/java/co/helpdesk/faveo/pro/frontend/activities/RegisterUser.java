@@ -204,6 +204,7 @@ public class RegisterUser extends AppCompatActivity {
                 Toasty.error(RegisterUser.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
+<<<<<<< HEAD
 
             try {
                 apiDisabled = Prefs.getString("400", null);
@@ -215,6 +216,8 @@ public class RegisterUser extends AppCompatActivity {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
+=======
+>>>>>>> master
             try{
                 JSONObject jsonObject=new JSONObject(result);
                 JSONObject jsonObject1=jsonObject.getJSONObject("result");

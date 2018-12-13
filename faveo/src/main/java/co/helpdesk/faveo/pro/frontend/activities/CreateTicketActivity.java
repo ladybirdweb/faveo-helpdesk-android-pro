@@ -72,7 +72,10 @@ import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
 import net.gotev.uploadservice.UploadStatusDelegate;
 
+<<<<<<< HEAD
 import org.apache.http.protocol.HTTP;
+=======
+>>>>>>> master
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -199,7 +202,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             keyType = "", valueType = "";
     String CountryID="";
     String CountryZipCode="";
+<<<<<<< HEAD
     String fname="",lname="";
+=======
+>>>>>>> master
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -244,7 +250,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
                 // Setting Dialog Title
@@ -428,6 +437,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         firstname=data2.getFirst_name();
                     lastname=data2.getLast_name();
                     editTextEmail.setText(email1);
+<<<<<<< HEAD
+=======
+                    editTextFirstName.setText(firstname);
+                    editTextLastName.setText(lastname);
+>>>>>>> master
                     }
                 }
 
@@ -493,6 +507,23 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             e.printStackTrace();
         }
 
+<<<<<<< HEAD
+=======
+        if (firstname.equals("null")){
+            editTextFirstName.setText("");
+        }
+        else{
+            editTextFirstName.setText(firstname);
+        }
+
+        if (lastname.equals("null")){
+            editTextLastName.setText("");
+        }
+        else{
+            editTextLastName.setText(lastname);
+        }
+
+>>>>>>> master
 
         if (email.equals("null")){
             editTextEmail.setText("");
@@ -1035,6 +1066,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 //                    }
                 }
             });
+<<<<<<< HEAD
 
             // Setting Negative "NO" Button
             alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -1048,6 +1080,21 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             // Showing Alert Message
             alertDialog.show();
 
+=======
+
+            // Setting Negative "NO" Button
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke NO event
+                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
+
+>>>>>>> master
         }
         else {
             finish();
@@ -1079,11 +1126,31 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         String first_user = null,second_user = null,third_user=null;
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
+<<<<<<< HEAD
         email2 = editTextEmail.getText().toString();
         email2=email1;
         fname=firstname;
         lname=lastname;
 
+=======
+        email1 = editTextEmail.getText().toString();
+        firstname=editTextFirstName.getText().toString();
+        lastname=editTextLastName.getText().toString();
+        Log.d("emialwithname", email1);
+        if (!email1.equals("")) {
+            email2 = email1;
+        } else if (email1.contains("<")){
+            int pos=email1.indexOf("<");
+            int pos1=email1.lastIndexOf(">");
+            email2=email1.substring(pos,pos1+1);
+            Log.d("email2",email2);
+        }
+        else{
+            allCorrect = false;
+            Toasty.info(this, getString(R.string.requestornotfound), Toast.LENGTH_SHORT).show();
+            return;
+        }
+>>>>>>> master
 
         collaborator = multiAutoCompleteTextViewCC.getText().toString().replaceAll(" ","");
         String newCollaList;
@@ -1190,6 +1257,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         final Data priority = (Data) autoCompletePriority.getSelectedItem();
         final Data staff = (Data) autoCompleteTextView.getSelectedItem();
         //final Data type= (Data) spinnerType.getSelectedItem();
+<<<<<<< HEAD
+=======
+        String fname = editTextFirstName.getText().toString();
+        String lname = editTextLastName.getText().toString();
+>>>>>>> master
         String phone = editTextPhone.getText().toString();
         mobile = editTextMobile.getText().toString();
 
@@ -1199,11 +1271,31 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         allCorrect = true;
 
+<<<<<<< HEAD
         if (emailHint.isEmpty()){
             Toasty.warning(this,getString(R.string.requestornotfound),Toast.LENGTH_LONG).show();
             allCorrect=false;
         }
         else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
+=======
+        if (fname.length()==0&&firstname.length()==0){
+            Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        }
+        if (fname.length() == 0 && email2.length() == 0 && subject.length() == 0 && message.length() == 0 && helpTopic.ID == 0 && priority.ID == 0) {
+            Toasty.warning(this, getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (fname.trim().length() == 0||fname.equals("null")||fname.equals(null)) {
+            Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (fname.trim().length() < 2) {
+            Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (fname.length() > 30) {
+            Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
+            allCorrect = false;
+        } else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
+>>>>>>> master
             Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (subject.trim().length() == 0) {

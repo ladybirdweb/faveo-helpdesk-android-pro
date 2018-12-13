@@ -60,6 +60,10 @@ public class collaboratorAdd extends AppCompatActivity {
     Button searchUer, deleteUser;
     ArrayList<CollaboratorSuggestion> stringArrayList;
     CollaboratorAdapter arrayAdapterCC;
+<<<<<<< HEAD
+=======
+    RelativeLayout relativeLayout;
+>>>>>>> master
     ArrayAdapter<String> spinnerPriArrayAdapter;
     int id = 0;
     int id1 = 0;
@@ -86,9 +90,23 @@ public class collaboratorAdd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collaborator_add);
         Window window = collaboratorAdd.this.getWindow();
+<<<<<<< HEAD
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(collaboratorAdd.this,R.color.faveo));
+=======
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(collaboratorAdd.this,R.color.faveo));
+        //recipients= (Spinner) findViewById(R.id.spinnerRecipients);
+        //relativeLayout= (RelativeLayout) findViewById(R.id.recipients);
+>>>>>>> master
         strings = new ArrayList<>();
         recyclerView= (RecyclerView) findViewById(R.id.list);
         strings.add("Show");
@@ -559,7 +577,11 @@ public class collaboratorAdd extends AppCompatActivity {
     }
     public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
 
+<<<<<<< HEAD
         private List<AttachedCollaborator> moviesList;
+=======
+        private List<co.helpdesk.faveo.pro.model.AttachedCollaborator> moviesList;
+>>>>>>> master
         Context context;
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView email;
@@ -575,6 +597,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 relativeLayout= (RelativeLayout) view.findViewById(R.id.attachedCollaborator);
                 textViewName= (TextView) view.findViewById(R.id.collaboratorname);
                 deletecolla= (ImageView) view.findViewById(R.id.deleteCollaborator);
+<<<<<<< HEAD
 
             }
         }
@@ -583,6 +606,16 @@ public class collaboratorAdd extends AppCompatActivity {
             this.context=context;
         }
 
+=======
+
+            }
+        }
+        public Collaboratoradapter(Context context,List<co.helpdesk.faveo.pro.model.AttachedCollaborator> moviesList) {
+            this.moviesList = moviesList;
+            this.context=context;
+        }
+
+>>>>>>> master
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
@@ -600,6 +633,7 @@ public class collaboratorAdd extends AppCompatActivity {
                         return false;
                     }
                 });
+<<<<<<< HEAD
 
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -676,6 +710,84 @@ public class collaboratorAdd extends AppCompatActivity {
 
             }
 
+=======
+
+            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            holder.deletecolla.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    email2=movie.getEmail();
+                    try {
+
+                        if (email2.equals("")){
+                            Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
+
+                        }
+                        else {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
+                            alertDialog.setMessage(R.string.user_collaborator);
+                            alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    progressDialog=new ProgressDialog(collaboratorAdd.this);
+                                    progressDialog.setMessage(getString(R.string.pleasewait));
+                                    progressDialog.show();
+                                    Log.d("email3",email2);
+                                    new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
+                                    // DO SOMETHING HERE
+
+                                }
+                            });
+
+                            AlertDialog dialog = alertDialog.create();
+                            dialog.show();
+
+
+                        }
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+            if (!movie.getEmail().equals("")) {
+                holder.email.setText(movie.getEmail());
+            }
+
+            if (movie.getName().equals("")){
+                holder.textViewName.setVisibility(View.GONE);
+            }
+            else{
+                holder.textViewName.setVisibility(View.VISIBLE);
+                holder.textViewName.setText(movie.getName());
+            }
+
+            if (!movie.getPicture().equals("")){
+                if (movie.getPicture().contains(".jpg")||movie.getPicture().contains(".jpeg")||movie.getPicture().contains(".png")) {
+                    Log.d("picture",movie.getPicture()) ;
+                    Picasso.with(collaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                }
+                else{
+                    Log.d("cameInThisBlock","true");
+                    Picasso.with(collaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                }
+
+            }
+
+>>>>>>> master
         }
 
         @Override

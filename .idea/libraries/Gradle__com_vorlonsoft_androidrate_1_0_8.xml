@@ -1,8 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.vorlonsoft:androidrate-1.0.8">
     <CLASSES>
+<<<<<<< HEAD
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/androidrate-1.0.8.aar/85bf0661464870d49cad5ed1305d445b/res" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/androidrate-1.0.8.aar/85bf0661464870d49cad5ed1305d445b/jars/classes.jar!/" />
+=======
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/androidrate-1.0.8.aar/34f6b43ed4678be6fef65632a3d87f87/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/androidrate-1.0.8.aar/34f6b43ed4678be6fef65632a3d87f87/res" />
+>>>>>>> master
     </CLASSES>
     <JAVADOC />
     <SOURCES>

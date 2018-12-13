@@ -53,6 +53,11 @@ public class TicketSaveActivity extends AppCompatActivity {
             spinnerPriority, spinnerHelpTopics;
     ProgressDialog progressDialog;
     AsyncTask<String, Void, String> task;
+<<<<<<< HEAD
+=======
+//    @BindView(R.id.spinner_staffs)
+    Spinner spinnerStaffs;
+>>>>>>> master
     EditText edittextsubject;
     Button buttonsave;
     ImageView imageView;
@@ -246,6 +251,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+<<<<<<< HEAD
             }
         });
 
@@ -370,6 +376,132 @@ public class TicketSaveActivity extends AppCompatActivity {
                 }
             }
         });
+=======
+            }
+        });
+
+        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (type.equals(spinnerType.getSelectedItem().toString())){
+                    buttonsave.setVisibility(View.GONE);
+                }
+                else{
+                    buttonsave.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        edittextsubject.addTextChangedListener(textWatcher);
+
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                // Setting Dialog Title
+                alertDialog.setTitle(getString(R.string.refreshingPage));
+
+                // Setting Dialog Message
+                alertDialog.setMessage(getString(R.string.refreshPage));
+
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke YES event
+                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                        if (InternetReceiver.isConnected()){
+                            refresh.startAnimation(rotation);
+
+                            new FetchDependency().execute();
+                            setUpViews();
+                            task = new FetchTicketDetail(Prefs.getString("TICKETid",null));
+                            task.execute();
+                            }
+                    }
+                });
+
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+
+                // Showing Alert Message
+                alertDialog.show();
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                    if (!subject.equalsIgnoreCase(edittextsubject.getText().toString())||!type.equalsIgnoreCase(spinnerType.getSelectedItem().toString())||
+                        !source.equalsIgnoreCase(spinnerSource.getSelectedItem().toString())||
+                        !priority.equalsIgnoreCase(spinnerPriority.getSelectedItem().toString())
+                        ||!helptopic.equalsIgnoreCase(spinnerHelpTopics.getSelectedItem().toString())||
+                        !staff.equalsIgnoreCase(autoCompleteTextViewstaff.getSelectedItem().toString())){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle(R.string.discard);
+
+                    // Setting Dialog Message
+                    //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke YES event
+                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+
+//                            Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//                            intent1.putExtra("ticket_id", ticketID);
+//                            startActivity(intent1);
+                            finish();
+                        }
+                    });
+
+                    // Setting Negative "NO" Button
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to invoke NO event
+                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+                }
+                else{
+
+//                        Intent intent1=new Intent(TicketSaveActivity.this,TicketDetailActivity.class);
+//                        intent1.putExtra("ticket_id", ticketID);
+//                        startActivity(intent1);
+                        finish();
+                }
+            }
+        });
+>>>>>>> master
         setSupportActionBar(toolbar);
 
         buttonsave.setOnClickListener(new View.OnClickListener() {
@@ -437,6 +569,39 @@ public class TicketSaveActivity extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
 
+<<<<<<< HEAD
+=======
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketSaveActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle(getString(R.string.editingticket));
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getString(R.string.editingConfirmation));
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()){
+                                    progressDialog=new ProgressDialog(TicketSaveActivity.this);
+                                    progressDialog.setMessage(getString(R.string.updating_ticket));
+                                    progressDialog.show();
+                                    try {
+                                        new SaveTicket(
+                                                Integer.parseInt(Prefs.getString("TICKETid",null)),
+                                                URLEncoder.encode(subject.trim(), "utf-8"),
+                                                helpTopic.ID,
+                                                source.ID,
+                                                priority.ID, type.ID,staffId.ID)
+                                                .execute();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+>>>>>>> master
                                     }
                                 }
                             });
@@ -651,7 +816,11 @@ public class TicketSaveActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
 //            if (progressDialog.isShowing())
+<<<<<<< HEAD
             progressDialog.dismiss();
+=======
+               progressDialog.dismiss();
+>>>>>>> master
             Prefs.putString("ticketThread","");
             Log.d("Depen Response : ", result + "");
             if (result == null) {

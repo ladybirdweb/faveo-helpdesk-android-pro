@@ -570,6 +570,7 @@ public class LoginActivity extends AppCompatActivity {
                 textInputLayoutUsername.setEnabled(true);
                 textInputLayoutPass.setEnabled(true);
                 buttonSignIn.revertAnimation();
+<<<<<<< HEAD
                 Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
@@ -626,6 +627,27 @@ public class LoginActivity extends AppCompatActivity {
 
 
             try {
+=======
+                Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                apiDisabled = Prefs.getString("400", null);
+                if (apiDisabled.equals("badRequest")) {
+                    textViewProgress.setVisibility(View.GONE);
+                    Prefs.putString("400", "null");
+                    textInputLayoutUsername.setEnabled(true);
+                    textInputLayoutPass.setEnabled(true);
+                    buttonSignIn.revertAnimation();
+                    //progressBar.setVisibility(View.GONE);
+                    Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            try {
+>>>>>>> master
 
                 JSONObject jsonObject = new JSONObject(result);
                 Log.d("camehere","true");
@@ -678,6 +700,30 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 } catch (JSONException e) {
+<<<<<<< HEAD
+=======
+                textInputLayoutUsername.setEnabled(true);
+                textInputLayoutPass.setEnabled(true);
+                buttonSignIn.stopAnimation();
+                buttonSignIn.revertAnimation();
+                buttonSignIn.setText(getString(R.string.sign_in)
+                );
+                //buttonSignIn.setText(getString(R.string.sign_in));
+                //buttonSignIn.setText(getString(R.string.sign_in));
+                //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
+                userNameError.setVisibility(View.VISIBLE);
+                userNameError.setText("Please check your password and email");
+                userNameError.setTextColor(Color.parseColor("#ff0000"));
+                userNameError.postDelayed(new Runnable() {
+                    public void run() {
+                        userNameError.setVisibility(View.INVISIBLE);
+                    }
+                }, 5000);
+                //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
+                passwordEdittext.startAnimation(animation);
+                usernameEdittext.startAnimation(animation);
+                //Toasty.error(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+>>>>>>> master
                 e.printStackTrace();
             }
 

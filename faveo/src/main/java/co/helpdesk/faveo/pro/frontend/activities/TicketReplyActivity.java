@@ -97,6 +97,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     EditText editTextReplyMessage;
     ProgressDialog progressDialog;
     TextView addCc;
+    Button searchUer, deleteUser;
     Button button;
     ImageButton imageButton;
     RelativeLayout attachment_layout;
@@ -105,10 +106,28 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     ProgressBar progressBar;
     private static final int PICKFILE_REQUEST_CODE = 1234;
     int gallery,document,camera,audio=0;
+<<<<<<< HEAD
     String path="1",realPath="1";
     String replyMessage;
     int id;
     String email;
+=======
+    BottomNavigationView bottomNavigationView;
+    String path="1",realPath="1";
+    private Uri fileUri = null;//Uri to capture image
+    private String getImageUrl = "";
+    String replyMessage;
+    LinearLayout linearLayout;
+    ArrayList<Data> stringArrayList;
+    ArrayAdapter<Data> arrayAdapterCC;
+    ArrayAdapter<String> spinnerPriArrayAdapter;
+    AutoCompleteTextView autoCompleteTextViewUser;
+    int id;
+    String email;
+    private LinearLayout mRevealView;
+    private boolean hidden = true;
+    public ImageButton photo_btn, video_btn,music_btn,document_btn;
+>>>>>>> master
     BottomSheetLayout bottomSheet;
     String option;
     @SuppressLint("ClickableViewAccessibility")

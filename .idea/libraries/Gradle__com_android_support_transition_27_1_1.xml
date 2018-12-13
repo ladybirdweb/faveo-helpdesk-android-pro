@@ -1,8 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.android.support:transition-27.1.1">
     <CLASSES>
+<<<<<<< HEAD:.idea/libraries/Gradle__com_android_support_transition_27_1_1.xml
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/transition-27.1.1.aar/45812112f1e1f81c34021fcee0b51201/res" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/transition-27.1.1.aar/45812112f1e1f81c34021fcee0b51201/jars/classes.jar!/" />
+=======
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/arcanimator-1.0.0.aar/c9ca819d24e388ed6cc42a9f5de0c37e/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/arcanimator-1.0.0.aar/c9ca819d24e388ed6cc42a9f5de0c37e/res" />
+>>>>>>> master:.idea/libraries/Gradle__com_github_asyl_animation_arcanimator_1_0_0.xml
     </CLASSES>
     <JAVADOC />
     <SOURCES>

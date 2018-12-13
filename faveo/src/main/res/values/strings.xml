@@ -357,6 +357,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="version">Version</string>
+<<<<<<< HEAD
     <string name="bannedOrdeactivated">Sorry!This account is either banned or deactivated,please contact the admistrator</string>
     <string name="inactiveagent">This account is currently inactive!</string>
     <string name="sort">sort</string>
@@ -370,6 +371,8 @@
     <string name="company">Company</string>
     <string name="no_results_found">No records found</string>
     <string name="email_taken">The email is has already been taken</string>
+=======
+>>>>>>> master
     <string-array name="CountryCodes">
 
         <item>93,AF</item>

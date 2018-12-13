@@ -14,12 +14,20 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
+<<<<<<< HEAD
     buildToolsVersion '28.0.3'
+=======
+    buildToolsVersion '27.0.3'
+>>>>>>> master
 
     defaultConfig {
         applicationId "co.helpdesk.faveo.pro"
         minSdkVersion 21
+<<<<<<< HEAD
         targetSdkVersion 26
+=======
+        targetSdkVersion 25
+>>>>>>> master
         versionCode 69
         versionName "4.9.5"
         multiDexEnabled true

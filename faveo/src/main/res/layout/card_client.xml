@@ -8,6 +8,10 @@
     android:paddingRight="16dp"
     android:paddingTop="4dp"
     android:focusable="true"
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     android:background="@drawable/custom_ripple">
 
     <!--<TextView-->

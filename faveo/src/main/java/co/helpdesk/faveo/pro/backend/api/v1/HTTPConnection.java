@@ -161,6 +161,7 @@ class HTTPConnection{
         }
         if (sb == null)
             return null;
+<<<<<<< HEAD
         String input = sb.toString();
         if (input.contains("token_expired") || input.contains("token_invalid")||input.contains("tokenRefreshed")) {
             if (refreshToken() == null)
@@ -283,6 +284,8 @@ class HTTPConnection{
         }
         if (sb == null)
             return null;
+=======
+>>>>>>> master
         String input = sb.toString();
         if (input.contains("token_expired") || input.contains("token_invalid")||input.contains("tokenRefreshed")) {
             if (refreshToken() == null)

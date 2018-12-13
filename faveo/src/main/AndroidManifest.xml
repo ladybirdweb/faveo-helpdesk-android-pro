@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -154,8 +155,12 @@
             android:name=".frontend.activities.CreateTicketActivity"
             android:label="@string/title_activity_create_ticket"
             android:screenOrientation="portrait"
+<<<<<<< HEAD
             android:theme="@style/MyMaterialTheme"
             android:noHistory="true"/>
+=======
+            android:theme="@style/MyMaterialTheme" />
+>>>>>>> master
         <activity
             android:name=".frontend.activities.SearchActivity"
             android:label="@string/title_activity_search"
@@ -208,6 +213,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".frontend.activities.TicketList"
+<<<<<<< HEAD
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
@@ -237,6 +243,37 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
+=======
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.TicketViewAndEdit"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.CustomersRelated"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.OtherFeatures"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.ViewClient"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".frontend.activities.CustomerFiltration"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".frontend.activities.SelectingMultipleTickets"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".frontend.activities.ChangingStatus"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+>>>>>>> master
         <activity android:name=".frontend.activities.MultipleTicketAssign"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">

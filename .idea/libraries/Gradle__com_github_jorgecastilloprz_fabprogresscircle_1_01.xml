@@ -1,8 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.jorgecastilloprz:fabprogresscircle-1.01">
     <CLASSES>
+<<<<<<< HEAD
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabprogresscircle-1.01.aar/0d3d74e551d21436adb3ea8089ed9ca0/res" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabprogresscircle-1.01.aar/0d3d74e551d21436adb3ea8089ed9ca0/jars/classes.jar!/" />
+=======
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabprogresscircle-1.01.aar/b978944e3625a214f81f6769b59e6a59/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabprogresscircle-1.01.aar/b978944e3625a214f81f6769b59e6a59/jars/classes.jar!/" />
+>>>>>>> master
     </CLASSES>
     <JAVADOC />
     <SOURCES>

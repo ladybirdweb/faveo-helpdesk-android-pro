@@ -1,8 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.ppamorim:dragger-1.2">
     <CLASSES>
+<<<<<<< HEAD
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/dragger-1.2.aar/e948a3cf6a8a9b0b7f0b957a9ff566db/res" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/dragger-1.2.aar/e948a3cf6a8a9b0b7f0b957a9ff566db/jars/classes.jar!/" />
+=======
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/dragger-1.2.aar/b4bc12cbc31b80b2edbf5976cbe0ffc9/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/dragger-1.2.aar/b4bc12cbc31b80b2edbf5976cbe0ffc9/jars/classes.jar!/" />
+>>>>>>> master
     </CLASSES>
     <JAVADOC />
     <SOURCES />

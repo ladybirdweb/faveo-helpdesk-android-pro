@@ -373,10 +373,17 @@ public class SearchActivity extends AppCompatActivity implements
         isShowing = false;
         super.onDestroy();
         }
+<<<<<<< HEAD
 
 
 
 
+=======
+
+
+
+
+>>>>>>> master
     @Override
     public void onBackPressed() {
         Prefs.putString("querry","null");

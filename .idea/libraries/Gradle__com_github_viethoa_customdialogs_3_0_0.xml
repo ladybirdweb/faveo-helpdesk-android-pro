@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.viethoa:customdialogs-3.0.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customdialogs-3.0.0.aar/569e0ee516bffbf0aed35b9bfcc0f47a/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/customdialogs-3.0.0.aar/569e0ee516bffbf0aed35b9bfcc0f47a/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.viethoa/customdialogs/3.0.0/7d11dfe0201983b37df9094c1d485d4fcd4ee714/customdialogs-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

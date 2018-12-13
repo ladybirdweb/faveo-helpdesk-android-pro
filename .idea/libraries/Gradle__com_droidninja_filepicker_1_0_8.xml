@@ -1,8 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.droidninja:filepicker-1.0.8">
     <CLASSES>
+<<<<<<< HEAD
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/filepicker-1.0.8.aar/7a1204614c922b2095e52741276ef6d4/res" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/filepicker-1.0.8.aar/7a1204614c922b2095e52741276ef6d4/jars/classes.jar!/" />
+=======
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/filepicker-1.0.8.aar/fdaf59a943494989fd3b2b70875fa7ad/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/filepicker-1.0.8.aar/fdaf59a943494989fd3b2b70875fa7ad/res" />
+>>>>>>> master
     </CLASSES>
     <JAVADOC />
     <SOURCES>
