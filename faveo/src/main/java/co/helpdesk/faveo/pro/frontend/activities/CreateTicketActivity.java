@@ -132,11 +132,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,typeArrayAdapter,autocompletetextview,stringArrayAdapterHint;
     ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
     MultiCollaboratorAdapter adapter1=null;
-    @BindView(R.id.fname_edittext)
-    EditText editTextFirstName;
     AutoCompleteTextView editTextEmail;
-    @BindView(R.id.lname_edittext)
-    EditText editTextLastName;
     @BindView(R.id.phone_edittext)
     EditText editTextPhone;
     @BindView(R.id.toolbar)
@@ -203,6 +199,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             keyType = "", valueType = "";
     String CountryID="";
     String CountryZipCode="";
+    String fname="",lname="";
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -431,8 +428,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         firstname=data2.getFirst_name();
                     lastname=data2.getLast_name();
                     editTextEmail.setText(email1);
-                    editTextFirstName.setText(firstname);
-                    editTextLastName.setText(lastname);
                     }
                 }
 
@@ -496,20 +491,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             phone = Prefs.getString("firstusermobile", null);
         }catch (NullPointerException e){
             e.printStackTrace();
-        }
-
-        if (firstname.equals("null")){
-            editTextFirstName.setText("");
-        }
-        else{
-            editTextFirstName.setText(firstname);
-        }
-
-        if (lastname.equals("null")){
-            editTextLastName.setText("");
-        }
-        else{
-            editTextLastName.setText(lastname);
         }
 
 
@@ -1014,8 +995,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
 //
         // editTextFirstName.addTextChangedListener(mTextWatcher);
-        editTextLastName.setFilters(new InputFilter[]{filter});
-        editTextFirstName.setFilters(new InputFilter[]{filter});
         subEdittext.setFilters(new InputFilter[]{filter});
 
     }
@@ -1100,23 +1079,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         String first_user = null,second_user = null,third_user=null;
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
-        email1 = editTextEmail.getText().toString();
-        firstname=editTextFirstName.getText().toString();
-        lastname=editTextLastName.getText().toString();
-        Log.d("emialwithname", email1);
-        if (!email1.equals("")) {
-            email2 = email1;
-        } else if (email1.contains("<")){
-            int pos=email1.indexOf("<");
-            int pos1=email1.lastIndexOf(">");
-            email2=email1.substring(pos,pos1+1);
-            Log.d("email2",email2);
-        }
-        else{
-            allCorrect = false;
-            Toasty.info(this, getString(R.string.requestornotfound), Toast.LENGTH_SHORT).show();
-            return;
-        }
+        email2 = editTextEmail.getText().toString();
+        email2=email1;
+        fname=firstname;
+        lname=lastname;
+
 
         collaborator = multiAutoCompleteTextViewCC.getText().toString().replaceAll(" ","");
         String newCollaList;
@@ -1223,8 +1190,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         final Data priority = (Data) autoCompletePriority.getSelectedItem();
         final Data staff = (Data) autoCompleteTextView.getSelectedItem();
         //final Data type= (Data) spinnerType.getSelectedItem();
-        String fname = editTextFirstName.getText().toString();
-        String lname = editTextLastName.getText().toString();
         String phone = editTextPhone.getText().toString();
         mobile = editTextMobile.getText().toString();
 
@@ -1234,23 +1199,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         allCorrect = true;
 
-        if (fname.length()==0&&firstname.length()==0){
-            Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
-            allCorrect = false;
+        if (emailHint.isEmpty()){
+            Toasty.warning(this,getString(R.string.requestornotfound),Toast.LENGTH_LONG).show();
+            allCorrect=false;
         }
-        if (fname.length() == 0 && email2.length() == 0 && subject.length() == 0 && message.length() == 0 && helpTopic.ID == 0 && priority.ID == 0) {
-            Toasty.warning(this, getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
-            allCorrect = false;
-        } else if (fname.trim().length() == 0||fname.equals("null")||fname.equals(null)) {
-            Toasty.warning(this, getString(R.string.fill_firstname), Toast.LENGTH_SHORT).show();
-            allCorrect = false;
-        } else if (fname.trim().length() < 2) {
-            Toasty.warning(this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
-            allCorrect = false;
-        } else if (fname.length() > 30) {
-            Toasty.warning(this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
-            allCorrect = false;
-        } else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
+        else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
             Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (subject.trim().length() == 0) {

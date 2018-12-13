@@ -570,57 +570,59 @@ public class LoginActivity extends AppCompatActivity {
                 textInputLayoutUsername.setEnabled(true);
                 textInputLayoutPass.setEnabled(true);
                 buttonSignIn.revertAnimation();
-                Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                Toasty.error(LoginActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
+            }
+
+            try{
+                apiDisabled = Prefs.getString("unauthorized", null);
+                if (apiDisabled.equals("true")){
+                    Prefs.putString("unauthorized","false");
+                    textInputLayoutUsername.setEnabled(true);
+                    textInputLayoutPass.setEnabled(true);
+                    buttonSignIn.setText(getString(R.string.sign_in));
+                    Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
+                    textInputLayoutUsername.setEnabled(true);
+                    textInputLayoutPass.setEnabled(true);
+                    buttonSignIn.revertAnimation();
+                    return;
+                }
+
+            }catch (NullPointerException e){
+                e.printStackTrace();
             }
 
             try{
                 apiDisabled = Prefs.getString("403", null);
                 if (apiDisabled.equals("403")){
+                    Prefs.putString("403","false");
                     textViewProgress.setVisibility(View.GONE);
-                    Prefs.putString("400", "true");
-                    textInputLayoutUsername.setEnabled(true);
-                    textInputLayoutPass.setEnabled(true);
-                    buttonSignIn.revertAnimation();
-                    //progressBar.setVisibility(View.GONE);
                     Toasty.info(context, getString(R.string.bannedOrdeactivated), Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }catch (NullPointerException e){
-
-            }
-
-            try{
-                apiDisabled = Prefs.getString("409", null);
-                if (apiDisabled.equals("409")){
-                    textViewProgress.setVisibility(View.GONE);
-                    Prefs.putString("409", "true");
                     textInputLayoutUsername.setEnabled(true);
                     textInputLayoutPass.setEnabled(true);
                     buttonSignIn.revertAnimation();
                     //progressBar.setVisibility(View.GONE);
-                    Toasty.info(context, getString(R.string.inactiveagent), Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
 
-            try {
-                apiDisabled = Prefs.getString("400", null);
-                if (apiDisabled.equals("badRequest")) {
-                    textViewProgress.setVisibility(View.GONE);
-                    Prefs.putString("400", "null");
-                    textInputLayoutUsername.setEnabled(true);
-                    textInputLayoutPass.setEnabled(true);
-                    buttonSignIn.revertAnimation();
-                    //progressBar.setVisibility(View.GONE);
-                    Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
                     return;
                 }
             }catch (NullPointerException e){
-                e.printStackTrace();
+
             }
+//            try {
+//                apiDisabled = Prefs.getString("400", null);
+//                if (apiDisabled.equals("badRequest")) {
+//                    textViewProgress.setVisibility(View.GONE);
+//                    Prefs.putString("400", "null");
+//                    textInputLayoutUsername.setEnabled(true);
+//                    textInputLayoutPass.setEnabled(true);
+//                    buttonSignIn.revertAnimation();
+//                    //progressBar.setVisibility(View.GONE);
+//                    Toasty.info(context, getString(R.string.apiDisabled), Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
+//            }
 
 
             try {
@@ -676,27 +678,6 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 } catch (JSONException e) {
-                textInputLayoutUsername.setEnabled(true);
-                textInputLayoutPass.setEnabled(true);
-                buttonSignIn.stopAnimation();
-                buttonSignIn.revertAnimation();
-                buttonSignIn.setText(getString(R.string.sign_in)
-                );
-                //buttonSignIn.setText(getString(R.string.sign_in));
-                //buttonSignIn.setText(getString(R.string.sign_in));
-                //Toast.makeText(LoginActivity.this, "Wrong Credentials", Toast.LENGTH_SHORT).show();
-                userNameError.setVisibility(View.VISIBLE);
-                userNameError.setText("Please check your password and email");
-                userNameError.setTextColor(Color.parseColor("#ff0000"));
-                userNameError.postDelayed(new Runnable() {
-                    public void run() {
-                        userNameError.setVisibility(View.INVISIBLE);
-                    }
-                }, 5000);
-                //StyleableToast st = new StyleableToast(LoginActivity.this, getString(R.string.wrong_credentials), Toast.LENGTH_LONG);
-                passwordEdittext.startAnimation(animation);
-                usernameEdittext.startAnimation(animation);
-                //Toasty.error(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 

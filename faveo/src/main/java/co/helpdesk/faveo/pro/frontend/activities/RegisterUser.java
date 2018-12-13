@@ -182,7 +182,7 @@ public class RegisterUser extends AppCompatActivity {
 
     private class RegisterUserNew extends AsyncTask<String, Void, String> {
         String firstname,email,mobile,company,lastname;
-
+        String apiDisabled;
         RegisterUserNew(String firstname,String lastname,String email,String mobile,String company) {
 
             this.firstname=firstname;
@@ -203,6 +203,17 @@ public class RegisterUser extends AppCompatActivity {
             if (result == null) {
                 Toasty.error(RegisterUser.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
+            }
+
+            try {
+                apiDisabled = Prefs.getString("400", null);
+                if (apiDisabled.equals("badRequest")) {
+                    Prefs.putString("400", "null");
+                    Toasty.info(RegisterUser.this,getString(R.string.email_taken), Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
             }
             try{
                 JSONObject jsonObject=new JSONObject(result);

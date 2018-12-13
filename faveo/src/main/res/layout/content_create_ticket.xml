@@ -129,74 +129,23 @@
 
                         />
                 </LinearLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:background="#f2f2f2">
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="36dp"-->
+                    <!--android:background="#f2f2f2">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
-                    android:text="@string/first_name"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:text="@string/required"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
-
-                <EditText
-                    android:id="@+id/fname_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@android:color/transparent"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPersonName"
-                    android:nextFocusForward="@+id/lname_edittext"
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="16sp"
-                    />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="#f2f2f2">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
-                    android:text="@string/last_name"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_marginLeft="17dp"-->
+                    <!--android:layout_marginStart="17dp"-->
+                    <!--android:text="@string/first_name"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:textStyle="bold" />-->
 
                 <!--<TextView-->
                     <!--android:layout_width="wrap_content"-->
@@ -208,28 +157,79 @@
                     <!--android:layout_marginRight="8dp"-->
                     <!--android:text="@string/required"-->
                     <!--android:textSize="12sp" />-->
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:focusable="true"-->
+                <!--android:focusableInTouchMode="true">-->
 
-                <EditText
-                    android:id="@+id/lname_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@android:color/transparent"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:nextFocusForward="@+id/phone_edittext"
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                <!--<EditText-->
+                    <!--android:id="@+id/fname_edittext"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--android:imeOptions="actionNext"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:nextFocusForward="@+id/lname_edittext"-->
+                    <!--android:textCursorDrawable="@drawable/color_cursor"-->
+                    <!--android:textSize="16sp"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
+
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="36dp"-->
+                <!--android:background="#f2f2f2">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_marginLeft="17dp"-->
+                    <!--android:layout_marginStart="17dp"-->
+                    <!--android:text="@string/last_name"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:textStyle="bold" />-->
+
+                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_marginEnd="8dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_marginRight="8dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:text="@string/required"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textSize="12sp" />&ndash;&gt;-->
+            <!--</RelativeLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:focusable="true"-->
+                <!--android:focusableInTouchMode="true">-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/lname_edittext"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--android:imeOptions="actionNext"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:maxLines="1"-->
+                    <!--android:nextFocusForward="@+id/phone_edittext"-->
+                    <!--android:textCursorDrawable="@drawable/color_cursor"-->
+                    <!--android:textSize="16sp" />-->
+            <!--</LinearLayout>-->
 
 
 

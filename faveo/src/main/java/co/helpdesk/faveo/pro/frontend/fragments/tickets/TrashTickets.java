@@ -744,7 +744,6 @@ public class TrashTickets extends Fragment {
                                 loading = false;
                                 pageno++;
                                 new FetchNextPage(getActivity(),pageno,"trash").execute();
-                                //Toast.makeText(getActivity(), "Loading!", Toast.LENGTH_SHORT).show();
                                 StyleableToast st = new StyleableToast(getContext(), getString(R.string.loading), Toast.LENGTH_SHORT);
                                 st.setBackgroundColor(Color.parseColor("#3da6d7"));
                                 st.setTextColor(Color.WHITE);

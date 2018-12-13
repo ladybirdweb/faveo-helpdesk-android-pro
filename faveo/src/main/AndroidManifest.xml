@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
 
     <application
         android:name=".FaveoApplication"
@@ -153,7 +154,8 @@
             android:name=".frontend.activities.CreateTicketActivity"
             android:label="@string/title_activity_create_ticket"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:noHistory="true"/>
         <activity
             android:name=".frontend.activities.SearchActivity"
             android:label="@string/title_activity_search"

@@ -371,12 +371,10 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 }
                 else{
                     int color=Color.parseColor("#ffffff");
-                    ColorGenerator generator = ColorGenerator.MATERIAL;
                     TextDrawable drawable = TextDrawable.builder()
                             .buildRound(letter,color);
                     imageViewClientPicture.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
                     imageViewClientPicture.setImageDrawable(drawable);
-                    //imageViewClientPicture.setImageResource(R.drawable.default_pic);
                 }
 
                 JSONArray jsonArray = jsonObject.getJSONArray("tickets");
