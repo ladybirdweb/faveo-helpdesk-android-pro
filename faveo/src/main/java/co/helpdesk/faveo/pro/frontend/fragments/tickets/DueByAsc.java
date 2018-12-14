@@ -731,7 +731,6 @@ public class DueByAsc extends Fragment {
             String result = new Helpdesk().getSortByTicketWithTitle(dept,title,order);
             if (result == null)
                 return null;
-            String data;
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);

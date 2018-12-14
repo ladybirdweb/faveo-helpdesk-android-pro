@@ -71,7 +71,7 @@ public class TicketFragment extends Fragment {
     TicketOverview ticketOverview;
     int pageno=1;
     private boolean isViewShown = false;
-    private OnFragmentInteractionListener mListener;
+
 
     public static TicketFragment newInstance(int page, String title) {
         TicketFragment fragmentFirst = new TicketFragment();

@@ -305,7 +305,6 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
             else {
                 int color= Color.parseColor("#ffffff");
                 String letter1 = String.valueOf(Prefs.getString("PROFILE_NAME", "").charAt(0));
-                ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
                         .buildRound(letter1,color);
                 //profilePic.setAlpha(0.2f);

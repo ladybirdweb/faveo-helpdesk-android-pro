@@ -12,8 +12,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import agency.tango.android.avatarview.IImageLoader;
 import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.model.MultiCollaborator;

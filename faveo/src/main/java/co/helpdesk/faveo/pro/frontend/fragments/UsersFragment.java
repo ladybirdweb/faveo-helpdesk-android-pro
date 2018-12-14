@@ -48,25 +48,19 @@ public class UsersFragment extends Fragment {
     Toolbar toolbar,toolbar1;
     TextView toolbarTextview;
     ShimmerRecyclerView recyclerView;
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
     static String nextPageURL = "";
     TextView empty_view;
     TextView noInternet_view;
     SwipeRefreshLayout swipeRefresh;
     ClientOverviewAdapter clientOverviewAdapter;
-    int total;
-    String cameFromFilter;
     TextView textView;
     List<ClientOverview> clientOverviewList = new ArrayList<>();
-    View rootView;
     ProgressDialog progressDialog;
     String querry;
     LinearLayout toolbarView;
-    int pastVisibleItems, visibleItemCount, totalItemCount;
     boolean loading = true;
-    private String lastQuerry;
-    private boolean isViewShown = false;
 
     public static UsersFragment newInstance(int page, String title) {
         UsersFragment fragmentFirst = new UsersFragment();

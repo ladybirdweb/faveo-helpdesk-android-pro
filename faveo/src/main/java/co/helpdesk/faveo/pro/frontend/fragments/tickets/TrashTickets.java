@@ -180,7 +180,6 @@ public class TrashTickets extends Fragment {
             Prefs.putString("Show","trash");
             statusItems=new ArrayList<>();
             JSONObject jsonObject1;
-            Data data;
             String json1 = Prefs.getString("DEPENDENCY", "");
             //statusItems.add(new Data(0, "Please select help topic"));
             try {
@@ -250,7 +249,6 @@ public class TrashTickets extends Fragment {
                     }catch (NullPointerException e){
                         e.printStackTrace();
                     }
-                    Fragment fragment = null;
                     title = getString(R.string.app_name);
                     if (item.getItemId() == R.id.due_ascending) {
                         Prefs.putString("dueasc","1");
@@ -384,7 +382,6 @@ public class TrashTickets extends Fragment {
             e.printStackTrace();
         }
         int id = item.getItemId();
-        StringBuffer stringBuffer = new StringBuffer();
         if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
@@ -886,7 +883,6 @@ public class TrashTickets extends Fragment {
                 letter="N";
             }
             int id=ticketOverviewList.get(i).getTicketID();
-            TextDrawable.IBuilder mDrawableBuilder;
             if (selectedIds.contains(id)){
                 //if item is selected then,set foreground color of FrameLayout.
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
@@ -1196,8 +1192,6 @@ public class TrashTickets extends Fragment {
 
             }
             else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")){
-                mDrawableBuilder = TextDrawable.builder()
-                        .round();
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
                 Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
 //        Glide.with(context)

@@ -31,14 +31,7 @@ class HTTPConnection{
     private StringBuilder sb = null;
     private InputStream is = null;
     private URL url;
-    private Context context;
     InputStream errorstream;
-
-   public HTTPConnection(Context context) {
-        super();
-        this.context = context;
-
-    }
     HTTPConnection() {
 
         CookieManager cookieManager = new CookieManager();
@@ -537,7 +530,6 @@ class HTTPConnection{
             JSONObject jsonObject1=jsonObject.getJSONObject("data");
             String token = jsonObject1.getString("token");
             JSONObject jsonObject2=jsonObject1.getJSONObject("user");
-            String role=jsonObject2.getString("role");
 //            if (role.equals("user")){
 //                //Prefs.clear();
 //                //Prefs.putString("role",role);

@@ -92,17 +92,14 @@ public class CustomBottomSheetDialog extends DialogFragment {
 
     public int getCountryZipCode() {
         String CountryID = "";
-        String CountryZipCode = "";
         int code = 0;
 
         TelephonyManager manager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        //getNetworkCountryIso
         CountryID = manager.getSimCountryIso().toUpperCase();
         String[] rl = this.getResources().getStringArray(R.array.spinnerCountryCodes);
         for (int i = 0; i < rl.length; i++) {
             String[] g = rl[i].split(",");
             if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
                 code = i;
                 break;
             }

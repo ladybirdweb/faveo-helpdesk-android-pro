@@ -496,26 +496,6 @@ public class SearchActivity extends AppCompatActivity implements
 
     }
 
-    /**
-     * Display the snackbar if network connection is there.
-     *
-     * @param isConnected is a boolean value of network connection.
-     */
-    private void showSnack(boolean isConnected) {
-
-        if (isConnected) {
-            Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
-
-            View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(Color.WHITE);
-            snackbar.show();
-        } else {
-            showSnackIfNoInternet(false);
-        }
-
-    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

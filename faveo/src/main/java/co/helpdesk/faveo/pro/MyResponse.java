@@ -3,8 +3,6 @@ package co.helpdesk.faveo.pro;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import retrofit2.Response;
-
 /**
  * Created by Sayar Samanta on 3/26/2018.
  */

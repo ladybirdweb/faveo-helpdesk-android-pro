@@ -68,7 +68,6 @@ public class ClientList extends Fragment implements View.OnClickListener {
     SwipeRefreshLayout swipeRefresh;
     ClientOverviewAdapter clientOverviewAdapter;
     int total;
-    String cameFromFilter;
     @BindView(R.id.totalcount)
             TextView textView;
     List<ClientOverview> clientOverviewList = new ArrayList<>();
@@ -84,7 +83,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
     public String mParam2;
     View view1;
     TextView toolbarTextview;
-    Toolbar toolbar1,toolbar2;
+    Toolbar toolbar1;
     String title;
     String heading;
     private OnFragmentInteractionListener mListener;
@@ -186,7 +185,6 @@ public class ClientList extends Fragment implements View.OnClickListener {
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
-                    Fragment fragment = null;
                     title = getString(R.string.app_name);
                     if (item.getItemId() == R.id.active) {
                         Prefs.putString("filtercustomer","active");

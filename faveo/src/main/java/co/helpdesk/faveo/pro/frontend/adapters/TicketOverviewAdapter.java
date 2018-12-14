@@ -35,12 +35,10 @@ import co.helpdesk.faveo.pro.model.TicketOverview;
 public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
     private List<TicketOverview> ticketOverviewList;
     String subject;
-    int length=0;
     private Context context;
     ArrayList<Integer> checked_items= new ArrayList<>();
-    ArrayList<String> ticketSubject=new ArrayList<>();
     private SparseBooleanArray mSelectedItemsIds;
-    private List<Integer> selectedIds = new ArrayList<>();
+    public List<Integer> selectedIds = new ArrayList<>();
 
 
     public TicketOverviewAdapter(Context context,List<TicketOverview> ticketOverviewList) {
@@ -58,7 +56,6 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
     public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
         final TicketOverview ticketOverview = ticketOverviewList.get(i);
         String letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
-         TextDrawable.IBuilder mDrawableBuilder;
 
         Log.d("letter",letter);
 //        if (selectedIds.contains(id)){
@@ -243,8 +240,6 @@ if (ticketOverview.clientPicture.equals("")){
 
 }
 else if (ticketOverview.clientPicture.contains(".jpg")){
-    mDrawableBuilder = TextDrawable.builder()
-            .round();
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
     Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
 //        Glide.with(context)

@@ -61,7 +61,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
             if (notiThread.getBy().equals("System")){
                 viewHolder.textSub.setText("System, "+notiThread.getTicket_subject());
-                //profilePic.setAlpha(0.2f);
                 viewHolder.roundedImageViewProfilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
                 viewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.default_pic);
             }
@@ -72,14 +71,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                 } else if (notiThread.getProfiel_pic().contains(".jpg") || notiThread.getProfiel_pic().contains(".png") || notiThread.getProfiel_pic().contains(".jpeg")) {
                     Picasso.with(context).load(notiThread.getProfiel_pic()).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
-//        Glide.with(context)
-//            .load(ticketOverview.getClientPicture())
-//            .into(ticketViewHolder.roundedImageViewProfilePic);
-
-                    //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
 
                 } else {
-                    int color = Color.parseColor("#cdc5bf");
                     ColorGenerator generator = ColorGenerator.MATERIAL;
                     TextDrawable drawable = TextDrawable.builder()
                             .buildRound(letter, generator.getRandomColor());
@@ -87,13 +80,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
                 }
             }
-//            if (notiThread.getRequesterName().equals("null")){
-//                viewHolder.textSub.setText(notiThread.getTicket_subject());
-//            }
-//            else{
-//                viewHolder.textSub.setText(notiThread.getRequesterName().trim() + ", " + notiThread.getTicket_subject());
-//            }
-
 
 
 
@@ -107,8 +93,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             viewHolder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    //updateNotification(notiThread.getTicket_id() + "");
                     new UpdateNotificationSeen(notiThread.getNoti_id()).execute();
 
 
@@ -136,36 +120,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             e.printStackTrace();
         }
     }
-
-
-//    private void updateNotification(String ticketID) {
-//
-//        OkHttpClient httpClient = new OkHttpClient();
-//
-//        RequestBody body = new FormBody.Builder()
-//                .add("notification_id", ticketID)
-//                .add("token", Preference.getToken())
-//                .build();
-//
-//        Request request = new Request.Builder()
-//                .url(Constants.URL + "helpdesk/notifications-seen?")
-//                .post(body)
-//                .build();
-//
-//        httpClient.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                Log.d("Response Of okHttp", response.body().string());
-//            }
-//        });
-//        //
-//
-//    }
 
     @Override
     public int getItemCount() {

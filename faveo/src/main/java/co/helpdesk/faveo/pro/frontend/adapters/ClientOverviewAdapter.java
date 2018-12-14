@@ -71,7 +71,6 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
 
             }
             else{
-                int color= Color.parseColor("#cdc5bf");
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
                         .buildRound(letter,generator.getRandomColor());

@@ -431,7 +431,6 @@ public class collaboratorAdd extends AppCompatActivity {
                 e.printStackTrace();
             }
                 movieList.clear();
-            int noOfCollaborator=0;
             if (isCancelled()) return;
 
             if (result == null) {
@@ -448,7 +447,6 @@ public class collaboratorAdd extends AppCompatActivity {
                 }else {
                     progressBar.setVisibility(View.GONE);
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        noOfCollaborator++;
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         String email = jsonObject1.getString("email");
                         String image=jsonObject1.getString("avatar");
@@ -578,7 +576,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
             }
         }
-        public Collaboratoradapter(Context context,List<co.helpdesk.faveo.pro.model.AttachedCollaborator> moviesList) {
+        public Collaboratoradapter(Context context,List<AttachedCollaborator> moviesList) {
             this.moviesList = moviesList;
             this.context=context;
         }
@@ -592,7 +590,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-            final co.helpdesk.faveo.pro.model.AttachedCollaborator movie = moviesList.get(position);
+            final AttachedCollaborator movie = moviesList.get(position);
             holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {

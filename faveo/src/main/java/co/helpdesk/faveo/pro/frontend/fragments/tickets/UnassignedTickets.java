@@ -193,7 +193,6 @@ public class UnassignedTickets extends Fragment {
             Prefs.putString("source","2");
             statusItems=new ArrayList<>();
             JSONObject jsonObject1;
-            Data data;
             String json1 = Prefs.getString("DEPENDENCY", "");
             //statusItems.add(new Data(0, "Please select help topic"));
             try {
@@ -277,7 +276,6 @@ public class UnassignedTickets extends Fragment {
                     }catch (NullPointerException e){
                         e.printStackTrace();
                     }
-                    Fragment fragment = null;
                     title = getString(R.string.app_name);
                     if (item.getItemId() == R.id.due_ascending) {
                         Prefs.putString("dueasc","1");
@@ -630,6 +628,7 @@ public class UnassignedTickets extends Fragment {
 
         FetchFirst(Context context,int page) {
             this.context = context;
+            this.page=page;
         }
 
         protected String doInBackground(String... urls) {

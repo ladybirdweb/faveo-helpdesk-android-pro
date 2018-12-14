@@ -391,7 +391,6 @@ public class MyTickets extends Fragment {
             e.printStackTrace();
         }
         int id = item.getItemId();
-        StringBuffer stringBuffer = new StringBuffer();
         if (id == R.id.action_noti) {
             Intent intent = new Intent(getActivity(), NotificationActivity.class);
             startActivity(intent);
@@ -607,6 +606,7 @@ public class MyTickets extends Fragment {
 
         FetchFirst(Context context, int page) {
             this.context = context;
+            this.page=page;
         }
 
         protected String doInBackground(String... urls) {
@@ -854,7 +854,6 @@ public class MyTickets extends Fragment {
                 letter="N";
             }
             int id = ticketOverviewList.get(i).getTicketID();
-            TextDrawable.IBuilder mDrawableBuilder;
             if (selectedIds.contains(id)) {
                 //if item is selected then,set foreground color of FrameLayout.
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
@@ -1051,8 +1050,6 @@ public class MyTickets extends Fragment {
                 ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
             } else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")) {
-                mDrawableBuilder = TextDrawable.builder()
-                        .round();
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
                 Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
 //        Glide.with(context)
