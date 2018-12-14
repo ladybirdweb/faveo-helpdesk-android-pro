@@ -37,9 +37,7 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         CollaboratorSuggestion customer = getItem(position);
-        IImageLoader imageLoader;
 //        String letter = null;
-        TextDrawable.IBuilder mDrawableBuilder;
 //        try {
 //            letter = String.valueOf(customer.getFirst_name().charAt(0));
 //        }catch (StringIndexOutOfBoundsException e){

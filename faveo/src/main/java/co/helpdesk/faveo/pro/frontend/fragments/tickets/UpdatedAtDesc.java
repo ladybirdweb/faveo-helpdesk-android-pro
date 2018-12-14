@@ -612,7 +612,6 @@ public class UpdatedAtDesc extends Fragment {
             String result = new Helpdesk().getSortByTicketWithTitle(show,title,order);
             if (result == null)
                 return null;
-            String data;
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);

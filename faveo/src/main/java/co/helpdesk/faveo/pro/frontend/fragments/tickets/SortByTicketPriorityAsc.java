@@ -184,7 +184,6 @@ public class SortByTicketPriorityAsc extends Fragment {
             progressDialog.setMessage("Please wait");
             statusItems=new ArrayList<>();
             JSONObject jsonObject1;
-            Data data;
             String json1 = Prefs.getString("DEPENDENCY", "");
             //statusItems.add(new Data(0, "Please select help topic"));
             try {
@@ -722,7 +721,6 @@ public class SortByTicketPriorityAsc extends Fragment {
             String result = new Helpdesk().getSortByTicketWithTitle(show,title,order);
             if (result == null)
                 return null;
-            String data;
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);

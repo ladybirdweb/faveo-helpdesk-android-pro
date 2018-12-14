@@ -376,7 +376,6 @@ public class Helper {
         String userName ;
         String clientname = null;
         int clientID = 0;
-        JSONObject requester=null;
         try {
             String message = jsonArray.getJSONObject(i).getString("message");
             int ticketID = jsonArray.getJSONObject(i).getInt("row_id");
@@ -409,7 +408,6 @@ public class Helper {
                 clientname="System";
 
             }
-            String requestor=jsonArray.getJSONObject(i).getString("requester");
 //            if (!requestor.equals(null)||!requestor.equals("null")){
 //
 //

@@ -138,7 +138,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         Prefs.putString("cameFromTicket","false");
         statusItems=new ArrayList<>();
         JSONObject jsonObject1;
-        Data data;
         String json1 = Prefs.getString("DEPENDENCY", "");
         //statusItems.add(new Data(0, "Please select help topic"));
         try {
@@ -600,8 +599,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         }
 
         protected void onPostExecute(String result) {
-
-            int noOfCollaborator=0;
             if (isCancelled()) return;
 
 

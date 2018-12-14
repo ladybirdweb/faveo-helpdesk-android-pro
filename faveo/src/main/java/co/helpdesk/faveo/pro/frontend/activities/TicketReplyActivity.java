@@ -79,7 +79,6 @@ import javax.net.ssl.HttpsURLConnection;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.model.Data;
 import es.dmoral.toasty.Toasty;
 
 import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
@@ -266,11 +265,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-    private void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -781,24 +775,6 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 
     }
 
-    /**
-     * Display the snackbar if network connection is there.
-     *
-     * @param isConnected is a boolean value of network connection.
-     */
-    private void showSnack(boolean isConnected) {
-        if (isConnected) {
-            Snackbar snackbar = Snackbar
-                    .make(findViewById(android.R.id.content), R.string.connected_to_internet, Snackbar.LENGTH_LONG);
-
-            View sbView = snackbar.getView();
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(Color.WHITE);
-            snackbar.show();
-        } else {
-            showSnackIfNoInternet(false);
-        }
-    }
     private void reqPermissionCamera() {
         new AskPermission.Builder(this).setPermissions(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .setCallback(TicketReplyActivity.this)

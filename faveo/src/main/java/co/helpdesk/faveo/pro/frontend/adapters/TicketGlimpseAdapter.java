@@ -73,7 +73,7 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_ticket_status, viewGroup, false);
-        return new TicketViewHolder(itemView, clientName);
+        return new TicketViewHolder(itemView);
     }
 
     static class TicketViewHolder extends RecyclerView.ViewHolder {
@@ -84,25 +84,13 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         View color;
         protected View ticket;
 
-        TicketViewHolder(View v, final String clientName) {
+        TicketViewHolder(View v) {
             super(v);
             textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
             textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
             textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
             color = v.findViewById(R.id.color);
             ticket=v.findViewById(R.id.ticket);
-//            v.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
-//                    intent.putExtra("ticket_id", textViewTicketID.getText().toString());
-//                    intent.putExtra("ticket_number", textViewTicketNumber.getText().toString());
-//                    intent.putExtra("ticket_opened_by", clientName);
-//                    Prefs.putString("ticketstatus",ticke);
-//                    intent.putExtra("ticket_subject", textViewSubject.getText().toString());
-//                    v.getContext().startActivity(intent);
-//                }
-//            });
 
         }
 

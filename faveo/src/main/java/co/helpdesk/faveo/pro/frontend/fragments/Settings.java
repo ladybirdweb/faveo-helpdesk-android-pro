@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,8 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
-
-import co.helpdesk.faveo.pro.LocaleHelper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import es.dmoral.toasty.Toasty;

@@ -73,8 +73,8 @@ public class Conversation extends Fragment {
     String name;
     FabSpeedDial fab;
     Toolbar toolbarTicket;
-    private String mParam1;
-    private String mParam2;
+    public String mParam1;
+    public String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private String ticketID;

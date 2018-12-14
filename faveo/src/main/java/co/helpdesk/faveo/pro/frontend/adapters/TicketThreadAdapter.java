@@ -54,7 +54,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
     @Override
     public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
         final TicketThread ticketThread = ticketThreadList.get(i);
-        final StringBuilder builder = new StringBuilder();
         String letter="U";
         Log.d("customerUname",ticketThread.clientName);
         try {

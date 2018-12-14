@@ -89,7 +89,6 @@ public class InboxTickets extends Fragment {
     TextView textView;
     public android.support.v7.view.ActionMode mActionMode;
     ArrayList<Integer> checked_items = new ArrayList<>();
-    private ActionMode actionMode;
     static String nextPageURL = "";
     TicketOverview ticketOverview;
     View rootView;

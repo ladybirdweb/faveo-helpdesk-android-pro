@@ -95,7 +95,6 @@ public class SplashActivity extends AppCompatActivity {
         //welcomeDialog=new WelcomeDialog();
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            String version = pInfo.versionName;
             int verCode = pInfo.versionCode;
             Log.d("versionNo",""+verCode);
         } catch (PackageManager.NameNotFoundException e) {

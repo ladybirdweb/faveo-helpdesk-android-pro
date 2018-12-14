@@ -653,7 +653,6 @@ public class SortByTicketNumberDescending extends Fragment {
             String result = new Helpdesk().getSortByTicketWithTitle(show,title,"DESC");
             if (result == null)
                 return null;
-            String data;
             ticketOverviewList.clear();
             try {
                 JSONObject jsonObject = new JSONObject(result);

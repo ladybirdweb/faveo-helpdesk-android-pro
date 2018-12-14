@@ -25,7 +25,6 @@ import es.dmoral.toasty.Toasty;
  * A simple {@link Fragment} subclass.
  */
 public class ConfirmationDialog extends DialogFragment {
-private Context context;
 
     public ConfirmationDialog() {
         // Required empty public constructor

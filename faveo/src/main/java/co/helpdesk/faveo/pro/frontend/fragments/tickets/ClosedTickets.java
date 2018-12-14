@@ -170,7 +170,6 @@ public class ClosedTickets extends Fragment {
             Prefs.putString("querry","null");
             statusItems=new ArrayList<>();
             JSONObject jsonObject1;
-            Data data;
             String json1 = Prefs.getString("DEPENDENCY", "");
             //statusItems.add(new Data(0, "Please select help topic"));
             try {
@@ -233,7 +232,6 @@ public class ClosedTickets extends Fragment {
                         e.printStackTrace();
                     }
                     //Prefs.putString("source","3");
-                    Fragment fragment = null;
                     title = getString(R.string.app_name);
                     if (item.getItemId() == R.id.due_ascending) {
 
@@ -982,12 +980,9 @@ public class ClosedTickets extends Fragment {
             }
             int id=ticketOverviewList.get(i).getTicketID();
             if (selectedIds.contains(id)){
-                //if item is selected then,set foreground color of FrameLayout.
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
             }
             else {
-                //else remove selected item color.
-                //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
             }
             subject=ticketOverview.ticketSubject;
             if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
@@ -1003,124 +998,13 @@ public class ClosedTickets extends Fragment {
                 ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
             }
 
-//            ticketViewHolder.ticket
-//                    .setBackgroundColor(mSelectedItemsIds.get(i) ? 0x9934B5E4
-//                            : Color.TRANSPARENT);
-
 
             if (checked_items.contains(id)){
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
             }
             else {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                if (ticketOverview.lastReply.equals("client")){
-//                    int color=Color.parseColor("#ededed");
-//                    ticketViewHolder.ticket.setBackgroundColor(color);
-//                }
-//                else{
-//
-//                }
-                //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
-
-//        if (checked_items.contains(id)){
-//            //if item is selected then,set foreground color of FrameLayout.
-//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#B9FCFC"));
-//        }
-//        else {
-//            //else remove selected item color.
-//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//        }
-
-            //Toast.makeText(context, "no of items"+checked_items.toString(), Toast.LENGTH_SHORT).show();
-
-//            ticketViewHolder.checkBox1.setOnCheckedChangeListener(null);
-//
-//            //ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-//            ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//
-//                    if (b){
-//                        ticketViewHolder.checkBox1.setChecked(true);
-//                        ticketOverview.setChecked(true);
-//                        //stringBuffer.append(""+ticketOverview.getTicketID()+",");
-//                        if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
-//                            String first=subject.replace("=?UTF-8?Q?","");
-//                            String second=first.replace("_"," ");
-//                            String third=second.replace("=C2=A0","");
-//                            String fourth=third.replace("?=","");
-//                            String fifth=fourth.replace("=E2=80=99","'");
-//                            ticketViewHolder.textViewSubject.setText(fifth);
-//                            ticketSubject.add(fifth);
-//                        }
-//                        else{
-//                            ticketSubject.add(ticketOverview.ticketSubject);
-//                        }
-//                        //ticketSubject.add(ticketOverview.ticketSubject);
-//                        checked_items.add(ticketOverview.getTicketID());
-////                  length=checked_items.size();
-//                        Log.d("ticketsubject",ticketSubject.toString());
-//                        Log.d("checkeditems",checked_items.toString().replace(" ",""));
-//                        Prefs.putString("tickets",checked_items.toString().replace(" ",""));
-//                        Prefs.putString("TicketSubject",ticketSubject.toString());
-//                        ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-//
-//                    }
-//                    else{
-//                        ticketOverview.setChecked(false);
-//                        int pos=checked_items.indexOf(ticketOverview.getTicketID());
-//                        int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
-//                        try {
-//                            checked_items.remove(pos);
-//                            ticketSubject.remove(pos1);
-//                        }
-//                        catch (ArrayIndexOutOfBoundsException e){
-//                            e.printStackTrace();
-//                        }
-//                        Log.d("Position",""+pos);
-//                        //checked_items.remove(checked_items.indexOf(ticketOverview.getTicketID()));
-//                        length--;
-//                        Log.d("NoOfItems",""+length);
-//                        Prefs.putInt("totalticketselected",length);
-//                        Log.d("checkeditems", "" + checked_items);
-//                        Prefs.putInt("NoOfItems",length);
-//                        Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
-//                        Prefs.putString("TicketSubject",ticketSubject.toString());
-//                        Log.d("ticketsubject",ticketSubject.toString());
-//                        ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                        ticketViewHolder.checkBox1.setChecked(false);
-//                        if (!ticketOverview.lastReply.equals("client")){
-//                            int color=Color.parseColor("#e9e9e9");
-//                            ticketViewHolder.ticket.setBackgroundColor(color);
-//                        }
-//                        else{
-//                            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                        }
-//
-//
-//                        //notifyDataSetChanged();
-//
-//                    }
-//
-//
-//                }
-//            });
-//
-//
-//
-//
-//            if (ticketOverview.getChecked()){
-//                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-//                ticketViewHolder.checkBox1.setChecked(true);
-//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-//            }
-//            else{
-//                ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                ticketViewHolder.checkBox1.setChecked(false);
-//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            }
 
             if (ticketOverview.ticketAttachments.equals("0")) {
 

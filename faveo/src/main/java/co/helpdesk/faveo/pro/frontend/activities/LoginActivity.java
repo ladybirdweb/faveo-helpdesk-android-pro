@@ -72,6 +72,8 @@ import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import es.dmoral.toasty.Toasty;
 
+import static android.os.Build.MANUFACTURER;
+
 
 /**
  * This log in activity is for verifying the url and and
@@ -199,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         String manufacturer = "xiaomi";
-        if (manufacturer.equalsIgnoreCase(android.os.Build.MANUFACTURER)) {
+        if (manufacturer.equalsIgnoreCase(MANUFACTURER)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setTitle("Enable Permission")
                     .setMessage("To get notifications on your phone in Faveo, you can simply enable the permission in auto start.")
