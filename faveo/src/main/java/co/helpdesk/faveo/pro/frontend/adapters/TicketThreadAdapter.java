@@ -98,7 +98,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         }
 
         else if (!ticketThread.getClientPicture().contains("jpg")||!ticketThread.getClientPicture().contains("png")||!ticketThread.getClientPicture().contains("jpeg")){
-            int color= Color.parseColor("#cdc5bf");
             ColorGenerator generator = ColorGenerator.MATERIAL;
             TextDrawable drawable = TextDrawable.builder()
                     .buildRound(letter,generator.getRandomColor());

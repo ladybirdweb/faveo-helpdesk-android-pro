@@ -981,7 +981,6 @@ public class ClosedTickets extends Fragment {
                 letter="N";
             }
             int id=ticketOverviewList.get(i).getTicketID();
-            TextDrawable.IBuilder mDrawableBuilder;
             if (selectedIds.contains(id)){
                 //if item is selected then,set foreground color of FrameLayout.
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
@@ -1292,8 +1291,7 @@ public class ClosedTickets extends Fragment {
 
             }
             else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")){
-                mDrawableBuilder = TextDrawable.builder()
-                        .round();
+
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
                 Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
 //        Glide.with(context)

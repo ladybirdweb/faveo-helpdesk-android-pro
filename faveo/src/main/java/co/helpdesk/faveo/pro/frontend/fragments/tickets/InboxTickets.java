@@ -87,7 +87,7 @@ public class InboxTickets extends Fragment {
     TextView noInternet_view;
     @BindView(R.id.totalcount)
     TextView textView;
-    private android.support.v7.view.ActionMode mActionMode;
+    public android.support.v7.view.ActionMode mActionMode;
     ArrayList<Integer> checked_items = new ArrayList<>();
     private ActionMode actionMode;
     static String nextPageURL = "";

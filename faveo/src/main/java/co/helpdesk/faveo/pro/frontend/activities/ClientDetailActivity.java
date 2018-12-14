@@ -65,38 +65,38 @@ public class ClientDetailActivity extends AppCompatActivity implements
         ClosedTickets.OnFragmentInteractionListener {
 
 
-    private AsyncTask<String, Void, String> task;
+    AsyncTask<String, Void, String> task;
     @BindView(R.id.imageView_default_profile)
-    private ImageView imageViewClientPicture;
+    ImageView imageViewClientPicture;
 
     @BindView(R.id.textView_client_name)
-    private LoaderTextView textViewClientName;
+    LoaderTextView textViewClientName;
 
     @BindView(R.id.textView_client_email)
-    private LoaderTextView textViewClientEmail;
+    LoaderTextView textViewClientEmail;
 
     @BindView(R.id.textView_client_phone)
-    private LoaderTextView textViewClientPhone;
+    LoaderTextView textViewClientPhone;
 
     @BindView(R.id.textView_client_mobile)
-    private LoaderTextView textViewClientMobile;
+    LoaderTextView textViewClientMobile;
 
     @BindView(R.id.textView_client_status)
-    private TextView textViewClientStatus;
+    TextView textViewClientStatus;
 
 
 
     @BindView(R.id.viewpager)
-    private ViewPager viewPager;
+    ViewPager viewPager;
 
-    private ViewPagerAdapter adapter;
-    private OpenTickets fragmentOpenTickets;
-    private ClosedTickets fragmentClosedTickets;
-    private String clientID, clientName;
-    private List<TicketGlimpse> listTicketGlimpse;
-    private ProgressDialog progressDialog;
-    private ImageView imageViewClientEdit;
-    private ImageView imageViewBack;
+    ViewPagerAdapter adapter;
+    OpenTickets fragmentOpenTickets;
+    ClosedTickets fragmentClosedTickets;
+    public String clientID, clientName;
+    List<TicketGlimpse> listTicketGlimpse;
+    ProgressDialog progressDialog;
+    ImageView imageViewClientEdit;
+    ImageView imageViewBack;
     @Override
     public void onPause() {
         if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
@@ -252,9 +252,9 @@ public class ClientDetailActivity extends AppCompatActivity implements
      * used two list for open and close ticket.
      */
     private class FetchClientTickets extends AsyncTask<String, Void, String> {
-        private Context context;
-        private List<TicketGlimpse> listOpenTicketGlimpse = new ArrayList<>();
-        private List<TicketGlimpse> listClosedTicketGlimpse = new ArrayList<>();
+        Context context;
+        List<TicketGlimpse> listOpenTicketGlimpse = new ArrayList<>();
+        List<TicketGlimpse> listClosedTicketGlimpse = new ArrayList<>();
 
         FetchClientTickets(Context context) {
             this.context = context;
@@ -271,7 +271,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
             try{
                 JSONObject jsonObject = new JSONObject(result);
                 String error=jsonObject.getString("error");
-                if (("This is not a client").equals(error)){
+                if (error.equals("This is not a client")){
                     imageViewClientEdit.setVisibility(View.GONE);
                     Toasty.info(ClientDetailActivity.this, "This is not a client", Toast.LENGTH_LONG).show();
                     return;
@@ -287,7 +287,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 String username = requester.getString("user_name");
                 String clientname;
                 String letter="A";
-                if (("").equals(firstname)&&("").equals(lastName)){
+                if (firstname.equals("")&&lastName.equals("")){
                     letter= String.valueOf(username.toUpperCase().charAt(0));
                 }
                 else{
