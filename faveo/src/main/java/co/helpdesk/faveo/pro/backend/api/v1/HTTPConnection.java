@@ -31,7 +31,7 @@ class HTTPConnection{
     private StringBuilder sb = null;
     private InputStream is = null;
     private URL url;
-    Context context;
+    private Context context;
     InputStream errorstream;
 
    public HTTPConnection(Context context) {
