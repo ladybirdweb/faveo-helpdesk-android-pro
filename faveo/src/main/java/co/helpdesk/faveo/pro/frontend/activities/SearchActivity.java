@@ -45,7 +45,6 @@ import co.helpdesk.faveo.pro.frontend.fragments.TicketFragment;
 import co.helpdesk.faveo.pro.frontend.fragments.UsersFragment;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
-import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 
 
 public class SearchActivity extends AppCompatActivity implements
