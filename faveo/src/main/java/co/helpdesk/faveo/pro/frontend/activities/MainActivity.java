@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 // Write your code here to invoke YES event
                 //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
 finishAffinity();
-                System.exit(0);
+
 
             }
         });

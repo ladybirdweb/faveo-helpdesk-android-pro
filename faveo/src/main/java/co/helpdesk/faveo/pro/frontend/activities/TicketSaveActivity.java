@@ -1031,6 +1031,8 @@ public class TicketSaveActivity extends AppCompatActivity {
             Log.d("cameHere","True");
 
             if (result==null) {
+                Toast.makeText(TicketSaveActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                return;
             }
 
 

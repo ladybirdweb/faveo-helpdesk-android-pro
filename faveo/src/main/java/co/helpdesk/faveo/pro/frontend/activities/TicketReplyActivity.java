@@ -14,7 +14,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -230,7 +229,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         addCc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TicketReplyActivity.this,collaboratorAdd.class);
+                Intent intent=new Intent(TicketReplyActivity.this,CollaboratorAdd.class);
                 intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
             }

@@ -153,7 +153,8 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("Depen Response : ", result + "");
 
             if (result==null) {
-
+                Toast.makeText(SplashActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                return;
             }
 
 

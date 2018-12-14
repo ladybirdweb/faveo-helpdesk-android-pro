@@ -857,9 +857,6 @@ public class MyTickets extends Fragment {
             if (selectedIds.contains(id)) {
                 //if item is selected then,set foreground color of FrameLayout.
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-            } else {
-                //else remove selected item color.
-                //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
             }
             subject = ticketOverview.ticketSubject;
             if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {

@@ -52,39 +52,39 @@ public class NotificationThread {
         return noti_seen;
     }
 
-    public void setNoti_seen(String noti_seen) {
+    public void setNotiseen(String noti_seen) {
         this.noti_seen = noti_seen;
     }
 
-    public int getNoti_id() {
+    public int getNotiid() {
         return noti_id;
     }
 
-    public void setNoti_id(int noti_id) {
+    public void setNotiid(int noti_id) {
         this.noti_id = noti_id;
     }
 
-    public int getTicket_id() {
+    public int getTicketid() {
         return ticket_id;
     }
 
-    public void setTicket_id(int ticket_id) {
+    public void setTicketid(int ticket_id) {
         this.ticket_id = ticket_id;
     }
 
-    public int getClient_id() {
+    public int getClientid() {
         return client_id;
     }
 
-    public void setClient_id(int client_id) {
+    public void setClientid(int client_id) {
         this.client_id = client_id;
     }
 
-    public String getNoti_scenario() {
+    public String getNotiscenario() {
         return noti_scenario;
     }
 
-    public void setNoti_scenario(String noti_scenario) {
+    public void setNotiscenario(String noti_scenario) {
         this.noti_scenario = noti_scenario;
     }
 
@@ -96,20 +96,20 @@ public class NotificationThread {
         this.placeHolder = placeHolder;
     }
 
-    public String getTicket_subject() {
+    public String getTicketsubject() {
         return ticket_subject;
     }
 
-    public void setTicket_subject(String ticket_subject) {
+    public void setTicketsubject(String ticket_subject) {
         this.ticket_subject = ticket_subject;
     }
 
 
-    public String getProfiel_pic() {
+    public String getProfielpic() {
         return profiel_pic;
     }
 
-    public void setProfiel_pic(String profiel_pic) {
+    public void setProfielpic(String profiel_pic) {
         this.profiel_pic = profiel_pic;
     }
 

@@ -1,6 +1,6 @@
 package co.helpdesk.faveo.pro.model;
 
-public class collaboratorModel {
+public class CollaboratorModel {
     public String email,pic;
 
     public String getEmail() {
@@ -19,7 +19,7 @@ public class collaboratorModel {
         this.pic = pic;
     }
 
-    public collaboratorModel(String email, String pic) {
+    public CollaboratorModel(String email, String pic) {
         this.email = email;
         this.pic = pic;
     }

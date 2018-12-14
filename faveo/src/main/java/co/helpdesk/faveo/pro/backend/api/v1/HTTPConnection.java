@@ -37,7 +37,7 @@ class HTTPConnection{
         CookieManager cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
     }
-    String HTTPResponsePost(String stringURL, String parameters) {
+    String hTTPResponsePost(String stringURL, String parameters) {
 
         try {
             url = new URL(stringURL);
@@ -165,7 +165,7 @@ class HTTPConnection{
         return sb.toString();
     }
 
-    String HTTPResponsePostLogin(String stringURL, String parameters) {
+    String hTTPResponsePostLogin(String stringURL, String parameters) {
 
         try {
             url = new URL(stringURL);
@@ -287,7 +287,7 @@ class HTTPConnection{
         return sb.toString();
     }
 
-    public String HTTPResponsePatch(String stringURL, String parameters) {
+    public String hTTPResponsePatch(String stringURL, String parameters) {
         try {
             url = new URL(stringURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -397,7 +397,7 @@ class HTTPConnection{
         return sb.toString();
     }
 
-    String HTTPResponseGet(String stringURL) {
+    String hTTPResponseGet(String stringURL) {
         try {
             url = new URL(stringURL);
             final HttpURLConnection connection = (HttpURLConnection) url.openConnection();

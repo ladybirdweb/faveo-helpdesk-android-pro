@@ -29,23 +29,23 @@ import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import es.dmoral.toasty.Toasty;
 
-public class collaboratorcreate extends AppCompatActivity {
+public class Collaboratorcreate extends AppCompatActivity {
 
     ImageView imageView;
     Button button;
     EditText editTextMail, editTextFirstName, editTextLastName;
     ProgressDialog progressDialog;
     String ticketId;
-    String email="";
-    String firstName="";
-    String lastName="";
+    String email = "";
+    String firstName = "";
+    String lastName = "";
     private String ticketID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collaboratorcreate);
-        Window window = collaboratorcreate.this.getWindow();
+        Window window = Collaboratorcreate.this.getWindow();
 
 // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -54,32 +54,32 @@ public class collaboratorcreate extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(collaboratorcreate.this, R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(Collaboratorcreate.this, R.color.faveo));
 
         imageView = (ImageView) findViewById(R.id.imageViewBackAddUser);
         editTextMail = (EditText) findViewById(R.id.email_edittextUser);
         editTextFirstName = (EditText) findViewById(R.id.fname_edittextUser);
         editTextLastName = (EditText) findViewById(R.id.lastname_edittext);
         button = (Button) findViewById(R.id.buttonAddUser);
-        progressDialog = new ProgressDialog(collaboratorcreate.this);
+        progressDialog = new ProgressDialog(Collaboratorcreate.this);
         progressDialog.setMessage(getString(R.string.pleasewait));
         final Intent intent = getIntent();
-        ticketID=intent.getStringExtra("ticket_id");
-        Prefs.putString("TICKETid",ticketID);
-        Prefs.putString("ticketId",ticketID);
+        ticketID = intent.getStringExtra("ticket_id");
+        Prefs.putString("TICKETid", ticketID);
+        Prefs.putString("ticketId", ticketID);
         Log.d("ticketId", ticketID);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (!email.equalsIgnoreCase(editTextMail.getText().toString()) || !firstName.equalsIgnoreCase(editTextFirstName.getText().toString()) || !lastName.equalsIgnoreCase(editTextLastName.getText().toString())) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorcreate.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(Collaboratorcreate.this);
                     alertDialog.setTitle(R.string.discard);
                     alertDialog.setIcon(R.mipmap.ic_launcher);
 
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-//                            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                            Intent intent = new Intent(Collaboratorcreate.this, CollaboratorAdd.class);
 //                            intent.putExtra("ticket_id", ticketID);
 //                            startActivity(intent);
                             finish();
@@ -91,9 +91,8 @@ public class collaboratorcreate extends AppCompatActivity {
                         }
                     });
                     alertDialog.show();
-                }
-                else{
-//                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+                } else {
+//                    Intent intent = new Intent(Collaboratorcreate.this, CollaboratorAdd.class);
 //                    intent.putExtra("ticket_id", ticketID);
 //                    startActivity(intent);
                     finish();
@@ -106,25 +105,25 @@ public class collaboratorcreate extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (editTextMail.getText().toString().equals("") || editTextFirstName.getText().toString().equals("") || editTextLastName.getText().toString().equals("")) {
-                    Toasty.info(collaboratorcreate.this, getString(R.string.fill_all_the_details), Toast.LENGTH_LONG).show();
+                    Toasty.info(Collaboratorcreate.this, getString(R.string.fill_all_the_details), Toast.LENGTH_LONG).show();
                     return;
                 } else if (!editTextMail.getText().toString().equals("") && !Helper.isValidEmail(editTextMail.getText().toString())) {
-                    Toasty.info(collaboratorcreate.this, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+                    Toasty.info(Collaboratorcreate.this, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
                     return;
                 } else if (editTextFirstName.getText().toString().trim().length() < 2) {
-                    Toasty.warning(collaboratorcreate.this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
+                    Toasty.warning(Collaboratorcreate.this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
                 } else if (editTextFirstName.getText().toString().trim().length() > 30) {
-                    Toasty.warning(collaboratorcreate.this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
+                    Toasty.warning(Collaboratorcreate.this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
                 } else if (editTextLastName.getText().toString().trim().length() < 2) {
-                    Toasty.warning(collaboratorcreate.this, getString(R.string.lastname_minimum_char), Toast.LENGTH_SHORT).show();
+                    Toasty.warning(Collaboratorcreate.this, getString(R.string.lastname_minimum_char), Toast.LENGTH_SHORT).show();
                 } else if (editTextLastName.getText().toString().trim().length() > 30) {
-                    Toasty.warning(collaboratorcreate.this, getString(R.string.lastname_maximum_char), Toast.LENGTH_SHORT).show();
+                    Toasty.warning(Collaboratorcreate.this, getString(R.string.lastname_maximum_char), Toast.LENGTH_SHORT).show();
                 } else {
                     email = editTextMail.getText().toString();
                     firstName = editTextFirstName.getText().toString();
                     lastName = editTextLastName.getText().toString();
 
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorcreate.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(Collaboratorcreate.this);
 
                     // Setting Dialog Title
                     alertDialog.setTitle(getString(R.string.creatinguser));
@@ -161,8 +160,6 @@ public class collaboratorcreate extends AppCompatActivity {
         });
 
 
-
-
     }
 
     private class RegisterUserNew extends AsyncTask<String, Void, String> {
@@ -185,7 +182,7 @@ public class collaboratorcreate extends AppCompatActivity {
             progressDialog.setMessage(getString(R.string.adding_collaborator));
             progressDialog.show();
             if (result == null) {
-                Toasty.error(collaboratorcreate.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                Toasty.error(Collaboratorcreate.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -193,7 +190,7 @@ public class collaboratorcreate extends AppCompatActivity {
 
                 if (state.equals("badRequest")) {
                     progressDialog.dismiss();
-                    Toasty.info(collaboratorcreate.this, "The user is already registered", Toast.LENGTH_LONG).show();
+                    Toasty.info(Collaboratorcreate.this, "The user is already registered", Toast.LENGTH_LONG).show();
                     return;
                 }
             } catch (NullPointerException e) {
@@ -205,8 +202,8 @@ public class collaboratorcreate extends AppCompatActivity {
                 JSONObject jsonObject1 = jsonObject.getJSONObject("result");
                 String error = jsonObject1.getString("error");
                 if (error.equals("lang.methon_not_allowed")) {
-                    Toasty.success(collaboratorcreate.this, getString(R.string.registrationsuccesfull), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(collaboratorcreate.this, collaboratorcreate.class);
+                    Toasty.success(Collaboratorcreate.this, getString(R.string.registrationsuccesfull), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Collaboratorcreate.this, Collaboratorcreate.class);
                     startActivity(intent);
 
                 }
@@ -261,8 +258,8 @@ public class collaboratorcreate extends AppCompatActivity {
                 JSONObject jsonObject1 = jsonObject.getJSONObject("collaborator");
                 String role = jsonObject1.getString("role");
                 if (role.contains("ccc")) {
-                    Toasty.success(collaboratorcreate.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(collaboratorcreate.this, TicketReplyActivity.class);
+                    Toasty.success(Collaboratorcreate.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Collaboratorcreate.this, TicketReplyActivity.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                 }
@@ -282,7 +279,7 @@ public class collaboratorcreate extends AppCompatActivity {
                 !firstName.equalsIgnoreCase(editTextFirstName.getText().toString()) ||
                 !lastName.equalsIgnoreCase(editTextLastName.getText().toString())) {
 
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorcreate.this);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(Collaboratorcreate.this);
 
             // Setting Dialog Title
             alertDialog.setTitle(R.string.discard);
@@ -299,7 +296,7 @@ public class collaboratorcreate extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+//                    Intent intent = new Intent(Collaboratorcreate.this, CollaboratorAdd.class);
 //                    intent.putExtra("ticket_id", ticketID);
 //                    startActivity(intent);
                     finish();
@@ -311,9 +308,8 @@ public class collaboratorcreate extends AppCompatActivity {
                 }
             });
             alertDialog.show();
-        }
-        else{
-//            Intent intent = new Intent(collaboratorcreate.this, collaboratorAdd.class);
+        } else {
+//            Intent intent = new Intent(Collaboratorcreate.this, CollaboratorAdd.class);
 //            intent.putExtra("ticket_id", ticketID);
 //            startActivity(intent);
             finish();

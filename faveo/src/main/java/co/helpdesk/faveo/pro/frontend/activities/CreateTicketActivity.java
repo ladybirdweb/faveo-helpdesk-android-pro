@@ -423,8 +423,8 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         email1=data2.getEmail();
                         Log.d("email1",email1);
                         editTextEmail.setText(email1);
-                        firstname=data2.getFirst_name();
-                    lastname=data2.getLast_name();
+                        firstname=data2.getFirstname();
+                    lastname=data2.getLastname();
                     editTextEmail.setText(email1);
                     }
                 }
