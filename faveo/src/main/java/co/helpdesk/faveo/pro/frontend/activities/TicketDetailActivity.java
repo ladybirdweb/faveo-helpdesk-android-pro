@@ -46,8 +46,8 @@ import java.util.List;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Conversation;
-import co.helpdesk.faveo.pro.frontend.fragments.ticketDetail.Detail;
+import co.helpdesk.faveo.pro.frontend.fragments.ticketdetail.Conversation;
+import co.helpdesk.faveo.pro.frontend.fragments.ticketdetail.Detail;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
 import co.helpdesk.faveo.pro.model.MessageEvent;
@@ -129,7 +129,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Prefs.putString("cameFromTicket","true");
-                Intent intent=new Intent(TicketDetailActivity.this,collaboratorAdd.class);
+                Intent intent=new Intent(TicketDetailActivity.this,CollaboratorAdd.class);
                 intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
             }

@@ -228,6 +228,8 @@ public class MultiAssigningActivity extends AppCompatActivity {
             Log.d("cameHere","True");
 
             if (result==null) {
+                Toast.makeText(MultiAssigningActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                return;
             }
 
 

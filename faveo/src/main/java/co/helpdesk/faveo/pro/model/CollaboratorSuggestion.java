@@ -24,19 +24,19 @@ public class CollaboratorSuggestion {
         this.id = id;
     }
 
-    public String getFirst_name() {
+    public String getFirstname() {
         return first_name;
     }
 
-    public void setFirst_name(String first_name) {
+    public void setFirstname(String first_name) {
         this.first_name = first_name;
     }
 
-    public String getLast_name() {
+    public String getLastname() {
         return last_name;
     }
 
-    public void setLast_name(String last_name) {
+    public void setLastname(String last_name) {
         this.last_name = last_name;
     }
 
@@ -48,11 +48,11 @@ public class CollaboratorSuggestion {
         this.email = email;
     }
 
-    public String getProfile_pic() {
+    public String getProfilepic() {
         return profile_pic;
     }
 
-    public void setProfile_pic(String profile_pic) {
+    public void setProfilepic(String profile_pic) {
         this.profile_pic = profile_pic;
     }
     @Override

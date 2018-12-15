@@ -87,7 +87,7 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
 
 // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(EditCustomer.this,R.color.faveo));
-        GetCountryZipCode();
+        getCountryZipCode();
         countryCodePicker = (CountryCodePicker) findViewById(R.id.countrycoode);
         imageViewCallMobile = (ImageView) findViewById(R.id.forCalling);
         imageViewCallPhone = (ImageView) findViewById(R.id.forCallingPhone);
@@ -420,7 +420,7 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
     }
 
 
-    public String GetCountryZipCode(){
+    public String getCountryZipCode(){
         String CountryID="";
         String CountryZipCode="";
 

@@ -52,7 +52,7 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
         textViewChangeStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent=new Intent(OtherFeatures.this,ChangingStatus.class);;
+            Intent intent=new Intent(OtherFeatures.this,ChangingStatus.class);
             startActivity(intent);
 
             }

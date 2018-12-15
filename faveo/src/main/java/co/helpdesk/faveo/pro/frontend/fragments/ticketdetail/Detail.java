@@ -1,4 +1,4 @@
-package co.helpdesk.faveo.pro.frontend.fragments.ticketDetail;
+package co.helpdesk.faveo.pro.frontend.fragments.ticketdetail;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;

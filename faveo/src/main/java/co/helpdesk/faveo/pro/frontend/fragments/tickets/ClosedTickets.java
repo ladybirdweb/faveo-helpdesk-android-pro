@@ -982,8 +982,6 @@ public class ClosedTickets extends Fragment {
             if (selectedIds.contains(id)){
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
             }
-            else {
-            }
             subject=ticketOverview.ticketSubject;
             if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
                 String first=subject.replace("=?UTF-8?Q?","");

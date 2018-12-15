@@ -54,7 +54,7 @@ import co.helpdesk.faveo.pro.model.AttachedCollaborator;
 import co.helpdesk.faveo.pro.model.CollaboratorSuggestion;
 import es.dmoral.toasty.Toasty;
 
-public class collaboratorAdd extends AppCompatActivity {
+public class CollaboratorAdd extends AppCompatActivity {
 
     AutoCompleteTextView autoCompleteTextViewUser;
     Button searchUer, deleteUser;
@@ -85,17 +85,17 @@ public class collaboratorAdd extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collaborator_add);
-        Window window = collaboratorAdd.this.getWindow();
+        Window window = CollaboratorAdd.this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(collaboratorAdd.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(CollaboratorAdd.this,R.color.faveo));
         strings = new ArrayList<>();
         recyclerView= (RecyclerView) findViewById(R.id.list);
         strings.add("Show");
 
         isShowing=true;
         progressBar= (ProgressBar) findViewById(R.id.collaboratorProgressBarReply);
-        progressDialog=new ProgressDialog(collaboratorAdd.this);
+        progressDialog=new ProgressDialog(CollaboratorAdd.this);
         final Intent intent = getIntent();
         ticketID=intent.getStringExtra("ticket_id");
         Prefs.putString("TICKETid",ticketID);
@@ -114,8 +114,8 @@ public class collaboratorAdd extends AppCompatActivity {
 
         deleteUser = (Button) findViewById(R.id.buttonDeleteUser);
         stringArrayList = new ArrayList<CollaboratorSuggestion>();
-        arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
-        //arrayAdapterCC = new ArrayAdapter<Data>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+        arrayAdapterCC=new CollaboratorAdapter(CollaboratorAdd.this,stringArrayList);
+        //arrayAdapterCC = new ArrayAdapter<Data>(CollaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
 
         autoCompleteTextViewUser.addTextChangedListener(passwordWatcheredittextSubject);
         email1 = autoCompleteTextViewUser.getText().toString();
@@ -145,16 +145,16 @@ public class collaboratorAdd extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                collaboratorAdd.super.onBackPressed();
+                CollaboratorAdd.super.onBackPressed();
 //                try {
 //                    if (Prefs.getString("cameFromTicket", null).equals("true")) {
-//                        Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+//                        Intent intent = new Intent(CollaboratorAdd.this, TicketDetailActivity.class);
 //                        intent.putExtra("ticket_id", ticketID);
 //                        Prefs.putString("cameFromTicket","false");
 //                        startActivity(intent);
 //                        finish();
 //                    } else {
-//                        Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+//                        Intent intent = new Intent(CollaboratorAdd.this, TicketReplyActivity.class);
 //                        intent.putExtra("ticket_id", ticketID);
 //                        startActivity(intent);
 //                        finish();
@@ -173,14 +173,14 @@ public class collaboratorAdd extends AppCompatActivity {
                 String email=autoCompleteTextViewUser.getText().toString();
 
                 if (!email1.equals(email)&&autoCompleteTextViewUser.getText().toString().equals("")) {
-                    Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorEmpty), Toast.LENGTH_SHORT).show();
+                    Toasty.info(CollaboratorAdd.this, getString(R.string.collaboratorEmpty), Toast.LENGTH_SHORT).show();
                     id1=0;
                 }
                 else if (id1==0){
-                    Toasty.info(collaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
+                    Toasty.info(CollaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(CollaboratorAdd.this);
                     // Setting Dialog Title
                     alertDialog.setTitle("Adding collaborator...");
                     // Setting Dialog Message
@@ -194,7 +194,7 @@ public class collaboratorAdd extends AppCompatActivity {
                             // Write your code here to invoke YES event
                             Log.d("id of the user", String.valueOf(id));
                             if (id1==0){
-                                Toasty.error(collaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
+                                Toasty.error(CollaboratorAdd.this, getString(R.string.collaboratorNotFound), Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             progressDialog.setMessage(getString(R.string.pleasewait));
@@ -222,7 +222,7 @@ public class collaboratorAdd extends AppCompatActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intent=new Intent(collaboratorAdd.this,collaboratorcreate.class);
+                    Intent intent=new Intent(CollaboratorAdd.this,Collaboratorcreate.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     //finish();
@@ -234,11 +234,11 @@ public class collaboratorAdd extends AppCompatActivity {
                 try {
 
                     if (email2.equals("")){
-                        Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
+                        Toasty.info(CollaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
 
                     }
                     else {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CollaboratorAdd.this);
                         alertDialog.setMessage(R.string.user_collaborator);
                         alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
@@ -249,7 +249,7 @@ public class collaboratorAdd extends AppCompatActivity {
                         alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                progressDialog=new ProgressDialog(collaboratorAdd.this);
+                                progressDialog=new ProgressDialog(CollaboratorAdd.this);
                                 progressDialog.setMessage(getString(R.string.pleasewait));
                                 progressDialog.show();
                                 Log.d("email3",email2);
@@ -269,7 +269,7 @@ public class collaboratorAdd extends AppCompatActivity {
                 }
 
 
-                //Toast.makeText(collaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CollaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
             }
         });
 ////
@@ -356,8 +356,8 @@ public class collaboratorAdd extends AppCompatActivity {
                     autoCompleteTextViewUser.setText("");
                     id = 0;
                     id1=0;
-                    Toasty.success(collaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
+                    Toasty.success(CollaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(CollaboratorAdd.this,CollaboratorAdd.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     finish();
@@ -391,8 +391,8 @@ public class collaboratorAdd extends AppCompatActivity {
                 String collaborator=jsonObject.getString("collaborator");
                 if (collaborator.equals("deleted successfully")){
                     email2="";
-                    Toasty.success(collaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(collaboratorAdd.this,collaboratorAdd.class);
+                    Toasty.success(CollaboratorAdd.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(CollaboratorAdd.this,CollaboratorAdd.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                     finish();
@@ -404,7 +404,7 @@ public class collaboratorAdd extends AppCompatActivity {
             }
 
             if (result == null) {
-                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                Toasty.error(CollaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -434,7 +434,7 @@ public class collaboratorAdd extends AppCompatActivity {
             if (isCancelled()) return;
 
             if (result == null) {
-                Toasty.error(collaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                Toasty.error(CollaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -473,7 +473,7 @@ public class collaboratorAdd extends AppCompatActivity {
 
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                     recyclerView.setLayoutManager(mLayoutManager);
-                    mAdapter = new Collaboratoradapter(collaboratorAdd.this,movieList);
+                    mAdapter = new Collaboratoradapter(CollaboratorAdd.this,movieList);
                     runLayoutAnimation(recyclerView);
                     recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
@@ -505,13 +505,10 @@ public class collaboratorAdd extends AppCompatActivity {
                 if (!term.equals("")&&term.length()==3) {
                     String newTerm=term;
                     Log.d("newTerm", newTerm);
-                    arrayAdapterCC=new CollaboratorAdapter(collaboratorAdd.this,stringArrayList);
+                    arrayAdapterCC=new CollaboratorAdapter(CollaboratorAdd.this,stringArrayList);
                     progressBar.setVisibility(View.VISIBLE);
-                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
+                    //arrayAdapterCC = new ArrayAdapter<>(CollaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
-
-                }
-                else {
 
                 }
 
@@ -533,20 +530,20 @@ public class collaboratorAdd extends AppCompatActivity {
     };
     @Override
     public void onBackPressed() {
-//        Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+//        Intent intent = new Intent(CollaboratorAdd.this, TicketDetailActivity.class);
 //        startActivity(intent);
         finish();
 
 
 //        try {
 //            if (Prefs.getString("cameFromTicket", null).equals("true")) {
-//                Intent intent = new Intent(collaboratorAdd.this, TicketDetailActivity.class);
+//                Intent intent = new Intent(CollaboratorAdd.this, TicketDetailActivity.class);
 //                Prefs.putString("cameFromTicket","false");
 //                intent.putExtra("ticket_id", ticketID);
 //                startActivity(intent);
 //                finish();
 //            } else {
-//                Intent intent = new Intent(collaboratorAdd.this, TicketReplyActivity.class);
+//                Intent intent = new Intent(CollaboratorAdd.this, TicketReplyActivity.class);
 //                intent.putExtra("ticket_id", ticketID);
 //                startActivity(intent);
 //                finish();
@@ -613,11 +610,11 @@ public class collaboratorAdd extends AppCompatActivity {
                     try {
 
                         if (email2.equals("")){
-                            Toasty.info(collaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
+                            Toasty.info(CollaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
 
                         }
                         else {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(collaboratorAdd.this);
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(CollaboratorAdd.this);
                             alertDialog.setMessage(R.string.user_collaborator);
                             alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
@@ -628,7 +625,7 @@ public class collaboratorAdd extends AppCompatActivity {
                             alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    progressDialog=new ProgressDialog(collaboratorAdd.this);
+                                    progressDialog=new ProgressDialog(CollaboratorAdd.this);
                                     progressDialog.setMessage(getString(R.string.pleasewait));
                                     progressDialog.show();
                                     Log.d("email3",email2);
@@ -665,11 +662,11 @@ public class collaboratorAdd extends AppCompatActivity {
             if (!movie.getPicture().equals("")){
                 if (movie.getPicture().contains(".jpg")||movie.getPicture().contains(".jpeg")||movie.getPicture().contains(".png")) {
                     Log.d("picture",movie.getPicture()) ;
-                    Picasso.with(collaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                    Picasso.with(CollaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
                 }
                 else{
                     Log.d("cameInThisBlock","true");
-                    Picasso.with(collaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                    Picasso.with(CollaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
                 }
 
             }

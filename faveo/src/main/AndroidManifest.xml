@@ -180,7 +180,7 @@
             android:label="@string/title_activity_register_user"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name=".frontend.activities.collaboratorAdd"
+            android:name=".frontend.activities.CollaboratorAdd"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
         <activity android:name=".frontend.activities.TicketFilter" />
@@ -262,7 +262,7 @@
         <activity android:name=".frontend.activities.InternalNoteActivity" />
         <activity android:name=".frontend.activities.ShowingAttachment" />
         <activity android:name=".frontend.activities.HelpingActivity" />
-        <activity android:name=".frontend.activities.collaboratorcreate"></activity>
+        <activity android:name=".frontend.activities.Collaboratorcreate"></activity>
 
     </application>
 

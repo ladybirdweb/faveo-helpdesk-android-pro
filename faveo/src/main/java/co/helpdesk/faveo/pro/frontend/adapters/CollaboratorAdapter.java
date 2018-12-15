@@ -51,8 +51,8 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
         ImageView ivCustomerImage = (ImageView) convertView.findViewById(R.id.imageView_collaborator);
         TextView textViewEmail= (TextView) convertView.findViewById(R.id.textView_client_email);
 
-        if (txtCustomer != null&&customer.getFirst_name()!=null) {
-            txtCustomer.setText(customer.getFirst_name() + " " + customer.getLast_name());
+        if (txtCustomer != null&&customer.getFirstname()!=null) {
+            txtCustomer.setText(customer.getFirstname() + " " + customer.getLastname());
         }
         else{
             txtCustomer.setVisibility(View.GONE);
@@ -79,13 +79,13 @@ public class CollaboratorAdapter extends ArrayAdapter<CollaboratorSuggestion> {
 //            ivCustomerImage.setImageDrawable(drawable);
 //        }
 
-        if (ivCustomerImage != null && customer.getProfile_pic() != null) {
-            if (customer.getProfile_pic().equals(".jpg")||customer.getProfile_pic().equals(".jpeg")||customer.getProfile_pic().equals(".png")) {
-                Picasso.with(context).load(customer.getProfile_pic()).transform(new CircleTransform()).into(ivCustomerImage);
+        if (ivCustomerImage != null && customer.getProfilepic() != null) {
+            if (customer.getProfilepic().equals(".jpg")||customer.getProfilepic().equals(".jpeg")||customer.getProfilepic().equals(".png")) {
+                Picasso.with(context).load(customer.getProfilepic()).transform(new CircleTransform()).into(ivCustomerImage);
             }
             else{
                 Log.d("cameInThisBlock","true");
-                Picasso.with(context).load(customer.getProfile_pic()).transform(new CircleTransform()).into(ivCustomerImage);
+                Picasso.with(context).load(customer.getProfilepic()).transform(new CircleTransform()).into(ivCustomerImage);
             }
         }
 

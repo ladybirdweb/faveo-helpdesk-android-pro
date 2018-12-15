@@ -60,17 +60,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
             if (notiThread.getBy().equals("System")){
-                viewHolder.textSub.setText("System, "+notiThread.getTicket_subject());
+                viewHolder.textSub.setText("System, "+notiThread.getTicketsubject());
                 viewHolder.roundedImageViewProfilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
                 viewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.default_pic);
             }
             else{
-                viewHolder.textSub.setText(notiThread.getRequesterName().trim() + ", " + notiThread.getTicket_subject());
-                if (notiThread.getProfiel_pic().equals("")) {
+                viewHolder.textSub.setText(notiThread.getRequesterName().trim() + ", " + notiThread.getTicketsubject());
+                if (notiThread.getProfielpic().equals("")) {
                     viewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
-                } else if (notiThread.getProfiel_pic().contains(".jpg") || notiThread.getProfiel_pic().contains(".png") || notiThread.getProfiel_pic().contains(".jpeg")) {
-                    Picasso.with(context).load(notiThread.getProfiel_pic()).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
+                } else if (notiThread.getProfielpic().contains(".jpg") || notiThread.getProfielpic().contains(".png") || notiThread.getProfielpic().contains(".jpeg")) {
+                    Picasso.with(context).load(notiThread.getProfielpic()).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
 
                 } else {
                     ColorGenerator generator = ColorGenerator.MATERIAL;
@@ -93,25 +93,25 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             viewHolder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new UpdateNotificationSeen(notiThread.getNoti_id()).execute();
+                    new UpdateNotificationSeen(notiThread.getNotiid()).execute();
 
 
-                    if (notiThread.getNoti_scenario().equals("tickets")) {
+                    if (notiThread.getNotiscenario().equals("tickets")) {
 
                         Intent intent = new Intent(view.getContext(), TicketDetailActivity.class);
-                        Log.d("ticket_id", notiThread.getTicket_id() + "");
-                        Prefs.putString("TICKETid", notiThread.getTicket_id() + "");
+                        Log.d("ticket_id", notiThread.getTicketid() + "");
+                        Prefs.putString("TICKETid", notiThread.getTicketid() + "");
                         Prefs.putString("cameFromNotification", "true");
-                        intent.putExtra("ticket_id", notiThread.getTicket_id() + "");
+                        intent.putExtra("ticket_id", notiThread.getTicketid() + "");
                         view.getContext().startActivity(intent);
                     } else {
 
                         Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
-                        intent.putExtra("CLIENT_ID", notiThread.getClient_id() + "");
-                        Prefs.putString("clientId", notiThread.getClient_id() + "");
+                        intent.putExtra("CLIENT_ID", notiThread.getClientid() + "");
+                        Prefs.putString("clientId", notiThread.getClientid() + "");
                         view.getContext().startActivity(intent);
                     }
-                    notiThread.setNoti_seen("1");
+                    notiThread.setNotiseen("1");
                     notifyDataSetChanged();
                 }
             });

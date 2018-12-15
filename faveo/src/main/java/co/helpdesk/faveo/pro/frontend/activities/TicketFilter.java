@@ -698,8 +698,6 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
                 Prefs.putString("unauthorized", "false");
                 Prefs.putString("401","false");
                 e.printStackTrace();
-            } finally {
-
             }
         }
     }
