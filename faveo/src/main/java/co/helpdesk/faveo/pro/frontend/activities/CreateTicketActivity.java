@@ -157,7 +157,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     String[] cc,cc1;
     StringBuilder sb,sb1;
     String emailfromsuggestion;
-    String email2;
+    String email2="";
     @BindView(R.id.attachment_close)
     ImageButton imageButtonAttachmentClose;
     ProgressDialog progressDialog;
@@ -165,7 +165,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     ArrayList<CollaboratorSuggestion> emailHint;
     int id=0;
     int id1=0;
-    String email1,collaborator;
+    String email1="",collaborator;
     ArrayList<MultiCollaborator> stringArraylist;
     String splChrs = "-/@#$%^&_+=()" ;
     String countrycode = "";
@@ -1078,7 +1078,14 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
         email2 = editTextEmail.getText().toString();
-        email2=email1;
+        if (!email2.equals(email1)){
+            email2="";
+            //Toasty.warning(this,getString(R.string.requestornotfound),Toast.LENGTH_SHORT).show();
+        }
+        else{
+            email2=email1;
+        }
+        //email2=email1;
         fname=firstname;
         lname=lastname;
 
@@ -1197,14 +1204,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         allCorrect = true;
 
-        if (emailHint.isEmpty()){
-            Toasty.warning(this,getString(R.string.requestornotfound),Toast.LENGTH_LONG).show();
-            allCorrect=false;
-        }
-        else if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)) {
-            Toasty.warning(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+        if (email2.trim().length() == 0 || !Helper.isValidEmail(email2)||email2.equals("")) {
+            Toasty.warning(this, getString(R.string.requestornotfound), Toast.LENGTH_SHORT).show();
             allCorrect = false;
-        } else if (subject.trim().length() == 0) {
+        }
+        else if (subject.trim().length() == 0) {
             Toasty.warning(this, getString(R.string.sub_must_not_be_empty), Toast.LENGTH_SHORT).show();
             allCorrect = false;
         } else if (subject.trim().length() < 5) {
