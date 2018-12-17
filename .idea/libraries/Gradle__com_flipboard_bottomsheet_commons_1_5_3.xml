@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.flipboard:bottomsheet-commons-1.5.3">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-commons-1.5.3.aar/9574aeb50ae10d85893cd637e012055b/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-commons-1.5.3.aar/4f9f9a1b52d656e555aa2800e0de7f26/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-commons-1.5.3.aar/9574aeb50ae10d85893cd637e012055b/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-commons-1.5.3.aar/9574aeb50ae10d85893cd637e012055b/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-commons-1.5.3.aar/4f9f9a1b52d656e555aa2800e0de7f26/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-commons-1.5.3.aar/4f9f9a1b52d656e555aa2800e0de7f26/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

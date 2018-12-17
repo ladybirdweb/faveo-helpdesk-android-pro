@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.gotev.android-upload-service:uploadservice-d84ca6e2a6">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/uploadservice-d84ca6e2a6.aar/23b86ffe02e2343f568c7c880d2afcfb/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/uploadservice-d84ca6e2a6.aar/23b86ffe02e2343f568c7c880d2afcfb/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/uploadservice-d84ca6e2a6.aar/81f07eb426125a0242aba2c6d7077cec/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/uploadservice-d84ca6e2a6.aar/81f07eb426125a0242aba2c6d7077cec/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
