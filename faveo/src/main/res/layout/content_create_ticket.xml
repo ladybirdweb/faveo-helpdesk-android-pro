@@ -854,6 +854,11 @@
                     android:isScrollContainer="true"
                     android:maxLines="14"
                     android:minLines="8"
+                    android:nestedScrollingEnabled="true"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:overScrollMode="always"
+                    android:cursorVisible="true"
                     android:textCursorDrawable="@drawable/color_cursor"
                     android:textSize="16sp" />
             </LinearLayout>

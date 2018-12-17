@@ -238,7 +238,21 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
         button= (Button) findViewById(R.id.attachment);
-
+        msgEdittext.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_SCROLL:
+                        view.getParent().requestDisallowInterceptTouchEvent(false);
+                        return true;
+                    case MotionEvent.ACTION_BUTTON_PRESS:
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(msgEdittext, InputMethodManager.SHOW_IMPLICIT);
+                }
+                return false;
+            }
+        });
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -329,7 +343,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke YES event
-                            finish();
+                            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(newIntent);
                         }
                     });
 
@@ -347,7 +364,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 }
                 else {
 //
-                    finish();
+                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(newIntent);
                 }
             }
         });
@@ -1020,7 +1040,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(newIntent);
 //                    if (!MainActivity.isShowing) {
 //                        Log.d("isShowing", "false");
 //                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
@@ -1048,7 +1071,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         }
         else {
-            finish();
+            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(newIntent);
+            //finish();
 //            if (!MainActivity.isShowing) {
 //                Log.d("isShowing", "false");
 ////                Intent intent = new Intent(this, MainActivity.class);

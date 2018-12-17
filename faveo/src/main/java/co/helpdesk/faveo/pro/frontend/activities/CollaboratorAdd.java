@@ -1,10 +1,14 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -42,10 +47,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import co.helpdesk.faveo.pro.CircleTransform;
+import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.adapters.CollaboratorAdapter;
@@ -222,9 +230,9 @@ public class CollaboratorAdd extends AppCompatActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intent=new Intent(CollaboratorAdd.this,Collaboratorcreate.class);
-                    intent.putExtra("ticket_id", ticketID);
-                    startActivity(intent);
+                CustomDialogClassSolution cdd = new CustomDialogClassSolution(CollaboratorAdd.this);
+                cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                cdd.show();
                     //finish();
             }
         });
@@ -277,6 +285,194 @@ public class CollaboratorAdd extends AppCompatActivity {
     }
 
 
+    class CustomDialogClassSolution extends Dialog implements
+            android.view.View.OnClickListener {
+        String firstName,lastName;
+        public Activity c;
+        public Dialog d;
+        public Button buttoncreate, buttonclose;
+        EditText editTextEmail,editTextFirstName,editTextLastName;
+        public CustomDialogClassSolution(Activity a) {
+            super(a);
+            // TODO Auto-generated constructor stub
+            this.c = a;
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.activity_collaboratorcreate);
+            buttoncreate = (Button) findViewById(R.id.buttonAddUser);
+            buttonclose = (Button) findViewById(R.id.buttonClose);
+            editTextEmail=findViewById(R.id.email_edittextUser);
+            editTextFirstName=findViewById(R.id.fname_edittextUser);
+            editTextLastName=findViewById(R.id.lastname_edittext);
+            buttoncreate.setOnClickListener(this);
+            buttonclose.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.buttonAddUser:
+                    if (editTextEmail.getText().toString().equals("") || editTextFirstName.getText().toString().equals("") || editTextLastName.getText().toString().equals("")) {
+                        Toasty.info(CollaboratorAdd.this, getString(R.string.fill_all_the_details), Toast.LENGTH_LONG).show();
+                        return;
+                    } else if (!editTextEmail.getText().toString().equals("") && !Helper.isValidEmail(editTextEmail.getText().toString())) {
+                        Toasty.info(CollaboratorAdd.this, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+                        return;
+                    } else if (editTextFirstName.getText().toString().trim().length() < 2) {
+                        Toasty.warning(CollaboratorAdd.this, getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
+                    } else if (editTextFirstName.getText().toString().trim().length() > 30) {
+                        Toasty.warning(CollaboratorAdd.this, getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
+                    } else if (editTextLastName.getText().toString().trim().length() < 2) {
+                        Toasty.warning(CollaboratorAdd.this, getString(R.string.lastname_minimum_char), Toast.LENGTH_SHORT).show();
+                    } else if (editTextLastName.getText().toString().trim().length() > 30) {
+                        Toasty.warning(CollaboratorAdd.this, getString(R.string.lastname_maximum_char), Toast.LENGTH_SHORT).show();
+                    } else {
+                        email = editTextEmail.getText().toString();
+                        firstName = editTextFirstName.getText().toString();
+                        lastName = editTextLastName.getText().toString();
+
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CollaboratorAdd.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle(getString(R.string.creatinguser));
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog.setMessage(getString(R.string.creatinguser));
+                                    progressDialog.show();
+                                    new RegisterUserNew(email, firstName, lastName).execute();
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        alertDialog.show();
+
+
+                    }
+                    break;
+                case R.id.buttonClose:
+                    dismiss();
+                    break;
+                default:
+                    break;
+            }
+            dismiss();
+        }
+    }
+
+    private class RegisterUserNew extends AsyncTask<String, Void, String> {
+        String firstname, email, lastname;
+
+        RegisterUserNew(String email, String firstname, String lastname) {
+
+            this.firstname = firstname;
+            this.email = email;
+            this.lastname = lastname;
+
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().postCreateUser(email, firstname, lastname);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            progressDialog.setMessage(getString(R.string.adding_collaborator));
+            progressDialog.show();
+            if (result == null) {
+                Toasty.error(CollaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+            try {
+                String state = Prefs.getString("400", null);
+
+                if (state.equals("badRequest")) {
+                    progressDialog.dismiss();
+                    Toasty.info(CollaboratorAdd.this, "The user is already registered", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String message = jsonObject.getString("message");
+                    JSONObject jsonObject2 = jsonObject.getJSONObject("user");
+                    email = jsonObject2.getString("email");
+                    int id = jsonObject2.getInt("id");
+                    Log.d("idNew", id + "");
+
+                    if (message.contains("Activate your account! Click on the link that we've sent to your mail")) {
+                        new collaboratorAdduser(ticketID, String.valueOf(id)).execute();
+                    }
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+    private class collaboratorAdduser extends AsyncTask<String, Void, String> {
+        String ticketId, userId;
+
+        public collaboratorAdduser(String ticketId, String userId) {
+            this.ticketId = ticketId;
+            this.userId = userId;
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().createCollaborator(ticketId, String.valueOf(userId));
+        }
+
+        protected void onPostExecute(String result) {
+            if (isCancelled()) return;
+            progressDialog.dismiss();
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONObject jsonObject1 = jsonObject.getJSONObject("collaborator");
+                String role = jsonObject1.getString("role");
+                if (role.contains("ccc")) {
+                    Toasty.success(CollaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CollaboratorAdd.this, TicketReplyActivity.class);
+                    intent.putExtra("ticket_id", ticketID);
+                    startActivity(intent);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
     private class FetchCollaborator extends AsyncTask<String, Void, String> {
         String term;
 
@@ -309,9 +505,7 @@ public class CollaboratorAdd extends AppCompatActivity {
                         String first_name = jsonObject1.getString("first_name");
                         String last_name = jsonObject1.getString("last_name");
                         String profilePic=jsonObject1.getString("profile_pic");
-                        //Toast.makeText(TicketSaveActivity.this, "email:"+email, Toast.LENGTH_SHORT).show();
                         CollaboratorSuggestion collaboratorSuggestion=new CollaboratorSuggestion(id,first_name,last_name,email,profilePic);
-                        //Data data = new Data(id, first_name + " " + last_name + " <" + email + ">");
                         stringArrayList.add(collaboratorSuggestion);
                         Prefs.putString("noUser", "1");
                     }
@@ -320,6 +514,7 @@ public class CollaboratorAdd extends AppCompatActivity {
                     autoCompleteTextViewUser.setDropDownWidth(1500);
                     autoCompleteTextViewUser.setAdapter(arrayAdapterCC);
                     autoCompleteTextViewUser.showDropDown();
+
 
                 }
                 } catch (JSONException e) {
@@ -332,45 +527,45 @@ public class CollaboratorAdd extends AppCompatActivity {
         }
     }
 
-    private class collaboratorAdduser extends AsyncTask<String, Void, String> {
-        String ticketId, userId;
-
-        public collaboratorAdduser(String ticketId, String userId) {
-            this.ticketId = ticketId;
-            this.userId = userId;
-        }
-
-        protected String doInBackground(String... urls) {
-            return new Helpdesk().createCollaborator(Prefs.getString("ticketId", null), String.valueOf(userId));
-        }
-
-        protected void onPostExecute(String result) {
-            if (isCancelled()) return;
-            progressDialog.dismiss();
-
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("collaborator");
-                String role = jsonObject1.getString("role");
-                if (role.contains("ccc")) {
-                    autoCompleteTextViewUser.setText("");
-                    id = 0;
-                    id1=0;
-                    Toasty.success(CollaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(CollaboratorAdd.this,CollaboratorAdd.class);
-                    intent.putExtra("ticket_id", ticketID);
-                    startActivity(intent);
-                    finish();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-
-        }
-    }
+//    private class collaboratorAdduserExisting extends AsyncTask<String, Void, String> {
+//        String ticketId, userId;
+//
+//        public collaboratorAdduserExisting(String ticketId, String userId) {
+//            this.ticketId = ticketId;
+//            this.userId = userId;
+//        }
+//
+//        protected String doInBackground(String... urls) {
+//            return new Helpdesk().createCollaborator(Prefs.getString("ticketId", null), String.valueOf(userId));
+//        }
+//
+//        protected void onPostExecute(String result) {
+//            if (isCancelled()) return;
+//            progressDialog.dismiss();
+//
+//            try {
+//                JSONObject jsonObject = new JSONObject(result);
+//                JSONObject jsonObject1 = jsonObject.getJSONObject("collaborator");
+//                String role = jsonObject1.getString("role");
+//                if (role.contains("ccc")) {
+//                    autoCompleteTextViewUser.setText("");
+//                    id = 0;
+//                    id1=0;
+//                    Toasty.success(CollaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
+//                    Intent intent=new Intent(CollaboratorAdd.this,CollaboratorAdd.class);
+//                    intent.putExtra("ticket_id", ticketID);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//
+//        }
+//    }
 
     private class collaboratorRemoveUser extends AsyncTask<String, Void, String> {
         String ticketId, userId;
@@ -502,15 +697,12 @@ public class CollaboratorAdd extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             term = autoCompleteTextViewUser.getText().toString();
             if (InternetReceiver.isConnected()) {
-                if (!term.equals("")&&term.length()==3) {
                     String newTerm=term;
                     Log.d("newTerm", newTerm);
                     arrayAdapterCC=new CollaboratorAdapter(CollaboratorAdd.this,stringArrayList);
                     progressBar.setVisibility(View.VISIBLE);
                     //arrayAdapterCC = new ArrayAdapter<>(CollaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
-
-                }
 
             }
         }

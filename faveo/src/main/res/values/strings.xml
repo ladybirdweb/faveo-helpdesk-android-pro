@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Faveo Helpdesk Pro</string>
 
     <string name="title_activity_client_profile" translatable="false">ClientProfile</string>
@@ -159,10 +159,10 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" tools:ignore="MissingTranslation">Hello blank fragment</string>
     <string name="ticketProperties">Ticket Properties</string>
     <string name="addUser">ADD REQUESTOR</string>
-    <string name="adduser">Add user</string>
+    <string name="adduser">Add new user</string>
     <string name="firstName">First name</string>
     <string name="lastName">Last name</string>
     <string name="companyName">Organization</string>
@@ -369,7 +369,7 @@
     <string name="additionalDetails">Additional details can be filled from web</string>
     <string name="company">Company</string>
     <string name="no_results_found">No records found</string>
-    <string name="email_taken">The email is has already been taken</string>
+    <string name="email_taken">The email id has already been taken</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>

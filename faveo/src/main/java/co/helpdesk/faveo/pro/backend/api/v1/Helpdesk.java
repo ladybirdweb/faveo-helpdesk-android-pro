@@ -621,11 +621,11 @@ public class Helpdesk {
 //        return result;
 //    }
 
-    public String postRegisterUser(String email,String firstname,String lastname,String mobile,String company){
-        Log.d("RegisterUser", Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname +"&last_name="+ lastname+ "&mobile="+ mobile +"&company=" +company);
-        String result=new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile + "&company=" +company,null);
+    public String postRegisterUser(String email,String firstname,String lastname,String mobile){
+        Log.d("RegisterUser", Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname +"&last_name="+ lastname+ "&mobile="+ mobile);
+        String result=new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile,null);
         if (result!=null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile + "&company=" +company,null);
+            return new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile,null);
         return result;
     }
     public String postCreateUser(String email,String firstname,String lastname){
