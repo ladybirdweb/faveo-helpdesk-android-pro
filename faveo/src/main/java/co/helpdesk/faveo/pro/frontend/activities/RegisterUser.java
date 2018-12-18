@@ -141,10 +141,7 @@ public class RegisterUser extends AppCompatActivity {
                 }
 
                 if (allCorect) {
-                    Prefs.putString("firstusername",firstname);
-                    Prefs.putString("lastusername",lastname);
-                    Prefs.putString("firstuseremail",email);
-                    Prefs.putString("firstusermobile",phone);
+
 
                     if (InternetReceiver.isConnected()) {
 
@@ -244,21 +241,6 @@ public class RegisterUser extends AppCompatActivity {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
-            try{
-                JSONObject jsonObject=new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("result");
-                String error=jsonObject1.getString("error");
-                if (error.equals("lang.methon_not_allowed")){
-                    Toasty.success(RegisterUser.this,getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
-                    Prefs.putString("newuseremail",email);
-                    startActivity(intent);
-
-                }
-
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
             try {
 
                 //JSONObject jsonObject=new JSONObject(result);
@@ -269,6 +251,15 @@ public class RegisterUser extends AppCompatActivity {
                     String message=jsonObject.getString("message");
                     JSONObject jsonObject2=jsonObject.getJSONObject("user");
                     email=jsonObject2.getString("email");
+                    firstname=jsonObject2.getString("first_name");
+                    lastname=jsonObject2.getString("last_name");
+                    mobile=jsonObject2.getString("mobile");
+                    if (!mobile.equals("Not available")){
+                        Prefs.putString("firstusermobile",mobile);
+                    }
+                    Prefs.putString("firstusername",firstname);
+                    Prefs.putString("lastusername",lastname);
+                    Prefs.putString("firstuseremail",email);
 
                     if (message.contains("Activate your account! Click on the link that we've sent to your mail")){
                         Toasty.success(RegisterUser.this,getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();

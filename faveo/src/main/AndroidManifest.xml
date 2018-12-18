@@ -179,10 +179,12 @@
             android:name=".frontend.activities.RegisterUser"
             android:label="@string/title_activity_register_user"
             android:theme="@style/MyMaterialTheme"
+            android:launchMode="singleTask"
             />
         <activity
             android:name=".frontend.activities.CollaboratorAdd"
             android:windowSoftInputMode="stateAlwaysHidden"
+            android:launchMode="singleTask"
             />
         <activity android:name=".frontend.activities.TicketFilter" />
         <activity android:name=".frontend.activities.EditCustomer" />
@@ -259,7 +261,8 @@
         <activity
             android:name=".frontend.activities.TicketReplyActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:launchMode="singleTask"></activity>
         <activity android:name=".frontend.activities.InternalNoteActivity" />
         <activity android:name=".frontend.activities.ShowingAttachment" />
         <activity android:name=".frontend.activities.HelpingActivity" />

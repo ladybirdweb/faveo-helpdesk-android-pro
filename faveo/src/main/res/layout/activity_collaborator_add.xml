@@ -74,7 +74,7 @@
                     android:background="@drawable/ic_action_done"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <Button
                     android:id="@+id/buttonDeleteUser"

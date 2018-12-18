@@ -141,6 +141,8 @@ public class CollaboratorAdd extends AppCompatActivity {
                         Log.d("email1",email1);
                         autoCompleteTextViewUser.setText(email1);
                         searchUer.setVisibility(View.VISIBLE);
+                        //autoCompleteTextViewUser.setDropDownHeight(0);
+
                     }
                 }
 
@@ -153,7 +155,7 @@ public class CollaboratorAdd extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CollaboratorAdd.super.onBackPressed();
+                finish();
 //                try {
 //                    if (Prefs.getString("cameFromTicket", null).equals("true")) {
 //                        Intent intent = new Intent(CollaboratorAdd.this, TicketDetailActivity.class);
@@ -460,7 +462,7 @@ public class CollaboratorAdd extends AppCompatActivity {
                 String role = jsonObject1.getString("role");
                 if (role.contains("ccc")) {
                     Toasty.success(CollaboratorAdd.this, getString(R.string.collaboratoraddedsuccesfully), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CollaboratorAdd.this, TicketReplyActivity.class);
+                    Intent intent = new Intent(CollaboratorAdd.this,TicketReplyActivity.class);
                     intent.putExtra("ticket_id", ticketID);
                     startActivity(intent);
                 }
@@ -671,6 +673,7 @@ public class CollaboratorAdd extends AppCompatActivity {
                     mAdapter = new Collaboratoradapter(CollaboratorAdd.this,movieList);
                     runLayoutAnimation(recyclerView);
                     recyclerView.setAdapter(mAdapter);
+                    autoCompleteTextViewUser.setDropDownHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
                     mAdapter.notifyDataSetChanged();
                 }
 
@@ -701,7 +704,6 @@ public class CollaboratorAdd extends AppCompatActivity {
                     Log.d("newTerm", newTerm);
                     arrayAdapterCC=new CollaboratorAdapter(CollaboratorAdd.this,stringArrayList);
                     progressBar.setVisibility(View.VISIBLE);
-                    //arrayAdapterCC = new ArrayAdapter<>(CollaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
 
             }

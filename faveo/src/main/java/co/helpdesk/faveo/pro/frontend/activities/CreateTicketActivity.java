@@ -508,8 +508,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             email = Prefs.getString("firstuseremail", null);
             phone = Prefs.getString("firstusermobile", null);
         }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+            e.printStackTrace(); }
 
 
         if (email.equals("null")){
@@ -1040,10 +1039,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(newIntent);
+                    finish();
+//                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+//                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(newIntent);
 //                    if (!MainActivity.isShowing) {
 //                        Log.d("isShowing", "false");
 //                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
@@ -1071,11 +1071,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         }
         else {
-            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
-            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(newIntent);
-            //finish();
+//            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+//            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(newIntent);
+            finish();
 //            if (!MainActivity.isShowing) {
 //                Log.d("isShowing", "false");
 ////                Intent intent = new Intent(this, MainActivity.class);
