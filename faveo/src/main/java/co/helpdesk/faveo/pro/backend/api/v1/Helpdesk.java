@@ -44,7 +44,7 @@ public class Helpdesk {
     }
 
     public String postCreateTicket(int userID, String subject, String body, int helpTopic,
-                                   int priority, String fname, String lname, String phone, String email, String code, int staff, String mobile) {
+                                   int priority, String fname, String lname, int staff,String email) {
         Log.d("postCreateTicketAPI", Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
                 "&token=" + token+
@@ -57,11 +57,9 @@ public class Helpdesk {
                 "&priority=" + priority +
                 //"&dept=" + dept +
                 "&first_name=" + fname +
-                "&last_name=" + lname +
-                "&email=" + email +
-                "&assigned=" + staff+ "&phone=" + mobile +
-                "&code=" + code +
-                "&mobile=" + phone);
+                "&last_name=" + lname + "&assigned=" + staff+
+                "&email=" + email
+                );
         Prefs.putString("createTicketApi",Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
                 "&token=" + token+
@@ -75,10 +73,9 @@ public class Helpdesk {
                 //"&dept=" + dept +
                 "&first_name=" + fname +
                 "&last_name=" + lname +
-                "&email=" + email +
-                "&assigned=" + staff+ "&phone=" + mobile +
-                "&code=" + code +
-                "&mobile=" + phone);
+                        "&assigned=" + staff+
+                "&email=" + email
+                );
 
         String result = new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/create?" +
                 "api_key=" + apiKey +
@@ -93,10 +90,8 @@ public class Helpdesk {
                 // "&dept=" + dept +
                 "&first_name=" + fname +
                 "&last_name=" + lname +
-                "&email=" + email +
-                "&assigned=" + staff + "&phone=" + mobile +
-                "&code=" + code +
-                "&mobile=" + phone, null);
+                        "&assigned=" + staff+
+                "&email=" + email , null);
 
         if (result != null && result.equals("tokenRefreshed"))
             return new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/create?" +
@@ -112,10 +107,9 @@ public class Helpdesk {
                     //  "&dept=" + dept +
                     "&first_name=" + fname +
                     "&last_name=" + lname+
-                    "&email=" + email +
-                    "&assigned=" + staff+ "&phone=" + mobile +
-                    "&code=" + code +
-                    "&mobile=" + phone, null);
+                            "&assigned=" + staff+
+                    "&email=" + email
+                    , null);
         return result;
     }
 
@@ -621,11 +615,11 @@ public class Helpdesk {
 //        return result;
 //    }
 
-    public String postRegisterUser(String email,String firstname,String lastname,String mobile){
-        Log.d("RegisterUser", Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname +"&last_name="+ lastname+ "&mobile="+ mobile);
-        String result=new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile,null);
+    public String postRegisterUser(String email,String firstname,String lastname,String mobile,String code){
+        Log.d("RegisterUser", Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname +"&last_name="+ lastname+ "&mobile="+ mobile+"&code="+code);
+        String result=new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile+"&code="+code,null);
         if (result!=null && result.equals("tokenRefreshed"))
-            return new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile,null);
+            return new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/register?token=" +token +"&email=" +email +"&first_name=" +firstname + "&last_name="+ lastname+ "&mobile="+ mobile+"&code="+code,null);
         return result;
     }
     public String postCreateUser(String email,String firstname,String lastname){

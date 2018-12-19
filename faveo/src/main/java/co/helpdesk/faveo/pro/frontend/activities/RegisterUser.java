@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
@@ -40,7 +42,7 @@ public class RegisterUser extends AppCompatActivity {
     boolean allCorect;
     ProgressDialog progressDialog;
     String email;
-
+    CountryCodePicker countryCodePicker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,7 @@ public class RegisterUser extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         submit= (Button) findViewById(R.id.buttonCreateUser);
+        countryCodePicker=findViewById(R.id.countrycoode);
         editTextEmail= (EditText) findViewById(R.id.email_edittextUser);
         editTextFirstName= (EditText) findViewById(R.id.fname_edittextUser);
         editTextLastName= (EditText) findViewById(R.id.lastname_edittext);
@@ -112,7 +115,8 @@ public class RegisterUser extends AppCompatActivity {
                 String lastname=editTextLastName.getText().toString();
                 String phone=editTextPhone.getText().toString();
 
-
+                final String code=countryCodePicker.getSelectedCountryCode();
+                Log.d("code",code);
                 if (email.length()==0&&firstname.length()==0&&lastname.length()==0){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
@@ -139,7 +143,7 @@ public class RegisterUser extends AppCompatActivity {
                     Toasty.warning(RegisterUser.this,getString(R.string.lastNameCharacter),Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                else if (!code.equals(""))
                 if (allCorect) {
 
 
@@ -181,7 +185,7 @@ public class RegisterUser extends AppCompatActivity {
                                     progressDialog = new ProgressDialog(RegisterUser.this);
                                     progressDialog.show();
                                     progressDialog.setMessage(getString(R.string.UserCreating ));
-                                    new RegisterUserNew(finalFirstname, finalLastname, finalEmail, finalPhone).execute();
+                                    new RegisterUserNew(finalFirstname, finalLastname, finalEmail, finalPhone,code).execute();
                                 }
                             }
                         });
@@ -208,19 +212,20 @@ public class RegisterUser extends AppCompatActivity {
     }
 
     private class RegisterUserNew extends AsyncTask<String, Void, String> {
-        String firstname,email,mobile,lastname;
+        String firstname,email,mobile,lastname,code;
         String apiDisabled;
-        RegisterUserNew(String firstname,String lastname,String email,String mobile) {
+        RegisterUserNew(String firstname,String lastname,String email,String mobile,String code) {
 
             this.firstname=firstname;
             this.email=email;
             this.mobile=mobile;
             this.lastname=lastname;
+            this.code=code;
 
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postRegisterUser(email,firstname,lastname,mobile);
+            return new Helpdesk().postRegisterUser(email,firstname,lastname,mobile,code);
         }
 
         protected void onPostExecute(String result) {
@@ -254,7 +259,11 @@ public class RegisterUser extends AppCompatActivity {
                     firstname=jsonObject2.getString("first_name");
                     lastname=jsonObject2.getString("last_name");
                     mobile=jsonObject2.getString("mobile");
+                    Log.d("mobile",mobile);
                     if (!mobile.equals("Not available")){
+                        Prefs.putString("firstusermobile",mobile);
+                    }
+                    else{
                         Prefs.putString("firstusermobile",mobile);
                     }
                     Prefs.putString("firstusername",firstname);

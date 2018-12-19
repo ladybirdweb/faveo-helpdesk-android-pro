@@ -218,6 +218,12 @@
             <!--&gt;-->
 
         <!--</com.hbb20.CountryCodePicker>-->
+        <com.hbb20.CountryCodePicker
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:id="@+id/countrycoode"
+            >
+        </com.hbb20.CountryCodePicker>
 
         <EditText
             android:id="@+id/phone_edittextUser"
