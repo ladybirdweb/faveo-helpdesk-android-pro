@@ -126,7 +126,7 @@ import static com.vincent.filepicker.activity.ImagePickActivity.IS_NEED_CAMERA;
 public class CreateTicketActivity extends AppCompatActivity implements PermissionCallback, ErrorCallback {
     boolean allCorrect;
     String term;
-    String collaborators=null;
+    String collaborators="";
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,typeArrayAdapter,autocompletetextview,stringArrayAdapterHint;
     ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
     MultiCollaboratorAdapter adapter1=null;
@@ -432,7 +432,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         editTextEmail.setText(email1);
                         firstname=data2.getFirstname();
                     lastname=data2.getLastname();
-                    editTextEmail.setText(email1);
                     }
                 }
 
@@ -968,17 +967,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(newIntent);
 
-//            if (!MainActivity.isShowing) {
-//                Log.d("isShowing", "false");
-////                Intent intent = new Intent(this, MainActivity.class);
-////                startActivity(intent);
-//                finish();
-//            } else {
-//                Log.d("isShowing", "true");
-////                Intent intent = new Intent(this, MainActivity.class);
-////                startActivity(intent);
-//                finish();
-//            }
         }
 
 
@@ -1161,61 +1149,117 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                 progressDialog = new ProgressDialog(CreateTicketActivity.this);
                 if (path.equals("")) {
-                    //Starting the upload
-                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
-                    progressDialog.setMessage(getString(R.string.creating_ticket));
+                    if (!collaborators.equals("")) {
+                        //Starting the upload
+                        progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                        progressDialog.setMessage(getString(R.string.creating_ticket));
 
+                        try {
+                            fname = URLEncoder.encode(fname.trim(), "utf-8");
+                            lname = URLEncoder.encode(lname.trim(), "utf-8");
+                            subject = URLEncoder.encode(subject.trim(), "utf-8");
+                            message = URLEncoder.encode(message.trim(), "utf-8");
+                            email1 = URLEncoder.encode(email1.trim(), "utf-8");
 
-                    try {
-                        fname = URLEncoder.encode(fname.trim(), "utf-8");
-                        lname = URLEncoder.encode(lname.trim(), "utf-8");
-                        subject = URLEncoder.encode(subject.trim(), "utf-8");
-                        message = URLEncoder.encode(message.trim(), "utf-8");
-                        email1 = URLEncoder.encode(email1.trim(), "utf-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+                        // Setting Dialog Title
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
 
-                    // Setting Dialog Title
-                    alertDialog.setTitle(getString(R.string.creatingTicket));
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
 
-                    // Setting Dialog Message
-                    alertDialog.setMessage(getString(R.string.createConfirmation));
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
 
-                    // Setting Icon to Dialog
-                    alertDialog.setIcon(R.mipmap.ic_launcher);
-
-                    // Setting Positive "Yes" Button
-                    final String finalSubject = subject;
-                    final String finalMessage = message;
-                    final String finalFname = fname;
-                    final String finalLname = lname;
-                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to invoke YES event
-                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                            if (InternetReceiver.isConnected()){
-                                progressDialog = new ProgressDialog(CreateTicketActivity.this);
-                                progressDialog.setMessage("Please wait");
-                                progressDialog.show();
-                                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID,finalFname, finalLname, staff.ID,email2).execute();
+                        // Setting Positive "Yes" Button
+                        final String finalSubject = subject;
+                        final String finalMessage = message;
+                        final String finalFname = fname;
+                        final String finalLname = lname;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage("Please wait");
+                                    progressDialog.show();
+                                    new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID, finalFname, finalLname, staff.ID, email2+collaborators).execute();
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    // Setting Negative "NO" Button
-                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to invoke NO event
-                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                            dialog.cancel();
-                        }
-                    });
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
 
-                    // Showing Alert Message
-                    alertDialog.show();
+                        // Showing Alert Message
+                        alertDialog.show();
+                    }
+                    else{
+                        progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                        progressDialog.setMessage(getString(R.string.creating_ticket));
+
+                        try {
+                            fname = URLEncoder.encode(fname.trim(), "utf-8");
+                            lname = URLEncoder.encode(lname.trim(), "utf-8");
+                            subject = URLEncoder.encode(subject.trim(), "utf-8");
+                            message = URLEncoder.encode(message.trim(), "utf-8");
+                            email1 = URLEncoder.encode(email1.trim(), "utf-8");
+
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        final String finalSubject = subject;
+                        final String finalMessage = message;
+                        final String finalFname = fname;
+                        final String finalLname = lname;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage("Please wait");
+                                    progressDialog.show();
+                                    new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID, finalFname, finalLname, staff.ID, email2).execute();
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+                    }
                 } else {
                     if (res == 1) {
 //                    progressDialog.setMessage(getString(R.string.creating_ticket));
@@ -1876,7 +1920,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         protected String doInBackground(File... files) {
 
 
-            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, staff,email + collaborators);
+            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, staff,email);
         }
 
         protected void onPostExecute(String result) {

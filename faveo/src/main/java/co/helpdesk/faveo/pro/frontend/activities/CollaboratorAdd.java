@@ -20,6 +20,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -141,6 +143,11 @@ public class CollaboratorAdd extends AppCompatActivity {
                         Log.d("email1",email1);
                         autoCompleteTextViewUser.setText(email1);
                         searchUer.setVisibility(View.VISIBLE);
+                        View view1 = CollaboratorAdd.this.getCurrentFocus();
+                        if (view1 != null) {
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                        }
                         //autoCompleteTextViewUser.setDropDownHeight(0);
 
                     }
@@ -150,6 +157,7 @@ public class CollaboratorAdd extends AppCompatActivity {
 
 
         });
+
         spinnerPriArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strings); //selected item will look like a spinner set from XML
         spinnerPriArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -282,9 +290,30 @@ public class CollaboratorAdd extends AppCompatActivity {
                 //Toast.makeText(CollaboratorAdd.this,getString(R.string.userEmpty), Toast.LENGTH_SHORT).show();
             }
         });
+
+        autoCompleteTextViewUser.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    View view1 = CollaboratorAdd.this.getCurrentFocus();
+                    if (view1 != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                    }
+                }else{
+                    View view1 = CollaboratorAdd.this.getCurrentFocus();
+                    if (view1 != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
 ////
 
     }
+
+
 
 
     class CustomDialogClassSolution extends Dialog implements
@@ -349,6 +378,7 @@ public class CollaboratorAdd extends AppCompatActivity {
                         alertDialog.setIcon(R.mipmap.ic_launcher);
                         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                hideSoftKeyboard();
                                 // Write your code here to invoke YES event
                                 //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                                 if (InternetReceiver.isConnected()) {
@@ -378,6 +408,12 @@ public class CollaboratorAdd extends AppCompatActivity {
                     break;
             }
             dismiss();
+        }
+    }
+    public void hideSoftKeyboard() {
+        if(CollaboratorAdd.this.getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) CollaboratorAdd.this.getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(CollaboratorAdd.this.getCurrentFocus().getWindowToken(), 0);
         }
     }
 
@@ -698,28 +734,33 @@ public class CollaboratorAdd extends AppCompatActivity {
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        public void afterTextChanged(Editable s) {
             term = autoCompleteTextViewUser.getText().toString();
             if (InternetReceiver.isConnected()) {
+                if (!term.equals("")&&term.length()==3) {
                     String newTerm=term;
                     Log.d("newTerm", newTerm);
                     arrayAdapterCC=new CollaboratorAdapter(CollaboratorAdd.this,stringArrayList);
                     progressBar.setVisibility(View.VISIBLE);
+                    //arrayAdapterCC = new ArrayAdapter<>(collaboratorAdd.this, android.R.layout.simple_dropdown_item_1line, stringArrayList);
                     new FetchCollaborator(newTerm.trim()).execute();
 
-            }
-        }
-
-        public void afterTextChanged(Editable s) {
-            if (term.equals("")){
-                searchUer.setVisibility(View.GONE);
-            }
-            else {
-                if (term.equalsIgnoreCase(email1)) {
-                    searchUer.setVisibility(View.VISIBLE);
-                } else {
-                    searchUer.setVisibility(View.GONE);
                 }
             }
+
+//            if (term.equals("")){
+//                searchUer.setVisibility(View.GONE);
+//            }
+//            else {
+//                if (term.equalsIgnoreCase(email1)) {
+//                    searchUer.setVisibility(View.VISIBLE);
+//                } else {
+//                    searchUer.setVisibility(View.GONE);
+//                }
+//            }
         }
     };
     @Override

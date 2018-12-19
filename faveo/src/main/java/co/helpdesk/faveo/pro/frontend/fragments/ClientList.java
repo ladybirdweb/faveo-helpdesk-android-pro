@@ -1,10 +1,14 @@
 package co.helpdesk.faveo.pro.frontend.fragments;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,15 +16,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +52,8 @@ import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.ClientDetailActivity;
+import co.helpdesk.faveo.pro.frontend.activities.CollaboratorAdd;
+import co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity;
 import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.NotificationActivity;
 import co.helpdesk.faveo.pro.frontend.activities.RegisterUser;
@@ -50,6 +62,8 @@ import co.helpdesk.faveo.pro.frontend.adapters.ClientOverviewAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.ClientOverview;
 import es.dmoral.toasty.Toasty;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class ClientList extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
@@ -369,13 +383,176 @@ public class ClientList extends Fragment implements View.OnClickListener {
             startActivity(intent);
         }
         else if (id==R.id.action_add){
-            Intent intent=new Intent(getActivity(),RegisterUser.class);
-            startActivity(intent);
+           CustomDialogClassSolution cdd = new CustomDialogClassSolution(getActivity());
+            cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            cdd.show();
         }
 
         return super.onOptionsItemSelected(item);
     }
+    class CustomDialogClassSolution extends Dialog implements
+            android.view.View.OnClickListener {
+        String firstName,lastName;
+        String email;
+        public Activity c;
+        public Dialog d;
+        public Button buttoncreate, buttonclose;
+        EditText editTextEmail,editTextFirstName,editTextLastName;
+        public CustomDialogClassSolution(Activity a) {
+            super(a);
+            // TODO Auto-generated constructor stub
+            this.c = a;
+        }
 
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.activity_collaboratorcreate);
+            buttoncreate = (Button) findViewById(R.id.buttonAddUser);
+            buttonclose = (Button) findViewById(R.id.buttonClose);
+            editTextEmail=findViewById(R.id.email_edittextUser);
+            editTextFirstName=findViewById(R.id.fname_edittextUser);
+            editTextLastName=findViewById(R.id.lastname_edittext);
+            buttoncreate.setOnClickListener(this);
+            buttonclose.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.buttonAddUser:
+
+
+                    if (editTextEmail.getText().toString().equals("") || editTextFirstName.getText().toString().equals("") || editTextLastName.getText().toString().equals("")) {
+                        Toasty.info(getActivity(), getString(R.string.fill_all_the_details), Toast.LENGTH_LONG).show();
+                        return;
+                    } else if (!editTextEmail.getText().toString().equals("") && !Helper.isValidEmail(editTextEmail.getText().toString())) {
+                        Toasty.info(getActivity(), getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+                        return;
+                    } else if (editTextFirstName.getText().toString().trim().length() < 2) {
+                        Toasty.warning(getActivity(), getString(R.string.firstname_minimum_char), Toast.LENGTH_SHORT).show();
+                    } else if (editTextFirstName.getText().toString().trim().length() > 30) {
+                        Toasty.warning(getActivity(), getString(R.string.firstname_maximum_char), Toast.LENGTH_SHORT).show();
+                    } else if (editTextLastName.getText().toString().trim().length() < 2) {
+                        Toasty.warning(getActivity(), getString(R.string.lastname_minimum_char), Toast.LENGTH_SHORT).show();
+                    } else if (editTextLastName.getText().toString().trim().length() > 30) {
+                        Toasty.warning(getActivity(), getString(R.string.lastname_maximum_char), Toast.LENGTH_SHORT).show();
+                    } else {
+                        email = editTextEmail.getText().toString();
+                        firstName = editTextFirstName.getText().toString();
+                        lastName = editTextLastName.getText().toString();
+
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle(getString(R.string.creatinguser));
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                hideSoftKeyboard();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog.setMessage(getString(R.string.creatinguser));
+                                    progressDialog.show();
+                                    new RegisterUserNew(email, firstName, lastName).execute();
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        alertDialog.show();
+
+
+                    }
+                    break;
+                case R.id.buttonClose:
+                    dismiss();
+                    break;
+                default:
+                    break;
+            }
+            dismiss();
+        }
+    }
+    public void hideSoftKeyboard() {
+        if(getActivity().getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    private class RegisterUserNew extends AsyncTask<String, Void, String> {
+        String firstname, email, lastname;
+
+        RegisterUserNew(String email, String firstname, String lastname) {
+
+            this.firstname = firstname;
+            this.email = email;
+            this.lastname = lastname;
+
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().postCreateUser(email, firstname, lastname);
+        }
+
+        protected void onPostExecute(String result) {
+            Fragment fragment = null;
+            progressDialog.dismiss();
+            if (result == null) {
+                Toasty.error(getActivity(), getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+            try {
+                String state = Prefs.getString("400", null);
+
+                if (state.equals("badRequest")) {
+                    progressDialog.dismiss();
+                    Toasty.info(getActivity(), "The user is already registered", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String message = jsonObject.getString("message");
+                    if (message.contains("Activate your account! Click on the link that we've sent to your mail")){
+                        Toasty.success(getActivity(),getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();
+                        fragment = new ClientList();
+                        replaceFragment(fragment);
+                    }
+
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+    public void replaceFragment(Fragment someFragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container_body, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
     private class FetchClients extends AsyncTask<String, Void, String> {
         Context context;
 
