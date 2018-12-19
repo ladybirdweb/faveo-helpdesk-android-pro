@@ -963,11 +963,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         }
         else {
-//            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
-//            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(newIntent);
-            finish();
+            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(newIntent);
+
 //            if (!MainActivity.isShowing) {
 //                Log.d("isShowing", "false");
 ////                Intent intent = new Intent(this, MainActivity.class);
