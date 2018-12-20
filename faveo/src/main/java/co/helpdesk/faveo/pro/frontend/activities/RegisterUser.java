@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
@@ -36,11 +38,11 @@ public class RegisterUser extends AppCompatActivity {
 
     ImageView imageViewBackFromRegister;
     Button submit;
-    EditText editTextEmail,editTextFirstName,editTextPhone,editTextCompany,editTextLastName;
+    EditText editTextEmail,editTextFirstName,editTextPhone,editTextLastName;
     boolean allCorect;
     ProgressDialog progressDialog;
     String email;
-
+    CountryCodePicker countryCodePicker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,16 +59,50 @@ public class RegisterUser extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         submit= (Button) findViewById(R.id.buttonCreateUser);
+        countryCodePicker=findViewById(R.id.countrycoode);
         editTextEmail= (EditText) findViewById(R.id.email_edittextUser);
         editTextFirstName= (EditText) findViewById(R.id.fname_edittextUser);
         editTextLastName= (EditText) findViewById(R.id.lastname_edittext);
         editTextPhone= (EditText) findViewById(R.id.phone_edittextUser);
-        editTextCompany= (EditText) findViewById(R.id.company_edittextUser);
         imageViewBackFromRegister= (ImageView) findViewById(R.id.imageViewBack);
         imageViewBackFromRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if (!editTextEmail.getText().toString().equals("")||!editTextFirstName.getText().toString().equals("")||
+                        !editTextLastName.getText().toString().equals("")||!editTextPhone.getText().toString().equals("")){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterUser.this);
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Discard changes?");
+
+                    // Setting Dialog Message
+                    //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                    // Setting Icon to Dialog
+                    alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                    // Setting Positive "Yes" Button
+
+                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+
+                }
+                else{
+                    Intent intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -78,9 +114,9 @@ public class RegisterUser extends AppCompatActivity {
                 String firstname=editTextFirstName.getText().toString();
                 String lastname=editTextLastName.getText().toString();
                 String phone=editTextPhone.getText().toString();
-                String company=editTextCompany.getText().toString();
 
-
+                final String code=countryCodePicker.getSelectedCountryCode();
+                Log.d("code",code);
                 if (email.length()==0&&firstname.length()==0&&lastname.length()==0){
                     allCorect=false;
                     Toasty.warning(co.helpdesk.faveo.pro.frontend.activities.RegisterUser.this,getString(R.string.fill_all_the_details), Toast.LENGTH_SHORT).show();
@@ -107,12 +143,9 @@ public class RegisterUser extends AppCompatActivity {
                     Toasty.warning(RegisterUser.this,getString(R.string.lastNameCharacter),Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                else if (!code.equals(""))
                 if (allCorect) {
-                    Prefs.putString("firstusername",firstname);
-                    Prefs.putString("lastusername",lastname);
-                    Prefs.putString("firstuseremail",email);
-                    Prefs.putString("firstusermobile",phone);
+
 
                     if (InternetReceiver.isConnected()) {
 
@@ -121,7 +154,6 @@ public class RegisterUser extends AppCompatActivity {
                             lastname=URLEncoder.encode(lastname,"utf-8");
                             email = URLEncoder.encode(email.trim(), "utf-8");
                             phone = URLEncoder.encode(phone.trim(), "utf-8");
-                            company=URLEncoder.encode(company,"utf-8");
 
 
 
@@ -145,7 +177,6 @@ public class RegisterUser extends AppCompatActivity {
                         final String finalLastname = lastname;
                         final String finalEmail = email;
                         final String finalPhone = phone;
-                        final String finalCompany = company;
                         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Write your code here to invoke YES event
@@ -154,7 +185,7 @@ public class RegisterUser extends AppCompatActivity {
                                     progressDialog = new ProgressDialog(RegisterUser.this);
                                     progressDialog.show();
                                     progressDialog.setMessage(getString(R.string.UserCreating ));
-                                    new RegisterUserNew(finalFirstname, finalLastname, finalEmail, finalPhone, finalCompany).execute();
+                                    new RegisterUserNew(finalFirstname, finalLastname, finalEmail, finalPhone,code).execute();
                                 }
                             }
                         });
@@ -181,20 +212,20 @@ public class RegisterUser extends AppCompatActivity {
     }
 
     private class RegisterUserNew extends AsyncTask<String, Void, String> {
-        String firstname,email,mobile,company,lastname;
+        String firstname,email,mobile,lastname,code;
         String apiDisabled;
-        RegisterUserNew(String firstname,String lastname,String email,String mobile,String company) {
+        RegisterUserNew(String firstname,String lastname,String email,String mobile,String code) {
 
             this.firstname=firstname;
             this.email=email;
             this.mobile=mobile;
-            this.company=company;
             this.lastname=lastname;
+            this.code=code;
 
         }
 
         protected String doInBackground(String... urls) {
-            return new Helpdesk().postRegisterUser(email,firstname,lastname,mobile,company);
+            return new Helpdesk().postRegisterUser(email,firstname,lastname,mobile,code);
         }
 
         protected void onPostExecute(String result) {
@@ -215,21 +246,6 @@ public class RegisterUser extends AppCompatActivity {
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
-            try{
-                JSONObject jsonObject=new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("result");
-                String error=jsonObject1.getString("error");
-                if (error.equals("lang.methon_not_allowed")){
-                    Toasty.success(RegisterUser.this,getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
-                    Prefs.putString("newuseremail",email);
-                    startActivity(intent);
-
-                }
-
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
             try {
 
                 //JSONObject jsonObject=new JSONObject(result);
@@ -240,6 +256,19 @@ public class RegisterUser extends AppCompatActivity {
                     String message=jsonObject.getString("message");
                     JSONObject jsonObject2=jsonObject.getJSONObject("user");
                     email=jsonObject2.getString("email");
+                    firstname=jsonObject2.getString("first_name");
+                    lastname=jsonObject2.getString("last_name");
+                    mobile=jsonObject2.getString("mobile");
+                    Log.d("mobile",mobile);
+                    if (!mobile.equals("Not available")){
+                        Prefs.putString("firstusermobile",mobile);
+                    }
+                    else{
+                        Prefs.putString("firstusermobile",mobile);
+                    }
+                    Prefs.putString("firstusername",firstname);
+                    Prefs.putString("lastusername",lastname);
+                    Prefs.putString("firstuseremail",email);
 
                     if (message.contains("Activate your account! Click on the link that we've sent to your mail")){
                         Toasty.success(RegisterUser.this,getString(R.string.registrationsuccesfull),Toast.LENGTH_SHORT).show();
@@ -270,7 +299,42 @@ public class RegisterUser extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+
+        if (!editTextEmail.getText().toString().equals("")||!editTextFirstName.getText().toString().equals("")||
+                !editTextLastName.getText().toString().equals("")||!editTextPhone.getText().toString().equals("")){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterUser.this);
+
+            // Setting Dialog Title
+            alertDialog.setTitle("Discard changes?");
+
+            // Setting Dialog Message
+            //alertDialog.setMessage(getString(R.string.createConfirmation));
+
+            // Setting Icon to Dialog
+            alertDialog.setIcon(R.mipmap.ic_launcher);
+
+            // Setting Positive "Yes" Button
+
+            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
+                    startActivity(intent);
+                }
+            });
+            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
+
+        }
+        else{
+            Intent intent=new Intent(RegisterUser.this,CreateTicketActivity.class);
+            startActivity(intent);
+        }
+
     }
 }

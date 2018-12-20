@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -169,6 +169,8 @@
                 android:hint="@string/leaveYourMessage"
                 android:paddingBottom="10dp"
                 android:paddingTop="16dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="18sp" />
 
@@ -282,5 +284,5 @@
     </LinearLayout>
 
 
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
 </com.flipboard.bottomsheet.BottomSheetLayout>

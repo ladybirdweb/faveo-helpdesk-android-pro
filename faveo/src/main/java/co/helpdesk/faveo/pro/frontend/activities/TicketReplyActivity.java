@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -215,6 +216,21 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
         progressBar= (ProgressBar) findViewById(R.id.progress_bar);
         addCc = (TextView) findViewById(R.id.addcc);
         editTextReplyMessage = (EditText) findViewById(R.id.editText_reply_message);
+        editTextReplyMessage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_SCROLL:
+                        view.getParent().requestDisallowInterceptTouchEvent(false);
+                        return true;
+                    case MotionEvent.ACTION_BUTTON_PRESS:
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(editTextReplyMessage, InputMethodManager.SHOW_IMPLICIT);
+                }
+                return false;
+            }
+        });
         editTextReplyMessage.setCursorVisible(true);
 
         imageView.setOnClickListener(new View.OnClickListener() {

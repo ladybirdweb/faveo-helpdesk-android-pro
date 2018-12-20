@@ -126,13 +126,11 @@ import static com.vincent.filepicker.activity.ImagePickActivity.IS_NEED_CAMERA;
 public class CreateTicketActivity extends AppCompatActivity implements PermissionCallback, ErrorCallback {
     boolean allCorrect;
     String term;
-    String collaborators=null;
+    String collaborators="";
     ArrayAdapter<Data> spinnerPriArrayAdapter, spinnerHelpArrayAdapter,typeArrayAdapter,autocompletetextview,stringArrayAdapterHint;
     ArrayAdapter<CollaboratorSuggestion> arrayAdapterCC;
     MultiCollaboratorAdapter adapter1=null;
     AutoCompleteTextView editTextEmail;
-    @BindView(R.id.phone_edittext)
-    EditText editTextPhone;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.attachment_name)
@@ -143,8 +141,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     EditText subEdittext;
     @BindView(R.id.msg_edittext)
     EditText msgEdittext;
-    @BindView(R.id.phone_edittext10)
-    EditText editTextMobile;
     Spinner autoCompletePriority;
     Spinner autoCompleteHelpTopic;
     Spinner spinnerType;
@@ -172,7 +168,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
     int i=0;
     int res=0;
     MultiAutoCompleteTextView multiAutoCompleteTextViewCC;
-    CountryCodePicker countryCodePicker;
     String firstname,lastname,email;
     String result;
     Button button;
@@ -238,7 +233,21 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
         button= (Button) findViewById(R.id.attachment);
-
+        msgEdittext.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_SCROLL:
+                        view.getParent().requestDisallowInterceptTouchEvent(false);
+                        return true;
+                    case MotionEvent.ACTION_BUTTON_PRESS:
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(msgEdittext, InputMethodManager.SHOW_IMPLICIT);
+                }
+                return false;
+            }
+        });
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -329,7 +338,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to invoke YES event
-                            finish();
+                            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(newIntent);
                         }
                     });
 
@@ -347,7 +359,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 }
                 else {
 //
-                    finish();
+                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(newIntent);
                 }
             }
         });
@@ -397,14 +412,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
             }
         });
-        countryCodePicker= (CountryCodePicker) findViewById(R.id.countrycoode);
-        countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
-            @Override
-            public void onCountrySelected() {
-
-                countrycode=countryCodePicker.getSelectedCountryCode();
-            }
-        });
         editTextEmail= (AutoCompleteTextView) findViewById(R.id.email_edittext);
         emailHint=new ArrayList<>();
         arrayAdapterCC=new CollaboratorAdapter(this,emailHint);
@@ -425,7 +432,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                         editTextEmail.setText(email1);
                         firstname=data2.getFirstname();
                     lastname=data2.getLastname();
-                    editTextEmail.setText(email1);
                     }
                 }
 
@@ -488,8 +494,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             email = Prefs.getString("firstuseremail", null);
             phone = Prefs.getString("firstusermobile", null);
         }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+            e.printStackTrace(); }
 
 
         if (email.equals("null")){
@@ -497,14 +502,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         }
         else{
             editTextEmail.setText(email);
-        }
-
-
-        if (phone.equals("null")){
-            editTextPhone.setText("");
-        }
-        else {
-            editTextPhone.setText(phone);
         }
     }
 
@@ -775,93 +772,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         return result.toString();
     }
 
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
-    }
-    private String getRealPathFromURI(Uri contentURI)
-    {
-        String result = null;
-
-        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-
-        if (cursor == null)
-        { // Source is Dropbox or other similar local file path
-            result = contentURI.getPath();
-        }
-        else
-        {
-            if(cursor.moveToFirst())
-            {
-                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                result = cursor.getString(idx);
-            }
-            cursor.close();
-        }
-        return result;
-    }
-
     private void reqPermissionCamera() {
         new AskPermission.Builder(this).setPermissions(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .setCallback(this)
@@ -1021,6 +931,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                     finish();
+//                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+//                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(newIntent);
 //                    if (!MainActivity.isShowing) {
 //                        Log.d("isShowing", "false");
 //                        Intent intent = new Intent(CreateTicketActivity.this, MainActivity.class);
@@ -1048,18 +962,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
         }
         else {
-            finish();
-//            if (!MainActivity.isShowing) {
-//                Log.d("isShowing", "false");
-////                Intent intent = new Intent(this, MainActivity.class);
-////                startActivity(intent);
-//                finish();
-//            } else {
-//                Log.d("isShowing", "true");
-////                Intent intent = new Intent(this, MainActivity.class);
-////                startActivity(intent);
-//                finish();
-//            }
+            Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(newIntent);
+
         }
 
 
@@ -1078,14 +985,18 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         String subject = subEdittext.getText().toString();
         String message = msgEdittext.getText().toString();
         email2 = editTextEmail.getText().toString();
-        if (!email2.equals(email1)){
+        String email3=editTextEmail.getText().toString();
+        if (!email3.equals(email1)){
             email2="";
-            //Toasty.warning(this,getString(R.string.requestornotfound),Toast.LENGTH_SHORT).show();
         }
-        else{
+        if (email3.equals(email)){
+            email2=email;
+        }
+        if (email3.equals(email1)){
             email2=email1;
         }
-        //email2=email1;
+
+        Log.d("email2",email2);
         fname=firstname;
         lname=lastname;
 
@@ -1194,12 +1105,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         final Data helpTopic = (Data) autoCompleteHelpTopic.getSelectedItem();
         final Data priority = (Data) autoCompletePriority.getSelectedItem();
         final Data staff = (Data) autoCompleteTextView.getSelectedItem();
-        //final Data type= (Data) spinnerType.getSelectedItem();
-        String phone = editTextPhone.getText().toString();
-        mobile = editTextMobile.getText().toString();
 
-
-        countrycode = countryCodePicker.getSelectedCountryCode();
 
 
         allCorrect = true;
@@ -1243,64 +1149,117 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
                 progressDialog = new ProgressDialog(CreateTicketActivity.this);
                 if (path.equals("")) {
-                    //Starting the upload
-                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
-                    progressDialog.setMessage(getString(R.string.creating_ticket));
+                    if (!collaborators.equals("")) {
+                        //Starting the upload
+                        progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                        progressDialog.setMessage(getString(R.string.creating_ticket));
 
+                        try {
+                            fname = URLEncoder.encode(fname.trim(), "utf-8");
+                            lname = URLEncoder.encode(lname.trim(), "utf-8");
+                            subject = URLEncoder.encode(subject.trim(), "utf-8");
+                            message = URLEncoder.encode(message.trim(), "utf-8");
+                            email1 = URLEncoder.encode(email1.trim(), "utf-8");
 
-                    try {
-                        fname = URLEncoder.encode(fname.trim(), "utf-8");
-                        lname = URLEncoder.encode(lname.trim(), "utf-8");
-                        subject = URLEncoder.encode(subject.trim(), "utf-8");
-                        message = URLEncoder.encode(message.trim(), "utf-8");
-                        email1 = URLEncoder.encode(email1.trim(), "utf-8");
-                        phone = URLEncoder.encode(phone.trim(), "utf-8");
-                        mobile = URLEncoder.encode(mobile.trim(), "utf-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
 
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+                        // Setting Dialog Title
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
 
-                    // Setting Dialog Title
-                    alertDialog.setTitle(getString(R.string.creatingTicket));
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
 
-                    // Setting Dialog Message
-                    alertDialog.setMessage(getString(R.string.createConfirmation));
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
 
-                    // Setting Icon to Dialog
-                    alertDialog.setIcon(R.mipmap.ic_launcher);
-
-                    // Setting Positive "Yes" Button
-                    final String finalSubject = subject;
-                    final String finalMessage = message;
-                    final String finalPhone = phone;
-                    final String finalFname = fname;
-                    final String finalLname = lname;
-                    alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to invoke YES event
-                            //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                            if (InternetReceiver.isConnected()){
-                                progressDialog = new ProgressDialog(CreateTicketActivity.this);
-                                progressDialog.setMessage("Please wait");
-                                progressDialog.show();
-                                new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID, finalPhone, finalFname, finalLname, email2, countrycode, staff.ID, mobile).execute();
+                        // Setting Positive "Yes" Button
+                        final String finalSubject = subject;
+                        final String finalMessage = message;
+                        final String finalFname = fname;
+                        final String finalLname = lname;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage("Please wait");
+                                    progressDialog.show();
+                                    new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID, finalFname, finalLname, staff.ID, email2+collaborators).execute();
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    // Setting Negative "NO" Button
-                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to invoke NO event
-                            //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                            dialog.cancel();
-                        }
-                    });
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
 
-                    // Showing Alert Message
-                    alertDialog.show();
+                        // Showing Alert Message
+                        alertDialog.show();
+                    }
+                    else{
+                        progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                        progressDialog.setMessage(getString(R.string.creating_ticket));
+
+                        try {
+                            fname = URLEncoder.encode(fname.trim(), "utf-8");
+                            lname = URLEncoder.encode(lname.trim(), "utf-8");
+                            subject = URLEncoder.encode(subject.trim(), "utf-8");
+                            message = URLEncoder.encode(message.trim(), "utf-8");
+                            email1 = URLEncoder.encode(email1.trim(), "utf-8");
+
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreateTicketActivity.this);
+
+                        // Setting Dialog Title
+                        alertDialog.setTitle(getString(R.string.creatingTicket));
+
+                        // Setting Dialog Message
+                        alertDialog.setMessage(getString(R.string.createConfirmation));
+
+                        // Setting Icon to Dialog
+                        alertDialog.setIcon(R.mipmap.ic_launcher);
+
+                        // Setting Positive "Yes" Button
+                        final String finalSubject = subject;
+                        final String finalMessage = message;
+                        final String finalFname = fname;
+                        final String finalLname = lname;
+                        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke YES event
+                                //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                if (InternetReceiver.isConnected()) {
+                                    progressDialog = new ProgressDialog(CreateTicketActivity.this);
+                                    progressDialog.setMessage("Please wait");
+                                    progressDialog.show();
+                                    new CreateNewTicket(Integer.parseInt(Prefs.getString("ID", null)), finalSubject, finalMessage, helpTopic.ID, priority.ID, finalFname, finalLname, staff.ID, email2).execute();
+                                }
+                            }
+                        });
+
+                        // Setting Negative "NO" Button
+                        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to invoke NO event
+                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                        // Showing Alert Message
+                        alertDialog.show();
+                    }
                 } else {
                     if (res == 1) {
 //                    progressDialog.setMessage(getString(R.string.creating_ticket));
@@ -1343,9 +1302,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addParameter("assigned", "" + staff.ID)
                                                 .addParameter("first_name", firstname)
                                                 .addParameter("last_name", lastname)
-                                                .addParameter("phone", finalPhone1)
-                                                .addParameter("code", countrycode)
-                                                .addParameter("mobile", mobile)
                                                 .addArrayParameter("cc[]", finalFirst_user)
                                                 .addParameter("email", email2)
                                                 .setMaxRetries(1)
@@ -1484,9 +1440,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addParameter("assigned", "" + staff.ID)
                                                 .addParameter("first_name", firstname)
                                                 .addParameter("last_name", lastname)
-                                                .addParameter("phone", finalPhone1)
-                                                .addParameter("code", countrycode)
-                                                .addParameter("mobile", mobile)
                                                 .addArrayParameter("cc[]", finalFirst_user)
                                                 .addArrayParameter("cc[]", finalSecond_user)
                                                 .addParameter("email", email2)
@@ -1626,9 +1579,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addParameter("assigned", "" + staff.ID)
                                                 .addParameter("first_name", firstname)
                                                 .addParameter("last_name", lastname)
-                                                .addParameter("phone", finalPhone1)
-                                                .addParameter("code", countrycode)
-                                                .addParameter("mobile", mobile)
                                                 .addArrayParameter("cc[]", finalFirst_user)
                                                 .addArrayParameter("cc[]", finalSecond_user)
                                                 .addArrayParameter("cc[]", finalThird_user)
@@ -1766,9 +1716,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                                                 .addParameter("assigned", "" + staff.ID)
                                                 .addParameter("first_name", firstname)
                                                 .addParameter("last_name", lastname)
-                                                .addParameter("phone", finalPhone1)
-                                                .addParameter("code", countrycode)
-                                                .addParameter("mobile", mobile)
                                                 .addParameter("email", email2)
                                                 .setMaxRetries(1)
                                                 .setMethod("POST").setDelegate(new UploadStatusDelegate() {
@@ -1941,11 +1888,9 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
      * Async task for creating the ticket.
      */
     private class CreateNewTicket extends AsyncTask<File, Void, String> {
-        String fname, lname, email, code;
+        String fname, lname, email;
         String subject;
         public String body;
-        String phone;
-        String mobile;
         int helpTopic;
         // int SLA;
         int priority;
@@ -1955,7 +1900,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         String string;
 
         CreateNewTicket(int userID, String subject, String body,
-                        int helpTopic, int priority, String phone, String fname, String lname, String email, String code,int staff,String mobile) {
+                        int helpTopic, int priority,String fname, String lname,int staff, String email) {
 
             this.subject = subject;
             this.body = body;
@@ -1964,13 +1909,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
             this.priority = priority;
             //this.dept = dept;
             this.userID = userID;
-            this.phone = phone;
             this.lname = lname;
             this.fname = fname;
             this.email = email;
-            this.code = code;
             this.staff=staff;
-            this.mobile = mobile;
 
         }
 
@@ -1978,7 +1920,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         protected String doInBackground(File... files) {
 
 
-            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, phone, email, code, staff, mobile+ collaborators);
+            return new Helpdesk().postCreateTicket(userID, subject, body, helpTopic, priority, fname, lname, staff,email);
         }
 
         protected void onPostExecute(String result) {

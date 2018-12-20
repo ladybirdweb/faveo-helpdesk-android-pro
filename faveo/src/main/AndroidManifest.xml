@@ -155,7 +155,7 @@
             android:label="@string/title_activity_create_ticket"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
-            android:noHistory="true"/>
+            />
         <activity
             android:name=".frontend.activities.SearchActivity"
             android:label="@string/title_activity_search"
@@ -178,7 +178,9 @@
         <activity
             android:name=".frontend.activities.RegisterUser"
             android:label="@string/title_activity_register_user"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".frontend.activities.CollaboratorAdd"
             android:windowSoftInputMode="stateAlwaysHidden"
@@ -258,11 +260,12 @@
         <activity
             android:name=".frontend.activities.TicketReplyActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:launchMode="singleTask"
+            ></activity>
         <activity android:name=".frontend.activities.InternalNoteActivity" />
         <activity android:name=".frontend.activities.ShowingAttachment" />
         <activity android:name=".frontend.activities.HelpingActivity" />
-        <activity android:name=".frontend.activities.Collaboratorcreate"></activity>
 
     </application>
 
