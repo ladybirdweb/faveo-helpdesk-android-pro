@@ -45,8 +45,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -988,17 +991,17 @@ public class SortByTicketNumberDescending extends Fragment {
     public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
         private List<TicketOverview> ticketOverviewList;
         String subject;
-        int length=0;
+        int length = 0;
         private Context context;
-        ArrayList<Integer> checked_items= new ArrayList<>();
-        ArrayList<String> ticketSubject=new ArrayList<>();
+        ArrayList<Integer> checked_items = new ArrayList<>();
+        ArrayList<String> ticketSubject = new ArrayList<>();
         private SparseBooleanArray mSelectedItemsIds;
         private List<Integer> selectedIds = new ArrayList<>();
 
 
-        public TicketOverviewAdapter(Context context,List<TicketOverview> ticketOverviewList) {
+        public TicketOverviewAdapter(Context context, List<TicketOverview> ticketOverviewList) {
             this.ticketOverviewList = ticketOverviewList;
-            this.context=context;
+            this.context = context;
             mSelectedItemsIds = new SparseBooleanArray();
         }
 
@@ -1006,158 +1009,63 @@ public class SortByTicketNumberDescending extends Fragment {
         public int getItemCount() {
             return ticketOverviewList.size();
         }
-
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
         @Override
         public void onBindViewHolder(final TicketOverviewAdapter.TicketViewHolder ticketViewHolder, final int i) {
             final TicketOverview ticketOverview = ticketOverviewList.get(i);
-            String letter;
-            if (!ticketOverview.getClientName().equals("")){
-                letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+            String letter="U";
+            // Log.d("customerUname",ticketOverview.clientName);
+            try {
+                if (!ticketOverview.clientName.equals("")) {
+                    if (Character.isUpperCase(ticketOverview.clientName.charAt(0))){
+                        letter = String.valueOf(ticketOverview.clientName.charAt(0));
+                    }
+                    else{
+                        letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
+
+                    }
+
+                }
+                else{
+                    ticketViewHolder.textViewClientName.setVisibility(View.GONE);
+                }
+            }catch (StringIndexOutOfBoundsException e){
+                e.printStackTrace();
             }
-            else{
-                letter="N";
-            }
-            int id=ticketOverviewList.get(i).getTicketID();
+
+            int id = ticketOverviewList.get(i).getTicketID();
             TextDrawable.IBuilder mDrawableBuilder;
-            if (selectedIds.contains(id)){
+            if (selectedIds.contains(id)) {
                 //if item is selected then,set foreground color of FrameLayout.
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
             }
-            else {
-                //else remove selected item color.
-                //holder.rootView.setForeground(new ColorDrawable(ContextCompat.getColor(context,android.R.color.transparent)));
-            }
-            subject=ticketOverview.ticketSubject;
-            if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
-                String first=subject.replace("=?UTF-8?Q?","");
-                String second=first.replace("_"," ");
+            subject = ticketOverview.ticketSubject;
+            if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {
+                String first = subject.replace("=?UTF-8?Q?", "");
+                String second = first.replace("_", " ");
                 String second1=second.replace("=C3=BA","");
                 String third = second1.replace("=C2=A0", "");
-                String fourth=third.replace("?=","");
-                String fifth=fourth.replace("=E2=80=99","'");
+                String fourth = third.replace("?=", "");
+                String fifth = fourth.replace("=E2=80=99", "'");
                 ticketViewHolder.textViewSubject.setText(fifth);
-            }
-            else{
+            } else {
                 ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
             }
-
-//            ticketViewHolder.ticket
-//                    .setBackgroundColor(mSelectedItemsIds.get(i) ? 0x9934B5E4
-//                            : Color.TRANSPARENT);
-
-            if (checked_items.contains(id)){
+            if (checked_items.contains(id)) {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
-            }
-            else {
+            } else {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                if (ticketOverview.lastReply.equals("client")){
-//                    int color=Color.parseColor("#ededed");
+//                if (ticketOverview.lastReply.equals("client")) {
+//
+//                    int color = Color.parseColor("#ededed");
 //                    ticketViewHolder.ticket.setBackgroundColor(color);
+//                } else {
+//
 //                }
-//                else{
-//                    ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                }
-                //ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
-
-//        if (checked_items.contains(id)){
-//            //if item is selected then,set foreground color of FrameLayout.
-//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#B9FCFC"));
-//        }
-//        else {
-//            //else remove selected item color.
-//            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//        }
-
-            //Toast.makeText(context, "no of items"+checked_items.toString(), Toast.LENGTH_SHORT).show();
-
-//            ticketViewHolder.checkBox1.setOnCheckedChangeListener(null);
-//
-//            //ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-//            ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//
-//                    if (b){
-//                        ticketViewHolder.checkBox1.setChecked(true);
-//                        ticketOverview.setChecked(true);
-//                        //stringBuffer.append(""+ticketOverview.getTicketID()+",");
-//                        if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
-//                            String first=subject.replace("=?UTF-8?Q?","");
-//                            String second=first.replace("_"," ");
-//                            String third=second.replace("=C2=A0","");
-//                            String fourth=third.replace("?=","");
-//                            String fifth=fourth.replace("=E2=80=99","'");
-//                            ticketViewHolder.textViewSubject.setText(fifth);
-//                            ticketSubject.add(fifth);
-//                        }
-//                        else{
-//                            ticketSubject.add(ticketOverview.ticketSubject);
-//                        }
-//                        //ticketSubject.add(ticketOverview.ticketSubject);
-//                        checked_items.add(ticketOverview.getTicketID());
-////                  length=checked_items.size();
-//                        Log.d("ticketsubject",ticketSubject.toString());
-//                        Log.d("checkeditems",checked_items.toString().replace(" ",""));
-//                        Prefs.putString("tickets",checked_items.toString().replace(" ",""));
-//                        Prefs.putString("TicketSubject",ticketSubject.toString());
-//                        ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-//
-//                    }
-//                    else{
-//                        ticketOverview.setChecked(false);
-//                        int pos=checked_items.indexOf(ticketOverview.getTicketID());
-//                        int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
-//                        try {
-//                            checked_items.remove(pos);
-//                            ticketSubject.remove(pos1);
-//                        }
-//                        catch (ArrayIndexOutOfBoundsException e){
-//                            e.printStackTrace();
-//                        }
-//                        Log.d("Position",""+pos);
-//                        //checked_items.remove(checked_items.indexOf(ticketOverview.getTicketID()));
-//                        length--;
-//                        Log.d("NoOfItems",""+length);
-//                        Prefs.putInt("totalticketselected",length);
-//                        Log.d("checkeditems", "" + checked_items);
-//                        Prefs.putInt("NoOfItems",length);
-//                        Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
-//                        Prefs.putString("TicketSubject",ticketSubject.toString());
-//                        Log.d("ticketsubject",ticketSubject.toString());
-//                        ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                        ticketViewHolder.checkBox1.setChecked(false);
-//                        if (!ticketOverview.lastReply.equals("client")){
-//                            int color=Color.parseColor("#e9e9e9");
-//                            ticketViewHolder.ticket.setBackgroundColor(color);
-//                        }
-//                        else{
-//                            ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                        }
-//
-//
-//                        //notifyDataSetChanged();
-//
-//                    }
-//
-//
-//                }
-//            });
-//
-//
-//
-//
-//            if (ticketOverview.getChecked()){
-//                ticketViewHolder.checkBox1.setVisibility(View.VISIBLE);
-//                ticketViewHolder.checkBox1.setChecked(true);
-//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-//            }
-//            else{
-//                ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                ticketViewHolder.checkBox1.setChecked(false);
-//                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            }
 
             if (ticketOverview.ticketAttachments.equals("0")) {
                 ticketViewHolder.attachementView.setVisibility(View.GONE);
@@ -1165,37 +1073,41 @@ public class SortByTicketNumberDescending extends Fragment {
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
                 ticketViewHolder.attachementView.setColorFilter(color);
+
             }
-            if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
-//            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
-//                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-//            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
-
+            try {
+                if (!ticketOverview.dueDate.equals(null) || !ticketOverview.dueDate.equals("null"))
+                    Log.d("dueDate", ticketOverview.getDueDate());
                 if (Helper.compareDates(ticketOverview.dueDate) == 2) {
-                    ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
-//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-//                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
-//                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor();
+                    Log.d("duetoday", "yes");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date EndTime = null;
+                    try {
+                        EndTime = dateFormat.parse(ticketOverview.getDueDate());
+                        Date CurrentTime = dateFormat.parse(dateFormat.format(new Date()));
+                        if (CurrentTime.after(EndTime)) {
+                            ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+                            Log.d("dueFromInbox", "overdue");
+                        } else {
+                            Log.d("dueFromInbox", "duetoday");
+                            ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-                }
-                else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+
+                } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+                    Log.d("duetoday", "no");
                     ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
-//                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
-//
-////set color
-//                 drawable.setColor(color);
-                    ((GradientDrawable)ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
-                }
-                else {
+                } else {
+                    Log.d("duetoday", "novalue");
                     ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+                    ticketViewHolder.textViewduetoday.setVisibility(View.GONE);
                 }
-
-
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
             ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
 
             ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
@@ -1223,26 +1135,28 @@ public class SortByTicketNumberDescending extends Fragment {
                 else{
                     ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
                 }
-                //ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 
             }
-            if (ticketOverview.ticketPriorityColor.equals("null")){
-                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-            }
-            else if (ticketOverview.ticketPriorityColor != null) {
-                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
-            }
 
-
-//        else if (ticketOverview.ticketPriorityColor.equals("null")){
-//            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-//        }
-            ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
-
-            if (!ticketOverview.countthread.equals("0")){
-                ticketViewHolder.countThread.setText("("+ticketOverview.getCountthread()+")");
+            if (!ticketOverview.priorityName.equals("null")||!ticketOverview.priorityName.equals("")){
+                ticketViewHolder.textViewpriorityName.setText(ticketOverview.priorityName);
             }
             else{
+                ticketViewHolder.textViewpriorityName.setText(getActivity().getString(R.string.not_available));
+            }
+
+            if (ticketOverview.ticketPriorityColor.equals("null")) {
+                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+                ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor("#3da6d7"));
+            } else if (ticketOverview.ticketPriorityColor != null) {
+                //ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+                ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
+            }
+            ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
+
+            if (!ticketOverview.countthread.equals("0")) {
+                ticketViewHolder.countThread.setText("(" + ticketOverview.getCountthread() + ")");
+            } else {
                 ticketViewHolder.countThread.setVisibility(View.GONE);
             }
 
@@ -1294,96 +1208,60 @@ public class SortByTicketNumberDescending extends Fragment {
                     break;
             }
 
-            if (!ticketOverview.countcollaborator.equals("0")){
-
+            if (!ticketOverview.countcollaborator.equals("0")) {
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
                 ticketViewHolder.countCollaborator.setColorFilter(color);
-            }
-            else if (ticketOverview.countcollaborator.equals("0")){
+            } else if (ticketOverview.countcollaborator.equals("0")) {
                 ticketViewHolder.countCollaborator.setVisibility(View.GONE);
             }
 
-            if (!ticketOverview.agentName.equals("Unassigned")){
+            if (!ticketOverview.agentName.equals("Unassigned")) {
                 //ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
                 ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
-            }
-            else{
+            } else {
                 ticketViewHolder.agentAssigned.setText("Unassigned");
                 //ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
             }
 
-//else if (ticketOverview.getAgentName().equals("Unassigned")){
-//    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
-//}
-
-
-//            if (!ticketOverview.lastReply.equals("client")){
-//                int color=Color.parseColor("#e9e9e9");
-//                ticketViewHolder.ticket.setBackgroundColor(color);
-//            }
-
-            if (ticketOverview.clientPicture.equals("")){
+            if (ticketOverview.clientPicture.equals("")) {
                 ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
-            }
-            else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")){
+            } else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")) {
                 mDrawableBuilder = TextDrawable.builder()
                         .round();
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
                 Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
-//        Glide.with(context)
-//            .load(ticketOverview.getClientPicture())
-//            .into(ticketViewHolder.roundedImageViewProfilePic);
 
-                //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
 
             }
-            else{
-                int color=Color.parseColor("#cdc5bf");
+
+            else {
+
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(letter,generator.getRandomColor());
-                ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                        .buildRound(letter, generator.getRandomColor());
+                //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
             }
-
-//            if (ticketOverview.clientPicture.equals("")){
-//                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
-//            }
-//            else if (ticketOverview.clientPicture.startsWith("")){
-//                IImageLoader imageLoader = new PicassoLoader();
-//                imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
-//                //imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
-//            }
-
-//        if (ticketOverview.clientPicture != null && ticketOverview.clientPicture.trim().length() != 0)
-//            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
-//                    .load(ticketOverview.clientPicture)
-//                    .placeholder(R.drawable.default_pic)
-//                    .error(R.drawable.default_pic)
-//                    .into(ticketViewHolder.roundedImageViewProfilePic);
 
             ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mActionMode != null) {
                         onListItemSelect(i);
-                    }
-
-                    else{
+                    } else {
                         Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                         intent.putExtra("ticket_id", ticketOverview.ticketID + "");
-                        Prefs.putString("TICKETid",ticketOverview.ticketID+"");
+                        Prefs.putString("TICKETid", ticketOverview.ticketID + "");
                         Prefs.putString("ticketId",ticketOverview.ticketID+"");
-                        Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
-
+                        Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
                         intent.putExtra("priority_color",ticketOverview.ticketPriorityColor);
                         intent.putExtra("ticket_number", ticketOverview.ticketNumber);
                         intent.putExtra("ticket_status",ticketOverview.ticketStatus);
                         intent.putExtra("ticket_opened_by", ticketOverview.clientName);
                         intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
-                        Log.d("clicked","onRecyclerView");
+                        Log.d("clicked", "onRecyclerView");
                         v.getContext().startActivity(intent);
                     }
 
@@ -1394,76 +1272,15 @@ public class SortByTicketNumberDescending extends Fragment {
                 public boolean onLongClick(View view) {
                     onListItemSelect(i);
                     length++;
-                    Log.d("noofitems",""+length);
-                    Prefs.putInt("NoOfItems",length);
+                    Log.d("noofitems", "" + length);
+                    Prefs.putInt("NoOfItems", length);
 
-//                ticketOverviewList.get(i).getTicketID();
-//                Log.d("position",""+ticketOverviewList.get(i).getTicketID());
-//                if (ticketViewHolder.checkBox1.isEnabled()){
-//
-//                }
-//                else{
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                }
-//                if (ticketViewHolder.checkBox1.isChecked()){
-//
-//                }else{
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                }
                     return true;
                 }
             });
 
-
-
-//        ticketViewHolder.checkBox1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (ticketViewHolder.checkBox1.isChecked())
-//                    ticketViewHolder.checkBox1.setChecked(false);
-//                else
-//                    ticketViewHolder.checkBox1.setChecked(true);
-//            }
-//        });
-
-
-
-//        ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//
-//                if (isChecked){
-////                    ticketViewHolder.checkBox1.setChecked(true);
-////                    Prefs.putString("checkboxstate","checked");
-//
-//                    stringBuffer.append(ticketOverview.getTicketID()+",");
-//                    Log.d("ids",stringBuffer.toString());
-//
-//                }
-//                else{
-//                    Prefs.putString("checkboxstate","unchecked");
-//                    stringBuffer.toString().replace(""+ticketOverview.getTicketID(),"");
-//                    Log.d("ids",stringBuffer.toString());
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                    notifyDataSetChanged();
-//                }
-////
-////                String state=Prefs.getString("checkboxstate",null);
-////
-////                if (state.equals("checked")){
-////                    ticketViewHolder.checkBox1.setSelected(true);
-////                    notifyDataSetChanged();
-////                }
-////                else{
-////                    ticketViewHolder.checkBox1.setSelected(false);
-////                    notifyDataSetChanged();
-////                }
-//
-//
-//            }
-//        });
-
         }
+
         private void onListItemSelect(int position) {
             ticketOverviewAdapter.toggleSelection(position);//Toggle the selection
 
@@ -1472,7 +1289,7 @@ public class SortByTicketNumberDescending extends Fragment {
 
             if (hasCheckedItems && mActionMode == null)
                 // there are some selected items, start the actionMode
-                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new Toolbar_ActionMode_Callback(getActivity(),ticketOverviewAdapter, null, ticketOverviewList, false));
+                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new Toolbar_ActionMode_Callback(getActivity(), ticketOverviewAdapter, null, ticketOverviewList, false));
             else if (!hasCheckedItems && mActionMode != null)
                 // there no selected items, finish the actionMode
                 mActionMode.finish();
@@ -1493,46 +1310,46 @@ public class SortByTicketNumberDescending extends Fragment {
         //Remove selected selections
 
 
-
         //Put or delete selected position into SparseBooleanArray
         public void selectView(int position, boolean value) {
-            TicketOverview ticketOverview=ticketOverviewList.get(position);
+            TicketOverview ticketOverview = ticketOverviewList.get(position);
             if (value) {
                 ticketSubject.add(ticketOverview.ticketSubject);
                 checked_items.add(ticketOverview.getTicketID());
                 status=ticketOverview.getTicketStatus();
-                Log.d("ticketsubject",ticketSubject.toString());
-                Log.d("checkeditems",checked_items.toString().replace(" ",""));
-                Prefs.putString("tickets",checked_items.toString().replace(" ",""));
-                Prefs.putString("TicketSubject",ticketSubject.toString());
+                Log.d("status",status);
+                Log.d("ticketsubject", ticketSubject.toString());
+                Log.d("checkeditems", checked_items.toString().replace(" ", ""));
+                Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+                Prefs.putString("TicketSubject", ticketSubject.toString());
                 mSelectedItemsIds.put(position, value);
-            }
-            else {
-
-                int pos=checked_items.indexOf(ticketOverview.getTicketID());
-                int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
+            } else {
+                int pos = checked_items.indexOf(ticketOverview.getTicketID());
+                int pos1 = ticketSubject.indexOf(ticketOverview.getTicketSubject());
                 try {
                     checked_items.remove(pos);
                     ticketSubject.remove(pos1);
-                }catch (ArrayIndexOutOfBoundsException e){
+                } catch (ArrayIndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
-                Log.d("ticketsubject",ticketSubject.toString());
-                Log.d("checkeditems",checked_items.toString().replace(" ",""));
-                Prefs.putInt("totalticketselected",length);
+                Log.d("ticketsubject", ticketSubject.toString());
+                Log.d("checkeditems", checked_items.toString().replace(" ", ""));
+                Prefs.putInt("totalticketselected", length);
                 Log.d("checkeditems", "" + checked_items);
-                Prefs.putInt("NoOfItems",length);
+                Prefs.putInt("NoOfItems", length);
                 Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
-                Prefs.putString("TicketSubject",ticketSubject.toString());
+                Prefs.putString("TicketSubject", ticketSubject.toString());
                 mSelectedItemsIds.delete(position);
             }
 
             notifyDataSetChanged();
         }
+
         public void setSelectedIds(List<Integer> selectedIds) {
             this.selectedIds = selectedIds;
             notifyDataSetChanged();
         }
+
         public void removeSelection() {
             mSelectedItemsIds = new SparseBooleanArray();
             notifyDataSetChanged();
@@ -1542,22 +1359,10 @@ public class SortByTicketNumberDescending extends Fragment {
         public int getSelectedCount() {
             return mSelectedItemsIds.size();
         }
-
-        //        //Return all selected ids
-//        public SparseBooleanArray getSelectedIds() {
-//            return mSelectedItemsIds;
-//        }
-//        public void setSelectedIds(ArrayList<Integer> checked_items) {
-//            this.checked_items = checked_items;
-//            notifyDataSetChanged();
-//        }
-        public TicketOverview getItem(int position){
+        public TicketOverview getItem(int position) {
             return ticketOverviewList.get(position);
         }
-        @Override
-        public int getItemViewType(int position) {
-            return position;
-        }
+
         @Override
         public TicketOverviewAdapter.TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
@@ -1565,9 +1370,7 @@ public class SortByTicketNumberDescending extends Fragment {
                     inflate(R.layout.card_ticket, viewGroup, false);
             return new TicketOverviewAdapter.TicketViewHolder(itemView);
         }
-
-        public  class TicketViewHolder extends RecyclerView.ViewHolder {
-
+        public class TicketViewHolder extends RecyclerView.ViewHolder {
             protected View ticket;
             ImageView roundedImageViewProfilePic;
             TextView textViewTicketID;
@@ -1576,21 +1379,21 @@ public class SortByTicketNumberDescending extends Fragment {
             TextView textViewSubject;
             RelativeTimeTextView textViewTime;
             TextView textViewOverdue;
-            View ticketPriority;
-            // TextView ticketStatus;
+            ImageView ticketPriority;
             ImageView attachementView;
             CheckBox checkBox1;
             ImageView countCollaborator;
             ImageView source;
             TextView countThread;
             TextView agentAssigned;
-            //ImageView agentAssignedImage;
             TextView textViewduetoday;
+            TextView textViewpriorityName;
             TicketViewHolder(View v) {
                 super(v);
                 ticket = v.findViewById(R.id.ticket);
                 attachementView = (ImageView) v.findViewById(R.id.attachment_icon);
-                ticketPriority = v.findViewById(R.id.priority_view);
+                textViewpriorityName=v.findViewById(R.id.priority_viewText);
+                ticketPriority = (ImageView) v.findViewById(R.id.priority_view);
                 roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
                 textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
                 textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
@@ -1598,13 +1401,13 @@ public class SortByTicketNumberDescending extends Fragment {
                 textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
                 textViewTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
                 textViewOverdue = (TextView) v.findViewById(R.id.overdue_view);
-                checkBox1= (CheckBox) v.findViewById(R.id.checkbox);
-                countCollaborator= (ImageView) v.findViewById(R.id.collaborator);
-                countThread= (TextView) v.findViewById(R.id.countthread);
-                source= (ImageView) v.findViewById(R.id.source);
-                agentAssigned= (TextView) v.findViewById(R.id.agentassigned);
-                //agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
-                textViewduetoday= (TextView) v.findViewById(R.id.duetoday);
+                checkBox1 = (CheckBox) v.findViewById(R.id.checkbox);
+                countCollaborator = (ImageView) v.findViewById(R.id.collaborator);
+                countThread = (TextView) v.findViewById(R.id.countthread);
+                source = (ImageView) v.findViewById(R.id.source);
+                agentAssigned = (TextView) v.findViewById(R.id.agentassigned);
+                //agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
+                textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
 
 
             }

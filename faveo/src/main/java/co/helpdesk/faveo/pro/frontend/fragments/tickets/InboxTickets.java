@@ -1740,10 +1740,20 @@ public class InboxTickets extends Fragment {
                 }
 
             }
+
+            if (!ticketOverview.priorityName.equals("null")||!ticketOverview.priorityName.equals("")){
+                ticketViewHolder.textViewpriorityName.setText(ticketOverview.priorityName);
+            }
+            else{
+                ticketViewHolder.textViewpriorityName.setText(getActivity().getString(R.string.not_available));
+            }
+
             if (ticketOverview.ticketPriorityColor.equals("null")) {
                 ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+                ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor("#3da6d7"));
             } else if (ticketOverview.ticketPriorityColor != null) {
-                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+                //ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+                ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
             }
             ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
 
@@ -1830,11 +1840,11 @@ public class InboxTickets extends Fragment {
             }
 
             else {
-                int color=Color.parseColor("#cdc5bf");
+
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
                         .buildRound(letter, generator.getRandomColor());
-                ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
             }
 
@@ -1972,22 +1982,21 @@ public class InboxTickets extends Fragment {
             TextView textViewSubject;
             RelativeTimeTextView textViewTime;
             TextView textViewOverdue;
-            View ticketPriority;
-            // TextView ticketStatus;
+            ImageView ticketPriority;
             ImageView attachementView;
             CheckBox checkBox1;
             ImageView countCollaborator;
             ImageView source;
             TextView countThread;
             TextView agentAssigned;
-            //ImageView agentAssignedImage;
             TextView textViewduetoday;
-
+            TextView textViewpriorityName;
             TicketViewHolder(View v) {
                 super(v);
                 ticket = v.findViewById(R.id.ticket);
                 attachementView = (ImageView) v.findViewById(R.id.attachment_icon);
-                ticketPriority = v.findViewById(R.id.priority_view);
+                textViewpriorityName=v.findViewById(R.id.priority_viewText);
+                ticketPriority = (ImageView) v.findViewById(R.id.priority_view);
                 roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
                 textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
                 textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);

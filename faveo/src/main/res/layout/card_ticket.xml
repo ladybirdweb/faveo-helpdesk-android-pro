@@ -10,7 +10,8 @@
     android:layout_height="140dp"
     android:layout_margin="5dp"
     card_view:cardCornerRadius="9dp"
-    card_view:contentPadding="2dp">
+    card_view:contentPadding="2dp"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -147,7 +148,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/textViewagentName"
+                android:id="@+id/textViewDepartmentName"
                 android:layout_width="90dp"
                 android:layout_height="21dp"
                 android:layout_alignStart="@+id/textView_client_name"
@@ -175,29 +176,27 @@
                 android:backgroundTint="@color/grey_200">
 
                 <ImageView
+                    android:id="@+id/priority_view"
                     android:layout_width="8dp"
                     android:layout_height="8dp"
-                    android:layout_alignBottom="@+id/priority_view"
+                    android:layout_alignBottom="@+id/priority_viewText"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="4dp"
                     android:layout_marginBottom="3dp"
                     android:src="@drawable/icons8newmoon24"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    />
 
                 <TextView
-                    android:id="@+id/priority_view"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/priority_viewText"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="7dp"
-                    android:alpha=".7"
+                    android:layout_marginEnd="17dp"
+                    android:layout_toStartOf="@+id/priority_view"
                     android:backgroundTint="@color/grey_200"
                     android:fontFamily="monospace"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="Emergency"
+                    android:text="emergenc"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </RelativeLayout>
@@ -212,7 +211,7 @@
             android:layout_alignTop="@+id/textView_ticket_time"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="-44dp"
+            android:layout_marginTop="-52dp"
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:layout_toRightOf="@+id/textView_ticket_id"
             android:backgroundTint="@color/faveo"

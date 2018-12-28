@@ -59,6 +59,7 @@ public class Helper {
             String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
             String dueDate = jsonArray.getJSONObject(i).getString("duedate");
             String priorityColor = jsonArray.getJSONObject(i).getJSONObject("priority").getString("color");
+            String priorityName=jsonArray.getJSONObject(i).getJSONObject("priority").getString("name");
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
 
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
@@ -114,7 +115,7 @@ public class Helper {
             else
                 clientname = firstName + " " + lastName;
             return new TicketOverview(Integer.parseInt(ID), profilePic,
-                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname,countcollaborator,countthread,source,last_replier,agentname);
+                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname,countcollaborator,countthread,source,last_replier,agentname,priorityName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -149,6 +150,7 @@ public class Helper {
             String ticketStatusName = statuses.getString("name");
             JSONObject priority=jsonObject2.getJSONObject("priority");
             String priorityColor = priority.getString("priority_color");
+            String priorityName=priority.getString("name");
             JSONObject jsonObjectSources=jsonObject2.getJSONObject("sources");
             String source=jsonObjectSources.getString("name");
 //            String firstName = jsonArray.getJSONObject(i).getString("c_fname");
@@ -186,7 +188,7 @@ public class Helper {
             else
                 clientname = firstName + " " + lastName;
             return new TicketOverview(Integer.parseInt(ID), profilePic,
-                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname,countcollaborator,countthread,source,last_replier,agentname);
+                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname,countcollaborator,countthread,source,last_replier,agentname,priorityName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -222,6 +224,7 @@ public class Helper {
             String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
             String dueDate = jsonArray.getJSONObject(i).getString("duedate");
             String priorityColor = jsonArray.getJSONObject(i).getJSONObject("priority").getString("color");
+            String priorityName=jsonArray.getJSONObject(i).getJSONObject("priority").getString("name");
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
 
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
@@ -268,7 +271,7 @@ public class Helper {
             else
                 clientname = firstName + " " + lastName;
             return new TicketOverview(Integer.parseInt(ID), profilePic,
-                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname,countcollaborator,countthread,source,last_replier,agentname);
+                    ticketNumber, clientname, title, updatedAt, priorityColor, ticketStatusName, i + "", attachment, dueDate, clientname,countcollaborator,countthread,source,last_replier,agentname,priorityName);
         } catch (JSONException e) {
             e.printStackTrace();
         }

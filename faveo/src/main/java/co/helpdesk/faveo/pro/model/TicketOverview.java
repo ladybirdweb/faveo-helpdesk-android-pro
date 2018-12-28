@@ -23,6 +23,7 @@ public class TicketOverview {
     public String sourceTicket;
     public String lastReply;
     public String agentName;
+    public String priorityName;
     private boolean isChecked;
 
     public boolean getChecked() {
@@ -33,7 +34,7 @@ public class TicketOverview {
         isChecked = checked;
     }
 
-    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName) {
+    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName,String priorityName) {
         this.ticketID = ticketID;
         this.clientPicture = clientPicture;
         this.ticketNumber = ticketNumber;
@@ -51,6 +52,15 @@ public class TicketOverview {
         this.sourceTicket=sourceTicket;
         this.lastReply=lastReply;
         this.agentName=agentName;
+        this.priorityName=priorityName;
+    }
+
+    public String getPriorityName() {
+        return priorityName;
+    }
+
+    public void setPriorityName(String priorityName) {
+        this.priorityName = priorityName;
     }
 
     public String getLastReply() {
