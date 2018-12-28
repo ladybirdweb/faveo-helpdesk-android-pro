@@ -1661,13 +1661,13 @@ public class InboxTickets extends Fragment {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
             } else {
                 ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                if (ticketOverview.lastReply.equals("client")) {
-
-                    int color = Color.parseColor("#ededed");
-                    ticketViewHolder.ticket.setBackgroundColor(color);
-                } else {
-
-                }
+//                if (ticketOverview.lastReply.equals("client")) {
+//
+//                    int color = Color.parseColor("#ededed");
+//                    ticketViewHolder.ticket.setBackgroundColor(color);
+//                } else {
+//
+//                }
             }
 
             if (ticketOverview.ticketAttachments.equals("0")) {
@@ -1810,11 +1810,11 @@ public class InboxTickets extends Fragment {
             }
 
             if (!ticketOverview.agentName.equals("Unassigned")) {
-                ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
+                //ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
                 ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
             } else {
                 ticketViewHolder.agentAssigned.setText("Unassigned");
-                ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+                //ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
             }
 
             if (ticketOverview.clientPicture.equals("")) {
@@ -1980,7 +1980,7 @@ public class InboxTickets extends Fragment {
             ImageView source;
             TextView countThread;
             TextView agentAssigned;
-            ImageView agentAssignedImage;
+            //ImageView agentAssignedImage;
             TextView textViewduetoday;
 
             TicketViewHolder(View v) {
@@ -2000,7 +2000,7 @@ public class InboxTickets extends Fragment {
                 countThread = (TextView) v.findViewById(R.id.countthread);
                 source = (ImageView) v.findViewById(R.id.source);
                 agentAssigned = (TextView) v.findViewById(R.id.agentassigned);
-                agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
+                //agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
                 textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
 
 

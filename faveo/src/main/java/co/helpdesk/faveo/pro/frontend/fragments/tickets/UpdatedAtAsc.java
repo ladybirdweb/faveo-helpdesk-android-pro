@@ -1333,12 +1333,12 @@ public class UpdatedAtAsc extends Fragment {
             }
 
             if (!ticketOverview.agentName.equals("Unassigned")){
-                ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
+                //ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
                 ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
             }
             else{
                 ticketViewHolder.agentAssigned.setText("Unassigned");
-                ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+                //ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
             }
 
 //else if (ticketOverview.getAgentName().equals("Unassigned")){
@@ -1612,7 +1612,7 @@ public class UpdatedAtAsc extends Fragment {
             ImageView source;
             TextView countThread;
             TextView agentAssigned;
-            ImageView agentAssignedImage;
+            //ImageView agentAssignedImage;
             TextView textViewduetoday;
             TicketViewHolder(View v) {
                 super(v);
@@ -1631,7 +1631,7 @@ public class UpdatedAtAsc extends Fragment {
                 countThread= (TextView) v.findViewById(R.id.countthread);
                 source= (ImageView) v.findViewById(R.id.source);
                 agentAssigned= (TextView) v.findViewById(R.id.agentassigned);
-                agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
+                //agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
                 textViewduetoday= (TextView) v.findViewById(R.id.duetoday);
 
 

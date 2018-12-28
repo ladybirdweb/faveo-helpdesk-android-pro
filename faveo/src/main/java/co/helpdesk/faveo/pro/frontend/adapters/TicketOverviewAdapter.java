@@ -214,14 +214,14 @@ else if (ticketOverview.countcollaborator.equals("0")){
 ticketViewHolder.countCollaborator.setVisibility(View.GONE);
 }
 
-if (!ticketOverview.agentName.equals("Unassigned")){
-    ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
-    ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
-}
-else{
-    ticketViewHolder.agentAssigned.setText("Unassigned");
-    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
-}
+//if (!ticketOverview.agentName.equals("Unassigned")){
+//    ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
+//    ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
+//}
+//else{
+//    ticketViewHolder.agentAssigned.setText("Unassigned");
+//    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+//}
 
 //else if (ticketOverview.getAgentName().equals("Unassigned")){
 //    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
@@ -452,7 +452,7 @@ else{
         public ImageView source;
         public TextView countThread;
         public TextView agentAssigned;
-        public ImageView agentAssignedImage;
+        //public ImageView agentAssignedImage;
         public TextView textViewduetoday;
         TicketViewHolder(View v) {
             super(v);
@@ -471,7 +471,7 @@ else{
             countThread= (TextView) v.findViewById(R.id.countthread);
             source= (ImageView) v.findViewById(R.id.source);
             agentAssigned= (TextView) v.findViewById(R.id.agentassigned);
-            agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
+            //agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
             textViewduetoday= (TextView) v.findViewById(R.id.duetoday);
 
 

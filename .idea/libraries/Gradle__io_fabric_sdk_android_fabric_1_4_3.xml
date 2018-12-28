@@ -1,10 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: io.fabric.sdk.android:fabric-1.4.3">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabric-1.4.3.aar/f65721193d1e0cd997f8e157de89c871/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabric-1.4.3.aar/f65721193d1e0cd997f8e157de89c871/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabric-1.4.3.aar/8f30334160328fd1b6d87310c237f246/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fabric-1.4.3.aar/8f30334160328fd1b6d87310c237f246/jars/classes.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric.sdk.android/fabric/1.4.3/f44ad1cce61dc7de6749488d998ff6afd4edbfef/fabric-1.4.3-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>

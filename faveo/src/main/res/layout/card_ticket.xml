@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ticket"
-    android:background="@color/colorAccent"
+    android:background="@color/grey_200"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:layout_height="140dp"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="9dp"
+    card_view:contentPadding="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/custom_ripple"
+        android:layout_margin="5dp"
         android:focusable="true">
 
         <TextView
@@ -52,101 +55,182 @@
             android:textColor="@color/black"
             android:textSize="10sp" />
 
+        <!--<TextView-->
+        <!--android:id="@+id/textViewagentName"-->
+        <!--android:layout_width="76dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/textView_ticket_number"-->
+        <!--android:layout_marginTop="7dp"-->
+        <!--android:layout_marginEnd="-74dp"-->
+        <!--android:layout_toStartOf="@+id/agentassigned"-->
+        <!--android:fontFamily="sans-serif-bold"-->
+        <!--android:maxLines="1"-->
+        <!--android:paddingLeft="3dp"-->
+        <!--android:text="Support"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:alpha=".68"/>-->
 
         <TextView
             android:id="@+id/textView_ticket_subject"
             android:layout_width="270dp"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textView_ticket_number"
-            android:layout_alignStart="@+id/textView_ticket_number"
             android:layout_below="@+id/textView_ticket_number"
-            android:layout_marginTop="8dp"
-            android:layout_toLeftOf="@+id/overdue_view"
+            android:layout_alignStart="@+id/textView_ticket_number"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:fontFamily="monospace"
             android:maxLines="1"
-            android:textStyle="bold"
             android:text="Test Tciket"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
 
         <TextView
             android:id="@+id/textView_client_name"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView_ticket_subject"
-            android:layout_centerVertical="true"
             android:layout_below="@+id/textView_ticket_subject"
-            android:ellipsize="end"
-            android:layout_marginTop="5dp"
+            android:layout_alignStart="@+id/textView_ticket_number"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="6dp"
             android:alpha=".68"
+            android:ellipsize="end"
             android:fontFamily="monospace"
-            android:textStyle="bold"
             android:maxLines="1"
             android:text="@string/dummy_name"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            />
 
-        <ImageView
-            android:id="@+id/user"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+
+
+
+
+        <!--<ImageView-->
+            <!--android:id="@+id/user"-->
+            <!--android:layout_width="16dp"-->
+            <!--android:layout_height="16dp"-->
+            <!--android:layout_alignTop="@+id/textView_client_name"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_marginStart="113dp"-->
+            <!--android:layout_marginTop="0dp"-->
+            <!--android:visibility="visible"-->
+            <!--app:srcCompat="@drawable/userpic"-->
+            <!--tools:ignore="ContentDescription" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
             android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/textView_client_name"
-            android:layout_marginStart="156dp"
-            android:visibility="gone"
-            app:srcCompat="@drawable/userpic"
-            tools:ignore="ContentDescription" />
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="2dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/agentassigned"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView_client_name"
-            android:layout_below="@+id/imageView_default_profile"
-            android:fontFamily="sans-serif-smallcaps"
-            android:text="Sayar@ladybirdweb.com"
-            android:maxLines="1"
-            android:alpha=".88"
-            android:textStyle="bold"
-            android:layout_marginTop="5dp"
-            android:textColor="#696969"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/agentassigned"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0.6dp"
+                android:alpha=".7"
+                android:background="@drawable/rectangle3"
+                android:backgroundTint="@color/grey_200"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="Admin"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewagentName"
+                android:layout_width="90dp"
+                android:layout_height="21dp"
+                android:layout_alignStart="@+id/textView_client_name"
+                android:layout_alignBottom="@+id/textView_client_name"
+                android:layout_marginLeft="10dp"
+                android:alpha=".7"
+                android:background="@drawable/rectangle3"
+                android:backgroundTint="@color/grey_200"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="support"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="90dp"
+                android:layout_height="21dp"
+                android:layout_alignTop="@+id/textViewagentName"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="-2dp"
+                android:layout_toStartOf="@+id/user"
+                android:alpha=".7"
+                android:background="@drawable/rectangle3"
+                android:backgroundTint="@color/grey_200">
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_alignBottom="@+id/priority_view"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="3dp"
+                    android:src="@drawable/icons8newmoon24"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/priority_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="7dp"
+                    android:alpha=".7"
+                    android:backgroundTint="@color/grey_200"
+                    android:fontFamily="monospace"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Emergency"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/imageView_default_profile"
             android:layout_width="46dp"
             android:layout_height="46dp"
-            android:visibility="visible"
-            android:layout_centerVertical="true"
+            android:layout_alignTop="@+id/textView_ticket_time"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-44dp"
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:layout_toRightOf="@+id/textView_ticket_id"
+            android:backgroundTint="@color/faveo"
             android:src="@drawable/default_pic"
             android:transitionName="@string/blue_name"
-            android:backgroundTint="@color/faveo"
+            android:visibility="visible" />
 
-            />
-        <View
-            android:id="@+id/priority_view"
-            android:layout_width="5dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            />
 
         <com.github.curioustechizen.ago.RelativeTimeTextView
             android:id="@+id/textView_ticket_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="8dp"
-            android:layout_toLeftOf="@+id/priority_view"
-            android:layout_toStartOf="@+id/priority_view"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="76dp"
+            android:layout_marginEnd="214dp"
             android:alpha=".50"
+            android:layout_alignStart="@id/textView_ticket_number"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
             android:text="@string/dummy_date"
@@ -157,16 +241,18 @@
             android:id="@+id/overdue_view"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_client_name"
             android:layout_alignEnd="@+id/textView_ticket_time"
-            android:layout_alignTop="@+id/agentassigned"
-            android:background="@drawable/rectangle"
-            android:gravity="center"
-            android:backgroundTint="#ff6666"
-            android:paddingBottom="2dp"
-            android:textColor="@color/white"
-            android:text="@string/overdue"
-            android:textSize="12sp"
+            android:layout_marginTop="-69dp"
+            android:layout_marginEnd="-211dp"
             android:alpha=".6"
+            android:background="@drawable/rectangle"
+            android:backgroundTint="#ff6666"
+            android:gravity="center"
+            android:paddingBottom="2dp"
+            android:text="@string/overdue"
+            android:textColor="@color/white"
+            android:textSize="12sp"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -174,16 +260,18 @@
             android:id="@+id/duetoday"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/overdue_view"
             android:layout_alignEnd="@+id/textView_ticket_time"
-            android:layout_alignTop="@+id/agentassigned"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="-210dp"
+            android:alpha=".6"
             android:background="@drawable/rectangle"
-            android:gravity="center"
             android:backgroundTint="#ff9933"
+            android:gravity="center"
             android:paddingBottom="2dp"
             android:text="@string/due_today"
-            android:textSize="12sp"
-            android:alpha=".6"
             android:textColor="@color/white"
+            android:textSize="12sp"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -191,8 +279,8 @@
             android:id="@+id/countthread"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
             android:layout_above="@+id/textView_ticket_subject"
+            android:layout_marginLeft="3dp"
             android:layout_toEndOf="@+id/textView_ticket_number"
             android:text="(2)"
             android:textColor="#606060"
@@ -202,23 +290,22 @@
 
         <ImageView
             android:id="@+id/attachment_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView_ticket_time"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_alignTop="@+id/countthread"
             android:layout_toEndOf="@+id/countthread"
             android:layout_toRightOf="@+id/textView_ticket_number"
             android:visibility="visible"
-            app:srcCompat="@drawable/attachment" />
+            app:srcCompat="@drawable/ic_attach_file_black_18dp"
+            />
 
         <ImageView
             android:id="@+id/source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView_ticket_time"
-            android:layout_alignTop="@+id/collaborator"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignTop="@+id/textView_ticket_number"
+            android:layout_marginStart="1dp"
             android:layout_toEndOf="@+id/attachment_icon"
-            android:layout_toRightOf="@+id/textView_ticket_number"
             android:visibility="visible"
             app:srcCompat="@drawable/ic_attach_file_black_18dp" />
 
@@ -226,11 +313,11 @@
             android:id="@+id/collaborator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView_ticket_time"
             android:layout_alignTop="@+id/textView_ticket_time"
+            android:layout_alignBottom="@+id/textView_ticket_time"
             android:layout_toEndOf="@+id/source"
             android:layout_toRightOf="@+id/source"
-            android:visibility="visible"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_attach_file_black_18dp" />
 
 
@@ -242,24 +329,17 @@
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:visibility="gone" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height=".1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/textView_ticket_id"
-            android:layout_toRightOf="@+id/textView_ticket_id"
-            android:background="@color/grey_500" />
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginStart="2dp"-->
+            <!--android:layout_marginLeft="2dp"-->
+            <!--android:layout_marginBottom="0dp"-->
+            <!--android:layout_toEndOf="@+id/textView_ticket_id"-->
+            <!--android:layout_toRightOf="@+id/textView_ticket_id"-->
+            <!--android:background="@color/grey_500" />-->
 
-        <ImageView
-            android:id="@+id/agentAssigned"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignTop="@+id/agentassigned"
-            android:layout_toEndOf="@+id/agentassigned"
-            app:srcCompat="@drawable/agent"
-            android:visibility="gone"
-            android:tint="#808080"
-            />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

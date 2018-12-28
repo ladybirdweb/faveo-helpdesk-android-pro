@@ -1263,37 +1263,24 @@ public class UpdatedAtDesc extends Fragment {
             }
 
             if (!ticketOverview.agentName.equals("Unassigned")){
-                ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
+                //ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
                 ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
             }
             else{
                 ticketViewHolder.agentAssigned.setText("Unassigned");
-                ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
+                //ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
             }
-
-//else if (ticketOverview.getAgentName().equals("Unassigned")){
-//    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
-//}
-
-
-//            if (!ticketOverview.lastReply.equals("client")){
-//                int color=Color.parseColor("#e9e9e9");
-//                ticketViewHolder.ticket.setBackgroundColor(color);
-//            }
 
             if (ticketOverview.clientPicture.equals("")){
                 ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
             }
             else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")){
-                mDrawableBuilder = TextDrawable.builder()
-                        .round();
                 Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
 
 
             }
             else{
-                int color=Color.parseColor("#cdc5bf");
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
                         .buildRound(letter,generator.getRandomColor());
@@ -1416,15 +1403,6 @@ public class UpdatedAtDesc extends Fragment {
         public int getSelectedCount() {
             return mSelectedItemsIds.size();
         }
-
-        //        //Return all selected ids
-//        public SparseBooleanArray getSelectedIds() {
-//            return mSelectedItemsIds;
-//        }
-//        public void setSelectedIds(ArrayList<Integer> checked_items) {
-//            this.checked_items = checked_items;
-//            notifyDataSetChanged();
-//        }
         public TicketOverview getItem(int position){
             return ticketOverviewList.get(position);
         }
@@ -1458,7 +1436,7 @@ public class UpdatedAtDesc extends Fragment {
             ImageView source;
             TextView countThread;
             TextView agentAssigned;
-            ImageView agentAssignedImage;
+            ///ImageView agentAssignedImage;
             TextView textViewduetoday;
             TicketViewHolder(View v) {
                 super(v);
@@ -1477,7 +1455,7 @@ public class UpdatedAtDesc extends Fragment {
                 countThread= (TextView) v.findViewById(R.id.countthread);
                 source= (ImageView) v.findViewById(R.id.source);
                 agentAssigned= (TextView) v.findViewById(R.id.agentassigned);
-                agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
+                //agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
                 textViewduetoday= (TextView) v.findViewById(R.id.duetoday);
 
 

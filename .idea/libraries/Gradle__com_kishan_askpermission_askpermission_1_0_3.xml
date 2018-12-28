@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.kishan.askpermission:askpermission-1.0.3">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/askpermission-1.0.3.aar/748a783d11b6cb11e903a792ce881900/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/askpermission-1.0.3.aar/748a783d11b6cb11e903a792ce881900/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/askpermission-1.0.3.aar/4dcb0f3b057eeb60879ed2780f290723/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/askpermission-1.0.3.aar/4dcb0f3b057eeb60879ed2780f290723/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

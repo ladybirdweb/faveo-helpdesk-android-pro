@@ -309,11 +309,8 @@ public class CollaboratorAdd extends AppCompatActivity {
                 }
             }
         });
-////
 
     }
-
-
 
 
     class CustomDialogClassSolution extends Dialog implements

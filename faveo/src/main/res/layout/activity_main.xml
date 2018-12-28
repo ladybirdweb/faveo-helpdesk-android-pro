@@ -27,6 +27,7 @@
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:popupTheme="@style/AppThemeOverlay.ActionBar"
+
                 >
 
                 <TextView
