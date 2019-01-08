@@ -11,14 +11,14 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:theme="@style/MyMaterialTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbarsave"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="60dp"
+            android:background="#154c66"
             app:popupTheme="@style/MyMaterialTheme.PopupOverlay">
 
             <RelativeLayout
@@ -30,6 +30,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_arrow_back_black_24dp"
                     android:id="@+id/imageViewBackTicketSave"
+                    android:backgroundTint="@color/colorAccent"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
@@ -41,10 +42,11 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginStart="12dp"
                     android:text="@string/ticketProperties"
-                    android:textColor="@color/theme"
+                    android:textColor="@color/colorAccent"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textAllCaps="true"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:layout_alignTop="@+id/imageViewBackTicketSave"
                     android:layout_toRightOf="@+id/imageViewBackTicketSave"
                     android:layout_toEndOf="@+id/imageViewBackTicketSave"
@@ -58,6 +60,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="22dp"
+                    android:backgroundTint="@color/colorAccent"
                     android:background="@drawable/ic_refresh_black_24dp" />
 
                 <Button
@@ -70,6 +73,7 @@
                     android:background="@drawable/ic_action_done"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
+                    android:backgroundTint="@color/colorAccent"
                     android:visibility="gone"/>
 
             </RelativeLayout>

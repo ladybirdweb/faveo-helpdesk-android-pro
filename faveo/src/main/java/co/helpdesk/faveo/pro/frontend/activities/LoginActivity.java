@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(LoginActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(LoginActivity.this,R.color.mainActivityTopBar));
         buttonSignIn= (CircularProgressButton) findViewById(R.id.button_signin);
         textViewProgress= (TextView) findViewById(R.id.progresstext);
         ButterKnife.bind(this);

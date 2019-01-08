@@ -26,7 +26,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
-        tools:replace="allowBackup, label">
+        tools:replace="allowBackup, label"
+        android:windowSoftInputMode="stateAlwaysHidden"
+        android:screenOrientation="portrait">
 
         <!--android:hardwareAccelerated="false"-->
         <!--android:largeHeap="true"-->
@@ -162,7 +164,8 @@
             android:launchMode="singleTop"
             android:parentActivityName=".frontend.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemes">
+            android:theme="@style/AppThemes"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -185,7 +188,9 @@
             android:name=".frontend.activities.CollaboratorAdd"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
-        <activity android:name=".frontend.activities.TicketFilter" />
+        <activity android:name=".frontend.activities.TicketFilter"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
         <activity android:name=".frontend.activities.EditCustomer" />
         <activity
             android:name=".frontend.activities.MultiAssigningActivity"

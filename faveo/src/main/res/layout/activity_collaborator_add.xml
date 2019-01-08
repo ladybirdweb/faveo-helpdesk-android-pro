@@ -7,14 +7,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:theme="@style/AppThemeOverlay.ActionBar">
 
         <Toolbar
             android:id="@+id/toolbarCollaborator"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="60dp"
+            android:background="#154c66"
             app:popupTheme="@style/AppThemeOverlay.ActionBar">
 
             <!--<TextView-->
@@ -47,6 +47,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:backgroundTint="@color/colorAccent"
                     android:background="@drawable/ic_arrow_back_black_24dp" />
 
                 <TextView
@@ -60,7 +61,8 @@
                     android:layout_toRightOf="@+id/imageViewBack"
                     android:text="@string/collaboratorAdd"
                     android:textAllCaps="true"
-                    android:textColor="@color/theme"
+                    android:fontFamily="@font/hintedlainesansregular"
+                    android:textColor="@color/colorAccent"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -74,6 +76,7 @@
                     android:background="@drawable/ic_action_done"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
+                    android:backgroundTint="@color/colorAccent"
                     android:visibility="visible" />
 
                 <Button
@@ -85,6 +88,7 @@
                     android:layout_marginEnd="45dp"
                     android:background="@drawable/ic_delete_black_24dp"
                     android:padding="10dp"
+                    android:backgroundTint="@color/colorAccent"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
                     android:visibility="gone" />
@@ -93,6 +97,7 @@
                     android:id="@+id/collaboratorProgressBarReply"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:backgroundTint="@color/colorAccent"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="81dp"
@@ -118,7 +123,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:background="#EEEEEE">
+        android:background="@color/colorAccent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -130,10 +135,20 @@
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
             android:text="@string/addcolla"
-            android:textSize="16sp"
+            android:textSize="12sp"
+            android:fontFamily="@font/hintedlainesansregular"
             android:textStyle="bold" />
         />
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/grey_500"
+        android:alpha=".3">
+
+    </View>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -148,6 +163,7 @@
             android:background="@android:color/transparent"
             android:cursorVisible="true"
             android:imeOptions="actionNext"
+            android:fontFamily="@font/hintedlainesansregular"
             android:inputType="textEmailAddress"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="16sp"
@@ -167,10 +183,11 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/appCompatAutoCompleteTextView"
-            android:background="@color/faveo">
+            android:background="@color/grey_500"
+            >
 
         </View>
 

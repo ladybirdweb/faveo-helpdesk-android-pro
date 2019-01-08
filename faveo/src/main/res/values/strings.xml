@@ -370,6 +370,7 @@
     <string name="company">Company</string>
     <string name="no_results_found">No records found</string>
     <string name="email_taken">The email id has already been taken</string>
+    <string name="notification">NOTIFICATION</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>

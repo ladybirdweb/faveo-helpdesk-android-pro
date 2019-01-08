@@ -1,6 +1,7 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -8,8 +9,8 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#154c66"
             android:orientation="vertical"
             tools:context=".frontend.activities.MainActivity">
 
@@ -22,21 +23,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/faveo">
+        android:layout_height="180dp"
+        android:background="#154c66">
 
         <ImageView
             android:id="@+id/imageView_default_profile"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_alignParentLeft="true"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="54dp"
-            android:backgroundTint="@color/white"
-            android:background="@drawable/rounded_textview"/>
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/rounded_textview"
+            android:backgroundTint="@color/white" />
 
         <TextView
             android:id="@+id/usernametv"
@@ -47,6 +48,7 @@
             android:layout_below="@+id/imageView_default_profile"
             android:layout_marginTop="8dp"
             android:text="Roger Federer"
+            android:fontFamily="@font/hintedlainesansregular"
             android:textSize="16sp"
             android:textColor="@color/white"/>
 
@@ -58,8 +60,10 @@
             android:layout_alignStart="@+id/usernametv"
             android:layout_below="@+id/usernametv"
             android:layout_marginBottom="16dp"
+            android:fontFamily="@font/hintedlainesansregular"
             android:layout_marginTop="4dp"
-            android:text="faveohelpdesk.co.in"
+            android:singleLine="true"
+            android:text="www.support.faveohelpdesk.com"
             android:textSize="14sp"
             android:textColor="@color/white"/>
 
@@ -72,17 +76,18 @@
             android:layout_alignTop="@+id/imageView_default_profile"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:fontFamily="@font/hintedlainesansregular"
             android:textAllCaps="true"
             android:text="Agent"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/white"/>
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_200" />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/grey_200" />-->
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -101,7 +106,7 @@
                 android:id="@+id/create_ticket"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:background="@color/grey_200">
+                >
 
                 <ImageView
                     android:layout_width="20dp"
@@ -113,7 +118,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center"
                     android:text="@string/create_ticket"
                     android:textColor="@color/black"
@@ -142,17 +147,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center"
                     android:text="@string/ticket_list"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey_200" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/grey_200" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -163,6 +168,7 @@
                     android:layout_height="match_parent"
                     android:id="@+id/listviewNavigation"
                     android:nestedScrollingEnabled="true"
+                    android:visibility="gone"
                     >
 
                 </ListView>
@@ -429,10 +435,10 @@
 
             <!--</RelativeLayout>-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey_200" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/grey_200" />-->
 
             <LinearLayout
                 android:id="@+id/client_list"
@@ -452,7 +458,7 @@
                     android:id="@+id/clientList"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center"
                     android:text="@string/client_list"
                     android:textColor="@color/black"
@@ -513,16 +519,16 @@
                     android:id="@+id/settingtext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center"
                     android:text="@string/settings"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey_200" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/grey_200" />-->
             <LinearLayout
                 android:id="@+id/helpSection"
                 android:layout_width="match_parent"
@@ -542,16 +548,16 @@
                     android:id="@+id/helptext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center"
                     android:text="@string/support"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey_200" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/grey_200" />-->
             <LinearLayout
                 android:id="@+id/about"
                 android:layout_width="match_parent"
@@ -570,7 +576,7 @@
                     android:id="@+id/abouttext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center"
                     android:text="@string/about"
                     android:textColor="@color/black"
@@ -603,7 +609,7 @@
                     android:id="@+id/logouttext"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center"
                     android:text="@string/logout"
                     android:textColor="@color/black"

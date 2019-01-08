@@ -28,7 +28,7 @@ public class HelpSection extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(HelpSection.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(HelpSection.this,R.color.mainActivityTopBar));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         login= (RelativeLayout) findViewById(R.id.login);
         tickets= (RelativeLayout) findViewById(R.id.ticket);

@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="6dp"
     android:clickable="true"
+    android:layout_margin="7dp"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="3dp"
@@ -16,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_margin="7dp">
 
 
         <ImageView
@@ -29,9 +30,6 @@
             android:src="@drawable/default_pic"
             android:background="@drawable/rounded_textview"
              />
-//app:av_border_color="@color/faveo"
-        app:av_border_width="2dp"
-        app:av_text_size_percentage="35"
         <TextView
             android:id="@+id/noti_subject"
             android:layout_width="match_parent"
@@ -41,10 +39,10 @@
             android:layout_marginTop="8dp"
             android:layout_toEndOf="@+id/dthumbnail"
             android:layout_toRightOf="@+id/dthumbnail"
-            android:ellipsize="end"
-            android:textColor="@color/grey_500"
+            android:fontFamily="monospace"
+            android:alpha=".7"
+            android:textStyle="normal"
             android:maxLines="2"
-            android:text="@string/dummy_sub"
             android:textSize="14sp" />
 
         <com.github.curioustechizen.ago.RelativeTimeTextView
@@ -55,6 +53,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="6dp"
+            android:fontFamily="monospace"
             android:layout_toEndOf="@+id/dthumbnail"
             android:layout_toRightOf="@+id/dthumbnail"
             android:text="@string/dummy_date"

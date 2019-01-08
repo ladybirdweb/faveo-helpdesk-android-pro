@@ -192,6 +192,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
             toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
+
                     try {
                         if (item != null) {
                             item.getSubMenu().clearHeader();

@@ -67,7 +67,7 @@ public class ShowingAttachment extends AppCompatActivity implements PermissionCa
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(ShowingAttachment.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(ShowingAttachment.this,R.color.mainActivityTopBar));
         ListView listView = (ListView) findViewById(R.id.attachment_list);
         reqPermissionCamera();
         ticketID=Prefs.getString("ticketId",null);

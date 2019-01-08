@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +64,9 @@ public class SplashActivity extends AppCompatActivity {
     String error;
     Context context;
     Button button;
+    ImageView imageViewFaveo;
+    TextView textViewTag;
+    Animation uptodown,downtoup;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -87,10 +93,15 @@ public class SplashActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(SplashActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(SplashActivity.this,R.color.mainActivityTopBar));
         ButterKnife.bind(this);
+        uptodown = AnimationUtils.loadAnimation(this,R.anim.uptodown);
+        downtoup = AnimationUtils.loadAnimation(this,R.anim.downtoup);
         button= (Button) findViewById(R.id.clear_cache);
-
+        imageViewFaveo=findViewById(R.id.faveoImage);
+        textViewTag=findViewById(R.id.faveotag);
+        imageViewFaveo.setAnimation(uptodown);
+        textViewTag.setAnimation(downtoup);
         //httpConnection=new HTTPConnection(getApplicationContext());
         //welcomeDialog=new WelcomeDialog();
         try {

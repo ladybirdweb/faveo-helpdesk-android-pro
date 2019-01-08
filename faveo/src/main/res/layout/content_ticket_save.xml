@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="6dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="co.helpdesk.faveo.pro.frontend.activities.CreateTicketActivity"
     tools:showIn="@layout/activity_ticket_save">
@@ -35,9 +36,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#f2f2f2">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/subjectheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -47,16 +49,16 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/Subject"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/subjectheader"
+                android:layout_toEndOf="@+id/subjectheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -72,15 +74,17 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:text="@string/not_available"
+            android:fontFamily="@font/hintedlainesansregular"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="14sp"
+            android:textSize="16sp"
             />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#f2f2f2">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/assignheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -90,16 +94,16 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/assignedto"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/assignheader"
+                android:layout_toEndOf="@+id/assignheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -216,9 +220,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#f2f2f2">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/priorityheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -228,16 +233,16 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/priority"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/priorityheader"
+                android:layout_toEndOf="@+id/priorityheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -260,7 +265,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#f2f2f2">
+            android:background="@color/colorAccent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -272,7 +277,8 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/ticket_type"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
         </RelativeLayout>
 
@@ -292,9 +298,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#f2f2f2">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/helptopicheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -304,16 +311,16 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/helptopic"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/helptopicheader"
+                android:layout_toEndOf="@+id/helptopicheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -365,9 +372,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:background="#f2f2f2">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/sourceheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -377,16 +385,16 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/source"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/sourceheader"
+                android:layout_toEndOf="@+id/sourceheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>

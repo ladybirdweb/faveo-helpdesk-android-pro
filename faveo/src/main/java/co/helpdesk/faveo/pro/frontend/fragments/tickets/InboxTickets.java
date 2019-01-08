@@ -1,11 +1,15 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,8 +17,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -234,7 +242,7 @@ public class InboxTickets extends Fragment {
             Prefs.putString("querry", "null");
             toolbar = (Toolbar) rootView.findViewById(R.id.toolbar2);
             toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
-            toolbar1.setVisibility(View.VISIBLE);
+            //toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
             toolbar1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1657,18 +1665,6 @@ public class InboxTickets extends Fragment {
             } else {
                 ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
             }
-            if (checked_items.contains(id)) {
-                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
-            } else {
-                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                if (ticketOverview.lastReply.equals("client")) {
-//
-//                    int color = Color.parseColor("#ededed");
-//                    ticketViewHolder.ticket.setBackgroundColor(color);
-//                } else {
-//
-//                }
-            }
 
             if (ticketOverview.ticketAttachments.equals("0")) {
                 ticketViewHolder.attachementView.setVisibility(View.GONE);
@@ -1766,25 +1762,25 @@ public class InboxTickets extends Fragment {
             switch (ticketOverview.sourceTicket) {
                 case "chat": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.chat);
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
                 case "web": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.web);
+                    ticketViewHolder.source.setImageResource(R.drawable.web_design);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
                 case "agent": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
                 case "email": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
@@ -1802,7 +1798,7 @@ public class InboxTickets extends Fragment {
                 }
                 case "call": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+                    ticketViewHolder.source.setImageResource(R.drawable.phone);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
@@ -1846,6 +1842,45 @@ public class InboxTickets extends Fragment {
                         .buildRound(letter, generator.getRandomColor());
                 //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+            }
+
+            if (checked_items.contains(id)) {
+                AnimatorSet shrinkSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.grow_from_middle);
+                shrinkSet.setTarget(ticketViewHolder.roundedImageViewProfilePic);
+                shrinkSet.start();
+                ticketViewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
+
+//                notifyDataSetChanged();
+            } else {
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                if (ticketOverview.clientPicture.equals("")) {
+                    ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+
+                } else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")) {
+                    mDrawableBuilder = TextDrawable.builder()
+                            .round();
+//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+                    Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
+
+
+                }
+
+                else {
+
+                    ColorGenerator generator = ColorGenerator.MATERIAL;
+                    TextDrawable drawable = TextDrawable.builder()
+                            .buildRound(letter, generator.getRandomColor());
+                    //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                    ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+                }
+//                if (ticketOverview.lastReply.equals("client")) {
+//
+//                    int color = Color.parseColor("#ededed");
+//                    ticketViewHolder.ticket.setBackgroundColor(color);
+//                } else {
+//
+//                }
             }
 
             ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
@@ -1974,7 +2009,7 @@ public class InboxTickets extends Fragment {
             return new TicketOverviewAdapter.TicketViewHolder(itemView);
         }
         public class TicketViewHolder extends RecyclerView.ViewHolder {
-            protected View ticket;
+            protected CardView ticket;
             ImageView roundedImageViewProfilePic;
             TextView textViewTicketID;
             TextView textViewTicketNumber;
@@ -2038,7 +2073,14 @@ public class InboxTickets extends Fragment {
         public boolean onCreateActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
             //Inflate the menu over action mode
             mode.getMenuInflater().inflate(R.menu.multiplemenuinbox, menu);
-            SubMenu fileMenu = menu.addSubMenu("Change Status");
+            SubMenu fileMenu = menu.addSubMenu("Change Status").setIcon(getResources().getDrawable(R.drawable.changestatuslogo));
+            Drawable drawable = fileMenu.getItem().getIcon();
+            if (drawable != null) {
+                // If we don't mutate the drawable, then all drawable's with this id will have a color
+                // filter applied to it.
+                drawable.mutate();
+                drawable.setColorFilter(getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_ATOP);
+            }
             //menu.addSubMenu("Change Status");
             for (int i=0;i<statusItems.size();i++){
                 Data data=statusItems.get(i);
@@ -2054,10 +2096,11 @@ public class InboxTickets extends Fragment {
             //So here show action menu according to SDK Levels
             if (Build.VERSION.SDK_INT < 11) {
                 //MenuItemCompat.setShowAsAction(menu.findItem(R.id.mergeticket), MenuItemCompat.SHOW_AS_ACTION_NEVER);
-
+                MenuItemCompat.setShowAsAction(menu.findItem(R.id.assignticket), MenuItemCompat.SHOW_AS_ACTION_NEVER);
 //            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_copy), MenuItemCompat.SHOW_AS_ACTION_NEVER);
 //            MenuItemCompat.setShowAsAction(menu.findItem(R.id.action_forward), MenuItemCompat.SHOW_AS_ACTION_NEVER);
             } else {
+                MenuItemCompat.setShowAsAction(menu.findItem(R.id.assignticket), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
                 //menu.findItem(R.id.mergeticket).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 //            menu.findItem(R.id.action_copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 //            menu.findItem(R.id.action_forward).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);

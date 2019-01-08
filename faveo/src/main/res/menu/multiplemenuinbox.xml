@@ -4,10 +4,11 @@
     tools:context="com.example.narendra.myapplic ation12.MainActivity">
     <item
         android:id="@+id/assignticket"
-        android:orderInCategory="101"
         android:title="@string/assignTicket"
-        android:icon="@drawable/ic_merge_type_black_24dp"
-        app:showAsAction="withText">
+        app:showAsAction="always"
+        android:icon="@drawable/assignlogo"
+        app:iconTint="@color/faveo"
+        >
     </item>
     <!--<item-->
         <!--android:id="@+id/empty"-->

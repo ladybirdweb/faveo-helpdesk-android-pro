@@ -258,7 +258,7 @@ public class Helpdesk {
         );
 
 
-        String result = new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/edit?" +
+        String result = new HTTPConnection().hTTPResponsePostTest(Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
@@ -294,6 +294,7 @@ public class Helpdesk {
             e.printStackTrace();
         }
         Log.d("fcm call", Constants.URL + "fcmtoken?");
+        Log.d("fcmApi",Constants.URL + "fcmtoken?"+parameters);
         return new HTTPConnection().hTTPResponsePost(Constants.URL + "fcmtoken?", parameters);
     }
 

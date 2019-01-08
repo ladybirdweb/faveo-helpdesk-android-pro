@@ -100,7 +100,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             ColorGenerator generator = ColorGenerator.MATERIAL;
             TextDrawable drawable = TextDrawable.builder()
                     .buildRound(letter,generator.getRandomColor());
-            ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+            //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
             ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
         }
         else{
@@ -108,16 +108,18 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         }
 
         if (ticketThread.getName().equals("")){
-            ticketViewHolder.relativeLayout.setVisibility(View.GONE);
-            ticketViewHolder.view.setVisibility(View.GONE);
+            ticketViewHolder.fileIcon.setVisibility(View.GONE);
+            //ticketViewHolder.view.setVisibility(View.GONE);
         }
         else{
-            ticketViewHolder.relativeLayout.setVisibility(View.VISIBLE);
-            ticketViewHolder.view.setVisibility(View.VISIBLE);
-            ticketViewHolder.textView.setText("Attachment "+"("+ticketThread.getNoOfAttachments()+")");
+            ticketViewHolder.fileIcon.setVisibility(View.VISIBLE);
+            //ticketViewHolder.view.setVisibility(View.VISIBLE);
+            //ticketViewHolder.textView.setText("Attachment "+"("+ticketThread.getNoOfAttachments()+")");
 
         }
-        ticketViewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+
+
+        ticketViewHolder.fileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(view.getContext(), ShowingAttachment.class);
@@ -131,57 +133,84 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             }
         });
 
-        if (i==ticketThreadList.size()-1){
-            ticketViewHolder.reportAndReply.setText("reported ");
-        }
-        else{
-            ticketViewHolder.reportAndReply.setText("updated ");
-        }
+//        if (i==ticketThreadList.size()-1){
+//            ticketViewHolder.reportAndReply.setText("reported ");
+//        }
+//        else{
+//            ticketViewHolder.reportAndReply.setText("updated ");
+//        }
 
-        if (i==0){
-            ticketViewHolder.linearLayout.setVisibility(View.GONE);
-            ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+        for (int j=0;j<ticketThreadList.size()-1;j++){
+            ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+            //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+            //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
             ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
-            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
-            ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
-        }
-        else if (i==ticketThreadList.size()-1){
             ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
-            ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-            ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
+            //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
             ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
         }
-        else {
-            ticketViewHolder.linearLayout.setVisibility(View.GONE);
-            ticketViewHolder.reportAndReply.setVisibility(View.GONE);
-            ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
-            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
-            ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
-        }
+
+//        if (i==0){
+//            ticketViewHolder.linearLayout.setVisibility(View.GONE);
+//            ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+//            ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+//            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
+//            ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
+//        }
+//        else if (i==ticketThreadList.size()-1){
+//            ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+//            ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+//            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+//            ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
+//            ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+//        }
+//        else {
+//            ticketViewHolder.linearLayout.setVisibility(View.GONE);
+//            ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+//            ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+//            ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
+//            ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
+//        }
+
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ticketViewHolder.linearLayout.getVisibility() == View.VISIBLE) {
-                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
-                    ticketViewHolder.linearLayout.setVisibility(View.GONE);
-                    ticketViewHolder.reportAndReply.setVisibility(View.GONE);
-                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
+
+                if (ticketViewHolder.relativeLayoutWebView.getVisibility()==View.VISIBLE){
                     ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
-                } else {
-                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
-                    ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
-                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-                    //ticketViewHolder.webView.setVisibility(View.VISIBLE);
+                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+                    ticketViewHolder.webView.setVisibility(View.GONE);
+
                 }
+                else{
+                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+                    ticketViewHolder.webView.setVisibility(View.VISIBLE);
+                }
+//                if (ticketViewHolder.linearLayout.getVisibility() == View.VISIBLE) {
+//                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.linearLayout.setVisibility(View.GONE);
+//                    ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+//                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
+//                    ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
+//                } else {
+//                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+//                    ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
+//                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+//                    //ticketViewHolder.webView.setVisibility(View.VISIBLE);
+//                }
             }
         });
 
-        if (!ticketThread.getIsReply().equals("true"))
-            ticketViewHolder.textViewType.setText("");
+
+
+
+
+//        if (!ticketThread.getIsReply().equals("true"))
+//            ticketViewHolder.textViewType.setText("");
 
     }
 
@@ -198,34 +227,33 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 
         RelativeLayout thread;
         TextView textViewShowingSome;
-        ImageView roundedImageViewProfilePic;
+        ImageView roundedImageViewProfilePic,fileIcon;
         TextView textViewClientName;
         RelativeTimeTextView textViewMessageTime;
         RelativeTimeTextView textViewTicketCreatedTime;
         TextView textViewMessageTitle;
         TextView textViewType;
         WebView webView;
-        RelativeLayout relativeLayout;
-        TextView textView;
+        RelativeLayout relativeLayoutWebView;
         TextView reportAndReply;
         LinearLayout linearLayout;
         View view;
         TicketViewHolder(View v) {
             super(v);
             thread = (RelativeLayout) v.findViewById(R.id.thread);
-            view=v.findViewById(R.id.attachmentSeparation);
+            //view=v.findViewById(R.id.attachmentSeparation);
             roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewMessageTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
             textViewTicketCreatedTime= (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_related);
             //textViewMessageTitle = (TextView) v.findViewById(R.id.textView_client_message_title);
+            fileIcon=v.findViewById(R.id.filethread);
             textViewType = (TextView) v.findViewById(R.id.textView_type);
             webView = (WebView) v.findViewById(R.id.webView);
             textViewShowingSome= (TextView) v.findViewById(R.id.showingSome);
-            relativeLayout= (RelativeLayout) v.findViewById(R.id.attachmentlayout);
-            textView= (TextView) v.findViewById(R.id.textView7);
             reportAndReply= (TextView) v.findViewById(R.id.reported);
             linearLayout= (LinearLayout) v.findViewById(R.id.linearWebView);
+            relativeLayoutWebView=v.findViewById(R.id.showingWebView);
 
         }
 

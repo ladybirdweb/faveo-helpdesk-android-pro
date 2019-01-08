@@ -17,7 +17,7 @@ import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.adapters.TicketGlimpseAdapter;
 import co.helpdesk.faveo.pro.model.TicketGlimpse;
 
-public class OpenTickets extends Fragment {
+public class Tickets extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -30,8 +30,8 @@ public class OpenTickets extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public static OpenTickets newInstance(String param1, String param2) {
-        OpenTickets fragment = new OpenTickets();
+    public static Tickets newInstance(String param1, String param2) {
+        Tickets fragment = new Tickets();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -39,7 +39,7 @@ public class OpenTickets extends Fragment {
         return fragment;
     }
 
-    public OpenTickets() {
+    public Tickets() {
     }
     /**
      *

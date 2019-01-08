@@ -9,20 +9,23 @@
                 <!--<menu>-->
         <item
             android:id="@+id/action_add"
-            android:icon="@drawable/ic_action_add_circle_outline"
+            android:icon="@drawable/ic_add_circle_outline_black_24dp"
             android:orderInCategory="100"
             android:title="@string/abc_search_hint"
-            app:showAsAction="always" />
+            app:showAsAction="always"
+            android:iconTint="@color/colorAccent"/>
         <item
             android:id="@+id/action_search"
-            android:icon="@drawable/ic_action_search"
+            android:icon="@drawable/ic_search_black_24dp"
             android:orderInCategory="100"
             android:title="@string/abc_search_hint"
-            app:showAsAction="always" />
+            app:showAsAction="always"
+            android:iconTint="@color/colorAccent"/>
         <item
             android:id="@+id/action_noti"
-            android:icon="@drawable/ic_notifications_black_24dp_colored"
+            android:icon="@drawable/ic_notifications_none_black_24dp"
             android:orderInCategory="100"
             android:title="Notifications"
-            app:showAsAction="always" />
+            app:showAsAction="always"
+            android:iconTint="@color/colorAccent"/>
 </menu>

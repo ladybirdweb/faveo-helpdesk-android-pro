@@ -36,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="LOGIN"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -110,6 +111,7 @@
                     android:text="@string/helpdesk_url"
                     android:textColor="@color/black"
                     android:textSize="14sp"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -138,6 +140,7 @@
                         android:inputType="textUri"
                         android:paddingBottom="12dp"
                         android:paddingTop="12dp"
+                        android:fontFamily="@font/hintedlainesansregular"
                         android:hint="eg: http://faveohelpdesk.com/public"
                         android:textCursorDrawable="@drawable/color_cursor"
                         android:textSize="14sp" />
@@ -176,6 +179,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/urlError"
                     android:visibility="gone"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:text="Please enter a valid url"
                     android:textColor="#ff0000"/>
 
@@ -183,15 +187,13 @@
                     android:id="@+id/helpUrl"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignStart="@+id/staticView"
-                    android:layout_marginBottom="97dp"
+                    android:layout_marginBottom="107dp"
                     android:autoLink="web"
                     android:background="@drawable/layer_list"
-                    android:fontFamily="sans-serif-condensed"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:text="@string/need_help_with_your_servicedesk_url"
                     android:textColor="@color/faveo"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
                 <ProgressBar
                     android:layout_width="20dp"
                     android:id="@+id/progress_bar"
@@ -205,6 +207,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/pleasewait"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:visibility="gone"/>
 
             </LinearLayout>
@@ -229,6 +232,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/user_name"
+                        android:fontFamily="@font/hintedlainesansregular"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName" />
                     <TextView
@@ -236,6 +240,7 @@
                         android:layout_height="20dp"
                         android:id="@+id/usernameError"
                         android:visibility="gone"
+                        android:fontFamily="@font/hintedlainesansregular"
                         android:text="Username is required"
                         android:textColor="#ff0000"/>
 
@@ -254,6 +259,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
+                        android:fontFamily="@font/hintedlainesansregular"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword" />
                     <TextView
@@ -261,6 +267,7 @@
                         android:layout_height="20dp"
                         android:id="@+id/passwordError"
                         android:visibility="gone"
+                        android:fontFamily="@font/hintedlainesansregular"
                         android:text="Password is required"
                         android:textColor="#ff0000"/>
                 </android.support.design.widget.TextInputLayout>

@@ -16,15 +16,16 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppThemeOverlay.ActionBar">
+        android:layout_height="60dp"
+        android:theme="@style/AppThemeOverlay.ActionBar"
+        android:backgroundTint="#154c66">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppThemeOverlay.ActionBar">
+            android:layout_height="60dp"
+            android:backgroundTint="#154c66"
+            app:popupTheme="@style/AppThemeOverlay.ActionBarMainActivity">
 
             <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
@@ -56,6 +57,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:backgroundTint="@color/colorAccent"
                     android:background="@drawable/ic_arrow_back_black_24dp" />
 
                 <TextView
@@ -67,9 +69,10 @@
                     android:layout_toEndOf="@+id/imageViewBack"
                     android:text="@string/create_ticket"
                     android:textAllCaps="true"
-                    android:textColor="@color/theme"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/hintedlainesansregular"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorAccent"/>
 
                 <Button
                     android:id="@+id/attachment"
@@ -81,6 +84,7 @@
                     android:background="@drawable/ic_action_attach_file"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
+                    android:backgroundTint="@color/colorAccent"
                     android:visibility="visible" />
 
                 <Button
@@ -92,7 +96,8 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/ic_action_done"
                     android:textColor="#ffffff"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:backgroundTint="@color/colorAccent"/>
 
                 <ImageButton
                     android:id="@+id/imageRefresh"
@@ -104,7 +109,8 @@
                     android:background="@drawable/ic_refresh_black_24dp"
                     android:visibility="visible"
                     android:fillAfter="true"
-                    android:fillEnabled="true"/>
+                    android:fillEnabled="true"
+                    android:backgroundTint="@color/colorAccent"/>
 
 
                 <!--<ProgressBar-->
@@ -119,13 +125,6 @@
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/faveo">
-
-        </View>
 
         <View
             android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     ArrayList<String> strings;
     Toolbar toolbar;
     Context context;
+    FloatingActionButton floatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,11 +95,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.mainActivityTopBar));
         ButterKnife.bind(this);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
+        floatingActionButton=findViewById(R.id.fab_main);
         Prefs.putString("querry1", "null");
         strings = new ArrayList<>();
         strings.add(0, "Sort by");
@@ -110,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.inflateMenu(R.menu.menu_inbox);
-        mToolbar.setNavigationIcon(R.drawable.ic_action_attach_file);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -135,6 +136,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.replace(R.id.container_body, inboxTickets);
         fragmentTransaction.commit();
         setActionBarTitle(getResources().getString(R.string.inbox));
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                Intent intent = new Intent(MainActivity.this, TicketFilter.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

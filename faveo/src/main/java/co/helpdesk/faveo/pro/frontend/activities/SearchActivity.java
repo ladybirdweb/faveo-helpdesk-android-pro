@@ -79,12 +79,8 @@ public class SearchActivity extends AppCompatActivity implements
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(SearchActivity.this,R.color.faveo));
-        View view = SearchActivity.this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
+        window.setStatusBarColor(ContextCompat.getColor(SearchActivity.this,R.color.mainActivityTopBar));
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout= (TabLayout) findViewById(R.id.tabs);
         relativeLayout= (RelativeLayout) findViewById(R.id.relativeSearch);
@@ -102,8 +98,8 @@ public class SearchActivity extends AppCompatActivity implements
 
         isShowing = true;
         tabLayout.setTabTextColors(
-                ContextCompat.getColor(this, R.color.grey_500),
-                ContextCompat.getColor(this, R.color.faveo)
+                ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, R.color.colorAccent)
         );
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

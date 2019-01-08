@@ -4,8 +4,8 @@
     tools:context="com.example.narendra.myapplic ation12.MainActivity">
     <item
         android:id="@+id/buttonsave"
-        android:icon="@drawable/ic_edit_black_24dp"
-        android:tint="@color/faveo"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:tint="@color/colorAccent"
         app:showAsAction="always"
         android:enabled="true"
         android:title="@string/save"

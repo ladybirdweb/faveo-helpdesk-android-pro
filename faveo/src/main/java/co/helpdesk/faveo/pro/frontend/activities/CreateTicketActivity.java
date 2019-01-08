@@ -71,6 +71,8 @@ import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
 import net.gotev.uploadservice.UploadStatusDelegate;
+
+import org.apache.http.client.methods.HttpPost;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -216,7 +218,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         Window window = CreateTicketActivity.this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.mainActivityTopBar));
         GetCountryZipCode();
         refresh= (ImageButton) findViewById(R.id.imageRefresh);
         bottomSheet= (BottomSheetLayout) findViewById(R.id.bottomsheet);
@@ -453,6 +455,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
             }
         });
+
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

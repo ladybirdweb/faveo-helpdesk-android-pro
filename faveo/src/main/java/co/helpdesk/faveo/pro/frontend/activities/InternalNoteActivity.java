@@ -42,7 +42,6 @@ public class InternalNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_internal_note);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
         Window window = InternalNoteActivity.this.getWindow();
 
@@ -53,7 +52,7 @@ public class InternalNoteActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(InternalNoteActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(InternalNoteActivity.this,R.color.mainActivityTopBar));
         option=Prefs.getString("cameFromNotification", null);
         switch (option) {
             case "true":

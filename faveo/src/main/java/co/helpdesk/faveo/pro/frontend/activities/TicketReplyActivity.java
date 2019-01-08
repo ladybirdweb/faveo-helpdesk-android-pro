@@ -119,7 +119,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(TicketReplyActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(TicketReplyActivity.this,R.color.mainActivityTopBar));
         button= (Button) findViewById(R.id.attachment);
         attachment_layout= (RelativeLayout) findViewById(R.id.attachment_layout);
         attachmentFileName= (TextView) findViewById(R.id.attachment_name);

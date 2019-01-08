@@ -17,7 +17,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="#154c66"
                 app:popupTheme="@style/AppThemeOverlay.ActionBar">
 
                 <!--<TextView-->
@@ -50,6 +50,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
+                        android:backgroundTint="@color/colorAccent"
                         android:background="@drawable/ic_arrow_back_black_24dp" />
 
                     <TextView
@@ -63,7 +64,7 @@
                         android:layout_toRightOf="@+id/imageViewBackTicketInternalNote"
                         android:text="@string/internal_note"
                         android:textAllCaps="true"
-                        android:textColor="@color/theme"
+                        android:textColor="@color/colorAccent"
                         android:textSize="19sp"
                         android:textStyle="bold" />
 
@@ -77,21 +78,17 @@
                         android:layout_marginEnd="18dp"
                         android:background="@drawable/ic_action_done"
                         android:textAllCaps="false"
+                        android:backgroundTint="@color/colorAccent"
                         android:textColor="@color/white" />
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/faveo">
 
-            </View>
 
         </android.support.design.widget.AppBarLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="#EEEEEE">
+            android:background="@color/colorAccent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -103,10 +100,18 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/interNalNote"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
             />
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/grey_500"
+            android:alpha=".3"></View>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="490dp"
@@ -116,10 +121,8 @@
         <EditText
             android:id="@+id/editText_internal_note"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/rectanglenew"
+            android:layout_height="300dp"
             android:imeOptions="actionDone"
-            android:hint="@string/leaveYourMessage"
             android:gravity="top"
             android:overScrollMode="ifContentScrolls"
             android:inputType="textMultiLine"
@@ -127,10 +130,12 @@
             android:paddingBottom="10dp"
             android:isScrollContainer="true"
             android:padding="9dp"
+            android:hint="Type your message here....."
+            android:background="@color/colorAccent"
             android:nestedScrollingEnabled="true"
             android:cursorVisible="true"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
         <com.andexert.library.RippleView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,6 +1,8 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -212,7 +214,7 @@ public class  CreatedAtDesc extends Fragment {
 //            });
             Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar2);
             Toolbar toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
-            toolbar1.setVisibility(View.VISIBLE);
+            //toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
             //toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
 
@@ -1095,10 +1097,6 @@ public class  CreatedAtDesc extends Fragment {
 
             int id = ticketOverviewList.get(i).getTicketID();
             TextDrawable.IBuilder mDrawableBuilder;
-            if (selectedIds.contains(id)) {
-                //if item is selected then,set foreground color of FrameLayout.
-                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-            }
             subject = ticketOverview.ticketSubject;
             if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {
                 String first = subject.replace("=?UTF-8?Q?", "");
@@ -1220,25 +1218,25 @@ public class  CreatedAtDesc extends Fragment {
             switch (ticketOverview.sourceTicket) {
                 case "chat": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.chat);
+                    ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
                 case "web": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.web);
+                    ticketViewHolder.source.setImageResource(R.drawable.web_design);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
                 case "agent": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
                 case "email": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                    ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
@@ -1256,7 +1254,7 @@ public class  CreatedAtDesc extends Fragment {
                 }
                 case "call": {
                     int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+                    ticketViewHolder.source.setImageResource(R.drawable.phone);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
@@ -1300,6 +1298,45 @@ public class  CreatedAtDesc extends Fragment {
                         .buildRound(letter, generator.getRandomColor());
                 //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+            }
+
+            if (checked_items.contains(id)) {
+                AnimatorSet shrinkSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.grow_from_middle);
+                shrinkSet.setTarget(ticketViewHolder.roundedImageViewProfilePic);
+                shrinkSet.start();
+                ticketViewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
+
+//                notifyDataSetChanged();
+            } else {
+                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                if (ticketOverview.clientPicture.equals("")) {
+                    ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+
+                } else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")) {
+                    mDrawableBuilder = TextDrawable.builder()
+                            .round();
+//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+                    Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
+
+
+                }
+
+                else {
+
+                    ColorGenerator generator = ColorGenerator.MATERIAL;
+                    TextDrawable drawable = TextDrawable.builder()
+                            .buildRound(letter, generator.getRandomColor());
+                    //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                    ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+                }
+//                if (ticketOverview.lastReply.equals("client")) {
+//
+//                    int color = Color.parseColor("#ededed");
+//                    ticketViewHolder.ticket.setBackgroundColor(color);
+//                } else {
+//
+//                }
             }
 
             ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {

@@ -95,12 +95,13 @@ public class NotificationActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(NotificationActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(NotificationActivity.this,R.color.mainActivityTopBar));
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         progressDialog=new ProgressDialog(NotificationActivity.this);
         progressDialog.setMessage("Please wait");
         if (InternetReceiver.isConnected()) {

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_200"
     tools:context=".frontend.activities.ClientDetailActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -10,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        android:background="@color/faveo"
+        android:background="#154c66"
         android:theme="@style/AppThemeOverlay.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -24,14 +25,14 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/faveo"
+                android:background="#154c66"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/faveo"
+                    android:background="#154c66"
                     app:layout_collapseMode="pin"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:popupTheme="@style/AppThemeOverlay.ActionBar.Client">
@@ -59,9 +60,11 @@
                             android:layout_gravity="left"
                             android:layout_marginStart="65dp"
                             android:gravity="center"
+                            android:fontFamily="monospace"
                             android:text="@string/profile"
                             android:textColor="@color/white"
                             android:textSize="18sp"
+                            android:visibility="gone"
                             android:textStyle="bold" />
 
                         <co.helpdesk.faveo.pro.SquareImageView
@@ -72,7 +75,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="16dp"
-                            android:tint="@color/white"
+                            android:tint="#154c66"
                             android:src="@drawable/ic_edit_black_24dp" />
                     </RelativeLayout>
                 </android.support.v7.widget.Toolbar>
@@ -85,8 +88,8 @@
 
                     <ImageView
                         android:id="@+id/imageView_default_profile"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
                         android:layout_centerHorizontal="true"
                         android:transitionName="@string/blue_name"
                         android:backgroundTint="@color/white"
@@ -101,9 +104,9 @@
                         android:layout_below="@+id/imageView_default_profile"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
-                        android:fontFamily="sans-serif-bold"
+                        android:fontFamily="monospace"
                         android:maxLines="1"
-                        android:text=""
+                        android:text="Demo Admin"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         app:use_gradient="true"/>
@@ -118,9 +121,9 @@
                         android:drawableLeft="@drawable/emailenvelope"
                         android:drawableTint="@color/white"
                         android:drawablePadding="8dp"
-                        android:fontFamily="sans-serif-medium"
+                        android:fontFamily="monospace"
                         android:maxLines="1"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:text="@string/dummy_mail_id"
                         android:textColor="@color/white"
                         android:textSize="16sp"
@@ -135,7 +138,7 @@
                         android:layout_marginTop="6dp"
                         android:drawableLeft="@drawable/landphone"
                         android:drawablePadding="8dp"
-                        android:fontFamily="sans-serif-medium"
+                        android:fontFamily="monospace"
                         android:maxLines="1"
                         android:drawableTint="@color/white"
                         android:text="@string/dummy_num"
@@ -154,7 +157,7 @@
                         android:drawableLeft="@drawable/mobile"
                         android:drawableTint="@color/white"
                         android:drawablePadding="8dp"
-                        android:fontFamily="sans-serif-medium"
+                        android:fontFamily="monospace"
                         android:maxLines="1"
                         android:text="@string/dummy_num"
                         android:textColor="@color/white"
@@ -203,17 +206,18 @@
             android:layout_height="wrap_content"
             app:tabGravity="fill"
             app:tabTextColor="#808080"
-            app:tabMode=    "fixed"
-            android:background="@color/faveo"
-            app:tabIndicatorColor="@color/grey_500"
-            app:tabIndicatorHeight="4dp"
-            app:tabSelectedTextColor="@color/white"/>
+            app:tabMode="fixed"
+            android:background="@color/colorAccent"
+            app:tabIndicatorColor="@color/faveo"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/grey_500"/>
         <!--app:tabIndicatorColor="@color/faveo"-->
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
+        android:backgroundTint="@color/grey_200"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

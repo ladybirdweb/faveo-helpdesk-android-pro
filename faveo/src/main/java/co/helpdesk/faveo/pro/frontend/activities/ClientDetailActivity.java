@@ -48,8 +48,8 @@ import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
-import co.helpdesk.faveo.pro.frontend.fragments.client.ClosedTickets;
-import co.helpdesk.faveo.pro.frontend.fragments.client.OpenTickets;
+import co.helpdesk.faveo.pro.frontend.fragments.client.Profile;
+import co.helpdesk.faveo.pro.frontend.fragments.client.Tickets;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
 import co.helpdesk.faveo.pro.model.TicketGlimpse;
@@ -61,8 +61,8 @@ import es.dmoral.toasty.Toasty;
  * so we are loading the view pager here.
  */
 public class ClientDetailActivity extends AppCompatActivity implements
-        OpenTickets.OnFragmentInteractionListener,
-        ClosedTickets.OnFragmentInteractionListener {
+        Tickets.OnFragmentInteractionListener,
+        Profile.OnFragmentInteractionListener {
 
 
     AsyncTask<String, Void, String> task;
@@ -90,8 +90,8 @@ public class ClientDetailActivity extends AppCompatActivity implements
     ViewPager viewPager;
 
     ViewPagerAdapter adapter;
-    OpenTickets fragmentOpenTickets;
-    ClosedTickets fragmentClosedTickets;
+    Tickets fragmentOpenTickets;
+    Profile fragmentClosedTickets;
     public String clientID, clientName;
     List<TicketGlimpse> listTicketGlimpse;
     ProgressDialog progressDialog;
@@ -119,7 +119,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(ClientDetailActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(ClientDetailActivity.this,R.color.mainActivityTopBar));
         ButterKnife.bind(this);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -282,6 +282,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject requester = jsonObject.getJSONObject("requester");
+                Prefs.putString("clientProfile",requester.toString());
                 String firstname = requester.getString("first_name");
                 String lastName = requester.getString("last_name");
                 String username = requester.getString("user_name");
@@ -387,10 +388,11 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
                     try {
                         isOpen = jsonArray.getJSONObject(i).getString("ticket_status_name").equals("Open");
-                        if (isOpen)
-                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId,clientName));
-                        else
-                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status,clientId,clientName));
+                        listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId,clientName));
+//                        if (isOpen)
+//                            listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId,clientName));
+//                        else
+//                            listClosedTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, false,status,clientId,clientName));
                     } catch (Exception e) {
                         listOpenTicketGlimpse.add(new TicketGlimpse(ticketID, ticketNumber, ticketSubject, true,status,clientId,clientName));
                     }
@@ -400,9 +402,8 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 Toasty.error(ClientDetailActivity.this, getString(R.string.unexpected_error), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-
             fragmentOpenTickets.populateData(listOpenTicketGlimpse, clientName);
-            fragmentClosedTickets.populateData(listClosedTicketGlimpse, clientName);
+            //fragmentClosedTickets.populateData(listClosedTicketGlimpse, clientName);
         }
     }
 
@@ -414,10 +415,10 @@ public class ClientDetailActivity extends AppCompatActivity implements
      */
     private void setupViewPager() {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        fragmentOpenTickets = new OpenTickets();
-        fragmentClosedTickets = new ClosedTickets();
+        fragmentOpenTickets = new Tickets();
+        fragmentClosedTickets = new Profile();
         adapter.addFragment(fragmentOpenTickets, getString(R.string.open_ticket));
-        adapter.addFragment(fragmentClosedTickets, getString(R.string.closed_ticket));
+        adapter.addFragment(fragmentClosedTickets, getString(R.string.profile));
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(onPageChangeListener);
     }
