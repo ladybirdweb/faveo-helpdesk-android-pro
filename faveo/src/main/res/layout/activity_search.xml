@@ -91,19 +91,19 @@
                     <!--android:src="@drawable/ic_action_search" />-->
 
 
-                <ImageView
-                    android:id="@+id/cleartext"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="10dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:contentDescription="Back"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_close_24dp"
-                    android:visibility="visible"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/cleartext"-->
+                    <!--android:layout_width="38dp"-->
+                    <!--android:layout_height="38dp"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_marginEnd="10dp"-->
+                    <!--android:background="?android:attr/selectableItemBackground"-->
+                    <!--android:clickable="true"-->
+                    <!--android:contentDescription="Back"-->
+                    <!--android:padding="8dp"-->
+                    <!--android:src="@drawable/ic_close_24dp"-->
+                    <!--android:visibility="visible"/>-->
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 

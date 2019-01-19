@@ -68,7 +68,7 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(MultiAssigningActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(MultiAssigningActivity.this,R.color.mainActivityTopBar));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         staffItems=new ArrayList<>();
@@ -208,11 +208,12 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-//        if (InternetReceiver.isConnected()){
-//            new FetchDependency().execute();
-//        }
         super.onResume();
     }
+
+
+
+
 
     private class FetchDependency extends AsyncTask<String, Void, String> {
         String unauthorized;

@@ -63,7 +63,7 @@
                     android:textAllCaps="true"
                     android:fontFamily="@font/hintedlainesansregular"
                     android:textColor="@color/colorAccent"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <Button

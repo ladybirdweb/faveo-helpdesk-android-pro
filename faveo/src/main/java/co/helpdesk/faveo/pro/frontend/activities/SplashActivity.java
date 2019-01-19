@@ -102,6 +102,46 @@ public class SplashActivity extends AppCompatActivity {
         textViewTag=findViewById(R.id.faveotag);
         imageViewFaveo.setAnimation(uptodown);
         textViewTag.setAnimation(downtoup);
+
+
+        uptodown.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                progressDialog.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (InternetReceiver.isConnected()) {
+                    progressDialog.setVisibility(View.VISIBLE);
+                    new FetchDependency().execute();
+                    Prefs.putString("came from filter", "false");
+
+                }else
+                {
+                    progressDialog.setVisibility(View.INVISIBLE);
+                    loading.setText(getString(R.string.oops_no_internet));
+                    textViewtryAgain.setVisibility(View.VISIBLE);
+                    textViewrefresh.setVisibility(View.VISIBLE);
+                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+                    Prefs.putString("querry","null");
+
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         //httpConnection=new HTTPConnection(getApplicationContext());
         //welcomeDialog=new WelcomeDialog();
         try {
@@ -120,29 +160,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-        if (InternetReceiver.isConnected()) {
-            progressDialog.setVisibility(View.VISIBLE);
-            new FetchDependency().execute();
-            Prefs.putString("came from filter", "false");
 
-        }else
-        {
-            progressDialog.setVisibility(View.INVISIBLE);
-            loading.setText(getString(R.string.oops_no_internet));
-            textViewtryAgain.setVisibility(View.VISIBLE);
-            textViewrefresh.setVisibility(View.VISIBLE);
-            textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                    Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-                    startActivity(intent);
-                }
-            });
-            //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
-            Prefs.putString("querry","null");
-
-        }
         Prefs.putString("tickets", "null");
     }
 

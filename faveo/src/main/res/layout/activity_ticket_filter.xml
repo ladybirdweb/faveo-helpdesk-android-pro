@@ -43,7 +43,7 @@
                     android:layout_marginStart="24dp"
                     android:text="@string/filterticket"
                     android:textColor="@color/colorAccent"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/hintedlainesansregular"
                     android:textAllCaps="true"
@@ -53,8 +53,8 @@
 
                 <ImageView
                 android:id="@+id/buttonfilter"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignBottom="@+id/imageViewBack"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
@@ -67,8 +67,8 @@
 
                 <ImageView
                     android:id="@+id/buttonclearall"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_horizontal"
@@ -80,8 +80,8 @@
 
                 <ImageView
                     android:id="@+id/buttonRefresh"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_horizontal"

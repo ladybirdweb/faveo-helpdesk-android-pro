@@ -24,7 +24,7 @@ ImageView imageView;
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(MultipleTicketAssign.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(MultipleTicketAssign.this,R.color.mainActivityTopBar));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -132,11 +132,12 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 
         }
-        if (ticketOverview.ticketPriorityColor.equals("null")){
+        if (ticketOverview.ticketPriorityColor.equals("null")) {
             ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-        }
-        else if (ticketOverview.ticketPriorityColor != null) {
-            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+            ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor("#3da6d7"));
+        } else if (ticketOverview.ticketPriorityColor != null) {
+            //ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+            ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
         }
 
 
@@ -157,28 +158,34 @@ else{
     ticketViewHolder.countThread.setVisibility(View.GONE);
 }
 
+        if (!ticketOverview.agentName.equals("Unassigned")) {
+            ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
+        } else {
+            ticketViewHolder.agentAssigned.setText("Unassigned");
+        }
+
         switch (ticketOverview.sourceTicket) {
             case "chat": {
                 int color = Color.parseColor("#808080");
-                ticketViewHolder.source.setImageResource(R.drawable.chat);
+                ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
             case "web": {
                 int color = Color.parseColor("#808080");
-                ticketViewHolder.source.setImageResource(R.drawable.web);
+                ticketViewHolder.source.setImageResource(R.drawable.web_design);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
             case "agent": {
                 int color = Color.parseColor("#808080");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                ticketViewHolder.source.setImageResource(R.drawable.mail);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
             case "email": {
                 int color = Color.parseColor("#808080");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
+                ticketViewHolder.source.setImageResource(R.drawable.mail);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
@@ -196,7 +203,7 @@ else{
             }
             case "call": {
                 int color = Color.parseColor("#808080");
-                ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
+                ticketViewHolder.source.setImageResource(R.drawable.phone);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
@@ -228,10 +235,10 @@ ticketViewHolder.countCollaborator.setVisibility(View.GONE);
 //}
 
 
-if (!ticketOverview.lastReply.equals("client")){
-    int color=Color.parseColor("#e9e9e9");
-ticketViewHolder.ticket.setBackgroundColor(color);
-}
+//if (!ticketOverview.lastReply.equals("client")){
+//    int color=Color.parseColor("#e9e9e9");
+//ticketViewHolder.ticket.setBackgroundColor(color);
+//}
 
 
 
@@ -253,10 +260,16 @@ else{
     ColorGenerator generator = ColorGenerator.MATERIAL;
     TextDrawable drawable = TextDrawable.builder()
             .buildRound(letter,generator.getRandomColor());
-    ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+    //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
     ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
 
 }
+        if (!ticketOverview.priorityName.equals("")){
+            ticketViewHolder.textViewpriorityName.setText(ticketOverview.priorityName);
+        }
+        else{
+            ticketViewHolder.textViewpriorityName.setText(R.string.not_available);
+        }
 //   else if (ticketOverview.clientPicture.startsWith("")){
 ////    Glide.with(context)
 ////            .load(imageUrl)
@@ -444,19 +457,19 @@ else{
         public TextView textViewSubject;
         public RelativeTimeTextView textViewTime;
         public TextView textViewOverdue;
-        public View ticketPriority;
-        // TextView ticketStatus;
+        public ImageView ticketPriority;
         public ImageView attachementView;
         public CheckBox checkBox1;
         public ImageView countCollaborator;
         public ImageView source;
         public TextView countThread;
         public TextView agentAssigned;
-        //public ImageView agentAssignedImage;
         public TextView textViewduetoday;
+        TextView textViewpriorityName;
         TicketViewHolder(View v) {
             super(v);
             ticket = v.findViewById(R.id.ticket);
+            textViewpriorityName=v.findViewById(R.id.priority_viewText);
             attachementView = (ImageView) v.findViewById(R.id.attachment_icon);
             ticketPriority = v.findViewById(R.id.priority_view);
             roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);

@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -45,6 +46,7 @@ import co.helpdesk.faveo.pro.frontend.fragments.TicketFragment;
 import co.helpdesk.faveo.pro.frontend.fragments.UsersFragment;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketdetail.Conversation;
 import co.helpdesk.faveo.pro.frontend.fragments.ticketdetail.Detail;
+import es.dmoral.toasty.Toasty;
 
 
 public class SearchActivity extends AppCompatActivity implements
@@ -52,7 +54,6 @@ public class SearchActivity extends AppCompatActivity implements
         Detail.OnFragmentInteractionListener {
     AutoCompleteTextView searchView;
     ImageView imageViewback;
-    ImageView imageViewClearText;
     private ViewPager vpPager;
     ArrayList<String> colorList;
     ArrayAdapter<String> suggestionAdapter;
@@ -134,8 +135,6 @@ public class SearchActivity extends AppCompatActivity implements
         toolbar= (Toolbar) findViewById(R.id.toolbar);
         imageViewback= (ImageView) toolbar.findViewById(R.id.image_search_back);
         searchView= (AutoCompleteTextView) toolbar.findViewById(R.id.edit_text_search);
-        imageViewClearText= (ImageView) toolbar.findViewById(R.id.cleartext);
-        imageViewClearText.setVisibility(View.GONE);
         colorList=new ArrayList<>();
         colorList.clear();
 
@@ -170,7 +169,7 @@ public class SearchActivity extends AppCompatActivity implements
             }catch (NullPointerException e) {
             e.printStackTrace();
         }
-        searchView.addTextChangedListener(passwordWatcheredittextSubject);
+        //searchView.addTextChangedListener(passwordWatcheredittextSubject);
 
         imageViewback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,54 +200,58 @@ public class SearchActivity extends AppCompatActivity implements
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String querry=searchView.getText().toString();
-                    Prefs.putString("querry",querry);
-                    try {
-                        String querry1 = URLEncoder.encode(querry, "utf-8");
-                        Prefs.putString("querry1",querry1);
-                        //Log.d("Msg", replyMessage);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (!colorList.contains(querry)){
-                        colorList.add(searchView.getText().toString());
-                    }
-                    View view = SearchActivity.this.getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-                    Prefs.putString("RecentSearh",colorList.toString());
-                    Log.d("suggestionss",colorList.toString());
-
-
-                    try {
-                        if (Prefs.getString("cameFromClientList", null).equals("true")) {
-
-                            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-                            adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
-                            adapter.addFrag(new UsersFragment(), getString(R.string.users));
-                            adapter.notifyDataSetChanged();
-                            vpPager.setAdapter(adapter);
-                            vpPager.setCurrentItem(1);
-
-                        } else if (Prefs.getString("cameFromClientList", null).equals("false")){
-                            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-                            adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
-                            adapter.addFrag(new UsersFragment(), getString(R.string.users));
-                            adapter.notifyDataSetChanged();
-                            vpPager.setAdapter(adapter);
-                            vpPager.setCurrentItem(0);
-                        }
-                    }catch (NullPointerException e){
+                    String querry = searchView.getText().toString();
+                    if (querry.equals("")) {
+                        Toasty.info(SearchActivity.this,"Search field can not be empty",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Prefs.putString("querry", querry);
+                        try {
+                            String querry1 = URLEncoder.encode(querry, "utf-8");
+                            Prefs.putString("querry1", querry1);
+                            //Log.d("Msg", replyMessage);
+                        } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
+                        }
+
+                        if (!colorList.contains(querry)) {
+                            colorList.add(searchView.getText().toString());
+                        }
+                        View view = SearchActivity.this.getCurrentFocus();
+                        if (view != null) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
+                        Prefs.putString("RecentSearh", colorList.toString());
+                        Log.d("suggestionss", colorList.toString());
+
+
+                        try {
+                            if (Prefs.getString("cameFromClientList", null).equals("true")) {
+
+                                ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                                adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
+                                adapter.addFrag(new UsersFragment(), getString(R.string.users));
+                                adapter.notifyDataSetChanged();
+                                vpPager.setAdapter(adapter);
+                                vpPager.setCurrentItem(1);
+
+                            } else if (Prefs.getString("cameFromClientList", null).equals("false")) {
+                                ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                                adapter.addFrag(new TicketFragment(), getString(R.string.tickets));
+                                adapter.addFrag(new UsersFragment(), getString(R.string.users));
+                                adapter.notifyDataSetChanged();
+                                vpPager.setAdapter(adapter);
+                                vpPager.setCurrentItem(0);
+                            }
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+
+                        //colorList.add(searchView.getText().toString());
+
+                        //performSearch();
+                        return true;
                     }
-
-                    //colorList.add(searchView.getText().toString());
-
-                    //performSearch();
-                    return true;
                 }
                 return false;
             }
@@ -331,17 +334,17 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
 
-        imageViewClearText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchView.setText("");
-                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
-                searchView.setAdapter(suggestionAdapter);
-                searchView.setDropDownWidth(1500);
-                searchView.setThreshold(1);
-                searchView.showDropDown();
-                }
-        });
+//        imageViewClearText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                searchView.setText("");
+//                suggestionAdapter=new ArrayAdapter<String>(SearchActivity.this,R.layout.row,R.id.textView,colorList);
+//                searchView.setAdapter(suggestionAdapter);
+//                searchView.setDropDownWidth(1500);
+//                searchView.setThreshold(1);
+//                searchView.showDropDown();
+//                }
+//        });
         }
         @Override
     protected void onResume() {
@@ -437,36 +440,36 @@ public class SearchActivity extends AppCompatActivity implements
 
 
 
-    final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            term = searchView.getText().toString();
-            if (term.equals("")){
-//                searchView.showDropDown();
-                imageViewClearText.setVisibility(View.GONE);
-                imageViewClearText.setClickable(false);
-            }
-            else{
-                imageViewClearText.setVisibility(View.VISIBLE);
-            }
-        }
-
-        public void afterTextChanged(Editable s) {
-            if (term.equals("")){
-                imageViewClearText.setVisibility(View.GONE);
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                //searchView.showDropDown();
-                imageViewClearText.setClickable(false);
-            }
-            else{
-                imageViewClearText.setVisibility(View.VISIBLE);
-                //searchView.showDropDown();
-                //searchView.showDropDown();
-            }
-        }
-    };
+//    final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//        }
+//
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            term = searchView.getText().toString();
+//            if (term.equals("")){
+////                searchView.showDropDown();
+//                imageViewClearText.setVisibility(View.GONE);
+//                imageViewClearText.setClickable(false);
+//            }
+//            else{
+//                imageViewClearText.setVisibility(View.VISIBLE);
+//            }
+//        }
+//
+//        public void afterTextChanged(Editable s) {
+//            if (term.equals("")){
+//                imageViewClearText.setVisibility(View.GONE);
+//                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//                //searchView.showDropDown();
+//                imageViewClearText.setClickable(false);
+//            }
+//            else{
+//                imageViewClearText.setVisibility(View.VISIBLE);
+//                //searchView.showDropDown();
+//                //searchView.showDropDown();
+//            }
+//        }
+//    };
 
     /**
      * Display the snackbar if network connection is not there.

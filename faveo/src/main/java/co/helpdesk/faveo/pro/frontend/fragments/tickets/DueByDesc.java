@@ -1594,12 +1594,12 @@ public class DueByDesc extends Fragment {
     public class Toolbar_ActionMode_Callback implements android.support.v7.view.ActionMode.Callback {
 
         private Context context;
-        private InboxTickets.TicketOverviewAdapter recyclerView_adapter;
+        private TicketOverviewAdapter recyclerView_adapter;
         private ArrayList<TicketOverview> message_models;
         private boolean isListViewFragment;
 
 
-        public Toolbar_ActionMode_Callback(Context context, TicketOverviewAdapter ticketOverviewAdapter, InboxTickets.TicketOverviewAdapter recyclerView_adapter, List<TicketOverview> message_models, boolean b) {
+        public Toolbar_ActionMode_Callback(Context context, TicketOverviewAdapter ticketOverviewAdapter, TicketOverviewAdapter recyclerView_adapter, List<TicketOverview> message_models, boolean b) {
             this.context = context;
             this.recyclerView_adapter = recyclerView_adapter;
             this.message_models = (ArrayList<TicketOverview>) message_models;

@@ -30,7 +30,7 @@ String text;
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(CustomerFiltration.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(CustomerFiltration.this,R.color.mainActivityTopBar));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         textView= (TextView) findViewById(R.id.filterCustomers);
         text="To filter customers and agents on your helpdesk you have to click on the filter option in the client list page and you will get some option to filter the customers like " +

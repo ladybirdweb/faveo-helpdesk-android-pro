@@ -9,14 +9,14 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:theme="@style/MyMaterialTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="60dp"
+            android:background="#154c66"
             app:popupTheme="@style/MyMaterialTheme.PopupOverlay">
 
             <RelativeLayout
@@ -30,6 +30,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:backgroundTint="@color/colorAccent"
                     android:background="@drawable/ic_arrow_back_black_24dp" />
 
                 <TextView
@@ -39,9 +40,10 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginStart="24dp"
                     android:text="@string/login"
-                    android:textColor="@color/theme"
-                    android:textSize="18sp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
                     android:textStyle="bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:textAllCaps="true"
                     android:layout_alignTop="@+id/imageViewBack"
                     android:layout_toRightOf="@+id/imageViewBack"
@@ -58,13 +60,14 @@
     </android.support.design.widget.AppBarLayout>
     <TextView
         android:id="@+id/loggingin"
-        android:padding="9dp"
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/hintedlainesansregular"
         android:text="@string/loggingIn"
-        android:textSize="20sp"/>
+        android:textSize="16sp"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/faveo"></View>
+        android:background="@color/grey_500"></View>
 </LinearLayout>

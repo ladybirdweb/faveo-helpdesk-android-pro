@@ -275,6 +275,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
+
+
     /**
      * Handling the back button here.
      * As if we clicking twice then it will

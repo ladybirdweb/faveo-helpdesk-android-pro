@@ -367,6 +367,7 @@ public class Conversation extends Fragment {
 /*                        String clientName = jsonArray.getJSONObject(i).getString("poster");
                         if (clientName.equals("null") || clientName.equals(""))
                             clientName = "NOTE";*/
+                        String ticketId=jsonArray.getJSONObject(i).getString("ticket_id");
                         String firstName = jsonArray.getJSONObject(i).getJSONObject("user").getString("first_name");
                         String userName = jsonArray.getJSONObject(i).getJSONObject("user").getString("user_name");
                         String lastName = jsonArray.getJSONObject(i).getJSONObject("user").getString("last_name");
@@ -426,7 +427,7 @@ public class Conversation extends Fragment {
                         Log.d("body:", message);
                         //String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
                         String isReply = "0";
-                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l, name, file, type, noOfAttachment);
+                        ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l, name, file, type,ticketId, noOfAttachment);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

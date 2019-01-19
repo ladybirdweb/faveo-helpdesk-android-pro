@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -143,35 +144,38 @@ public class ClientList extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (rootView == null) {
+
             heading=Prefs.getString("filtercustomer",null);
             condition=Prefs.getString("normalclientlist",null);
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             toolbar= (Toolbar) rootView.findViewById(R.id.toolbar2);
             toolbarTextview= (TextView) toolbar.findViewById(R.id.toolbartextview);
 
-             if (heading.equals("active")){
-                toolbarTextview.setText(getString(R.string.activeUser));
-            }
-            else if (heading.equals("inactive")){
-                toolbarTextview.setText(getString(R.string.inactiveUser));
-            }
-            else if (heading.equals("banned")){
-                toolbarTextview.setText(getString(R.string.bannedUser));
-            }
-            else if (heading.equals("deleted")){
-                toolbarTextview.setText(getString(R.string.deleteduser));
-            }
-            else if (heading.equals("admin")){
-                toolbarTextview.setText(getString(R.string.roleAdmin));
-            }
-             else if (heading.equals("agent")){
-                 toolbarTextview.setText(getString(R.string.roleAgent));
-             }
-             else if (heading.equals("user")){
-                 toolbarTextview.setText(getString(R.string.roleUser));
-             }
-             else{
-                toolbarTextview.setText(getString(R.string.customerFilter));
+            switch (heading) {
+                case "active":
+                    toolbarTextview.setText(getString(R.string.activeUser));
+                    break;
+                case "inactive":
+                    toolbarTextview.setText(getString(R.string.inactiveUser));
+                    break;
+                case "banned":
+                    toolbarTextview.setText(getString(R.string.bannedUser));
+                    break;
+                case "deleted":
+                    toolbarTextview.setText(getString(R.string.deleteduser));
+                    break;
+                case "admin":
+                    toolbarTextview.setText(getString(R.string.roleAdmin));
+                    break;
+                case "agent":
+                    toolbarTextview.setText(getString(R.string.roleAgent));
+                    break;
+                case "user":
+                    toolbarTextview.setText(getString(R.string.roleUser));
+                    break;
+                default:
+                    toolbarTextview.setText(getString(R.string.customerFilter));
+                    break;
             }
 
             view1=rootView.findViewById(R.id.separationView);

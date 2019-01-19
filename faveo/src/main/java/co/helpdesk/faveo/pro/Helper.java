@@ -150,7 +150,7 @@ public class Helper {
             String ticketStatusName = statuses.getString("name");
             JSONObject priority=jsonObject2.getJSONObject("priority");
             String priorityColor = priority.getString("priority_color");
-            String priorityName=priority.getString("name");
+            String priorityName=priority.getString("priority");
             JSONObject jsonObjectSources=jsonObject2.getJSONObject("sources");
             String source=jsonObjectSources.getString("name");
 //            String firstName = jsonArray.getJSONObject(i).getString("c_fname");

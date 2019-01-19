@@ -27,7 +27,7 @@
     <color name="grey_200">#eeeeee</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="dark_translucent">#55000000</color>
-
+    <color name="test_color">#2079a3</color>
     <color name="grey_500">#9E9E9E</color>
 
 </resources>

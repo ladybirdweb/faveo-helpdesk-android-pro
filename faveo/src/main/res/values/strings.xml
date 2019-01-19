@@ -193,7 +193,7 @@
     <string name="showsuggestions">Please enter 2 or more characters</string>
     <string name="addcolla">Add collaborator</string>
     <string name="assigned">Assigned/Unassigned</string>
-    <string name="customerFilter">Filter Customer</string>
+    <string name="customerFilter">Filter By</string>
     <string name="editCustomer">Edit Customer Details</string>
     <string name="activeUser">Active Users</string>
     <string name="inactiveUser">Inactive Users</string>

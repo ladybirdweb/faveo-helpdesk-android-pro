@@ -767,5 +767,14 @@ public class Helpdesk {
             return result;
         }
 
+        public String getAgentbasedOnDepartment(String ticketid){
+        Log.d("getAgentList",newurl + "api/v2/helpdesk/api/get/agentlist?token="+token+"&ticket_id="+ticketid);
+        String result=new HTTPConnection().hTTPResponseGet(newurl + "api/v2/helpdesk/api/get/agentlist?token="+token+"&ticket_id="+ticketid);
+            if (result!=null&&result.equals("tokenRefreshed"))
+                return new HTTPConnection().hTTPResponseGet(newurl + "api/v2/helpdesk/api/get/agentlist?token="+token+"&ticket_id="+ticketid);
+            return result;
+        }
+
+
 
 }

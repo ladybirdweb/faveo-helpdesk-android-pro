@@ -25,6 +25,7 @@
             android:layout_height="80dp"
             android:animateLayoutChanges="true"
             android:focusable="true"
+            android:background="#F3FCFB"
             android:paddingBottom="2dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -105,6 +106,7 @@
                 android:tint="@color/grey_500"/>
 
             <ImageView
+                android:id="@+id/imageviewreply"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignTop="@+id/textView_client_name"
@@ -177,8 +179,6 @@
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:background="@color/grey_200"
                 android:padding="5dp"
                 android:textSize="16sp"
                 android:visibility="visible" />

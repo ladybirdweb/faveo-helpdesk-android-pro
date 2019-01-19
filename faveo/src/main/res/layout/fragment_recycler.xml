@@ -16,10 +16,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:orientation="horizontal"
         android:id="@+id/toolbarview"
-        android:visibility="visible"
+        android:visibility="gone"
         >
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbarfilteration"
@@ -68,11 +68,11 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppThemeOverlay.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            android:visibility="visible"
+            android:visibility="gone"
             android:overScrollMode="always"
             android:layout_weight="1">
             <RelativeLayout
@@ -147,7 +147,7 @@
         android:layout_height="0dp"
         android:layout_weight="7"
         android:clickable="true"
-        android:padding="3dp"
+        android:padding="1dp"
         >
 
         <com.cooltechworks.views.shimmer.ShimmerRecyclerView

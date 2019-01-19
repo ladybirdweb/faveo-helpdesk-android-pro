@@ -6,6 +6,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="24dp"
+    android:backgroundTint="@color/faveo"
     tools:context=".frontend.activities.SplashActivity">
 
     <!--<TextView-->
@@ -21,12 +22,12 @@
     <ImageView
         android:id="@+id/faveoImage"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="500dp"
         android:layout_above="@+id/faveotag"
         android:layout_centerHorizontal="true"
-        android:layout_weight="2"
-        android:padding="40dp"
-        android:src="@drawable/pro" />
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="-15dp"
+        android:src="@drawable/faveonewlogo" />
 
     <TextView
         android:id="@+id/faveotag"
@@ -35,21 +36,22 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginBottom="185dp"
+        android:layout_marginBottom="206dp"
         android:fontFamily="mo"
         android:gravity="center"
-        android:text="Simplifying Customer Support"
-        android:textColor="@color/faveo"
-        android:textSize="20sp"
-        android:shadowColor="@color/faveo"
+        android:shadowColor="@color/colorAccent"
         android:shadowDx="-2"
         android:shadowDy="-2"
-        android:shadowRadius="1"/>
+        android:shadowRadius="1"
+        android:text="Simplifying Customer Support"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp" />
 
     <ProgressBar
         android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
+        android:indeterminateTint="@android:color/white"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -64,28 +66,26 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-109dp"
-        android:alpha="0.5"
         android:text="@string/loading"
-        android:textColor="@color/black"
+        android:fontFamily="@font/hintedlainesansregular"
+        android:textColor="@color/colorAccent"
         android:textSize="14sp"
         android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="64dp"
-        android:layout_weight="1.5">
+        android:layout_marginBottom="23dp">
 
         <TextView
             android:id="@+id/refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginEnd="12dp"
-            android:layout_toStartOf="@+id/tryagain"
+            android:layout_alignBaseline="@+id/tryagain"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="60dp"
             android:alpha="0.5"
             android:background="@drawable/ic_refresh_black_24dp"
             android:visibility="gone" />
@@ -99,6 +99,7 @@
             android:layout_gravity="center_horizontal"
             android:alpha="0.5"
             android:text="@string/retry"
+            android:fontFamily="@font/hintedlainesansregular"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"

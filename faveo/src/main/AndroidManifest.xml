@@ -28,7 +28,8 @@
         android:theme="@style/MyMaterialTheme"
         tools:replace="allowBackup, label"
         android:windowSoftInputMode="stateAlwaysHidden"
-        android:screenOrientation="portrait">
+        android:screenOrientation="portrait"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <!--android:hardwareAccelerated="false"-->
         <!--android:largeHeap="true"-->
@@ -245,10 +246,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".frontend.activities.MultipleTicketAssign"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".frontend.activities.MultipleTicketMerge"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>

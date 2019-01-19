@@ -110,9 +110,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        toolbarBottom=findViewById(R.id.toolbarbottom);
         imageViewSource=findViewById(R.id.imageView_default_profile);
         loaderImageView= (ImageView) findViewById(R.id.collaboratorview);
-        //textViewreply=toolbarBottom.findViewById(R.id.textViewReply);
-        //imageViewReply=toolbarBottom.findViewById(R.id.reply);
-        //imageViewInternalNote=toolbarBottom.findViewById(R.id.internalNote);
+//        textViewreply=findViewById(R.id.textViewReply);
+        //imageViewReply=findViewById(R.id.imageviewreply);
+//        imageViewInternalNote=findViewById(R.id.internalNote);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {

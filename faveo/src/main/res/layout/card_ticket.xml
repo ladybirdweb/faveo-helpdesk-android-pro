@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView android:id="@+id/ticket"
+<android.support.v7.widget.CardView
+    android:id="@+id/ticket"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:elevation="3dp"
-    android:layout_margin="10dp"
-    android:background="@drawable/shape"
+    android:layout_margin="7dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    app:cardPreventCornerOverlap="false"
-    app:cardCornerRadius="11dp"
-    app:cardElevation="5dp"
+    card_view:cardCornerRadius="6dp"
+    card_view:cardElevation="5dp"
+    card_view:contentPadding="1dp"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
-        android:focusable="true">
+        >
 
         <TextView
             android:id="@+id/textView_ticket_id"
@@ -48,7 +51,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="54dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="62dp"
             android:alpha=".54"
             android:fontFamily="@font/hintedlainesansregular"
             android:maxLines="1"
@@ -84,6 +87,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/hintedlainesansregular"
             android:maxLines="1"
+            android:alpha=".7"
             android:text="Using full width cards"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -105,6 +109,14 @@
             android:text="Matthias Robbers"
             android:textColor="@color/black"
             android:textSize="15sp" />
+
+        <ImageButton
+            android:id="@+id/selectedTicket"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/circle"
+            android:visibility="gone"
+            android:src="@drawable/ic_done_white_24dp"/>
 
 
         <!--<ImageView-->
@@ -141,7 +153,7 @@
                     android:layout_alignBottom="@+id/priority_viewText"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="5dp"
                     android:src="@drawable/icons8newmoon24" />
 
                 <TextView
@@ -149,11 +161,12 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="1dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="3dp"
                     android:layout_toStartOf="@+id/priority_view"
                     android:backgroundTint="@color/grey_200"
-                    android:fontFamily="monospace"
+                    android:fontFamily="@font/hintedlainesansregular"
+                    android:gravity="center"
                     android:text="Emergency"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -180,7 +193,7 @@
                 android:alpha=".7"
                 android:background="@drawable/rectangle3"
                 android:backgroundTint="@color/grey_200"
-                android:fontFamily="monospace"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Support"
@@ -225,8 +238,9 @@
                     android:layout_centerVertical="true"
                     android:background="@drawable/rectangle3"
                     android:backgroundTint="@color/grey_200"
-                    android:fontFamily="monospace"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:singleLine="true"
+                    android:gravity="center"
                     android:text="Sayar"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -243,7 +257,7 @@
             android:layout_alignTop="@+id/textView_ticket_time"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="-79dp"
+            android:layout_marginTop="-69dp"
             android:layout_toEndOf="@+id/textView_ticket_id"
             android:layout_toRightOf="@+id/textView_ticket_id"
             android:backgroundTint="@color/faveo"
@@ -254,14 +268,13 @@
 
         <com.github.curioustechizen.ago.RelativeTimeTextView
             android:id="@+id/textView_ticket_time"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignStart="@id/textView_ticket_number"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="1dp"
             android:layout_marginTop="84dp"
-            android:layout_marginEnd="213dp"
             android:alpha=".50"
             android:fontFamily="@font/hintedlainesansregular"
             android:maxLines="1"

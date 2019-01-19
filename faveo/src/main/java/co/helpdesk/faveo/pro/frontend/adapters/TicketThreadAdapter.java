@@ -28,6 +28,7 @@ import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.ShowingAttachment;
+import co.helpdesk.faveo.pro.frontend.activities.TicketReplyActivity;
 import co.helpdesk.faveo.pro.model.TicketThread;
 
 /**
@@ -172,6 +173,15 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 //            ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
 //        }
 
+        ticketViewHolder.replyIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                                Intent intent=new Intent(view.getContext(),TicketReplyActivity.class);
+                intent.putExtra("ticket_id", ticketThread.ticketId);
+                view.getContext().startActivity(intent);
+            }
+        });
+
         ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +237,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
 
         RelativeLayout thread;
         TextView textViewShowingSome;
-        ImageView roundedImageViewProfilePic,fileIcon;
+        ImageView roundedImageViewProfilePic,fileIcon,replyIcon;
         TextView textViewClientName;
         RelativeTimeTextView textViewMessageTime;
         RelativeTimeTextView textViewTicketCreatedTime;
@@ -237,7 +247,6 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
         RelativeLayout relativeLayoutWebView;
         TextView reportAndReply;
         LinearLayout linearLayout;
-        View view;
         TicketViewHolder(View v) {
             super(v);
             thread = (RelativeLayout) v.findViewById(R.id.thread);
@@ -254,6 +263,7 @@ public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapte
             reportAndReply= (TextView) v.findViewById(R.id.reported);
             linearLayout= (LinearLayout) v.findViewById(R.id.linearWebView);
             relativeLayoutWebView=v.findViewById(R.id.showingWebView);
+            replyIcon=v.findViewById(R.id.imageviewreply);
 
         }
 
