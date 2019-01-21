@@ -56,13 +56,27 @@
                     android:layout_alignBottom="@+id/imageViewBack"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginEnd="21dp"
+                    android:layout_marginEnd="52dp"
+                    android:layout_marginBottom="0dp"
                     android:background="@drawable/ic_action_done"
-                    android:text="@string/filter"
                     android:backgroundTint="@color/colorAccent"
+                    android:text="@string/filter"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
+                <ImageButton
+                    android:id="@+id/imageRefresh"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="19dp"
+                    android:background="@drawable/ic_refresh_black_24dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:fillAfter="true"
+                    android:fillEnabled="true"
+                    android:visibility="visible" />
 
             </RelativeLayout>
 

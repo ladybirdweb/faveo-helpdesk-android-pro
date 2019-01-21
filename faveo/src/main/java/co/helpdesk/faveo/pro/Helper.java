@@ -61,7 +61,7 @@ public class Helper {
             String priorityColor = jsonArray.getJSONObject(i).getJSONObject("priority").getString("color");
             String priorityName=jsonArray.getJSONObject(i).getJSONObject("priority").getString("name");
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
-
+            //String departmentname=jsonArray.getJSONObject(i).getJSONObject("deparment").getString("name");
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
             if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&& jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
              agentName= jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
@@ -161,7 +161,7 @@ public class Helper {
 //            String ID = jsonArray.getJSONObject(i).getString("id");
             String countcollaborator=jsonArray.getJSONObject(i).getString("collaborator_count");
             String countthread=jsonArray.getJSONObject(i).getString("thread_count");
-
+            //String departmentname=jsonArray.getJSONObject(i).getJSONObject("deparment").getString("name");
 //            String title = jsonArray.getJSONObject(i).getString("ticket_title");
 //            String ticketStatusName = jsonArray.getJSONObject(i).getString("ticket_status_name");
             String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
@@ -213,7 +213,7 @@ public class Helper {
             String source=jsonArray.getJSONObject(i).getString("source");
             //String title = jsonArray.getJSONObject(i).getString("ticket_title");
             String title=jsonArray.getJSONObject(i).getString("title");
-
+            //String departmentname=jsonArray.getJSONObject(i).getJSONObject("deparment").getString("name");
 //            String createdAt = jsonArray.getJSONObject(i).getString("created_at");
 //            String departmentName = jsonArray.getJSONObject(i).getString("department_name");
 //            String priorityName = jsonArray.getJSONObject(i).getString("priotity_name");

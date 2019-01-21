@@ -25,6 +25,7 @@ public class TicketOverview {
     public String agentName;
     public String priorityName;
     private boolean isChecked;
+    //public String departmentname;
 
     public boolean getChecked() {
         return isChecked;
@@ -53,7 +54,16 @@ public class TicketOverview {
         this.lastReply=lastReply;
         this.agentName=agentName;
         this.priorityName=priorityName;
+        //this.departmentname=departmentname;
     }
+
+//    public String getDepartmentname() {
+//        return departmentname;
+//    }
+//
+//    public void setDepartmentname(String departmentname) {
+//        this.departmentname = departmentname;
+//    }
 
     public String getPriorityName() {
         return priorityName;

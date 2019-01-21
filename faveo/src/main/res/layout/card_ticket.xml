@@ -342,14 +342,13 @@
             android:layout_alignTop="@+id/countthread"
             android:layout_toEndOf="@+id/countthread"
             android:layout_toRightOf="@+id/textView_ticket_number"
-            android:src="@drawable/ic_attach_file_black_18dp"
-            android:visibility="gone" />
+            android:src="@drawable/attachment"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/source"
             android:layout_width="20dp"
             android:layout_height="20dp"
-
             android:layout_alignStart="@+id/textView_ticket_number"
             android:layout_alignTop="@+id/textView_client_name"
             android:src="@drawable/ic_attach_file_black_18dp"

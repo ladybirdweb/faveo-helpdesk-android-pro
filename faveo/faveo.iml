@@ -210,6 +210,7 @@
     <orderEntry type="library" name="Gradle: com.muddzdev:styleabletoast-1.0.6" level="project" />
     <orderEntry type="library" name="Gradle: agency.tango.android:avatar-view-picasso-0.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.pixplicity.easyprefs:library-1.8.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.getkeepsafe.taptargetview:taptargetview-1.11.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.8.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-1.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12@jar" level="project" />

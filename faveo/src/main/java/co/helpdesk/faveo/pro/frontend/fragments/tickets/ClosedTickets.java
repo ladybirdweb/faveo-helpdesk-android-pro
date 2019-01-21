@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -1081,43 +1082,43 @@ public class ClosedTickets extends Fragment {
             }
 
             switch (ticketOverview.sourceTicket) {
-                case "chat": {
+                case "Chat": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "web": {
+                case "Web": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.web_design);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "agent": {
+                case "Agent": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "email": {
+                case "Email": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "facebook": {
+                case "Facebook": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.facebook);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "twitter": {
+                case "Twitter": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.twitter);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "call": {
+                case "Call": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.phone);
                     ticketViewHolder.source.setColorFilter(color);
@@ -1145,9 +1146,11 @@ public class ClosedTickets extends Fragment {
 //                shrinkSet.setTarget(ticketViewHolder.roundedImageViewProfilePic);
 //                shrinkSet.start();
 //                ticketViewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                ticketViewHolder.imageButtonSelected.setVisibility(View.VISIBLE);
                 ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#ededed"));
 //                notifyDataSetChanged();
             } else {
+                ticketViewHolder.imageButtonSelected.setVisibility(View.GONE);
                 ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
                 if (ticketOverview.clientPicture.equals("")) {
                     ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
@@ -1167,6 +1170,10 @@ public class ClosedTickets extends Fragment {
                 }
 
             }
+
+//            if (!ticketOverview.departmentname.equals("")){
+//                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+//            }
 
 
             if (ticketOverview.clientPicture.equals("")){
@@ -1339,6 +1346,8 @@ public class ClosedTickets extends Fragment {
             TextView agentAssigned;
             TextView textViewduetoday;
             TextView textViewpriorityName;
+            ImageButton imageButtonSelected;
+            //TextView textViewDepartment;
             TicketViewHolder(View v) {
                 super(v);
                 ticket = v.findViewById(R.id.ticket);
@@ -1359,7 +1368,8 @@ public class ClosedTickets extends Fragment {
                 agentAssigned = (TextView) v.findViewById(R.id.agentassigned);
                 //agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
                 textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
-
+                imageButtonSelected=v.findViewById(R.id.selectedTicket);
+                //textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
 
             }
 

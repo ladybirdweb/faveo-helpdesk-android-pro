@@ -1757,43 +1757,43 @@ public class InboxTickets extends Fragment {
             }
 
             switch (ticketOverview.sourceTicket) {
-                case "chat": {
+                case "Chat": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "web": {
+                case "Web": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.web_design);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "agent": {
+                case "Agent": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "email": {
+                case "Email": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "facebook": {
+                case "Facebook": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.facebook);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "twitter": {
+                case "Twitter": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.twitter);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "call": {
+                case "Call": {
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.phone);
                     ticketViewHolder.source.setColorFilter(color);
@@ -1845,6 +1845,18 @@ public class InboxTickets extends Fragment {
 
             }
 
+//            if (!ticketOverview.departmentname.equals("")){
+//                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+//            }
+
+//            if (ticketOverview.ticketAttachments.equals("0")) {
+//                ticketViewHolder.attachementView.setVisibility(View.GONE);
+//            } else {
+//                int color = Color.parseColor("#808080");
+//                ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+//                ticketViewHolder.attachementView.setColorFilter(color);
+//
+//            }
 
 
             if (ticketOverview.clientPicture.equals("")){
@@ -2017,6 +2029,7 @@ public class InboxTickets extends Fragment {
             TextView textViewduetoday;
             TextView textViewpriorityName;
             ImageButton imageButtonSelected;
+            //TextView textViewDepartment;
             TicketViewHolder(View v) {
                 super(v);
                 ticket = v.findViewById(R.id.ticket);
@@ -2038,7 +2051,7 @@ public class InboxTickets extends Fragment {
                 //agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
                 textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
                 imageButtonSelected=v.findViewById(R.id.selectedTicket);
-
+                //textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
 
             }
 

@@ -91,8 +91,8 @@
                     android:layout_height="24dp"
                     android:layout_alignStart="@+id/status"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="77dp"
-                    android:layout_marginBottom="58dp"
+                    android:layout_marginStart="-1dp"
+                    android:layout_marginBottom="60dp"
                     android:alpha=".7"
                     android:background="@drawable/rectangle1"
                     android:backgroundTint="@color/grey_200"
@@ -134,12 +134,12 @@
                     />
 
                 <RelativeLayout
-                    android:layout_width="70dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/title"
                     android:layout_alignStart="@+id/status"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="83dp"
+                    android:layout_marginBottom="9dp"
                     android:alpha=".7"
                     android:background="@drawable/rectangle3"
                     android:backgroundTint="@color/grey_200">
@@ -156,9 +156,9 @@
 
                     <TextView
                         android:id="@+id/agentassigned"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_marginLeft="20dp"
                         android:layout_centerVertical="true"
                         android:background="@drawable/rectangle3"
                         android:backgroundTint="@color/grey_200"

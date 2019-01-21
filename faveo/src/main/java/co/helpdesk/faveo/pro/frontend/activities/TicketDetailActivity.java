@@ -829,43 +829,43 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 String priorityColor=jsonObject2.getString("priority_color");
                 String source=jsonObject2.getString("source_name");
                 switch (source) {
-                    case "chat": {
+                    case "Chat": {
                         int color = Color.parseColor(priorityColor);
                         imageViewSource.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                         imageViewSource.setColorFilter(color);
                         break;
                     }
-                    case "web": {
+                    case "Web": {
                         int color = Color.parseColor(priorityColor);
                         imageViewSource.setImageResource(R.drawable.web_design);
                         imageViewSource.setColorFilter(color);
                         break;
                     }
-                    case "agent": {
+                    case "Agent": {
                         int color = Color.parseColor(priorityColor);
                         imageViewSource.setImageResource(R.drawable.mail);
                         imageViewSource.setColorFilter(color);
                         break;
                     }
-                    case "email": {
+                    case "Email": {
                         int color = Color.parseColor(priorityColor);
                         imageViewSource.setImageResource(R.drawable.mail);
                         imageViewSource.setColorFilter(color);
                         break;
                     }
-                    case "facebook": {
+                    case "Facebook": {
                         int color = Color.parseColor(priorityColor);
                         imageViewSource.setImageResource(R.drawable.facebook);
                         imageViewSource.setColorFilter(color);
                         break;
                     }
-                    case "twitter": {
+                    case "Twitter": {
                         int color = Color.parseColor(priorityColor);
                         imageViewSource.setImageResource(R.drawable.twitter);
                         imageViewSource.setColorFilter(color);
                         break;
                     }
-                    case "call": {
+                    case "Call": {
                         int color = Color.parseColor(priorityColor);
                         imageViewSource.setImageResource(R.drawable.phone);
                         imageViewSource.setColorFilter(color);
