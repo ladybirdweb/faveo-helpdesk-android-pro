@@ -38,6 +38,7 @@ import co.helpdesk.faveo.pro.BuildConfig;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.SharedPreference;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
@@ -67,6 +68,7 @@ public class SplashActivity extends AppCompatActivity {
     ImageView imageViewFaveo;
     TextView textViewTag;
     Animation uptodown,downtoup;
+    SharedPreference sharedPreferenceObj;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -85,6 +87,7 @@ public class SplashActivity extends AppCompatActivity {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        sharedPreferenceObj = new SharedPreference(SplashActivity.this);
         setContentView(R.layout.activity_splash);
         Window window = SplashActivity.this.getWindow();
 
@@ -323,7 +326,11 @@ public class SplashActivity extends AppCompatActivity {
                     Prefs.putString("unassignedTickets", "999+");
                 else
                     Prefs.putString("unassignedTickets", unasigned + "");
-                loading.setText(R.string.done_loading);
+                if (sharedPreferenceObj.getApp_runFirst().equals("FIRST")) {
+                    loading.setText("Welcome to FAVEO");
+                }else{
+                    loading.setText("Welcome back "+Prefs.getString("PROFILE_NAME",""));
+                }
 
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);

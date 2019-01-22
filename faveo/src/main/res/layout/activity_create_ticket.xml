@@ -78,39 +78,27 @@
                     android:id="@+id/attachment"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_alignTop="@+id/imageViewBack"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="53dp"
-                    android:background="@drawable/ic_action_attach_file"
-                    android:textColor="#ffffff"
-                    android:textSize="12sp"
+                    android:layout_marginEnd="11dp"
+                    android:background="@drawable/attachment"
                     android:backgroundTint="@color/colorAccent"
-                    android:visibility="visible" />
-
-                <Button
-                    android:id="@+id/buttonSubmit"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="12dp"
-                    android:background="@drawable/ic_action_done"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
-                    android:backgroundTint="@color/colorAccent"/>
+                    android:visibility="visible" />
 
                 <ImageButton
                     android:id="@+id/imageRefresh"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_alignTop="@+id/imageViewBack"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="91dp"
+                    android:layout_marginEnd="47dp"
                     android:background="@drawable/ic_refresh_black_24dp"
-                    android:visibility="visible"
+                    android:backgroundTint="@color/colorAccent"
                     android:fillAfter="true"
                     android:fillEnabled="true"
-                    android:backgroundTint="@color/colorAccent"/>
+                    android:visibility="visible" />
 
 
                 <!--<ProgressBar-->
@@ -138,19 +126,6 @@
 
 
     <include layout="@layout/content_create_ticket" />
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:itemBackground="@color/white"
-        android:foreground="?attr/selectableItemBackground"
-        app:itemIconTint="@color/faveo"
-        android:visibility="gone"
-        app:itemTextColor="@color/faveo"
-        app:menu="@menu/navigation" />
 
 
 </android.support.design.widget.CoordinatorLayout>

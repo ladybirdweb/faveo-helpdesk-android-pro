@@ -41,8 +41,8 @@
                         android:textStyle="bold" />
 
                     <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
                         android:layout_alignTop="@+id/requester"
                         android:layout_toEndOf="@+id/requester"
                         android:fontFamily="@font/hintedlainesansregular"
@@ -173,8 +173,8 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_alignTop="@+id/subjectheader"
                     android:layout_toEndOf="@+id/subjectheader"
                     android:fontFamily="@font/hintedlainesansregular"
@@ -234,8 +234,8 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_alignTop="@+id/priorityheader"
                     android:layout_toEndOf="@+id/priorityheader"
                     android:fontFamily="@font/hintedlainesansregular"
@@ -377,8 +377,8 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_alignTop="@+id/helptopicheader"
                     android:layout_toEndOf="@+id/helptopicheader"
                     android:fontFamily="@font/hintedlainesansregular"
@@ -555,8 +555,8 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_alignTop="@+id/msgheader"
                     android:layout_toEndOf="@+id/msgheader"
                     android:fontFamily="@font/hintedlainesansregular"
@@ -606,34 +606,35 @@
 
                 </View>
 
-            <RelativeLayout
-                android:id="@+id/attachment_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="5dp"
-                android:visibility="gone"
-                android:background="@color/grey_200"
-                >
+                <RelativeLayout
+                    android:id="@+id/attachment_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_alignStart="@+id/editText_reply_message"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="0dp"
+                    android:background="@drawable/rectangle3"
+                    android:layout_marginBottom="35dp"
+                    android:backgroundTint="@color/faveo"
+                    android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/attachment_name"
-                    android:layout_width="170dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/grey_200"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:maxLines="1"
-                    android:text="@string/img_name"
-                    android:textAlignment="center"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/attachment_name"
+                        android:layout_width="170dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="7dp"
+                        android:text="@string/img_name"
+                        android:textAlignment="center"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp" />
 
 
-                <!--<TextView-->
+                    <!--<TextView-->
                     <!--android:id="@+id/attachment_size"-->
                     <!--android:layout_width="wrap_content"-->
                     <!--android:layout_height="wrap_content"-->
@@ -645,15 +646,30 @@
                     <!--android:text="@string/_300_kb"-->
                     <!--android:textSize="12sp" />-->
 
-                <ImageButton
-                    android:id="@+id/attachment_close"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/attachment_name"
-                    android:background="@color/grey_200"
-                    android:src="@drawable/ic_clear_black_18dp" />
-            </RelativeLayout>
+                    <ImageButton
+                        android:id="@+id/attachment_close"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="9dp"
+                        android:layout_toEndOf="@+id/attachment_name"
+                        android:background="@color/faveo"
+                        android:src="@drawable/ic_clear_black_18dp"
+                        android:tint="@color/colorAccent" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/buttonSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/rectangle3"
+                    android:textSize="12sp"
+                    android:text="@string/create_ticket"
+                    />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

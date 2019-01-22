@@ -161,6 +161,14 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/faveo"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
     <TextView
         android:layout_width="380dp"
         android:layout_height="50dp"

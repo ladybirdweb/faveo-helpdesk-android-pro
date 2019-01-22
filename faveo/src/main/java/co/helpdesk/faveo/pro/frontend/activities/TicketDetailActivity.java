@@ -27,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,6 +94,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
     TextView textViewreply;
     Toolbar toolbarBottom;
     ImageView imageViewReply,imageViewInternalNote;
+    RelativeLayout relativeLayoutToolbar;
+    int userId=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +113,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
 //        toolbarBottom=findViewById(R.id.toolbarbottom);
         imageViewSource=findViewById(R.id.imageView_default_profile);
         loaderImageView= (ImageView) findViewById(R.id.collaboratorview);
+
 //        textViewreply=findViewById(R.id.textViewReply);
         //imageViewReply=findViewById(R.id.imageviewreply);
 //        imageViewInternalNote=findViewById(R.id.internalNote);
@@ -131,6 +135,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 return false;
             }
         });
+
+
 //        imageViewReply.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -215,6 +221,15 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }).start();
             new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
         }
+
+        textviewAgentName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+                intent1.putExtra("CLIENT_ID",userId);
+                startActivity(intent1);
+            }
+        });
 
         //Log.d("cameFromNotification",cameFromNotification);
         ticketNumber = getIntent().getStringExtra("ticket_number");
@@ -888,6 +903,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 }
                 JSONObject jsonObject3=jsonObject2.getJSONObject("from");
                 String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                userId=jsonObject3.getInt("id");
                 if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
                     userName=jsonObject3.getString("user_name");
                     textviewAgentName.setText(userName);

@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent">
+    android:background="@color/colorAccent"
+    android:backgroundTint="@color/grey_200">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ticketList"

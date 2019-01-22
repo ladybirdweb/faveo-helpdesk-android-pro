@@ -1082,43 +1082,50 @@ public class ClosedTickets extends Fragment {
             }
 
             switch (ticketOverview.sourceTicket) {
-                case "Chat": {
+                case "Chat":
+                case "chat":{
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "Web": {
+                case "Web":
+                case "web":{
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.web_design);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "Agent": {
+                case "Agent":
+                case "agent":{
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "Email": {
+                case "Email":
+                case "email":{
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.mail);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "Facebook": {
+                case "Facebook":
+                case "facebook":{
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.facebook);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "Twitter": {
+                case "Twitter":
+                case "twitter":{
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.twitter);
                     ticketViewHolder.source.setColorFilter(color);
                     break;
                 }
-                case "Call": {
+                case "Call":
+                case "call":{
                     int color = Color.parseColor("#808080");
                     ticketViewHolder.source.setImageResource(R.drawable.phone);
                     ticketViewHolder.source.setColorFilter(color);
@@ -1227,6 +1234,7 @@ public class ClosedTickets extends Fragment {
             ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
+                    Prefs.putString("ticketstatus", ticketOverview.ticketStatus);
                     onListItemSelect(i);
                     length++;
                     Log.d("noofitems", "" + length);
@@ -1778,12 +1786,26 @@ public class ClosedTickets extends Fragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     status = Prefs.getString("ticketstatus", null);
+                    Log.d("status",status);
                     Data data=statusItems.get(i);
                     if (data.getName().equalsIgnoreCase(status)){
                         Toasty.warning(getActivity(), "Ticket is already in "+listView.getAdapter().getItem(i).toString()+" state", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     else{
+                        StringBuffer stringBuffer=new StringBuffer();
+                        String tickets = Prefs.getString("tickets", null);
+                        int pos = tickets.indexOf("[");
+                        int pos1 = tickets.lastIndexOf("]");
+                        String text1 = tickets.substring(pos + 1, pos1);
+                        String[] namesList = text1.split(",");
+                        for (String name : namesList) {
+                            stringBuffer.append(name + ",");
+                        }
+                        int pos2 = stringBuffer.toString().lastIndexOf(",");
+                        ticket = stringBuffer.toString().substring(0, pos2);
+
+                        Log.d("tickets", ticket);
                         id=data.getID();
                         new BottomDialog.Builder(getActivity())
                                 .setTitle(getString(R.string.changingStatus))

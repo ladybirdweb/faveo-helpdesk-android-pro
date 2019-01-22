@@ -8,7 +8,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
@@ -30,8 +30,8 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
             android:layout_alignTop="@+id/requesterheader"
             android:layout_toEndOf="@+id/requesterheader"
             android:fontFamily="@font/hintedlainesansregular"
@@ -96,8 +96,8 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
             android:layout_alignTop="@+id/firstnameheader"
             android:layout_toEndOf="@+id/firstnameheader"
             android:fontFamily="@font/hintedlainesansregular"
@@ -157,8 +157,8 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
             android:layout_alignTop="@+id/lastnameheader"
             android:layout_toEndOf="@+id/lastnameheader"
             android:fontFamily="@font/hintedlainesansregular"
@@ -284,6 +284,18 @@
         >
 
     </View>
+    <Button
+        android:id="@+id/buttonCreateUser"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/titlesave"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/rectangle3"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        android:text="create user"
+        />
 
 </LinearLayout>
     </ScrollView>

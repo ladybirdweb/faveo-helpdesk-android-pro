@@ -231,8 +231,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         setSupportActionBar(toolbar);
         rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         final ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
-        bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
         button= (Button) findViewById(R.id.attachment);
         msgEdittext.setOnTouchListener(new View.OnTouchListener() {

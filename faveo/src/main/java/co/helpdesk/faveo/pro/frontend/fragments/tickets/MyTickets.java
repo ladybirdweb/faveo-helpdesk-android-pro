@@ -1098,6 +1098,7 @@ public class MyTickets extends Fragment {
             ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
+                    Prefs.putString("ticketstatus", ticketOverview.ticketStatus);
                     onListItemSelect(i);
                     length++;
                     Log.d("noofitems", "" + length);
@@ -1654,6 +1655,19 @@ public class MyTickets extends Fragment {
                         return;
                     }
                     else{
+                        StringBuffer stringBuffer=new StringBuffer();
+                        String tickets = Prefs.getString("tickets", null);
+                        int pos = tickets.indexOf("[");
+                        int pos1 = tickets.lastIndexOf("]");
+                        String text1 = tickets.substring(pos + 1, pos1);
+                        String[] namesList = text1.split(",");
+                        for (String name : namesList) {
+                            stringBuffer.append(name + ",");
+                        }
+                        int pos2 = stringBuffer.toString().lastIndexOf(",");
+                        ticket = stringBuffer.toString().substring(0, pos2);
+
+                        Log.d("tickets", ticket);
                         id=data.getID();
                         new BottomDialog.Builder(getActivity())
                                 .setTitle(getString(R.string.changingStatus))

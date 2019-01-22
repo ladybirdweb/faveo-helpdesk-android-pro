@@ -69,7 +69,7 @@
     <string name="created_date">Created Date</string>
     <string name="assigneeName">Agent Name</string>
 
-    <string name="save">Save</string>
+    <string name="save">Save Changes</string>
     <string name="trash">Trash</string>
     <string name="logout">Logout</string>
     <string name="ticket_list">Ticket list</string>

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_200"
+    android:background="@color/colorAccent"
     tools:context=".frontend.activities.ClientDetailActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -217,7 +217,6 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
-        android:backgroundTint="@color/grey_200"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
