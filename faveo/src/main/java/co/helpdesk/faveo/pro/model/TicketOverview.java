@@ -25,7 +25,7 @@ public class TicketOverview {
     public String agentName;
     public String priorityName;
     private boolean isChecked;
-    //public String departmentname;
+    public String departmentname;
 
     public boolean getChecked() {
         return isChecked;
@@ -35,7 +35,7 @@ public class TicketOverview {
         isChecked = checked;
     }
 
-    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName,String priorityName) {
+    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName,String priorityName,String departmentname) {
         this.ticketID = ticketID;
         this.clientPicture = clientPicture;
         this.ticketNumber = ticketNumber;
@@ -54,16 +54,16 @@ public class TicketOverview {
         this.lastReply=lastReply;
         this.agentName=agentName;
         this.priorityName=priorityName;
-        //this.departmentname=departmentname;
+        this.departmentname=departmentname;
     }
 
-//    public String getDepartmentname() {
-//        return departmentname;
-//    }
-//
-//    public void setDepartmentname(String departmentname) {
-//        this.departmentname = departmentname;
-//    }
+    public String getDepartmentname() {
+        return departmentname;
+    }
+
+    public void setDepartmentname(String departmentname) {
+        this.departmentname = departmentname;
+    }
 
     public String getPriorityName() {
         return priorityName;

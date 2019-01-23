@@ -810,7 +810,7 @@ public class ClosedTickets extends Fragment {
         protected void onPostExecute(String result) {
             //progressDialog.dismiss();
             swipeRefresh.setRefreshing(false);
-            textView.setText(""+total+" tickets");
+            textView.setText(""+total+" Tickets");
 
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
@@ -1178,9 +1178,9 @@ public class ClosedTickets extends Fragment {
 
             }
 
-//            if (!ticketOverview.departmentname.equals("")){
-//                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
-//            }
+            if (!ticketOverview.departmentname.equals("")){
+                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+            }
 
 
             if (ticketOverview.clientPicture.equals("")){
@@ -1355,7 +1355,7 @@ public class ClosedTickets extends Fragment {
             TextView textViewduetoday;
             TextView textViewpriorityName;
             ImageButton imageButtonSelected;
-            //TextView textViewDepartment;
+            TextView textViewDepartment;
             TicketViewHolder(View v) {
                 super(v);
                 ticket = v.findViewById(R.id.ticket);
@@ -1377,7 +1377,7 @@ public class ClosedTickets extends Fragment {
                 //agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
                 textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
                 imageButtonSelected=v.findViewById(R.id.selectedTicket);
-                //textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
+                textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
 
             }
 

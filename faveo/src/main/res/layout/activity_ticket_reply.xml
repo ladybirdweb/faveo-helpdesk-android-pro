@@ -202,6 +202,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="0dp"
                     android:alpha=".3"
                     android:background="@color/grey_500"></View>
             </RelativeLayout>
@@ -258,6 +259,16 @@
                     android:tint="@color/colorAccent" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignEnd="@+id/button_send"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="42dp"
+                android:alpha=".3"
+                android:background="@color/grey_500">
+
+            </View>
             <Button
                 android:id="@+id/attachment"
                 android:layout_width="25dp"
@@ -277,7 +288,8 @@
                 android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/rectangle3"
                 android:backgroundTint="@color/faveo"
                 android:text="send"

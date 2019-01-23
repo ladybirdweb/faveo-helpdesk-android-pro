@@ -165,43 +165,50 @@ else{
         }
 
         switch (ticketOverview.sourceTicket) {
-            case "chat": {
+            case "Chat":
+            case "chat":{
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
-            case "web": {
+            case "Web":
+            case "web":{
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.source.setImageResource(R.drawable.web_design);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
-            case "agent": {
+            case "Agent":
+            case "agent":{
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.source.setImageResource(R.drawable.mail);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
-            case "email": {
+            case "Email":
+            case "email":{
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.source.setImageResource(R.drawable.mail);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
-            case "facebook": {
+            case "Facebook":
+            case "facebook":{
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.source.setImageResource(R.drawable.facebook);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
-            case "twitter": {
+            case "Twitter":
+            case "twitter":{
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.source.setImageResource(R.drawable.twitter);
                 ticketViewHolder.source.setColorFilter(color);
                 break;
             }
-            case "call": {
+            case "Call":
+            case "call":{
                 int color = Color.parseColor("#808080");
                 ticketViewHolder.source.setImageResource(R.drawable.phone);
                 ticketViewHolder.source.setColorFilter(color);

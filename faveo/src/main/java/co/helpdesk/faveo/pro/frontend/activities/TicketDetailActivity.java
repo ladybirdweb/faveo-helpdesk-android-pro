@@ -83,8 +83,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
     LoaderTextView textViewSubject;
     ArrayList<Data> statusItems;
     int id = 0;
-    FabSpeedDial fabSpeedDial;
-    View view;
+    //FabSpeedDial fabSpeedDial;
+//    View view;
     public boolean isFabOpen;
     public Menu menu;
     ImageView loaderImageView;
@@ -108,61 +108,68 @@ public class TicketDetailActivity extends AppCompatActivity implements
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(TicketDetailActivity.this,R.color.mainActivityTopBar));
-        view=findViewById(R.id.overlay);
-        fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
+        //view=findViewById(R.id.overlay);
+        //fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
 //        toolbarBottom=findViewById(R.id.toolbarbottom);
         imageViewSource=findViewById(R.id.imageView_default_profile);
         loaderImageView= (ImageView) findViewById(R.id.collaboratorview);
-
+        relativeLayoutToolbar=findViewById(R.id.toolbarmenucontainer);
+        textViewreply=relativeLayoutToolbar.findViewById(R.id.tapForReply);
+        imageViewReply=relativeLayoutToolbar.findViewById(R.id.replyImage);
+        imageViewInternalNote=relativeLayoutToolbar.findViewById(R.id.internalNote);
+//        relativeLayoutToolbar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d("clickedOnRelative","True");
+//            }
+//        });
 //        textViewreply=findViewById(R.id.textViewReply);
         //imageViewReply=findViewById(R.id.imageviewreply);
 //        imageViewInternalNote=findViewById(R.id.internalNote);
-        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+//        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+//            @Override
+//            public boolean onMenuItemSelected(MenuItem menuItem) {
+//               int id=menuItem.getItemId();
+//               if (id==R.id.fab_reply){
+//                   Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+//                   intent.putExtra("ticket_id", ticketID);
+//                   startActivity(intent);
+//               }
+//               else if (id==R.id.fab_internalnote){
+//                   Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+//                   intent.putExtra("ticket_id", ticketID);
+//                   startActivity(intent);
+//               }
+//                //TODO: Start some activity
+//                return false;
+//            }
+//        });
+        imageViewReply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemSelected(MenuItem menuItem) {
-               int id=menuItem.getItemId();
-               if (id==R.id.fab_reply){
-                   Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
-                   intent.putExtra("ticket_id", ticketID);
-                   startActivity(intent);
-               }
-               else if (id==R.id.fab_internalnote){
-                   Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
-                   intent.putExtra("ticket_id", ticketID);
-                   startActivity(intent);
-               }
-                //TODO: Start some activity
-                return false;
+            public void onClick(View view) {
+                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                intent.putExtra("ticket_id", ticketID);
+                startActivity(intent);
             }
         });
 
+        imageViewInternalNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+                intent.putExtra("ticket_id", ticketID);
+                startActivity(intent);
+            }
+        });
 
-//        imageViewReply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
-//                intent.putExtra("ticket_id", ticketID);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        imageViewInternalNote.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
-//                intent.putExtra("ticket_id", ticketID);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        textViewreply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
-//                intent.putExtra("ticket_id", ticketID);
-//                startActivity(intent);
-//            }
-//        });
+        textViewreply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                intent.putExtra("ticket_id", ticketID);
+                startActivity(intent);
+            }
+        });
 
         loaderImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -438,14 +445,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public void onClick(View view) {
         int id = view.getId();
         switch (id){
-            case R.id.fab_reply:
+            case R.id.replyImage:
 
-                animateFAB();
+                //animateFAB();
                 Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
                 intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
                 break;
-            case R.id.fab_internalnote:
+            case R.id.internalNote:
                 Intent intent1=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
                 intent1.putExtra("ticket_id", ticketID);
                 startActivity(intent1);
@@ -454,21 +461,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         }
     }
-    public void animateFAB(){
-
-        if(fabSpeedDial.isMenuOpen()){
-
-            view.setVisibility(View.VISIBLE);
-            isFabOpen = false;
-            Log.d("Raj", "close");
-
-        } else {
-            view.setVisibility(View.GONE);
-            isFabOpen = true;
-            Log.d("Raj","open");
-
-        }
-    }
+//    public void animateFAB(){
+//
+//        if(fabSpeedDial.isMenuOpen()){
+//
+//            view.setVisibility(View.VISIBLE);
+//            isFabOpen = false;
+//            Log.d("Raj", "close");
+//
+//        } else {
+//            view.setVisibility(View.GONE);
+//            isFabOpen = true;
+//            Log.d("Raj","open");
+//
+//        }
+//    }
 
     /**
      * Async task for changing the status of the ticket.
@@ -582,14 +589,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         public void onPageSelected(int position) {
             switch (position) {
                 case 0:
-                    fabSpeedDial.show();
+                    //fabSpeedDial.show();
                     break;
 
                 case 1:
-                    fabSpeedDial.hide();
+                    //fabSpeedDial.hide();
                     break;
                 default:
-                    fabSpeedDial.show();
+                    //fabSpeedDial.show();
                     break;
             }
         }

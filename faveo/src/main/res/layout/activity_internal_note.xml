@@ -125,25 +125,28 @@
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="16sp" />
 
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="2dp"-->
-            <!--android:layout_above="@+id/button_create"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_marginBottom="9dp"-->
-            <!--android:alpha=".3"-->
-            <!--android:background="@color/grey_500">-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/button_create"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="9dp"
+            android:alpha=".3"
+            android:background="@color/grey_500">
 
-        <!--</View>-->
+        </View>
 
         <Button
             android:id="@+id/button_create"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="end"
-            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="13dp"
             android:background="@drawable/rectangle3"
             android:backgroundTint="@color/faveo"
             android:text="send"

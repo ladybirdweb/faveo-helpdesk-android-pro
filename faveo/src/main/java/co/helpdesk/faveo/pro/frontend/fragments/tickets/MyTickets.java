@@ -658,7 +658,7 @@ public class MyTickets extends Fragment {
 
         protected void onPostExecute(String result) {
             swipeRefresh.setRefreshing(false);
-            textView.setText("" + total + " tickets");
+            textView.setText("" + total + " Tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
             try {
@@ -1043,9 +1043,9 @@ public class MyTickets extends Fragment {
                 }
 
             }
-//            if (!ticketOverview.departmentname.equals("")){
-//                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
-//            }
+            if (!ticketOverview.departmentname.equals("")){
+                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+            }
 
             if (ticketOverview.clientPicture.equals("")){
                 ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);

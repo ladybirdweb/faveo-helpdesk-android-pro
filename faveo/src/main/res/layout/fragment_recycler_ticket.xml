@@ -145,7 +145,7 @@
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_weight="6"
         android:clickable="true"
         android:padding="1dp"
         >
@@ -160,24 +160,6 @@
 
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_500"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        />
-
-    <TextView
-        android:layout_width="380dp"
-        android:layout_height="50dp"
-        android:text="Total Count"
-        android:fontFamily="@font/hintedlainesansregular"
-        android:id="@+id/totalcount"
-        android:textColor="@color/faveo"
-        android:gravity="center"
-        android:visibility="visible"/>
 
     <!--<RelativeLayout-->
     <!--android:id="@+id/sort_view"-->

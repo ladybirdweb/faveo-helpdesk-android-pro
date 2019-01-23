@@ -1264,7 +1264,7 @@ public class InboxTickets extends Fragment {
             Prefs.putString("filterwithsorting", "false");
             swipeRefresh.setRefreshing(false);
 
-            textView.setText("" + total + " tickets");
+            textView.setText("" + total + " Tickets");
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
             if (isAdded()) {
@@ -1852,9 +1852,9 @@ public class InboxTickets extends Fragment {
 
             }
 
-//            if (!ticketOverview.departmentname.equals("")){
-//                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
-//            }
+            if (!ticketOverview.departmentname.equals("")){
+                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+            }
 
 //            if (ticketOverview.ticketAttachments.equals("0")) {
 //                ticketViewHolder.attachementView.setVisibility(View.GONE);
@@ -2037,7 +2037,7 @@ public class InboxTickets extends Fragment {
             TextView textViewduetoday;
             TextView textViewpriorityName;
             ImageButton imageButtonSelected;
-            //TextView textViewDepartment;
+            TextView textViewDepartment;
             TicketViewHolder(View v) {
                 super(v);
                 ticket = v.findViewById(R.id.ticket);
@@ -2059,7 +2059,7 @@ public class InboxTickets extends Fragment {
                 //agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
                 textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
                 imageButtonSelected=v.findViewById(R.id.selectedTicket);
-                //textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
+                textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
 
             }
 
