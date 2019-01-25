@@ -126,75 +126,59 @@
             android:layout_marginRight="10dp"
             android:background="@color/grey_500"
             android:alpha=".3"></View>
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="7dp"
             android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/editText_reply_message"
-                android:layout_width="match_parent"
-                android:layout_height="290dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="62dp"
-                android:cursorVisible="true"
-                android:gravity="top"
-                android:imeOptions="actionDone"
-                android:inputType="textMultiLine"
-                android:isScrollContainer="true"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="always"
-                android:padding="9dp"
-                android:lineSpacingExtra="3dp"
-                android:paddingLeft="5dp"
-                android:paddingTop="16dp"
-                android:hint="Type your message here...."
-                android:background="@color/colorAccent"
-                android:paddingBottom="10dp"
-                android:scrollbarStyle="insideInset"
-                android:scrollbars="vertical"
-                android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="16sp" />
-
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="52dp"
                 android:gravity="right"
                 android:paddingTop="2dp"
                 android:orientation="horizontal">
 
-                <com.andexert.library.RippleView
-                    rv_centered="true"
+                <TextView
+                    android:id="@+id/addcc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end">
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/hintedlainesansregular"
+                    android:text="Add CC"
+                    android:textColor="@color/faveo"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/addcc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="Add CC"
-                        android:paddingTop="6dp"
-                        android:fontFamily="@font/hintedlainesansregular"
-                        android:textColor="@color/faveo"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:visibility="visible" />
+                <TextView
+                    android:id="@+id/showRecipients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/addcc"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="23dp"
+                    android:fontFamily="@font/hintedlainesansregular"
+                    android:text="Recipients"
+                    android:textColor="@color/faveo"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar"
-                        style="@android:style/Widget.ProgressBar.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/addcc"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:paddingTop="6dp"
-                        android:visibility="visible" />
-                </com.andexert.library.RippleView>
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/addcc"
+                    android:layout_alignTop="@+id/showRecipients"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="16dp"
+                    android:paddingTop="6dp"
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"
@@ -207,33 +191,65 @@
                     android:background="@color/grey_500"></View>
             </RelativeLayout>
 
+            <EditText
+                android:id="@+id/editText_reply_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorAccent"
+                android:cursorVisible="true"
+                android:gravity="top"
+                android:hint="Type your message here...."
+                android:imeOptions="actionDone"
+                android:inputType="textMultiLine"
+                android:isScrollContainer="true"
+                android:lineSpacingExtra="3dp"
+                android:lines="13"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="always"
+                android:padding="9dp"
+                android:paddingLeft="5dp"
+                android:scrollbars="vertical"
+                android:scrollHorizontally="false"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textSize="16sp" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_alignEnd="@+id/button_send"-->
+                <!--android:layout_marginTop="-5dp"-->
+                <!--android:layout_marginEnd="0dp"-->
+                <!--android:alpha=".3"-->
+                <!--android:background="@color/grey_500">-->
+
+            <!--</View>-->
             <RelativeLayout
                 android:id="@+id/attachment_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignStart="@+id/editText_reply_message"
+                android:layout_height="30dp"
+                android:layout_marginTop="2dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="3dp"
-                android:layout_marginBottom="50dp"
+                android:layout_gravity="end"
                 android:background="@drawable/shape"
-                android:backgroundTint="@color/faveo"
+                android:backgroundTint="@color/grey_500"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/attachment_name"
-                    android:layout_width="170dp"
+                    android:layout_width="70dp"
                     android:layout_height="20dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="0dp"
                     android:fontFamily="@font/hintedlainesansregular"
                     android:text="@string/img_name"
                     android:textAlignment="center"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
 
                 <!--<TextView-->
@@ -250,50 +266,46 @@
 
                 <ImageButton
                     android:id="@+id/attachment_close"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/attachment_name"
-                    android:background="@color/faveo"
+                    android:background="@color/grey_500"
                     android:src="@drawable/ic_clear_black_18dp"
                     android:tint="@color/colorAccent" />
             </RelativeLayout>
+                <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp">
+                <Button
+                    android:id="@+id/attachment"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="113dp"
+                    android:background="@drawable/attachment"
+                    android:backgroundTint="@color/faveo"
+                    android:gravity="bottom"
+                    android:textColor="#ffffff"
+                    android:visibility="visible" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignEnd="@+id/button_send"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="42dp"
-                android:alpha=".3"
-                android:background="@color/grey_500">
+                <Button
+                    android:id="@+id/button_send"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="3dp"
+                    android:background="@drawable/rectangle3"
+                    android:backgroundTint="@color/faveo"
 
-            </View>
-            <Button
-                android:id="@+id/attachment"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignTop="@+id/button_send"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="-1dp"
-                android:layout_marginEnd="314dp"
-                android:background="@drawable/attachment"
-                android:backgroundTint="@color/faveo"
-                android:textColor="#ffffff"
-                android:visibility="visible" />
+                    android:text="send"
+                    android:textColor="@color/white" />
 
-            <Button
-                android:id="@+id/button_send"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/rectangle3"
-                android:backgroundTint="@color/faveo"
-                android:text="send"
-                android:textColor="@color/white" />
-        </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
     </LinearLayout>
 </com.flipboard.bottomsheet.BottomSheetLayout>

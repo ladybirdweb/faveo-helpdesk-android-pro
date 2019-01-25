@@ -100,41 +100,41 @@
             android:alpha=".3">
 
         </View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editText_internal_note"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorAccent"
+        android:cursorVisible="true"
+        android:gravity="top"
+        android:hint="Type your message here...."
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
+        android:isScrollContainer="true"
+        android:lineSpacingExtra="3dp"
+        android:lines="14"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="always"
+        android:padding="9dp"
+        android:paddingLeft="5dp"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="false"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:textSize="16sp" />
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        >
-
-        <EditText
-            android:id="@+id/editText_internal_note"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:imeOptions="actionDone"
-            android:gravity="top"
-            android:overScrollMode="ifContentScrolls"
-            android:inputType="textMultiLine"
-            android:paddingTop="16dp"
-            android:paddingBottom="10dp"
-            android:isScrollContainer="true"
-            android:padding="14dp"
-            android:hint="Type your message here....."
-            android:background="@color/colorAccent"
-            android:nestedScrollingEnabled="true"
-            android:cursorVisible="true"
-            android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="16sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@+id/button_create"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="9dp"
-            android:alpha=".3"
-            android:background="@color/grey_500">
-
-        </View>
+        android:layout_height="0dp"
+        android:layout_weight="3">
 
         <Button
             android:id="@+id/button_create"
@@ -142,16 +142,13 @@
             android:layout_height="25dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="end"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginBottom="13dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/rectangle3"
             android:backgroundTint="@color/faveo"
             android:text="send"
             android:textColor="@color/white" />
+
+
     </RelativeLayout>
-
-
-    </LinearLayout>
+</LinearLayout>

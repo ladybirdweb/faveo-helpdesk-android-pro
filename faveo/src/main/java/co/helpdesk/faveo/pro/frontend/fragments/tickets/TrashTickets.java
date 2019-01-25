@@ -33,6 +33,8 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -771,12 +773,23 @@ public class TrashTickets extends Fragment {
             });
 
             ticketOverviewAdapter = new TicketOverviewAdapter(getContext(),ticketOverviewList);
+            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(ticketOverviewAdapter);
             if (ticketOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);
             } else empty_view.setVisibility(View.GONE);
 
         }
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
+
+        recyclerView.setLayoutAnimation(controller);
+        ticketOverviewAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
     /**
      * Async task for next page details.

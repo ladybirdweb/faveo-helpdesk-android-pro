@@ -26,7 +26,7 @@ public class TicketOverview {
     public String priorityName;
     private boolean isChecked;
     public String departmentname;
-
+    public String clientid;
     public boolean getChecked() {
         return isChecked;
     }
@@ -35,7 +35,7 @@ public class TicketOverview {
         isChecked = checked;
     }
 
-    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName,String priorityName,String departmentname) {
+    public TicketOverview(int ticketID, String clientPicture, String ticketNumber, String clientName, String ticketSubject, String ticketTime, String ticketPriorityColor, String ticketStatus, String ticketBubble, String ticketAttachments, String dueDate, String placeholder,String countcollaborator,String countthread,String sourceTicket,String lastReply,String agentName,String priorityName,String departmentname,String clientid) {
         this.ticketID = ticketID;
         this.clientPicture = clientPicture;
         this.ticketNumber = ticketNumber;
@@ -55,10 +55,19 @@ public class TicketOverview {
         this.agentName=agentName;
         this.priorityName=priorityName;
         this.departmentname=departmentname;
+        this.clientid=clientid;
     }
 
     public String getDepartmentname() {
         return departmentname;
+    }
+
+    public String getClientid() {
+        return clientid;
+    }
+
+    public void setClientid(String clientid) {
+        this.clientid = clientid;
     }
 
     public void setDepartmentname(String departmentname) {

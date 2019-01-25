@@ -80,13 +80,11 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="46dp"
         android:alpha=".7"
-        android:background="@drawable/rectangle"
-        android:backgroundTint="@color/grey_500"
+        android:backgroundTint="@color/faveo"
         android:fontFamily="monospace"
-        android:gravity="center"
         android:maxLines="1"
         android:text="closed"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/black"
         android:textSize="10sp" />
 
 </RelativeLayout>

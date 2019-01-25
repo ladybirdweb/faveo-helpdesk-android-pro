@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="List of collaborator of this ticket"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:gravity="center|left"
+        android:fontFamily="@font/hintedlainesansregular"
+        android:paddingLeft="7dp"
+        android:background="@color/grey_200"/>
+
+    <ProgressBar
+            android:id="@+id/progressbarExisting"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/faveo"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+        android:layout_gravity="center"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewExistingProblem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

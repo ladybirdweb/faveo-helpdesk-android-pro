@@ -88,14 +88,12 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public boolean isFabOpen;
     public Menu menu;
     ImageView loaderImageView;
-    String clientId;
     String ticketSubject,ticketNumberMain,userName,ticketStatus,ticketPriorityColor;
     private LoaderTextView textViewDepartment;
     TextView textViewreply;
-    Toolbar toolbarBottom;
     ImageView imageViewReply,imageViewInternalNote;
     RelativeLayout relativeLayoutToolbar;
-    int userId=0;
+    String userId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,7 +213,6 @@ public class TicketDetailActivity extends AppCompatActivity implements
         textViewStatus.setText(ticketStatus);
         textViewTitle.setText(ticketSubject);
         textViewSubject.setText(ticketNumberMain);
-        clientId=Prefs.getString("clientId",null);
         Prefs.putString("TICKETid",ticketID);
         Prefs.putString("ticketId",ticketID);
         if (InternetReceiver.isConnected()){
@@ -233,7 +230,9 @@ public class TicketDetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
-                intent1.putExtra("CLIENT_ID",userId);
+                Prefs.putString("cameFromNotification","false");
+                Log.d("userId",""+userId);
+                intent1.putExtra("CLIENT_ID","3");
                 startActivity(intent1);
             }
         });
@@ -910,7 +909,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 }
                 JSONObject jsonObject3=jsonObject2.getJSONObject("from");
                 String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
-                userId=jsonObject3.getInt("id");
+                userId=jsonObject3.getString("id");
+
                 if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
                     userName=jsonObject3.getString("user_name");
                     textviewAgentName.setText(userName);

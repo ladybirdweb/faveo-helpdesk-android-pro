@@ -42,6 +42,8 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -1313,6 +1315,7 @@ public class InboxTickets extends Fragment {
             });
 
             ticketOverviewAdapter = new TicketOverviewAdapter(getContext(), ticketOverviewList);
+            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(ticketOverviewAdapter);
 
             if (ticketOverviewAdapter.getItemCount() == 0) {
@@ -1320,7 +1323,15 @@ public class InboxTickets extends Fragment {
             } else empty_view.setVisibility(View.GONE);
         }
     }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
 
+        recyclerView.setLayoutAnimation(controller);
+        ticketOverviewAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
+    }
     /**
      * Fetch the nextpage tickets by next_pageUrl.
      */
@@ -1900,6 +1911,8 @@ public class InboxTickets extends Fragment {
                         Prefs.putString("cameFromNotification", "none");
                         Prefs.putString("ticketThread", "");
                         intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+                        intent.putExtra("CLIENT_ID", ticketOverview.clientid);
+                        Log.d("clientId",ticketOverview.clientid);
                         Prefs.putString("TICKETid", ticketOverview.ticketID + "");
                         Prefs.putString("ticketId", ticketOverview.ticketID + "");
                         Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
