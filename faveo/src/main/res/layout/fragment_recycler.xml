@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:id="@+id/toolbarview"
         android:visibility="gone"
@@ -68,7 +68,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="45dp"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppThemeOverlay.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways|snap"
@@ -77,7 +77,7 @@
             android:layout_weight="1">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="45dp">
 
                 <TextView
                     android:id="@+id/toolbartextview"
@@ -85,8 +85,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="249dp"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="238dp"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:gravity="center_vertical"
                     android:text="@string/sort_by"
                     android:textColor="#808080"

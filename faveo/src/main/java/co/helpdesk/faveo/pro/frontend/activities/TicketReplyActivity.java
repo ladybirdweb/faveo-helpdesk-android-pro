@@ -911,9 +911,7 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                     Toasty.success(TicketReplyActivity.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
                     onResume();
                     myBottomSheetDialog.cancel();
-
-
-                }
+                    }
 
             } catch (JSONException |NullPointerException e) {
                 e.printStackTrace();

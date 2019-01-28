@@ -1907,6 +1907,16 @@ public class InboxTickets extends Fragment {
                         onListItemSelect(i);
                     }
                     else {
+
+                        if (ticketViewHolder.textViewduetoday.getVisibility()==View.VISIBLE){
+
+                        }
+                        else if (ticketViewHolder.textViewOverdue.getVisibility()==View.VISIBLE){
+
+                        }
+                        else{
+
+                        }
                         Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
                         Prefs.putString("cameFromNotification", "none");
                         Prefs.putString("ticketThread", "");

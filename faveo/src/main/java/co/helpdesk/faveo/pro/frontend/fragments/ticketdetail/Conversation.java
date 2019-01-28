@@ -17,29 +17,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.helpdesk.faveo.pro.CircleTransform;
+import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.activities.InternalNoteActivity;
+import co.helpdesk.faveo.pro.frontend.activities.ShowingAttachment;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketReplyActivity;
-import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
+//import co.helpdesk.faveo.pro.frontend.adapters.TicketThreadAdapter;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.TicketThread;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
@@ -76,9 +85,6 @@ public class Conversation extends Fragment {
     StringBuilder stringBuilderFile;
     String name;
     //FabSpeedDial fab;
-    ImageView imageViewReply,imageViewInternalNote;
-    RelativeLayout relativeLayoutToolbar;
-    TextView textViewreply;
     Toolbar toolbarTicket;
     public String mParam1;
     public String mParam2;
@@ -402,135 +408,6 @@ public class Conversation extends Fragment {
 
             task = new FetchTicketThreads(getActivity(), ticketID);
             task.execute();
-//            if (ticketThreadList.size() != 0) {
-//                ticketThreadList.clear();
-//                ticketThreadAdapter.notifyDataSetChanged();
-//                progressDialog=new ProgressDialog(getActivity());
-//                progressDialog.setMessage(getString(R.string.pleasewait));
-//                swipeRefresh.setRefreshing(true);
-//                noInternet_view.setVisibility(View.GONE);
-//                task = new FetchTicketThreads(getActivity(), Prefs.getString("TICKETid", null));
-//                task.execute();
-////                if (Prefs.getString("ticketThread", null).equals("")) {
-////                    noInternet_view.setVisibility(View.GONE);
-////                    task = new FetchTicketThreads(getActivity(), Prefs.getString("TICKETid", null));
-////                    task.execute();
-////                }
-////                else {
-////                    try {
-////                        swipeRefresh.setRefreshing(false);
-////                    } catch (NullPointerException e) {
-////                        e.printStackTrace();
-////                    }
-////                        ticketThreadList.clear();
-////                        ticketThreadAdapter.notifyDataSetChanged();
-////                        String jsonObject2 = Prefs.getString("ticketThread", null);
-////                        textView.setVisibility(View.GONE);
-////                        Log.d("ThreadConversation", jsonObject2);
-////                        JSONObject jsonObject = null;
-////                        try {
-////                            jsonObject = new JSONObject(jsonObject2);
-////                        } catch (JSONException e) {
-////                            e.printStackTrace();
-////                        }
-////                        JSONObject jsonObject1 = null;
-////                        try {
-////                            jsonObject1 = jsonObject.getJSONObject("data");
-////                        } catch (JSONException e) {
-////                            e.printStackTrace();
-////                        }
-////                        JSONArray jsonArray = null;
-////                        try {
-////                            jsonArray = jsonObject1.getJSONArray("threads");
-////                        } catch (JSONException e) {
-////                            e.printStackTrace();
-////                        }
-////                        for (int i = 0; i < jsonArray.length(); i++) {
-////                            TicketThread ticketThread = null;
-////                            try {
-////                                String clientPicture = null;
-////                                try {
-////                                    clientPicture = jsonArray.getJSONObject(i).getJSONObject("user").getString("profile_pic");
-////                                } catch (Exception e) {
-////                                    e.printStackTrace();
-////                                }
-/////*                        String clientName = jsonArray.getJSONObject(i).getString("poster");
-////                        if (clientName.equals("null") || clientName.equals(""))
-////                            clientName = "NOTE";*/
-////                                String firstName = jsonArray.getJSONObject(i).getJSONObject("user").getString("first_name");
-////                                String userName = jsonArray.getJSONObject(i).getJSONObject("user").getString("user_name");
-////                                String lastName = jsonArray.getJSONObject(i).getJSONObject("user").getString("last_name");
-////                                JSONArray jsonArray1 = jsonArray.getJSONObject(i).getJSONArray("attach");
-////                                stringBuilderName = new StringBuilder();
-////                                stringBuilderFile = new StringBuilder();
-////                                if (jsonArray1.length() == 0) {
-////                                    Prefs.putString("imageBase64", "no attachment");
-////                                    Log.d("FileBase64", "no attachment");
-////                                    name = "";
-////                                } else {
-////                                    for (int j = 0; j < jsonArray1.length(); j++) {
-////                                        JSONObject jsonObject5 = jsonArray1.getJSONObject(j);
-////                                        file = jsonObject5.getString("file");
-////                                        name = jsonObject5.getString("name");
-////                                        //stringBuilderFile=new StringBuilder(file);
-////                                        stringBuilderName.append(name + ",");
-////                                        stringBuilderFile.append(file + ",");
-////                                        //stringBuilderFile.append(file+",");
-////                                        type = jsonObject5.getString("type");
-////                                    }
-////                                    //Log.d("FileBase64", file);
-////                                    name = stringBuilderName.toString();
-////                                    file = stringBuilderFile.toString();
-////                                    Log.d("MultipleFileName", stringBuilderName.toString());
-////                                    noOfAttachment = "" + jsonArray1.length();
-////                                    Log.d("Total Attachments", "" + jsonArray1.length());
-////                                }
-////
-////                                String clientName = firstName + " " + lastName;
-////                                String f = "", l = "";
-////                                if (firstName.trim().length() != 0) {
-////                                    f = firstName.substring(0, 1);
-////                                }
-////                                if (lastName.trim().length() != 0) {
-////                                    l = lastName.substring(0, 1);
-////                                }
-//////                        if ((clientName.equals("null null") || clientName.equals(""))&&userName.equals("")){
-//////                            clientName="system";
-//////                        }else
-////                                if (firstName.equals("null") && lastName.equals("null") && userName.equals("null")) {
-////                                    clientName = "System Generated";
-////                                } else if (clientName.equals("") && userName.equals("null") && userName.equals("null")) {
-////                                    clientName = "System Generated";
-////                                } else if ((firstName.equals("null")) && (lastName.equals("null")) && (userName != null)) {
-////                                    clientName = userName;
-////                                } else if (firstName.equals("") && (lastName.equals("")) && (userName != null)) {
-////                                    clientName = userName;
-////                                } else if (firstName != null || lastName != null) {
-////                                    clientName = firstName + " " + lastName;
-////                                }
-////                                String messageTime = jsonArray.getJSONObject(i).getString("created_at");
-////                                String messageTitle = jsonArray.getJSONObject(i).getString("title");
-////                                String message = jsonArray.getJSONObject(i).getString("body");
-////                                Log.d("body:", message);
-////                                //String isReply = jsonArray.getJSONObject(i).getString("is_internal").equals("0") ? "false" : "true";
-////                                String isReply = "0";
-////                                ticketThread = new TicketThread(clientPicture, clientName, messageTime, messageTitle, message, isReply, f + l, name, file, type, noOfAttachment);
-////                            } catch (JSONException e) {
-////                                e.printStackTrace();
-////                            }
-////                            if (ticketThread != null)
-////                                ticketThreadList.add(ticketThread);
-////                        }
-////                    }
-////                    recyclerView.setHasFixedSize(false);
-////                    final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-////                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-////                    recyclerView.setLayoutManager(linearLayoutManager);
-////
-////                    //Collections.reverse(ticketThreadList);
-////                    ticketThreadAdapter = new TicketThreadAdapter(getContext(), ticketThreadList);
-////                    recyclerView.setAdapter(ticketThreadAdapter);
-//                }
 
         } else {
             recyclerView.setVisibility(View.INVISIBLE);
@@ -539,47 +416,239 @@ public class Conversation extends Fragment {
             noInternet_view.setVisibility(View.VISIBLE);
         }
     }
-
-//    @Override
-//    public void onPause() {
-//        if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
-//            task.cancel(true);
-//            Log.d("Async Detail", "Cancelled");
-//        }
-//        super.onPause();
-//    }
-
-
-
     @Override
     public void onStart() {
         Log.d("calledOnStart", "true");
         super.onStart();
-//            noInternet_view.setVisibility(View.GONE);
-        // swipeRefresh.setRefreshing(true);
-        //Log.d("TICKETid",Prefs.getString("TICKETid", null));
-        //refresh();
-//            task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
-//            task.execute();
+    }
+    public class TicketThreadAdapter extends RecyclerView.Adapter<TicketThreadAdapter.TicketViewHolder> {
+        private List<TicketThread> ticketThreadList;
+        Context context;
+
+
+        public TicketThreadAdapter(Context context,List<TicketThread> ticketThreadList) {
+            this.ticketThreadList = ticketThreadList;
+            this.context=context;
+        }
+
+        @Override
+        public int getItemCount() {
+            return ticketThreadList.size();
+        }
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+        @Override
+        public void onBindViewHolder(final TicketViewHolder ticketViewHolder, final int i) {
+            final TicketThread ticketThread = ticketThreadList.get(i);
+            String letter="U";
+            Log.d("customerUname",ticketThread.clientName);
+            try {
+                if (!ticketThread.clientName.equals("")) {
+                    if (Character.isUpperCase(ticketThread.clientName.charAt(0))){
+                        letter = String.valueOf(ticketThread.clientName.charAt(0));
+                    }
+                    else{
+                        letter = String.valueOf(ticketThread.clientName.charAt(0)).toUpperCase();
+                    }
+
+                }
+//                else if (ticketOverview.clientName.equals("null")){
+//                    letter="U";
+//                }
+                else{
+                    ticketViewHolder.textViewClientName.setVisibility(View.GONE);
+                }
+            }catch (StringIndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
+            //String letter = String.valueOf(ticketThread.clientName.charAt(0)).toUpperCase();
+            ticketViewHolder.textViewClientName.setText(ticketThread.clientName);
+            ticketViewHolder.textViewMessageTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
+            ticketViewHolder.textViewTicketCreatedTime.setReferenceTime(Helper.relativeTime(ticketThread.messageTime));
+            String message=ticketThread.message.replaceAll("\n","");
+            String message1=message.replaceAll("\t","");
+            String message2=message1.replaceAll("&nbsp;"," ");
+            Log.d("without",message1);
+//        Document doc = Jsoup.parse(message1);
+//        Elements elements = doc.select("body").first().children();
+////Elements elements = doc.select("p");//or only `<p>` elements
+//        for (Element link : elements) {
+//            builder.append(link.text()).append("");
+//        }
+            ticketViewHolder.textViewShowingSome.setText(Jsoup.parse(message1).text());
+            //ticketViewHolder.textViewShowingSome.setText(message1);
+            ticketViewHolder.webView.loadDataWithBaseURL(null,message2.replaceAll("\\n", "<br/>"), "text/html", "UTF-8", null);
+            if (ticketThread.getClientPicture().contains("jpg")||ticketThread.getClientPicture().contains("png")||ticketThread.getClientPicture().contains("jpeg")){
+                Picasso.with(context).load(ticketThread.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
+            }
+
+            else if (!ticketThread.getClientPicture().contains("jpg")||!ticketThread.getClientPicture().contains("png")||!ticketThread.getClientPicture().contains("jpeg")){
+                ColorGenerator generator = ColorGenerator.MATERIAL;
+                TextDrawable drawable = TextDrawable.builder()
+                        .buildRound(letter,generator.getRandomColor());
+                //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+            }
+            else{
+                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+            }
+
+            if (ticketThread.getName().equals("")){
+                ticketViewHolder.fileIcon.setVisibility(View.GONE);
+                //ticketViewHolder.view.setVisibility(View.GONE);
+            }
+            else{
+                ticketViewHolder.fileIcon.setVisibility(View.VISIBLE);
+                //ticketViewHolder.view.setVisibility(View.VISIBLE);
+                //ticketViewHolder.textView.setText("Attachment "+"("+ticketThread.getNoOfAttachments()+")");
+
+            }
+
+
+            ticketViewHolder.fileIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(view.getContext(), ShowingAttachment.class);
+                    Prefs.putString("fileName",ticketThread.getName());
+                    Prefs.putString("file",ticketThread.getFile());
+                    Prefs.putString("multipleName",ticketThread.getName());
+                    Prefs.putString("multipleFile",ticketThread.getFile());
+                    Log.d("MultipleFileNameFrom",ticketThread.getName());
+                    view.getContext().startActivity(intent);
+
+                }
+            });
+
+//        if (i==ticketThreadList.size()-1){
+//            ticketViewHolder.reportAndReply.setText("reported ");
+//        }
+//        else{
+//            ticketViewHolder.reportAndReply.setText("updated ");
+//        }
+
+            if (i==0){
+                for (int j=0;j<ticketThreadList.size()-1;j++){
+                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+                    //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+                    //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+                    //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+                }
+            }
+            else{
+                for (int j=0;j<ticketThreadList.size()-1;j++){
+                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+                    //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+                    //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+                    //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            ticketViewHolder.replyIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(view.getContext(),TicketReplyActivity.class);
+                    intent.putExtra("ticket_id", ticketThread.ticketId);
+                    view.getContext().startActivity(intent);
+                }
+            });
+
+            ticketViewHolder.thread.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (ticketViewHolder.relativeLayoutWebView.getVisibility()==View.VISIBLE){
+                        ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
+                        ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+                        ticketViewHolder.webView.setVisibility(View.GONE);
+
+                    }
+                    else{
+                        ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+                        ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+                        ticketViewHolder.webView.setVisibility(View.VISIBLE);
+                    }
+//                if (ticketViewHolder.linearLayout.getVisibility() == View.VISIBLE) {
+//                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.linearLayout.setVisibility(View.GONE);
+//                    ticketViewHolder.reportAndReply.setVisibility(View.GONE);
+//                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
+//                    ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
+//                } else {
+//                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+//                    ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
+//                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+//                    //ticketViewHolder.webView.setVisibility(View.VISIBLE);
+//                }
+                }
+            });
+
+
+
+
+
+//        if (!ticketThread.getIsReply().equals("true"))
+//            ticketViewHolder.textViewType.setText("");
+
+        }
+
+
+        @Override
+        public TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.card_conversation, viewGroup, false);
+            return new TicketViewHolder(itemView);
+        }
+
+        class TicketViewHolder extends RecyclerView.ViewHolder {
+
+            RelativeLayout thread;
+            TextView textViewShowingSome;
+            ImageView roundedImageViewProfilePic,fileIcon,replyIcon;
+            TextView textViewClientName;
+            RelativeTimeTextView textViewMessageTime;
+            RelativeTimeTextView textViewTicketCreatedTime;
+            TextView textViewMessageTitle;
+            TextView textViewType;
+            WebView webView;
+            RelativeLayout relativeLayoutWebView;
+            TextView reportAndReply;
+            LinearLayout linearLayout;
+            TicketViewHolder(View v) {
+                super(v);
+                thread = (RelativeLayout) v.findViewById(R.id.thread);
+                //view=v.findViewById(R.id.attachmentSeparation);
+                roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
+                textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
+                textViewMessageTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
+                textViewTicketCreatedTime= (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_related);
+                //textViewMessageTitle = (TextView) v.findViewById(R.id.textView_client_message_title);
+                fileIcon=v.findViewById(R.id.filethread);
+                textViewType = (TextView) v.findViewById(R.id.textView_type);
+                webView = (WebView) v.findViewById(R.id.webView);
+                textViewShowingSome= (TextView) v.findViewById(R.id.showingSome);
+                reportAndReply= (TextView) v.findViewById(R.id.reported);
+                linearLayout= (LinearLayout) v.findViewById(R.id.linearWebView);
+                relativeLayoutWebView=v.findViewById(R.id.showingWebView);
+                replyIcon=v.findViewById(R.id.imageviewreply);
+
+            }
+
+        }
+
     }
 
-//    @Override
-//    public void onResume() {
-//        Log.d("calledOnResume", "true");
-//        final Intent intent = getActivity().getIntent();
-//        ticketID=intent.getStringExtra("ticket_id");
-//        Prefs.putString("TICKETid",ticketID);
-//        Prefs.putString("ticketId",ticketID);
-//        Log.d("ticketId",ticketID);
-//        refresh();
-//        super.onResume();
-//    }
-//            noInternet_view.setVisibility(View.GONE);
-        // swipeRefresh.setRefreshing(true);
-        //Log.d("TICKETid",Prefs.getString("TICKETid", null));
-        //refresh();
-//            task = new FetchTicketThreads(getActivity(),Prefs.getString("TICKETid", null));
-//            task.execute();
     }
 
 
