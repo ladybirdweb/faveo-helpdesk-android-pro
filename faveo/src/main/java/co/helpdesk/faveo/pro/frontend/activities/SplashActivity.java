@@ -326,6 +326,10 @@ public class SplashActivity extends AppCompatActivity {
                     Prefs.putString("unassignedTickets", "999+");
                 else
                     Prefs.putString("unassignedTickets", unasigned + "");
+
+
+
+
                 if (sharedPreferenceObj.getApp_runFirst().equals("FIRST")) {
                     loading.setText("Welcome to FAVEO");
                 }else{

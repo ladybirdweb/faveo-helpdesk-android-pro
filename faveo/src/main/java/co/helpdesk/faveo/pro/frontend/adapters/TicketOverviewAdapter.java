@@ -140,10 +140,9 @@ public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAd
             ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
         }
 
-
-//        else if (ticketOverview.ticketPriorityColor.equals("null")){
-//            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-//        }
+        if (!ticketOverview.departmentname.equals("")){
+            ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+        }
         if (!ticketOverview.ticketTime.equals("null")) {
             ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
         }
@@ -473,6 +472,7 @@ else{
         public TextView agentAssigned;
         public TextView textViewduetoday;
         TextView textViewpriorityName;
+        TextView textViewDepartment;
         TicketViewHolder(View v) {
             super(v);
             ticket = v.findViewById(R.id.ticket);
@@ -493,7 +493,7 @@ else{
             agentAssigned= (TextView) v.findViewById(R.id.agentassigned);
             //agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
             textViewduetoday= (TextView) v.findViewById(R.id.duetoday);
-
+            textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
 
         }
 

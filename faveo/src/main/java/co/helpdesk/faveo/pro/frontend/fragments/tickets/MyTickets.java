@@ -943,7 +943,7 @@ public class MyTickets extends Fragment {
             if (ticketOverview.ticketPriorityColor.equals("null")) {
                 ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
                 ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor("#3da6d7"));
-            } else if (ticketOverview.ticketPriorityColor != null) {
+            } else {
                 //ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
                 ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
             }

@@ -347,7 +347,7 @@
             android:layout_height="20dp"
             android:layout_alignStart="@+id/textView_ticket_number"
             android:layout_alignTop="@+id/textView_client_name"
-            android:src="@drawable/ic_attach_file_black_18dp"
+            android:src="@drawable/emailenvelope"
             android:visibility="visible" />
 
         <ImageView

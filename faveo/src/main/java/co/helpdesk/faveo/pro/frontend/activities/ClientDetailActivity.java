@@ -125,6 +125,8 @@ public class ClientDetailActivity extends AppCompatActivity implements
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
+
+
         imageViewBack= (ImageView) findViewById(R.id.imageViewBackClient);
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -226,16 +226,16 @@ public class TicketDetailActivity extends AppCompatActivity implements
             new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
         }
 
-        textviewAgentName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
-                Prefs.putString("cameFromNotification","false");
-                Log.d("userId",""+userId);
-                intent1.putExtra("CLIENT_ID","3");
-                startActivity(intent1);
-            }
-        });
+//        textviewAgentName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+//                Prefs.putString("cameFromNotification","false");
+//                Log.d("userId",""+userId);
+//                intent1.putExtra("CLIENT_ID","3");
+//                startActivity(intent1);
+//            }
+//        });
 
         //Log.d("cameFromNotification",cameFromNotification);
         ticketNumber = getIntent().getStringExtra("ticket_number");
