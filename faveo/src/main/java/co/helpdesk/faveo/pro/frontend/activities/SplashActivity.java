@@ -331,8 +331,10 @@ public class SplashActivity extends AppCompatActivity {
 
 
                 if (sharedPreferenceObj.getApp_runFirst().equals("FIRST")) {
+                    loading.setVisibility(View.VISIBLE);
                     loading.setText("Welcome to FAVEO");
                 }else{
+                    loading.setVisibility(View.VISIBLE);
                     loading.setText("Welcome back "+Prefs.getString("PROFILE_NAME",""));
                 }
 

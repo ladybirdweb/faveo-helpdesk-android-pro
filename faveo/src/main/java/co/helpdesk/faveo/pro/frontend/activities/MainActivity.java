@@ -1,5 +1,8 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
+import android.annotation.TargetApi;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,11 +11,14 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -93,9 +99,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     Context context;
     FloatingActionButton floatingActionButton;
     SharedPreference sharedPreferenceObj;
+    @TargetApi(Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+
+
+//        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, "1")
+//                .setContentTitle("Test Title")
+//                .setContentText("Test Message")
+//                .setSmallIcon(R.mipmap.ic_launcher);
+//        notificationManager = getSystemService(NotificationManager.class);
+//        notificationManager.notify(1, notification.build());
+
         Fabric.with(this, new Crashlytics());
         overridePendingTransition(0, 0);
         sharedPreferenceObj = new SharedPreference(MainActivity.this);
@@ -177,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                                         .transparentTarget(true)
                                         .textColor(android.R.color.white).cancelable(false).id(2),                 // Specify the target radius (in dp)
 
-                        TapTarget.forToolbarMenuItem(mToolbar, R.id.actionsearch, "This is a search icon from here you will be able to search tickets and users in FAVEO......")
+                        TapTarget.forToolbarMenuItem(mToolbar, R.id.actionsearch, "This is a search icon from here you will be able to search tickets and users in FAVEO.")
                                 .dimColor(android.R.color.black)
                                 .outerCircleColor(R.color.faveo)
                                 .targetCircleColor(android.R.color.white)
@@ -185,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                                 .textTypeface(typeface)
                                 .textColor(android.R.color.white)
                                 .id(3).cancelable(false),
-                        TapTarget.forToolbarMenuItem(mToolbar, R.id.action_noti, "This is a notification icon you will get all the latest updates of your tickets from here.....")
+                        TapTarget.forToolbarMenuItem(mToolbar, R.id.action_noti, "This is a notification icon you will get all the latest updates of your tickets from here.")
                                 .dimColor(android.R.color.black)
                                 .outerCircleColor(R.color.faveo)
                                 .textTypeface(typeface)
@@ -200,8 +219,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     @Override
                     public void onSequenceFinish() {
                         new BottomDialog.Builder(MainActivity.this)
+
                                 .setContent(R.string.intro)
                                 .setPositiveText("ok")
+                                .setPositiveBackgroundColor(R.color.faveo)
+                                .setPositiveTextColor(R.color.colorAccent)
                                 .setCancelable(false)
                                 .setPositiveBackgroundColorResource(R.color.white)
                                 //.setPositiveBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary)
@@ -245,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             // That's mean First Time Launch
             // After your Work , SET Status NO
             TapTargetView.showFor(this,                 // `this` is an Activity
-                    TapTarget.forView(findViewById(R.id.fab_main), "This is the FAB from here you will get the option to filter the tickets in FAVEO based upon agent name,department,source,priority and many more....... ").id(1)
+                    TapTarget.forView(findViewById(R.id.fab_main), "This is the FAB from here you will get the option to filter the tickets in FAVEO based upon agent name,department,source,priority and many more.").id(1)
                             .dimColor(android.R.color.black)
                             .outerCircleColor(R.color.faveo)
                             .textTypeface(typeface)

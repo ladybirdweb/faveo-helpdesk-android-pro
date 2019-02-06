@@ -1,8 +1,10 @@
 package co.helpdesk.faveo.pro.frontend.services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,7 +16,10 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -31,6 +36,7 @@ import java.net.URL;
 
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.frontend.activities.ClientDetailActivity;
+import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 
 /**
@@ -41,7 +47,12 @@ import co.helpdesk.faveo.pro.frontend.activities.TicketDetailActivity;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
     String by;
+    private NotificationChannel mChannel;
+    NotificationManager notifManager;
+    Bitmap bitmap1;
+    int CHANNEL_ID=0;
     Context context;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -61,30 +72,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String pic = "";
         int client_id = 0;
         String clientname = "";
-        if (by.equals("System")){
-              clientname="System";
-              pic=getURLForResource(R.mipmap.ic_launcher);
-        }
-        else{
-            String requester = remoteMessage.getData().get("requester");
+
+        try {
+            if (by.equals("System")) {
+                clientname = "System";
+                pic = getURLForResource(R.mipmap.ic_launcher);
+            } else {
+                String requester = remoteMessage.getData().get("requester");
 //        Log.d("Requester", requester);
 
-            try {
-                JSONObject jsonObj = new JSONObject(requester);
-                pic = jsonObj.getString("profile_pic");
-                client_id = jsonObj.getInt("id");
-                String firstName = jsonObj.getString("first_name");
-                String lastName = jsonObj.getString("last_name");
-                String userName = jsonObj.getString("user_name");
-                if (firstName == null || firstName.equals(""))
-                    clientname = userName;
-                else
-                    clientname = firstName + " " + lastName;
-                Log.d("Profile_Pic", pic);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                try {
+                    JSONObject jsonObj = new JSONObject(requester);
+                    pic = jsonObj.getString("profile_pic");
+                    client_id = jsonObj.getInt("id");
+                    String firstName = jsonObj.getString("first_name");
+                    String lastName = jsonObj.getString("last_name");
+                    String userName = jsonObj.getString("user_name");
+                    if (firstName == null || firstName.equals(""))
+                        clientname = userName;
+                    else
+                        clientname = firstName + " " + lastName;
+                    Log.d("Profile_Pic", pic);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
         //Calling method to generate notification
 
@@ -94,8 +109,90 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             sendNotificationClient(remoteMessage.getData().get("message"), client_id + "", clientname.trim(), pic);
 
         //Log.d("Data",remoteMessage.getNotification().);
-
     }
+
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    private void displayCustomNotificationForOrders(String messageBody, String ID, String noti_tittle, String profilePic) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel notificationChannel = new NotificationChannel("3" , "new name", NotificationManager.IMPORTANCE_HIGH);
+//            notificationChannel.enableLights(true);
+//            notificationChannel.enableVibration(true);
+//            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+//            notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            notifManager.createNotificationChannel(notificationChannel);
+//
+//        }
+//            Intent intent = new Intent(this, ClientDetailActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            intent.putExtra("CLIENT_ID", ID);
+//            PendingIntent pendingIntent = null;
+//
+//            pendingIntent = PendingIntent.getActivity(this, 1251, intent, PendingIntent.FLAG_ONE_SHOT);
+//        Bitmap bitmap=getBitmapFromURL(profilePic);
+//        //Bitmap bitmap1=getCircleBitmap(bitmap);
+//            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,"3")
+//                    .setContentTitle(noti_tittle)
+//                    .setContentText(messageBody)
+//                    .setAutoCancel(true)
+//                    .setColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary))
+//                    .setSound(defaultSoundUri)
+//                    .setSmallIcon(R.mipmap.ic_stat_f1)
+//                    .setLargeIcon(bitmap)
+//                    .setContentIntent(pendingIntent)
+//                    .setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(noti_tittle).bigText(messageBody));
+//
+//            notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            notifManager.notify(1251, notificationBuilder.build());
+//        }
+//
+//
+//    private void displayCustomNotificationForTickets(String messageBody, String ID, String noti_tittle, String profilePic) {
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel notificationChannel = new NotificationChannel("3" , "new name", NotificationManager.IMPORTANCE_HIGH);
+//            notificationChannel.enableLights(true);
+//            notificationChannel.enableVibration(true);
+//            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+//            notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            notifManager.createNotificationChannel(notificationChannel);
+//        }
+//        PendingIntent pendingIntent = null;
+//
+//        Intent intent = new Intent(this, TicketDetailActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+////                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.putExtra("ticket_id", ID);
+//
+//        Log.d("intents from FCM", "ID :" + ID);
+//
+//        pendingIntent = PendingIntent.getActivity(this, 1251, intent, PendingIntent.FLAG_ONE_SHOT);
+//        Bitmap bitmap=getBitmapFromURL(profilePic);
+//        //Bitmap bitmap1=getCircleBitmap(bitmap);
+//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,"3")
+//                .setContentTitle(noti_tittle)
+//                .setContentText(messageBody)
+//                .setAutoCancel(true)
+//                .setColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary))
+//                .setSound(defaultSoundUri)
+//                .setSmallIcon(R.mipmap.ic_stat_f1)
+//                .setLargeIcon(bitmap)
+//                .setContentIntent(pendingIntent).
+//                        setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                .setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(noti_tittle).bigText(messageBody));
+//
+//        notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notifManager.notify(1251, notificationBuilder.build());
+//    }
+
+
+
+
+
+
+
 
     /**
      * This method is only generating push notification
@@ -106,7 +203,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param profilePic
      */
     private void sendNotificationClient(String messageBody, String ID, String noti_tittle, String profilePic) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("3" , "new name", NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notifManager.createNotificationChannel(notificationChannel);
 
+        }
         Intent intent = new Intent(this, ClientDetailActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 //                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -124,10 +228,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
+
+
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,"3");
         notificationBuilder.setSmallIcon(R.mipmap.ic_stat_f1);
-        if (!profilePic.equals("")&&!profilePic.equals("null")&&!profilePic.equals(null))
+        if (!profilePic.equals("")&&!profilePic.equals("null"))
         {
             Bitmap bitmap=getBitmapFromURL(profilePic);
             Bitmap bitmap1=getCircleBitmap(bitmap);
@@ -155,10 +261,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
             Log.e("ringtone", "setDefault");
         }
-        NotificationManager notificationManager =
+         notifManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(id, notificationBuilder.build());
+        notifManager.notify(id, notificationBuilder.build());
         Log.d("stackadded", "notification arrived");
 
     }
@@ -173,10 +279,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param profilePic
      */
     private void sendNotificationTicket(String messageBody, String ID, String noti_tittle, String profilePic) {
+        //Prefs.putString("TICKETid", ID);
+        //Prefs.putString("cameFromNotification","true");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("3" , "new name", NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notifManager.createNotificationChannel(notificationChannel);
+
+        }
         Intent intent = new Intent(this, TicketDetailActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 //                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("ticket_id", ID);
+
         Log.d("intents from FCM", "ID :" + ID);
 
         int id = (int) System.currentTimeMillis();

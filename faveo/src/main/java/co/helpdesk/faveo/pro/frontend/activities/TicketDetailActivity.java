@@ -99,10 +99,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_detail);
         Window window = TicketDetailActivity.this.getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
+        // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(TicketDetailActivity.this,R.color.mainActivityTopBar));

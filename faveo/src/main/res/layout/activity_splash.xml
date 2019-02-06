@@ -67,6 +67,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-109dp"
         android:text="@string/loading"
+        android:visibility="gone"
         android:fontFamily="@font/hintedlainesansregular"
         android:textColor="@color/colorAccent"
         android:textSize="14sp"

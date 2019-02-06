@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.cocosw:bottomsheet-0.9">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/d0cac3963f0875b162788dbae120f0e2/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/d4331e2f0b23f3b4662d02c27f28727a/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/d0cac3963f0875b162788dbae120f0e2/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/d0cac3963f0875b162788dbae120f0e2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/d4331e2f0b23f3b4662d02c27f28727a/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/bottomsheet-0.9.aar/d4331e2f0b23f3b4662d02c27f28727a/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

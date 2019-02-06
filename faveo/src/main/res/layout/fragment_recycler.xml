@@ -106,27 +106,32 @@
     <TextView
         android:id="@+id/noiternet_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:drawableTint="@color/dark_translucent"
-        android:drawableTop="@drawable/ic_signal_wifi_off_black_48dp"
+        android:drawableTop="@drawable/nowifi"
         android:text="@string/no_internet_connection"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="200dp"
+        android:fontFamily="@font/hintedlainesansregular"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="150dp"
         android:layout_gravity="center"
+        android:layout_marginTop="200dp"
         android:drawableTint="@color/dark_translucent"
-        android:drawableTop="@drawable/ic_inbox_black_48dp"
-        android:text="@string/no_records"
+        android:drawableTop="@drawable/norecords"
+        android:text="@string/no_tickets"
+        android:fontFamily="@font/hintedlainesansregular"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
+        android:textStyle="bold"
         android:visibility="gone" />
 
 
@@ -145,10 +150,11 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="7"
         android:clickable="true"
         android:padding="1dp"
+        android:visibility="visible"
         >
 
         <com.cooltechworks.views.shimmer.ShimmerRecyclerView
@@ -165,20 +171,22 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/grey_500"
+        android:layout_above="@+id/totalcount"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        />
+        android:background="@color/grey_500" />
 
     <TextView
+        android:id="@+id/totalcount"
         android:layout_width="380dp"
         android:layout_height="50dp"
-        android:text="Total Count"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:fontFamily="@font/hintedlainesansregular"
-        android:id="@+id/totalcount"
-        android:textColor="@color/faveo"
         android:gravity="center"
-        android:visibility="visible"/>
+        android:text="Total Count"
+        android:textColor="@color/faveo"
+        android:visibility="visible" />
 
     <!--<RelativeLayout-->
     <!--android:id="@+id/sort_view"-->

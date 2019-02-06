@@ -1001,151 +1001,153 @@ public class ClosedTickets extends Fragment {
         }
         @Override
         public void onBindViewHolder(final TicketOverviewAdapter.TicketViewHolder ticketViewHolder, final int i) {
-            final TicketOverview ticketOverview = ticketOverviewList.get(i);
-            String letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
 
-            Log.d("letter", letter);
-            int id = ticketOverviewList.get(i).getTicketID();
-            subject = ticketOverview.ticketSubject;
-            if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {
-                String first = subject.replace("=?UTF-8?Q?", "");
-                String second = first.replace("_", " ");
-                String third = second.replace("=C2=A0", "");
-                String fourth = third.replace("?=", "");
-                String fifth = fourth.replace("=E2=80=99", "'");
-                ticketViewHolder.textViewSubject.setText(fifth);
-            } else {
-                ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
-            }
+            try {
+                final TicketOverview ticketOverview = ticketOverviewList.get(i);
+                String letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
 
-            if (ticketOverview.ticketAttachments.equals("0")) {
-                ticketViewHolder.attachementView.setVisibility(View.GONE);
-            } else {
-                int color = Color.parseColor("#808080");
-                ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
-                ticketViewHolder.attachementView.setColorFilter(color);
-            }
-            if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
+                Log.d("letter", letter);
+                int id = ticketOverviewList.get(i).getTicketID();
+                subject = ticketOverview.ticketSubject;
+                if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {
+                    String first = subject.replace("=?UTF-8?Q?", "");
+                    String second = first.replace("_", " ");
+                    String third = second.replace("=C2=A0", "");
+                    String fourth = third.replace("?=", "");
+                    String fifth = fourth.replace("=E2=80=99", "'");
+                    ticketViewHolder.textViewSubject.setText(fifth);
+                } else {
+                    ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
+                }
+
+                if (ticketOverview.ticketAttachments.equals("0")) {
+                    ticketViewHolder.attachementView.setVisibility(View.GONE);
+                } else {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+                    ticketViewHolder.attachementView.setColorFilter(color);
+                }
+                if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
 //            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
 //                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
 //            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
 
-                if (Helper.compareDates(ticketOverview.dueDate) == 2) {
-                    ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-                    ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor();
+                    if (Helper.compareDates(ticketOverview.dueDate) == 2) {
+                        ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+                        ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+                        //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+                        ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
+                        ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
+                        //ticketViewHolder.textViewOverdue.setBackgroundColor();
 
-                } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
-                    ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
+                    } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+                        ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+                        ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+                        //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
 //                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
 //
 ////set color
 //                 drawable.setColor(color);
-                    ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
+                        ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
+                        ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
+                    } else {
+                        ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+                    }
+
+
+                ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
+
+                ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
+                if (ticketOverview.getClientName().startsWith("=?")) {
+                    String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
+                    String newClientName = clientName.replaceAll("=E2=84=A2", "");
+                    String finalName = newClientName.replace("=??Q?", "");
+                    String name = finalName.replace("?=", "");
+                    String newName = name.replace("_", " ");
+                    Log.d("new name", newName);
+                    ticketViewHolder.textViewClientName.setText(newName);
                 } else {
-                    ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+                    ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
+
                 }
-
-
-            ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
-
-            ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
-            if (ticketOverview.getClientName().startsWith("=?")) {
-                String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
-                String newClientName = clientName.replaceAll("=E2=84=A2", "");
-                String finalName = newClientName.replace("=??Q?", "");
-                String name = finalName.replace("?=", "");
-                String newName = name.replace("_", " ");
-                Log.d("new name", newName);
-                ticketViewHolder.textViewClientName.setText(newName);
-            } else {
-                ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
-
-            }
-            if (ticketOverview.ticketPriorityColor.equals("null")) {
-                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-                ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor("#3da6d7"));
-            } else if (ticketOverview.ticketPriorityColor != null) {
-                //ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
-                ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
-            }
+                if (ticketOverview.ticketPriorityColor.equals("null")) {
+                    ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+                    ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor("#3da6d7"));
+                } else if (ticketOverview.ticketPriorityColor != null) {
+                    //ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+                    ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
+                }
 
 
 //        else if (ticketOverview.ticketPriorityColor.equals("null")){
 //            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
 //        }
-            if (!ticketOverview.ticketTime.equals("null")) {
-                ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
-            } else {
-                ticketViewHolder.textViewTime.setVisibility(View.GONE);
-            }
+                if (!ticketOverview.ticketTime.equals("null")) {
+                    ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
+                } else {
+                    ticketViewHolder.textViewTime.setVisibility(View.GONE);
+                }
 
-            if (!ticketOverview.countthread.equals("0")) {
-                ticketViewHolder.countThread.setText("(" + ticketOverview.getCountthread() + ")");
-            } else {
-                ticketViewHolder.countThread.setVisibility(View.GONE);
-            }
+                if (!ticketOverview.countthread.equals("0")) {
+                    ticketViewHolder.countThread.setText("(" + ticketOverview.getCountthread() + ")");
+                } else {
+                    ticketViewHolder.countThread.setVisibility(View.GONE);
+                }
 
-            switch (ticketOverview.sourceTicket) {
-                case "Chat":
-                case "chat":{
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
+                switch (ticketOverview.sourceTicket) {
+                    case "Chat":
+                    case "chat": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Web":
+                    case "web": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.web_design);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Agent":
+                    case "agent": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.mail);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Email":
+                    case "email": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.mail);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Facebook":
+                    case "facebook": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.facebook);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Twitter":
+                    case "twitter": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.twitter);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Call":
+                    case "call": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.phone);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    default:
+                        ticketViewHolder.source.setVisibility(View.GONE);
+                        break;
                 }
-                case "Web":
-                case "web":{
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.web_design);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "Agent":
-                case "agent":{
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.mail);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "Email":
-                case "email":{
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.mail);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "Facebook":
-                case "facebook":{
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.facebook);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "Twitter":
-                case "twitter":{
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.twitter);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "Call":
-                case "call":{
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.phone);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                default:
-                    ticketViewHolder.source.setVisibility(View.GONE);
-                    break;
-            }
 
 //            if (checked_items.contains(id)){
 //                ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#d6d6d6"));
@@ -1153,108 +1155,107 @@ public class ClosedTickets extends Fragment {
 //            else{
 //                ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
 //            }
-            if (!ticketOverview.agentName.equals("Unassigned")) {
-                ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
-            } else {
-                ticketViewHolder.agentAssigned.setText("Unassigned");
-            }
+                if (!ticketOverview.agentName.equals("Unassigned")) {
+                    ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
+                } else {
+                    ticketViewHolder.agentAssigned.setText("Unassigned");
+                }
 
-            if (checked_items.contains(id)) {
+                if (checked_items.contains(id)) {
 //                AnimatorSet shrinkSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.grow_from_middle);
 //                shrinkSet.setTarget(ticketViewHolder.roundedImageViewProfilePic);
 //                shrinkSet.start();
 //                ticketViewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.ic_check_circle_black_24dp);
-                ticketViewHolder.imageButtonSelected.setVisibility(View.VISIBLE);
-                ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#ededed"));
+                    ticketViewHolder.imageButtonSelected.setVisibility(View.VISIBLE);
+                    ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#ededed"));
 //                notifyDataSetChanged();
-            } else {
-                ticketViewHolder.imageButtonSelected.setVisibility(View.GONE);
-                ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+                } else {
+                    ticketViewHolder.imageButtonSelected.setVisibility(View.GONE);
+                    ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+                    if (ticketOverview.clientPicture.equals("")) {
+                        ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+
+                    } else if (ticketOverview.clientPicture.contains(".jpg") || ticketOverview.clientPicture.contains(".jpeg") || ticketOverview.clientPicture.contains(".png")) {
+//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+                        Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
+
+
+                    } else {
+
+                        ColorGenerator generator = ColorGenerator.MATERIAL;
+                        TextDrawable drawable = TextDrawable.builder()
+                                .buildRound(letter, generator.getRandomColor());
+                        //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                        ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+                    }
+
+                }
+
+                if (!ticketOverview.departmentname.equals("")) {
+                    ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+                }
+
+
                 if (ticketOverview.clientPicture.equals("")) {
                     ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
-                } else if (ticketOverview.clientPicture.contains(".jpg") || ticketOverview.clientPicture.contains(".jpeg") || ticketOverview.clientPicture.contains(".png")) {
-//    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
+                } else if (ticketOverview.clientPicture.contains(".jpg")) {
                     Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
 
 
                 } else {
-
                     ColorGenerator generator = ColorGenerator.MATERIAL;
                     TextDrawable drawable = TextDrawable.builder()
                             .buildRound(letter, generator.getRandomColor());
                     //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                     ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+
+                }
+                if (!ticketOverview.priorityName.equals("")) {
+                    ticketViewHolder.textViewpriorityName.setText(ticketOverview.priorityName);
+                } else {
+                    ticketViewHolder.textViewpriorityName.setText(R.string.not_available);
                 }
 
-            }
+                ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mActionMode != null) {
+                            onListItemSelect(i);
+                        } else {
+                            Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+                            Prefs.putString("cameFromNotification", "none");
+                            Prefs.putString("ticketThread", "");
+                            intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+                            Prefs.putString("TICKETid", ticketOverview.ticketID + "");
+                            Prefs.putString("ticketId", ticketOverview.ticketID + "");
+                            Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
+                            intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+                            intent.putExtra("ticket_opened_by", ticketOverview.clientName);
+                            intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
+                            Log.d("clicked", "onRecyclerView");
+                            v.getContext().startActivity(intent);
+                        }
+                    }
+                });
 
-            if (!ticketOverview.departmentname.equals("")){
-                ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
-            }
 
-
-            if (ticketOverview.clientPicture.equals("")){
-                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
-
-            }
-            else if (ticketOverview.clientPicture.contains(".jpg")){
-                Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
-
-
-            }
-            else{
-                ColorGenerator generator = ColorGenerator.MATERIAL;
-                TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(letter,generator.getRandomColor());
-                //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
-                ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
-
-            }
-            if (!ticketOverview.priorityName.equals("")){
-                ticketViewHolder.textViewpriorityName.setText(ticketOverview.priorityName);
-            }
-            else{
-                ticketViewHolder.textViewpriorityName.setText(R.string.not_available);
-            }
-
-            ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mActionMode != null) {
+                ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        Prefs.putString("ticketstatus", ticketOverview.ticketStatus);
                         onListItemSelect(i);
+                        length++;
+                        Log.d("noofitems", "" + length);
+                        Prefs.putInt("NoOfItems", length);
+
+                        return true;
                     }
-                    else {
-                        Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
-                        Prefs.putString("cameFromNotification", "none");
-                        Prefs.putString("ticketThread", "");
-                        intent.putExtra("ticket_id", ticketOverview.ticketID + "");
-                        Prefs.putString("TICKETid", ticketOverview.ticketID + "");
-                        Prefs.putString("ticketId", ticketOverview.ticketID + "");
-                        Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
-                        intent.putExtra("ticket_number", ticketOverview.ticketNumber);
-                        intent.putExtra("ticket_opened_by", ticketOverview.clientName);
-                        intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
-                        Log.d("clicked", "onRecyclerView");
-                        v.getContext().startActivity(intent);
-                    }
-                }
-            });
+                });
 
-
-            ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    Prefs.putString("ticketstatus", ticketOverview.ticketStatus);
-                    onListItemSelect(i);
-                    length++;
-                    Log.d("noofitems", "" + length);
-                    Prefs.putInt("NoOfItems", length);
-
-                    return true;
-                }
-            });
-
+            }catch (IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
         }
 
         private void onListItemSelect(int position) {

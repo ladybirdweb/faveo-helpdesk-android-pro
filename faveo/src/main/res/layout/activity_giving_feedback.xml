@@ -13,14 +13,14 @@
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:theme="@style/MyMaterialTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="#154c66"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
                 app:popupTheme="@style/MyMaterialTheme.PopupOverlay">
 
                 <RelativeLayout
@@ -34,7 +34,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:backgroundTint="@color/colorAccent"
                         android:background="@drawable/ic_arrow_back_black_24dp" />
 
                     <TextView
@@ -44,9 +43,8 @@
                         android:layout_marginLeft="24dp"
                         android:layout_marginStart="24dp"
                         android:text="@string/other"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/hintedlainesansregular"
+                        android:textColor="@color/theme"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         android:textAllCaps="true"
                         android:layout_alignTop="@+id/imageViewBack"
@@ -67,18 +65,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/submitFeedback"
-            android:textSize="16sp"
-            android:fontFamily="@font/hintedlainesansregular"
+            android:textSize="20sp"
             android:textStyle="bold"/>
 
         <!--<TextView-->
-            <!--android:padding="9dp"-->
-            <!--android:layout_marginTop="25dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/selectingAgent"-->
-            <!--android:textSize="18sp"-->
-            <!--android:textStyle="bold"/>-->
+        <!--android:padding="9dp"-->
+        <!--android:layout_marginTop="25dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/selectingAgent"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textStyle="bold"/>-->
 
         <ImageView
             android:padding="9dp"
@@ -102,13 +99,13 @@
         <!--/>-->
 
         <TextView
+            android:id="@+id/multipleTicketSelection"
             android:padding="9dp"
             android:lineSpacingExtra="9.2dp"
             android:layout_marginTop="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:fontFamily="@font/hintedlainesansregular"
+            android:textSize="18sp"
             android:text="@string/howToGiveFeedback"
             />
 

@@ -74,6 +74,7 @@
     <string name="logout">Logout</string>
     <string name="ticket_list">Ticket list</string>
     <string name="no_records">No Records!</string>
+    <string name="no_tickets">No tickets found!</string>
     <string name="no_internet_connection">No internet connection!</string>
     <string name="send_crash_reports">Send crash reports</string>
     <string name="crash_reports">CRASH REPORTS</string>
@@ -371,7 +372,7 @@
     <string name="no_results_found">No records found</string>
     <string name="email_taken">The email id has already been taken</string>
     <string name="notification">NOTIFICATION</string>
-    <string name="intro">Lets explore the app.</string>
+    <string name="intro">Welcome to Faveo Helpdesk Android App.Lets explore it.</string>
     <string-array name="CountryCodes">
 
         <item>93,AF</item>

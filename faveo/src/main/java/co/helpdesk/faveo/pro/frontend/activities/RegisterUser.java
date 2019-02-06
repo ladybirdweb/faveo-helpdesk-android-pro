@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;

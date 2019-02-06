@@ -131,12 +131,15 @@
         <!--android:name="io.fabric.ApiKey"-->
         <!--android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />-->
 
-        <service android:name=".frontend.services.MyFirebaseInstanceIDService">
+        <service android:name=".frontend.services.MyFirebaseInstanceIDService"
+            >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".frontend.services.MyFirebaseMessagingService">
+        <service android:name=".frontend.services.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
