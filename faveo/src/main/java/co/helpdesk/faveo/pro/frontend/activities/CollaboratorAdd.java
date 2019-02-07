@@ -85,9 +85,8 @@ public class CollaboratorAdd extends AppCompatActivity {
     public static boolean isShowing = false;
     ProgressBar progressBar;
     ImageButton buttonAdd;
-    List<AttachedCollaborator> movieList = new ArrayList<>();
-    RecyclerView recyclerView;
-    Collaboratoradapter mAdapter;
+    //RecyclerView recyclerView;
+    //Collaboratoradapter mAdapter;
     RecyclerView list;
     private String ticketID;
     @SuppressLint("ClickableViewAccessibility")
@@ -98,9 +97,8 @@ public class CollaboratorAdd extends AppCompatActivity {
         Window window = CollaboratorAdd.this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(CollaboratorAdd.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(CollaboratorAdd.this,R.color.mainActivityTopBar));
         strings = new ArrayList<>();
-        recyclerView= (RecyclerView) findViewById(R.id.list);
         strings.add("Show");
 
         isShowing=true;
@@ -110,10 +108,10 @@ public class CollaboratorAdd extends AppCompatActivity {
         ticketID=intent.getStringExtra("ticket_id");
         Prefs.putString("TICKETid",ticketID);
         Prefs.putString("ticketId",ticketID);
-        if (InternetReceiver.isConnected()){
-            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
-            progressBar.setVisibility(View.VISIBLE);
-        }
+//        if (InternetReceiver.isConnected()){
+//            new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
+//            progressBar.setVisibility(View.VISIBLE);
+//        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCollaborator);
         ImageView imageView = (ImageView) toolbar.findViewById(R.id.imageViewBack);
         buttonAdd= (ImageButton) findViewById(R.id.collaboratorAdd);
@@ -309,11 +307,8 @@ public class CollaboratorAdd extends AppCompatActivity {
                 }
             }
         });
-////
 
     }
-
-
 
 
     class CustomDialogClassSolution extends Dialog implements
@@ -644,91 +639,91 @@ public class CollaboratorAdd extends AppCompatActivity {
 
         }
     }
-
-    private class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
-        String ticketid;
-
-        FetchCollaboratorAssociatedWithTicket(String ticketid) {
-
-            this.ticketid = ticketid;
-        }
-
-        protected String doInBackground(String... urls) {
-            return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
-        }
-
-        protected void onPostExecute(String result) {
-            try{
-                progressDialog.dismiss();
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
-                movieList.clear();
-            if (isCancelled()) return;
-
-            if (result == null) {
-                Toasty.error(CollaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
-                if (jsonArray.length()==0){
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }else {
-                    progressBar.setVisibility(View.GONE);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        String email = jsonObject1.getString("email");
-                        String image=jsonObject1.getString("avatar");
-                        String name=jsonObject1.getString("first_name");
-                        String last=jsonObject1.getString("last_name");
-                        String fullName;
-                        if (name.equals("")&&last.equals("")){
-                            fullName="";
-                        }
-                        else if (name.equals("")&&!last.equals("")){
-                            fullName=last;
-                        }
-                        else if (last.equals("")&&!name.equals("")){
-                            fullName=name;
-                        }
-                        else{
-                            fullName=name+" "+last;
-                        }
-                            AttachedCollaborator attachedCollaborator=new AttachedCollaborator(email,image,fullName);
-                            movieList.add(attachedCollaborator);
-
-
-                    }
-
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(mLayoutManager);
-                    mAdapter = new Collaboratoradapter(CollaboratorAdd.this,movieList);
-                    runLayoutAnimation(recyclerView);
-                    recyclerView.setAdapter(mAdapter);
-                    autoCompleteTextViewUser.setDropDownHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-                    mAdapter.notifyDataSetChanged();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-    }
-    private void runLayoutAnimation(final RecyclerView recyclerView) {
-        final Context context = recyclerView.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
-
-        recyclerView.setLayoutAnimation(controller);
-        mAdapter.notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
-    }
+//
+//    private class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
+//        String ticketid;
+//
+//        FetchCollaboratorAssociatedWithTicket(String ticketid) {
+//
+//            this.ticketid = ticketid;
+//        }
+//
+//        protected String doInBackground(String... urls) {
+//            return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
+//        }
+//
+//        protected void onPostExecute(String result) {
+//            try{
+//                progressDialog.dismiss();
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
+//            }
+//                movieList.clear();
+//            if (isCancelled()) return;
+//
+//            if (result == null) {
+//                Toasty.error(CollaboratorAdd.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            try {
+//                JSONObject jsonObject = new JSONObject(result);
+//                JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
+//                if (jsonArray.length()==0){
+//                    progressBar.setVisibility(View.GONE);
+//                    return;
+//                }else {
+//                    progressBar.setVisibility(View.GONE);
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                        String email = jsonObject1.getString("email");
+//                        String image=jsonObject1.getString("avatar");
+//                        String name=jsonObject1.getString("first_name");
+//                        String last=jsonObject1.getString("last_name");
+//                        String fullName;
+//                        if (name.equals("")&&last.equals("")){
+//                            fullName="";
+//                        }
+//                        else if (name.equals("")&&!last.equals("")){
+//                            fullName=last;
+//                        }
+//                        else if (last.equals("")&&!name.equals("")){
+//                            fullName=name;
+//                        }
+//                        else{
+//                            fullName=name+" "+last;
+//                        }
+//                            AttachedCollaborator attachedCollaborator=new AttachedCollaborator(email,image,fullName);
+//                            movieList.add(attachedCollaborator);
+//
+//
+//                    }
+//
+//                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+//                    recyclerView.setLayoutManager(mLayoutManager);
+//                    mAdapter = new Collaboratoradapter(CollaboratorAdd.this,movieList);
+//                    runLayoutAnimation(recyclerView);
+//                    recyclerView.setAdapter(mAdapter);
+//                    autoCompleteTextViewUser.setDropDownHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+//                    mAdapter.notifyDataSetChanged();
+//                }
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//        }
+//    }
+//    private void runLayoutAnimation(final RecyclerView recyclerView) {
+//        final Context context = recyclerView.getContext();
+//        final LayoutAnimationController controller =
+//                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+//
+//        recyclerView.setLayoutAnimation(controller);
+//        mAdapter.notifyDataSetChanged();
+//        recyclerView.scheduleLayoutAnimation();
+//    }
     final TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
@@ -787,132 +782,132 @@ public class CollaboratorAdd extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
     }
-    public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
-
-        private List<AttachedCollaborator> moviesList;
-        Context context;
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView email;
-            public TextView textViewName;
-            public ImageView imageViewCollaborator;
-            public ImageView deletecolla;
-            public RelativeLayout relativeLayout;
-
-            public MyViewHolder(View view) {
-                super(view);
-                email = (TextView) view.findViewById(R.id.textView_client_email);
-                imageViewCollaborator= (ImageView) view.findViewById(R.id.imageView_collaborator);
-                relativeLayout= (RelativeLayout) view.findViewById(R.id.attachedCollaborator);
-                textViewName= (TextView) view.findViewById(R.id.collaboratorname);
-                deletecolla= (ImageView) view.findViewById(R.id.deleteCollaborator);
-
-            }
-        }
-        public Collaboratoradapter(Context context,List<AttachedCollaborator> moviesList) {
-            this.moviesList = moviesList;
-            this.context=context;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.listview_item_row, parent, false);
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
-            final AttachedCollaborator movie = moviesList.get(position);
-            holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        email2=movie.getEmail();
-                        return false;
-                    }
-                });
-
-            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
-            holder.deletecolla.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    email2=movie.getEmail();
-                    try {
-
-                        if (email2.equals("")){
-                            Toasty.info(CollaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
-
-                        }
-                        else {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(CollaboratorAdd.this);
-                            alertDialog.setMessage(R.string.user_collaborator);
-                            alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                            alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    progressDialog=new ProgressDialog(CollaboratorAdd.this);
-                                    progressDialog.setMessage(getString(R.string.pleasewait));
-                                    progressDialog.show();
-                                    Log.d("email3",email2);
-                                    new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
-                                    // DO SOMETHING HERE
-
-                                }
-                            });
-
-                            AlertDialog dialog = alertDialog.create();
-                            dialog.show();
-
-
-                        }
-                    }catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-
-            if (!movie.getEmail().equals("")) {
-                holder.email.setText(movie.getEmail());
-            }
-
-            if (movie.getName().equals("")){
-                holder.textViewName.setVisibility(View.GONE);
-            }
-            else{
-                holder.textViewName.setVisibility(View.VISIBLE);
-                holder.textViewName.setText(movie.getName());
-            }
-
-            if (!movie.getPicture().equals("")){
-                if (movie.getPicture().contains(".jpg")||movie.getPicture().contains(".jpeg")||movie.getPicture().contains(".png")) {
-                    Log.d("picture",movie.getPicture()) ;
-                    Picasso.with(CollaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
-                }
-                else{
-                    Log.d("cameInThisBlock","true");
-                    Picasso.with(CollaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
-                }
-
-            }
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return moviesList.size();
-        }
-    }
+//    public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
+//
+//    private List<AttachedCollaborator> moviesList;
+//    Context context;
+//    public class MyViewHolder extends RecyclerView.ViewHolder {
+//        public TextView email;
+//        public TextView textViewName;
+//        public ImageView imageViewCollaborator;
+//        public ImageView deletecolla;
+//        public RelativeLayout relativeLayout;
+//
+//        public MyViewHolder(View view) {
+//            super(view);
+//            email = (TextView) view.findViewById(R.id.textView_client_email);
+//            imageViewCollaborator= (ImageView) view.findViewById(R.id.imageView_collaborator);
+//            relativeLayout= (RelativeLayout) view.findViewById(R.id.attachedCollaborator);
+//            textViewName= (TextView) view.findViewById(R.id.collaboratorname);
+//            deletecolla= (ImageView) view.findViewById(R.id.deleteCollaborator);
+//
+//        }
+//    }
+//    public Collaboratoradapter(Context context,List<AttachedCollaborator> moviesList) {
+//        this.moviesList = moviesList;
+//        this.context=context;
+//    }
+//
+//    @Override
+//    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        View itemView = LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.listview_item_row, parent, false);
+//        return new MyViewHolder(itemView);
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(final MyViewHolder holder, int position) {
+//        final AttachedCollaborator movie = moviesList.get(position);
+//        holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                email2=movie.getEmail();
+//                return false;
+//            }
+//        });
+//
+//        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+//
+//        holder.deletecolla.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                email2=movie.getEmail();
+//                try {
+//
+//                    if (email2.equals("")){
+//                        Toasty.info(CollaboratorAdd.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                    else {
+//                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CollaboratorAdd.this);
+//                        alertDialog.setMessage(R.string.user_collaborator);
+//                        alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                        alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                progressDialog=new ProgressDialog(CollaboratorAdd.this);
+//                                progressDialog.setMessage(getString(R.string.pleasewait));
+//                                progressDialog.show();
+//                                Log.d("email3",email2);
+//                                new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
+//                                // DO SOMETHING HERE
+//
+//                            }
+//                        });
+//
+//                        AlertDialog dialog = alertDialog.create();
+//                        dialog.show();
+//
+//
+//                    }
+//                }catch (NullPointerException e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//
+//        if (!movie.getEmail().equals("")) {
+//            holder.email.setText(movie.getEmail());
+//        }
+//
+//        if (movie.getName().equals("")){
+//            holder.textViewName.setVisibility(View.GONE);
+//        }
+//        else{
+//            holder.textViewName.setVisibility(View.VISIBLE);
+//            holder.textViewName.setText(movie.getName());
+//        }
+//
+//        if (!movie.getPicture().equals("")){
+//            if (movie.getPicture().contains(".jpg")||movie.getPicture().contains(".jpeg")||movie.getPicture().contains(".png")) {
+//                Log.d("picture",movie.getPicture()) ;
+//                Picasso.with(CollaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+//            }
+//            else{
+//                Log.d("cameInThisBlock","true");
+//                Picasso.with(CollaboratorAdd.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+//            }
+//
+//        }
+//
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return moviesList.size();
+//    }
+//}
 
 
 

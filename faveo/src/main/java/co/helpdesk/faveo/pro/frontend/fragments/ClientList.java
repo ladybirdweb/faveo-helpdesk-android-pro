@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +29,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -143,35 +146,38 @@ public class ClientList extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (rootView == null) {
+
             heading=Prefs.getString("filtercustomer",null);
             condition=Prefs.getString("normalclientlist",null);
             rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
             toolbar= (Toolbar) rootView.findViewById(R.id.toolbar2);
             toolbarTextview= (TextView) toolbar.findViewById(R.id.toolbartextview);
 
-             if (heading.equals("active")){
-                toolbarTextview.setText(getString(R.string.activeUser));
-            }
-            else if (heading.equals("inactive")){
-                toolbarTextview.setText(getString(R.string.inactiveUser));
-            }
-            else if (heading.equals("banned")){
-                toolbarTextview.setText(getString(R.string.bannedUser));
-            }
-            else if (heading.equals("deleted")){
-                toolbarTextview.setText(getString(R.string.deleteduser));
-            }
-            else if (heading.equals("admin")){
-                toolbarTextview.setText(getString(R.string.roleAdmin));
-            }
-             else if (heading.equals("agent")){
-                 toolbarTextview.setText(getString(R.string.roleAgent));
-             }
-             else if (heading.equals("user")){
-                 toolbarTextview.setText(getString(R.string.roleUser));
-             }
-             else{
-                toolbarTextview.setText(getString(R.string.customerFilter));
+            switch (heading) {
+                case "active":
+                    toolbarTextview.setText(getString(R.string.activeUser));
+                    break;
+                case "inactive":
+                    toolbarTextview.setText(getString(R.string.inactiveUser));
+                    break;
+                case "banned":
+                    toolbarTextview.setText(getString(R.string.bannedUser));
+                    break;
+                case "deleted":
+                    toolbarTextview.setText(getString(R.string.deleteduser));
+                    break;
+                case "admin":
+                    toolbarTextview.setText(getString(R.string.roleAdmin));
+                    break;
+                case "agent":
+                    toolbarTextview.setText(getString(R.string.roleAgent));
+                    break;
+                case "user":
+                    toolbarTextview.setText(getString(R.string.roleUser));
+                    break;
+                default:
+                    toolbarTextview.setText(getString(R.string.customerFilter));
+                    break;
             }
 
             view1=rootView.findViewById(R.id.separationView);
@@ -192,6 +198,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
             toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
+
                     try {
                         if (item != null) {
                             item.getSubMenu().clearHeader();
@@ -632,6 +639,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                     }
                 });
                 clientOverviewAdapter = new ClientOverviewAdapter(getContext(), clientOverviewList);
+                runLayoutAnimation(recyclerView);
                 recyclerView.setAdapter(clientOverviewAdapter);
                 if (clientOverviewAdapter.getItemCount() == 0) {
                     empty_view.setVisibility(View.VISIBLE);
@@ -681,6 +689,16 @@ public class ClientList extends Fragment implements View.OnClickListener {
             clientOverviewAdapter.notifyDataSetChanged();
             loading = true;
         }
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+
+        recyclerView.setLayoutAnimation(controller);
+        clientOverviewAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
     private class FetchClientsFilter extends AsyncTask<String, Void, String> {
         Context context;
@@ -762,6 +780,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                 }
             });
             clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
+            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);

@@ -28,7 +28,7 @@ String text;
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(ViewClient.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(ViewClient.this,R.color.mainActivityTopBar));
         textView= (TextView) findViewById(R.id.editclient);
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         text="To edit customer you have to click on the edit icon in the client detail page.Once you click you will get " +

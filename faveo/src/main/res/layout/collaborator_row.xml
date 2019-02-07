@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="40dp"
     android:background="@drawable/rectanglereachout"
-    android:backgroundTint="@color/shade_white"
+    android:backgroundTint="@color/colorAccent"
     android:layout_margin="7dp">
 
     <ImageView
         android:id="@+id/imageView_collaborator"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:transitionName="@string/blue_name"
         android:layout_marginLeft="3dp"
         android:layout_centerVertical="true"
@@ -24,28 +24,31 @@
         android:layout_marginLeft="18dp"
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@+id/imageView_collaborator"
-        android:fontFamily="sans-serif-bold"
+        android:fontFamily="@font/hintedlainesansregular"
         android:maxLines="1"
         android:ellipsize="end"
         android:text="@string/dummy_name"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:visibility="visible"/>
 
     <TextView
         android:id="@+id/textView_client_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_collaborator_name"
         android:layout_alignStart="@+id/textView_collaborator_name"
-        android:layout_centerVertical="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="-7dp"
+        android:layout_marginBottom="2dp"
         android:alpha=".54"
         android:drawablePadding="8dp"
         android:ellipsize="end"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/hintedlainesansregular"
         android:maxLines="1"
         android:text="@string/dummy_mail_id"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
 
 

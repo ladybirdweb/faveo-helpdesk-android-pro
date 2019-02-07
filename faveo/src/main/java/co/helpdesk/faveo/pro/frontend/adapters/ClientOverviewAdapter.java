@@ -48,12 +48,12 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
             //clientViewHolder.textViewClientID.setText(clientOverview.clientID + "");
             clientViewHolder.textViewClientName.setText(clientOverview.clientName);
             clientViewHolder.textViewClientEmail.setText(clientOverview.clientEmail);
-            if (clientOverview.clientPhone.equals("") || clientOverview.clientPhone.equals("null")||clientOverview.clientPhone.equals("Not available")||clientOverview.clientPhone.equals(" "))
-                clientViewHolder.textViewClientPhone.setVisibility(View.GONE);
-            else {
-                clientViewHolder.textViewClientPhone.setVisibility(View.VISIBLE);
-                clientViewHolder.textViewClientPhone.setText(clientOverview.clientPhone);
-            }
+//            if (clientOverview.clientPhone.equals("") || clientOverview.clientPhone.equals("null")||clientOverview.clientPhone.equals("Not available")||clientOverview.clientPhone.equals(" "))
+//                clientViewHolder.textViewClientPhone.setVisibility(View.GONE);
+//            else {
+//                clientViewHolder.textViewClientPhone.setVisibility(View.VISIBLE);
+//                clientViewHolder.textViewClientPhone.setText(clientOverview.clientPhone);
+//            }
             if (clientOverview.clientPicture.equals("")){
                 clientViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
@@ -74,7 +74,7 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
                 ColorGenerator generator = ColorGenerator.MATERIAL;
                 TextDrawable drawable = TextDrawable.builder()
                         .buildRound(letter,generator.getRandomColor());
-                clientViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                //clientViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                 clientViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
 
 
@@ -132,7 +132,6 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
         ImageView roundedImageViewProfilePic;
         TextView textViewClientName;
         TextView textViewClientEmail;
-        TextView textViewClientPhone;
 
         ClientViewHolder(View v) {
             super(v);
@@ -141,7 +140,6 @@ public class ClientOverviewAdapter extends RecyclerView.Adapter<ClientOverviewAd
             roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
             textViewClientName = (TextView) v.findViewById(R.id.textView_client_name);
             textViewClientEmail = (TextView) v.findViewById(R.id.textView_client_email);
-            textViewClientPhone = (TextView) v.findViewById(R.id.textView_client_phone);
         }
 
     }

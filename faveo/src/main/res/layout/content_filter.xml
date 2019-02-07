@@ -5,88 +5,14 @@
     android:fillViewport="true"
     android:overScrollMode="never"
     android:orientation="vertical"
+    android:padding="6dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="36dp"-->
-                <!--android:background="#EEEEEE">-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_alignParentStart="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:layout_marginLeft="17dp"-->
-                    <!--android:layout_marginStart="17dp"-->
-                    <!--android:text="@string/show"-->
-                    <!--android:textSize="16sp"-->
-                    <!--android:textStyle="bold" />-->
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentEnd="true"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_marginEnd="8dp"-->
-                    <!--android:layout_marginRight="8dp"-->
-                    <!--android:text="@string/required"-->
-                    <!--android:textSize="12sp" />-->
-                <!--/>-->
-            <!--</RelativeLayout>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<Spinner-->
-                    <!--android:id="@+id/autocompleteshow"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:nextFocusForward="@+id/spinner_help"-->
-                    <!--android:entries="@array/spinnerAssignTo"-->
-                    <!--android:hint="@string/SelectPriority"/>-->
-            <!--</LinearLayout>-->
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="36dp"-->
-                <!--android:background="#EEEEEE">-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_alignParentStart="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:layout_marginLeft="17dp"-->
-                    <!--android:layout_marginStart="17dp"-->
-                    <!--android:text="@string/status"-->
-                    <!--android:textSize="16sp"-->
-                    <!--android:textStyle="bold" />-->
-                <!--/>-->
-
-            <!--</RelativeLayout>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<android.support.v7.widget.AppCompatMultiAutoCompleteTextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="50dp"-->
-                    <!--android:id="@+id/autocompletestatus"-->
-                    <!--android:hint="@string/showsuggestions"-->
-                    <!--android:inputType="text"-->
-                    <!--/>-->
-            <!--</LinearLayout>-->
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent">
     <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="36dp"
@@ -102,8 +28,9 @@
         android:layout_marginLeft="17dp"
         android:layout_marginStart="17dp"
         android:text="@string/department"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="12sp"
+        android:fontFamily="@font/hintedlainesansregular"
+       />
     />
 
 </RelativeLayout>
@@ -118,6 +45,9 @@
             android:id="@+id/autocompletedepartment"
             android:hint="@string/showsuggestions"
             android:inputType="text"
+            android:textSize="15sp"
+            android:fontFamily="@font/hintedlainesansregular"
+
             />
     </LinearLayout>
     <RelativeLayout
@@ -135,8 +65,9 @@
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
             android:text="@string/source"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="12sp"
+            android:fontFamily="@font/hintedlainesansregular"
+             />
         />
     </RelativeLayout>
 
@@ -150,6 +81,8 @@
             android:id="@+id/autocompletetesource"
             android:hint="@string/showsuggestions"
             android:inputType="text"
+            android:fontFamily="@font/hintedlainesansregular"
+            android:textSize="15sp"
             />
     </LinearLayout>
     <RelativeLayout
@@ -167,8 +100,9 @@
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
             android:text="@string/priority"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="12sp"
+            android:fontFamily="@font/hintedlainesansregular"
+            />
         />
     </RelativeLayout>
 
@@ -182,6 +116,8 @@
             android:id="@+id/autocompletetepriority"
             android:hint="@string/showsuggestions"
             android:inputType="text"
+            android:textSize="15sp"
+            android:fontFamily="@font/hintedlainesansregular"
             />
     </LinearLayout>
 
@@ -200,8 +136,9 @@
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
             android:text="@string/assigneeName"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="12sp"
+            android:fontFamily="@font/hintedlainesansregular"
+             />
         />
     </RelativeLayout>
 
@@ -215,6 +152,8 @@
             android:id="@+id/autocompleteassign"
             android:hint="@string/showsuggestions"
             android:inputType="text"
+            android:textSize="15sp"
+            android:fontFamily="@font/hintedlainesansregular"
             />
     </LinearLayout>
 
@@ -233,8 +172,9 @@
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
             android:text="@string/ticket_type"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="12sp"
+            android:fontFamily="@font/hintedlainesansregular"
+             />
         />
     </RelativeLayout>
 
@@ -248,6 +188,8 @@
             android:id="@+id/autocompletetype"
             android:hint="@string/showsuggestions"
             android:inputType="text"
+            android:textSize="15sp"
+            android:fontFamily="@font/hintedlainesansregular"
             />
     </LinearLayout>
             <RelativeLayout
@@ -265,8 +207,9 @@
                     android:layout_marginLeft="17dp"
                     android:layout_marginStart="17dp"
                     android:text="@string/assigned"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="12sp"
+                    android:fontFamily="@font/hintedlainesansregular"
+                    />
                 />
             </RelativeLayout>
 
@@ -280,10 +223,11 @@
                     android:id="@+id/autocompleteassigned"
                     android:inputType="text"
                     android:hint="@string/please_enter_yes_or_no"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/hintedlainesansregular"
 
                     />
             </LinearLayout>
-
 
 
         </LinearLayout>

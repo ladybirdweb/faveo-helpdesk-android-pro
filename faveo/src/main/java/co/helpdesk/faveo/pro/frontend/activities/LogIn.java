@@ -28,7 +28,7 @@ TextView textView;
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(LogIn.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(LogIn.this,R.color.mainActivityTopBar));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         textView= (TextView) findViewById(R.id.loggingin);
         textView.setOnClickListener(new View.OnClickListener() {

@@ -42,7 +42,6 @@ public class InternalNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_internal_note);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
         Window window = InternalNoteActivity.this.getWindow();
 
@@ -53,7 +52,7 @@ public class InternalNoteActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(InternalNoteActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(InternalNoteActivity.this,R.color.mainActivityTopBar));
         option=Prefs.getString("cameFromNotification", null);
         switch (option) {
             case "true":
@@ -151,7 +150,11 @@ public class InternalNoteActivity extends AppCompatActivity {
                 Toasty.error(InternalNoteActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            new FetchTicketThreads(InternalNoteActivity.this, Prefs.getString("TICKETid", null)).execute();
+
+            Toasty.success(InternalNoteActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(InternalNoteActivity.this,MainActivity.class);
+            startActivity(intent);
+            //new FetchTicketThreads(InternalNoteActivity.this, Prefs.getString("TICKETid", null)).execute();
 
         }
     }

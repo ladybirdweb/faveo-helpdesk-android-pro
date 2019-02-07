@@ -69,13 +69,13 @@
             android:textStyle="bold"/>
 
         <!--<TextView-->
-            <!--android:padding="9dp"-->
-            <!--android:layout_marginTop="25dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/selectingAgent"-->
-            <!--android:textSize="18sp"-->
-            <!--android:textStyle="bold"/>-->
+        <!--android:padding="9dp"-->
+        <!--android:layout_marginTop="25dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/selectingAgent"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textStyle="bold"/>-->
 
         <ImageView
             android:padding="9dp"
@@ -99,6 +99,7 @@
         <!--/>-->
 
         <TextView
+            android:id="@+id/multipleTicketSelection"
             android:padding="9dp"
             android:lineSpacingExtra="9.2dp"
             android:layout_marginTop="25dp"

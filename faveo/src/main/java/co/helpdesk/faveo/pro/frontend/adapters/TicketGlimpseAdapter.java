@@ -41,6 +41,10 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         ticketViewHolder.textViewTicketID.setText(ticketGlimpse.ticketID + "");
         ticketViewHolder.textViewTicketNumber.setText(ticketGlimpse.ticketNumber);
         ticketViewHolder.textViewSubject.setText(ticketGlimpse.ticketSubject);
+
+        if (!ticketGlimpse.status.equals("")){
+            ticketViewHolder.textViewStatus.setText(ticketGlimpse.getStatus());
+        }
         if (ticketGlimpse.isTicketOpen)
             ticketViewHolder.color.setBackgroundColor(Color.parseColor("#4CD964"));
         else
@@ -82,6 +86,7 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
         TextView textViewTicketNumber;
         TextView textViewSubject;
         View color;
+        TextView textViewStatus;
         protected View ticket;
 
         TicketViewHolder(View v) {
@@ -89,6 +94,7 @@ public class TicketGlimpseAdapter extends RecyclerView.Adapter<TicketGlimpseAdap
             textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
             textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
             textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
+            textViewStatus=v.findViewById(R.id.textViewstatusname);
             color = v.findViewById(R.id.color);
             ticket=v.findViewById(R.id.ticket);
 

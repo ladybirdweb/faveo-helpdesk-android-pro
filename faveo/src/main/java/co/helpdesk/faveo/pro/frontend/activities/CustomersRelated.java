@@ -28,7 +28,7 @@ public class CustomersRelated extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(CustomersRelated.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(CustomersRelated.this,R.color.mainActivityTopBar));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         textViewEditClient= (TextView) findViewById(R.id.clienteditwithfilter);
         textViewViewClient= (TextView) findViewById(R.id.viewclient);

@@ -54,7 +54,7 @@ LinearLayout textViewSuggestion,textViewIssue;
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(FeedBackActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(FeedBackActivity.this,R.color.mainActivityTopBar));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         editTextmessageFeedback= (EditText) findViewById(R.id.messageFeedback);
         editTextsubjectFeedback= (EditText) findViewById(R.id.subjectFeedback);

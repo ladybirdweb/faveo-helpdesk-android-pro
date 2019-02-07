@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.sharish:ShimmerRecyclerView-v1.0">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ShimmerRecyclerView-v1.0.aar/5c1f588abf287b944c08b8a99cc41e57/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ShimmerRecyclerView-v1.0.aar/5c1f588abf287b944c08b8a99cc41e57/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ShimmerRecyclerView-v1.0.aar/60cccf76a63abc907592fe0378859adb/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ShimmerRecyclerView-v1.0.aar/60cccf76a63abc907592fe0378859adb/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -258,7 +258,7 @@ public class Helpdesk {
         );
 
 
-        String result = new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/edit?" +
+        String result = new HTTPConnection().hTTPResponsePostTest(Constants.URL + "helpdesk/edit?" +
                 "api_key=" + apiKey +
                 "&ip=" + IP +
                 "&token=" + token +
@@ -294,6 +294,7 @@ public class Helpdesk {
             e.printStackTrace();
         }
         Log.d("fcm call", Constants.URL + "fcmtoken?");
+        Log.d("fcmApi",Constants.URL + "fcmtoken?"+parameters);
         return new HTTPConnection().hTTPResponsePost(Constants.URL + "fcmtoken?", parameters);
     }
 
@@ -765,6 +766,15 @@ public class Helpdesk {
             return new HTTPConnection().hTTPResponsePost(Constants.URL + "helpdesk/helpsection/mails?token="+token+"&help_email=faveoservicedesk@gmail.com&help_subject="+subject+"&help_massage="+message,null);
             return result;
         }
+
+        public String getAgentbasedOnDepartment(String ticketid){
+        Log.d("getAgentList",newurl + "api/v2/helpdesk/api/get/agentlist?token="+token+"&ticket_id="+ticketid);
+        String result=new HTTPConnection().hTTPResponseGet(newurl + "api/v2/helpdesk/api/get/agentlist?token="+token+"&ticket_id="+ticketid);
+            if (result!=null&&result.equals("tokenRefreshed"))
+                return new HTTPConnection().hTTPResponseGet(newurl + "api/v2/helpdesk/api/get/agentlist?token="+token+"&ticket_id="+ticketid);
+            return result;
+        }
+
 
 
 }

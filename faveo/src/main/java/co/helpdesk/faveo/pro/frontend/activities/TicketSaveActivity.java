@@ -4,8 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -30,19 +33,38 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 
+import javax.net.ssl.HttpsURLConnection;
+
+import co.helpdesk.faveo.pro.CircleTransform;
+import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.backend.api.v1.Authenticate;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.Data;
@@ -64,6 +86,12 @@ public class TicketSaveActivity extends AppCompatActivity {
     int id,id1;
     Animation rotation;
     String option;
+    int responseCodeForShow;
+    static String token;
+    private URL url;
+    InputStream errorstream;
+    private StringBuilder sb = null;
+    private InputStream is = null;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -88,7 +116,7 @@ public class TicketSaveActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(TicketSaveActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(TicketSaveActivity.this,R.color.mainActivityTopBar));
         StrictMode.setThreadPolicy(policy);
         refresh= (ImageView) findViewById(R.id.imageViewRefresh);
         rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -375,6 +403,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         buttonsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new SendPostRequest().execute();
                 boolean allCorrect = true;
                 final String subject = edittextsubject.getText().toString();
                 final Data helpTopic = (Data) spinnerHelpTopics.getSelectedItem();
@@ -517,6 +546,371 @@ public class TicketSaveActivity extends AppCompatActivity {
 //            new FetchTicketDetail(Prefs.getString("TICKETid",null)).execute();
 //        }
     }
+
+    public class SendPostRequest extends AsyncTask<String, Void, String> {
+
+        protected void onPreExecute(){}
+
+        protected String doInBackground(String... arg0) {
+            try {
+
+                URL url = new URL(Constants.URL + "authenticate"); // here is your URL path
+
+                JSONObject postDataParams = new JSONObject();
+                postDataParams.put("username", Prefs.getString("USERNAME", null));
+                postDataParams.put("password", Prefs.getString("PASSWORD", null));
+                Log.e("params",postDataParams.toString());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                //MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int responseCode=conn.getResponseCode();
+
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    Log.d("ifresponseCode",""+responseCode);
+                    BufferedReader in=new BufferedReader(new
+                            InputStreamReader(
+                            conn.getInputStream()));
+
+                    StringBuffer sb = new StringBuffer("");
+                    String line="";
+
+                    while((line = in.readLine()) != null) {
+                        sb.append(line);
+                        break;
+                    }
+                    in.close();
+                    return sb.toString();
+                }
+                else {
+                    if (responseCode==400){
+                        Log.d("cameInThisBlock","true");
+                        responseCodeForShow=400;
+                    }
+                    else if (responseCode==405){
+                        responseCodeForShow=405;
+                    }
+                    else if (responseCode==302){
+                        responseCodeForShow=302;
+                    }
+                    Log.d("elseresponseCode",""+responseCode);
+                    return new String("false : "+responseCode);
+                }
+            }
+            catch(Exception e){
+                return new String("Exception: " + e.getMessage());
+            }
+
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("resultFromNewCall",result);
+
+                if (responseCodeForShow == 400) {
+                    final Toast toast = Toasty.info(TicketSaveActivity.this, getString(R.string.urlchange), Toast.LENGTH_SHORT);
+                    toast.show();
+                    new CountDownTimer(10000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            toast.show();
+                        }
+
+                        public void onFinish() {
+                            toast.cancel();
+                        }
+                    }.start();
+                    Prefs.clear();
+                    Intent intent = new Intent(TicketSaveActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+
+
+                if (responseCodeForShow == 405) {
+                    final Toast toast = Toasty.info(TicketSaveActivity.this, getString(R.string.urlchange), Toast.LENGTH_SHORT);
+                    toast.show();
+                    new CountDownTimer(10000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            toast.show();
+                        }
+
+                        public void onFinish() {
+                            toast.cancel();
+                        }
+                    }.start();
+                    Prefs.clear();
+                    Intent intent = new Intent(TicketSaveActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+
+
+                if (responseCodeForShow == 302) {
+                    final Toast toast = Toasty.info(TicketSaveActivity.this, getString(R.string.urlchange), Toast.LENGTH_SHORT);
+                    toast.show();
+                    new CountDownTimer(10000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            toast.show();
+                        }
+
+                        public void onFinish() {
+                            toast.cancel();
+                        }
+                    }.start();
+                    Prefs.clear();
+                    Intent intent = new Intent(TicketSaveActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+
+
+            try {
+                JSONObject jsonObject=new JSONObject(result);
+                JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                token = jsonObject1.getString("token");
+                Prefs.putString("TOKEN", token);
+                JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+                String role=jsonObject2.getString("role");
+                String profile_pic = jsonObject2.getString("profile_pic");
+                Prefs.putString("profilePicture",profile_pic);
+                if (role.equals("user")){
+                    final Toast toast = Toasty.info(TicketSaveActivity.this, getString(R.string.roleChanged),Toast.LENGTH_SHORT);
+                    toast.show();
+                    new CountDownTimer(10000, 1000)
+                    {
+                        public void onTick(long millisUntilFinished) {toast.show();}
+                        public void onFinish() {toast.cancel();}
+                    }.start();
+                    Prefs.clear();
+                    //Prefs.putString("role",role);
+                    Intent intent = new Intent(TicketSaveActivity.this, LoginActivity.class);
+                    //Toasty.info(getActivity(), getString(R.string.roleChanged), Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                }
+                String firstName = jsonObject2.getString("first_name");
+                String lastName = jsonObject2.getString("last_name");
+                String userName = jsonObject2.getString("user_name");
+                String email=jsonObject2.getString("email");
+                String clientname;
+                if (firstName == null || firstName.equals(""))
+                    clientname = userName;
+                else
+                    clientname = firstName + " " + lastName;
+                Prefs.putString("clientNameForFeedback",clientname);
+                Prefs.putString("emailForFeedback",email);
+                Prefs.putString("PROFILE_NAME",clientname);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public String getPostDataString(JSONObject params) throws Exception {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while(itr.hasNext()){
+
+            String key= itr.next();
+            Object value = params.get(key);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
+        }
+        return result.toString();
+    }
+
+//    String hTTPResponsePost(String stringURL, String parameters) {
+//
+//        try {
+//            url = new URL(stringURL);
+//            final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestProperty("Offer-type", "application/json");
+//            connection.setRequestProperty("Accept", "application/json");
+//            connection.setRequestProperty("token",token);
+//            connection.setDoInput(true);
+//            connection.setUseCaches(false);
+//            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=xxxxxxxxxx");
+//            connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+//            connection.setRequestProperty( "application-type", "REST" );
+//            connection.setRequestMethod("POST");
+//            connection.connect();
+//            OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
+//            BufferedWriter writer = new BufferedWriter(
+//                    new OutputStreamWriter(outputStream, "UTF-8"));
+//            if (parameters != null)
+//                writer.write(parameters);
+//
+//            writer.flush();
+//            writer.close();
+//            outputStream.close();
+//
+//            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//                String ret = null;
+//                switch (connection.getResponseCode()) {
+//                    case HttpURLConnection.HTTP_UNAUTHORIZED:
+//                        Log.e("Response code: ", "401-UNAUTHORIZED!");
+////                        Prefs.putString("unauthorized","true");
+////                        ret="Unauthorized Access";
+////                        break;
+//                        //ret="HTTP_UNAUTHORIZED";
+//                        if (refreshToken() == null)
+//                            return null;
+//                        new Helpdesk();
+//                        new Authenticate();
+//                        return "tokenRefreshed";
+//                    case HttpURLConnection.HTTP_NOT_FOUND:
+//                        Log.e("Response code: ", "NotFound-404!");
+//                        //ret = "notFound";
+//                        break;
+//                    case HttpURLConnection.HTTP_BAD_METHOD:
+//                        Log.e("Response code: ", "405 MethodNotAllowed!");
+//                        ret="MethodNotAllowed";
+//                        Log.d("MethodNotAllowed","CAMEHERE");
+//                        Prefs.putString("405","True");
+//                    case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
+//                        Log.e("Response code: ", "Timeout!");
+//                        // ret = "timeout";
+//                        break;
+//                    case HttpURLConnection.HTTP_UNAVAILABLE:
+//                        Log.e("Response code: ", "Unavailable!");
+//                        // ret = "unavailable";
+//                        break;// retry, server is unstable
+//                    case HttpURLConnection.HTTP_BAD_REQUEST:
+//                        Log.e("Response code: ", "BadRequest!");
+//                        ret="badRequest";
+//                        Prefs.putString("400",ret);
+////                        if (refreshToken() == null)
+////                            return null;
+////                        new Helpdesk();
+////                        new Authenticate();
+////                        ret = "tokenRefreshed";
+//                        break;
+//                    case HttpURLConnection.HTTP_FORBIDDEN:
+//                        Log.e("Response code","Forbidden");
+//                        ret="Forbidden";
+//                        Prefs.putString("403","403");
+//
+//                        break;
+//                    case HttpURLConnection.HTTP_CONFLICT:
+//                        Log.e("Response code","Conflict");
+//                        ret="Conflict";
+//                        Prefs.putString("409","409");
+//                        break;
+//                    default:
+//
+//                        break; // abort
+//                }
+//
+//                return ret;
+//            }
+//            Prefs.putString("405","False");
+//            Prefs.putString("unauthorized","false");
+//            Prefs.putString("400","false");
+//            Prefs.putString("403","false");
+//            Prefs.putString("409","true");
+//            is = connection.getInputStream();
+//            Log.e("Response Code", connection.getResponseCode() + "");
+//        } catch (IOException e) {
+//            if (e.getMessage().contains("No authentication challenges found")) {
+//                if (refreshToken() == null)
+//                    return null;
+//                new Helpdesk();
+//                new Authenticate();
+//                return "tokenRefreshed";
+//            }
+//            Log.e("error in faveo", e.getMessage());
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+//            sb = new StringBuilder();
+//            sb.append(reader.readLine()).append("\n");
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                sb.append(line).append("\n");
+//            }
+//            is.close();
+//        } catch (Exception e) {
+//            Log.e("log_tag", "Error converting result " + e.toString());
+//        }
+//        if (sb == null)
+//            return null;
+//        String input = sb.toString();
+//        if (input.contains("token_expired") || input.contains("token_invalid")||input.contains("tokenRefreshed")) {
+//            if (refreshToken() == null)
+//                return null;
+//            new Helpdesk();
+//            new Authenticate();
+//            return "tokenRefreshed";
+//        }
+//        return sb.toString();
+//    }
+//    public String refreshToken() {
+//        String result = new Authenticate().postAuthenticateUser(Prefs.getString("USERNAME", null), Prefs.getString("PASSWORD", null));
+//        if (result == null) {
+//            return null;
+//        }
+//        try {
+//            JSONObject jsonObject = new JSONObject(result);
+//            Log.d("tokenExpired","called");
+//            JSONObject jsonObject1=jsonObject.getJSONObject("data");
+//            String token = jsonObject1.getString("token");
+//            JSONObject jsonObject2=jsonObject1.getJSONObject("user");
+////            if (role.equals("user")){
+////                //Prefs.clear();
+////                //Prefs.putString("role",role);
+////                Intent intent=new Intent(FaveoApplication.getContext(),LoginActivity.class);
+////                Toast.makeText(FaveoApplication.getContext(),FaveoApplication.getContext().getString(R.string.permission), Toast.LENGTH_SHORT).show();
+////                FaveoApplication.getContext().startActivity(intent);
+////
+////
+////            }
+//
+//            String profilePic = jsonObject2.getString("profile_pic");
+//            //Prefs.putString("role",role);
+//            Log.d("result", result);
+//            Log.d("profilePicture", profilePic);
+//            //String token = jsonObject.getString("token");
+//            Prefs.putString("TOKEN", token);
+//            Prefs.putString("profilePicture", profilePic);
+//            Authenticate.token = token;
+//            Helpdesk.token = token;
+//
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            Log.d("cameInException","true");
+//            Prefs.clear();
+//            Prefs.putString("NoToken","True");
+//            return null;
+//        }
+//        return "success";
+//    }
     private class FetchTicketDetail1 extends AsyncTask<String, Void, String> {
         String ticketID;
         String agentName;
@@ -627,7 +1021,7 @@ public class TicketSaveActivity extends AppCompatActivity {
         int ticketSource;
         int ticketPriority;
         int ticketStatus;
-
+        String token;
         int staff;
 
         SaveTicketWithoutType(int ticketNumber, String subject, int helpTopic, int ticketSource, int ticketPriority,int staff) {
@@ -638,6 +1032,7 @@ public class TicketSaveActivity extends AppCompatActivity {
             this.ticketSource = ticketSource;
             this.ticketPriority = ticketPriority;
             // this.ticketStatus = ticketStatus;
+            this.token=token;
 
             this.staff=staff;
         }

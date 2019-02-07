@@ -76,7 +76,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     ColorGenerator generator = ColorGenerator.MATERIAL;
                     TextDrawable drawable = TextDrawable.builder()
                             .buildRound(letter, generator.getRandomColor());
-                    viewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                     viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
                 }
             }
@@ -87,7 +86,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 viewHolder.textSub.setTypeface(null, Typeface.NORMAL);
                 viewHolder.textSub.setTextColor(Color.parseColor("#7a7a7a"));
             } else {
-                viewHolder.textSub.setTypeface(null, Typeface.BOLD);
+                //viewHolder.textSub.setTypeface(null, Typeface.BOLD);
                 viewHolder.textSub.setTextColor(Color.parseColor("#000000"));
             }
             viewHolder.card.setOnClickListener(new View.OnClickListener() {

@@ -14,9 +14,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="#EEEEEE">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/multipleAssignHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -26,16 +27,16 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/selectAgent"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/multipleAssignHeader"
+                android:layout_toEndOf="@+id/multipleAssignHeader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
             />
@@ -48,11 +49,21 @@
             <android.support.v7.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/selectAssignee"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
+                android:paddingLeft="16dp"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:background="@color/colorAccent"
                 android:nextFocusForward="@+id/spinner_help"
                 android:entries="@array/spinnerAssignTo"
                 android:hint="@string/SelectAssignee"/>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/grey_500"
+            android:alpha=".3">
+
+        </View>
 
     </LinearLayout>
 </ScrollView>

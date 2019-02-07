@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    >
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -17,16 +18,17 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="4dp"
-            android:theme="@style/AppThemeOverlay.ActionBar">
+            android:backgroundTint="#154c66"
+            >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
+                android:backgroundTint="#154c66"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/AppThemeOverlay.ActionBar"
+                android:theme="@style/AppThemes"
+                app:popupTheme="@style/AppThemes"
                 >
 
                 <TextView
@@ -34,17 +36,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textAllCaps="false"
-                    android:textColor="@color/theme"
+                    android:textColor="@color/colorAccent"
                     android:textSize="16sp"
+                    android:fontFamily="@font/hintedlainesansregular"
+                    android:gravity="center_vertical"
                     android:textStyle="bold" />
 
             </android.support.v7.widget.Toolbar>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/faveo"
-                />
 
 
             <!--<android.support.design.widget.BottomNavigationView-->
@@ -66,6 +64,20 @@
 
         <include layout="@layout/content_main" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_main"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|end"
+            android:visibility="visible"
+            app:backgroundTint="@color/faveo"
+            app:tint="@color/colorAccent"
+            android:src="@drawable/ic_if_filter_383135"
+            android:layout_marginBottom="20dp"
+            android:elevation="8dp"
+            android:layout_marginRight="10dp"/>
+
+
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -78,6 +90,9 @@
         android:layout_gravity="start"
         app:layout="@layout/fragment_navigation_drawer"
         tools:layout="@layout/fragment_navigation_drawer" />
+
+
+
 
 
 

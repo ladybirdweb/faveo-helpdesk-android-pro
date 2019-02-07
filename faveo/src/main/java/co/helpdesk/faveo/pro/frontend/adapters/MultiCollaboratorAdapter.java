@@ -42,8 +42,12 @@ public class MultiCollaboratorAdapter extends ArrayAdapter<MultiCollaborator> {
         ImageView ivCustomerImage = (ImageView) convertView.findViewById(R.id.imageView_collaborator);
         TextView textViewEmail= (TextView) convertView.findViewById(R.id.textView_client_email);
 
-        if (txtCustomer != null&&customer.getFirstname()!=null)
+        if (txtCustomer != null&&customer.getFirstname()!=null) {
             txtCustomer.setText(customer.getFirstname() + " " + customer.getLastname());
+        }
+        else{
+            txtCustomer.setVisibility(View.GONE);
+        }
 
         if (ivCustomerImage != null && customer.getProfilepic() != null) {
             if (customer.getProfilepic().equals(".jpg")||customer.getProfilepic().equals(".jpeg")||customer.getProfilepic().equals(".png")) {
@@ -54,6 +58,7 @@ public class MultiCollaboratorAdapter extends ArrayAdapter<MultiCollaborator> {
                 Picasso.with(context).load(customer.getProfilepic()).transform(new CircleTransform()).into(ivCustomerImage);
             }
         }
+
 
         if (textViewEmail!=null&&customer.getEmail()!=null)
             textViewEmail.setText(customer.getEmail());

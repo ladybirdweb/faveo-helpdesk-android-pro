@@ -16,9 +16,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:id="@+id/toolbarview"
+        android:visibility="gone"
         >
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbarfilteration"
@@ -27,7 +28,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppThemeOverlay.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            android:visibility="visible"
+            android:visibility="gone"
             android:overScrollMode="always"
             android:layout_weight="1"
             >
@@ -59,6 +60,7 @@
         <View
             android:id="@+id/separationView"
             android:layout_width="1dp"
+            android:visibility="gone"
             android:background="@color/faveo"
             android:layout_height="match_parent"
             >
@@ -66,27 +68,31 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppThemeOverlay.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            android:visibility="visible"
+            android:visibility="gone"
             android:overScrollMode="always"
             android:layout_weight="1">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="45dp">
 
                 <TextView
+                    android:id="@+id/toolbartextview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="238dp"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/hintedlainesansregular"
+                    android:gravity="center_vertical"
                     android:text="@string/sort_by"
                     android:textColor="#808080"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:gravity="center_vertical"
-                    android:id="@+id/toolbartextview"
-                    />
+                    android:textStyle="bold" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
@@ -100,27 +106,32 @@
     <TextView
         android:id="@+id/noiternet_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:drawableTint="@color/dark_translucent"
-        android:drawableTop="@drawable/ic_signal_wifi_off_black_48dp"
+        android:drawableTop="@drawable/nowifi"
         android:text="@string/no_internet_connection"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="200dp"
+        android:fontFamily="@font/hintedlainesansregular"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="150dp"
         android:layout_gravity="center"
+        android:layout_marginTop="200dp"
         android:drawableTint="@color/dark_translucent"
-        android:drawableTop="@drawable/ic_inbox_black_48dp"
-        android:text="@string/no_records"
+        android:drawableTop="@drawable/norecords"
+        android:text="@string/no_tickets"
+        android:fontFamily="@font/hintedlainesansregular"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
+        android:textStyle="bold"
         android:visibility="gone" />
 
 
@@ -139,15 +150,17 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="7"
         android:clickable="true"
+        android:padding="1dp"
+        android:visibility="visible"
         >
 
         <com.cooltechworks.views.shimmer.ShimmerRecyclerView
             android:id="@+id/cardList"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             app:demo_child_count="10"
             app:demo_layout="@layout/card_ticket_shimmer" />
 
@@ -155,14 +168,25 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/totalcount"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/grey_500" />
+
     <TextView
+        android:id="@+id/totalcount"
         android:layout_width="380dp"
         android:layout_height="50dp"
-        android:text="Total Count"
-        android:id="@+id/totalcount"
-        android:textColor="@color/faveo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:fontFamily="@font/hintedlainesansregular"
         android:gravity="center"
-        android:visibility="visible"/>
+        android:text="Total Count"
+        android:textColor="@color/faveo"
+        android:visibility="visible" />
 
     <!--<RelativeLayout-->
     <!--android:id="@+id/sort_view"-->
