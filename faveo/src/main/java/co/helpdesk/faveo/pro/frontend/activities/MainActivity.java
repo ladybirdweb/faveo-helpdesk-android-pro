@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
@@ -178,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         final Rect droidTarget = new Rect(0, 0, droid.getIntrinsicWidth() * 2, droid.getIntrinsicHeight() * 2);
         // Using deprecated methods makes you look way cool
         droidTarget.offset(display.getWidth() / 2, display.getHeight() / 2);
-        Typeface typeface = ResourcesCompat.getFont(this, R.font.hintedlainesansregular);
+        final Typeface typeface = ResourcesCompat.getFont(this, R.font.hintedlainesansregular);
         final SpannableString sassyDesc = new SpannableString("It allows you to go back, sometimes");
         sassyDesc.setSpan(new StyleSpan(Typeface.NORMAL), sassyDesc.length() - "sometimes".length(), sassyDesc.length(), 0);
 
@@ -218,24 +221,55 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     // to the sequence
                     @Override
                     public void onSequenceFinish() {
-                        new BottomDialog.Builder(MainActivity.this)
-
-                                .setContent(R.string.intro)
-                                .setPositiveText("ok")
-                                .setPositiveBackgroundColor(R.color.faveo)
-                                .setPositiveTextColor(R.color.colorAccent)
-                                .setCancelable(false)
-                                .setPositiveBackgroundColorResource(R.color.white)
-                                //.setPositiveBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary)
-                                .setPositiveTextColorResource(R.color.faveo)
-                                //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                                .onPositive(new BottomDialog.ButtonCallback() {
+                                                final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                                //.setMessage(getString(R.string.intro))
+                                .setPositiveButton("Ok", null).show();
+                        TapTargetView.showFor(dialog,
+                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), getString(R.string.intro))
+                                        .cancelable(false)
+                                        .outerCircleColor(R.color.faveo)
+                                        .textColor(android.R.color.white)
+                                        .textTypeface(typeface)
+                                        .dimColor(android.R.color.black)
+                                        .tintTarget(false), new TapTargetView.Listener() {
                                     @Override
-                                    public void onClick(BottomDialog dialog) {
+                                    public void onTargetClick(TapTargetView view) {
+                                        super.onTargetClick(view);
                                         dialog.dismiss();
                                     }
-                                })
-                                .show();
+                                });
+
+
+
+
+//                        final BottomSheetDialog dialog = new BottomSheetDialog(MainActivity.this);
+//                        dialog.setContentView(R.layout.bottom_custom_view);
+//                        Button button=dialog.findViewById(R.id.continueExploring);
+//                        button.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                        dialog.show();
+
+//                        new BottomDialog.Builder(MainActivity.this)
+//                                .setContent(R.string.intro)
+//                                .setPositiveText("ok")
+//                                .setPositiveBackgroundColor(R.color.faveo)
+//                                .setPositiveTextColor(R.color.colorAccent)
+//                                .setCancelable(false)
+//                                .setPositiveBackgroundColorResource(R.color.white)
+//                                //.setPositiveBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary)
+//                                .setPositiveTextColorResource(R.color.faveo)
+//                                //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+//                                .onPositive(new BottomDialog.ButtonCallback() {
+//                                    @Override
+//                                    public void onClick(BottomDialog dialog) {
+//                                        dialog.dismiss();
+//                                    }
+//                                })
+//                                .show();
 
                     }
 

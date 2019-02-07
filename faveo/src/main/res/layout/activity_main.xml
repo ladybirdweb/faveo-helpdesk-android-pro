@@ -77,6 +77,8 @@
             android:elevation="8dp"
             android:layout_marginRight="10dp"/>
 
+
+
     </android.support.design.widget.CoordinatorLayout>
 
 
@@ -88,6 +90,9 @@
         android:layout_gravity="start"
         app:layout="@layout/fragment_navigation_drawer"
         tools:layout="@layout/fragment_navigation_drawer" />
+
+
+
 
 
 

@@ -35,7 +35,7 @@ public class ConfirmationDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-        builder.setTitle("Confirm log out....");
+        builder.setTitle("Logging out");
         builder.setIcon(R.mipmap.ic_launcher);
         builder.setMessage("Are you sure?");
         builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
