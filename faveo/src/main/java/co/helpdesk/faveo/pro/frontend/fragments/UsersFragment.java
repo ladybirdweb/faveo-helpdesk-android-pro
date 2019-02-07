@@ -9,12 +9,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -354,6 +357,7 @@ public class UsersFragment extends Fragment {
 //                }
 //            });
             clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
+            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);
@@ -361,52 +365,13 @@ public class UsersFragment extends Fragment {
         }
     }
 
-    private class FetchNextPage extends AsyncTask<String, Void, String> {
-        Context context;
-        String querry;
-        String url;
-
-        FetchNextPage(Context context,String url,String querry) {
-            this.context = context;
-            this.url=url;
-            this.querry=querry;
-        }
-
-        protected String doInBackground(String... urls) {
-            if (nextPageURL.equals("null")) {
-                return "all done";
-            }
-            String result = new Helpdesk().nextPageURL(nextPageURL,querry);
-            if (result == null)
-                return null;
-            String data;
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject jsonObject1=jsonObject.getJSONObject("result");
-                data = jsonObject1.getString("data");
-                nextPageURL = jsonObject1.getString("next_page_url");
-                JSONArray jsonArray = new JSONArray(data);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    ClientOverview clientOverview = Helper.parseClientOverview(jsonArray, i);
-                    if (clientOverview != null)
-                        clientOverviewList.add(clientOverview);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return "success";
-        }
-
-        protected void onPostExecute(String result) {
-            if (result == null)
-                return;
-            if (result.equals("all done")) {
-                Toasty.info(context, getString(R.string.allClientsLoaded), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            clientOverviewAdapter.notifyDataSetChanged();
-            loading = true;
-        }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+        recyclerView.setLayoutAnimation(controller);
+        clientOverviewAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

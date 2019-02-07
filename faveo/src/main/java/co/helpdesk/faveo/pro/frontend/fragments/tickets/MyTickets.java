@@ -728,7 +728,7 @@ public class MyTickets extends Fragment {
     private void runLayoutAnimation(final RecyclerView recyclerView) {
         final Context context = recyclerView.getContext();
         final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
 
         recyclerView.setLayoutAnimation(controller);
         ticketOverviewAdapter.notifyDataSetChanged();

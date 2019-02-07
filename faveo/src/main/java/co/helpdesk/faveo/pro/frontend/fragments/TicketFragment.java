@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -349,6 +351,7 @@ public class TicketFragment extends Fragment {
             });
 //
             ticketOverviewAdapter = new TicketOverviewAdapter(getContext(),ticketOverviewList);
+            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(ticketOverviewAdapter);
 
             if (ticketOverviewAdapter.getItemCount() == 0) {
@@ -356,6 +359,15 @@ public class TicketFragment extends Fragment {
                 textView.setVisibility(View.GONE);
             } else empty_view.setVisibility(View.GONE);
         }
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+        recyclerView.setLayoutAnimation(controller);
+        ticketOverviewAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 
     /**

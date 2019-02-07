@@ -150,7 +150,11 @@ public class InternalNoteActivity extends AppCompatActivity {
                 Toasty.error(InternalNoteActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
                 return;
             }
-            new FetchTicketThreads(InternalNoteActivity.this, Prefs.getString("TICKETid", null)).execute();
+
+            Toasty.success(InternalNoteActivity.this, getString(R.string.internal_notes_posted), Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(InternalNoteActivity.this,MainActivity.class);
+            startActivity(intent);
+            //new FetchTicketThreads(InternalNoteActivity.this, Prefs.getString("TICKETid", null)).execute();
 
         }
     }

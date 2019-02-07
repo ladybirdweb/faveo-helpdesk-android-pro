@@ -221,4 +221,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/create_ticket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/createticketicon"
+        app:fabSize="normal"
+        android:tint="@color/colorAccent"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"/>
+
 </android.support.design.widget.CoordinatorLayout>

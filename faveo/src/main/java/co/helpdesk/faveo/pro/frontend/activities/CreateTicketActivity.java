@@ -357,7 +357,12 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     alertDialog.show();
 
                 }
-                else {
+                else if (Prefs.getString("createTicketFromClient",null).equals("True")){
+                    Prefs.putString("createTicketFromClient","False");
+                    finish();
+
+                }
+                else  {
 //
                     Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -960,6 +965,11 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
             // Showing Alert Message
             alertDialog.show();
+
+        }
+        else if (Prefs.getString("createTicketFromClient",null).equals("True")){
+            Prefs.putString("createTicketFromClient","False");
+            finish();
 
         }
         else {

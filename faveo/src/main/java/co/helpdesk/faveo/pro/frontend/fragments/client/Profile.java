@@ -1,5 +1,6 @@
 package co.helpdesk.faveo.pro.frontend.fragments.client;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,6 +43,7 @@ public class Profile extends Fragment {
     EditText userName, firstName, email, phoneEditText, mobileEdittext;
     public String clientID;
     private OnFragmentInteractionListener mListener;
+    ProgressDialog progressDialog;
     RelativeLayout relativeLayoutmobile,relativeLayoutphone;
     public static Profile newInstance(String param1, String param2) {
         Profile fragment = new Profile();
@@ -82,6 +84,7 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.userprofile, container, false);
+            progressDialog=new ProgressDialog(getActivity());
             clientID=Prefs.getString("clientId",null);
             userName= (EditText) rootView.findViewById(R.id.username);
             firstName= (EditText) rootView.findViewById(R.id.firstname);
@@ -92,6 +95,8 @@ public class Profile extends Fragment {
             relativeLayoutmobile=rootView.findViewById(R.id.usermobileheading);
             relativeLayoutphone=rootView.findViewById(R.id.userphoneheading);
             if (InternetReceiver.isConnected()){
+                progressDialog.setMessage(getString(R.string.pleasewait));
+                progressDialog.show();
                 new FetchClientTickets(getActivity()).execute();
             }
 
@@ -111,6 +116,7 @@ public class Profile extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+            progressDialog.dismiss();
             if (isCancelled()) return;
 
             if (result == null) return;

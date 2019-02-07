@@ -5,6 +5,9 @@
       <config />
     </shared>
   </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
@@ -13,95 +16,24 @@
   <component name="ChangeListManager">
     <list default="true" id="f949db3c-d60f-4eb9-b24a-5533b4a772ed" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__agency_tango_android_avatar_view_0_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__agency_tango_android_avatar_view_0_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__agency_tango_android_avatar_view_picasso_0_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__agency_tango_android_avatar_view_picasso_0_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__br_com_simplepass_loading_button_android_1_14_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__br_com_simplepass_loading_button_android_1_14_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_amulyakhare_com_amulyakhare_textdrawable_1_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_amulyakhare_com_amulyakhare_textdrawable_1_0_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_databinding_adapters_1_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_databinding_adapters_1_3_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_databinding_library_1_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_databinding_library_1_3_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_animated_vector_drawable_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_animated_vector_drawable_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_appcompat_v7_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_appcompat_v7_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_cardview_v7_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_cardview_v7_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_1_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_1_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_solver_1_0_2_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_solver_1_0_2_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_design_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_design_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_recyclerview_v7_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_recyclerview_v7_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_compat_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_compat_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_ui_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_ui_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_utils_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_utils_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_fragment_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_fragment_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_media_compat_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_media_compat_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v13_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v13_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v4_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v4_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_vector_drawable_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_vector_drawable_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_core_2_2_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_core_2_2_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_idling_resource_2_2_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_idling_resource_2_2_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_exposed_instrumentation_api_publish_0_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_exposed_instrumentation_api_publish_0_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_rules_0_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_rules_0_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_runner_0_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_runner_0_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_transition_26_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_transition_26_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_bm_photoview_library_1_4_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_bm_photoview_library_1_4_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_cocosw_bottomsheet_0_9.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_cocosw_bottomsheet_0_9.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_answers_1_4_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_answers_1_4_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_beta_1_2_8.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_beta_1_2_8.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_crashlytics_2_9_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_crashlytics_2_9_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_crashlytics_core_2_6_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_crashlytics_sdk_android_crashlytics_core_2_6_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_droidninja_filepicker_1_0_8.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_droidninja_filepicker_1_0_8.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_elyeproj_libraries_loaderviewlibrary_1_4_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_elyeproj_libraries_loaderviewlibrary_1_4_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_drawee_0_14_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_drawee_0_14_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_fbcore_0_14_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_fbcore_0_14_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_fresco_0_14_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_fresco_0_14_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_imagepipeline_0_14_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_imagepipeline_0_14_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_imagepipeline_base_0_14_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_facebook_fresco_imagepipeline_base_0_14_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_flipboard_bottomsheet_commons_1_5_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_flipboard_bottomsheet_commons_1_5_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_flipboard_bottomsheet_core_1_5_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_flipboard_bottomsheet_core_1_5_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_futuremind_recyclerfastscroll_fastscroll_0_2_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_futuremind_recyclerfastscroll_fastscroll_0_2_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_getkeepsafe_taptargetview_taptargetview_1_11_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_getkeepsafe_taptargetview_taptargetview_1_11_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_GrenderG_Toasty_1_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_GrenderG_Toasty_1_1_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_curioustechizen_android_ago_library_1_4_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_curioustechizen_android_ago_library_1_4_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_emanzanoaxa_RippleEffect_52ea2a0ab6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_emanzanoaxa_RippleEffect_52ea2a0ab6.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gotev_android_upload_service_uploadservice_d84ca6e2a6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gotev_android_upload_service_uploadservice_d84ca6e2a6.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_javiersantos_BottomDialogs_1_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_javiersantos_BottomDialogs_1_2_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_jorgecastilloprz_fabprogresscircle_1_01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_jorgecastilloprz_fabprogresscircle_1_01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ppamorim_dragger_1_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ppamorim_dragger_1_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_sharish_ShimmerRecyclerView_v1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_sharish_ShimmerRecyclerView_v1_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_ads_identifier_15_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_ads_identifier_15_0_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_base_15_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_base_15_0_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_basement_15_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_basement_15_0_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_measurement_base_15_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_measurement_base_15_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_stats_15_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_stats_15_0_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_tasks_15_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_tasks_15_0_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_analytics_15_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_analytics_15_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_analytics_impl_15_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_analytics_impl_15_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_common_15_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_common_15_0_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_core_15_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_core_15_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_iid_15_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_iid_15_1_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_iid_interop_15_0_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_iid_interop_15_0_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_measurement_connector_15_0_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_measurement_connector_15_0_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_measurement_connector_impl_15_0_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_measurement_connector_impl_15_0_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_messaging_15_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_messaging_15_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_hbb20_ccp_2_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_hbb20_ccp_2_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_butterknife_8_5_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_butterknife_8_5_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_timber_timber_4_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_jakewharton_timber_timber_4_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_kishan_askpermission_askpermission_1_0_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_kishan_askpermission_askpermission_1_0_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_muddzdev_styleabletoast_1_0_6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_muddzdev_styleabletoast_1_0_6.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_pixplicity_easyprefs_library_1_8_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_pixplicity_easyprefs_library_1_8_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_leakcanary_leakcanary_android_1_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_leakcanary_leakcanary_android_1_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_leakcanary_leakcanary_android_no_op_1_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_leakcanary_leakcanary_android_no_op_1_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_vincent_filepicker_MultiTypeFilePicker_1_0_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_vincent_filepicker_MultiTypeFilePicker_1_0_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_vorlonsoft_androidrate_1_0_8.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_vorlonsoft_androidrate_1_0_8.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__io_fabric_sdk_android_fabric_1_4_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_fabric_sdk_android_fabric_1_4_3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__io_github_yavski_fab_speed_dial_1_0_6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_github_yavski_fab_speed_dial_1_0_6.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__pub_devrel_easypermissions_0_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__pub_devrel_easypermissions_0_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/faveo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/faveo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/InternalNoteActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/InternalNoteActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/NotificationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/NotificationActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/ClientList.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/ClientList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/TicketFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/TicketFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/UsersFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/UsersFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/client/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/client/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/ClosedTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/ClosedTickets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/InboxTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/InboxTickets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/TrashTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/TrashTickets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/UnassignedTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/UnassignedTickets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/services/MyFirebaseMessagingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/services/MyFirebaseMessagingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/layout/activity_client_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/layout/activity_client_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/layout/content_filter.xml" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/layout/content_filter.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -124,25 +56,41 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="FragmentDrawer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/drawers/FragmentDrawer.java">
+      <file leaf-file-name="ClientDetailActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="102" column="24" selection-start-line="102" selection-start-column="24" selection-end-line="102" selection-end-column="24" />
+            <state relative-caret-position="357">
+              <caret line="199" column="65" selection-start-line="199" selection-start-column="16" selection-end-line="199" selection-end-column="65" />
+              <folding>
+                <element signature="e#6911#7074#0" expanded="true" />
+                <element signature="e#7073#7074#0" expanded="true" />
+                <element signature="e#8691#8692#0" expanded="true" />
+                <element signature="e#8737#8738#0" expanded="true" />
+                <element signature="e#18602#18638#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/faveo/build.gradle">
+      <file leaf-file-name="CreateTicketActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+            <state relative-caret-position="22">
+              <caret line="342" column="67" selection-start-line="342" selection-start-column="67" selection-end-line="342" selection-end-column="67" />
+              <folding>
+                <element signature="e#100153#100154#0" expanded="true" />
+                <element signature="e#100186#100187#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>onBac</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -2147,6 +2095,22 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/faveo/build.gradle" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/services/MyFirebaseMessagingService.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/res/layout/content_filter.xml" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/InternalNoteActivity.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/NotificationActivity.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/InboxTickets.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/ClientList.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/ClosedTickets.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/TrashTickets.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/UnassignedTickets.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/TicketFragment.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/UsersFragment.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/res/layout/activity_client_profile.xml" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/client/Profile.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java" />
       </list>
     </option>
   </component>
@@ -2166,7 +2130,50 @@
           <expand>
             <path>
               <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
-              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
+              <item name="faveo" type="feadf853:AndroidModuleNode" />
+            </path>
+            <path>
+              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
+              <item name="faveo" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+            </path>
+            <path>
+              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
+              <item name="faveo" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
+              <item name="faveo" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
+              <item name="faveo" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="activities" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
+              <item name="faveo" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="fragments" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
+              <item name="faveo" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="fragments" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -2309,8 +2316,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -2318,16 +2324,17 @@
       <window_info id="Image Layers" order="2" />
       <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32909605" />
+      <window_info anchor="right" id="Preview" weight="0.37315437" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Logcat" order="7" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="7" visible="true" weight="0.78954804" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
-      <window_info anchor="bottom" id="Build" order="7" visible="true" weight="0.32909605" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17919463" />
+      <window_info anchor="bottom" id="Build" order="7" weight="0.32909605" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
@@ -2361,10 +2368,331 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/services/MyFirebaseInstanceIDService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-465">
+          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/services/MyFirebaseMessagingService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="310" column="95" selection-start-line="310" selection-start-column="95" selection-end-line="310" selection-end-column="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/content_create_ticket.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="661" column="16" selection-start-line="661" selection-start-column="16" selection-end-line="671" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/activity_create_ticket.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="458">
+          <caret line="120" column="37" selection-start-line="120" selection-start-column="37" selection-end-line="120" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/content_filter.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/activity_ticket_filter.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="54" column="45" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/TicketFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="71" column="37" selection-start-line="71" selection-start-column="37" selection-end-line="71" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/faveo/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="34">
           <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/adapters/NotificationAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/ClientList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="696" column="94" selection-start-line="696" selection-start-column="94" selection-end-line="696" selection-end-column="94" />
+          <folding>
+            <element signature="e#23704#23705#0" expanded="true" />
+            <element signature="e#23750#23751#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/adapters/TicketOverviewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/UsersFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="374" column="5" selection-start-line="374" selection-start-column="5" selection-end-line="374" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/TicketFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="353" column="43" selection-start-line="353" selection-start-column="43" selection-end-line="353" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/UnassignedTickets.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="760" column="5" selection-start-line="753" selection-start-column="3" selection-end-line="760" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/TrashTickets.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="787" column="94" selection-start-line="787" selection-start-column="94" selection-end-line="787" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/ClosedTickets.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="880" column="94" selection-start-line="880" selection-start-column="94" selection-end-line="880" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="730" column="94" selection-start-line="730" selection-start-column="94" selection-end-line="730" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/InboxTickets.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="1328" column="94" selection-start-line="1328" selection-start-column="67" selection-end-line="1328" selection-end-column="94" />
+          <folding>
+            <element signature="e#11014#11276#0" expanded="true" />
+            <element signature="e#11275#11276#0" expanded="true" />
+            <element signature="e#12706#12737#0" expanded="true" />
+            <element signature="e#12950#16043#0" expanded="true" />
+            <element signature="e#13387#13415#0" expanded="true" />
+            <element signature="e#13571#13599#0" expanded="true" />
+            <element signature="e#13866#13895#0" expanded="true" />
+            <element signature="e#14109#14138#0" expanded="true" />
+            <element signature="e#14353#14382#0" expanded="true" />
+            <element signature="e#14601#14638#0" expanded="true" />
+            <element signature="e#14858#14896#0" expanded="true" />
+            <element signature="e#15104#15141#0" expanded="true" />
+            <element signature="e#15350#15388#0" expanded="true" />
+            <element signature="e#15597#15626#0" expanded="true" />
+            <element signature="e#15836#15865#0" expanded="true" />
+            <element signature="e#16042#16043#0" expanded="true" />
+            <element signature="e#58395#98914#0" expanded="true" />
+            <element signature="e#98913#98914#0" expanded="true" />
+            <element signature="e#101986#102026#0" expanded="true" />
+            <element signature="e#102229#102259#0" expanded="true" />
+            <element signature="e#102866#102896#0" expanded="true" />
+            <element signature="e#103949#103977#0" expanded="true" />
+            <element signature="e#104588#104627#0" expanded="true" />
+            <element signature="e#104923#104963#0" expanded="true" />
+            <element signature="e#107509#107549#0" expanded="true" />
+            <element signature="e#107760#107793#0" expanded="true" />
+            <element signature="e#108319#109677#0" expanded="true" />
+            <element signature="e#109152#109179#0" expanded="true" />
+            <element signature="e#109676#109677#0" expanded="true" />
+            <element signature="e#112538#112578#0" expanded="true" />
+            <element signature="e#112755#112788#0" expanded="true" />
+            <element signature="e#114800#114840#0" expanded="true" />
+            <element signature="e#114990#115023#0" expanded="true" />
+            <element signature="e#115518#116982#0" expanded="true" />
+            <element signature="e#116353#116380#0" expanded="true" />
+            <element signature="e#116981#116982#0" expanded="true" />
+            <element signature="e#119469#119502#0" expanded="true" />
+            <element signature="e#126118#126136#0" expanded="true" />
+            <element signature="e#126798#126814#0" expanded="true" />
+            <element signature="e#136555#136577#0" expanded="true" />
+            <element signature="e#136658#138404#0" expanded="true" />
+            <element signature="e#138403#138404#0" expanded="true" />
+            <element signature="e#138472#138953#0" expanded="true" />
+            <element signature="e#138952#138953#0" expanded="true" />
+            <element signature="e#147036#148465#0" expanded="true" />
+            <element signature="e#147349#147377#0" expanded="true" />
+            <element signature="e#147567#147575#0" expanded="true" />
+            <element signature="e#148310#148338#0" expanded="true" />
+            <element signature="e#148464#148465#0" expanded="true" />
+            <element signature="e#148524#148833#0" expanded="true" />
+            <element signature="e#148832#148833#0" expanded="true" />
+            <element signature="e#152802#152836#0" expanded="true" />
+            <element signature="e#152953#152991#0" expanded="true" />
+            <element signature="e#153263#153926#0" expanded="true" />
+            <element signature="e#153741#153771#0" expanded="true" />
+            <element signature="e#153925#153926#0" expanded="true" />
+            <element signature="e#154062#154537#0" expanded="true" />
+            <element signature="e#154536#154537#0" expanded="true" />
+            <element signature="e#155307#155335#0" expanded="true" />
+            <element signature="e#155554#155582#0" expanded="true" />
+            <element signature="e#159227#162424#0" expanded="true" />
+            <element signature="e#160707#160741#0" expanded="true" />
+            <element signature="e#160787#160825#0" expanded="true" />
+            <element signature="e#161439#162044#0" expanded="true" />
+            <element signature="e#161814#161844#0" expanded="true" />
+            <element signature="e#162043#162044#0" expanded="true" />
+            <element signature="e#162057#162328#0" expanded="true" />
+            <element signature="e#162327#162328#0" expanded="true" />
+            <element signature="e#162423#162424#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/NotificationActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="290" column="94" selection-start-line="290" selection-start-column="94" selection-end-line="290" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/InternalNoteActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="176" column="44" selection-start-line="176" selection-start-column="44" selection-end-line="176" selection-end-column="44" />
+          <folding>
+            <element signature="e#2801#3396#0" expanded="true" />
+            <element signature="e#3395#3396#0" expanded="true" />
+            <element signature="e#3743#4088#0" expanded="true" />
+            <element signature="e#4087#4088#0" expanded="true" />
+            <element signature="e#4131#5289#0" expanded="true" />
+            <element signature="e#4408#4449#0" expanded="true" />
+            <element signature="e#5038#5071#0" expanded="true" />
+            <element signature="e#5204#5237#0" expanded="true" />
+            <element signature="e#5288#5289#0" expanded="true" />
+            <element signature="e#5966#6006#0" expanded="true" />
+            <element signature="e#6128#6169#0" expanded="true" />
+            <element signature="e#7599#7640#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/activity_ticket_detail.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="266" column="2" selection-start-line="266" selection-start-column="2" selection-end-line="282" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/TicketDetailActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="99" column="41" selection-start-line="99" selection-start-column="41" selection-end-line="99" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/activity_client_profile.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="424">
+          <caret line="225" column="38" selection-start-line="225" selection-start-column="38" selection-end-line="225" selection-end-column="38" />
+          <folding>
+            <element signature="e#3182#3199#0" expanded="true" />
+            <element signature="e#5199#5218#0" expanded="true" />
+            <element signature="e#6929#6952#0" expanded="true" />
+            <element signature="e#7893#7912#0" expanded="true" />
+            <element signature="e#8902#8921#0" expanded="true" />
+            <element signature="e#9946#9962#0" expanded="true" />
+            <element signature="e#11091#11131#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/RegisterUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="266" column="25" selection-start-line="266" selection-start-column="25" selection-end-line="266" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/client/Tickets.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-850">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/client/Profile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="111" column="9" selection-start-line="111" selection-start-column="9" selection-end-line="111" selection-end-column="9" />
+          <folding>
+            <element signature="e#3722#3752#0" expanded="true" />
+            <element signature="e#3819#3820#0" expanded="true" />
+            <element signature="e#3865#3866#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="199" column="65" selection-start-line="199" selection-start-column="16" selection-end-line="199" selection-end-column="65" />
+          <folding>
+            <element signature="e#6911#7074#0" expanded="true" />
+            <element signature="e#7073#7074#0" expanded="true" />
+            <element signature="e#8691#8692#0" expanded="true" />
+            <element signature="e#8737#8738#0" expanded="true" />
+            <element signature="e#18602#18638#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="342" column="67" selection-start-line="342" selection-start-column="67" selection-end-line="342" selection-end-column="67" />
+          <folding>
+            <element signature="e#100153#100154#0" expanded="true" />
+            <element signature="e#100186#100187#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -227,6 +229,7 @@ public class NotificationActivity extends AppCompatActivity {
             });
 
             notificationAdapter = new NotificationAdapter(getApplicationContext(),notiThreadList);
+            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(notificationAdapter);
             if (notificationAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);
@@ -280,6 +283,16 @@ public class NotificationActivity extends AppCompatActivity {
             notificationAdapter.notifyDataSetChanged();
             loading = true;
         }
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+
+        recyclerView.setLayoutAnimation(controller);
+        notificationAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 
     /**

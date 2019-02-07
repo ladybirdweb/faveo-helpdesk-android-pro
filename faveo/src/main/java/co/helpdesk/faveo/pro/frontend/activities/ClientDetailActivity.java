@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -97,6 +98,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
     ProgressDialog progressDialog;
     ImageView imageViewClientEdit;
     ImageView imageViewBack;
+    FloatingActionButton floatingActionButton;
     @Override
     public void onPause() {
         if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
@@ -126,7 +128,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
 
         StrictMode.setThreadPolicy(policy);
 
-
+        floatingActionButton=findViewById(R.id.create_ticket);
         imageViewBack= (ImageView) findViewById(R.id.imageViewBackClient);
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +192,15 @@ public class ClientDetailActivity extends AppCompatActivity implements
         } else Toasty.warning(this, getString(R.string.oops_no_internet), Toast.LENGTH_LONG).show();
 
 
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1=new Intent(ClientDetailActivity.this,CreateTicketActivity.class);
+                Prefs.putString("createTicketFromClient","True");
+                startActivity(intent1);
+            }
+        });
 
         //aSwitch.setEnabled(false);
 
@@ -289,6 +300,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
                 String lastName = requester.getString("last_name");
                 String username = requester.getString("user_name");
                 String clientname;
+                String email=requester.getString("email");
                 String letter="A";
                 if (firstname.equals("")&&lastName.equals("")){
                     letter= String.valueOf(username.toUpperCase().charAt(0));
@@ -360,6 +372,16 @@ public class ClientDetailActivity extends AppCompatActivity implements
                     textViewClientMobile.setText(mobile);
                 }
 
+
+                if (!mobile.equals("Not available")){
+                    Prefs.putString("firstusermobile",mobile);
+                }
+                else{
+                    Prefs.putString("firstusermobile",mobile);
+                }
+                Prefs.putString("firstusername",firstname);
+                Prefs.putString("lastusername",lastName);
+                Prefs.putString("firstuseremail",email);
 
                 textViewClientStatus.setText(requester.getString("active" +
                         "").equals("1") ? getString(R.string.active) : getString(R.string.inactive));
