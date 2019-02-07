@@ -638,6 +638,7 @@ public class LoginActivity extends AppCompatActivity {
                 String profile_pic = jsonObject2.getString("profile_pic");
                 Prefs.putString("profilePicture",profile_pic);
                 String role = jsonObject2.getString("role");
+                Prefs.putString("ROLE",role);
                 Log.d("ROLE",role);
                 if (role.equals("user")){
                     textInputLayoutUsername.setEnabled(true);
