@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Firebase" />
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -16,24 +16,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f949db3c-d60f-4eb9-b24a-5533b4a772ed" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/InternalNoteActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/InternalNoteActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/NotificationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/NotificationActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/ClientList.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/ClientList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/TicketFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/TicketFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/UsersFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/UsersFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/client/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/client/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/ClosedTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/ClosedTickets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/InboxTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/InboxTickets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/TrashTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/TrashTickets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/UnassignedTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/UnassignedTickets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/services/MyFirebaseMessagingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/services/MyFirebaseMessagingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/layout/activity_client_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/layout/activity_client_profile.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/layout/content_filter.xml" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/layout/content_filter.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -59,14 +44,29 @@
       <file leaf-file-name="ClientDetailActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="199" column="65" selection-start-line="199" selection-start-column="16" selection-end-line="199" selection-end-column="65" />
+            <state relative-caret-position="32">
+              <caret line="198" column="96" selection-start-line="198" selection-start-column="96" selection-end-line="198" selection-end-column="96" />
               <folding>
-                <element signature="e#6911#7074#0" expanded="true" />
-                <element signature="e#7073#7074#0" expanded="true" />
+                <element signature="e#4569#5675#0" expanded="true" />
+                <element signature="e#5674#5675#0" expanded="true" />
+                <element signature="e#6009#6025#0" expanded="true" />
+                <element signature="e#6325#6565#0" expanded="true" />
+                <element signature="e#6564#6565#0" expanded="true" />
+                <element signature="e#6787#6823#0" expanded="true" />
+                <element signature="e#6903#7159#0" expanded="true" />
+                <element signature="e#7158#7159#0" expanded="true" />
                 <element signature="e#8691#8692#0" expanded="true" />
                 <element signature="e#8737#8738#0" expanded="true" />
-                <element signature="e#18602#18638#0" expanded="true" />
+                <element signature="e#14075#14101#0" expanded="true" />
+                <element signature="e#14104#14132#0" expanded="true" />
+                <element signature="e#16714#16750#0" expanded="true" />
+                <element signature="e#17369#17400#0" expanded="true" />
+                <element signature="e#17454#17481#0" expanded="true" />
+                <element signature="e#19445#19481#0" expanded="true" />
+                <element signature="e#20333#20371#0" expanded="true" />
+                <element signature="e#20638#20810#0" expanded="true" />
+                <element signature="e#20809#20810#0" expanded="true" />
+                <element signature="e#21193#21223#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,8 +75,8 @@
       <file leaf-file-name="CreateTicketActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="342" column="67" selection-start-line="342" selection-start-column="67" selection-end-line="342" selection-end-column="67" />
+            <state relative-caret-position="73">
+              <caret line="936" column="45" selection-start-line="936" selection-start-column="45" selection-end-line="936" selection-end-column="45" />
               <folding>
                 <element signature="e#100153#100154#0" expanded="true" />
                 <element signature="e#100186#100187#0" expanded="true" />
@@ -2186,7 +2186,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="device.picker.selection" value="Nexus_6P_API_26" />
+    <property name="device.picker.selection" value="SG8DDYM7HQPVOFCU" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="sync.plugin.last.upgrade.timestamp" value="1549472722455" />
   </component>
@@ -2317,6 +2317,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -2329,7 +2330,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="7" visible="true" weight="0.78954804" />
+      <window_info anchor="bottom" id="Logcat" order="7" weight="0.78954804" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -2673,22 +2674,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/ClientDetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="199" column="65" selection-start-line="199" selection-start-column="16" selection-end-line="199" selection-end-column="65" />
+        <state relative-caret-position="32">
+          <caret line="198" column="96" selection-start-line="198" selection-start-column="96" selection-end-line="198" selection-end-column="96" />
           <folding>
-            <element signature="e#6911#7074#0" expanded="true" />
-            <element signature="e#7073#7074#0" expanded="true" />
+            <element signature="e#4569#5675#0" expanded="true" />
+            <element signature="e#5674#5675#0" expanded="true" />
+            <element signature="e#6009#6025#0" expanded="true" />
+            <element signature="e#6325#6565#0" expanded="true" />
+            <element signature="e#6564#6565#0" expanded="true" />
+            <element signature="e#6787#6823#0" expanded="true" />
+            <element signature="e#6903#7159#0" expanded="true" />
+            <element signature="e#7158#7159#0" expanded="true" />
             <element signature="e#8691#8692#0" expanded="true" />
             <element signature="e#8737#8738#0" expanded="true" />
-            <element signature="e#18602#18638#0" expanded="true" />
+            <element signature="e#14075#14101#0" expanded="true" />
+            <element signature="e#14104#14132#0" expanded="true" />
+            <element signature="e#16714#16750#0" expanded="true" />
+            <element signature="e#17369#17400#0" expanded="true" />
+            <element signature="e#17454#17481#0" expanded="true" />
+            <element signature="e#19445#19481#0" expanded="true" />
+            <element signature="e#20333#20371#0" expanded="true" />
+            <element signature="e#20638#20810#0" expanded="true" />
+            <element signature="e#20809#20810#0" expanded="true" />
+            <element signature="e#21193#21223#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="342" column="67" selection-start-line="342" selection-start-column="67" selection-end-line="342" selection-end-column="67" />
+        <state relative-caret-position="73">
+          <caret line="936" column="45" selection-start-line="936" selection-start-column="45" selection-end-line="936" selection-end-column="45" />
           <folding>
             <element signature="e#100153#100154#0" expanded="true" />
             <element signature="e#100186#100187#0" expanded="true" />

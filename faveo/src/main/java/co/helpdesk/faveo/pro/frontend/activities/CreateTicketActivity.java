@@ -357,12 +357,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                     alertDialog.show();
 
                 }
-                else if (Prefs.getString("createTicketFromClient",null).equals("True")){
-                    Prefs.putString("createTicketFromClient","False");
-                    finish();
-
-                }
-                else  {
+                else {
 //
                     Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -936,7 +931,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(newIntent);
 //                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
 //                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -965,11 +963,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
             // Showing Alert Message
             alertDialog.show();
-
-        }
-        else if (Prefs.getString("createTicketFromClient",null).equals("True")){
-            Prefs.putString("createTicketFromClient","False");
-            finish();
 
         }
         else {

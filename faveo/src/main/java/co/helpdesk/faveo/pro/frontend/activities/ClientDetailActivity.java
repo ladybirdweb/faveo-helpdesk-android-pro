@@ -197,7 +197,6 @@ public class ClientDetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Intent intent1=new Intent(ClientDetailActivity.this,CreateTicketActivity.class);
-                Prefs.putString("createTicketFromClient","True");
                 startActivity(intent1);
             }
         });
