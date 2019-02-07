@@ -17,6 +17,9 @@
         android:text="@string/no_records"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:textColor="@color/dark_translucent"
+        android:visibility="gone"
+        android:drawableTint="@color/dark_translucent"
+        android:drawableTop="@drawable/norecords"/>
 
 </FrameLayout>

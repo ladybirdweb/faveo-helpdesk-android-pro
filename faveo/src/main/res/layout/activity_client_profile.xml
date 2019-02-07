@@ -205,12 +205,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
-            app:tabTextColor="#808080"
+            app:tabTextColor="@color/grey_500"
             app:tabMode="fixed"
-            android:background="@color/colorAccent"
             app:tabIndicatorColor="@color/faveo"
-            app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextColor="@color/grey_500"/>
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="@color/colorAccent"/>
         <!--app:tabIndicatorColor="@color/faveo"-->
 
     </android.support.design.widget.AppBarLayout>

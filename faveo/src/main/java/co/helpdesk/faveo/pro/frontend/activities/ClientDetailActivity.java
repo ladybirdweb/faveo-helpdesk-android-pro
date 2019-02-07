@@ -440,7 +440,7 @@ public class ClientDetailActivity extends AppCompatActivity implements
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         fragmentOpenTickets = new Tickets();
         fragmentClosedTickets = new Profile();
-        adapter.addFragment(fragmentOpenTickets, getString(R.string.open_ticket));
+        adapter.addFragment(fragmentOpenTickets, getString(R.string.tickets));
         adapter.addFragment(fragmentClosedTickets, getString(R.string.profile));
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(onPageChangeListener);

@@ -521,35 +521,47 @@ public class Conversation extends Fragment {
                 }
             });
 
-//        if (i==ticketThreadList.size()-1){
-//            ticketViewHolder.reportAndReply.setText("reported ");
-//        }
-//        else{
-//            ticketViewHolder.reportAndReply.setText("updated ");
-//        }
-
             if (i==0){
-                for (int j=0;j<ticketThreadList.size()-1;j++){
-                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
-                    //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-                    //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
-                    //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
-                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-                }
+                ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+                //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+                //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+                ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+                ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+                //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+                ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
             }
-            else{
-                for (int j=0;j<ticketThreadList.size()-1;j++){
-                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
-                    //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-                    //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
-                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
-                    //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
-                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-                }
+            for (int j=0;j<ticketThreadList.size()-1;j++){
+                ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+                //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+                //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+                ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+                ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+                //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+                ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
             }
+
+//            if (i==0){
+//                for (int j=0;j<ticketThreadList.size()-1;j++){
+//                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+//                    //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+//                    //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+//                    //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+//                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+//                }
+//            }
+//            else{
+//                for (int j=0;j<ticketThreadList.size()-1;j++){
+//                    ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
+//                    //ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
+//                    //ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
+//                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
+//                    //ticketViewHolder.relativeLayoutWebView.setVisibility(View.GONE);
+//                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
+//                }
+//            }
 
             ticketViewHolder.replyIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -575,21 +587,6 @@ public class Conversation extends Fragment {
                         ticketViewHolder.relativeLayoutWebView.setVisibility(View.VISIBLE);
                         ticketViewHolder.webView.setVisibility(View.VISIBLE);
                     }
-//                if (ticketViewHolder.linearLayout.getVisibility() == View.VISIBLE) {
-//                    //ticketViewHolder.textViewMessageTitle.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.linearLayout.setVisibility(View.GONE);
-//                    ticketViewHolder.reportAndReply.setVisibility(View.GONE);
-//                    ticketViewHolder.textViewMessageTime.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.GONE);
-//                    ticketViewHolder.textViewShowingSome.setVisibility(View.VISIBLE);
-//                } else {
-//                    ticketViewHolder.textViewShowingSome.setVisibility(View.GONE);
-//                    ticketViewHolder.reportAndReply.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewTicketCreatedTime.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewMessageTime.setVisibility(View.GONE);
-//                    ticketViewHolder.linearLayout.setVisibility(View.VISIBLE);
-//                    //ticketViewHolder.webView.setVisibility(View.VISIBLE);
-//                }
                 }
             });
 

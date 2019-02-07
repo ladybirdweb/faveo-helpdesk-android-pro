@@ -12,27 +12,32 @@
     <TextView
         android:id="@+id/noiternet_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:drawableTint="@color/dark_translucent"
-        android:drawableTop="@drawable/ic_signal_wifi_off_black_48dp"
+        android:drawableTop="@drawable/nowifi"
         android:text="@string/no_internet_connection"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="200dp"
+        android:fontFamily="@font/hintedlainesansregular"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="150dp"
         android:layout_gravity="center"
+        android:layout_marginTop="200dp"
         android:drawableTint="@color/dark_translucent"
-        android:drawableTop="@drawable/ic_inbox_black_48dp"
-        android:text="@string/no_records"
+        android:drawableTop="@drawable/norecords"
+        android:text="@string/no_tickets"
+        android:fontFamily="@font/hintedlainesansregular"
         android:textColor="@color/dark_translucent"
         android:textSize="28sp"
+        android:textStyle="bold"
         android:visibility="gone" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,7 +56,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="0dp"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            >
 
         <com.cooltechworks.views.shimmer.ShimmerRecyclerView
             android:id="@+id/recycler_view"
