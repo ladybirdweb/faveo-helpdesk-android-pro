@@ -158,7 +158,6 @@
       <change afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/company_url.webp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/create_ticket.webp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/createticketicon.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/createticketpage.webp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/default_pic.webp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/done_black.webp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/email.webp" afterDir="false" />
@@ -339,17 +338,17 @@
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/agentprofile.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/attachment_background.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/avatar_empty.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/changestatus.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/changestatus.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/changestatus.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/clearcache.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/client_list.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/closed_ticket.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/company_url.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/create_ticket.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/createticketicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/customerdetail.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/customerdetail.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/customeredit.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/customeredit.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/customerview.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/customerview.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/dashboard.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/dashboard.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/customerdetail.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/customeredit.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/customerview.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/dashboard.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/default_pic.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/done_black.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/email.png" beforeDir="false" />
@@ -357,18 +356,18 @@
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/facebook.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/faveonewlogo.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/filter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/filtercustomers.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/filtercustomers.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/filtercustomers.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/helpsection.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/icons8newmoon24.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/inbox_tickets.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/login.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/loginurl.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/loginurl.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/loginusername.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/loginusername.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/logout.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/logout.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/loginurl.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/loginusername.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/logout.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/mail.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/menuopen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/multipleticketassign.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/multipleticketassign.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/multipleticketstatus.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/multipleticketstatus.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/multipleticketassign.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/multipleticketstatus.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/my_ticket.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/norecords.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/notepad.png" beforeDir="false" />
@@ -376,20 +375,20 @@
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/nowifi.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/organisation_list.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/otherfeature.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/particularticketview.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/particularticketview.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/particularticketview.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/phone.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/reply.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/selectingmultipleticket.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/selectingmultipleticket.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/selectingmultipleticket.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/settings.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/supporticon.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/system.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticket.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticket_list.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketfilter.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketfilter.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketsave.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketsave.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketsearch.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketsearch.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketfilter.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketsave.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketsearch.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketthreadattachment.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketview.webp" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketview.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/ticketview.webp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/trash_ticket.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/twitter.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/faveo/src/main/res/drawable/unassigned_ticket.png" beforeDir="false" />
@@ -419,42 +418,7 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SettingsActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/SettingsActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="140" column="69" selection-start-line="140" selection-start-column="69" selection-end-line="140" selection-end-column="69" />
-              <folding>
-                <element signature="e#6077#6327#0" expanded="true" />
-                <element signature="e#6326#6327#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OtherFeatures.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/OtherFeatures.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="20" column="43" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_other_features.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/activity_other_features.xml">
-          <provider editor-type-id="android-designer2">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="47">
-              <caret line="47" column="64" selection-start-line="47" selection-start-column="64" selection-end-line="47" selection-end-column="64" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -2508,7 +2472,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="50" />
     <option name="y" value="15" />
     <option name="width" value="1400" />
@@ -2718,11 +2682,11 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="7" visible="true" weight="0.68502825" />
+      <window_info anchor="bottom" id="Logcat" order="7" weight="0.68502825" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.32909605" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -3135,17 +3099,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/SettingsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="140" column="69" selection-start-line="140" selection-start-column="69" selection-end-line="140" selection-end-column="69" />
-          <folding>
-            <element signature="e#6077#6327#0" expanded="true" />
-            <element signature="e#6326#6327#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/OtherFeatures.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -3160,6 +3113,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="47">
           <caret line="47" column="64" selection-start-line="47" selection-start-column="64" selection-end-line="47" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/SettingsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="140" column="69" selection-start-line="140" selection-start-column="69" selection-end-line="140" selection-end-column="69" />
+          <folding>
+            <element signature="e#6077#6327#0" expanded="true" />
+            <element signature="e#6326#6327#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
