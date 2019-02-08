@@ -71,6 +71,8 @@ import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.ServerResponse;
 import net.gotev.uploadservice.UploadInfo;
 import net.gotev.uploadservice.UploadStatusDelegate;
+
+import org.apache.http.client.methods.HttpPost;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -216,7 +218,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         Window window = CreateTicketActivity.this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(CreateTicketActivity.this,R.color.mainActivityTopBar));
         GetCountryZipCode();
         refresh= (ImageButton) findViewById(R.id.imageRefresh);
         bottomSheet= (BottomSheetLayout) findViewById(R.id.bottomsheet);
@@ -229,8 +231,6 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
         setSupportActionBar(toolbar);
         rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         final ImageButton imageButton= (ImageButton) findViewById( R.id.attachment_close);
-        bottomNavigationView= (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         collaboratorArray=new ArrayList<>();
         button= (Button) findViewById(R.id.attachment);
         msgEdittext.setOnTouchListener(new View.OnTouchListener() {
@@ -453,6 +453,7 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
 
             }
         });
+
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -930,7 +931,10 @@ public class CreateTicketActivity extends AppCompatActivity implements Permissio
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke YES event
                     //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(newIntent);
 //                    Intent newIntent = new Intent(CreateTicketActivity.this,MainActivity.class);
 //                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

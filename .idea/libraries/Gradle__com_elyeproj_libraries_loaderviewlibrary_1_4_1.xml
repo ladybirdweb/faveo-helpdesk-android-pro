@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.elyeproj.libraries:loaderviewlibrary-1.4.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loaderviewlibrary-1.4.1.aar/13a8f68bd405057e74a1e0e323d9da61/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loaderviewlibrary-1.4.1.aar/13a8f68bd405057e74a1e0e323d9da61/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loaderviewlibrary-1.4.1.aar/d3b1b7b3878b1928e288565bea895b0f/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/loaderviewlibrary-1.4.1.aar/d3b1b7b3878b1928e288565bea895b0f/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

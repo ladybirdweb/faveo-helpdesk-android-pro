@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,7 @@ import co.helpdesk.faveo.pro.BuildConfig;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.R;
+import co.helpdesk.faveo.pro.SharedPreference;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import co.helpdesk.faveo.pro.model.MessageEvent;
@@ -61,6 +65,10 @@ public class SplashActivity extends AppCompatActivity {
     String error;
     Context context;
     Button button;
+    ImageView imageViewFaveo;
+    TextView textViewTag;
+    Animation uptodown,downtoup;
+    SharedPreference sharedPreferenceObj;
     public static String
             keyDepartment = "", valueDepartment = "",
             keySLA = "", valueSLA = "",
@@ -79,6 +87,7 @@ public class SplashActivity extends AppCompatActivity {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        sharedPreferenceObj = new SharedPreference(SplashActivity.this);
         setContentView(R.layout.activity_splash);
         Window window = SplashActivity.this.getWindow();
 
@@ -87,10 +96,55 @@ public class SplashActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(SplashActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(SplashActivity.this,R.color.mainActivityTopBar));
         ButterKnife.bind(this);
+        uptodown = AnimationUtils.loadAnimation(this,R.anim.uptodown);
+        downtoup = AnimationUtils.loadAnimation(this,R.anim.downtoup);
         button= (Button) findViewById(R.id.clear_cache);
+        imageViewFaveo=findViewById(R.id.faveoImage);
+        textViewTag=findViewById(R.id.faveotag);
+        imageViewFaveo.setAnimation(uptodown);
+        textViewTag.setAnimation(downtoup);
 
+
+        uptodown.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                progressDialog.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (InternetReceiver.isConnected()) {
+                    progressDialog.setVisibility(View.VISIBLE);
+                    new FetchDependency().execute();
+                    Prefs.putString("came from filter", "false");
+
+                }else
+                {
+                    progressDialog.setVisibility(View.INVISIBLE);
+                    loading.setText(getString(R.string.oops_no_internet));
+                    textViewtryAgain.setVisibility(View.VISIBLE);
+                    textViewrefresh.setVisibility(View.VISIBLE);
+                    textViewrefresh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
+                    Prefs.putString("querry","null");
+
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         //httpConnection=new HTTPConnection(getApplicationContext());
         //welcomeDialog=new WelcomeDialog();
         try {
@@ -109,29 +163,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-        if (InternetReceiver.isConnected()) {
-            progressDialog.setVisibility(View.VISIBLE);
-            new FetchDependency().execute();
-            Prefs.putString("came from filter", "false");
 
-        }else
-        {
-            progressDialog.setVisibility(View.INVISIBLE);
-            loading.setText(getString(R.string.oops_no_internet));
-            textViewtryAgain.setVisibility(View.VISIBLE);
-            textViewrefresh.setVisibility(View.VISIBLE);
-            textViewrefresh.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                    Intent intent=new Intent(SplashActivity.this,SplashActivity.class);
-                    startActivity(intent);
-                }
-            });
-            //Toast.makeText(this, "Oops! No internet", Toast.LENGTH_LONG).show();
-            Prefs.putString("querry","null");
-
-        }
         Prefs.putString("tickets", "null");
     }
 
@@ -294,7 +326,17 @@ public class SplashActivity extends AppCompatActivity {
                     Prefs.putString("unassignedTickets", "999+");
                 else
                     Prefs.putString("unassignedTickets", unasigned + "");
-                loading.setText(R.string.done_loading);
+
+
+
+
+                if (sharedPreferenceObj.getApp_runFirst().equals("FIRST")) {
+                    loading.setVisibility(View.VISIBLE);
+                    loading.setText("Welcome to FAVEO");
+                }else{
+                    loading.setVisibility(View.VISIBLE);
+                    loading.setText("Welcome back "+Prefs.getString("PROFILE_NAME",""));
+                }
 
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);

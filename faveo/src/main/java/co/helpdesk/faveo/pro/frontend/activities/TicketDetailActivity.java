@@ -27,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,52 +77,93 @@ public class TicketDetailActivity extends AppCompatActivity implements
     String title;
     TextView addCc;
     View viewpriority,viewCollapsePriority;
-    ImageView imgaeviewBack;
-    //public static boolean isShowing = false;
-    LoaderTextView textViewStatus, textviewAgentName,textViewTitle;
+    ImageView imgaeviewBack,imageViewSource;
+    LoaderTextView textViewStatus,textViewTitle;
+    TextView textviewAgentName;
     LoaderTextView textViewSubject;
     ArrayList<Data> statusItems;
     int id = 0;
-    FabSpeedDial fabSpeedDial;
-    View view;
+    //FabSpeedDial fabSpeedDial;
+//    View view;
     public boolean isFabOpen;
     public Menu menu;
     ImageView loaderImageView;
-    String clientId;
     String ticketSubject,ticketNumberMain,userName,ticketStatus,ticketPriorityColor;
     private LoaderTextView textViewDepartment;
-
+    TextView textViewreply;
+    ImageView imageViewReply,imageViewInternalNote;
+    RelativeLayout relativeLayoutToolbar;
+    String userId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_detail);
         Window window = TicketDetailActivity.this.getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
+        // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(TicketDetailActivity.this,R.color.faveo));
-        view=findViewById(R.id.overlay);
-        fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
+        window.setStatusBarColor(ContextCompat.getColor(TicketDetailActivity.this,R.color.mainActivityTopBar));
+        //view=findViewById(R.id.overlay);
+        //fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed_dial);
+//        toolbarBottom=findViewById(R.id.toolbarbottom);
+        imageViewSource=findViewById(R.id.imageView_default_profile);
         loaderImageView= (ImageView) findViewById(R.id.collaboratorview);
-        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+        relativeLayoutToolbar=findViewById(R.id.toolbarmenucontainer);
+        textViewreply=relativeLayoutToolbar.findViewById(R.id.tapForReply);
+        imageViewReply=relativeLayoutToolbar.findViewById(R.id.replyImage);
+        imageViewInternalNote=relativeLayoutToolbar.findViewById(R.id.internalNote);
+//        relativeLayoutToolbar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d("clickedOnRelative","True");
+//            }
+//        });
+//        textViewreply=findViewById(R.id.textViewReply);
+        //imageViewReply=findViewById(R.id.imageviewreply);
+//        imageViewInternalNote=findViewById(R.id.internalNote);
+//        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+//            @Override
+//            public boolean onMenuItemSelected(MenuItem menuItem) {
+//               int id=menuItem.getItemId();
+//               if (id==R.id.fab_reply){
+//                   Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+//                   intent.putExtra("ticket_id", ticketID);
+//                   startActivity(intent);
+//               }
+//               else if (id==R.id.fab_internalnote){
+//                   Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+//                   intent.putExtra("ticket_id", ticketID);
+//                   startActivity(intent);
+//               }
+//                //TODO: Start some activity
+//                return false;
+//            }
+//        });
+        imageViewReply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemSelected(MenuItem menuItem) {
-               int id=menuItem.getItemId();
-               if (id==R.id.fab_reply){
-                   Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
-                   intent.putExtra("ticket_id", ticketID);
-                   startActivity(intent);
-               }
-               else if (id==R.id.fab_internalnote){
-                   Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
-                   intent.putExtra("ticket_id", ticketID);
-                   startActivity(intent);
-               }
-                //TODO: Start some activity
-                return false;
+            public void onClick(View view) {
+                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                intent.putExtra("ticket_id", ticketID);
+                startActivity(intent);
+            }
+        });
+
+        imageViewInternalNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
+                intent.putExtra("ticket_id", ticketID);
+                startActivity(intent);
+            }
+        });
+
+        textViewreply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
+                intent.putExtra("ticket_id", ticketID);
+                startActivity(intent);
             }
         });
 
@@ -154,7 +196,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbarTicketDetail);
         setSupportActionBar(mToolbar);
         textViewStatus = (LoaderTextView) mAppBarLayout.findViewById(R.id.status);
-        textviewAgentName = (LoaderTextView) mAppBarLayout.findViewById(R.id.textViewagentName);
+        textviewAgentName = mAppBarLayout.findViewById(R.id.agentassigned);
         textViewTitle = (LoaderTextView) mAppBarLayout.findViewById(R.id.title);
         textViewDepartment= (LoaderTextView) mAppBarLayout.findViewById(R.id.department);
         textViewSubject = (LoaderTextView) mToolbar.findViewById(R.id.subject);
@@ -167,9 +209,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
         ticketID=intent.getStringExtra("ticket_id");
         textviewAgentName.setText(userName);
         textViewStatus.setText(ticketStatus);
-        textViewTitle.setText(ticketNumberMain);
-        textViewSubject.setText(ticketSubject);
-        clientId=Prefs.getString("clientId",null);
+        textViewTitle.setText(ticketSubject);
+        textViewSubject.setText(ticketNumberMain);
         Prefs.putString("TICKETid",ticketID);
         Prefs.putString("ticketId",ticketID);
         if (InternetReceiver.isConnected()){
@@ -182,6 +223,17 @@ public class TicketDetailActivity extends AppCompatActivity implements
             }).start();
             new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
         }
+
+//        textviewAgentName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent1=new Intent(TicketDetailActivity.this,ClientDetailActivity.class);
+//                Prefs.putString("cameFromNotification","false");
+//                Log.d("userId",""+userId);
+//                intent1.putExtra("CLIENT_ID","3");
+//                startActivity(intent1);
+//            }
+//        });
 
         //Log.d("cameFromNotification",cameFromNotification);
         ticketNumber = getIntent().getStringExtra("ticket_number");
@@ -390,14 +442,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
     public void onClick(View view) {
         int id = view.getId();
         switch (id){
-            case R.id.fab_reply:
+            case R.id.replyImage:
 
-                animateFAB();
+                //animateFAB();
                 Intent intent=new Intent(TicketDetailActivity.this,TicketReplyActivity.class);
                 intent.putExtra("ticket_id", ticketID);
                 startActivity(intent);
                 break;
-            case R.id.fab_internalnote:
+            case R.id.internalNote:
                 Intent intent1=new Intent(TicketDetailActivity.this,InternalNoteActivity.class);
                 intent1.putExtra("ticket_id", ticketID);
                 startActivity(intent1);
@@ -406,21 +458,21 @@ public class TicketDetailActivity extends AppCompatActivity implements
 
         }
     }
-    public void animateFAB(){
-
-        if(fabSpeedDial.isMenuOpen()){
-
-            view.setVisibility(View.VISIBLE);
-            isFabOpen = false;
-            Log.d("Raj", "close");
-
-        } else {
-            view.setVisibility(View.GONE);
-            isFabOpen = true;
-            Log.d("Raj","open");
-
-        }
-    }
+//    public void animateFAB(){
+//
+//        if(fabSpeedDial.isMenuOpen()){
+//
+//            view.setVisibility(View.VISIBLE);
+//            isFabOpen = false;
+//            Log.d("Raj", "close");
+//
+//        } else {
+//            view.setVisibility(View.GONE);
+//            isFabOpen = true;
+//            Log.d("Raj","open");
+//
+//        }
+//    }
 
     /**
      * Async task for changing the status of the ticket.
@@ -523,7 +575,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            fabSpeedDial.setRotation(positionOffset * 180.0f);
+            //fabSpeedDial.setRotation(positionOffset * 180.0f);
 
         }
         /**
@@ -534,14 +586,14 @@ public class TicketDetailActivity extends AppCompatActivity implements
         public void onPageSelected(int position) {
             switch (position) {
                 case 0:
-                    fabSpeedDial.show();
+                    //fabSpeedDial.show();
                     break;
 
                 case 1:
-                    fabSpeedDial.hide();
+                    //fabSpeedDial.hide();
                     break;
                 default:
-                    fabSpeedDial.show();
+                    //fabSpeedDial.show();
                     break;
             }
         }
@@ -793,8 +845,58 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 String ticketNumber=jsonObject2.getString("ticket_number");
                 String statusName=jsonObject2.getString("status_name");
                 String subject=jsonObject2.getString("title");
-                String department=jsonObject2.getString("dept_name");
                 String priorityColor=jsonObject2.getString("priority_color");
+                String source=jsonObject2.getString("source_name");
+                switch (source) {
+                    case "chat": {
+                        int color = Color.parseColor(priorityColor);
+                        imageViewSource.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
+                        imageViewSource.setColorFilter(color);
+                        break;
+                    }
+                    case "web": {
+                        int color = Color.parseColor(priorityColor);
+                        imageViewSource.setImageResource(R.drawable.web_design);
+                        imageViewSource.setColorFilter(color);
+                        break;
+                    }
+                    case "agent": {
+                        int color = Color.parseColor(priorityColor);
+                        imageViewSource.setImageResource(R.drawable.mail);
+                        imageViewSource.setColorFilter(color);
+                        break;
+                    }
+                    case "email": {
+                        int color = Color.parseColor(priorityColor);
+                        imageViewSource.setImageResource(R.drawable.mail);
+                        imageViewSource.setColorFilter(color);
+                        break;
+                    }
+                    case "facebook": {
+                        int color = Color.parseColor(priorityColor);
+                        imageViewSource.setImageResource(R.drawable.facebook);
+                        imageViewSource.setColorFilter(color);
+                        break;
+                    }
+                    case "twitter": {
+                        int color = Color.parseColor(priorityColor);
+                        imageViewSource.setImageResource(R.drawable.twitter);
+                        imageViewSource.setColorFilter(color);
+                        break;
+                    }
+                    case "call": {
+                        int color = Color.parseColor(priorityColor);
+                        imageViewSource.setImageResource(R.drawable.phone);
+                        imageViewSource.setColorFilter(color);
+                        break;
+                    }
+                    default:
+                        imageViewSource.setVisibility(View.GONE);
+                        break;
+                }
+
+                String department=jsonObject2.getString("dept_name");
+
                 if (!priorityColor.equals("")||!priorityColor.equals("null")){
                     viewpriority.setBackgroundColor(Color.parseColor(priorityColor));
                     viewCollapsePriority.setBackgroundColor(Color.parseColor(priorityColor));
@@ -805,6 +907,8 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 }
                 JSONObject jsonObject3=jsonObject2.getJSONObject("from");
                 String userName = jsonObject3.getString("first_name")+" "+jsonObject3.getString("last_name");
+                userId=jsonObject3.getString("id");
+
                 if (userName.equals("")||userName.equals("null null")||userName.equals(" ")){
                     userName=jsonObject3.getString("user_name");
                     textviewAgentName.setText(userName);
@@ -819,7 +923,7 @@ public class TicketDetailActivity extends AppCompatActivity implements
                 else{
                     textViewStatus.setVisibility(View.GONE);
                 }
-                textViewTitle.setText(ticketNumber);
+                textViewSubject.setText(ticketNumber);
                 if (subject.startsWith("=?")){
                     title=subject.replaceAll("=?UTF-8?Q?","");
                     String newTitle=title.replaceAll("=E2=80=99","");
@@ -829,13 +933,13 @@ public class TicketDetailActivity extends AppCompatActivity implements
                     String newTitle1=finalTitle.replace("?=","");
                     String newTitle2=newTitle1.replace("_"," ");
                     Log.d("new name",newTitle2);
-                    textViewSubject.setText(newTitle2);
+                    textViewTitle.setText(newTitle2);
                 }
                 else if (!subject.equals("null")){
-                    textViewSubject.setText(subject);
+                    textViewTitle.setText(subject);
                 }
                 else if (subject.equals("null")){
-                    textViewSubject.setText("");
+                    textViewTitle.setText("");
                 }
                 if (!department.equals("")||!department.equals("null")){
                     textViewDepartment.setText(department);

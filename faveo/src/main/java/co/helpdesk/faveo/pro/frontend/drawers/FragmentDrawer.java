@@ -7,15 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -205,8 +208,8 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         listView.setAdapter(drawerItemCustomAdapter);
         progressDialog=new ProgressDialog(getActivity());
         drawerItemCustomAdapter.notifyDataSetChanged();
-        UIUtils.setListViewHeightBasedOnItems(listView);
-        UIUtils.setListViewHeightBasedOnItems(listView);
+        //UIUtils.setListViewHeightBasedOnItems(listView);
+        //UIUtils.setListViewHeightBasedOnItems(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -353,8 +356,14 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
         ticketList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listView.getVisibility()==View.VISIBLE){
+                    listView.setVisibility(View.GONE);
+                }
+                else{
+                    listView.setVisibility(View.VISIBLE);
+                }
                 //count++;
-                listView.setVisibility(View.VISIBLE);
+
             }
         });
         return layout;
@@ -407,9 +416,14 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
                 super.onDrawerSlide(drawerView, slideOffset);
                 toolbar.setAlpha(1 - slideOffset / 2);
             }
+
+
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+//        mDrawerToggle.setDrawerIndicatorEnabled(false);
+//        mDrawerToggle.setHomeAsUpIndicator(getActivity().getDrawable(R.drawable.ic_menu_black_24dp));
+
         mDrawerLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -785,7 +799,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 
             case R.id.create_ticket:
                 option=6;
-                linearLayoutCreate.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                //linearLayoutCreate.setBackgroundColor(getResources().getColor(R.color.grey_200));
                 Prefs.putString("firstusername","null");
                 Prefs.putString("lastusername","null");
                 Prefs.putString("firstuseremail","null");
@@ -822,7 +836,7 @@ public class FragmentDrawer extends Fragment implements View.OnClickListener {
 //                title = getString(R.string.closed_tickets);
 //                fragment = getActivity().getSupportFragmentManager().findFragmentByTag(title);
 //                if (fragment == null)
-//                    fragment = new ClosedTickets();
+//                    fragment = new Profile();
 //                break;
 //            case R.id.trash_tickets:
 //                title = getString(R.string.trash);

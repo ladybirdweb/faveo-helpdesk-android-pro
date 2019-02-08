@@ -1,17 +1,26 @@
 package co.helpdesk.faveo.pro;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.app.NotificationCompat;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.io.File;
 
+import co.helpdesk.faveo.pro.frontend.activities.MainActivity;
 import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
 import io.fabric.sdk.android.Fabric;
 
@@ -26,9 +35,12 @@ import io.fabric.sdk.android.Fabric;
 public class FaveoApplication extends MultiDexApplication {
     private static FaveoApplication instance;
     InternetReceiver internetReceiver;
-
+    NotificationManager notifManager;
     @Override
     public void onCreate() {
+        //createNotificationChannel();
+        FirebaseApp.initializeApp(this);
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true); FirebaseMessaging.getInstance().subscribeToTopic("subTopic");
         Fabric.with(this, new Crashlytics());
         Thread.setDefaultUncaughtExceptionHandler(new LocalFileUncaughtExceptionHandler(this,
                 Thread.getDefaultUncaughtExceptionHandler()));

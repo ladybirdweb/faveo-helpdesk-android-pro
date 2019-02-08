@@ -10,14 +10,14 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:theme="@style/MyMaterialTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="60dp"
+            android:background="#154c66"
             app:popupTheme="@style/MyMaterialTheme.PopupOverlay">
 
             <RelativeLayout
@@ -31,6 +31,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:backgroundTint="@color/colorAccent"
                     android:background="@drawable/ic_arrow_back_black_24dp" />
 
                 <TextView
@@ -40,9 +41,10 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginStart="24dp"
                     android:text="@string/ticket"
-                    android:textColor="@color/theme"
-                    android:textSize="18sp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
                     android:textStyle="bold"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:textAllCaps="true"
                     android:layout_alignTop="@+id/imageViewBack"
                     android:layout_toRightOf="@+id/imageViewBack"
@@ -59,28 +61,30 @@
     </android.support.design.widget.AppBarLayout>
     <TextView
         android:id="@+id/dashboard"
-        android:padding="9dp"
+        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="85dp"
         android:text="@string/dashboard"
-        android:textSize="20sp"/>
+        android:textSize="16sp"
+        android:fontFamily="@font/hintedlainesansregular"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/faveo">
+        android:background="@color/grey_500">
 
     </View>
     <TextView
         android:id="@+id/ticketguide"
         android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="65dp"
         android:text="@string/ticketGuide"
-        android:textSize="20sp"/>
+        android:textSize="16sp"
+        android:fontFamily="@font/hintedlainesansregular"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/faveo">
+        android:background="@color/grey_500">
 
     </View>
     <TextView
@@ -89,11 +93,12 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:text="@string/viewOfTicket"
-        android:textSize="20sp"/>
+        android:textSize="16sp"
+        android:fontFamily="@font/hintedlainesansregular"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/faveo">
+        android:background="@color/grey_500">
 
     </View>
 </LinearLayout>

@@ -61,8 +61,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
             if (notiThread.getBy().equals("System")){
                 viewHolder.textSub.setText("System, "+notiThread.getTicketsubject());
-                viewHolder.roundedImageViewProfilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
-                viewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.default_pic);
+                Picasso.with(context).load(R.drawable.default_pic).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
             }
             else{
                 viewHolder.textSub.setText(notiThread.getRequesterName().trim() + ", " + notiThread.getTicketsubject());
@@ -76,18 +75,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     ColorGenerator generator = ColorGenerator.MATERIAL;
                     TextDrawable drawable = TextDrawable.builder()
                             .buildRound(letter, generator.getRandomColor());
-                    viewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
                     viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
                 }
             }
-
 
 
             if (notiThread.getNoti_seen().equals("1")) {
                 viewHolder.textSub.setTypeface(null, Typeface.NORMAL);
                 viewHolder.textSub.setTextColor(Color.parseColor("#7a7a7a"));
             } else {
-                viewHolder.textSub.setTypeface(null, Typeface.BOLD);
+                //viewHolder.textSub.setTypeface(null, Typeface.BOLD);
                 viewHolder.textSub.setTextColor(Color.parseColor("#000000"));
             }
             viewHolder.card.setOnClickListener(new View.OnClickListener() {

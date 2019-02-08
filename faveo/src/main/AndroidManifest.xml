@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
+
 
     <application
         android:name=".FaveoApplication"
@@ -26,7 +26,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
-        tools:replace="allowBackup, label">
+        tools:replace="allowBackup, label"
+        android:windowSoftInputMode="stateAlwaysHidden"
+        android:screenOrientation="portrait"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <!--android:hardwareAccelerated="false"-->
         <!--android:largeHeap="true"-->
@@ -128,12 +131,15 @@
         <!--android:name="io.fabric.ApiKey"-->
         <!--android:value="3d31c3fca25cb228d17bfa05856d933d97e90db1" />-->
 
-        <service android:name=".frontend.services.MyFirebaseInstanceIDService">
+        <service android:name=".frontend.services.MyFirebaseInstanceIDService"
+            >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".frontend.services.MyFirebaseMessagingService">
+        <service android:name=".frontend.services.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -162,7 +168,8 @@
             android:launchMode="singleTop"
             android:parentActivityName=".frontend.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemes">
+            android:theme="@style/AppThemes"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -185,7 +192,9 @@
             android:name=".frontend.activities.CollaboratorAdd"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
-        <activity android:name=".frontend.activities.TicketFilter" />
+        <activity android:name=".frontend.activities.TicketFilter"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
         <activity android:name=".frontend.activities.EditCustomer" />
         <activity
             android:name=".frontend.activities.MultiAssigningActivity"
@@ -243,17 +252,8 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".frontend.activities.MultipleTicketMerge"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-        </activity>
         <activity
             android:name=".frontend.activities.FeedBackActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity
-            android:name=".frontend.activities.GivingFeedback"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>

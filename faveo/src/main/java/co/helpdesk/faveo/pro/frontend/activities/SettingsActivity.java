@@ -1,6 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(SettingsActivity.this, R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(SettingsActivity.this, R.color.mainActivityTopBar));
         imageView = (ImageView) findViewById(R.id.imageViewBack);
         //switchCompatCrashReports = (SwitchCompat) findViewById(R.id.switch_crash_reports);
         buttonFeedback = (Button) findViewById(R.id.feedback);
@@ -91,8 +92,13 @@ public class SettingsActivity extends AppCompatActivity {
         buttonFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SettingsActivity.this, FeedBackActivity.class);
-                startActivity(intent);
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","support.faveohelpdesk.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+//                Intent intent = new Intent(SettingsActivity.this, FeedBackActivity.class);
+//                startActivity(intent);
 
             }
         });
@@ -137,7 +143,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override

@@ -28,7 +28,7 @@ String ticketlist,ticketsearch;
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(TicketList.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(TicketList.this,R.color.mainActivityTopBar));
         textView= (TextView) findViewById(R.id.ticketlistview);
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         textView1= (TextView) findViewById(R.id.ticketsearch);

@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import co.helpdesk.faveo.pro.FaveoApplication;
 import co.helpdesk.faveo.pro.Helper;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -55,7 +56,7 @@ public class RegisterUser extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(RegisterUser.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(RegisterUser.this,R.color.mainActivityTopBar));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         submit= (Button) findViewById(R.id.buttonCreateUser);

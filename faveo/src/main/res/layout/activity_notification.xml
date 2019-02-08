@@ -10,17 +10,30 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:elevation="4dp"
-        android:theme="@style/AppThemeOverlay.ActionBar">
+        android:backgroundTint="#154c66">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="60dp"
             android:background="?attr/colorPrimary"
+            android:backgroundTint="#154c66"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/AppThemeOverlay.ActionBar" />
+            app:theme="@style/myToolbarTheme">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAllCaps="false"
+                android:gravity="center_vertical"
+                android:text="@string/notification"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </android.support.v7.widget.Toolbar>
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"

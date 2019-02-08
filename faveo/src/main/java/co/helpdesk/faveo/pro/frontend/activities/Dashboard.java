@@ -30,7 +30,7 @@ ImageView imageView;
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(Dashboard.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(Dashboard.this,R.color.mainActivityTopBar));
         textView= (TextView) findViewById(R.id.dashboardcreate);
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         imageView.setOnClickListener(new View.OnClickListener() {

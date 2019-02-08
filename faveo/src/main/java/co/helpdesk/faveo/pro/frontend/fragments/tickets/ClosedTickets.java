@@ -1,5 +1,7 @@
 package co.helpdesk.faveo.pro.frontend.fragments.tickets;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,11 +12,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,8 +33,15 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +49,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.github.curioustechizen.ago.RelativeTimeTextView;
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.picasso.Picasso;
@@ -43,9 +57,13 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -77,7 +95,7 @@ public class ClosedTickets extends Fragment {
     String title;
     @BindView(R.id.cardList)
     ShimmerRecyclerView recyclerView;
-
+    ImageView imageViewssignTicket,imageViewChangingStatus;
     int currentPage = 1;
     int page = 1;
 
@@ -104,6 +122,7 @@ public class ClosedTickets extends Fragment {
     public String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    public TextView textViewShowingCount;
 
     public static ClosedTickets newInstance(String param1, String param2) {
         ClosedTickets fragment = new ClosedTickets();
@@ -204,7 +223,7 @@ public class ClosedTickets extends Fragment {
 //            });
             Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar2);
             Toolbar toolbar1 = (Toolbar) rootView.findViewById(R.id.toolbarfilteration);
-            toolbar1.setVisibility(View.VISIBLE);
+            //toolbar1.setVisibility(View.VISIBLE);
             toolbar1.setOverflowIcon(getResources().getDrawable(R.drawable.ic_if_filter_383135));
 
             toolbar1.setOnClickListener(new View.OnClickListener() {
@@ -793,7 +812,7 @@ public class ClosedTickets extends Fragment {
         protected void onPostExecute(String result) {
             //progressDialog.dismiss();
             swipeRefresh.setRefreshing(false);
-            textView.setText(""+total+" tickets");
+            textView.setText(""+total+" Tickets");
 
             if (swipeRefresh.isRefreshing())
                 swipeRefresh.setRefreshing(false);
@@ -855,7 +874,6 @@ public class ClosedTickets extends Fragment {
             } else empty_view.setVisibility(View.GONE);
         }
     }
-
     private class FetchNextPage extends AsyncTask<String, Void, String> {
         Context context;
         int page;
@@ -949,17 +967,17 @@ public class ClosedTickets extends Fragment {
     public class TicketOverviewAdapter extends RecyclerView.Adapter<TicketOverviewAdapter.TicketViewHolder> {
         private List<TicketOverview> ticketOverviewList;
         String subject;
-        int length=0;
+        int length = 0;
         private Context context;
-        ArrayList<Integer> checked_items= new ArrayList<>();
-        ArrayList<String> ticketSubject=new ArrayList<>();
+        ArrayList<Integer> checked_items = new ArrayList<>();
+        ArrayList<String> ticketSubject = new ArrayList<>();
         private SparseBooleanArray mSelectedItemsIds;
         private List<Integer> selectedIds = new ArrayList<>();
 
 
-        public TicketOverviewAdapter(Context context,List<TicketOverview> ticketOverviewList) {
+        public TicketOverviewAdapter(Context context, List<TicketOverview> ticketOverviewList) {
             this.ticketOverviewList = ticketOverviewList;
-            this.context=context;
+            this.context = context;
             mSelectedItemsIds = new SparseBooleanArray();
         }
 
@@ -967,347 +985,269 @@ public class ClosedTickets extends Fragment {
         public int getItemCount() {
             return ticketOverviewList.size();
         }
-
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
         @Override
         public void onBindViewHolder(final TicketOverviewAdapter.TicketViewHolder ticketViewHolder, final int i) {
-            final TicketOverview ticketOverview = ticketOverviewList.get(i);
-            String letter;
-            if (!ticketOverview.getClientName().equals("")){
-                letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
-            }
-            else{
-                letter="N";
-            }
-            int id=ticketOverviewList.get(i).getTicketID();
-            if (selectedIds.contains(id)){
-                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#bdbdbd"));
-            }
-            subject=ticketOverview.ticketSubject;
-            if (subject.startsWith("=?UTF-8?Q?")&&subject.endsWith("?=")){
-                String first=subject.replace("=?UTF-8?Q?","");
-                String second=first.replace("_"," ");
-                String second1=second.replace("=C3=BA","");
-                String third = second1.replace("=C2=A0", "");
-                String fourth=third.replace("?=","");
-                String fifth=fourth.replace("=E2=80=99","'");
-                ticketViewHolder.textViewSubject.setText(fifth);
-            }
-            else{
-                ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
-            }
 
+            try {
+                final TicketOverview ticketOverview = ticketOverviewList.get(i);
+                String letter = String.valueOf(ticketOverview.clientName.charAt(0)).toUpperCase();
 
-            if (checked_items.contains(id)){
-                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#d6d6d6"));
-            }
-            else {
-                ticketViewHolder.ticket.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            }
+                Log.d("letter", letter);
+                int id = ticketOverviewList.get(i).getTicketID();
+                subject = ticketOverview.ticketSubject;
+                if (subject.startsWith("=?UTF-8?Q?") && subject.endsWith("?=")) {
+                    String first = subject.replace("=?UTF-8?Q?", "");
+                    String second = first.replace("_", " ");
+                    String third = second.replace("=C2=A0", "");
+                    String fourth = third.replace("?=", "");
+                    String fifth = fourth.replace("=E2=80=99", "'");
+                    ticketViewHolder.textViewSubject.setText(fifth);
+                } else {
+                    ticketViewHolder.textViewSubject.setText(ticketOverview.ticketSubject);
+                }
 
-            if (ticketOverview.ticketAttachments.equals("0")) {
-
-                ticketViewHolder.attachementView.setVisibility(View.GONE);
-            } else {
-                int color = Color.parseColor("#808080");
-                ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
-                ticketViewHolder.attachementView.setColorFilter(color);
-            }
-            if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
+                if (ticketOverview.ticketAttachments.equals("0")) {
+                    ticketViewHolder.attachementView.setVisibility(View.GONE);
+                } else {
+                    int color = Color.parseColor("#808080");
+                    ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
+                    ticketViewHolder.attachementView.setColorFilter(color);
+                }
+                if (ticketOverview.dueDate != null && !ticketOverview.dueDate.equals("null"))
 //            if (Helper.compareDates(ticketOverview.dueDate) == 1) {
 //                ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
 //            } else ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
 
-                if (Helper.compareDates(ticketOverview.dueDate) == 2) {
-                    ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewduetoday.setText(R.string.due_today);
-//                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
-//                    ((GradientDrawable)ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
-//                    ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor();
+                    if (Helper.compareDates(ticketOverview.dueDate) == 2) {
+                        ticketViewHolder.textViewduetoday.setVisibility(View.VISIBLE);
+                        ticketViewHolder.textViewduetoday.setText(R.string.due_today);
+                        //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#FFD700"));
+                        ((GradientDrawable) ticketViewHolder.textViewduetoday.getBackground()).setColor(Color.parseColor("#3da6d7"));
+                        ticketViewHolder.textViewduetoday.setTextColor(Color.parseColor("#ffffff"));
+                        //ticketViewHolder.textViewOverdue.setBackgroundColor();
 
-                }
-                else  if (Helper.compareDates(ticketOverview.dueDate) == 1) {
-                    ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
-//                    ticketViewHolder.textViewOverdue.setText(R.string.overdue);
-                    //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
+                    } else if (Helper.compareDates(ticketOverview.dueDate) == 1) {
+                        ticketViewHolder.textViewOverdue.setVisibility(View.VISIBLE);
+                        ticketViewHolder.textViewOverdue.setText(R.string.overdue);
+                        //ticketViewHolder.textViewOverdue.setBackgroundColor(Color.parseColor("#ef9a9a"));
 //                GradientDrawable drawable = (GradientDrawable) context.getDrawable(ticketViewHolder.textViewOverdue);
 //
 ////set color
 //                 drawable.setColor(color);
-                    ((GradientDrawable)ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
-                    ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
-                }
-                else {
-                    ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
-                }
+                        ((GradientDrawable) ticketViewHolder.textViewOverdue.getBackground()).setColor(Color.parseColor("#3da6d7"));
+                        ticketViewHolder.textViewOverdue.setTextColor(Color.parseColor("#ffffff"));
+                    } else {
+                        ticketViewHolder.textViewOverdue.setVisibility(View.GONE);
+                    }
 
 
-            ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
+                ticketViewHolder.textViewTicketID.setText(ticketOverview.ticketID + "");
 
-            ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
-            String clientFinalName="";
-            if (ticketOverview.getClientName().startsWith("=?")) {
-                String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
-                String newClientName = clientName.replaceAll("=E2=84=A2", "");
-                String finalName = newClientName.replace("=??Q?", "");
-                String name = finalName.replace("?=", "");
-                String newName = name.replace("_", " ");
-                Log.d("new name", newName);
-                if (!Character.isUpperCase(newName.charAt(0))){
-                    clientFinalName=newName.replace(newName.charAt(0),newName.toUpperCase().charAt(0));
-                    ticketViewHolder.textViewClientName.setText(clientFinalName);
-                }
-                else{
+                ticketViewHolder.textViewTicketNumber.setText(ticketOverview.ticketNumber);
+                if (ticketOverview.getClientName().startsWith("=?")) {
+                    String clientName = ticketOverview.getClientName().replaceAll("=?UTF-8?Q?", "");
+                    String newClientName = clientName.replaceAll("=E2=84=A2", "");
+                    String finalName = newClientName.replace("=??Q?", "");
+                    String name = finalName.replace("?=", "");
+                    String newName = name.replace("_", " ");
+                    Log.d("new name", newName);
                     ticketViewHolder.textViewClientName.setText(newName);
-                }
-
-            } else {
-                if (!Character.isUpperCase(ticketOverview.clientName.charAt(0))){
-                    clientFinalName=ticketOverview.clientName.replace(ticketOverview.clientName.charAt(0),ticketOverview.clientName.toUpperCase().charAt(0));
-                    ticketViewHolder.textViewClientName.setText(clientFinalName);
-                }
-                else{
+                } else {
                     ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
-                }
-                //ticketViewHolder.textViewClientName.setText(ticketOverview.clientName);
 
-            }
-            if (ticketOverview.ticketPriorityColor.equals("null")){
-                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
-            }
-            else if (ticketOverview.ticketPriorityColor != null) {
-                ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
-            }
+                }
+                if (ticketOverview.ticketPriorityColor.equals("null")) {
+                    ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
+                    ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor("#3da6d7"));
+                } else if (ticketOverview.ticketPriorityColor != null) {
+                    //ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor(ticketOverview.ticketPriorityColor));
+                    ticketViewHolder.ticketPriority.setColorFilter(Color.parseColor(ticketOverview.ticketPriorityColor));
+                }
 
 
 //        else if (ticketOverview.ticketPriorityColor.equals("null")){
 //            ticketViewHolder.ticketPriority.setBackgroundColor(Color.parseColor("#3da6d7"));
 //        }
-            ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
-
-            if (!ticketOverview.countthread.equals("0")){
-                ticketViewHolder.countThread.setText("("+ticketOverview.getCountthread()+")");
-            }
-            else{
-                ticketViewHolder.countThread.setVisibility(View.GONE);
-            }
-
-            switch (ticketOverview.sourceTicket) {
-                case "chat": {
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.chat);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
+                if (!ticketOverview.ticketTime.equals("null")) {
+                    ticketViewHolder.textViewTime.setReferenceTime(Helper.relativeTime(ticketOverview.ticketTime));
+                } else {
+                    ticketViewHolder.textViewTime.setVisibility(View.GONE);
                 }
-                case "web": {
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.web);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "agent": {
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "email": {
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_email_black_24dp);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "facebook": {
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.facebook);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "twitter": {
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.twitter);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                case "call": {
-                    int color = Color.parseColor("#808080");
-                    ticketViewHolder.source.setImageResource(R.drawable.ic_call_black_24dp);
-                    ticketViewHolder.source.setColorFilter(color);
-                    break;
-                }
-                default:
-                    ticketViewHolder.source.setVisibility(View.GONE);
-                    break;
-            }
 
-            if (!ticketOverview.countcollaborator.equals("0")){
-                int color = Color.parseColor("#808080");
-                ticketViewHolder.countCollaborator.setImageResource(R.drawable.ic_group_black_24dp);
-                ticketViewHolder.countCollaborator.setColorFilter(color);
-            }
-            else if (ticketOverview.countcollaborator.equals("0")){
-                ticketViewHolder.countCollaborator.setVisibility(View.GONE);
-            }
+                if (!ticketOverview.countthread.equals("0")) {
+                    ticketViewHolder.countThread.setText("(" + ticketOverview.getCountthread() + ")");
+                } else {
+                    ticketViewHolder.countThread.setVisibility(View.GONE);
+                }
 
-            if (!ticketOverview.agentName.equals("Unassigned")){
-                ticketViewHolder.agentAssignedImage.setVisibility(View.VISIBLE);
-                ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
-            }
-            else{
-                ticketViewHolder.agentAssigned.setText("Unassigned");
-                ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
-            }
+                switch (ticketOverview.sourceTicket) {
+                    case "Chat":
+                    case "chat": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Web":
+                    case "web": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.web_design);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Agent":
+                    case "agent": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.mail);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Email":
+                    case "email": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.mail);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Facebook":
+                    case "facebook": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.facebook);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Twitter":
+                    case "twitter": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.twitter);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    case "Call":
+                    case "call": {
+                        int color = Color.parseColor("#808080");
+                        ticketViewHolder.source.setImageResource(R.drawable.phone);
+                        ticketViewHolder.source.setColorFilter(color);
+                        break;
+                    }
+                    default:
+                        ticketViewHolder.source.setVisibility(View.GONE);
+                        break;
+                }
 
-//else if (ticketOverview.getAgentName().equals("Unassigned")){
-//    ticketViewHolder.agentAssignedImage.setVisibility(View.GONE);
-//}
-
-
-//            if (!ticketOverview.lastReply.equals("client")){
-//                int color=Color.parseColor("#e9e9e9");
-//                ticketViewHolder.ticket.setBackgroundColor(color);
+//            if (checked_items.contains(id)){
+//                ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#d6d6d6"));
 //            }
+//            else{
+//                ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+//            }
+                if (!ticketOverview.agentName.equals("Unassigned")) {
+                    ticketViewHolder.agentAssigned.setText(ticketOverview.getAgentName());
+                } else {
+                    ticketViewHolder.agentAssigned.setText("Unassigned");
+                }
 
-            if (ticketOverview.clientPicture.equals("")){
-                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+                if (checked_items.contains(id)) {
+//                AnimatorSet shrinkSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.grow_from_middle);
+//                shrinkSet.setTarget(ticketViewHolder.roundedImageViewProfilePic);
+//                shrinkSet.start();
+//                ticketViewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                    ticketViewHolder.imageButtonSelected.setVisibility(View.VISIBLE);
+                    ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#ededed"));
+//                notifyDataSetChanged();
+                } else {
+                    ticketViewHolder.imageButtonSelected.setVisibility(View.GONE);
+                    ticketViewHolder.ticket.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+                    if (ticketOverview.clientPicture.equals("")) {
+                        ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
 
-            }
-            else if (ticketOverview.clientPicture.contains(".jpg")||ticketOverview.clientPicture.contains(".jpeg")||ticketOverview.clientPicture.contains(".png")){
-
+                    } else if (ticketOverview.clientPicture.contains(".jpg") || ticketOverview.clientPicture.contains(".jpeg") || ticketOverview.clientPicture.contains(".png")) {
 //    TextDrawable drawable1 = mDrawableBuilder.build(generator.getRandomColor());
-                Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
-//        Glide.with(context)
-//            .load(ticketOverview.getClientPicture())
-//            .into(ticketViewHolder.roundedImageViewProfilePic);
+                        Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
 
-                //ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
 
-            }
-            else{
-                int color=Color.parseColor("#cdc5bf");
-                ColorGenerator generator = ColorGenerator.MATERIAL;
-                TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(letter, generator.getRandomColor());
-                ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
-                ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
-            }
+                    } else {
 
-//            if (ticketOverview.clientPicture.equals("")){
-//                ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
-//            }
-//            else if (ticketOverview.clientPicture.startsWith("")){
-//                IImageLoader imageLoader = new PicassoLoader();
-//                imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
-//                //imageLoader.loadImage(ticketViewHolder.roundedImageViewProfilePic, ticketOverview.clientPicture, ticketOverview.placeholder);
-//            }
+                        ColorGenerator generator = ColorGenerator.MATERIAL;
+                        TextDrawable drawable = TextDrawable.builder()
+                                .buildRound(letter, generator.getRandomColor());
+                        //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                        ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+                    }
 
-//        if (ticketOverview.clientPicture != null && ticketOverview.clientPicture.trim().length() != 0)
-//            Picasso.with(ticketViewHolder.roundedImageViewProfilePic.getContext())
-//                    .load(ticketOverview.clientPicture)
-//                    .placeholder(R.drawable.default_pic)
-//                    .error(R.drawable.default_pic)
-//                    .into(ticketViewHolder.roundedImageViewProfilePic);
+                }
 
-            ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mActionMode != null) {
+                if (!ticketOverview.departmentname.equals("")) {
+                    ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
+                }
+
+
+                if (ticketOverview.clientPicture.equals("")) {
+                    ticketViewHolder.roundedImageViewProfilePic.setVisibility(View.GONE);
+
+                } else if (ticketOverview.clientPicture.contains(".jpg")) {
+                    Picasso.with(context).load(ticketOverview.getClientPicture()).transform(new CircleTransform()).into(ticketViewHolder.roundedImageViewProfilePic);
+
+
+                } else {
+                    ColorGenerator generator = ColorGenerator.MATERIAL;
+                    TextDrawable drawable = TextDrawable.builder()
+                            .buildRound(letter, generator.getRandomColor());
+                    //ticketViewHolder.roundedImageViewProfilePic.setAlpha(0.6f);
+                    ticketViewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
+
+                }
+                if (!ticketOverview.priorityName.equals("")) {
+                    ticketViewHolder.textViewpriorityName.setText(ticketOverview.priorityName);
+                } else {
+                    ticketViewHolder.textViewpriorityName.setText(R.string.not_available);
+                }
+
+                ticketViewHolder.ticket.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mActionMode != null) {
+                            onListItemSelect(i);
+                        } else {
+                            Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
+                            Prefs.putString("cameFromNotification", "none");
+                            Prefs.putString("ticketThread", "");
+                            intent.putExtra("ticket_id", ticketOverview.ticketID + "");
+                            Prefs.putString("TICKETid", ticketOverview.ticketID + "");
+                            Prefs.putString("ticketId", ticketOverview.ticketID + "");
+                            Prefs.putString("ticketstatus", ticketOverview.getTicketStatus());
+                            intent.putExtra("ticket_number", ticketOverview.ticketNumber);
+                            intent.putExtra("ticket_opened_by", ticketOverview.clientName);
+                            intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
+                            Log.d("clicked", "onRecyclerView");
+                            v.getContext().startActivity(intent);
+                        }
+                    }
+                });
+
+
+                ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        Prefs.putString("ticketstatus", ticketOverview.ticketStatus);
                         onListItemSelect(i);
+                        length++;
+                        Log.d("noofitems", "" + length);
+                        Prefs.putInt("NoOfItems", length);
+
+                        return true;
                     }
+                });
 
-                    else{
-                        Intent intent = new Intent(v.getContext(), TicketDetailActivity.class);
-                        intent.putExtra("ticket_id", ticketOverview.ticketID + "");
-                        Prefs.putString("TICKETid",ticketOverview.ticketID+"");
-                        Prefs.putString("ticketId",ticketOverview.ticketID+"");
-                        Prefs.putString("ticketstatus",ticketOverview.getTicketStatus());
-
-                        intent.putExtra("priority_color",ticketOverview.ticketPriorityColor);
-                        intent.putExtra("ticket_number", ticketOverview.ticketNumber);
-                        intent.putExtra("ticket_status",ticketOverview.ticketStatus);
-                        intent.putExtra("ticket_opened_by", ticketOverview.clientName);
-                        intent.putExtra("ticket_subject", ticketOverview.ticketSubject);
-                        Log.d("clicked","onRecyclerView");
-                        v.getContext().startActivity(intent);
-                    }
-
-                }
-            });
-            ticketViewHolder.ticket.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    onListItemSelect(i);
-                    length++;
-                    Log.d("noofitems",""+length);
-                    Prefs.putInt("NoOfItems",length);
-
-//                ticketOverviewList.get(i).getTicketID();
-//                Log.d("position",""+ticketOverviewList.get(i).getTicketID());
-//                if (ticketViewHolder.checkBox1.isEnabled()){
-//
-//                }
-//                else{
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                }
-//                if (ticketViewHolder.checkBox1.isChecked()){
-//
-//                }else{
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                }
-                    return true;
-                }
-            });
-
-
-
-//        ticketViewHolder.checkBox1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (ticketViewHolder.checkBox1.isChecked())
-//                    ticketViewHolder.checkBox1.setChecked(false);
-//                else
-//                    ticketViewHolder.checkBox1.setChecked(true);
-//            }
-//        });
-
-
-
-//        ticketViewHolder.checkBox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//
-//                if (isChecked){
-////                    ticketViewHolder.checkBox1.setChecked(true);
-////                    Prefs.putString("checkboxstate","checked");
-//
-//                    stringBuffer.append(ticketOverview.getTicketID()+",");
-//                    Log.d("ids",stringBuffer.toString());
-//
-//                }
-//                else{
-//                    Prefs.putString("checkboxstate","unchecked");
-//                    stringBuffer.toString().replace(""+ticketOverview.getTicketID(),"");
-//                    Log.d("ids",stringBuffer.toString());
-//                    ticketViewHolder.checkBox1.setVisibility(View.GONE);
-//                    notifyDataSetChanged();
-//                }
-////
-////                String state=Prefs.getString("checkboxstate",null);
-////
-////                if (state.equals("checked")){
-////                    ticketViewHolder.checkBox1.setSelected(true);
-////                    notifyDataSetChanged();
-////                }
-////                else{
-////                    ticketViewHolder.checkBox1.setSelected(false);
-////                    notifyDataSetChanged();
-////                }
-//
-//
-//            }
-//        });
-
+            }catch (IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
         }
+
         private void onListItemSelect(int position) {
             ticketOverviewAdapter.toggleSelection(position);//Toggle the selection
 
@@ -1316,7 +1256,7 @@ public class ClosedTickets extends Fragment {
 
             if (hasCheckedItems && mActionMode == null)
                 // there are some selected items, start the actionMode
-                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new Toolbar_ActionMode_Callback(getActivity(),ticketOverviewAdapter, null, ticketOverviewList, false));
+                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new Toolbar_ActionMode_Callback(getActivity(), ticketOverviewAdapter, null, ticketOverviewList, false));
             else if (!hasCheckedItems && mActionMode != null)
                 // there no selected items, finish the actionMode
                 mActionMode.finish();
@@ -1325,6 +1265,7 @@ public class ClosedTickets extends Fragment {
                 //set action mode title on item selection
                 mActionMode.setTitle(String.valueOf(ticketOverviewAdapter
                         .getSelectedCount()) + " ticket selected");
+            textViewShowingCount.setText(ticketOverviewAdapter.getSelectedCount() + " ticket selected");
 
 
         }
@@ -1337,46 +1278,46 @@ public class ClosedTickets extends Fragment {
         //Remove selected selections
 
 
-
         //Put or delete selected position into SparseBooleanArray
         public void selectView(int position, boolean value) {
-            TicketOverview ticketOverview=ticketOverviewList.get(position);
+            TicketOverview ticketOverview = ticketOverviewList.get(position);
             if (value) {
                 ticketSubject.add(ticketOverview.ticketSubject);
                 checked_items.add(ticketOverview.getTicketID());
                 status=ticketOverview.getTicketStatus();
-                Log.d("ticketsubject",ticketSubject.toString());
-                Log.d("checkeditems",checked_items.toString().replace(" ",""));
-                Prefs.putString("tickets",checked_items.toString().replace(" ",""));
-                Prefs.putString("TicketSubject",ticketSubject.toString());
+                Log.d("status",status);
+                Log.d("ticketsubject", ticketSubject.toString());
+                Log.d("checkeditems", checked_items.toString().replace(" ", ""));
+                Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
+                Prefs.putString("TicketSubject", ticketSubject.toString());
                 mSelectedItemsIds.put(position, value);
-            }
-            else {
-
-                int pos=checked_items.indexOf(ticketOverview.getTicketID());
-                int pos1=ticketSubject.indexOf(ticketOverview.getTicketSubject());
+            } else {
+                int pos = checked_items.indexOf(ticketOverview.getTicketID());
+                int pos1 = ticketSubject.indexOf(ticketOverview.getTicketSubject());
                 try {
                     checked_items.remove(pos);
                     ticketSubject.remove(pos1);
-                }catch (ArrayIndexOutOfBoundsException e){
+                } catch (ArrayIndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
-                Log.d("ticketsubject",ticketSubject.toString());
-                Log.d("checkeditems",checked_items.toString().replace(" ",""));
-                Prefs.putInt("totalticketselected",length);
+                Log.d("ticketsubject", ticketSubject.toString());
+                Log.d("checkeditems", checked_items.toString().replace(" ", ""));
+                Prefs.putInt("totalticketselected", length);
                 Log.d("checkeditems", "" + checked_items);
-                Prefs.putInt("NoOfItems",length);
+                Prefs.putInt("NoOfItems", length);
                 Prefs.putString("tickets", checked_items.toString().replace(" ", ""));
-                Prefs.putString("TicketSubject",ticketSubject.toString());
+                Prefs.putString("TicketSubject", ticketSubject.toString());
                 mSelectedItemsIds.delete(position);
             }
 
             notifyDataSetChanged();
         }
+
         public void setSelectedIds(List<Integer> selectedIds) {
             this.selectedIds = selectedIds;
             notifyDataSetChanged();
         }
+
         public void removeSelection() {
             mSelectedItemsIds = new SparseBooleanArray();
             notifyDataSetChanged();
@@ -1386,22 +1327,10 @@ public class ClosedTickets extends Fragment {
         public int getSelectedCount() {
             return mSelectedItemsIds.size();
         }
-
-        //        //Return all selected ids
-//        public SparseBooleanArray getSelectedIds() {
-//            return mSelectedItemsIds;
-//        }
-//        public void setSelectedIds(ArrayList<Integer> checked_items) {
-//            this.checked_items = checked_items;
-//            notifyDataSetChanged();
-//        }
-        public TicketOverview getItem(int position){
+        public TicketOverview getItem(int position) {
             return ticketOverviewList.get(position);
         }
-        @Override
-        public int getItemViewType(int position) {
-            return position;
-        }
+
         @Override
         public TicketOverviewAdapter.TicketViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
@@ -1409,10 +1338,8 @@ public class ClosedTickets extends Fragment {
                     inflate(R.layout.card_ticket, viewGroup, false);
             return new TicketOverviewAdapter.TicketViewHolder(itemView);
         }
-
-        public  class TicketViewHolder extends RecyclerView.ViewHolder {
-
-            protected View ticket;
+        public class TicketViewHolder extends RecyclerView.ViewHolder {
+            CardView ticket;
             ImageView roundedImageViewProfilePic;
             TextView textViewTicketID;
             TextView textViewTicketNumber;
@@ -1420,21 +1347,23 @@ public class ClosedTickets extends Fragment {
             TextView textViewSubject;
             RelativeTimeTextView textViewTime;
             TextView textViewOverdue;
-            View ticketPriority;
-            // TextView ticketStatus;
+            ImageView ticketPriority;
             ImageView attachementView;
             CheckBox checkBox1;
             ImageView countCollaborator;
             ImageView source;
             TextView countThread;
             TextView agentAssigned;
-            ImageView agentAssignedImage;
             TextView textViewduetoday;
+            TextView textViewpriorityName;
+            ImageButton imageButtonSelected;
+            TextView textViewDepartment;
             TicketViewHolder(View v) {
                 super(v);
                 ticket = v.findViewById(R.id.ticket);
                 attachementView = (ImageView) v.findViewById(R.id.attachment_icon);
-                ticketPriority = v.findViewById(R.id.priority_view);
+                textViewpriorityName=v.findViewById(R.id.priority_viewText);
+                ticketPriority = (ImageView) v.findViewById(R.id.priority_view);
                 roundedImageViewProfilePic = (ImageView) v.findViewById(R.id.imageView_default_profile);
                 textViewTicketID = (TextView) v.findViewById(R.id.textView_ticket_id);
                 textViewTicketNumber = (TextView) v.findViewById(R.id.textView_ticket_number);
@@ -1442,14 +1371,15 @@ public class ClosedTickets extends Fragment {
                 textViewSubject = (TextView) v.findViewById(R.id.textView_ticket_subject);
                 textViewTime = (RelativeTimeTextView) v.findViewById(R.id.textView_ticket_time);
                 textViewOverdue = (TextView) v.findViewById(R.id.overdue_view);
-                checkBox1= (CheckBox) v.findViewById(R.id.checkbox);
-                countCollaborator= (ImageView) v.findViewById(R.id.collaborator);
-                countThread= (TextView) v.findViewById(R.id.countthread);
-                source= (ImageView) v.findViewById(R.id.source);
-                agentAssigned= (TextView) v.findViewById(R.id.agentassigned);
-                agentAssignedImage= (ImageView) v.findViewById(R.id.agentAssigned);
-                textViewduetoday= (TextView) v.findViewById(R.id.duetoday);
-
+                checkBox1 = (CheckBox) v.findViewById(R.id.checkbox);
+                countCollaborator = (ImageView) v.findViewById(R.id.collaborator);
+                countThread = (TextView) v.findViewById(R.id.countthread);
+                source = (ImageView) v.findViewById(R.id.source);
+                agentAssigned = (TextView) v.findViewById(R.id.agentassigned);
+                //agentAssignedImage = (ImageView) v.findViewById(R.id.agentAssigned);
+                textViewduetoday = (TextView) v.findViewById(R.id.duetoday);
+                imageButtonSelected=v.findViewById(R.id.selectedTicket);
+                textViewDepartment=v.findViewById(R.id.textViewDepartmentName);
 
             }
 
@@ -1459,12 +1389,12 @@ public class ClosedTickets extends Fragment {
     public class Toolbar_ActionMode_Callback implements android.support.v7.view.ActionMode.Callback {
 
         private Context context;
-        private InboxTickets.TicketOverviewAdapter recyclerView_adapter;
+        private TicketOverviewAdapter recyclerView_adapter;
         private ArrayList<TicketOverview> message_models;
         private boolean isListViewFragment;
 
 
-        public Toolbar_ActionMode_Callback(Context context, TicketOverviewAdapter ticketOverviewAdapter, InboxTickets.TicketOverviewAdapter recyclerView_adapter, List<TicketOverview> message_models, boolean b) {
+        public Toolbar_ActionMode_Callback(Context context, TicketOverviewAdapter ticketOverviewAdapter, TicketOverviewAdapter recyclerView_adapter, List<TicketOverview> message_models, boolean b) {
             this.context = context;
             this.recyclerView_adapter = recyclerView_adapter;
             this.message_models = (ArrayList<TicketOverview>) message_models;
@@ -1475,13 +1405,39 @@ public class ClosedTickets extends Fragment {
         public boolean onCreateActionMode(android.support.v7.view.ActionMode mode, Menu menu) {
 
             //mode.getMenuInflater().inflate(R.menu.multipleclosed, menu);//Inflate the menu over action mode
-            mode.getMenuInflater().inflate(R.menu.multiplemenuinbox, menu);
-            SubMenu fileMenu = menu.addSubMenu("Change Status");
-            //menu.addSubMenu("Change Status");
-            for (int i=0;i<statusItems.size();i++){
-                Data data=statusItems.get(i);
-                fileMenu.add(data.getName());
-            }
+            RelativeLayout layout = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.actionmode_view, null);
+            mode.setCustomView(layout);
+            textViewShowingCount=layout.findViewById(R.id.ticketcount);
+            imageViewssignTicket=layout.findViewById(R.id.assignTickets);
+            imageViewChangingStatus=layout.findViewById(R.id.changingStatus);
+            imageViewssignTicket.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (Prefs.getString("tickets", null).equals("null") || Prefs.getString("tickets", null).equals("[]")) {
+                            Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+
+                        }
+                        String ticketId = Prefs.getString("tickets", null);
+                        List<String> items = new ArrayList<String>(Arrays.asList(ticketId.split("\\s*,\\s*")));
+                        int itemCount = items.size();
+                        Intent intent = new Intent(getActivity(), MultiAssigningActivity.class);
+                        startActivity(intent);
+
+                    } catch (NullPointerException e) {
+                        Toasty.info(getActivity(), getString(R.string.noticket), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            imageViewChangingStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MyBottomSheetDialogChangeStatus myBottomSheetDialog = new MyBottomSheetDialogChangeStatus(getActivity());
+                    myBottomSheetDialog.show();
+                }
+            });
             return true;
         }
 
@@ -1771,6 +1727,8 @@ public class ClosedTickets extends Fragment {
             ClosedTickets closedTickets=new ClosedTickets();
             //recyclerView_adapter.removeSelection();
             closedTickets.setNullToActionMode();
+            ticketOverviewAdapter = new TicketOverviewAdapter(getContext(), ticketOverviewList);
+            recyclerView.setAdapter(ticketOverviewAdapter);
             ticketOverviewAdapter.removeSelection();
             setNullToActionMode();
 //        ((InboxTickets) inboxTickets).setNullToActionMode();
@@ -1794,5 +1752,94 @@ public class ClosedTickets extends Fragment {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
+    public class MyBottomSheetDialogChangeStatus extends BottomSheetDialog {
+
+        Context context;
+        ListView listView;
+        MyBottomSheetDialogChangeStatus(@NonNull Context context) {
+            super(context);
+            this.context = context;
+            createChange();
+        }
+
+        public void createChange() {
+            View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_change_status, null);
+            setContentView(bottomSheetView);
+            listView=bottomSheetView.findViewById(R.id.listViewStatus);
+            BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+            BottomSheetBehavior.BottomSheetCallback bottomSheetCallback = new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    // do something
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                    // do something
+                }
+            };
+            ArrayAdapter adapter = new ArrayAdapter<Data>(getActivity(),
+                    R.layout.listview_row_status,statusItems);
+            listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    status = Prefs.getString("ticketstatus", null);
+                    Log.d("status",status);
+                    Data data=statusItems.get(i);
+                    if (data.getName().equalsIgnoreCase(status)){
+                        Toasty.warning(getActivity(), "Ticket is already in "+listView.getAdapter().getItem(i).toString()+" state", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    else{
+                        StringBuffer stringBuffer=new StringBuffer();
+                        String tickets = Prefs.getString("tickets", null);
+                        int pos = tickets.indexOf("[");
+                        int pos1 = tickets.lastIndexOf("]");
+                        String text1 = tickets.substring(pos + 1, pos1);
+                        String[] namesList = text1.split(",");
+                        for (String name : namesList) {
+                            stringBuffer.append(name + ",");
+                        }
+                        int pos2 = stringBuffer.toString().lastIndexOf(",");
+                        ticket = stringBuffer.toString().substring(0, pos2);
+
+                        Log.d("tickets", ticket);
+                        id=data.getID();
+                        new BottomDialog.Builder(getActivity())
+                                .setTitle(getString(R.string.changingStatus))
+                                .setContent(getString(R.string.statusConfirmation))
+                                .setPositiveText("YES")
+                                .setNegativeText("NO")
+                                .setPositiveBackgroundColorResource(R.color.white)
+                                //.setPositiveBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary)
+                                .setPositiveTextColorResource(R.color.faveo)
+                                .setNegativeTextColor(R.color.black)
+                                //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                                .onPositive(new BottomDialog.ButtonCallback() {
+                                    @Override
+                                    public void onClick(BottomDialog dialog) {
+                                        if (InternetReceiver.isConnected()){
+                                            progressDialog.show();
+                                            progressDialog.setMessage(getString(R.string.pleasewait));
+                                            new StatusChange(ticket, id).execute();
+                                        }
+                                    }
+                                }).onNegative(new BottomDialog.ButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull BottomDialog bottomDialog) {
+                                bottomDialog.dismiss();
+                            }
+                        })
+                                .show();
+                    }
+                }
+            });
+
+        }
+
     }
 }

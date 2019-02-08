@@ -14,7 +14,7 @@ import co.helpdesk.faveo.pro.R;
 
 public class OtherFeatures extends AppCompatActivity {
 ImageView imageView;
-TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerging,textViewGivingFeedback;
+TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +26,11 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(OtherFeatures.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(OtherFeatures.this,R.color.mainActivityTopBar));
         imageView= (ImageView) findViewById(R.id.imageViewBack);
         textViewMultipleTicket= (TextView) findViewById(R.id.multipleticket);
         textViewChangeStatus= (TextView) findViewById(R.id.changestatus);
         textViewAssign= (TextView) findViewById(R.id.assignmultipleticket);
-        textViewMerging= (TextView) findViewById(R.id.mergingticket);
-        textViewGivingFeedback= (TextView) findViewById(R.id.givingFeedback);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,23 +63,7 @@ TextView textViewMultipleTicket,textViewChangeStatus,textViewAssign,textViewMerg
 
             }
         });
-        textViewMerging.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-        Intent intent=new Intent(OtherFeatures.this,MultipleTicketMerge.class);
-        startActivity(intent);
-
             }
-        });
-        textViewGivingFeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(OtherFeatures.this,GivingFeedback.class);
-                startActivity(intent);
-
-            }
-        });
-    }
 
     @Override
     public void onBackPressed() {

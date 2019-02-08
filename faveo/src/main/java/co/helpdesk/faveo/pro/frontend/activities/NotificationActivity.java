@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,12 +97,13 @@ public class NotificationActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(NotificationActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(NotificationActivity.this,R.color.mainActivityTopBar));
         swipeRefresh.setColorSchemeResources(R.color.faveo_blue);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         progressDialog=new ProgressDialog(NotificationActivity.this);
         progressDialog.setMessage("Please wait");
         if (InternetReceiver.isConnected()) {
@@ -279,6 +282,16 @@ public class NotificationActivity extends AppCompatActivity {
             notificationAdapter.notifyDataSetChanged();
             loading = true;
         }
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+
+        recyclerView.setLayoutAnimation(controller);
+        notificationAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 
     /**

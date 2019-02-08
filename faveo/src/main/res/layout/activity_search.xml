@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
-        android:background="#f2f2f2"
+        android:background="#154c66"
         android:theme="@style/AppThemeOverlay.ActionBar">
 
         <android.support.v7.widget.Toolbar
@@ -54,6 +54,7 @@
                     android:contentDescription="Back"
                     android:padding="8dp"
                     android:src="@drawable/ic_arrow_back_black_24dp"
+                    android:tint="@color/faveo"
                     />
 
                 <android.support.v7.widget.AppCompatAutoCompleteTextView
@@ -68,11 +69,14 @@
                     android:inputType="text"
                     android:gravity="center_vertical"
                     android:hint="@string/search"
+                    android:fontFamily="@font/hintedlainesansregular"
                     android:imeOptions="actionSearch"
                     android:paddingLeft="12dp"
                     android:paddingRight="8dp"
                     android:singleLine="true"
                     android:dropDownVerticalOffset="10dp"
+                    android:cursorVisible="true"
+                    android:textCursorDrawable="@drawable/color_cursor"
                     />
 
                 <!--<ImageView-->
@@ -88,19 +92,19 @@
                     <!--android:src="@drawable/ic_action_search" />-->
 
 
-                <ImageView
-                    android:id="@+id/cleartext"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="10dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:contentDescription="Back"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_close_24dp"
-                    android:visibility="visible"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/cleartext"-->
+                    <!--android:layout_width="38dp"-->
+                    <!--android:layout_height="38dp"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_marginEnd="10dp"-->
+                    <!--android:background="?android:attr/selectableItemBackground"-->
+                    <!--android:clickable="true"-->
+                    <!--android:contentDescription="Back"-->
+                    <!--android:padding="8dp"-->
+                    <!--android:src="@drawable/ic_close_24dp"-->
+                    <!--android:visibility="visible"/>-->
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 

@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_gravity="center"
-    android:layout_width="250dp"
+    android:layout_width="350dp"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="14dp"
+    card_view:cardCornerRadius="4dp"
     android:elevation="10dp"
     card_view:contentPadding="3dp"
     >
@@ -15,20 +15,22 @@
     android:background="@color/colorAccent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:orientation="vertical"
         android:background="@color/colorAccent"
+        android:padding="5dp"
         >
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:theme="@style/AppThemeOverlay.ActionBar">
 
             <Toolbar
                 android:id="@+id/toolbarCollaborator"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="60dp"
                 android:background="?attr/colorPrimary"
+                android:backgroundTint="#154c66"
                 app:popupTheme="@style/AppThemeOverlay.ActionBar">
 
                 <!--<TextView-->
@@ -76,7 +78,7 @@
                         android:layout_toRightOf="@+id/imageViewBackAddUser"
                         android:text="@string/adduser"
                         android:textAllCaps="true"
-                        android:textColor="@color/theme"
+                        android:textColor="@color/colorAccent"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -92,6 +94,7 @@
                         android:padding="10dp"
                         android:textAllCaps="false"
                         android:textColor="#ffffff"
+                        android:backgroundTint="@color/colorAccent"
                         android:visibility="visible" />
 
                     <Button
@@ -106,7 +109,8 @@
                         android:padding="10dp"
                         android:textAllCaps="false"
                         android:textColor="#ffffff"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:backgroundTint="@color/colorAccent"/>
 
                 </RelativeLayout>
             </Toolbar>
@@ -126,9 +130,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="#EEEEEE">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/emailheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -138,20 +143,22 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/email"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/emailheader"
+                android:layout_toEndOf="@+id/emailheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -168,6 +175,7 @@
                 android:layout_marginRight="16dp"
                 android:background="@android:color/transparent"
                 android:cursorVisible="true"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:nextFocusForward="@+id/editText_firstname"
@@ -176,13 +184,22 @@
 
 
         </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/grey_500"
+                android:alpha=".3">
 
+            </View>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="#EEEEEE">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/firstnameheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -192,17 +209,17 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/firstName"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/firstnameheader"
+                android:layout_toEndOf="@+id/firstnameheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -222,17 +239,26 @@
                 android:background="@android:color/transparent"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:nextFocusForward="@+id/lname_edittext"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="16sp"
                 />
         </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/grey_500"
+                android:alpha=".3"></View>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="#EEEEEE">
+            android:background="@color/colorAccent">
 
             <TextView
+                android:id="@+id/lastnameheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -242,17 +268,17 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
                 android:text="@string/lastName"
-                android:textSize="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/hintedlainesansregular"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignTop="@+id/lastnameheader"
+                android:layout_toEndOf="@+id/lastnameheader"
+                android:fontFamily="@font/hintedlainesansregular"
+                android:src="@drawable/ic_star_black_24dp"
                 android:text="@string/required"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -277,6 +303,13 @@
                 android:textSize="16sp"
                 />
         </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/grey_500"
+                android:alpha=".3"></View>
 
         <!--<View-->
             <!--android:layout_width="match_parent"-->

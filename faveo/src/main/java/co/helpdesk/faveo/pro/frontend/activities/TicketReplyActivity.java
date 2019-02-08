@@ -6,21 +6,31 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +48,7 @@ import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.squareup.picasso.Picasso;
 import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.AudioPickActivity;
 import com.vincent.filepicker.activity.ImagePickActivity;
@@ -71,14 +82,18 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import co.helpdesk.faveo.pro.CircleTransform;
 import co.helpdesk.faveo.pro.Constants;
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
+import co.helpdesk.faveo.pro.frontend.receivers.InternetReceiver;
+import co.helpdesk.faveo.pro.model.AttachedCollaborator;
 import es.dmoral.toasty.Toasty;
 
 import static com.vincent.filepicker.activity.AudioPickActivity.IS_NEED_RECORDER;
@@ -105,6 +120,11 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     String email;
     BottomSheetLayout bottomSheet;
     String option;
+    TextView textViewShowRecipients;
+    String email2;
+    Collaboratoradapter mAdapter;
+    List<AttachedCollaborator> movieList = new ArrayList<>();
+    MyBottomSheetDialogExistingProblem myBottomSheetDialog;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,12 +139,13 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(TicketReplyActivity.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(TicketReplyActivity.this,R.color.mainActivityTopBar));
         button= (Button) findViewById(R.id.attachment);
         attachment_layout= (RelativeLayout) findViewById(R.id.attachment_layout);
         attachmentFileName= (TextView) findViewById(R.id.attachment_name);
         imageButton= (ImageButton) findViewById(R.id.attachment_close);
         bottomSheet= (BottomSheetLayout) findViewById(R.id.bottomsheet);
+        textViewShowRecipients=findViewById(R.id.showRecipients);
         final Intent intent = getIntent();
         ticketID=intent.getStringExtra("ticket_id");
         Prefs.putString("TICKETid",ticketID);
@@ -231,6 +252,14 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                 return false;
             }
         });
+
+        textViewShowRecipients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myBottomSheetDialog = new MyBottomSheetDialogExistingProblem(TicketReplyActivity.this);
+                myBottomSheetDialog.show();
+            }
+        });
         editTextReplyMessage.setCursorVisible(true);
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -274,6 +303,10 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                 }
 
         });
+        if (InternetReceiver.isConnected()){
+            progressDialog.setMessage(getString(R.string.pleasewait));
+            new FetchCollaboratorAssociatedWithTicket(ticketID).execute();
+        }
     }
 
     @Override
@@ -727,6 +760,298 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
             }
         }
     }
+
+    public class MyBottomSheetDialogExistingProblem extends BottomSheetDialog {
+
+        Context context;
+
+        MyBottomSheetDialogExistingProblem(@NonNull Context context) {
+            super(context);
+            this.context = context;
+            createTickets();
+        }
+
+        public void createTickets() {
+            View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheetexisting_problem, null);
+            setContentView(bottomSheetView);
+            BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+            BottomSheetBehavior.BottomSheetCallback bottomSheetCallback = new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    // do something
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                    // do something
+                }
+            };
+            final RecyclerView recyclerView = (RecyclerView) bottomSheetView.findViewById(R.id.recyclerViewExistingProblem);
+            final ProgressBar progressBar=bottomSheetView.findViewById(R.id.progressbarExisting);
+            progressBar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.faveo)));
+            recyclerView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setHasFixedSize(true);
+            class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
+                String ticketid;
+
+                FetchCollaboratorAssociatedWithTicket(String ticketid) {
+
+                    this.ticketid = ticketid;
+                }
+
+                protected String doInBackground(String... urls) {
+                    return new Helpdesk().postCollaboratorAssociatedWithTicket(ticketid);
+                }
+
+                protected void onPostExecute(String result) {
+                    try{
+                        progressDialog.dismiss();
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                    movieList.clear();
+                    if (isCancelled()) return;
+
+                    if (result == null) {
+                        Toasty.error(TicketReplyActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
+                        if (jsonArray.length()==0){
+                            progressBar.setVisibility(View.GONE);
+                            return;
+                        }else {
+                            progressBar.setVisibility(View.GONE);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                String email = jsonObject1.getString("email");
+                                String image=jsonObject1.getString("avatar");
+                                String name=jsonObject1.getString("first_name");
+                                String last=jsonObject1.getString("last_name");
+                                String fullName;
+                                if (name.equals("")&&last.equals("")){
+                                    fullName="";
+                                }
+                                else if (name.equals("")&&!last.equals("")){
+                                    fullName=last;
+                                }
+                                else if (last.equals("")&&!name.equals("")){
+                                    fullName=name;
+                                }
+                                else{
+                                    fullName=name+" "+last;
+                                }
+                                AttachedCollaborator attachedCollaborator=new AttachedCollaborator(email,image,fullName);
+                                movieList.add(attachedCollaborator);
+
+
+                            }
+
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            mAdapter = new Collaboratoradapter(TicketReplyActivity.this,movieList);
+                            runLayoutAnimation(recyclerView);
+                            recyclerView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }
+
+
+
+            if (InternetReceiver.isConnected()){
+                progressDialog.setMessage(getString(R.string.pleasewait));
+                new FetchCollaboratorAssociatedWithTicket(ticketID).execute();
+            }
+
+
+
+        }
+
+    }
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+
+        recyclerView.setLayoutAnimation(controller);
+        mAdapter.notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
+    }
+    private class collaboratorRemoveUser extends AsyncTask<String, Void, String> {
+        String ticketId, userId;
+
+        public collaboratorRemoveUser(String ticketId, String userId) {
+            this.ticketId = ticketId;
+            this.userId = userId;
+        }
+
+        protected String doInBackground(String... urls) {
+            return new Helpdesk().removeCollaborator(Prefs.getString("ticketId", null),email2);
+        }
+
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            if (isCancelled()) return;
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String collaborator=jsonObject.getString("collaborator");
+                if (collaborator.equals("deleted successfully")){
+                    email2="";
+                    Toasty.success(TicketReplyActivity.this, getString(R.string.collaboratorRemove), Toast.LENGTH_SHORT).show();
+                    onResume();
+                    myBottomSheetDialog.cancel();
+                    }
+
+            } catch (JSONException |NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            if (result == null) {
+                Toasty.error(TicketReplyActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+
+        }
+    }
+    public class Collaboratoradapter extends RecyclerView.Adapter<Collaboratoradapter.MyViewHolder> {
+
+        private List<AttachedCollaborator> moviesList;
+        Context context;
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView email;
+            public TextView textViewName;
+            public ImageView imageViewCollaborator;
+            public ImageView deletecolla;
+            public RelativeLayout relativeLayout;
+
+            public MyViewHolder(View view) {
+                super(view);
+                email = (TextView) view.findViewById(R.id.textView_client_email);
+                imageViewCollaborator= (ImageView) view.findViewById(R.id.imageView_collaborator);
+                relativeLayout= (RelativeLayout) view.findViewById(R.id.attachedCollaborator);
+                textViewName= (TextView) view.findViewById(R.id.collaboratorname);
+                deletecolla= (ImageView) view.findViewById(R.id.deleteCollaborator);
+
+            }
+        }
+        public Collaboratoradapter(Context context,List<AttachedCollaborator> moviesList) {
+            this.moviesList = moviesList;
+            this.context=context;
+        }
+
+        @Override
+        public Collaboratoradapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.listview_item_row, parent, false);
+            return new Collaboratoradapter.MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final Collaboratoradapter.MyViewHolder holder, int position) {
+            final AttachedCollaborator movie = moviesList.get(position);
+            holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    //email2=movie.getEmail();
+                    return false;
+                }
+            });
+
+            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            holder.deletecolla.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    email2=movie.getEmail();
+                    try {
+
+                        if (email2.equals("")){
+                            Toasty.info(TicketReplyActivity.this,getString(R.string.userEmpty),Toast.LENGTH_SHORT).show();
+
+                        }
+                        else {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(TicketReplyActivity.this);
+                            alertDialog.setMessage(R.string.user_collaborator);
+                            alertDialog.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            alertDialog.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    progressDialog=new ProgressDialog(TicketReplyActivity.this);
+                                    progressDialog.setMessage(getString(R.string.pleasewait));
+                                    progressDialog.show();
+                                    Log.d("email3",email2);
+                                    new collaboratorRemoveUser(Prefs.getString("ticketId", null), email2).execute();
+                                    // DO SOMETHING HERE
+
+                                }
+                            });
+
+                            AlertDialog dialog = alertDialog.create();
+                            dialog.show();
+
+
+                        }
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+            if (!movie.getEmail().equals("")) {
+                holder.email.setText(movie.getEmail());
+            }
+
+            if (movie.getName().equals("")){
+                holder.textViewName.setVisibility(View.GONE);
+            }
+            else{
+                holder.textViewName.setVisibility(View.VISIBLE);
+                holder.textViewName.setText(movie.getName());
+            }
+
+            if (!movie.getPicture().equals("")){
+                if (movie.getPicture().contains(".jpg")||movie.getPicture().contains(".jpeg")||movie.getPicture().contains(".png")) {
+                    Log.d("picture",movie.getPicture()) ;
+                    Picasso.with(TicketReplyActivity.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                }
+                else{
+                    Log.d("cameInThisBlock","true");
+                    Picasso.with(TicketReplyActivity.this).load(movie.getPicture()).placeholder(R.drawable.default_pic).transform(new CircleTransform()).into(holder.imageViewCollaborator);
+                }
+
+            }
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return moviesList.size();
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     class FetchCollaboratorAssociatedWithTicket extends AsyncTask<String, Void, String> {
         String ticketid;
@@ -755,15 +1080,15 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = jsonObject.getJSONArray("collaborator");
                 if (jsonArray.length() == 0) {
-                    addCc.setText("Add CC");
+                    textViewShowRecipients.setVisibility(View.GONE);
                     return;
                 } else {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         noOfCollaborator++;
-
-                    }
-                    addCc.setText("Add cc" + "(" + noOfCollaborator + " Recipients)");
+                        }
+                    textViewShowRecipients.setText("Recipients ("+noOfCollaborator+")");
+                    textViewShowRecipients.setVisibility(View.VISIBLE);
                 }
 
             } catch (JSONException e) {
@@ -801,7 +1126,8 @@ public class TicketReplyActivity extends AppCompatActivity implements Permission
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.VISIBLE);
-        addCc.setVisibility(View.GONE);
+        //addCc.setVisibility(View.GONE);
+        textViewShowRecipients.setVisibility(View.GONE);
         new FetchCollaboratorAssociatedWithTicket(Prefs.getString("ticketId", null)).execute();
     }
 

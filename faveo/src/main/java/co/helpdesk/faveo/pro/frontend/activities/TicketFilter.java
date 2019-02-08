@@ -77,7 +77,7 @@ public class TicketFilter extends AppCompatActivity implements InboxTickets.OnFr
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(TicketFilter.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(TicketFilter.this,R.color.mainActivityTopBar));
         rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         show=Prefs.getString("Show",null);
         Log.d("Show",show);

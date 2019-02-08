@@ -55,19 +55,15 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
 
     EditText username, firstname, lastname, email, phoneEditText, mobile;
     ImageView imageviewback, imageViewCallMobile, imageViewCallPhone;
-    Button submit, userStatusChangeButton;
+    Button submit;
     String clientID;
-    //Switch aSwitch;
     int status;
     int i = 0;
-    TextView textViewActiveOrDeactivated;
     ProgressDialog progressDialog;
     String countrycode = "";
     CountryCodePicker countryCodePicker;
     String userName, firstName, lastName, emailtext, phoneText, mobileText;
     String usernameGet="",firstnameGet="",lastnameGet="",emailGet="",phoneGet="",mobileGet="";
-    TextView textViewUserStatus;
-    int statusId;
     String phone1,mobile1;
     private int PICKFILE_REQUEST_CODE=1;
 
@@ -86,7 +82,7 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(EditCustomer.this,R.color.faveo));
+        window.setStatusBarColor(ContextCompat.getColor(EditCustomer.this,R.color.mainActivityTopBar));
         getCountryZipCode();
         countryCodePicker = (CountryCodePicker) findViewById(R.id.countrycoode);
         imageViewCallMobile = (ImageView) findViewById(R.id.forCalling);
@@ -686,7 +682,7 @@ public class EditCustomer extends AppCompatActivity implements PermissionCallbac
                 if (message.equals("Updated successfully")){
                     i=0;
                     Toasty.success(EditCustomer.this,getString(R.string.editedcustomerdetails),Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(EditCustomer.this,ClientDetailActivity.class);
+                    Intent intent=new Intent(EditCustomer.this,MainActivity.class);
                     startActivity(intent);
                 }
 
