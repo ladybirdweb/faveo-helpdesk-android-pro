@@ -61,8 +61,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             viewHolder.textNotificationtime.setReferenceTime(Helper.relativeTime(notiThread.noti_time));
             if (notiThread.getBy().equals("System")){
                 viewHolder.textSub.setText("System, "+notiThread.getTicketsubject());
-                viewHolder.roundedImageViewProfilePic.setColorFilter(context.getResources().getColor(R.color.faveo), PorterDuff.Mode.SRC_IN);
-                viewHolder.roundedImageViewProfilePic.setImageResource(R.drawable.default_pic);
+                Picasso.with(context).load(R.drawable.default_pic).transform(new CircleTransform()).into(viewHolder.roundedImageViewProfilePic);
             }
             else{
                 viewHolder.textSub.setText(notiThread.getRequesterName().trim() + ", " + notiThread.getTicketsubject());
@@ -79,7 +78,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     viewHolder.roundedImageViewProfilePic.setImageDrawable(drawable);
                 }
             }
-
 
 
             if (notiThread.getNoti_seen().equals("1")) {

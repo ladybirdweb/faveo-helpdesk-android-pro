@@ -229,7 +229,6 @@ public class NotificationActivity extends AppCompatActivity {
             });
 
             notificationAdapter = new NotificationAdapter(getApplicationContext(),notiThreadList);
-            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(notificationAdapter);
             if (notificationAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);

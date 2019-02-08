@@ -639,7 +639,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                     }
                 });
                 clientOverviewAdapter = new ClientOverviewAdapter(getContext(), clientOverviewList);
-                runLayoutAnimation(recyclerView);
+                //runLayoutAnimation(recyclerView);
                 recyclerView.setAdapter(clientOverviewAdapter);
                 if (clientOverviewAdapter.getItemCount() == 0) {
                     empty_view.setVisibility(View.VISIBLE);
@@ -691,15 +691,15 @@ public class ClientList extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void runLayoutAnimation(final RecyclerView recyclerView) {
-        final Context context = recyclerView.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
-
-        recyclerView.setLayoutAnimation(controller);
-        clientOverviewAdapter.notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
-    }
+//    private void runLayoutAnimation(final RecyclerView recyclerView) {
+//        final Context context = recyclerView.getContext();
+//        final LayoutAnimationController controller =
+//                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
+//
+//        recyclerView.setLayoutAnimation(controller);
+//        clientOverviewAdapter.notifyDataSetChanged();
+//        recyclerView.scheduleLayoutAnimation();
+//    }
     private class FetchClientsFilter extends AsyncTask<String, Void, String> {
         Context context;
         String url;
@@ -780,7 +780,7 @@ public class ClientList extends Fragment implements View.OnClickListener {
                 }
             });
             clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
-            runLayoutAnimation(recyclerView);
+            //runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);

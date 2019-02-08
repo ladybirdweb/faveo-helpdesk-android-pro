@@ -162,6 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:demo_child_count="10"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
             app:demo_layout="@layout/card_ticket_shimmer" />
 
 

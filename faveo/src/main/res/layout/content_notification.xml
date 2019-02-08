@@ -66,6 +66,7 @@
             app:demo_child_count="10"
             app:demo_layout="@layout/card_noti_shimmer"
             tools:context=".MainActivity"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
             tools:listitem="@layout/card_notification" />
         </android.support.v4.widget.SwipeRefreshLayout>
     <TextView

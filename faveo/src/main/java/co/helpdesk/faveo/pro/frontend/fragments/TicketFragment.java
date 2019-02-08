@@ -351,7 +351,6 @@ public class TicketFragment extends Fragment {
             });
 //
             ticketOverviewAdapter = new TicketOverviewAdapter(getContext(),ticketOverviewList);
-            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(ticketOverviewAdapter);
 
             if (ticketOverviewAdapter.getItemCount() == 0) {

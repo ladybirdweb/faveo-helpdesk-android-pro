@@ -773,23 +773,12 @@ public class TrashTickets extends Fragment {
             });
 
             ticketOverviewAdapter = new TicketOverviewAdapter(getContext(),ticketOverviewList);
-            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(ticketOverviewAdapter);
             if (ticketOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);
             } else empty_view.setVisibility(View.GONE);
 
         }
-    }
-
-    private void runLayoutAnimation(final RecyclerView recyclerView) {
-        final Context context = recyclerView.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right);
-
-        recyclerView.setLayoutAnimation(controller);
-        ticketOverviewAdapter.notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
     }
     /**
      * Async task for next page details.

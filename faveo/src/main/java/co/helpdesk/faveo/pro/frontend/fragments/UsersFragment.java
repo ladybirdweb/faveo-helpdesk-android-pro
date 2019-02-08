@@ -357,7 +357,6 @@ public class UsersFragment extends Fragment {
 //                }
 //            });
             clientOverviewAdapter = new ClientOverviewAdapter(getContext(),clientOverviewList);
-            runLayoutAnimation(recyclerView);
             recyclerView.setAdapter(clientOverviewAdapter);
             if (clientOverviewAdapter.getItemCount() == 0) {
                 empty_view.setVisibility(View.VISIBLE);
