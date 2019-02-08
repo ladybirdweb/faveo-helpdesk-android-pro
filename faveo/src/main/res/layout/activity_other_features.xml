@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorAccent"
-    tools:context="co.helpdesk.faveo.pro.frontend.activities.HelpSection">
+    tools:context=".frontend.activities.OtherFeatures">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -92,20 +92,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="@string/assignMultipleTicket"
-        android:textSize="16sp"
-        android:fontFamily="@font/hintedlainesansregular"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_500">
-
-    </View>
-    <TextView
-        android:id="@+id/givingFeedback"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="@string/submitFeedback"
         android:textSize="16sp"
         android:fontFamily="@font/hintedlainesansregular"/>
     <View

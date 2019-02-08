@@ -1000,43 +1000,50 @@ public class TrashTickets extends Fragment {
                 }
 
                 switch (ticketOverview.sourceTicket) {
-                    case "Chat": {
+                    case "Chat":
+                    case "chat": {
                         int color = Color.parseColor("#808080");
                         ticketViewHolder.source.setImageResource(R.drawable.ic_chat_bubble_outline_black_24dp);
                         ticketViewHolder.source.setColorFilter(color);
                         break;
                     }
-                    case "Web": {
+                    case "Web":
+                    case "web": {
                         int color = Color.parseColor("#808080");
                         ticketViewHolder.source.setImageResource(R.drawable.web_design);
                         ticketViewHolder.source.setColorFilter(color);
                         break;
                     }
-                    case "Agent": {
+                    case "Agent":
+                    case "agent": {
                         int color = Color.parseColor("#808080");
                         ticketViewHolder.source.setImageResource(R.drawable.mail);
                         ticketViewHolder.source.setColorFilter(color);
                         break;
                     }
-                    case "Email": {
+                    case "Email":
+                    case "email": {
                         int color = Color.parseColor("#808080");
                         ticketViewHolder.source.setImageResource(R.drawable.mail);
                         ticketViewHolder.source.setColorFilter(color);
                         break;
                     }
-                    case "Facebook": {
+                    case "Facebook":
+                    case "facebook": {
                         int color = Color.parseColor("#808080");
                         ticketViewHolder.source.setImageResource(R.drawable.facebook);
                         ticketViewHolder.source.setColorFilter(color);
                         break;
                     }
-                    case "Twitter": {
+                    case "Twitter":
+                    case "twitter": {
                         int color = Color.parseColor("#808080");
                         ticketViewHolder.source.setImageResource(R.drawable.twitter);
                         ticketViewHolder.source.setColorFilter(color);
                         break;
                     }
-                    case "Call": {
+                    case "Call":
+                    case "call": {
                         int color = Color.parseColor("#808080");
                         ticketViewHolder.source.setImageResource(R.drawable.phone);
                         ticketViewHolder.source.setColorFilter(color);
