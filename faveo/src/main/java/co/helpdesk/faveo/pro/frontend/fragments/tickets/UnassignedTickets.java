@@ -1068,7 +1068,10 @@ public class UnassignedTickets extends Fragment {
                     }
 
                 }
-                if (!ticketOverview.departmentname.equals("")) {
+                if (ticketOverview.departmentname.equals("")) {
+                    ticketViewHolder.textViewDepartment.setVisibility(View.GONE);
+                }
+                else{
                     ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
                 }
 

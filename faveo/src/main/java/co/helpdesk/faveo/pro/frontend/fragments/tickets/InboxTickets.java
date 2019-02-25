@@ -1865,18 +1865,12 @@ public class InboxTickets extends Fragment {
 
                 }
 
-                if (!ticketOverview.departmentname.equals("")) {
+                if (ticketOverview.departmentname.equals("")) {
+                    ticketViewHolder.textViewDepartment.setVisibility(View.GONE);
+                }
+                else{
                     ticketViewHolder.textViewDepartment.setText(ticketOverview.getDepartmentname());
                 }
-
-//            if (ticketOverview.ticketAttachments.equals("0")) {
-//                ticketViewHolder.attachementView.setVisibility(View.GONE);
-//            } else {
-//                int color = Color.parseColor("#808080");
-//                ticketViewHolder.attachementView.setVisibility(View.VISIBLE);
-//                ticketViewHolder.attachementView.setColorFilter(color);
-//
-//            }
 
 
                 if (ticketOverview.clientPicture.equals("")) {

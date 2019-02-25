@@ -196,7 +196,6 @@
                 android:fontFamily="@font/hintedlainesansregular"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Support"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
