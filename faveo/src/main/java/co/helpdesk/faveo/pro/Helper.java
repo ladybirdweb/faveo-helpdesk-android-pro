@@ -230,7 +230,6 @@ public class Helper {
             String priorityColor = jsonArray.getJSONObject(i).getJSONObject("priority").getString("color");
             String priorityName=jsonArray.getJSONObject(i).getJSONObject("priority").getString("name");
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
-
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
             if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&& jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
                 agentName= jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
