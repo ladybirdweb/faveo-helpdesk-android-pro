@@ -31,6 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import co.helpdesk.faveo.pro.R;
 import co.helpdesk.faveo.pro.backend.api.v1.Helpdesk;
@@ -41,8 +43,8 @@ import es.dmoral.toasty.Toasty;
 public class MultiAssigningActivity extends AppCompatActivity {
 
     AutoCompleteTextView autoCompleteTextViewselectAssignee;
-    ImageView imageViewback,buttonAssign;
-    ArrayList<Data> staffItems;
+    ImageView imageViewback, buttonAssign;
+    ArrayList<Data> staffItems, staffitemsauto;
     ArrayAdapter<Data> autoAssignAdapyter;
     int agentId;
     String ticket;
@@ -54,11 +56,12 @@ public class MultiAssigningActivity extends AppCompatActivity {
             keySLA = "", valueSLA = "",
             keyStatus = "", valueStatus = "",
             keyStaff = "", valueStaff = "",
-            keyName="",
+            keyName = "",
             keyPriority = "", valuePriority = "",
             keyTopic = "", valueTopic = "",
             keySource = "", valueSource = "",
             keyType = "", valueType = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,12 +75,12 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(MultiAssigningActivity.this,R.color.mainActivityTopBar));
+        window.setStatusBarColor(ContextCompat.getColor(MultiAssigningActivity.this, R.color.mainActivityTopBar));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         progressDialog = new ProgressDialog(MultiAssigningActivity.this);
         setSupportActionBar(toolbar);
-        imageButton=findViewById(R.id.imageRefresh);
-        stringBuffer=new StringBuffer();
+        imageButton = findViewById(R.id.imageRefresh);
+        stringBuffer = new StringBuffer();
         if (!Prefs.getString("tickets", null).isEmpty()) {
             String tickets = Prefs.getString("tickets", null);
             int pos = tickets.indexOf("[");
@@ -91,108 +94,109 @@ public class MultiAssigningActivity extends AppCompatActivity {
             ticket = stringBuffer.toString().substring(0, pos2);
             Log.d("tickets", ticket);
         }
-            if (InternetReceiver.isConnected()) {
+        if (InternetReceiver.isConnected()) {
+            progressDialog.setMessage(getString(R.string.pleasewait));
+            progressDialog.show();
+            staffItems = new ArrayList<>();
+            new FetchAgents(ticket).execute();
+            //new FetchDependency().execute();
+        }
+
+        buttonAssign = (ImageView) findViewById(R.id.buttonAssign);
+        autoCompleteTextViewselectAssignee = (AutoCompleteTextView) findViewById(R.id.selectAssignee);
+        imageViewback = (ImageView) findViewById(R.id.imageViewBack);
+        autoAssignAdapyter = new ArrayAdapter<Data>(this, android.R.layout.simple_dropdown_item_1line, staffItems);
+        autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
+        autoCompleteTextViewselectAssignee.setThreshold(0);
+        autoCompleteTextViewselectAssignee.setDropDownWidth(1500);
+        autoCompleteTextViewselectAssignee.addTextChangedListener(passwordWatcheredittextSubject);
+        imageViewback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MultiAssigningActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                staffItems = new ArrayList<>();
                 progressDialog.setMessage(getString(R.string.pleasewait));
                 progressDialog.show();
-                staffItems = new ArrayList<>();
                 new FetchAgents(ticket).execute();
-                //new FetchDependency().execute();
             }
-
-            buttonAssign = (ImageView) findViewById(R.id.buttonAssign);
-            autoCompleteTextViewselectAssignee = (AutoCompleteTextView) findViewById(R.id.selectAssignee);
-            imageViewback = (ImageView) findViewById(R.id.imageViewBack);
-            autoAssignAdapyter = new ArrayAdapter<Data>(this, android.R.layout.simple_dropdown_item_1line, staffItems);
-            autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
-            autoCompleteTextViewselectAssignee.setThreshold(0);
-            autoCompleteTextViewselectAssignee.setDropDownWidth(1500);
-            autoCompleteTextViewselectAssignee.addTextChangedListener(passwordWatcheredittextSubject);
-            imageViewback.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MultiAssigningActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    staffItems = new ArrayList<>();
-                    progressDialog.setMessage(getString(R.string.pleasewait));
-                    progressDialog.show();
-                    new FetchAgents(ticket).execute();
-                }
-            });
-            buttonAssign.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        });
+        buttonAssign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MultiAssigningActivity.this);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MultiAssigningActivity.this);
 
-                            // Setting Dialog Title
-                            alertDialog.setTitle(getString(R.string.assigningTickets));
+                // Setting Dialog Title
+                alertDialog.setTitle(getString(R.string.assigningTickets));
 
-                            // Setting Dialog Message
-                            alertDialog.setMessage(getString(R.string.assigningConfirmation));
+                // Setting Dialog Message
+                alertDialog.setMessage(getString(R.string.assigningConfirmation));
 
-                            // Setting Icon to Dialog
-                            alertDialog.setIcon(R.mipmap.ic_launcher);
+                // Setting Icon to Dialog
+                alertDialog.setIcon(R.mipmap.ic_launcher);
 
-                            // Setting Positive "Yes" Button
-                            alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Write your code here to invoke YES event
-                                    //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                    if (InternetReceiver.isConnected()) {
-                                        progressDialog = new ProgressDialog(MultiAssigningActivity.this);
-                                        progressDialog.setMessage("Please wait");
-                                        progressDialog.show();
-                                        new MultipleAssign(ticket, "" + agentId).execute();
-
-
-                                    }
-                                }
-                            });
-
-                            // Setting Negative "NO" Button
-                            alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Write your code here to invoke NO event
-                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                                    dialog.cancel();
-                                }
-                            });
-
-                            // Showing Alert Message
-                            alertDialog.show();
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke YES event
+                        //Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                        if (InternetReceiver.isConnected()) {
+                            progressDialog = new ProgressDialog(MultiAssigningActivity.this);
+                            progressDialog.setMessage("Please wait");
+                            progressDialog.show();
+                            new MultipleAssign(ticket, "" + agentId).execute();
 
 
                         }
+                    }
+                });
 
-            });
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+
+                // Showing Alert Message
+                alertDialog.show();
+
+
+            }
+
+        });
 
 
         autoCompleteTextViewselectAssignee.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name1=autoCompleteTextViewselectAssignee.getText().toString();
+                String name1 = autoCompleteTextViewselectAssignee.getText().toString();
                 for (int j = 0; j < staffItems.size(); j++) {
                     if (staffItems.get(j).getName().equalsIgnoreCase(name1)) {
                         Data data = staffItems.get(j);
                         id = data.getID();
-                        agentId=data.getID();
+                        agentId = data.getID();
                         buttonAssign.setVisibility(View.VISIBLE);
                         //Toast.makeText(MultiAssigningActivity.this, "id:" + id, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
-        }
+    }
+
     @Override
     public void onBackPressed() {
-        Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
+        Intent intent = new Intent(MultiAssigningActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
@@ -200,8 +204,6 @@ public class MultiAssigningActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
-
-
 
 
     private class FetchDependency extends AsyncTask<String, Void, String> {
@@ -215,9 +217,9 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             Log.d("Depen Response : ", result + "");
-            Log.d("cameHere","True");
+            Log.d("cameHere", "True");
 
-            if (result==null) {
+            if (result == null) {
                 Toast.makeText(MultiAssigningActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -247,11 +249,13 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
                 JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
                 for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-                    keyName +=jsonArrayStaffs.getJSONObject(i).getString("first_name") + jsonArrayStaffs.getJSONObject(i).getString("last_name") +",";
+                    keyName += jsonArrayStaffs.getJSONObject(i).getString("first_name") + jsonArrayStaffs.getJSONObject(i).getString("last_name") + ",";
                     keyStaff += jsonArrayStaffs.getJSONObject(i).getString("id") + ",";
                     valueStaff += jsonArrayStaffs.getJSONObject(i).getString("email") + ",";
                 }
-                Prefs.putString("keyName",keyName);
+
+
+                Prefs.putString("keyName", keyName);
                 Prefs.putString("keyStaff", keyStaff);
                 Prefs.putString("valueStaff", valueStaff);
 
@@ -362,14 +366,14 @@ public class MultiAssigningActivity extends AppCompatActivity {
             } catch (JSONException | NullPointerException e) {
                 //Toasty.error(SplashActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
                 Prefs.putString("unauthorized", "false");
-                Prefs.putString("401","false");
+                Prefs.putString("401", "false");
                 e.printStackTrace();
             }
 
         }
     }
 
-    private class FetchAgents extends AsyncTask<String,Void,String>{
+    private class FetchAgents extends AsyncTask<String, Void, String> {
         String ticketId;
 
         public FetchAgents(String ticketId) {
@@ -385,90 +389,137 @@ public class MultiAssigningActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("AgnetsAre",s);
+            Log.d("AgnetsAre", s);
             staffItems.clear();
-            try {
 
+            try {
                 JSONObject jsonObject = new JSONObject(s);
-                JSONArray jsonArrayStaffs = jsonObject.getJSONArray("data");
-                for (int i = 0; i < jsonArrayStaffs.length(); i++) {
-                    String name=jsonArrayStaffs.getJSONObject(i).getString("name");
-                    int id=jsonArrayStaffs.getJSONObject(i).getInt("id");
-                    Data data=new Data(id,name);
-                    staffItems.add(data);
+                String status = jsonObject.getString("status");
+                if (status.equals("404")) {
+                    JSONObject jsonObject1;
+                    Data data;
+                    String json = Prefs.getString("DEPENDENCY", "");
+                    staffitemsauto = new ArrayList<>();
+                    staffitemsauto.add(new Data(0, "--"));
+
+                    jsonObject1 = new JSONObject(json);
+                    JSONArray jsonArrayStaffs = jsonObject1.getJSONArray("staffs");
+                    for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                        if (jsonArrayStaffs.getJSONObject(i).getString("first_name").equals("") && jsonArrayStaffs.getJSONObject(i).getString("last_name").equals("")) {
+                            Log.d("cameHere", "TRUE");
+                            data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("email"));
+                        } else {
+                            data = new Data(Integer.parseInt(jsonArrayStaffs.getJSONObject(i).getString("id")), jsonArrayStaffs.getJSONObject(i).getString("first_name") + " " + jsonArrayStaffs.getJSONObject(i).getString("last_name"));
+                        }
+                        staffItems.add(data);
+                        staffitemsauto.add(data);
+                        Collections.sort(staffitemsauto, new Comparator<Data>() {
+                            @Override
+                            public int compare(Data lhs, Data rhs) {
+                                return lhs.getName().compareTo(rhs.getName());
+                            }
+                        });
+                    }
+                    autoAssignAdapyter = new ArrayAdapter<Data>(MultiAssigningActivity.this, android.R.layout.simple_dropdown_item_1line, staffitemsauto);
+                    autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
+                    autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
+                    autoCompleteTextViewselectAssignee.setThreshold(0);
+                    autoCompleteTextViewselectAssignee.setDropDownWidth(1500);
+
+
                 }
-                autoAssignAdapyter = new ArrayAdapter<Data>(MultiAssigningActivity.this, android.R.layout.simple_dropdown_item_1line, staffItems);
-                autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
-                autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
-                autoCompleteTextViewselectAssignee.setThreshold(0);
-                autoCompleteTextViewselectAssignee.setDropDownWidth(1500);
-            } catch (JSONException e) {
+
+            }catch (JSONException e){
                 e.printStackTrace();
-            }
-        }
-    }
-    @SuppressLint("StaticFieldLeak")
-    private class MultipleAssign extends AsyncTask<String, Void, String> {
-         private String ticketid,assignid;
 
-        MultipleAssign(String ticketid, String assignid) {
-            this.ticketid = ticketid;
-            this.assignid = assignid;
-        }
+                try {
 
-        protected String doInBackground(String... urls) {
-
-            return new Helpdesk().multipleTicketAssign(ticketid,assignid);
-        }
-        protected void onPostExecute(String result) {
-            Log.d("Depen Response : ", result + "");
-            progressDialog.dismiss();
-
-            if (result == null) {
-                Toasty.error(MultiAssigningActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
-                return;
-            }
-            String state=Prefs.getString("403",null);
-
-            try {
-                if (state.equals("403") && !state.equals(null)) {
-                    Toasty.warning(MultiAssigningActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
-                    Prefs.putString("403", "null");
-                    return;
+                        JSONObject jsonObject2 = new JSONObject(s);
+                        JSONArray jsonArrayStaffs = jsonObject2.getJSONArray("data");
+                        for (int i = 0; i < jsonArrayStaffs.length(); i++) {
+                            String name = jsonArrayStaffs.getJSONObject(i).getString("name");
+                            int id = jsonArrayStaffs.getJSONObject(i).getInt("id");
+                            Data data1 = new Data(id, name);
+                            staffItems.add(data1);
+                        }
+                        autoAssignAdapyter = new ArrayAdapter<Data>(MultiAssigningActivity.this, android.R.layout.simple_dropdown_item_1line, staffItems);
+                        autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
+                        autoCompleteTextViewselectAssignee.setAdapter(autoAssignAdapyter);
+                        autoCompleteTextViewselectAssignee.setThreshold(0);
+                        autoCompleteTextViewselectAssignee.setDropDownWidth(1500);
+                    } catch (JSONException e1){
+                    e1.printStackTrace();
                 }
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
 
-
-            try {
-
-                JSONObject jsonObject = new JSONObject(result);
-                String response=jsonObject.getString("message");
-                if (response.equals("Assigned successfully")){
-                    Toasty.success(MultiAssigningActivity.this, getString(R.string.successfullyAssigned), Toast.LENGTH_LONG).show();
-                    Intent intent=new Intent(MultiAssigningActivity.this,MainActivity.class);
-                    startActivity(intent);
                 }
-            } catch (JSONException e) {
-                Toasty.error(MultiAssigningActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
             }
         }
-    }
-    TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
 
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @SuppressLint("StaticFieldLeak")
+            private class MultipleAssign extends AsyncTask<String, Void, String> {
+                private String ticketid, assignid;
 
-        }
+                MultipleAssign(String ticketid, String assignid) {
+                    this.ticketid = ticketid;
+                    this.assignid = assignid;
+                }
 
-        public void afterTextChanged(Editable s) {
-            if (autoCompleteTextViewselectAssignee.getText().toString().equals("")){
-                buttonAssign.setVisibility(View.GONE);
+                protected String doInBackground(String... urls) {
+
+                    return new Helpdesk().multipleTicketAssign(ticketid, assignid);
+                }
+
+                protected void onPostExecute(String result) {
+                    Log.d("Depen Response : ", result + "");
+                    progressDialog.dismiss();
+
+                    if (result == null) {
+                        Toasty.error(MultiAssigningActivity.this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    String state = Prefs.getString("403", null);
+
+                    try {
+                        if (state.equals("403") && !state.equals(null)) {
+                            Toasty.warning(MultiAssigningActivity.this, getString(R.string.permission), Toast.LENGTH_LONG).show();
+                            Prefs.putString("403", "null");
+                            return;
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    try {
+
+                        JSONObject jsonObject = new JSONObject(result);
+                        String response = jsonObject.getString("message");
+                        if (response.equals("Assigned successfully")) {
+                            Toasty.success(MultiAssigningActivity.this, getString(R.string.successfullyAssigned), Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(MultiAssigningActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        Toasty.error(MultiAssigningActivity.this, "Parsing Error!", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
-    };
+            TextWatcher passwordWatcheredittextSubject = new TextWatcher() {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                public void afterTextChanged(Editable s) {
+                    if (autoCompleteTextViewselectAssignee.getText().toString().equals("")) {
+                        buttonAssign.setVisibility(View.GONE);
+                    }
+                }
+            };
+
+        }
+
+
