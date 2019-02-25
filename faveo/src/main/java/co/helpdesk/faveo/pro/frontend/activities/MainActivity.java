@@ -190,14 +190,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 .targets(
                         // This tap target will target the back button, we just need to pass its containing toolbar
                         // Likewise, this tap target will target the search button
-                                        // `this` is an Activity
+                        // `this` is an Activity
                         TapTarget.forToolbarNavigationIcon(mToolbar, "This is the hamburger icon,from here you can control the app.You will get option to create ticket,view all the tickets,access the settings and support page and also you will get option to log out from the app.").id(1)
-                                        .dimColor(android.R.color.black)
-                                        .outerCircleColor(R.color.faveo)
+                                .dimColor(android.R.color.black)
+                                .outerCircleColor(R.color.faveo)
                                 .textTypeface(typeface)
-                                        .targetCircleColor(android.R.color.white)
-                                        .transparentTarget(true)
-                                        .textColor(android.R.color.white).cancelable(false).id(2),                 // Specify the target radius (in dp)
+                                .targetCircleColor(android.R.color.white)
+                                .transparentTarget(true)
+                                .textColor(android.R.color.white).cancelable(false).id(2),                 // Specify the target radius (in dp)
 
                         TapTarget.forToolbarMenuItem(mToolbar, R.id.actionsearch, "This is a search icon from here you will be able to search tickets and users in FAVEO.")
                                 .dimColor(android.R.color.black)
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     // to the sequence
                     @Override
                     public void onSequenceFinish() {
-                                                final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                        final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this,R.style.MyDialogTheme)
                                 //.setMessage(getString(R.string.intro))
                                 .setPositiveButton("Ok", null).show();
                         TapTargetView.showFor(dialog,
@@ -317,9 +317,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     });
 
             sharedPreferenceObj.setApp_runFirst("NO");
-        } else {
-
-            // App is not First Time Launch
         }
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

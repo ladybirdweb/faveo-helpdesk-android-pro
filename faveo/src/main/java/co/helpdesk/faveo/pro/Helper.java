@@ -49,12 +49,6 @@ public class Helper {
             String source=jsonArray.getJSONObject(i).getString("source");
             //String title = jsonArray.getJSONObject(i).getString("ticket_title");
             String title=jsonArray.getJSONObject(i).getString("title");
-
-//            String createdAt = jsonArray.getJSONObject(i).getString("created_at");
-//            String departmentName = jsonArray.getJSONObject(i).getString("department_name");
-//            String priorityName = jsonArray.getJSONObject(i).getString("priotity_name");
-//            String slaPlanName = jsonArray.getJSONObject(i).getString("sla_plan_name");
-//            String helpTopicName = jsonArray.getJSONObject(i).getString("help_topic_name");
             String ticketStatusName = jsonArray.getJSONObject(i).getString("status");
             //String ticketStatusName="open";
             String updatedAt = jsonArray.getJSONObject(i).getString("updated_at");
@@ -62,7 +56,11 @@ public class Helper {
             String priorityColor = jsonArray.getJSONObject(i).getJSONObject("priority").getString("color");
             String priorityName=jsonArray.getJSONObject(i).getJSONObject("priority").getString("name");
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
-            String departmentname=jsonArray.getJSONObject(i).getJSONObject("department").getString("name");
+            String departmentname="";
+            if (jsonArray.getJSONObject(i).has("department")){
+                departmentname=jsonArray.getJSONObject(i).getJSONObject("department").getString("name");
+            }
+
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
             if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&& jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
              agentName= jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
@@ -216,7 +214,10 @@ public class Helper {
             String source=jsonArray.getJSONObject(i).getString("source");
             //String title = jsonArray.getJSONObject(i).getString("ticket_title");
             String title=jsonArray.getJSONObject(i).getString("title");
-            String departmentname=jsonArray.getJSONObject(i).getJSONObject("department").getString("name");
+            String departmentname="";
+            if (jsonArray.getJSONObject(i).has("department")){
+                departmentname=jsonArray.getJSONObject(i).getJSONObject("department").getString("name");
+            }
 //            String createdAt = jsonArray.getJSONObject(i).getString("created_at");
 //            String departmentName = jsonArray.getJSONObject(i).getString("department_name");
 //            String priorityName = jsonArray.getJSONObject(i).getString("priotity_name");
@@ -229,7 +230,6 @@ public class Helper {
             String priorityColor = jsonArray.getJSONObject(i).getJSONObject("priority").getString("color");
             String priorityName=jsonArray.getJSONObject(i).getJSONObject("priority").getString("name");
             String attachment = jsonArray.getJSONObject(i).getString("attachment_count");
-
             String last_replier=jsonArray.getJSONObject(i).getString("last_replier");
             if (jsonArray.getJSONObject(i).getJSONObject("assignee").getString("first_name").equals("")&& jsonArray.getJSONObject(i).getJSONObject("assignee").getString("last_name").equals("")){
                 agentName= jsonArray.getJSONObject(i).getJSONObject("assignee").getString("user_name");
