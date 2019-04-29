@@ -15,11 +15,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="961e561a-ceed-4777-b11f-d8a4475aea12" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/MultiAssigningActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/MultiAssigningActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/TicketDetailActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/TicketDetailActivity.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -51,96 +47,21 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Helper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/Helper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="232" column="12" selection-start-line="232" selection-start-column="12" selection-end-line="232" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MultiAssigningActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/MultiAssigningActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="455" column="9" selection-start-line="455" selection-start-column="9" selection-end-line="455" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyTickets.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="623">
-              <caret line="1069" column="17" selection-start-line="1069" selection-start-column="17" selection-end-line="1069" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TicketDetailActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/TicketDetailActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="893" column="32" selection-start-line="893" selection-start-column="32" selection-end-line="893" selection-end-column="32" />
-              <folding>
-                <element signature="e#6023#6332#0" expanded="true" />
-                <element signature="e#6331#6332#0" expanded="true" />
-                <element signature="e#6385#6695#0" expanded="true" />
-                <element signature="e#6694#6695#0" expanded="true" />
-                <element signature="e#6740#7049#0" expanded="true" />
-                <element signature="e#7048#7049#0" expanded="true" />
-                <element signature="e#7096#7459#0" expanded="true" />
-                <element signature="e#7458#7459#0" expanded="true" />
-                <element signature="e#9594#9817#0" expanded="true" />
-                <element signature="e#9816#9817#0" expanded="true" />
-                <element signature="e#11786#13505#0" expanded="true" />
-                <element signature="e#13504#13505#0" expanded="true" />
-                <element signature="e#17493#17527#0" expanded="true" />
-                <element signature="e#17620#17658#0" expanded="true" />
-                <element signature="e#17882#18469#0" expanded="true" />
-                <element signature="e#18388#18418#0" expanded="true" />
-                <element signature="e#18468#18469#0" expanded="true" />
-                <element signature="e#18581#18984#0" expanded="true" />
-                <element signature="e#18983#18984#0" expanded="true" />
-                <element signature="e#21108#21138#0" expanded="true" />
-                <element signature="e#21758#21788#0" expanded="true" />
-                <element signature="e#22296#22335#0" expanded="true" />
-                <element signature="e#23124#23156#0" expanded="true" />
-                <element signature="e#23203#23229#0" expanded="true" />
-                <element signature="e#29412#29450#0" expanded="true" />
-                <element signature="e#29717#29889#0" expanded="true" />
-                <element signature="e#29888#29889#0" expanded="true" />
-                <element signature="e#30272#30302#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+    <leaf>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/faveo/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="24" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
+            <state relative-caret-position="153">
+              <caret line="22" column="22" lean-forward="true" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CreateTicketActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/CreateTicketActivity.java">
+      <file leaf-file-name="Constants.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/Constants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="161" column="60" selection-start-line="161" selection-start-column="50" selection-end-line="161" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2686">
-              <caret line="235" column="83" selection-start-line="235" selection-start-column="83" selection-end-line="235" selection-end-column="83" />
+            <state relative-caret-position="153">
+              <caret line="9" column="76" lean-forward="true" selection-start-line="9" selection-start-column="76" selection-end-line="9" selection-end-column="76" />
             </state>
           </provider>
         </entry>
@@ -2202,12 +2123,13 @@
         <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/fragments/tickets/MyTickets.java" />
         <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/TicketDetailActivity.java" />
         <option value="$PROJECT_DIR$/faveo/build.gradle" />
+        <option value="$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/Constants.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="50" />
-    <option name="y" value="15" />
+    <option name="x" value="720" />
+    <option name="y" value="50" />
     <option name="width" value="1400" />
     <option name="height" value="775" />
   </component>
@@ -2216,8 +2138,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -2238,56 +2158,25 @@
             </path>
             <path>
               <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
-              <item name="faveo" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
-              <item name="faveo" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="activities" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
-              <item name="faveo" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="fragments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
-              <item name="faveo" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="pro" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
-              <item name="fragments" type="462c0819:PsiDirectoryNode" />
-              <item name="tickets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
-              <item name="faveo" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
-              <item name="faveo" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="faveo-helpdesk-android-pro" type="1abcf292:AndroidViewProjectNode" />
               <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="faveo-helpdesk-android-pro" type="b2602c69:ProjectViewProjectNode" />
+              <item name="faveo-helpdesk-android-pro" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2429,7 +2318,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -2445,7 +2335,7 @@
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21140939" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16845638" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.32909605" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -2453,22 +2343,43 @@
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="7" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32909605" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21140939" />
       <window_info anchor="right" id="Preview" order="4" weight="0.41543624" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="Build Variants" order="2" side_tool="true" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="bottom" id="Logcat" order="7" weight="0.68502825" />
+      <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info id="Image Layers" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="bottom" id="Android Profiler" order="7" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Build" order="7" weight="0.32909605" />
+      <window_info anchor="bottom" id="Messages" order="7" />
+      <window_info id="Captures" order="2" weight="0.25" />
+      <window_info anchor="right" id="Gradle" order="3" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info id="Designer" order="2" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/frontend/activities/GivingFeedback.java" />
     <entry file="file://$PROJECT_DIR$/faveo/src/main/res/layout/activity_how_to_log_in.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -2696,60 +2607,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2042">
           <caret line="641" column="18" selection-start-line="641" selection-start-column="18" selection-end-line="641" selection-end-column="18" />
-          <folding>
-            <element signature="e#5684#5714#0" expanded="true" />
-            <element signature="e#5821#5853#0" expanded="true" />
-            <element signature="e#5958#5988#0" expanded="true" />
-            <element signature="e#6094#6125#0" expanded="true" />
-            <element signature="e#6229#6258#0" expanded="true" />
-            <element signature="e#6362#6391#0" expanded="true" />
-            <element signature="e#6494#6522#0" expanded="true" />
-            <element signature="e#6621#6655#0" expanded="true" />
-            <element signature="e#7598#11454#0" expanded="true" />
-            <element signature="e#8036#8064#0" expanded="true" />
-            <element signature="e#8397#8428#0" expanded="true" />
-            <element signature="e#8869#8900#0" expanded="true" />
-            <element signature="e#9347#9378#0" expanded="true" />
-            <element signature="e#9825#9856#0" expanded="true" />
-            <element signature="e#10301#10332#0" expanded="true" />
-            <element signature="e#10775#10806#0" expanded="true" />
-            <element signature="e#11246#11277#0" expanded="true" />
-            <element signature="e#11453#11454#0" expanded="true" />
-            <element signature="e#12556#13739#0" expanded="true" />
-            <element signature="e#13738#13739#0" expanded="true" />
-            <element signature="e#14399#14418#0" expanded="true" />
-            <element signature="e#14488#14519#0" expanded="true" />
-            <element signature="e#17766#17806#0" expanded="true" />
-            <element signature="e#18059#18092#0" expanded="true" />
-            <element signature="e#18300#18342#0" expanded="true" />
-            <element signature="e#18520#18562#0" expanded="true" />
-            <element signature="e#18738#18779#0" expanded="true" />
-            <element signature="e#18956#18997#0" expanded="true" />
-            <element signature="e#19467#19499#0" expanded="true" />
-            <element signature="e#19600#19638#0" expanded="true" />
-            <element signature="e#19820#20407#0" expanded="true" />
-            <element signature="e#20129#20161#0" expanded="true" />
-            <element signature="e#20406#20407#0" expanded="true" />
-            <element signature="e#20527#20756#0" expanded="true" />
-            <element signature="e#20755#20756#0" expanded="true" />
-            <element signature="e#22072#22112#0" expanded="true" />
-            <element signature="e#23060#23102#0" expanded="true" />
-            <element signature="e#23807#23808#0" expanded="true" />
-            <element signature="e#23853#23854#0" expanded="true" />
-            <element signature="e#25288#25328#0" expanded="true" />
-            <element signature="e#25495#25528#0" expanded="true" />
-            <element signature="e#26056#27552#0" expanded="true" />
-            <element signature="e#26983#27010#0" expanded="true" />
-            <element signature="e#27551#27552#0" expanded="true" />
-            <element signature="e#29358#29394#0" expanded="true" />
-            <element signature="e#31650#31690#0" expanded="true" />
-            <element signature="e#31840#31877#0" expanded="true" />
-            <element signature="e#32373#33909#0" expanded="true" />
-            <element signature="e#33384#33411#0" expanded="true" />
-            <element signature="e#33908#33909#0" expanded="true" />
-            <element signature="e#35811#35848#0" expanded="true" />
-            <element signature="e#37364#37393#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2909,43 +2766,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
           <caret line="893" column="32" selection-start-line="893" selection-start-column="32" selection-end-line="893" selection-end-column="32" />
-          <folding>
-            <element signature="e#6023#6332#0" expanded="true" />
-            <element signature="e#6331#6332#0" expanded="true" />
-            <element signature="e#6385#6695#0" expanded="true" />
-            <element signature="e#6694#6695#0" expanded="true" />
-            <element signature="e#6740#7049#0" expanded="true" />
-            <element signature="e#7048#7049#0" expanded="true" />
-            <element signature="e#7096#7459#0" expanded="true" />
-            <element signature="e#7458#7459#0" expanded="true" />
-            <element signature="e#9594#9817#0" expanded="true" />
-            <element signature="e#9816#9817#0" expanded="true" />
-            <element signature="e#11786#13505#0" expanded="true" />
-            <element signature="e#13504#13505#0" expanded="true" />
-            <element signature="e#17493#17527#0" expanded="true" />
-            <element signature="e#17620#17658#0" expanded="true" />
-            <element signature="e#17882#18469#0" expanded="true" />
-            <element signature="e#18388#18418#0" expanded="true" />
-            <element signature="e#18468#18469#0" expanded="true" />
-            <element signature="e#18581#18984#0" expanded="true" />
-            <element signature="e#18983#18984#0" expanded="true" />
-            <element signature="e#21108#21138#0" expanded="true" />
-            <element signature="e#21758#21788#0" expanded="true" />
-            <element signature="e#22296#22335#0" expanded="true" />
-            <element signature="e#23124#23156#0" expanded="true" />
-            <element signature="e#23203#23229#0" expanded="true" />
-            <element signature="e#29412#29450#0" expanded="true" />
-            <element signature="e#29717#29889#0" expanded="true" />
-            <element signature="e#29888#29889#0" expanded="true" />
-            <element signature="e#30272#30302#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/faveo/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="24" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
+        <state relative-caret-position="153">
+          <caret line="22" column="22" lean-forward="true" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/faveo/src/main/java/co/helpdesk/faveo/pro/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="76" lean-forward="true" selection-start-line="9" selection-start-column="76" selection-end-line="9" selection-end-column="76" />
         </state>
       </provider>
     </entry>
